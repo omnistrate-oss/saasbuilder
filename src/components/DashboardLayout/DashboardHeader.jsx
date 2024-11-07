@@ -103,7 +103,8 @@ function DashboardHeader(props) {
               </Box>
             </Tooltip>
           )}
-          {environmentType !== ENVIRONMENT_TYPES.PROD &&
+          {environmentType &&
+            environmentType !== ENVIRONMENT_TYPES.PROD &&
             (serviceName || noServicesAvailable) && <EnvironmentTypeChip />}
         </Stack>
       </Stack>

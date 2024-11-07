@@ -7,13 +7,15 @@ function EnvironmentTypeChip() {
   const environmentLabel = ENVIRONMENT_TYPE_LABEL[environmentType];
   const environmentStyles = getEnvironmentChipStyles(environmentType);
 
-  return (
+  return environmentLabel ? (
     <Chip
       bgColor={environmentStyles.bgColor}
       fontColor={environmentStyles.fontColor}
       borderColor={environmentStyles.fontColor}
       label={environmentLabel}
     />
+  ) : (
+    ""
   );
 }
 
