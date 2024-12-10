@@ -230,6 +230,7 @@ function MarketplaceService() {
   const [currentTabValue, setCurrentTabValue] = useState(false);
   const [viewInfoDrawerOpen, setViewInfoDrawerOpen] = useState(false);
   const [updateDrawerOpen, setUpdateDrawerOpen] = useState(false);
+  const [viewInstructionsItem, setViewInstructionsItem] = useState(null);
   const insightsVisible = useSelector(selectInstanceListSummaryVisibility);
 
   const timeoutID = useRef(null);
@@ -277,6 +278,18 @@ function MarketplaceService() {
   const shouldShowKubernetesDashboardColumn = resourceInstanceList?.some(
     (instance) => instance.kubernetesDashboardEndpoint
   );
+
+  const handleViewAccountConfigInstructions = (row) => {
+    setViewInstructionsItem(row);
+    const result_params = row.result_params;
+    setCloudProvider(
+      result_params?.cloud_provider || !!result_params?.aws_account_id
+        ? "aws"
+        : "gcp"
+    );
+    setAccountConfigMethod(result_params?.account_configuration_method);
+    handleOrgIdModalOpen();
+  };
 
   const columns = useMemo(() => {
     const columnDefinition = [
@@ -341,6 +354,8 @@ function MarketplaceService() {
               "PENDING_DEPENDENCY",
               "UNKNOWN",
               "DEPLOYING",
+              "READY",
+              "FAILED",
             ].includes(status);
           const statusSytlesAndLabel =
             getResourceInstanceStatusStylesAndLabel(status);
@@ -369,18 +384,7 @@ function MarketplaceService() {
                       alignItems: "center",
                     }}
                     onClick={() => {
-                      const result_params = params.row.result_params;
-                      setCloudProvider(
-                        result_params?.cloud_provider ||
-                          !!result_params?.aws_account_id
-                          ? "aws"
-                          : "gcp"
-                      );
-
-                      setAccountConfigMethod(
-                        result_params?.account_configuration_method
-                      );
-                      handleOrgIdModalOpen();
+                      handleViewAccountConfigInstructions(params.row);
                     }}
                   >
                     <ViewInstructionsIcon />
@@ -2065,6 +2069,7 @@ function MarketplaceService() {
             fetchResourceInstancesOfSelectedResource
           }
           cloudFormationTemplateUrlNoLB={cloudFormationTemplateUrlNoLB}
+          viewInstructionsItem={viewInstructionsItem}
         />
 
         <AccessSideRestoreInstance
