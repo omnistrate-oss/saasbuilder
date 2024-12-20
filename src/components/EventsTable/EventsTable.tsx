@@ -240,17 +240,7 @@ const EventsTable: FC<EventsTableProps> = (props) => {
         cell: (data) =>
           data.row.original.time ? formatDateUTC(data.row.original.time) : "-",
       }),
-      columnHelper.accessor("message", {
-        id: "message",
-        header: "Message",
-        cell: (data) => {
-          return data.row.original.message ? (
-            <EventMessageChip message={data.row.original.message} />
-          ) : (
-            "-"
-          );
-        },
-      }),
+
       columnHelper.accessor("userName", {
         id: "userName",
         header: "User",
@@ -279,6 +269,18 @@ const EventsTable: FC<EventsTableProps> = (props) => {
               target="_blank"
               value={userName || "-"}
             />
+          );
+        },
+      }),
+
+      columnHelper.accessor("message", {
+        id: "message",
+        header: "Message",
+        cell: (data) => {
+          return data.row.original.message ? (
+            <EventMessageChip message={data.row.original.message} />
+          ) : (
+            "-"
           );
         },
       }),

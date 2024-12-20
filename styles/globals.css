@@ -126,3 +126,13 @@ a {
   top: 0;
   left: 0;
 }
+
+.clamp_two_lines {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: normal;
+  word-break: break-all;
+}
