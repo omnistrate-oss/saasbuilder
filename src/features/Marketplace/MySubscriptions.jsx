@@ -163,6 +163,8 @@ const MySubscriptions = (props) => {
       headerName: "Subscription Type",
       flex: 1,
       minWidth: 150,
+      valueGetter: (params) =>
+        params.row.roleType === "root" ? "Direct" : "Invited",
       renderCell: (params) => {
         return (
           <GridCellExpand
