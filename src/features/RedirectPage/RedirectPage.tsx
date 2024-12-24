@@ -4,10 +4,7 @@ import { useEffect, useState } from "react";
 import { createSubscriptionRequest } from "src/api/subscriptionRequests";
 import { createSubscriptions } from "src/api/subscriptions";
 import DashboardLayout from "src/components/DashboardLayout/DashboardLayout";
-import {
-  getMarketplaceProductTierRoute,
-  getResourceRoute,
-} from "src/utils/route/access/accessRoute";
+import { getResourceRoute } from "src/utils/route/access/accessRoute";
 import useOrgServiceOfferings from "../Marketplace/PublicServices/hooks/useOrgServiceOfferings";
 import { Box } from "@mui/material";
 import LoadingSpinner from "src/components/LoadingSpinner/LoadingSpinner";
@@ -84,33 +81,21 @@ const RedirectPage = () => {
         {
           onSuccess: (res: any) => {
             setIsRedirecting(true);
-            if (offering.AutoApproveSubscription) {
-              router.push(
-                getResourceRoute(
-                  offering.serviceId,
-                  offering.serviceEnvironmentID,
-                  offering.productTierID,
-                  Object.values(res.data).join("") // The Subscription ID
-                )
-              );
-            } else {
-              router.push(
-                getMarketplaceProductTierRoute(
-                  offering.serviceId,
-                  offering.serviceEnvironmentID
-                )
-              );
-            }
+            router.push(
+              getResourceRoute(
+                offering.serviceId,
+                offering.serviceEnvironmentID,
+                offering.productTierID,
+                Object.values(res.data).join("") // The Subscription ID
+              )
+            );
+          },
+          onError: () => {
+            setIsRedirecting(true);
+            router.push("/service-plans");
           },
         }
       );
-
-      if (!isRedirecting) {
-        setIsRedirecting(true);
-        router.push("/service-plans");
-      }
-
-      return;
     }
 
     // Find Service Offering with a Subscription and Redirect them To the Corresponding Instances List Page
