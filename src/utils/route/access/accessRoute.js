@@ -19,6 +19,7 @@ export function getMarketplaceProductTierRoute(
   if (serviceId) {
     return `/service-plans?serviceId=${serviceId}`;
   }
+  return "/service-plans";
 }
 
 export function getDashboardRoute(

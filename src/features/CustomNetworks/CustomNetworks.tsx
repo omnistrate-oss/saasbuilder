@@ -189,10 +189,6 @@ const CustomNetworks: FC<CustomNetworkProps> = (props) => {
         headerName: "Network ID",
         flex: 1,
         minWidth: 170,
-        headerAlign: "center",
-        align: "center",
-        valueGetter: (params: GridCellParams<any, CustomNetwork>) =>
-          params.row.id,
         renderCell: (params: GridCellParams<any, CustomNetwork>) => (
           <DataGridText
             onClick={() => {
@@ -210,29 +206,14 @@ const CustomNetworks: FC<CustomNetworkProps> = (props) => {
         headerName: "Name",
         flex: 1,
         minWidth: 170,
-        headerAlign: "center",
-        align: "center",
         valueGetter: (params: GridCellParams<any, CustomNetwork>) =>
           params.row.name,
-        // renderCell: (params: GridCellParams<any, CustomNetwork>) => (
-        //   <DataGridText
-        //     onClick={() => {
-        //       setSelectedCustomNetwork(params.row);
-        //       openSideDrawer();
-        //     }}
-        //     color="primary"
-        //   >
-        //     {params.row.name}
-        //   </DataGridText>
-        // ),
       },
       {
         field: "cloudProviderName",
         headerName: "Provider",
         flex: 1,
         minWidth: 150,
-        headerAlign: "center",
-        align: "center",
         valueGetter: (params: GridCellParams<any, CustomNetwork>) =>
           params.row.cloudProviderName,
         renderCell: (params: GridCellParams<any, CustomNetwork>) => {
@@ -246,8 +227,6 @@ const CustomNetworks: FC<CustomNetworkProps> = (props) => {
         headerName: "Region",
         flex: 1,
         minWidth: 100,
-        headerAlign: "center",
-        align: "center",
         valueGetter: (params: GridCellParams<any, CustomNetwork>) =>
           params.row.cloudProviderRegion,
         renderCell: (params: GridCellParams<any, CustomNetwork>) => (
@@ -262,13 +241,6 @@ const CustomNetworks: FC<CustomNetworkProps> = (props) => {
         headerName: "CIDR",
         flex: 1,
         minWidth: 150,
-        headerAlign: "center",
-        align: "center",
-        valueGetter: (params: GridCellParams<any, CustomNetwork>) =>
-          params.row.cidr,
-        renderCell: (params: GridCellParams<any, CustomNetwork>) => (
-          <DataGridText>{params.row.cidr}</DataGridText>
-        ),
       },
     ],
     []
@@ -284,7 +256,6 @@ const CustomNetworks: FC<CustomNetworkProps> = (props) => {
         <DataGrid
           checkboxSelection
           disableColumnMenu
-          hideFooterSelectedRowCount
           disableSelectionOnClick
           selectionModel={selectedCustomNetworkIds}
           onSelectionModelChange={(newSelection) => {

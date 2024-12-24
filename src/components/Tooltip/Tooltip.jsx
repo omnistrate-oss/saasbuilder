@@ -8,22 +8,15 @@ const Tooltip = styled(
   {
     shouldForwardProp: (prop) => prop !== "isVisible",
   }
-)(({ theme, isVisible = true }) => {
-  return {
-    display: isVisible ? "block" : "none",
-    [`& .${tooltipClasses.arrow}`]: {
-      color: theme.palette.common.black,
-    },
-    [`& .${tooltipClasses.tooltip}`]: {
-      backgroundColor: "#101828",
-      fontSize: "12px",
-      lineHeight: "18px",
-      fontWeight: 600,
-      padding: "12px",
-      borderRadius: "8px",
-    },
-  };
-});
+)(({ isVisible = true }) => ({
+  display: isVisible ? "block" : "none",
+  [`& .${tooltipClasses.arrow}`]: {},
+  [`& .${tooltipClasses.tooltip}`]: {
+    padding: "6px 10px",
+    fontWeight: "500",
+    borderRadius: "8px",
+  },
+}));
 
 export default Tooltip;
 

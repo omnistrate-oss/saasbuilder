@@ -6,8 +6,10 @@ export const listSubscriptionRequests = (query) => {
   });
 };
 
-export const createSubscriptionRequest = (body) => {
-  return axios.post("/subscription/request", body);
+export const createSubscriptionRequest = (body, ignoreError = false) => {
+  return axios.post("/subscription/request", body, {
+    ignoreGlobalErrorSnack: ignoreError,
+  });
 };
 
 export const cancelSubscriptionRequest = (requestId) => {

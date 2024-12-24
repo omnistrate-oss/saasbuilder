@@ -5,7 +5,6 @@ import Card from "../Card/Card";
 import { Text } from "../Typography/Typography";
 
 function NoProductTierUI() {
-
   return (
     <Container
       sx={{ paddingTop: "130px", paddingBottom: "130px", marginTop: "30px" }}
@@ -20,7 +19,7 @@ function NoProductTierUI() {
         }}
       >
         <Text size="xlarge" color="#98A2B3" weight="medium" textAlign="center">
-          No Subscription plans were found.
+          No subscription plans found.
           <br />
         </Text>
         <Image src={noProductTierIcon} alt="no-services-available" />

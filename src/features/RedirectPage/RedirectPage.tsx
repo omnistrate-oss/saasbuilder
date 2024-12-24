@@ -4,10 +4,7 @@ import { useEffect, useState } from "react";
 import { createSubscriptionRequest } from "src/api/subscriptionRequests";
 import { createSubscriptions } from "src/api/subscriptions";
 import DashboardLayout from "src/components/DashboardLayout/DashboardLayout";
-import {
-  getMarketplaceProductTierRoute,
-  getResourceRoute,
-} from "src/utils/route/access/accessRoute";
+import { getResourceRoute } from "src/utils/route/access/accessRoute";
 import useOrgServiceOfferings from "../Marketplace/PublicServices/hooks/useOrgServiceOfferings";
 import { Box } from "@mui/material";
 import LoadingSpinner from "src/components/LoadingSpinner/LoadingSpinner";
@@ -56,7 +53,19 @@ const RedirectPage = () => {
 
     // No Subscriptions, Subscribe to the First Service Offering
     if (subscriptions?.length === 0 && subscriptionRequestIds?.length === 0) {
-      const offering = serviceOfferingsData?.[0];
+      let offering = serviceOfferingsData?.find(
+        (offering) =>
+          offering.AutoApproveSubscription &&
+          (offering.productTierName.toLowerCase().includes("free") ||
+            offering.productTierPlanDescription.toLowerCase().includes("free"))
+      ); // Find the First Service Offering with AutoApproveSubscription Enabled and Free Plan
+
+      if (!offering) {
+        offering = serviceOfferingsData?.find(
+          (offering) => offering.AutoApproveSubscription
+        ); // Find the First Service Offering with AutoApproveSubscription Enabled
+      }
+
       if (!offering) {
         setIsRedirecting(true);
         router.push("/service-plans");
@@ -72,24 +81,18 @@ const RedirectPage = () => {
         {
           onSuccess: (res: any) => {
             setIsRedirecting(true);
-            if (offering.AutoApproveSubscription) {
-              router.push(
-                getResourceRoute(
-                  offering.serviceId,
-                  offering.serviceEnvironmentID,
-                  offering.productTierID,
-                  Object.values(res.data).join("")
-                )
-              );
-            } else {
-              router.push(
-                getMarketplaceProductTierRoute(
-                  offering.serviceId,
-                  offering.serviceEnvironmentID
-                )
-              );
-            }
-            return;
+            router.push(
+              getResourceRoute(
+                offering.serviceId,
+                offering.serviceEnvironmentID,
+                offering.productTierID,
+                Object.values(res.data).join("") // The Subscription ID
+              )
+            );
+          },
+          onError: () => {
+            setIsRedirecting(true);
+            router.push("/service-plans");
           },
         }
       );

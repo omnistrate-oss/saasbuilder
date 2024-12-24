@@ -85,7 +85,6 @@ const MySubscriptions = (props) => {
           params.row;
         return (
           <GridCellExpand
-            justifyContent="left"
             value={serviceName || ""}
             textStyles={{
               color: "#6941C6",
@@ -164,10 +163,11 @@ const MySubscriptions = (props) => {
       headerName: "Subscription Type",
       flex: 1,
       minWidth: 150,
+      valueGetter: (params) =>
+        params.row.roleType === "root" ? "Direct" : "Invited",
       renderCell: (params) => {
         return (
           <GridCellExpand
-            justifyContent="left"
             value={params.row.roleType === "root" ? "Direct" : "Invited"}
             startIcon={
               params.row.roleType === "root" ? (
@@ -186,73 +186,6 @@ const MySubscriptions = (props) => {
       flex: 1,
       minWidth: 120,
     },
-    // {
-    //   field: "defaultSubscription",
-    //   headerName: "Action",
-    //   width: 100,
-    //   renderCell: (params) => {
-    //     return (
-    //       <>
-    //         <IconButton
-    //           onClick={(event) => onActionMenuClick(event, params.row)}
-    //         >
-    //           <MoreVertIcon />
-    //         </IconButton>
-    //         <Menu
-    //           anchorOrigin={{
-    //             vertical: "bottom",
-    //             horizontal: "center",
-    //           }}
-    //           transformOrigin={{
-    //             vertical: "top",
-    //             horizontal: "right",
-    //           }}
-    //           anchorEl={anchorEl}
-    //           open={
-    //             Boolean(anchorEl) && params.row.id === selectedSubscription.id
-    //           }
-    //           onClose={() => setAnchorEl(null)}
-    //           PaperProps={{
-    //             style: {
-    //               maxHeight: ITEM_HEIGHT * 4.5,
-    //               width: "22ch",
-    //             },
-    //           }}
-    //         >
-    //           <MenuItem
-    //             sx={{ gap: "8px" }}
-    //             onClick={() => {
-    //               setAnchorEl(null);
-    //               viewResourceInstance();
-    //             }}
-    //           >
-    //             <SpeedometerIcon />
-    //             <Text size="small" weight="medium">
-    //               Go To Dashboard
-    //             </Text>
-    //           </MenuItem>
-
-    //           {/* Show Unsubscribe Only When It's Not a Default Subscription */}
-    //           <MenuItem
-    //             sx={{
-    //               gap: "8px",
-    //               display: params.row.defaultSubscription ? "none" : "flex",
-    //             }}
-    //             onClick={() => {
-    //               setAnchorEl(null);
-    //               setShowUnsubscribeDialog(true);
-    //             }}
-    //           >
-    //             <BellRingingIcon />
-    //             <Text size="small" weight="medium">
-    //               Unsubscribe
-    //             </Text>
-    //           </MenuItem>
-    //         </Menu>
-    //       </>
-    //     );
-    //   },
-    // },
   ];
 
   function handleUnsubscribeClick() {
@@ -330,7 +263,6 @@ const MySubscriptions = (props) => {
           boxShadow: "0px 1px 2px 0px rgba(16, 24, 40, 0.05)",
           border: "1px solid  rgba(228, 231, 236, 1)",
         }}
-        hideFooterSelectedRowCount
       />
 
       <TextConfirmationDialog

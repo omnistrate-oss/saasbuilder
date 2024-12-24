@@ -172,6 +172,7 @@ const DateRangePicker: FC<DateRangePickerProps> = (props) => {
         sx={{ marginTop: "8px" }}
       >
         <Box>
+          {/*@ts-ignore */}
           <ReactDateRangePicker
             onChange={(item) => {
               setSelectedDateRange(item.selection);

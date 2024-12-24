@@ -26,6 +26,7 @@ type DataGridTextProps = {
   onClick?: () => void;
   color?: "default" | "primary";
   style?: CSS.Properties;
+  justifyContent?: "center" | "start" | "end";
 };
 
 const DataGridText: FC<DataGridTextProps> = ({
@@ -35,6 +36,7 @@ const DataGridText: FC<DataGridTextProps> = ({
   onClick,
   color = "default",
   style = {},
+  justifyContent = "start",
 }) => {
   const [tooltipText, setTooltipText] = useState("Click to copy");
   const { href, target = "_self", isUnderlined = false } = linkProps || {};
@@ -94,7 +96,7 @@ const DataGridText: FC<DataGridTextProps> = ({
     <Stack
       direction="row"
       alignItems="center"
-      justifyContent="center"
+      justifyContent={justifyContent}
       gap="4px"
       width="100%"
     >

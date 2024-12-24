@@ -210,14 +210,15 @@ const Backup: FC<{
         field: "encrypted",
         headerName: "Encryption Status",
         flex: 0.7,
-        renderCell: (params: { row: SnapshotBase }) => {
-          const encrypted = params.row.encrypted;
-          const encryptionStatus = encrypted ? "Encrypted" : "Not Encrypted";
+        valueGetter: (params: { row: SnapshotBase }) =>
+          params.row.encrypted ? "Encrypted" : "Not Encrypted",
+        renderCell: (params: {
+          row: SnapshotBase;
+          value: "Encrypted" | "Not Encrypted";
+        }) => {
           const statusStylesAndMap =
-            getResourceInstanceBackupStatusStylesAndLabel(encryptionStatus);
-          return (
-            <StatusChip status={encryptionStatus} {...statusStylesAndMap} />
-          );
+            getResourceInstanceBackupStatusStylesAndLabel(params.value);
+          return <StatusChip status={params.value} {...statusStylesAndMap} />;
         },
         minWidth: 150,
       },
@@ -237,9 +238,7 @@ const Backup: FC<{
         <DataGrid
           checkboxSelection
           getRowId={(row: SnapshotBase) => row.snapshotId}
-          disableColumnMenu
           disableSelectionOnClick
-          hideFooterSelectedRowCount
           columns={columns}
           rows={isRefetching ? [] : filteredsnapshots}
           components={{
@@ -274,7 +273,7 @@ const Backup: FC<{
             selectSingleItem(newSelection, selectionModel, setSelectionModel);
           }}
           loading={isRefetching}
-          noRowsText="No Backups"
+          noRowsText="No backups"
         />
       </Box>
       <InformationDialogTopCenter

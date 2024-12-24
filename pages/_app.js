@@ -30,9 +30,9 @@ NProgress.configure({
 });
 
 const startProgressBar = () => {
- // const newUrlPath = url?.split("?")[0];
+  // const newUrlPath = url?.split("?")[0];
   //if (newUrlPath !== Router.pathname) {
-    NProgress.start();
+  NProgress.start();
   //}
 };
 

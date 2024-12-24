@@ -59,6 +59,10 @@ type PropertyTableProps = {
   rows: { rows: Row[]; title: string; desc: string; flexWrap: boolean };
 } & BoxProps;
 
+interface JsonDataType {
+  [key: string]: unknown;
+}
+
 const PropertyDetails: FC<PropertyTableProps> = ({ rows, ...otherProps }) => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [data, setData] = useState<Row | null>(null);
@@ -95,7 +99,7 @@ const PropertyDetails: FC<PropertyTableProps> = ({ rows, ...otherProps }) => {
       </Stack>
       <Box
         display="grid"
-        gridTemplateColumns="repeat(auto-fill, minmax(220px, 1fr))"
+        gridTemplateColumns="repeat(auto-fit, minmax(220px, 1fr))"
         position={"relative"}
         gap="12px"
         padding="12px 0"
@@ -114,7 +118,7 @@ const PropertyDetails: FC<PropertyTableProps> = ({ rows, ...otherProps }) => {
 
           //check for JSON data types
           let isJSONData = false;
-          let jsonData;
+          let jsonData: JsonDataType;
 
           if (
             value !== null &&

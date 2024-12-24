@@ -24,10 +24,12 @@ const CarouselMultiProductTierPlan = (props) => {
   const sliderItems = data.length > 3 ? 3 : data.length;
   const items = [];
   //used to force rerender carousel component
-  const [carouselKey, setCarouselKey] = useState(_.random(1000));
+  //disabling eslint to block incorrect error report - https://github.com/facebook/react/issues/31687
+  //eslint-disable-next-line 
+  const [carouselKey, setCarouselKey] = useState(0);
 
   function reRenderCarousel() {
-    setCarouselKey(_.random(1000));
+    setCarouselKey(_.random(1, 10000,));
   }
 
   for (let i = 0; i < data.length; i += sliderItems) {

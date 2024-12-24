@@ -18,7 +18,7 @@ const NoServiceFoundUI = ({ text }) => {
         {text}
       </Typography>
 
-      <Image src={NoServicesImage} alt="No Services" width={582} height={400} />
+      <Image src={NoServicesImage} alt="No services" width={582} height={400} />
     </Box>
   );
 };

@@ -12,8 +12,10 @@ export const deleteSubscription = (subId) => {
   return axios.delete(`/subscription/${subId}`);
 };
 
-export const createSubscriptions = (payload) => {
-  return axios.post(`/subscription`, payload);
+export const createSubscriptions = (payload, ignoreError = false) => {
+  return axios.post(`/subscription`, payload, {
+    ignoreGlobalErrorSnack: ignoreError,
+  });
 };
 
 export const listSubscriptions = (query) => {

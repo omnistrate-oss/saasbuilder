@@ -128,7 +128,6 @@ function ProductTiers(props) {
     }
   }, [serviceOfferingData]);
 
-
   if (!serviceOfferingData?.offerings?.length && environmentId) {
     if (source === "access") return <NoProductTierUI />;
     return (
@@ -149,7 +148,7 @@ function ProductTiers(props) {
                 fontSize: "30px",
               }}
             >
-              No Subscription Plans
+              No subscription plans
             </div>
             <div
               justifyContent="center"

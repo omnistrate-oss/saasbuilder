@@ -240,17 +240,7 @@ const EventsTable: FC<EventsTableProps> = (props) => {
         cell: (data) =>
           data.row.original.time ? formatDateUTC(data.row.original.time) : "-",
       }),
-      columnHelper.accessor("message", {
-        id: "message",
-        header: "Message",
-        cell: (data) => {
-          return data.row.original.message ? (
-            <EventMessageChip message={data.row.original.message} />
-          ) : (
-            "-"
-          );
-        },
-      }),
+
       columnHelper.accessor("userName", {
         id: "userName",
         header: "User",
@@ -273,14 +263,24 @@ const EventsTable: FC<EventsTableProps> = (props) => {
             );
           }
 
-          const userDisplayLabel = userName;
-
           return (
             <GridCellExpand
               href={isRootSubscription ? pageLink : ""}
               target="_blank"
-              value={userDisplayLabel || "-"}
+              value={userName || "-"}
             />
+          );
+        },
+      }),
+
+      columnHelper.accessor("message", {
+        id: "message",
+        header: "Message",
+        cell: (data) => {
+          return data.row.original.message ? (
+            <EventMessageChip message={data.row.original.message} />
+          ) : (
+            "-"
           );
         },
       }),
@@ -339,7 +339,7 @@ const EventsTable: FC<EventsTableProps> = (props) => {
         columns={dataTableColumns}
         rows={filteredEvents}
         renderDetailsComponent={DetailTableRowView}
-        noRowsText={`No ${entityName}s available`}
+        noRowsText={`No ${entityName?.toLowerCase()}s`}
         getRowCanExpand={(rowData) =>
           Boolean(rowData.original.workflowFailures?.length > 0)
         }

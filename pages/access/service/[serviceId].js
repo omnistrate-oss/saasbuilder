@@ -230,6 +230,7 @@ function MarketplaceService() {
   const [currentTabValue, setCurrentTabValue] = useState(false);
   const [viewInfoDrawerOpen, setViewInfoDrawerOpen] = useState(false);
   const [updateDrawerOpen, setUpdateDrawerOpen] = useState(false);
+  const [viewInstructionsItem, setViewInstructionsItem] = useState(null);
   const insightsVisible = useSelector(selectInstanceListSummaryVisibility);
 
   const timeoutID = useRef(null);
@@ -278,6 +279,19 @@ function MarketplaceService() {
     (instance) => instance.kubernetesDashboardEndpoint
   );
 
+  const handleViewAccountConfigInstructions = (row) => {
+    setViewInstructionsItem(row);
+    const result_params = row.result_params;
+    setCloudProvider(
+      result_params?.cloud_provider === CLOUD_PROVIDERS.aws ||
+        !!result_params?.aws_account_id
+        ? "aws"
+        : "gcp"
+    );
+    setAccountConfigMethod(result_params?.account_configuration_method);
+    handleOrgIdModalOpen();
+  };
+
   const columns = useMemo(() => {
     const columnDefinition = [
       {
@@ -285,8 +299,11 @@ function MarketplaceService() {
         headerName: "ID",
         flex: 0.9,
         minWidth: 200,
-        align: "center",
-        headerAlign: "center",
+        valueGetter: (params) => {
+          return isCurrentResourceBYOA
+            ? "account-" + params.row.id
+            : params.row.id;
+        },
         renderCell: (params) => {
           const instanceId = params.row.id;
           const instanceIdDisplay = isCurrentResourceBYOA
@@ -320,16 +337,12 @@ function MarketplaceService() {
         headerName: "Resource Name",
         flex: 1,
         minWidth: 235,
-        align: "center",
-        headerAlign: "center",
-        renderCell: () => selectedResource?.name,
+        valueGetter: () => selectedResource?.name,
       },
       {
         field: "status",
         headerName: "Lifecycle Status",
         flex: 0.9,
-        align: "center",
-        headerAlign: "center",
         minWidth: 160,
         renderCell: (params) => {
           const status = params.row.status;
@@ -341,15 +354,18 @@ function MarketplaceService() {
               "PENDING_DEPENDENCY",
               "UNKNOWN",
               "DEPLOYING",
+              "READY",
+              "FAILED",
             ].includes(status);
           const statusSytlesAndLabel =
             getResourceInstanceStatusStylesAndLabel(status);
           return (
             <Stack
-              direction={"row"}
-              justifyContent={"center"}
-              alignItems={"center"}
-              gap="4px"
+              direction="row"
+              alignItems="center"
+              gap="6px"
+              minWidth="94px"
+              justifyContent="space-between"
             >
               <StatusChip status={status} {...statusSytlesAndLabel} />
               {showInstructions && (
@@ -369,18 +385,7 @@ function MarketplaceService() {
                       alignItems: "center",
                     }}
                     onClick={() => {
-                      const result_params = params.row.result_params;
-                      setCloudProvider(
-                        result_params?.cloud_provider ||
-                          !!result_params?.aws_account_id
-                          ? "aws"
-                          : "gcp"
-                      );
-
-                      setAccountConfigMethod(
-                        result_params?.account_configuration_method
-                      );
-                      handleOrgIdModalOpen();
+                      handleViewAccountConfigInstructions(params.row);
                     }}
                   >
                     <ViewInstructionsIcon />
@@ -396,24 +401,18 @@ function MarketplaceService() {
         headerName: "Load",
         flex: 0.9,
         minWidth: 100,
-        align: "center",
-        headerAlign: "center",
         renderCell: (params) => {
           const instanceLoadStatus = params.row.instanceLoadStatus;
 
           return (
-            <Stack
-              direction={"row"}
-              justifyContent={"center"}
-              alignItems={"center"}
-              gap="4px"
-            >
+            <Stack direction={"row"} alignItems={"center"} gap="4px">
               {instanceLoadStatus === "UNKNOWN" && "-"}
               {instanceLoadStatus === "POD_IDLE" && (
                 <Image
                   src={SpeedoMeterLow}
                   width={54}
                   height={54}
+                  alt="Low"
                   style={{ marginBottom: "-25px" }}
                 />
               )}
@@ -422,6 +421,7 @@ function MarketplaceService() {
                   src={SpeedoMeterMedium}
                   width={54}
                   height={54}
+                  alt="Medium"
                   style={{ marginBottom: "-25px" }}
                 />
               )}
@@ -430,6 +430,7 @@ function MarketplaceService() {
                   src={SpeedoMeterHigh}
                   width={54}
                   height={54}
+                  alt="High"
                   style={{ marginBottom: "-25px" }}
                 />
               )}
@@ -442,8 +443,6 @@ function MarketplaceService() {
         headerName: "Created On",
         flex: 1,
         minWidth: 235,
-        align: "center",
-        headerAlign: "center",
         valueGetter: (params) => {
           const value = formatDateUTC(params.row.created_at);
           return value;
@@ -454,8 +453,6 @@ function MarketplaceService() {
         headerName: "Last Modified",
         flex: 1,
         minWidth: 225,
-        align: "center",
-        headerAlign: "center",
         valueGetter: (params) => {
           const value = formatDateUTC(params.row.last_modified_at);
           return value;
@@ -465,8 +462,6 @@ function MarketplaceService() {
         field: "region",
         headerName: "Region",
         flex: 1,
-        align: "center",
-        headerAlign: "center",
         minWidth: 155,
         renderCell: (params) => {
           const region = params.row.region;
@@ -486,10 +481,8 @@ function MarketplaceService() {
         headerName: "Health Status",
         flex: 1,
         minWidth: 200,
-        align: "center",
-        headerAlign: "center",
-        renderCell: (params) => {
-          const status = params?.row?.status;
+        valueGetter: (params) => {
+          const status = params.row.status;
           let mainResource = [];
           if (params.row?.detailedNetworkTopology) {
             const detailedNetworkTopologyEntries = Object.entries(
@@ -505,17 +498,25 @@ function MarketplaceService() {
           const [, topologyDetails] = mainResource ?? [];
 
           if (CLI_MANAGED_RESOURCES.includes(topologyDetails?.resourceType))
-            return <StatusChip category="unknown" label="Unknown" />;
+            return "Unknown";
 
-          if (status === "STOPPED")
-            return <StatusChip category="unknown" label="N/A" />;
+          if (status === "STOPPED") return "N/A";
 
           const healthPercentage = calculateInstanceHealthPercentage(
             params.row.detailedNetworkTopology,
             status
           );
 
-          return <GradientProgressBar percentage={healthPercentage} />;
+          return healthPercentage;
+        },
+        renderCell: (params) => {
+          if (params.value === "Unknown")
+            return <StatusChip category="unknown" label="Unknown" />;
+
+          if (params.value === "N/A")
+            return <StatusChip category="unknown" label="N/A" />;
+
+          return <GradientProgressBar percentage={params.value} />;
         },
       });
     }
@@ -530,8 +531,8 @@ function MarketplaceService() {
         field: "cloud_provider",
         headerName: "Account ID",
         flex: 0.8,
-        align: "center",
-        headerAlign: "center",
+        valueGetter: (params) =>
+          params.row.awsAccountId || params.row.gcpProjectID,
         renderCell: (params) => {
           let Logo;
           const provider = params.row.cloud_provider;
@@ -550,13 +551,16 @@ function MarketplaceService() {
         field: "cloud_provider",
         headerName: "☁️ Provider(s)",
         flex: 0.8,
-        align: "center",
-        headerAlign: "center",
         minWidth: 130,
-        renderCell: (params) => {
+        valueGetter: (params) => {
           const cloudProvider = isCurrentResourceBYOA
-            ? params.row.result_params.cloud_provider
+            ? params.row.result_params?.cloud_provider
             : params.row.cloud_provider;
+
+          return cloudProvider;
+        },
+        renderCell: (params) => {
+          const cloudProvider = params.value;
 
           return cloudProvider === "aws" ? (
             <AwsLogo />
@@ -576,9 +580,9 @@ function MarketplaceService() {
         field: "kubernetesDashboardEndpoint",
         headerName: "Dashboard Endpoint",
         flex: 1,
-        headerAlign: "center",
-        align: "center",
         minWidth: 150,
+        valueGetter: (params) =>
+          params.row.kubernetesDashboardEndpoint?.dashboardEndpoint || "-",
         renderCell: (params) => {
           const { row } = params;
           const dashboardEndpoint =
@@ -927,12 +931,14 @@ function MarketplaceService() {
             }
           }
 
-          let cloud_provider = false;
+          let isCloudProvider = false;
           for (const param of schemaArray) {
-            cloud_provider = ["cloud_provider"].includes(param.key);
+            if (["cloud_provider"].includes(param.key)) {
+              isCloudProvider = true;
+            }
           }
 
-          if (!cloud_provider || isCustomNetworkEnabled) {
+          if (!isCloudProvider || isCustomNetworkEnabled) {
             delete data["network_type"];
           }
 
@@ -1649,7 +1655,7 @@ function MarketplaceService() {
                   fontSize: "30px",
                 }}
               >
-                No Resources
+                No resources
               </div>
               <div
                 justifyContent="center"
@@ -1864,8 +1870,6 @@ function MarketplaceService() {
                 components={{
                   Header: InstancesTableHeader,
                 }}
-                hideFooterSelectedRowCount
-                disableColumnMenu
                 columns={columns}
                 rows={isLoading ? [] : filteredInstances}
                 checkboxSelection
@@ -2063,6 +2067,7 @@ function MarketplaceService() {
             fetchResourceInstancesOfSelectedResource
           }
           cloudFormationTemplateUrlNoLB={cloudFormationTemplateUrlNoLB}
+          viewInstructionsItem={viewInstructionsItem}
         />
 
         <AccessSideRestoreInstance

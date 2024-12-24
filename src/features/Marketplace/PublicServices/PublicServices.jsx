@@ -64,7 +64,7 @@ function PublicServices() {
                 sx={{ mt: "100px", display: "flex", justifyContent: "center" }}
               >
                 <Text size="large" weight="medium">
-                  No Services Available
+                  No services available
                 </Text>
               </Box>
             )}

@@ -1,6 +1,6 @@
 import Box from "@mui/material/Box";
 import React from "react";
-import CopyToClipbpoardButton from "../CopyClipboardButton/CopyClipboardButton";
+import CopyToClipboardButton from "../CopyClipboardButton/CopyClipboardButton";
 import Link from "next/link";
 import ArrowOutwardIcon from "@mui/icons-material/ArrowOutward";
 
@@ -38,7 +38,7 @@ const GridCellExpand = React.memo(function GridCellExpand(
     onClick = () => {},
     href,
     target = "_self",
-    justifyContent = "center",
+    justifyContent = "start",
     externalLinkArrow,
   } = props;
   const wrapper = React.useRef(null);
@@ -101,7 +101,7 @@ const GridCellExpand = React.memo(function GridCellExpand(
       >
         {startIcon}
         {Boolean(copyButton && value) && (
-          <CopyToClipbpoardButton
+          <CopyToClipboardButton
             text={value}
             size="small"
             buttonStyles={{ marginLeft: "10px" }}
@@ -132,8 +132,6 @@ const GridCellExpand = React.memo(function GridCellExpand(
   return (
     <Box
       ref={wrapper}
-      // onMouseEnter={handleMouseEnter}
-      // onMouseLeave={handleMouseLeave}
       sx={{
         alignItems: "center",
         lineHeight: "24px",
