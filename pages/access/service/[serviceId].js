@@ -754,7 +754,7 @@ function MarketplaceService() {
     initialValues: {
       serviceId: serviceId,
       cloud_provider: defaultCloudProvider,
-      network_type: "PUBLIC",
+      network_type: service?.supportsPublicNetwork ? "PUBLIC" : "INTERNAL",
       region: "",
       requestParams: { ...requestParams },
       serviceProviderId: service?.serviceProviderId,

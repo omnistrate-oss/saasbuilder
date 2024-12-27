@@ -233,7 +233,9 @@ function CreateResourceInstanceForm(props) {
   const selectedCustomNetworkId = formData.values?.custom_network_id ?? "";
 
   const networkTypeFieldExists =
-    cloudProviderFieldExists && !isCustomNetworkEnabled;
+    cloudProviderFieldExists &&
+    !isCustomNetworkEnabled &&
+    service?.supportsPublicNetwork;
 
   if (isSchemaLoading)
     return (
