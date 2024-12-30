@@ -1,5 +1,4 @@
-import { SxProps, styled, Theme, Stack, Box } from "@mui/material";
-import MuiTableCell from "@mui/material/TableCell";
+import { SxProps, Theme, Stack, Box } from "@mui/material";
 import { Text } from "src/components/Typography/Typography";
 import { FC, useEffect, useRef, useState } from "react";
 import FieldContainer from "src/components/FormElementsv2/FieldContainer/FieldContainer";
@@ -30,9 +29,6 @@ export type AddCustomDNSToResourceInstancePayload = {
   customDNS: string;
   targetPort?: number;
 };
-const TableCell = styled(MuiTableCell)({
-  borderBottom: "none",
-});
 
 type ResourceConnectivityEndpointProps = {
   containerStyles: SxProps<Theme>;
