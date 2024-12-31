@@ -12,6 +12,7 @@ import CopyButton from "src/components/Button/CopyButton";
 import Button from "src/components/Button/Button";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
+import CustomDNSEndPoint from "./CustomDNSEndPoint";
 const TableCell = styled(MuiTableCell)({
   borderBottom: "none",
 });
@@ -25,6 +26,14 @@ type ResourceConnectivityEndpointProps = {
   containerStyles: SxProps<Theme>;
   context: "access" | "fleet";
   ResourceConnectivityCustomDNS?: any;
+  customDNSData?: {
+    enabled: boolean;
+    dnsName?: string;
+    status?: string;
+    cnameTarget?: string;
+    aRecordTarget?: string;
+    name?: string;
+  };
 };
 
 // Define the expected type for each port item
@@ -44,6 +53,7 @@ const ResourceConnectivityEndpoint: FC<ResourceConnectivityEndpointProps> = (
     viewType,
     isPrimaryResource = false,
     ResourceConnectivityCustomDNS,
+    customDNSData,
   } = props;
   const [isEndpointsExpanded, setIsEndpointsExpanded] = useState(false);
   const toggleExpanded = () => setIsEndpointsExpanded((prev) => !prev);
@@ -212,6 +222,17 @@ const ResourceConnectivityEndpoint: FC<ResourceConnectivityEndpointProps> = (
             </TableBody>
           </Table>
         </Box>
+        {customDNSData?.dnsName && customDNSData && (
+          <Box marginTop={"16px"}>
+            <CustomDNSEndPoint
+              isPrimaryResource={isPrimaryResource}
+              endpointURL={customDNSData?.dnsName}
+              endpointName={
+                customDNSData?.name ? customDNSData?.name : "Endpoint"
+              }
+            />
+          </Box>
+        )}
       </Box>
     </>
   );

@@ -10,7 +10,6 @@ function ResourceCustomDNS(props) {
     addCustomDNSMutation,
     removeCustomDNSMutation,
     accessQueryParams,
-    fleetQueryParams,
     refetchInstance,
   } = props;
 
@@ -45,6 +44,9 @@ function ResourceCustomDNS(props) {
     const res = [];
 
     if (primaryResourceName || otherResourceFilteredEndpoints?.length > 0) {
+      const customDNSEndpointName =
+        globalEndpoints?.primary?.customDNSEndpoint?.name ?? "";
+
       res.push({
         label: primaryResourceName,
         description: `The global endpoint of the ${sectionLabel.toLowerCase()}`,
@@ -53,14 +55,8 @@ function ResourceCustomDNS(props) {
           <>
             {primaryResourceName && (
               <CustomDNS
-                resourceName={
-                  primaryResourceName +
-                  " " +
-                  globalEndpoints?.primary?.customDNSEndpoint?.name
-                }
-                context={context}
+                resourceName={`${primaryResourceName} ${customDNSEndpointName}`}
                 customDNSData={globalEndpoints?.primary?.customDNSEndpoint}
-                fleetQueryParams={fleetQueryParams}
                 accessQueryParams={accessQueryParams}
                 resourceKey={globalEndpoints?.primary?.resourceKey}
                 resourceId={globalEndpoints?.primary?.resourceId}
@@ -85,6 +81,7 @@ function ResourceCustomDNS(props) {
           resourceHasCompute,
           customDNSEndpoint,
         }) => {
+          const customDNSEndpointName = customDNSEndpoint?.name ?? "";
           if (resourceName && endpoint) {
             res.push({
               label: resourceName,
@@ -92,10 +89,8 @@ function ResourceCustomDNS(props) {
               valueType: "custom",
               value: (
                 <CustomDNS
-                  resourceName={resourceName + " " + customDNSEndpoint?.name}
-                  context={context}
+                  resourceName={`${primaryResourceName} ${customDNSEndpointName}`}
                   customDNSData={customDNSEndpoint}
-                  fleetQueryParams={fleetQueryParams}
                   accessQueryParams={accessQueryParams}
                   resourceKey={resourceKey}
                   resourceId={resourceId}

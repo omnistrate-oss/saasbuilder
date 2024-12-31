@@ -18,24 +18,19 @@ import EditIcon from "src/components/Icons/Edit/Edit";
 import DeleteIcon from "src/components/Icons/Delete/Delete";
 import TextConfirmationDialog from "src/components/TextConfirmationDialog/TextConfirmationDialog";
 import LoadingSpinnerSmall from "src/components/CircularProgress/CircularProgress";
-import CustomDNSDetailsModal from "./CustomDNSDetailsModal";
 import { getCustomDNSStatusStylesAndLabel } from "src/constants/statusChipStyles/customDNS";
 import { useMutation } from "@tanstack/react-query";
-import ViewInstructionsIcon from "src/components/Icons/AccountConfig/ViewInstrcutionsIcon";
 import Card from "src/components/Card/Card";
 import PublicIcon from "src/components/Icons/DNSIcon/PublicIcon";
+import { AddCustomDNSToResourceInstancePayload } from "./ConnectivityCustomDNS";
+import CustomDNSDetails from "./CustomDNSDetails";
 
-export type AddCustomDNSToResourceInstancePayload = {
-  customDNS: string;
-  targetPort?: number;
-};
-
-type ResourceConnectivityEndpointProps = {
-  containerStyles: SxProps<Theme>;
+type EndpointProps = {
+  resourceName: string;
+  containerStyles?: SxProps<Theme>;
   resourceKey: string;
   resourceId: string;
   resourceHasCompute: boolean;
-  resourceName: string;
   customDNSData?: {
     enabled: boolean;
     dnsName?: string;
@@ -43,7 +38,7 @@ type ResourceConnectivityEndpointProps = {
     cnameTarget?: string;
     aRecordTarget?: string;
   };
-  queryData: {
+  accessQueryParams?: {
     serviceProviderId: string;
     serviceKey: string;
     serviceAPIVersion: string;
@@ -53,30 +48,25 @@ type ResourceConnectivityEndpointProps = {
     subscriptionId: string;
     resourceInstanceId: string;
   };
+
   refetchInstance: () => void;
 };
 
-const ResourceConnectivityCustomDNS: FC<ResourceConnectivityEndpointProps> = (
-  props
-) => {
+const CustomDNS: FC<EndpointProps> = (props) => {
   const {
+    resourceName,
     customDNSData = { enabled: false },
-    queryData,
+    accessQueryParams,
     resourceKey,
     resourceId,
     refetchInstance,
     resourceHasCompute,
-    resourceName,
   } = props;
 
   const [showDeleteConfirmationDialog, setShowDeleteConfirmationDialog] =
     useState(false);
-  const [showConfigurationDialog, setShowConfigurationDialog] = useState(false);
   const [deleteMessage, setDeleteMessage] = useState("");
   const [isTextfieldDisabled, setIsTextFieldDisabled] = useState(false);
-  const [shouldShowConfigDialog, setShouldShowConfigDialog] = useState(false);
-  const [isVerifyingDNSRemoval, setIsVerifyingDNSRemoval] = useState(false);
-  const [isEditing, setIsEditing] = useState(false);
   const textfieldRef = useRef<HTMLInputElement>();
   const timeoutID = useRef(null);
   const pollCount = useRef(0);
@@ -86,20 +76,19 @@ const ResourceConnectivityCustomDNS: FC<ResourceConnectivityEndpointProps> = (
   if (dnsName) {
     isCustomDNSSetup = true;
   }
-  const [isToggleChecked, setIsToggleChecked] = useState(isCustomDNSSetup);
 
   const addCustomDNSMutation = useMutation({
     mutationFn: (payload: AddCustomDNSToResourceInstancePayload) => {
       return addCustomDNSToResourceInstance(
-        queryData.serviceProviderId,
-        queryData.serviceKey,
-        queryData.serviceAPIVersion,
-        queryData.serviceEnvironmentKey,
-        queryData.serviceModelKey,
-        queryData.productTierKey,
+        accessQueryParams.serviceProviderId,
+        accessQueryParams.serviceKey,
+        accessQueryParams.serviceAPIVersion,
+        accessQueryParams.serviceEnvironmentKey,
+        accessQueryParams.serviceModelKey,
+        accessQueryParams.productTierKey,
         resourceKey,
-        queryData.resourceInstanceId,
-        queryData.subscriptionId,
+        accessQueryParams.resourceInstanceId,
+        accessQueryParams.subscriptionId,
         payload
       );
     },
@@ -111,15 +100,15 @@ const ResourceConnectivityCustomDNS: FC<ResourceConnectivityEndpointProps> = (
   const removeCustomDNSMutation = useMutation({
     mutationFn: () => {
       return removeCustomDNSFromResourceInstance(
-        queryData.serviceProviderId,
-        queryData.serviceKey,
-        queryData.serviceAPIVersion,
-        queryData.serviceEnvironmentKey,
-        queryData.serviceModelKey,
-        queryData.productTierKey,
+        accessQueryParams.serviceProviderId,
+        accessQueryParams.serviceKey,
+        accessQueryParams.serviceAPIVersion,
+        accessQueryParams.serviceEnvironmentKey,
+        accessQueryParams.serviceModelKey,
+        accessQueryParams.productTierKey,
         resourceKey,
-        queryData.resourceInstanceId,
-        queryData.subscriptionId
+        accessQueryParams.resourceInstanceId,
+        accessQueryParams.subscriptionId
       );
     },
     onSuccess: () => {
@@ -134,7 +123,6 @@ const ResourceConnectivityCustomDNS: FC<ResourceConnectivityEndpointProps> = (
   }
 
   function pollInstanceQueryToVerifyDNSRemoval() {
-    setIsVerifyingDNSRemoval(true);
     clearExistingTimeout();
     pollCount.current = 0;
     verifyDNSRemoval();
@@ -144,22 +132,21 @@ const ResourceConnectivityCustomDNS: FC<ResourceConnectivityEndpointProps> = (
         pollCount.current++;
         const id = setTimeout(() => {
           getResourceInstanceDetails(
-            queryData.serviceProviderId,
-            queryData.serviceKey,
-            queryData.serviceAPIVersion,
-            queryData.serviceEnvironmentKey,
-            queryData.serviceModelKey,
-            queryData.productTierKey,
+            accessQueryParams.serviceProviderId,
+            accessQueryParams.serviceKey,
+            accessQueryParams.serviceAPIVersion,
+            accessQueryParams.serviceEnvironmentKey,
+            accessQueryParams.serviceModelKey,
+            accessQueryParams.productTierKey,
             resourceKey,
-            queryData.resourceInstanceId,
-            queryData.subscriptionId
+            accessQueryParams.resourceInstanceId,
+            accessQueryParams.subscriptionId
           )
             .then((response) => {
               const topologyDetails =
                 response.data?.detailedNetworkTopology?.[resourceId];
               //check for dnsName field in the response, absence means dns removal complete
               if (!Boolean(topologyDetails?.customDNSEndpoint.dnsName)) {
-                setIsVerifyingDNSRemoval(false);
                 refetchInstance();
               } else {
                 verifyDNSRemoval();
@@ -171,7 +158,6 @@ const ResourceConnectivityCustomDNS: FC<ResourceConnectivityEndpointProps> = (
         }, 1500);
         timeoutID.current = id;
       } else {
-        setIsVerifyingDNSRemoval(false);
       }
     }
   }
@@ -217,11 +203,8 @@ const ResourceConnectivityCustomDNS: FC<ResourceConnectivityEndpointProps> = (
   async function handleAddDNS(payload: AddCustomDNSToResourceInstancePayload) {
     try {
       await addCustomDNSMutation?.mutateAsync(payload);
-      setShouldShowConfigDialog(true);
       setIsTextFieldDisabled(true);
-    } catch (err) {
-      console.error(err);
-    }
+    } catch {}
   }
 
   useEffect(() => {
@@ -229,16 +212,8 @@ const ResourceConnectivityCustomDNS: FC<ResourceConnectivityEndpointProps> = (
       setIsTextFieldDisabled(true);
     } else if (customDNSData.enabled === true && !customDNSData.dnsName) {
       setIsTextFieldDisabled(false);
-      setIsToggleChecked(false);
     }
   }, [customDNSData]);
-
-  useEffect(() => {
-    if (isCustomDNSSetup && shouldShowConfigDialog) {
-      setShowConfigurationDialog(true);
-      setShouldShowConfigDialog(false);
-    }
-  }, [isCustomDNSSetup, shouldShowConfigDialog, setShouldShowConfigDialog]);
 
   const statusStylesAndLabel = getCustomDNSStatusStylesAndLabel(
     customDNSData?.status
@@ -278,6 +253,13 @@ const ResourceConnectivityCustomDNS: FC<ResourceConnectivityEndpointProps> = (
               padding={"24px"}
               borderBottom={"1px solid rgba(213, 215, 218, 1)"}
             >
+              {(customDNSData?.aRecordTarget || customDNSData?.cnameTarget) && (
+                <CustomDNSDetails
+                  aRecordTarget={customDNSData?.aRecordTarget}
+                  cnameTarget={customDNSData?.cnameTarget}
+                  domainName={customDNSData?.dnsName}
+                />
+              )}
               <FieldContainer marginTop={0} sx={{ maxWidth: "1000px" }}>
                 <Stack
                   direction="row"
@@ -301,16 +283,8 @@ const ResourceConnectivityCustomDNS: FC<ResourceConnectivityEndpointProps> = (
                     <>
                       <IconButtonSquare
                         onClick={() => {
-                          setShowConfigurationDialog(true);
-                        }}
-                      >
-                        <ViewInstructionsIcon color="#7F56D9" />
-                      </IconButtonSquare>
-                      <IconButtonSquare
-                        onClick={() => {
                           setIsTextFieldDisabled(false);
                           //textfieldRef.current.focus();
-                          setIsEditing(true);
                         }}
                       >
                         <EditIcon color="#7F56D9" />
@@ -343,21 +317,6 @@ const ResourceConnectivityCustomDNS: FC<ResourceConnectivityEndpointProps> = (
                           <LoadingSpinnerSmall />
                         )}
                       </Button>
-                      {isEditing && (
-                        <Button
-                          variant="outlined"
-                          sx={{
-                            color: "#D92D20 !important",
-                          }}
-                          onClick={() => {
-                            customDNSFormik.resetForm();
-                            setIsEditing(false);
-                            setIsTextFieldDisabled(true);
-                          }}
-                        >
-                          Cancel
-                        </Button>
-                      )}
                     </>
                   )}
                 </Stack>
@@ -387,18 +346,9 @@ const ResourceConnectivityCustomDNS: FC<ResourceConnectivityEndpointProps> = (
             isDeleteEnable={true}
           />
         )}
-        <CustomDNSDetailsModal
-          open={showConfigurationDialog}
-          aRecordTarget={customDNSData?.aRecordTarget}
-          cnameTarget={customDNSData?.cnameTarget}
-          domainName={customDNSData?.dnsName}
-          handleClose={() => {
-            setShowConfigurationDialog(false);
-          }}
-        />
       </Card>
     </>
   );
 };
 
-export default ResourceConnectivityCustomDNS;
+export default CustomDNS;
