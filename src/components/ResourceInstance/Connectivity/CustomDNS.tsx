@@ -341,10 +341,17 @@ const CustomDNS: FC<EndpointProps> = (props) => {
                       />
                     )
                   }
-                  containerStyles={{
-                    backgroundColor: "rgba(237, 252, 242, 1)",
-                    border: "1px solid rgba(170, 240, 196, 1)",
-                  }}
+                  containerStyles={
+                    customDNSData?.status === "READY"
+                      ? {
+                          backgroundColor: "rgba(237, 252, 242, 1)",
+                          border: "1px solid rgba(170, 240, 196, 1)",
+                        }
+                      : {
+                          backgroundColor: "rgba(254, 251, 232, 1)",
+                          border: "1px solid rgba(254, 247, 195, 1)",
+                        }
+                  }
                   children={
                     <Text
                       size="xsmall"
