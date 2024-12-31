@@ -24,6 +24,9 @@ import Card from "src/components/Card/Card";
 import PublicIcon from "src/components/Icons/DNSIcon/PublicIcon";
 import { AddCustomDNSToResourceInstancePayload } from "./ConnectivityCustomDNS";
 import CustomDNSDetails from "./CustomDNSDetails";
+import AlertTrianglePITR from "src/components/Icons/AlertTrianglePITR/AlertTrianglePITR";
+import CircleCheckWithBorderIcon from "src/components/Icons/CircleCheck/CircleCheckWithBorderIcon";
+import CustomStatusChips from "src/components/CustomStatusChips/CustomStatusChips";
 
 type EndpointProps = {
   resourceName: string;
@@ -325,6 +328,40 @@ const CustomDNS: FC<EndpointProps> = (props) => {
                     customDNSFormik.errors.customDNSEndpoint}
                 </FieldError>
               </FieldContainer>
+              {isCustomDNSSetup && (
+                <CustomStatusChips
+                  icon={
+                    customDNSData?.status === "READY" ? (
+                      <CircleCheckWithBorderIcon />
+                    ) : (
+                      <AlertTrianglePITR
+                        height={16}
+                        width={16}
+                        style={{ alignSelf: "normal", flexShrink: 0 }}
+                      />
+                    )
+                  }
+                  containerStyles={{
+                    backgroundColor: "rgba(237, 252, 242, 1)",
+                    border: "1px solid rgba(170, 240, 196, 1)",
+                  }}
+                  children={
+                    <Text
+                      size="xsmall"
+                      weight="medium"
+                      color={
+                        customDNSData?.status === "READY"
+                          ? "rgba(8, 116, 67, 1)"
+                          : "rgba(220, 104, 3, 1)"
+                      }
+                    >
+                      {customDNSData?.status === "READY"
+                        ? "Domain Verified"
+                        : "Pending Verification"}
+                    </Text>
+                  }
+                />
+              )}
             </Box>
           </>
         )}
