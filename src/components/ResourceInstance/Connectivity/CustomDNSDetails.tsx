@@ -15,8 +15,9 @@ const RecordContainer = styled(Box)({
   flexDirection: "column",
   width: "100%",
   padding: "24px",
-  border: "1px solid rgba(233, 234, 235, 1)",
+  border: "1px solid #EAECF0",
   marginBottom: "16px",
+  boxShadow: "0px 1px 2px 0px rgba(16, 24, 40, 0.05)",
 });
 
 const RecordRowContainer = styled(Box)({
@@ -26,14 +27,16 @@ const RecordRowContainer = styled(Box)({
   width: "100%",
   marginBottom: "16px",
 });
-
 const RecordColumn = styled(Box)<{ hasBorder?: boolean }>(({ hasBorder }) => ({
   display: "flex",
   alignItems: "center",
-  border: hasBorder ? "1px solid rgba(233, 234, 235, 1)" : "none",
+  border: hasBorder ? "1px solid #EAECF0" : "none",
   borderRadius: "8px",
   flex: 1,
+  minHeight: "40px",
+  backgroundColor: "#fff",
   overflow: "hidden",
+  boxShadow: hasBorder ? "0px 1px 2px 0px rgba(16, 24, 40, 0.05)" : "none",
 }));
 
 const CustomDNSDetails: React.FC<CustomDNSDetailsProps> = ({
@@ -85,7 +88,7 @@ const CustomDNSDetails: React.FC<CustomDNSDetailsProps> = ({
                 alignItems="center"
                 justifyContent="center"
                 p="10px"
-                borderRight="1px solid rgba(233, 234, 235, 1)"
+                borderRight="1px solid #EAECF0"
                 flexShrink={0}
                 width="100px"
               >
@@ -106,7 +109,7 @@ const CustomDNSDetails: React.FC<CustomDNSDetailsProps> = ({
               >
                 <Box
                   p="10px"
-                  borderRight="1px solid rgba(233, 234, 235, 1)"
+                  borderRight="1px solid #EAECF0"
                   flexGrow={1}
                   overflow="hidden"
                   textOverflow="ellipsis"
@@ -141,7 +144,7 @@ const CustomDNSDetails: React.FC<CustomDNSDetailsProps> = ({
               >
                 <Box
                   p="10px"
-                  borderRight="1px solid rgba(233, 234, 235, 1)"
+                  borderRight="1px solid #EAECF0"
                   flexGrow={1}
                   overflow="hidden"
                   textOverflow="ellipsis"
