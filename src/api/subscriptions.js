@@ -1,10 +1,10 @@
 import axios from "../axios";
 
-export const getSubscriptionsIds = (orgId) => {
+export const getSubscriptionIds = (orgId) => {
   return axios.get(`/subscription/org/${orgId}`);
 };
 
-export const getSubscriptions = (subId) => {
+export const getSubscription = (subId) => {
   return axios.get(`/subscription/${subId}`);
 };
 
@@ -16,6 +16,10 @@ export const createSubscriptions = (payload, ignoreError = false) => {
   return axios.post(`/subscription`, payload, {
     ignoreGlobalErrorSnack: ignoreError,
   });
+};
+
+export const getSubscriptions = () => {
+  return axios.get(`/subscription`);
 };
 
 export const listSubscriptions = (query) => {

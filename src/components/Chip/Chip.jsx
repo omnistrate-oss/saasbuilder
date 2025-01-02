@@ -35,7 +35,6 @@ const Chip = styled(
     lineHeight: "20px",
     fontWeight: 500,
   },
-
   [`& .${chipClasses.icon}`]: {
     marginLeft: 0,
     marginRight: 4,

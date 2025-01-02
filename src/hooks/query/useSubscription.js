@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { useSelector } from "react-redux";
 import { selectUserData } from "../../slices/userDataSlice";
-import { getSubscriptions, getSubscriptionsIds } from "../../api/subscriptions";
+import { getSubscription, getSubscriptionIds } from "../../api/subscriptions";
 
 function useSubscription(productTierId) {
   const userData = useSelector(selectUserData);
@@ -10,11 +10,11 @@ function useSubscription(productTierId) {
   const query = useQuery(
     ["subscriptions", orgId, productTierId],
     async () => {
-      const subIds = await getSubscriptionsIds(orgId);
+      const subIds = await getSubscriptionIds(orgId);
       const subscriptionData = [];
       await Promise.all(
         subIds.data.ids.map((subId) => {
-          return getSubscriptions(subId).then((response) => {
+          return getSubscription(subId).then((response) => {
             const subData = response.data;
             return subscriptionData.push(subData);
           });

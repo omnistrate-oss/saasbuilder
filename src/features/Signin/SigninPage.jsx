@@ -1,30 +1,35 @@
-import Link from "next/link";
-import { useRouter } from "next/router";
-import { useMutation } from "@tanstack/react-query";
-import { Box, Stack, Typography } from "@mui/material";
-import { useFormik } from "formik";
-import axios from "src/axios";
-import Cookies from "js-cookie";
+"use client";
+
 import * as Yup from "yup";
-import MainImageLayout from "components/NonDashboardComponents/Layout/MainImageLayout";
-import FieldContainer from "components/NonDashboardComponents/FormElementsV2/FieldContainer";
+import Link from "next/link";
+import Cookies from "js-cookie";
+import { useFormik } from "formik";
+import ReCAPTCHA from "react-google-recaptcha";
+import { useRouter } from "next-nprogress-bar";
+import { useSearchParams } from "next/navigation";
+import { useMutation } from "@tanstack/react-query";
+import { useEffect, useRef, useState } from "react";
+import { Box, Stack, Typography } from "@mui/material";
+import { GoogleOAuthProvider } from "@react-oauth/google";
+
+import { Text } from "components/Typography/Typography";
+import DisplayHeading from "components/NonDashboardComponents/DisplayHeading";
+import TextField from "components/NonDashboardComponents/FormElementsV2/TextField";
 import FieldLabel from "components/NonDashboardComponents/FormElementsV2/FieldLabel";
 import SubmitButton from "components/NonDashboardComponents/FormElementsV2/SubmitButton";
-import TextField from "components/NonDashboardComponents/FormElementsV2/TextField";
 import PasswordField from "components/NonDashboardComponents/FormElementsV2/PasswordField";
-import { customerUserSignin } from "src/api/customer-user";
+import FieldContainer from "components/NonDashboardComponents/FormElementsV2/FieldContainer";
+
+import axios from "src/axios";
 import useSnackbar from "src/hooks/useSnackbar";
-import GoogleLogin from "./components/GoogleLogin";
-import { IDENTITY_PROVIDER_STATUS_TYPES } from "./constants";
-import { GoogleOAuthProvider } from "@react-oauth/google";
-import GithubLogin from "./components/GitHubLogin";
-import { useEffect, useRef, useState } from "react";
+import { customerUserSignin } from "src/api/customer-user";
 import useEnvironmentType from "src/hooks/useEnvironmentType";
 import { ENVIRONMENT_TYPES } from "src/constants/environmentTypes";
-import ReCAPTCHA from "react-google-recaptcha";
-import DisplayHeading from "components/NonDashboardComponents/DisplayHeading";
-import { Text } from "src/components/Typography/Typography";
 import { getMarketplaceProductTierRoute } from "src/utils/route/access/accessRoute";
+
+import GoogleLogin from "./components/GoogleLogin";
+import GithubLogin from "./components/GitHubLogin";
+import { IDENTITY_PROVIDER_STATUS_TYPES } from "./constants";
 
 const createSigninValidationSchema = Yup.object({
   email: Yup.string()
@@ -35,8 +40,6 @@ const createSigninValidationSchema = Yup.object({
 
 const SigninPage = (props) => {
   const {
-    orgName,
-    orgLogoURL,
     googleIdentityProvider,
     githubIdentityProvider,
     saasBuilderBaseURL,
@@ -44,8 +47,11 @@ const SigninPage = (props) => {
     isReCaptchaSetup,
   } = props;
   const router = useRouter();
+  const searchParams = useSearchParams();
   const environmentType = useEnvironmentType();
-  const { redirect_reason, destination } = router.query;
+  const redirect_reason = searchParams?.get("redirect_reason");
+  const destination = searchParams?.get("destination");
+
   const [isScriptLoaded, setIsScriptLoaded] = useState(false);
   const [hasCaptchaErrored, setHasCaptchaErrored] = useState(false);
   const reCaptchaRef = useRef(null);
@@ -104,7 +110,6 @@ const SigninPage = (props) => {
         return { serviceId: null, environmentId: null };
       }
     }
-    
 
     if (jwtToken) {
       Cookies.set("token", jwtToken, { sameSite: "Lax", secure: true });
@@ -117,9 +122,21 @@ const SigninPage = (props) => {
           extractQueryParams(decodedDestination);
 
         const route = getMarketplaceProductTierRoute(serviceId, environmentId);
-        router.replace(route);
+        router.replace(
+          route,
+          {},
+          {
+            showProgressBar: true,
+          }
+        );
       } else {
-        router.replace("/redirect");
+        router.replace(
+          "/instances",
+          {},
+          {
+            showProgressBar: true,
+          }
+        );
       }
     }
   }
@@ -205,11 +222,7 @@ const SigninPage = (props) => {
   const shouldHideSignupLink = environmentType !== ENVIRONMENT_TYPES.PROD;
 
   return (
-    <MainImageLayout
-      pageTitle="Sign in"
-      orgName={orgName}
-      orgLogoURL={orgLogoURL}
-    >
+    <>
       <DisplayHeading mt="24px">Login to your account</DisplayHeading>
 
       <Stack component="form" gap="32px" mt="44px">
@@ -344,13 +357,13 @@ const SigninPage = (props) => {
           color="#A0AEC0"
           textAlign="center"
         >
-          You’re new in here?{" "}
+          You&apos;re new in here?{" "}
           <Link href="/signup" style={{ color: "#27A376" }}>
             Create Account
           </Link>
         </Typography>
       )}
-    </MainImageLayout>
+    </>
   );
 };
 

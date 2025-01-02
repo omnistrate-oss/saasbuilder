@@ -1,27 +1,31 @@
-import { useEffect, useRef, useState } from "react";
-import Link from "next/link";
-import { useRouter } from "next/router";
-import { useFormik } from "formik";
-import { useMutation } from "@tanstack/react-query";
-import { Box, Stack, Typography, styled } from "@mui/material";
+"use client";
+
 import * as Yup from "yup";
-import { customerUserSignup } from "src/api/customer-user";
-import MainImageLayout from "components/NonDashboardComponents/Layout/MainImageLayout";
+import Link from "next/link";
+import { useFormik } from "formik";
+import ReCAPTCHA from "react-google-recaptcha";
+import { useSearchParams } from "next/navigation";
+import { useEffect, useRef, useState } from "react";
+import { useMutation } from "@tanstack/react-query";
+import { GoogleOAuthProvider } from "@react-oauth/google";
+import { Box, Stack, Typography, styled } from "@mui/material";
+
+import SuccessBox from "components/SuccessBox/SuccessBox";
+import FieldError from "components/FormElementsv2/FieldError/FieldError";
 import DisplayHeading from "components/NonDashboardComponents/DisplayHeading";
-import FieldContainer from "components/NonDashboardComponents/FormElementsV2/FieldContainer";
+import TextField from "components/NonDashboardComponents/FormElementsV2/TextField";
 import FieldLabel from "components/NonDashboardComponents/FormElementsV2/FieldLabel";
 import SubmitButton from "components/NonDashboardComponents/FormElementsV2/SubmitButton";
-import TextField from "components/NonDashboardComponents/FormElementsV2/TextField";
 import PasswordField from "components/NonDashboardComponents/FormElementsV2/PasswordField";
+import FieldContainer from "components/NonDashboardComponents/FormElementsV2/FieldContainer";
+
 import useSnackbar from "src/hooks/useSnackbar";
+import { customerUserSignup } from "src/api/customer-user";
 import { passwordRegex, passwordText } from "src/utils/passwordRegex";
-import FieldError from "src/components/FormElementsv2/FieldError/FieldError";
-import { GoogleOAuthProvider } from "@react-oauth/google";
+
 import GoogleLogin from "../Signin/components/GoogleLogin";
 import GithubLogin from "../Signin/components/GitHubLogin";
 import { IDENTITY_PROVIDER_STATUS_TYPES } from "../Signin/constants";
-import ReCAPTCHA from "react-google-recaptcha";
-import SuccessBox from "src/components/SuccessBox/SuccessBox";
 
 const signupValidationSchema = Yup.object({
   name: Yup.string().required("Name is required"),
@@ -39,8 +43,6 @@ const signupValidationSchema = Yup.object({
 
 const SignupPage = (props) => {
   const {
-    orgName,
-    orgLogoURL,
     googleIdentityProvider,
     githubIdentityProvider,
     saasBuilderBaseURL,
@@ -48,8 +50,12 @@ const SignupPage = (props) => {
     isReCaptchaSetup,
   } = props;
 
-  const router = useRouter();
-  const { org, orgUrl, email, userSource } = router.query;
+  const searchParams = useSearchParams();
+  const org = searchParams?.get("org");
+  const orgUrl = searchParams?.get("orgUrl");
+  const email = searchParams?.get("email");
+  const userSource = searchParams?.get("userSource");
+
   const [showSuccess, setShowSuccess] = useState(false);
   const [isScriptLoaded, setIsScriptLoaded] = useState(false);
   const [hasCaptchaErrored, setHasCaptchaErrored] = useState(false);
@@ -199,239 +205,226 @@ const SignupPage = (props) => {
 
   if (showSuccess) {
     return (
-      <MainImageLayout showArrow orgName={orgName} contentMaxWidth={650}>
+      <>
         <SuccessBox
           title="Verify Your Email to Activate Your Account"
           description="Thank you for signing up! We've sent a confirmation link to your email. Please check your inbox and click the link to verify your email address and complete the activation process."
         />
-      </MainImageLayout>
+      </>
     );
   }
 
   return (
     <>
-      <MainImageLayout
-        orgName={orgName}
-        orgLogoURL={orgLogoURL}
-        pageTitle="Sign up"
-        contentMaxWidth={650}
-      >
-        <DisplayHeading mt="24px">Get Started Today</DisplayHeading>
+      <DisplayHeading mt="24px">Get Started Today</DisplayHeading>
 
-        <Box component="form" mt="44px" autoComplete="off">
-          {/* Signup Form */}
-          <FormGrid>
-            <FieldContainer>
-              <FieldLabel required>Name</FieldLabel>
-              <TextField
-                id="name"
-                name="name"
-                placeholder="Enter your full name"
-                value={values.name}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                error={touched.name && errors.name}
-              />
-              <FieldError sx={{ paddingLeft: "13px" }}>
-                {touched.name && errors.name}
-              </FieldError>
-            </FieldContainer>
+      <Box component="form" mt="44px" autoComplete="off">
+        {/* Signup Form */}
+        <FormGrid>
+          <FieldContainer>
+            <FieldLabel required>Name</FieldLabel>
+            <TextField
+              id="name"
+              name="name"
+              placeholder="Enter your full name"
+              value={values.name}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              error={touched.name && errors.name}
+            />
+            <FieldError sx={{ paddingLeft: "13px" }}>
+              {touched.name && errors.name}
+            </FieldError>
+          </FieldContainer>
 
-            <FieldContainer>
-              <FieldLabel required>Email</FieldLabel>
-              <TextField
-                name="email"
-                id="email"
-                placeholder="example@companyemail.com"
-                value={values.email}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                error={touched.email && errors.email}
-                disabled={email ? true : false}
-              />
-              <FieldError sx={{ paddingLeft: "13px" }}>
-                {touched.email && errors.email}
-              </FieldError>
-            </FieldContainer>
+          <FieldContainer>
+            <FieldLabel required>Email</FieldLabel>
+            <TextField
+              name="email"
+              id="email"
+              placeholder="example@companyemail.com"
+              value={values.email}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              error={touched.email && errors.email}
+              disabled={email ? true : false}
+            />
+            <FieldError sx={{ paddingLeft: "13px" }}>
+              {touched.email && errors.email}
+            </FieldError>
+          </FieldContainer>
 
-            <FieldContainer>
-              <FieldLabel required>Company Name</FieldLabel>
-              <TextField
-                id="legalcompanyname"
-                name="legalcompanyname"
-                placeholder="Enter your company's name"
-                value={values.legalcompanyname}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                disabled={org ? true : false}
-                error={touched.legalcompanyname && errors.legalcompanyname}
-              />
-              <FieldError sx={{ paddingLeft: "13px" }}>
-                {touched.legalcompanyname && errors.legalcompanyname}
-              </FieldError>
-            </FieldContainer>
+          <FieldContainer>
+            <FieldLabel required>Company Name</FieldLabel>
+            <TextField
+              id="legalcompanyname"
+              name="legalcompanyname"
+              placeholder="Enter your company's name"
+              value={values.legalcompanyname}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              disabled={org ? true : false}
+              error={touched.legalcompanyname && errors.legalcompanyname}
+            />
+            <FieldError sx={{ paddingLeft: "13px" }}>
+              {touched.legalcompanyname && errors.legalcompanyname}
+            </FieldError>
+          </FieldContainer>
 
-            <FieldContainer>
-              <FieldLabel>Company URL</FieldLabel>
-              <TextField
-                id="companyurl"
-                name="companyurl"
-                placeholder="https://companyurl.com"
-                value={values.companyurl}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                error={touched.companyurl && errors.companyurl}
-                disabled={orgUrl ? true : false}
-              />
-              <FieldError sx={{ paddingLeft: "13px" }}>
-                {touched.companyurl && errors.companyurl}
-              </FieldError>
-            </FieldContainer>
+          <FieldContainer>
+            <FieldLabel>Company URL</FieldLabel>
+            <TextField
+              id="companyurl"
+              name="companyurl"
+              placeholder="https://companyurl.com"
+              value={values.companyurl}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              error={touched.companyurl && errors.companyurl}
+              disabled={orgUrl ? true : false}
+            />
+            <FieldError sx={{ paddingLeft: "13px" }}>
+              {touched.companyurl && errors.companyurl}
+            </FieldError>
+          </FieldContainer>
 
-            <FieldContainer>
-              <FieldLabel required>Password</FieldLabel>
-              <PasswordField
-                name="password"
-                id="password"
-                autoComplete="new-password"
-                placeholder="Enter your password"
-                value={values.password}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                error={touched.password && errors.password}
-              />
-              <FieldError sx={{ paddingLeft: "13px" }}>
-                {touched.password && errors.password}
-              </FieldError>
-            </FieldContainer>
+          <FieldContainer>
+            <FieldLabel required>Password</FieldLabel>
+            <PasswordField
+              name="password"
+              id="password"
+              autoComplete="new-password"
+              placeholder="Enter your password"
+              value={values.password}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              error={touched.password && errors.password}
+            />
+            <FieldError sx={{ paddingLeft: "13px" }}>
+              {touched.password && errors.password}
+            </FieldError>
+          </FieldContainer>
 
-            <FieldContainer>
-              <FieldLabel required>Confirm Password</FieldLabel>
-              <PasswordField
-                name="confirmPassword"
-                id="confirmPassword"
-                placeholder="Confirm your password"
-                value={values.confirmPassword}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                error={touched.confirmPassword && errors.confirmPassword}
-              />
-              <FieldError sx={{ paddingLeft: "13px" }}>
-                {touched.confirmPassword && errors.confirmPassword}
-              </FieldError>
-            </FieldContainer>
-          </FormGrid>
+          <FieldContainer>
+            <FieldLabel required>Confirm Password</FieldLabel>
+            <PasswordField
+              name="confirmPassword"
+              id="confirmPassword"
+              placeholder="Confirm your password"
+              value={values.confirmPassword}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              error={touched.confirmPassword && errors.confirmPassword}
+            />
+            <FieldError sx={{ paddingLeft: "13px" }}>
+              {touched.confirmPassword && errors.confirmPassword}
+            </FieldError>
+          </FieldContainer>
+        </FormGrid>
 
-          {/* Login and Google Button */}
-          <Stack mt="32px" width="480px" mx="auto">
-            <SubmitButton
-              type="submit"
-              onClick={formik.handleSubmit}
-              disabled={
-                !formik.isValid || (isReCaptchaSetup && !isScriptLoaded)
-              }
-              loading={signupMutation.isLoading}
+        {/* Login and Google Button */}
+        <Stack mt="32px" width="480px" mx="auto">
+          <SubmitButton
+            type="submit"
+            onClick={formik.handleSubmit}
+            disabled={!formik.isValid || (isReCaptchaSetup && !isScriptLoaded)}
+            loading={signupMutation.isLoading}
+          >
+            Create Account
+          </SubmitButton>
+          {isReCaptchaSetup && (
+            <ReCAPTCHA
+              size="invisible"
+              sitekey={googleReCaptchaSiteKey}
+              ref={reCaptchaRef}
+              asyncScriptOnLoad={() => {
+                setIsScriptLoaded(true);
+              }}
+              onErrored={() => {
+                setHasCaptchaErrored(true);
+              }}
+            />
+          )}
+        </Stack>
+      </Box>
+      {Boolean(googleIdentityProvider || githubIdentityProvider) && (
+        <>
+          <Box borderTop="1px solid #F1F2F4" textAlign="center" mt="40px">
+            <Box
+              display="inline-block"
+              paddingLeft="16px"
+              paddingRight="16px"
+              color="#687588"
+              bgcolor="white"
+              fontSize="14px"
+              fontWeight="500"
+              lineHeight="22px"
+              sx={{ transform: "translateY(-50%)" }}
             >
-              Create Account
-            </SubmitButton>
-            {isReCaptchaSetup && (
-              <ReCAPTCHA
-                size="invisible"
-                sitekey={googleReCaptchaSiteKey}
-                ref={reCaptchaRef}
-                asyncScriptOnLoad={() => {
-                  setIsScriptLoaded(true);
-                }}
-                onErrored={() => {
-                  setHasCaptchaErrored(true);
-                }}
-              />
-            )}
-          </Stack>
-        </Box>
-        {Boolean(googleIdentityProvider || githubIdentityProvider) && (
-          <>
-            <Box borderTop="1px solid #F1F2F4" textAlign="center" mt="40px">
-              <Box
-                display="inline-block"
-                paddingLeft="16px"
-                paddingRight="16px"
-                color="#687588"
-                bgcolor="white"
-                fontSize="14px"
-                fontWeight="500"
-                lineHeight="22px"
-                sx={{ transform: "translateY(-50%)" }}
-              >
-                Or use one of these options
-              </Box>
+              Or use one of these options
             </Box>
-            <Stack direction="row" justifyContent="center" mt="20px" gap="16px">
-              {showGoogleLoginButton && (
-                <GoogleOAuthProvider
-                  clientId={googleIDPClientID}
-                  onScriptLoadError={() => {}}
-                  onScriptLoadSuccess={() => {}}
-                >
-                  <GoogleLogin
-                    disabled={isGoogleLoginDisabled}
-                    saasBuilderBaseURL={saasBuilderBaseURL}
-                    invitationInfo={invitationInfo}
-                  />
-                </GoogleOAuthProvider>
-              )}
-              {showGithubLoginButton && (
-                <GithubLogin
-                  githubClientID={githubIDPClientID}
-                  disabled={isGithubLoginDisabled}
+          </Box>
+          <Stack direction="row" justifyContent="center" mt="20px" gap="16px">
+            {showGoogleLoginButton && (
+              <GoogleOAuthProvider
+                clientId={googleIDPClientID}
+                onScriptLoadError={() => {}}
+                onScriptLoadSuccess={() => {}}
+              >
+                <GoogleLogin
+                  disabled={isGoogleLoginDisabled}
                   saasBuilderBaseURL={saasBuilderBaseURL}
                   invitationInfo={invitationInfo}
                 />
-              )}
-            </Stack>
-          </>
-        )}
+              </GoogleOAuthProvider>
+            )}
+            {showGithubLoginButton && (
+              <GithubLogin
+                githubClientID={githubIDPClientID}
+                disabled={isGithubLoginDisabled}
+                saasBuilderBaseURL={saasBuilderBaseURL}
+                invitationInfo={invitationInfo}
+              />
+            )}
+          </Stack>
+        </>
+      )}
 
-        <Typography
-          mt="22px"
-          fontWeight="500"
-          fontSize="14px"
-          lineHeight="22px"
-          color="#A0AEC0"
-          textAlign="center"
+      <Typography
+        mt="22px"
+        fontWeight="500"
+        fontSize="14px"
+        lineHeight="22px"
+        color="#A0AEC0"
+        textAlign="center"
+      >
+        {policyAgreementText}{" "}
+        <Link target="_blank" href="/terms-of-use" style={{ color: "#27A376" }}>
+          Terms & Conditions
+        </Link>{" "}
+        and{" "}
+        <Link
+          target="_blank"
+          href="/privacy-policy"
+          style={{ color: "#27A376" }}
         >
-          {policyAgreementText}{" "}
-          <Link
-            target="_blank"
-            href="/terms-of-use"
-            style={{ color: "#27A376" }}
-          >
-            Terms & Conditions
-          </Link>{" "}
-          and{" "}
-          <Link
-            target="_blank"
-            href="/privacy-policy"
-            style={{ color: "#27A376" }}
-          >
-            Privacy Policy
-          </Link>
-        </Typography>
-        {/* Signup Link */}
-        <Typography
-          mt="20px"
-          fontWeight="500"
-          fontSize="14px"
-          lineHeight="22px"
-          color="#A0AEC0"
-          textAlign="center"
-        >
-          Already have an account?{" "}
-          <Link href="/signin" style={{ color: "#27A376" }}>
-            Login here
-          </Link>
-        </Typography>
-      </MainImageLayout>
+          Privacy Policy
+        </Link>
+      </Typography>
+      {/* Signup Link */}
+      <Typography
+        mt="20px"
+        fontWeight="500"
+        fontSize="14px"
+        lineHeight="22px"
+        color="#A0AEC0"
+        textAlign="center"
+      >
+        Already have an account?{" "}
+        <Link href="/signin" style={{ color: "#27A376" }}>
+          Login here
+        </Link>
+      </Typography>
     </>
   );
 };

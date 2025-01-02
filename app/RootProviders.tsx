@@ -1,0 +1,94 @@
+"use client";
+
+import { Suspense } from "react";
+import NProgress from "nprogress";
+import { Provider } from "react-redux";
+import { usePathname } from "next/navigation";
+import { ThemeProvider } from "@mui/material";
+import { AppProgressBar as ProgressBar } from "next-nprogress-bar";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { AppRouterCacheProvider } from "@mui/material-nextjs/v14-appRouter";
+
+import { store } from "src/redux-store";
+import NotificationBarProvider from "src/context/NotificationBarProvider";
+import EnvironmentTypeProvider from "src/context/EnvironmentTypeProvider";
+import AxiosGlobalErrorHandler from "src/providers/AxiosGlobalErrorHandler";
+import ProviderFavicon from "src/components/ProviderFavicon/ProviderFavicon";
+import SnackbarProvider from "src/components/SnackbarProvider/SnackbarProvider";
+import ProviderOrgDetailsProvider from "src/providers/ProviderOrgDetailsProvider";
+
+import { theme as dashboardTheme } from "../styles/theme";
+import { theme as nonDashboardTheme } from "../styles/non-dashboard-theme";
+
+import "../styles/globals.css";
+import "../styles/nprogress.css";
+import "../styles/quill-editor.css";
+import "../styles/monaco-editor.css";
+import "../src/components/DateRangePicker/date-range-picker-styles.css";
+
+NProgress.configure({
+  trickleSpeed: 50,
+});
+
+const queryQlient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: false,
+      refetchOnWindowFocus: false,
+      retryOnMount: false,
+    },
+  },
+});
+
+const nonDashboardRoutes = [
+  "/404",
+  "/signin",
+  "/signup",
+  "/change-password",
+  "/reset-password",
+];
+
+const RootProviders = ({
+  children,
+  envType,
+  providerOrgDetails,
+}: {
+  children: React.ReactNode;
+  envType: string; // TODO: Add a Type Here
+  providerOrgDetails: any; // TODO: Add a Type Here
+}) => {
+  const pathname = usePathname();
+  const isDashboardRoute = !nonDashboardRoutes.includes(pathname as string);
+  return (
+    <AppRouterCacheProvider>
+      <Provider store={store}>
+        <QueryClientProvider client={queryQlient}>
+          <Suspense>
+            <ProviderFavicon />
+            <SnackbarProvider>
+              <NotificationBarProvider>
+                <AxiosGlobalErrorHandler />
+                <ThemeProvider
+                  theme={isDashboardRoute ? dashboardTheme : nonDashboardTheme}
+                >
+                  <EnvironmentTypeProvider envType={envType}>
+                    <ProviderOrgDetailsProvider details={providerOrgDetails}>
+                      {children}
+                      <ProgressBar
+                        height="3px"
+                        color="#8d67df"
+                        options={{ showSpinner: false }}
+                      />
+                    </ProviderOrgDetailsProvider>
+                  </EnvironmentTypeProvider>
+                </ThemeProvider>
+              </NotificationBarProvider>
+            </SnackbarProvider>
+          </Suspense>
+        </QueryClientProvider>
+      </Provider>
+    </AppRouterCacheProvider>
+  );
+};
+
+export default RootProviders;

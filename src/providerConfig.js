@@ -12,9 +12,9 @@ export const styleConfig = {
   sidebarIconColor: "#667085",
   sidebarIconActiveColor: "#079455",
   sidebarIconDisabledColor: "#A0AEC0",
-  primaryColor: "#039855", // Filled Button Background
+  primaryColor: "#0E5FB5", // Filled Button Background
   primaryTextColor: "#FFFFFF", // Filled Button Text
-  primaryHoverColor: "#039855", // Filled Button Hover
+  primaryHoverColor: "#0E5FB5", // Filled Button Hover
   // secondaryColor: "#F5F5FF", // Outlined Button Background
   // primaryTextColor: "#FFFFFF", // Outlined Button Text
   // primaryHoverColor: "#7F56D9", // Outlined Button Hover

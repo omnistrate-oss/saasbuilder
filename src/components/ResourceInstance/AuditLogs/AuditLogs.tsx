@@ -109,7 +109,7 @@ function DetailTableRowView(props: { rowData: AccessEvent }) {
   return (
     <Box sx={{ margin: "10px 12px" }}>
       <JSONView
-        src={workflowFailures}
+        src={workflowFailures || {}}
         theme="isotope"
         enableClipboard={(copy: OnCopyProps) => {
           navigator.clipboard.writeText(JSON.stringify(copy.src));

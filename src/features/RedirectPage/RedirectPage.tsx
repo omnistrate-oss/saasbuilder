@@ -21,7 +21,7 @@ const RedirectPage = () => {
     useUserSubscriptions();
 
   const {
-    data: subscriptionRequestsData,
+    data: subscriptionRequests = [],
     isFetching: isFetchingSubscriptionRequests,
   } = useSubscriptionRequests();
 
@@ -49,10 +49,8 @@ const RedirectPage = () => {
     )
       return;
 
-    const subscriptionRequestIds = subscriptionRequestsData?.ids;
-
     // No Subscriptions, Subscribe to the First Service Offering
-    if (subscriptions?.length === 0 && subscriptionRequestIds?.length === 0) {
+    if (subscriptions?.length === 0 && subscriptionRequests?.length === 0) {
       let offering = serviceOfferingsData?.find(
         (offering) =>
           offering.AutoApproveSubscription &&
@@ -68,7 +66,7 @@ const RedirectPage = () => {
 
       if (!offering) {
         setIsRedirecting(true);
-        router.push("/service-plans");
+        router.push("/instances");
         return;
       }
 
@@ -92,7 +90,7 @@ const RedirectPage = () => {
           },
           onError: () => {
             setIsRedirecting(true);
-            router.push("/service-plans");
+            router.push("/instances");
           },
         }
       );
@@ -125,14 +123,14 @@ const RedirectPage = () => {
       router.push(route);
     } else {
       setIsRedirecting(true);
-      router.push("/service-plans");
+      router.push("/instances");
     }
   }, [
     isFetchingSubscriptions,
     isFetchingServiceOfferings,
     isFetchingSubscriptionRequests,
     serviceOfferingsData,
-    subscriptionRequestsData,
+    subscriptionRequests,
     subscriptions,
     isRedirecting,
   ]);

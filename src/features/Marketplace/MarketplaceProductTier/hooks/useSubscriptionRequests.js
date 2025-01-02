@@ -4,13 +4,10 @@ import { listSubscriptionRequests } from "src/api/subscriptionRequests";
 function useSubscriptionRequests(queryParams = {}, queryOptions = {}) {
   const query = useQuery(
     ["subscription-requests"],
-    () => {
-      return listSubscriptionRequests(queryParams);
-    },
+    () => listSubscriptionRequests(queryParams),
     {
-      refetchOnWindowFocus: false,
       select: (response) => {
-        return response.data;
+        return response.data.subscriptionRequests;
       },
       ...queryOptions,
     }

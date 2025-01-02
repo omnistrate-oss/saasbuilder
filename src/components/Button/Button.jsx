@@ -80,7 +80,7 @@ const Button = styled(
 
   return {
     ...buttonStyles,
-    borderRadius: 8,
+    borderRadius: "200px",
     textTransform: "none",
     minWidth: "auto",
     [`&.${buttonClasses.contained}`]: {
@@ -101,11 +101,11 @@ const Button = styled(
       boxShadow: "0px 1px 2px rgba(16, 24, 40, 0.05)",
     },
     [`&.${buttonClasses.outlined}`]: {
-      color: fontColor ? fontColor : "#374151",
+      color: fontColor ? fontColor : theme.palette.primary.main,
       background: outlineBg ? outlineBg : "white",
       borderWidth: "1px",
       borderStyle: "solid",
-      borderColor: outlineColor ? outlineColor : "#D0D5DD",
+      borderColor: outlineColor ? outlineColor : "#62AEFF",
       boxShadow: "0px 1px 2px 0px rgba(16, 24, 40, 0.05)",
     },
     [`&.${buttonClasses.outlined}:disabled`]: {

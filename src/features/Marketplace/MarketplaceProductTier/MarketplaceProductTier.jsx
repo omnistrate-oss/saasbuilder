@@ -26,11 +26,10 @@ function MarketplaceProductTier({ orgLogoURL, orgName }) {
   }, [data]);
   const subscriptionsQuery = useUserSubscriptions({ serviceId });
   const {
-    data: subscriptionRequestsData,
+    data: subscriptionRequests = [],
     isLoading: isSubscriptionRequestLoading,
     refetch: refetchSubscriptionRequests,
   } = useSubscriptionRequests();
-  const subscriptionRequests = subscriptionRequestsData?.subscriptionRequests;
   const { shouldDisplayNoServicesUI, shouldDisplayServiceNotFoundUI } =
     useProductTierRedirect();
 

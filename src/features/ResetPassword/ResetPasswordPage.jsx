@@ -1,23 +1,26 @@
-import { Stack } from "@mui/material";
-import { useMutation } from "@tanstack/react-query";
-import { useFormik } from "formik";
+"use client";
+
 import * as Yup from "yup";
+import Image from "next/image";
+import { useFormik } from "formik";
+import { Stack } from "@mui/material";
+import { useRef, useState } from "react";
+import ReCAPTCHA from "react-google-recaptcha";
+import { useMutation } from "@tanstack/react-query";
+
 import useSnackbar from "src/hooks/useSnackbar";
+import { styleConfig } from "src/providerConfig";
+import { customerUserResetPassword } from "src/api/customer-user";
+
+import { Text } from "components/Typography/Typography";
 import DisplayHeading from "components/NonDashboardComponents/DisplayHeading";
 import PageDescription from "components/NonDashboardComponents/PageDescription";
-import SubmitButton from "components/NonDashboardComponents/FormElementsV2/SubmitButton";
 import TextField from "components/NonDashboardComponents/FormElementsV2/TextField";
-import FieldContainer from "components/NonDashboardComponents/FormElementsV2/FieldContainer";
 import FieldLabel from "components/NonDashboardComponents/FormElementsV2/FieldLabel";
-import CenterContentLayout from "components/NonDashboardComponents/Layout/CenterContentLayout";
-import { customerUserResetPassword } from "src/api/customer-user";
-import ReCAPTCHA from "react-google-recaptcha";
-import { useRef, useState } from "react";
-import { Text } from "src/components/Typography/Typography";
-import { styleConfig } from "src/providerConfig";
+import SubmitButton from "components/NonDashboardComponents/FormElementsV2/SubmitButton";
+import FieldContainer from "components/NonDashboardComponents/FormElementsV2/FieldContainer";
 
 import Confetti from "public/assets/images/non-dashboard/confetti.svg";
-import Image from "next/image";
 
 const resetPasswordValidationSchema = Yup.object({
   email: Yup.string()
@@ -26,8 +29,8 @@ const resetPasswordValidationSchema = Yup.object({
 });
 
 const ResetPasswordPage = (props) => {
-  const { orgName, orgLogoURL, googleReCaptchaSiteKey, isReCaptchaSetup } =
-    props;
+  const { googleReCaptchaSiteKey, isReCaptchaSetup } = props;
+
   const snackbar = useSnackbar();
   const reCaptchaRef = useRef(null);
   const [isScriptLoaded, setIsScriptLoaded] = useState(false);
@@ -84,7 +87,7 @@ const ResetPasswordPage = (props) => {
 
   if (showSuccess) {
     return (
-      <CenterContentLayout orgName={orgName} pageTitle="Reset Password">
+      <>
         <Image
           src={Confetti}
           alt="Confetti"
@@ -119,21 +122,16 @@ const ResetPasswordPage = (props) => {
             Try again
           </span>
         </Text>
-      </CenterContentLayout>
+      </>
     );
   }
 
   return (
-    <CenterContentLayout
-      orgName={orgName}
-      orgLogoURL={orgLogoURL}
-      showLogo
-      pageTitle="Reset Password"
-    >
+    <>
       <Stack gap="16px">
         <DisplayHeading>Reset your password</DisplayHeading>
         <PageDescription>
-          Enter your email address and we’ll send you password reset
+          Enter your email address and we&apos;ll send you password reset
           instructions.
         </PageDescription>
       </Stack>
@@ -171,7 +169,7 @@ const ResetPasswordPage = (props) => {
           }}
         />
       )}
-    </CenterContentLayout>
+    </>
   );
 };
 

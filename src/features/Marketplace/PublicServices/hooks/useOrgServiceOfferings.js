@@ -6,13 +6,8 @@ function useOrgServiceOfferings(queryOptions = {}) {
   const environmentType = useEnvironmentType();
   const query = useQuery(
     ["org-service-offerings"],
-    () => {
-      return listServiceOfferings({
-        environmentType: environmentType,
-      });
-    },
+    () => listServiceOfferings({ environmentType: environmentType }),
     {
-      refetchOnWindowFocus: false,
       select: (data) => {
         const services = data.data?.services || [];
         const serviceOfferings = [];
@@ -32,6 +27,7 @@ function useOrgServiceOfferings(queryOptions = {}) {
         serviceOfferings.sort(
           (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
         );
+
         return serviceOfferings;
       },
       ...queryOptions,

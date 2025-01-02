@@ -56,7 +56,8 @@ function FourHundredFourPage() {
             <CardTitle
               sx={{ maxWidth: "592px", marginTop: "40px", textAlign: "center" }}
             >
-              Looks like you’ve found the doorway to the great nothing. <br />
+              Looks like you&apos;ve found the doorway to the great nothing.
+              <br />
             </CardTitle>
 
             <Description>

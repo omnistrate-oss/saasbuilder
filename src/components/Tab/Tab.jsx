@@ -5,7 +5,7 @@ import { styleConfig } from "src/providerConfig";
 
 export const Tabs = styled(MuiTabs)({
   borderBottom: "1px solid #E1E3EA",
-
+  minHeight: "32px",
   [`& .${tabsClasses.indicator}`]: {
     backgroundColor: "transparent",
   },
@@ -16,16 +16,15 @@ export const Tabs = styled(MuiTabs)({
 
 export const Tab = styled(MuiTab)({
   padding: 0,
-  paddingBottom: 14,
   textTransform: "none",
   borderBottom: "0px solid #EAECF0",
   fontSize: 14,
-  padding: "12px 0px",
+  padding: "4px 6px 12px !important",
   fontWeight: 600,
   color: "#667085",
   lineHeight: "20px",
-  // marginRight: "16px",
   minWidth: "auto",
+  minHeight: "32px",
   [`&.${tabClasses.selected}`]: {
     borderBottom: `2px solid ${styleConfig.secondaryColor}`,
     color: styleConfig.secondaryColor,

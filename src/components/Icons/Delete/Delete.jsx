@@ -3,10 +3,10 @@ import * as React from "react";
 const DeleteIcon = (props) => {
   let { color = "" } = props;
   if (!color) {
-    color = "#D92D20";
+    color = "#0E5FB5";
   }
   const { disabled = false } = props;
-  
+
   if (disabled) {
     color = "#a3a6ac";
   }
@@ -20,6 +20,7 @@ const DeleteIcon = (props) => {
       {...props}
     >
       <path
+        style={{ transition: "stroke 0.3s ease" }}
         stroke={color}
         strokeLinecap="round"
         strokeLinejoin="round"

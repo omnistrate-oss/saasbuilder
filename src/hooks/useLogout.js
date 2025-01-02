@@ -1,16 +1,22 @@
 import Cookies from "js-cookie";
-import { useRouter } from "next/router";
+import { useRouter } from "next-nprogress-bar";
+
 import axios from "../axios";
 
 function useLogout() {
   const router = useRouter();
-  //const snackbar = useSnackbar();
 
   //remove token from cookies, remove other user data and redirect to signin
   function handleLogout() {
     Cookies.remove("token");
     localStorage.removeItem("paymentNotificationHidden");
-    router.reload("/signin");
+    router.replace(
+      "/signin",
+      {},
+      {
+        showProgressBar: true,
+      }
+    );
   }
 
   //make backend call and invalidate the token

@@ -3,9 +3,9 @@ import * as React from "react";
 const EditIcon = (props) => {
   let { color } = props;
   const { disabled = false } = props;
-  
+
   if (!color) {
-    color = "#9F1AB1";
+    color = "#0E5FB5";
   }
   if (disabled) {
     color = "#a3a6ac";
@@ -19,6 +19,7 @@ const EditIcon = (props) => {
       {...props}
     >
       <path
+        style={{ transition: "stroke 0.3s ease" }}
         stroke={color}
         strokeLinecap="round"
         strokeLinejoin="round"
