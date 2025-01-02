@@ -24,6 +24,7 @@ import EnvironmentTypeProvider from "src/context/EnvironmentTypeProvider";
 import { ENVIRONMENT_TYPES } from "src/constants/environmentTypes";
 import { PAGE_TITLE_MAP } from "src/constants/pageTitleMap";
 import Head from "next/head";
+import CookieConsentProvider from "src/context/cookieConsentContext";
 
 NProgress.configure({
   trickleSpeed: 50,
@@ -173,7 +174,9 @@ export default function App(props) {
                   theme={isDashboardRoute ? dashboardTheme : nonDashboardTheme}
                 >
                   <EnvironmentTypeProvider envType={props.envType}>
-                    <Component {...pageProps} />
+                    <CookieConsentProvider>
+                      <Component {...pageProps} />
+                    </CookieConsentProvider>
                   </EnvironmentTypeProvider>
                 </ThemeProvider>
               </NotificationBarProvider>

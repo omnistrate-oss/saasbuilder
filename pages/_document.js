@@ -2,13 +2,13 @@ import * as React from "react";
 import Document, { Html, Head, Main, NextScript } from "next/document";
 import createEmotionServer from "@emotion/server/create-instance";
 import createEmotionCache from "../src/createEmotionCache";
-import Script from "next/script";
+// import Script from "next/script";
 export default class MyDocument extends Document {
   render() {
     return (
       <Html lang="en">
         <Head>
-          {process.env.GOOGLE_ANALYTICS_TAG_ID && (
+          {/* {process.env.GOOGLE_ANALYTICS_TAG_ID && (
             <Script
               src={`https://www.googletagmanager.com/gtag/js?id=${process.env.GOOGLE_ANALYTICS_TAG_ID}`}
               strategy="afterInteractive"
@@ -25,7 +25,7 @@ export default class MyDocument extends Document {
 	              gtag('config', '${process.env.GOOGLE_ANALYTICS_TAG_ID}');
 	            `}
             </Script>
-          )}
+          )} */}
           {/* PWA primary color */}
           <link rel="icon" href="" id="provider-favicon" />
           <meta httpEquiv="cache-control" content="no-cache" />
