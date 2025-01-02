@@ -24,7 +24,7 @@ import {
 import { getBillingRoute } from "src/utils/route/billing";
 import { getSettingsRoute } from "src/utils/route/settings";
 import { getSubscriptionsRoute } from "src/utils/route/subscriptions";
-import DOMPurify from "dompurify";
+import DOMPurify from "isomorphic-dompurify";
 
 type SubscriptionDropdownProps = {
   serviceId: string;
@@ -155,7 +155,6 @@ const SubscriptionsDropdown: FC<SubscriptionDropdownProps> = (props) => {
         },
       }}
       renderValue={() => {
-
         if (isLoadingSubscriptions) {
           return (
             <Stack justifyContent="center" alignItems="center" mt="3px">

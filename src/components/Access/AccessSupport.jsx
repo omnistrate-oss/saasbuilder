@@ -1,5 +1,5 @@
 import { Box, styled } from "@mui/material";
-import * as DOMPurify from "dompurify";
+import DOMPurify from "isomorphic-dompurify";
 import React, { useEffect, useState } from "react";
 import Tooltip from "..//Tooltip/Tooltip";
 import MarketplaceServiceDefinitionsTab, {
