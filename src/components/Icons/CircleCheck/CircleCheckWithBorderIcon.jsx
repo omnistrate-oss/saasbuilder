@@ -1,7 +1,7 @@
 import React from "react";
 
 function CircleCheckWithBorderIcon(props) {
-  const { height = 16, width = 16, color = "#B54708", ...restProps } = props;
+  const { height = 16, width = 16, ...restProps } = props;
 
   return (
     <svg

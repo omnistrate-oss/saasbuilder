@@ -23,10 +23,6 @@ const CustomDNSEndPoint: React.FC<CustomDNSEndPointProps> = ({
   containerStyles,
   endpointName,
 }) => {
-  const endpointPort = (url: string, port?: number): string => {
-    if (!url) return "";
-    return port ? `${url}:${port}` : url;
-  };
   return (
     <Box
       sx={{

@@ -218,10 +218,6 @@ const CustomDNS: FC<EndpointProps> = (props) => {
     }
   }, [customDNSData]);
 
-  const statusStylesAndLabel = getCustomDNSStatusStylesAndLabel(
-    customDNSData?.status
-  );
-
   return (
     <>
       <Card
@@ -352,22 +348,21 @@ const CustomDNS: FC<EndpointProps> = (props) => {
                           border: "1px solid rgba(254, 247, 195, 1)",
                         }
                   }
-                  children={
-                    <Text
-                      size="xsmall"
-                      weight="medium"
-                      color={
-                        customDNSData?.status === "READY"
-                          ? "rgba(8, 116, 67, 1)"
-                          : "rgba(220, 104, 3, 1)"
-                      }
-                    >
-                      {customDNSData?.status === "READY"
-                        ? "Domain Verified"
-                        : "Pending Verification"}
-                    </Text>
-                  }
-                />
+                >
+                  <Text
+                    size="xsmall"
+                    weight="medium"
+                    color={
+                      customDNSData?.status === "READY"
+                        ? "rgba(8, 116, 67, 1)"
+                        : "rgba(220, 104, 3, 1)"
+                    }
+                  >
+                    {customDNSData?.status === "READY"
+                      ? "Domain Verified"
+                      : "Pending Verification"}
+                  </Text>
+                </CustomStatusChips>
               )}
             </Box>
           </>

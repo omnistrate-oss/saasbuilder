@@ -574,7 +574,7 @@ function ResourceInstance() {
         <ResourceCustomDNS
           globalEndpoints={resourceInstanceData.connectivity.globalEndpoints}
           context="access"
-          accessQueryParams={accessQueryParams}
+          accessQueryParams={queryData}
           refetchInstance={resourceInstanceQuery.refetch}
         />
       )}

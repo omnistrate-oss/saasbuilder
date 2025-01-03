@@ -75,7 +75,6 @@ const ResourceConnectivityCustomDNS: FC<ResourceConnectivityEndpointProps> = (
 
   const [showDeleteConfirmationDialog, setShowDeleteConfirmationDialog] =
     useState(false);
-  const [showConfigurationDialog, setShowConfigurationDialog] = useState(false);
   const [deleteMessage, setDeleteMessage] = useState("");
   const [isTextfieldDisabled, setIsTextFieldDisabled] = useState(false);
   const [shouldShowConfigDialog, setShouldShowConfigDialog] = useState(false);
@@ -239,7 +238,6 @@ const ResourceConnectivityCustomDNS: FC<ResourceConnectivityEndpointProps> = (
 
   useEffect(() => {
     if (isCustomDNSSetup && shouldShowConfigDialog) {
-      setShowConfigurationDialog(true);
       setShouldShowConfigDialog(false);
     }
   }, [isCustomDNSSetup, shouldShowConfigDialog, setShouldShowConfigDialog]);
@@ -323,11 +321,7 @@ const ResourceConnectivityCustomDNS: FC<ResourceConnectivityEndpointProps> = (
                     />
                     {isTextfieldDisabled ? (
                       <>
-                        <IconButtonSquare
-                          onClick={() => {
-                            setShowConfigurationDialog(true);
-                          }}
-                        >
+                        <IconButtonSquare onClick={() => {}}>
                           <ViewInstructionsIcon color="#7F56D9" />
                         </IconButtonSquare>
                         <IconButtonSquare
