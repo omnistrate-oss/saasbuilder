@@ -81,6 +81,7 @@ const Header = ({ handleClose }: HeaderProps) => {
 
 type CookieCategoryProps = {
   category: CategoryWithoutServices;
+  // eslint-disable-next-line no-unused-vars
   handleChange: (categoryName: string) => void;
 };
 
@@ -149,6 +150,7 @@ const CookieCategoryCard = ({
 
 type ConsentProps = {
   handleAllowAll: () => void;
+  // eslint-disable-next-line no-unused-vars
   handleChange: (category: string) => void;
   userCategoryPreference: CategoryWithoutServices[];
 };
@@ -229,6 +231,7 @@ const Content = ({
 
 type FooterProps = {
   handleAllowNecessary: () => void;
+  // eslint-disable-next-line no-unused-vars
   handleSave: (userCategoryPreference: CategoryWithoutServices[]) => void;
   userCategoryPreference: CategoryWithoutServices[];
 };
@@ -273,6 +276,7 @@ type CookiePreferenceModalProps = {
   handleClose: () => void;
   handleAllowAll: () => void;
   handleAllowNecessary: () => void;
+  // eslint-disable-next-line no-unused-vars
   handleSave: (userCategoryPreference: CategoryWithoutServices[]) => void;
 };
 

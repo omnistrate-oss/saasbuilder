@@ -23,7 +23,6 @@ export const getServerSideProps = async () => {
     orgLogoURL = response.data.orgLogoURL;
     orgPrivacyPolicy = response.data.orgPrivacyPolicy;
     orgSupportEmail = response.data.orgSupportEmail || response.data.email;
-    //eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (err) {}
 
   return {

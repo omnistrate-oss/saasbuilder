@@ -98,7 +98,6 @@ const SigninPage = (props) => {
           serviceId: sanitizedServiceId || null,
           environmentId: sanitizedEnvironmentId || null,
         };
-        /*eslint-disable-next-line @typescript-eslint/no-unused-vars */
       } catch (error) {
         return { serviceId: null, environmentId: null };
       }

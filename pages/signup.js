@@ -33,7 +33,6 @@ export const getServerSideProps = async () => {
     );
     promises.push(identityProvidersPromise);
     await Promise.all(promises);
-    /*eslint-disable-next-line @typescript-eslint/no-unused-vars */
   } catch (err) {}
 
   return {

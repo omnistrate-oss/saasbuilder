@@ -217,7 +217,6 @@ App.getInitialProps = async () => {
       orgLogoURL = response.data.orgLogoURL;
       orgSupportEmail = response.data.orgSupportEmail || response.data.email;
     });
-    //eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (err) {}
 
   //check for environment type in environment variables, default to prod
