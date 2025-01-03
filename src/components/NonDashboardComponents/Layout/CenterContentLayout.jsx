@@ -3,16 +3,13 @@ import { Box, Stack } from "@mui/material";
 import Footer from "../Footer";
 import Logo from "../Logo";
 import BackgroundImg from "public/assets/images/non-dashboard/wave-background.svg";
+import { useOrgDetails } from "src/context/OrgDetailsProvider";
 // import NoLogoImage from "public/assets/images/logos/no-logo.png";
 // import Image from "next/image";
 
-const CenterContentLayout = ({
-  orgName,
-  orgLogoURL,
-  showLogo,
-  children,
-  pageTitle,
-}) => {
+const CenterContentLayout = ({ showLogo, children, pageTitle }) => {
+  const { orgName, orgLogoURL } = useOrgDetails();
+
   return (
     <>
       {pageTitle && (
@@ -40,7 +37,7 @@ const CenterContentLayout = ({
           )}
           {children}
         </Stack>
-        <Footer orgName={orgName} />
+        <Footer />
       </Box>
     </>
   );

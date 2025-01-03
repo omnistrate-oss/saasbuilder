@@ -14,11 +14,15 @@ export const getServerSideProps = async () => {
   let orgName = "";
   let orgLogoURL = "";
   let orgPrivacyPolicy = "";
+  let orgSupportEmail = "";
   try {
     const response = await getProviderOrgDetails();
+
     orgName = response.data.orgName;
     orgLogoURL = response.data.orgLogoURL;
     orgPrivacyPolicy = response.data.orgPrivacyPolicy;
+    orgSupportEmail = response.data.orgSupportEmail || response.data.email;
+    //eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (err) {}
 
   return {
@@ -26,6 +30,7 @@ export const getServerSideProps = async () => {
       orgName: orgName,
       orgLogoURL: orgLogoURL,
       orgPrivacyPolicy: orgPrivacyPolicy,
+      orgSupportEmail,
     },
   };
 };

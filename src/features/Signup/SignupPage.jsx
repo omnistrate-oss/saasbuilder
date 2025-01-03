@@ -39,8 +39,6 @@ const signupValidationSchema = Yup.object({
 
 const SignupPage = (props) => {
   const {
-    orgName,
-    orgLogoURL,
     googleIdentityProvider,
     githubIdentityProvider,
     saasBuilderBaseURL,
@@ -199,7 +197,7 @@ const SignupPage = (props) => {
 
   if (showSuccess) {
     return (
-      <MainImageLayout showArrow orgName={orgName} contentMaxWidth={650}>
+      <MainImageLayout showArrow  contentMaxWidth={650}>
         <SuccessBox
           title="Verify Your Email to Activate Your Account"
           description="Thank you for signing up! We've sent a confirmation link to your email. Please check your inbox and click the link to verify your email address and complete the activation process."
@@ -211,13 +209,10 @@ const SignupPage = (props) => {
   return (
     <>
       <MainImageLayout
-        orgName={orgName}
-        orgLogoURL={orgLogoURL}
         pageTitle="Sign up"
         contentMaxWidth={650}
       >
         <DisplayHeading mt="24px">Get Started Today</DisplayHeading>
-
         <Box component="form" mt="44px" autoComplete="off">
           {/* Signup Form */}
           <FormGrid>

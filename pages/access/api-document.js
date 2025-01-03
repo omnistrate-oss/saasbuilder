@@ -94,7 +94,6 @@ export default function ApiDocument() {
       <DashboardLayout
         setSupportDrawerOpen={setSupportDrawerOpen}
         setCurrentTabValue={setCurrentTabValue}
-        isNotShow
         marketplacePage={currentSource === "access" ? false : true}
         accessPage
         currentSubscription={subscriptionData}

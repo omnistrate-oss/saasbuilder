@@ -1,24 +1,15 @@
 import SignupPage from "src/features/Signup/SignupPage";
 import { IDENTITY_PROVIDER_TYPES } from "src/features/Signin/constants";
-import { getProviderOrgDetails } from "src/server/api/customer-user";
 import { getIdentityProvidersList } from "src/server/api/identity-provider";
 import { getSaaSDomainURL } from "src/server/utils/getSaaSDomainURL";
 import { checkReCaptchaSetup } from "src/server/utils/checkReCaptchaSetup";
 
 export const getServerSideProps = async () => {
-  let orgName = "";
-  let orgLogoURL = "";
-
   let googleIdentityProvider = null;
   let githubIdentityProvider = null;
 
   try {
     const promises = [];
-    const orgDetailsPromise = getProviderOrgDetails().then((response) => {
-      orgName = response.data.orgName;
-      orgLogoURL = response.data.orgLogoURL;
-    });
-    promises.push(orgDetailsPromise);
 
     const identityProvidersPromise = getIdentityProvidersList().then(
       (response) => {
@@ -42,12 +33,11 @@ export const getServerSideProps = async () => {
     );
     promises.push(identityProvidersPromise);
     await Promise.all(promises);
+    /*eslint-disable-next-line @typescript-eslint/no-unused-vars */
   } catch (err) {}
 
   return {
     props: {
-      orgName: orgName,
-      orgLogoURL: orgLogoURL,
       googleIdentityProvider: googleIdentityProvider,
       githubIdentityProvider: githubIdentityProvider,
       saasBuilderBaseURL: getSaaSDomainURL(),
