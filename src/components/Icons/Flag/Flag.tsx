@@ -1,5 +1,7 @@
-function Flag(props) {
-  const { color = '#ffffff' } = props;
+import { SVGIconType } from "src/types/common/reactGenerics";
+
+const Flag: SVGIconType = (props) => {
+  const { color = "#ffffff" } = props;
   return (
     <svg
       width={24}
@@ -18,6 +20,6 @@ function Flag(props) {
       />
     </svg>
   );
-}
+};
 
 export default Flag;

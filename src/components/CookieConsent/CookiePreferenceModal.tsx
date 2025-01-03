@@ -16,32 +16,39 @@ import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import Switch from "src/components/Switch/Switch";
 import { useState } from "react";
 import { useCookieConsentContext } from "src/context/cookieConsentContext";
+import { CategoryWithoutServices } from "src/types/cookieConsent";
 
-export const cookieCategoryDescriptionMap = {
+export const cookieCategoryDescriptionMap: Record<string, string> = {
   necessary:
     "These are essential for functioning of the application. They can't be disabled",
   analytics:
     "These cookies allow us to count visits and traffic sources so we can measure and improve the performance of our site. They help us to know which pages are the most and least popular and see how visitors move around the site. All information these cookies collect is aggregated and therefore anonymous. If you do not allow these cookies we will not know when you have visited our site, and will not be able to monitor its performance.",
 };
-const StyledContainer = styled(Box)(({ maxWidth = "500px" }) => ({
-  position: "fixed",
-  bottom: "50%",
-  right: "50%",
-  transform: "translate(50%, 50%)",
-  background: "#ffffff",
-  borderRadius: "12px",
-  // border: '1px solid #364152',
-  boxShadow:
-    "0px 2px 2px -1px #0A0D120A, 0px 4px 6px -2px #0A0D1208, 0px 12px 16px -4px #0A0D1214",
-  padding: "24px",
-  width: "100%",
-  maxWidth: maxWidth,
-  display: "flex",
-  flexDirection: "column",
-  justifyContent: "flex-start",
-}));
+const StyledContainer = styled(Box)<{ maxWidth?: string }>(
+  ({ maxWidth = "500px" }) => ({
+    position: "fixed",
+    bottom: "50%",
+    right: "50%",
+    transform: "translate(50%, 50%)",
+    background: "#ffffff",
+    borderRadius: "12px",
+    // border: '1px solid #364152',
+    boxShadow:
+      "0px 2px 2px -1px #0A0D120A, 0px 4px 6px -2px #0A0D1208, 0px 12px 16px -4px #0A0D1214",
+    padding: "24px",
+    width: "100%",
+    maxWidth: maxWidth,
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "flex-start",
+  })
+);
 
-const Header = ({ handleClose }) => {
+type HeaderProps = {
+  handleClose: () => void;
+};
+
+const Header = ({ handleClose }: HeaderProps) => {
   return (
     <Stack
       direction="row"
@@ -72,7 +79,15 @@ const Header = ({ handleClose }) => {
   );
 };
 
-const CookieCategoryCard = ({ category, handleChange }) => {
+type CookieCategoryProps = {
+  category: CategoryWithoutServices;
+  handleChange: (categoryName: string) => void;
+};
+
+const CookieCategoryCard = ({
+  category,
+  handleChange,
+}: CookieCategoryProps) => {
   const [isExpanded, setIsExpanded] = useState(false);
   return (
     <Box
@@ -132,7 +147,17 @@ const CookieCategoryCard = ({ category, handleChange }) => {
   );
 };
 
-const Content = ({ handleAllowAll, userCategoryPreference, handleChange }) => {
+type ConsentProps = {
+  handleAllowAll: () => void;
+  handleChange: (category: string) => void;
+  userCategoryPreference: CategoryWithoutServices[];
+};
+
+const Content = ({
+  handleAllowAll,
+  userCategoryPreference,
+  handleChange,
+}: ConsentProps) => {
   return (
     <Box>
       <Box sx={{ maxHeight: "440px", overflowY: "scroll", marginTop: "24px" }}>
@@ -202,11 +227,17 @@ const Content = ({ handleAllowAll, userCategoryPreference, handleChange }) => {
   );
 };
 
+type FooterProps = {
+  handleAllowNecessary: () => void;
+  handleSave: (userCategoryPreference: CategoryWithoutServices[]) => void;
+  userCategoryPreference: CategoryWithoutServices[];
+};
+
 const Footer = ({
   handleAllowNecessary,
   handleSave,
   userCategoryPreference,
-}) => {
+}: FooterProps) => {
   return (
     <Stack
       direction="row"
@@ -237,13 +268,21 @@ const Footer = ({
   );
 };
 
+type CookiePreferenceModalProps = {
+  open: boolean;
+  handleClose: () => void;
+  handleAllowAll: () => void;
+  handleAllowNecessary: () => void;
+  handleSave: (userCategoryPreference: CategoryWithoutServices[]) => void;
+};
+
 function CookiePreferenceModal({
   open,
   handleClose,
   handleAllowAll,
   handleAllowNecessary,
   handleSave,
-}) {
+}: CookiePreferenceModalProps) {
   const { consentState } = useCookieConsentContext();
 
   const [userCategoryPreference, setUserCategoryPreference] = useState(
@@ -253,13 +292,14 @@ function CookiePreferenceModal({
         category: category.category,
         enabled: category.enabled,
         editable: category.editable,
+        hide: category.hide,
       }))
   );
 
-  const handleChange = (category) => {
+  const handleChange = (categoryName: string) => {
     setUserCategoryPreference((categories) =>
       categories.map((cat) =>
-        cat.category === category ? { ...cat, enabled: !cat.enabled } : cat
+        cat.category === categoryName ? { ...cat, enabled: !cat.enabled } : cat
       )
     );
   };

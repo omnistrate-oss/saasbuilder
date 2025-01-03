@@ -1,14 +1,48 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import {
+  createContext,
+  ReactNode,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import CookieConsentModal from "src/components/CookieConsent/CookieConsentModal";
 import {
   cookieConsentInitialObject,
   handleConsentChanges,
 } from "src/cookieConsentManager";
+import {
+  CategoryWithoutServices,
+  CookieConsent,
+} from "src/types/cookieConsent";
 
-export const CookieConsentContext = createContext(null);
+type CookieConsentContextType = {
+  consentState: CookieConsent;
+  updateConsent: (updatedCategories: CategoryWithoutServices[]) => void;
+  isConsentModalOpen: boolean;
+  setIsConsentModalOpen: (isOpen: boolean) => void;
+};
 
-export default function CookieConsentProvider({ children }) {
-  const [consentState, setConsentState] = useState(cookieConsentInitialObject);
+// Default value for context
+const defaultContextValue: CookieConsentContextType = {
+  consentState: cookieConsentInitialObject as CookieConsent,
+  updateConsent: () => {},
+  isConsentModalOpen: false,
+  setIsConsentModalOpen: () => {},
+};
+
+export const CookieConsentContext =
+  createContext<CookieConsentContextType>(defaultContextValue);
+
+type CookieConsentProviderProps = {
+  children: ReactNode;
+};
+
+export default function CookieConsentProvider({
+  children,
+}: CookieConsentProviderProps) {
+  const [consentState, setConsentState] = useState(
+    cookieConsentInitialObject as CookieConsent
+  );
   const [isConsentModalOpen, setIsConsentModalOpen] = useState(false);
 
   const [isInitialLoad, setIsIntialLoad] = useState(true);
@@ -42,7 +76,7 @@ export default function CookieConsentProvider({ children }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [consentState]);
 
-  const updateConsent = (updatedCategories) => {
+  const updateConsent = (updatedCategories: CategoryWithoutServices[]) => {
     const newCategories = consentState.categories.map((cat) => {
       const updatedCategory = updatedCategories.find(
         (uc) => uc.category === cat.category

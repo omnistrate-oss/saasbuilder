@@ -6,24 +6,26 @@ import StyledButton from "../Button/Button";
 // import CookiePreferenceModal from "./CookiePreferenceModal";
 import { useCookieConsentContext } from "src/context/cookieConsentContext";
 
-const StyledConsentContainer = styled(Box)(({ maxWidth }) => ({
-  position: "fixed",
-  bottom: "0",
-  right: "50%",
-  transform: "translateX(50%)",
-  background: "#4B5565",
-  borderRadius: "12px",
-  border: "1px solid #364152",
-  boxShadow:
-    "0px 2px 2px -1px #0A0D120A, 0px 4px 6px -2px #0A0D1208, 0px 12px 16px -4px #0A0D1214",
-  padding: "12px",
-  width: "100%",
-  maxWidth: maxWidth,
-  display: "flex",
-  flexDirection: "column",
-  justifyContent: "flex-start",
-  zIndex: 1300,
-}));
+const StyledConsentContainer = styled(Box)<{ maxWidth?: string }>(
+  ({ maxWidth }) => ({
+    position: "fixed",
+    bottom: "0",
+    right: "50%",
+    transform: "translateX(50%)",
+    background: "#4B5565",
+    borderRadius: "12px",
+    border: "1px solid #364152",
+    boxShadow:
+      "0px 2px 2px -1px #0A0D120A, 0px 4px 6px -2px #0A0D1208, 0px 12px 16px -4px #0A0D1214",
+    padding: "12px",
+    width: "100%",
+    maxWidth: maxWidth,
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "flex-start",
+    zIndex: 1300,
+  })
+);
 
 const StartIcon = () => {
   return (
