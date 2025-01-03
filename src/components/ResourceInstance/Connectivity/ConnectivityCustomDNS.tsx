@@ -22,7 +22,6 @@ import EditIcon from "src/components/Icons/Edit/Edit";
 import DeleteIcon from "src/components/Icons/Delete/Delete";
 import TextConfirmationDialog from "src/components/TextConfirmationDialog/TextConfirmationDialog";
 import LoadingSpinnerSmall from "src/components/CircularProgress/CircularProgress";
-import CustomDNSDetailsModal from "./CustomDNSDetailsModal";
 import StatusChip from "src/components/StatusChip/StatusChip";
 import { getCustomDNSStatusStylesAndLabel } from "src/constants/statusChipStyles/customDNS";
 import { useMutation } from "@tanstack/react-query";
@@ -47,6 +46,7 @@ type ResourceConnectivityEndpointProps = {
     status?: string;
     cnameTarget?: string;
     aRecordTarget?: string;
+    name?: string;
   };
   queryData: {
     serviceProviderId: string;
@@ -75,7 +75,6 @@ const ResourceConnectivityCustomDNS: FC<ResourceConnectivityEndpointProps> = (
 
   const [showDeleteConfirmationDialog, setShowDeleteConfirmationDialog] =
     useState(false);
-  const [showConfigurationDialog, setShowConfigurationDialog] = useState(false);
   const [deleteMessage, setDeleteMessage] = useState("");
   const [isTextfieldDisabled, setIsTextFieldDisabled] = useState(false);
   const [shouldShowConfigDialog, setShouldShowConfigDialog] = useState(false);
@@ -109,6 +108,8 @@ const ResourceConnectivityCustomDNS: FC<ResourceConnectivityEndpointProps> = (
     },
     onSuccess: () => {
       refetchInstance();
+      setShouldShowConfigDialog(true);
+      setIsTextFieldDisabled(true);
     },
   });
 
@@ -128,6 +129,8 @@ const ResourceConnectivityCustomDNS: FC<ResourceConnectivityEndpointProps> = (
     },
     onSuccess: () => {
       pollInstanceQueryToVerifyDNSRemoval();
+      setShowDeleteConfirmationDialog(false);
+      removeCustomDNSFormik.resetForm();
     },
   });
 
@@ -209,24 +212,13 @@ const ResourceConnectivityCustomDNS: FC<ResourceConnectivityEndpointProps> = (
     },
     onSubmit: async (values) => {
       if (values.confirmationText === "deleteme") {
-        try {
-          await removeCustomDNSMutation?.mutateAsync();
-          setShowDeleteConfirmationDialog(false);
-          removeCustomDNSFormik.resetForm();
-        } catch {}
+        removeCustomDNSMutation?.mutate();
       }
     },
   });
 
   async function handleAddDNS(payload: AddCustomDNSToResourceInstancePayload) {
-    try {
-      await addCustomDNSMutation?.mutateAsync(payload);
-      setShouldShowConfigDialog(true);
-      setIsTextFieldDisabled(true);
-
-    } catch (err) {
-      console.error(err);
-    }
+    addCustomDNSMutation?.mutate(payload);
   }
 
   useEffect(() => {
@@ -240,7 +232,6 @@ const ResourceConnectivityCustomDNS: FC<ResourceConnectivityEndpointProps> = (
 
   useEffect(() => {
     if (isCustomDNSSetup && shouldShowConfigDialog) {
-      setShowConfigurationDialog(true);
       setShouldShowConfigDialog(false);
     }
   }, [isCustomDNSSetup, shouldShowConfigDialog, setShouldShowConfigDialog]);
@@ -304,7 +295,7 @@ const ResourceConnectivityCustomDNS: FC<ResourceConnectivityEndpointProps> = (
                 }}
               />
               <TableCell colSpan={2} sx={{ paddingLeft: "4px", paddingTop: 0 }}>
-                <FieldContainer marginTop={0} sx={{maxWidth : "510px"}}>
+                <FieldContainer marginTop={0} sx={{ maxWidth: "510px" }}>
                   <Stack
                     direction="row"
                     alignItems="center"
@@ -324,11 +315,7 @@ const ResourceConnectivityCustomDNS: FC<ResourceConnectivityEndpointProps> = (
                     />
                     {isTextfieldDisabled ? (
                       <>
-                        <IconButtonSquare
-                          onClick={() => {
-                            setShowConfigurationDialog(true);
-                          }}
-                        >
+                        <IconButtonSquare onClick={() => {}}>
                           <ViewInstructionsIcon color="#7F56D9" />
                         </IconButtonSquare>
                         <IconButtonSquare
@@ -414,15 +401,6 @@ const ResourceConnectivityCustomDNS: FC<ResourceConnectivityEndpointProps> = (
           isDeleteEnable={true}
         />
       )}
-      <CustomDNSDetailsModal
-        open={showConfigurationDialog}
-        aRecordTarget={customDNSData?.aRecordTarget}
-        cnameTarget={customDNSData?.cnameTarget}
-        domainName={customDNSData?.dnsName}
-        handleClose={() => {
-          setShowConfigurationDialog(false);
-        }}
-      />
     </>
   );
 };
