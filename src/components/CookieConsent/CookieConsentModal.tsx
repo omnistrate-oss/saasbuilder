@@ -5,7 +5,6 @@ import CloseIcon from "@mui/icons-material/Close";
 import StyledButton from "../Button/Button";
 // import CookiePreferenceModal from "./CookiePreferenceModal";
 import { useCookieConsentContext } from "src/context/cookieConsentContext";
-import Link from "next/link";
 
 const StyledConsentContainer = styled(Box)<{ maxWidth?: string }>(
   ({ maxWidth }) => ({
@@ -113,13 +112,12 @@ function CookieConsentModal() {
                 experience.{" "}
                 <Box component={"span"} sx={{ fontWeight: 400 }}>
                   Read our{" "}
-                  <Link
-                    href={"/cookie-policy"}
-                    target="_blank"
-                    style={{ textDecoration: "underline", cursor: "pointer" }}
+                  <Box
+                    component={"span"}
+                    sx={{ textDecoration: "underline", cursor: "pointer" }}
                   >
                     Cookie Policy
-                  </Link>
+                  </Box>
                 </Box>
               </Typography>
             </Stack>
