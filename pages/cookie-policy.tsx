@@ -16,13 +16,21 @@ const List = styled("ul")(() => ({
   marginTop: "16px",
   padding: "0px",
   listStyleType: "disc",
-  marginLeft: "20px",
+  marginLeft: "40px",
 }));
 
 const ListItem = styled("li")({
   "& + &": {
     marginTop: "16px",
+    fontSize: "16px",
+    lineHeight: "24px",
   },
+});
+
+const ListItemHeading = styled("h3")({
+  fontWeight: 700,
+  fontSize: "16px",
+  lineHeight: "24px",
 });
 
 function CookiePolicy() {
@@ -89,27 +97,27 @@ function CookiePolicy() {
             When you visit our websites, you may see a cookie notice that
             explains how we use cookies and provides an option to manage your
             preferences. You can:
-            <List>
-              <ListItem>
-                <Box fontWeight={700}>Cookie Settings</Box>
-                Access and update your cookie preferences at any time by
-                clicking on the &quot;Cookie Settings&quot; link in the footer
-                of our website.
-              </ListItem>
-              <ListItem>
-                <Box fontWeight={700}>Adjust Browser Settings</Box>
-                Most web browsers allow you to control cookies through their
-                settings. You can configure your browser to block cookies or
-                alert you when cookies are being set. Note that blocking some
-                cookies may impact website functionality.
-              </ListItem>
-              <ListItem>
-                <Box fontWeight={700}>Google Analytics Opt-Out</Box>
-                To opt out of Google Analytics, you can install the Google
-                Analytics Opt-Out Browser Add-on: Google Opt-Out.
-              </ListItem>
-            </List>
           </SectionDescription>
+          <List>
+            <ListItem>
+              <ListItemHeading>Cookie Settings</ListItemHeading>
+              Access and update your cookie preferences at any time by clicking
+              on the &quot;Cookie Settings&quot; link in the footer of our
+              website.
+            </ListItem>
+            <ListItem>
+              <ListItemHeading>Adjust Browser Settings</ListItemHeading>
+              Most web browsers allow you to control cookies through their
+              settings. You can configure your browser to block cookies or alert
+              you when cookies are being set. Note that blocking some cookies
+              may impact website functionality.
+            </ListItem>
+            <ListItem>
+              <ListItemHeading>Google Analytics Opt-Out</ListItemHeading>
+              To opt out of Google Analytics, you can install the Google
+              Analytics Opt-Out Browser Add-on: Google Opt-Out.
+            </ListItem>
+          </List>
           <SectionHeading>Updates to This Policy</SectionHeading>
           <SectionDescription>
             We may update this Cookie Policy from time to time to reflect
@@ -131,8 +139,8 @@ function CookiePolicy() {
               >
                 &nbsp;{orgSupportEmail}
               </Link>
-            </Box>. 
-            Thank you for choosing {orgName}! 
+            </Box>
+            . Thank you for choosing {orgName}!
           </SectionDescription>
         </>
       </Container>
