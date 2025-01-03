@@ -46,7 +46,7 @@ const PrivateIcon = (props: any) => (
         width="36"
         height="36"
         filterUnits="userSpaceOnUse"
-        color-interpolation-filters="sRGB"
+        colorInterpolationFilters="sRGB"
       >
         <feFlood flood-opacity="0" result="BackgroundImageFix" />
         <feColorMatrix
@@ -122,8 +122,8 @@ const PrivateIcon = (props: any) => (
         y2="33"
         gradientUnits="userSpaceOnUse"
       >
-        <stop stop-color="white" stop-opacity="0.12" />
-        <stop offset="1" stop-color="white" stop-opacity="0" />
+        <stop stopColor="white" stopOpacity="0.12" />
+        <stop offset="1" stopColor="white" stopOpacity="0" />
       </linearGradient>
     </defs>
   </svg>
