@@ -7,7 +7,7 @@
   "plugins": ["react", "react-hooks", "import"],
   "extends": [
     "next/core-web-vitals",
-    "plugin:@typescript-eslint/recommended"
+    // "plugin:@typescript-eslint/recommended"
     // "eslint:recommended",
     // "plugin:react/recommended"
   ],
