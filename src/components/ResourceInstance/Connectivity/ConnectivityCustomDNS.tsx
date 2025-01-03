@@ -108,6 +108,8 @@ const ResourceConnectivityCustomDNS: FC<ResourceConnectivityEndpointProps> = (
     },
     onSuccess: () => {
       refetchInstance();
+      setShouldShowConfigDialog(true);
+      setIsTextFieldDisabled(true);
     },
   });
 
@@ -127,6 +129,8 @@ const ResourceConnectivityCustomDNS: FC<ResourceConnectivityEndpointProps> = (
     },
     onSuccess: () => {
       pollInstanceQueryToVerifyDNSRemoval();
+      setShowDeleteConfirmationDialog(false);
+      removeCustomDNSFormik.resetForm();
     },
   });
 
@@ -208,23 +212,13 @@ const ResourceConnectivityCustomDNS: FC<ResourceConnectivityEndpointProps> = (
     },
     onSubmit: async (values) => {
       if (values.confirmationText === "deleteme") {
-        try {
-          await removeCustomDNSMutation?.mutateAsync();
-          setShowDeleteConfirmationDialog(false);
-          removeCustomDNSFormik.resetForm();
-        } catch {}
+        removeCustomDNSMutation?.mutate();
       }
     },
   });
 
   async function handleAddDNS(payload: AddCustomDNSToResourceInstancePayload) {
-    try {
-      await addCustomDNSMutation?.mutateAsync(payload);
-      setShouldShowConfigDialog(true);
-      setIsTextFieldDisabled(true);
-    } catch (err) {
-      console.error(err);
-    }
+    addCustomDNSMutation?.mutate(payload);
   }
 
   useEffect(() => {

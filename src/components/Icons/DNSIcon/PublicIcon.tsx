@@ -15,7 +15,7 @@ const PublicIcon = (props: any) => (
       <path
         d="M3 7C3 4.23858 5.23858 2 8 2H28C30.7614 2 33 4.23858 33 7V27C33 29.7614 30.7614 32 28 32H8C5.23858 32 3 29.7614 3 27V7Z"
         stroke="url(#paint0_linear_6543_3709)"
-        stroke-width="2"
+        strokeWidth="2"
       />
       <g clip-path="url(#clip0_6543_3709)">
         <path

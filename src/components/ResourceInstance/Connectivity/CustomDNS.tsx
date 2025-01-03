@@ -96,6 +96,7 @@ const CustomDNS: FC<EndpointProps> = (props) => {
     },
     onSuccess: () => {
       refetchInstance();
+      setIsTextFieldDisabled(true);
     },
   });
 
@@ -115,6 +116,8 @@ const CustomDNS: FC<EndpointProps> = (props) => {
     },
     onSuccess: () => {
       pollInstanceQueryToVerifyDNSRemoval();
+      setShowDeleteConfirmationDialog(false);
+      removeCustomDNSFormik.resetForm();
     },
   });
 
@@ -193,20 +196,13 @@ const CustomDNS: FC<EndpointProps> = (props) => {
     },
     onSubmit: async (values) => {
       if (values.confirmationText === "deleteme") {
-        try {
-          await removeCustomDNSMutation?.mutateAsync();
-          setShowDeleteConfirmationDialog(false);
-          removeCustomDNSFormik.resetForm();
-        } catch {}
+        removeCustomDNSMutation?.mutate();
       }
     },
   });
 
   async function handleAddDNS(payload: AddCustomDNSToResourceInstancePayload) {
-    try {
-      await addCustomDNSMutation?.mutateAsync(payload);
-      setIsTextFieldDisabled(true);
-    } catch {}
+    addCustomDNSMutation?.mutate(payload);
   }
 
   useEffect(() => {
