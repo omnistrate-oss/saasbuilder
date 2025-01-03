@@ -361,7 +361,6 @@ function AccessControl() {
       <DashboardLayout
         setSupportDrawerOpen={setSupportDrawerOpen}
         setCurrentTabValue={setCurrentTabValue}
-        isNotShow
         marketplacePage={currentSource === "access" ? false : true}
         apiDocsurl={serviceAPIDocsLink}
         serviceId={serviceId}
@@ -400,7 +399,6 @@ function AccessControl() {
       <DashboardLayout
         setSupportDrawerOpen={setSupportDrawerOpen}
         setCurrentTabValue={setCurrentTabValue}
-        isNotShow
         marketplacePage={currentSource === "access" ? false : true}
         apiDocsurl={serviceAPIDocsLink}
         serviceId={serviceId}
@@ -440,7 +438,6 @@ function AccessControl() {
       <DashboardLayout
         setSupportDrawerOpen={setSupportDrawerOpen}
         setCurrentTabValue={setCurrentTabValue}
-        isNotShow
         serviceId={serviceId}
         serviceApiId={service?.serviceAPIID}
         marketplacePage
@@ -470,7 +467,6 @@ function AccessControl() {
       enableConsumptionLinks
       servicePlanUrlLink={servicePlanUrlLink}
       environmentId={environmentId}
-      isNotShow
       SidebarUI={
         <MarketplaceServiceSidebar
           serviceId={serviceId}

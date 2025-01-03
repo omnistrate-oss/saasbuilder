@@ -26,8 +26,7 @@ const changePasswordValidationSchema = Yup.object({
     .oneOf([Yup.ref("password"), null], "Passwords must match"),
 });
 
-const ChangePasswordPage = (props) => {
-  const { orgName, orgLogoURL } = props;
+const ChangePasswordPage = () => {
   const snackbar = useSnackbar();
   const router = useRouter();
   const { email, token } = router.query;
@@ -65,12 +64,7 @@ const ChangePasswordPage = (props) => {
   const { values, handleChange, handleBlur, touched, errors } = formik;
 
   return (
-    <CenterContentLayout
-      showLogo
-      pageTitle="Update Password"
-      orgName={orgName}
-      orgLogoURL={orgLogoURL}
-    >
+    <CenterContentLayout showLogo pageTitle="Update Password">
       <Stack gap="16px">
         <DisplayHeading>Update your password</DisplayHeading>
         <PageDescription>

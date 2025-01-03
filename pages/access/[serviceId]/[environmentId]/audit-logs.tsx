@@ -106,7 +106,6 @@ function Events() {
         setSupportDrawerOpen={setSupportDrawerOpen}
         setCurrentTabValue={setCurrentTabValue}
         accessPage
-        isNotShow
         customLogo
         serviceId={serviceId}
         environmentId={environmentId}
@@ -138,7 +137,6 @@ function Events() {
         setSupportDrawerOpen={setSupportDrawerOpen}
         setCurrentTabValue={setCurrentTabValue}
         accessPage
-        isNotShow
         customLogo
         serviceId={serviceId}
         environmentId={environmentId}
@@ -185,7 +183,6 @@ function Events() {
       <DashboardLayout
         setSupportDrawerOpen={setSupportDrawerOpen}
         setCurrentTabValue={setCurrentTabValue}
-        isNotShow
         serviceId={serviceId}
         serviceApiId={serviceOffering?.serviceAPIID}
         marketplacePage
@@ -207,7 +204,6 @@ function Events() {
       setCurrentTabValue={setCurrentTabValue}
       accessPage
       currentSubscription={subscriptionData}
-      isNotShow
       enableConsumptionLinks
       apiDocsurl={serviceAPIDocsLink}
       servicePlanUrlLink={servicePlanUrlLink}

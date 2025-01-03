@@ -9,16 +9,20 @@ import Container from "src/components/NonDashboardComponents/Container/Container
 import { getProviderOrgDetails } from "src/server/api/customer-user";
 import DOMPurify from "isomorphic-dompurify";
 import { styleConfig } from "src/providerConfig";
+import Footer from "src/components/NonDashboardComponents/Footer";
 
 export const getServerSideProps = async () => {
   let orgName = "";
   let orgLogoURL = "";
   let orgPrivacyPolicy = "";
+  let orgSupportEmail = "";
   try {
     const response = await getProviderOrgDetails();
+
     orgName = response.data.orgName;
     orgLogoURL = response.data.orgLogoURL;
     orgPrivacyPolicy = response.data.orgPrivacyPolicy;
+    orgSupportEmail = response.data.orgSupportEmail || response.data.email;
   } catch (err) {}
 
   return {
@@ -26,6 +30,7 @@ export const getServerSideProps = async () => {
       orgName: orgName,
       orgLogoURL: orgLogoURL,
       orgPrivacyPolicy: orgPrivacyPolicy,
+      orgSupportEmail,
     },
   };
 };
@@ -223,6 +228,7 @@ function PrivacyPolicy(props) {
             mobile: "40px",
             desktop: "100px",
           },
+          minHeight: "calc(100vh - 62px)",
         }}
       >
         <Title>Privacy Policy</Title>
@@ -259,6 +265,7 @@ function PrivacyPolicy(props) {
           />
         )}
       </Container>
+      <Footer nonFloatingBottomPosition />
     </>
   );
 }

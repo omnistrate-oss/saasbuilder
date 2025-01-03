@@ -1,5 +1,8 @@
-import { styled } from "@mui/material";
+import { Typography, styled } from "@mui/material";
 import { closedWidth, drawerWidth } from "./SideDrawer";
+import { useOrgDetails } from "src/context/OrgDetailsProvider";
+import Link from "next/link";
+import { useCookieConsentContext } from "src/context/cookieConsentContext";
 
 const Footer = styled("footer", {
   shouldForwardProp: (prop) => prop !== "open" && prop !== "noSidebar",
@@ -35,21 +38,48 @@ const Footer = styled("footer", {
   }),
 }));
 
-// const Copyright = styled("span")(({ theme }) => ({
-//   fontWeight: 400,
-//   color: "#9CA3AF",
-// }));
+const Copyright = styled("span")(({}) => ({
+  fontWeight: 400,
+  color: "#9CA3AF",
+}));
 
 function DashboardFooter(props) {
+  const { orgName } = useOrgDetails();
+  const { setIsConsentModalOpen } = useCookieConsentContext();
+
   const { noSidebar, isNotShow } = props;
   return isNotShow ? (
     ""
   ) : (
     <Footer open={props.open} noSidebar={noSidebar}>
-      {/* <Copyright>
-        © {new Date().getFullYear()} {providerConfig.providerOrgName} All rights
-        reserved.
-      </Copyright> */}
+      <div>
+        <Link href={`/privacy-policy`} target="_blank" rel="noreferrer">
+          <span>Privacy Policy</span>
+        </Link>
+        <Link href={`/terms-of-use`} target="_blank" rel="noreferrer">
+          <span style={{ marginLeft: 32 }}>Terms of Use</span>
+        </Link>
+        <Typography
+          component="p"
+          sx={{
+            cursor: "pointer",
+            display: "inline-block",
+            color: "#6B7280",
+            fontWeight: 500,
+            lineHeight: "20px",
+            fontSize: "14px",
+            marginLeft: "32px",
+          }}
+          onClick={() => {
+            setIsConsentModalOpen(true);
+          }}
+        >
+          Cookie Settings
+        </Typography>
+      </div>
+      <Copyright>
+        © {new Date().getFullYear()} {orgName} All rights reserved.
+      </Copyright>
     </Footer>
   );
 }

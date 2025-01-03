@@ -24,6 +24,9 @@ import EnvironmentTypeProvider from "src/context/EnvironmentTypeProvider";
 import { ENVIRONMENT_TYPES } from "src/constants/environmentTypes";
 import { PAGE_TITLE_MAP } from "src/constants/pageTitleMap";
 import Head from "next/head";
+import CookieConsentProvider from "src/context/cookieConsentContext";
+import { getProviderOrgDetails } from "src/server/api/customer-user";
+import OrgDetailsProvider from "src/context/OrgDetailsProvider";
 
 NProgress.configure({
   trickleSpeed: 50,
@@ -173,7 +176,15 @@ export default function App(props) {
                   theme={isDashboardRoute ? dashboardTheme : nonDashboardTheme}
                 >
                   <EnvironmentTypeProvider envType={props.envType}>
-                    <Component {...pageProps} />
+                    <OrgDetailsProvider
+                      orgLogoURL={props.orgLogoURL}
+                      orgName={props.orgName}
+                      orgSupportEmail={props.orgSupportEmail}
+                    >
+                      <CookieConsentProvider>
+                        <Component {...pageProps} />
+                      </CookieConsentProvider>
+                    </OrgDetailsProvider>
                   </EnvironmentTypeProvider>
                 </ThemeProvider>
               </NotificationBarProvider>
@@ -196,6 +207,23 @@ export default function App(props) {
 }
 
 App.getInitialProps = async () => {
+  let orgName = "";
+  let orgLogoURL = "";
+  let orgSupportEmail = "";
+
+  try {
+    await getProviderOrgDetails().then((response) => {
+      orgName = response.data.orgName;
+      orgLogoURL = response.data.orgLogoURL;
+      orgSupportEmail = response.data.orgSupportEmail || response.data.email;
+    });
+  } catch (err) {}
+
   //check for environment type in environment variables, default to prod
-  return { envType: process.env.ENVIRONMENT_TYPE || ENVIRONMENT_TYPES.PROD };
+  return {
+    envType: process.env.ENVIRONMENT_TYPE || ENVIRONMENT_TYPES.PROD,
+    orgName,
+    orgLogoURL,
+    orgSupportEmail,
+  };
 };
