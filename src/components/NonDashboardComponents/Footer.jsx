@@ -3,18 +3,20 @@ import Link from "next/link";
 import { useOrgDetails } from "src/context/OrgDetailsProvider";
 import { useCookieConsentContext } from "src/context/cookieConsentContext";
 
-const Footer = () => {
+const Footer = (props) => {
+  const { nonFloatingBottomPosition = false } = props;
   const { setIsConsentModalOpen } = useCookieConsentContext();
   const { orgName } = useOrgDetails();
   return (
     <Box
-      position="absolute"
+      position={nonFloatingBottomPosition ? "static" : "absolute"}
       bottom="14px"
       left="0"
       right="0"
       display="flex"
       justifyContent="center"
       gap="10px"
+      padding={nonFloatingBottomPosition ? "20px" : "0px"}
     >
       <Typography
         fontWeight="500"

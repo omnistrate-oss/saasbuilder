@@ -6,6 +6,7 @@ import Link from "next/link";
 import Container from "src/components/NonDashboardComponents/Container/Container";
 import { useOrgDetails } from "src/context/OrgDetailsProvider";
 import CookiePolicyTable from "src/components/CookiePolicy/CookiePolicyTable";
+import Footer from "src/components/NonDashboardComponents/Footer";
 
 export const getServerSideProps = async () => {
   return {
@@ -146,6 +147,7 @@ function CookiePolicy() {
           </SectionDescription>
         </>
       </Container>
+      <Footer nonFloatingBottomPosition />
     </>
   );
 }
