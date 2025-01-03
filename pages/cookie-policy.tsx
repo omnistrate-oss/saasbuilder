@@ -5,6 +5,7 @@ import { Box, styled } from "@mui/material";
 import Link from "next/link";
 import Container from "src/components/NonDashboardComponents/Container/Container";
 import { useOrgDetails } from "src/context/OrgDetailsProvider";
+import CookiePolicyTable from "src/components/CookiePolicy/CookiePolicyTable";
 
 export const getServerSideProps = async () => {
   return {
@@ -89,8 +90,9 @@ function CookiePolicy() {
           <SectionHeading>
             Categories of Cookies and Their Providers
           </SectionHeading>
-          <SectionDescription>test</SectionDescription>
-
+          <Box sx={{ marginTop: "30px" }}>
+            <CookiePolicyTable orgName={orgName} />
+          </Box>
           <SectionHeading>How Can You Manage Cookies?</SectionHeading>
           <SectionDescription>
             You have the right to decide whether to accept or reject cookies.
