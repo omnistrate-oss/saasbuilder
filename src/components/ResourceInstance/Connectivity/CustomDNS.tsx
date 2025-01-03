@@ -18,7 +18,6 @@ import EditIcon from "src/components/Icons/Edit/Edit";
 import DeleteIcon from "src/components/Icons/Delete/Delete";
 import TextConfirmationDialog from "src/components/TextConfirmationDialog/TextConfirmationDialog";
 import LoadingSpinnerSmall from "src/components/CircularProgress/CircularProgress";
-import { getCustomDNSStatusStylesAndLabel } from "src/constants/statusChipStyles/customDNS";
 import { useMutation } from "@tanstack/react-query";
 import Card from "src/components/Card/Card";
 import PublicIcon from "src/components/Icons/DNSIcon/PublicIcon";
