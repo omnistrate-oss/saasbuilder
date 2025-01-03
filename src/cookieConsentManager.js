@@ -105,6 +105,10 @@ const removeCookies = (cookieNames) => {
 function removeGoogleAnalyticsScriptsAndCookies() {
   removeScript(`script-${this.name}`);
   removeCookies(this.cookies);
+  window.dataLayer = undefined; // Clear global state
+  delete window.gaGlobal;
+  delete window.google_tag_data;
+  delete window.google_tag_manager;
 }
 
 export const handleConsentChanges = (categories) => {
