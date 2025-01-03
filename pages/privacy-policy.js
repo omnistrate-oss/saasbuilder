@@ -9,6 +9,7 @@ import Container from "src/components/NonDashboardComponents/Container/Container
 import { getProviderOrgDetails } from "src/server/api/customer-user";
 import DOMPurify from "isomorphic-dompurify";
 import { styleConfig } from "src/providerConfig";
+import Footer from "src/components/NonDashboardComponents/Footer";
 
 export const getServerSideProps = async () => {
   let orgName = "";
@@ -228,6 +229,7 @@ function PrivacyPolicy(props) {
             mobile: "40px",
             desktop: "100px",
           },
+          minHeight: "calc(100vh - 62px)",
         }}
       >
         <Title>Privacy Policy</Title>
@@ -264,6 +266,7 @@ function PrivacyPolicy(props) {
           />
         )}
       </Container>
+      <Footer nonFloatingBottomPosition />
     </>
   );
 }
