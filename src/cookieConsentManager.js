@@ -106,9 +106,9 @@ function removeGoogleAnalyticsScriptsAndCookies() {
   removeScript(`script-${this.name}`);
   removeCookies(this.cookies);
   window.dataLayer = undefined; // Clear global state
-  delete window.gaGlobal;
-  delete window.google_tag_data;
-  delete window.google_tag_manager;
+  window.gaGlobal = undefined;
+  window.google_tag_data = undefined;
+  window.google_tag_manager = undefined;
 }
 
 export const handleConsentChanges = (categories) => {

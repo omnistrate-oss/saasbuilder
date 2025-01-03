@@ -13,7 +13,11 @@ type OrgDetails = {
   orgSupportEmail: string;
 };
 
-export const OrgDetailsContext = createContext<OrgDetails>(null);
+export const OrgDetailsContext = createContext<OrgDetails>({
+  orgLogoURL: "",
+  orgName: "",
+  orgSupportEmail: "",
+});
 
 const OrgDetailsProvider: FC<OrgDetails & { children: ReactNode }> = (
   props
