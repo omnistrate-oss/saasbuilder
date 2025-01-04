@@ -3,7 +3,7 @@ const PlayIcon = (props) => {
   let { color } = props;
   const { disabled } = props;
   if (!color) {
-    color = "#039855";
+    color = "#0E5FB5";
   }
   if (disabled) {
     color = "#a3a6ac";
@@ -17,6 +17,7 @@ const PlayIcon = (props) => {
       {...props}
     >
       <path
+        style={{ transition: "stroke 0.3s ease" }}
         stroke={color}
         strokeLinecap="round"
         strokeLinejoin="round"

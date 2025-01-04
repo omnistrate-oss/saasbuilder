@@ -80,8 +80,8 @@ type DateRangePickerProps = {
 };
 
 export const initialRangeState: Range = {
-  startDate: null,
-  endDate: null,
+  startDate: undefined,
+  endDate: undefined,
   key: "selection",
 };
 
@@ -149,13 +149,16 @@ const DateRangePicker: FC<DateRangePickerProps> = (props) => {
     <>
       <Button
         variant="outlined"
-        startIcon={<CalendarIcon color="#344054" />}
+        startIcon={
+          <CalendarIcon color="#414651" style={{ marginLeft: "4px" }} />
+        }
         onClick={handleButtonClick}
         sx={{
           fontWeight: "500 !important",
-          color: "#344054 !important",
+          color: "#414651 !important",
           height: "40px !important",
           padding: "10px 14px !important",
+          borderColor: "#D5D7DA !important",
         }}
       >
         {buttonText}

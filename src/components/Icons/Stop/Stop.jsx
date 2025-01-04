@@ -3,7 +3,7 @@ const StopIcon = (props) => {
   let { color } = props;
   const { disabled } = props;
   if (!color) {
-    color = "#D92D20";
+    color = "#0E5FB5";
   }
 
   if (disabled) {
@@ -19,6 +19,7 @@ const StopIcon = (props) => {
       {...props}
     >
       <path
+        style={{ transition: "stroke 0.3s ease" }}
         stroke={color}
         strokeLinecap="round"
         strokeLinejoin="round"

@@ -4,16 +4,16 @@ import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "src/components/Icons/Delete/Delete";
 import EditIcon from "src/components/Icons/Edit/Edit";
 
-const CloudAccountsDataTableHeader = () => {
+const CustomNetworksTableHeader = () => {
   return (
     <div className="py-5 px-6 flex items justify-between gap-4">
       <DataGridHeaderTitle
-        title="List of Cloud Account Instances"
-        desc="Details of instances"
+        title="List of Custom Networks"
+        desc="List of configured custom networks"
         count={1}
         units={{
-          singular: "Instance",
-          plural: "Instances",
+          singular: "Custom Network",
+          plural: "Custom Networks",
         }}
       />
 
@@ -43,6 +43,18 @@ const CloudAccountsDataTableHeader = () => {
           Modify
         </Button>
         <Button
+          variant="outlined"
+          // disabled={!isCreateAllowed}
+          // TODO: Check this
+          onClick={() => {
+            setFormMode("create");
+            openCreationDrawer();
+          }}
+          startIcon={<EditIcon />}
+        >
+          Peering Info
+        </Button>
+        <Button
           variant="contained"
           //   disabled={!isCreateAllowed}
           // TODO: Check this
@@ -59,4 +71,4 @@ const CloudAccountsDataTableHeader = () => {
   );
 };
 
-export default CloudAccountsDataTableHeader;
+export default CustomNetworksTableHeader;

@@ -16,4 +16,16 @@ export const PAGE_TITLE_MAP = {
   "/service-plans": "Billing Plans",
   "/access/[serviceId]/[environmentId]/audit-logs": "Audit Logs",
   "/access/[serviceId]/[environmentId]/notifications": "Notifications",
+
+  // dashboard: { title: "Dashboard" },
+  // instances: { title: "Instances" },
+  // customNetworks: { title: "Custom Networks" },
+  // cloudAccounts: { title: "Cloud Accounts" },
+  // accessControl: { title: "Access Control" },
+  // auditLogs: { title: "Audit Logs" },
+  // notifications: { title: "Notifications" },
+  // settings: { title: "Settings" },
+  // billing: { title: "Billing" },
+  // subscriptions: { title: "Subscriptions" },
+  // apiDocumentation: { title: "API Documentation" },
 };

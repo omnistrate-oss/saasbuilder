@@ -9,7 +9,7 @@ import DataTable from "src/components/DataTable/DataTable";
 import PageTitle from "../components/Layout/PageTitle";
 import PageContainer from "../components/Layout/PageContainer";
 import CloudAccountsIcon from "../components/Icons/CloudAccountsIcon";
-import CloudAccountsDataTableHeader from "./components/CloudAccountsDataTableHeader";
+import CloudAccountsTableHeader from "./components/CloudAccountsTableHeader";
 
 const columnHelper = createColumnHelper<any>(); // TODO: Add type
 
@@ -42,7 +42,7 @@ const CloudAccountsPage = () => {
           columns={dataTableColumns}
           rows={[]}
           noRowsText="No cloud account instances"
-          HeaderComponent={CloudAccountsDataTableHeader}
+          HeaderComponent={CloudAccountsTableHeader}
           headerProps={{}}
           isLoading={false}
         />
