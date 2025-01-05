@@ -1,7 +1,7 @@
-import React, { FC, ReactNode, useState } from "react";
+import React, { FC, ReactNode, useMemo, useState } from "react";
 import Collapse from "@mui/material/Collapse";
 import IconButton from "@mui/material/IconButton";
-import { Box, Stack } from "@mui/material";
+import { Box, Checkbox, Stack } from "@mui/material";
 import {
   ColumnDef,
   ExpandedState,
@@ -73,6 +73,13 @@ type DataTableProps<TData> = {
   getSubRows?: (orginalRow: TData) => TData[];
   HeaderComponent: FC;
   headerProps: any;
+
+  // Row Selection Props
+  selectedRows?: string[];
+  // eslint-disable-next-line no-unused-vars
+  onRowSelectionChange?: (selectedRows: string[]) => void;
+  disableRowSelection?: boolean;
+  rowId?: keyof TData; // Property to use as row identifier
 };
 
 const DEFAULT_COLUMN_MIN_WIDTH = 150;
@@ -88,8 +95,90 @@ const DataTable = <TData,>(props: DataTableProps<TData>): ReactNode => {
     HeaderComponent,
     headerProps = {},
     getSubRows,
+    selectedRows = [],
+    onRowSelectionChange,
+    disableRowSelection = false,
+    rowId = "id" as keyof TData,
   } = props;
+
   const [expanded, setExpanded] = useState<ExpandedState>({});
+
+  const allColumns = useMemo(() => {
+    if (disableRowSelection) return columns;
+
+    const selectionColumn: ColumnDef<TData> = {
+      id: "selection",
+      header: ({ table }) => (
+        <Checkbox
+          checked={
+            table.getRowModel().rows.length > 0 &&
+            table
+              .getRowModel()
+              .rows.every((row) =>
+                selectedRows.includes(String(row.original[rowId]))
+              )
+          }
+          indeterminate={
+            table
+              .getRowModel()
+              .rows.some((row) =>
+                selectedRows.includes(String(row.original[rowId]))
+              ) &&
+            !table
+              .getRowModel()
+              .rows.every((row) =>
+                selectedRows.includes(String(row.original[rowId]))
+              )
+          }
+          onChange={() => {
+            if (!onRowSelectionChange) return;
+
+            const allRowIds = table
+              .getRowModel()
+              .rows.map((row) => String(row.original[rowId]));
+
+            const areAllSelected = allRowIds.every((id) =>
+              selectedRows.includes(id)
+            );
+
+            if (areAllSelected) {
+              onRowSelectionChange(
+                selectedRows.filter((id) => !allRowIds.includes(id))
+              );
+            } else {
+              onRowSelectionChange([
+                ...selectedRows,
+                ...allRowIds.filter((id) => !selectedRows.includes(id)),
+              ]);
+            }
+          }}
+          size="small"
+        />
+      ),
+      cell: ({ row }) => (
+        <Checkbox
+          checked={selectedRows.includes(String(row.original[rowId]))}
+          onChange={() => {
+            if (!onRowSelectionChange) return;
+            const rowIdValue = String(row.original[rowId]);
+            if (selectedRows.includes(rowIdValue)) {
+              onRowSelectionChange(
+                selectedRows.filter((id) => id !== rowIdValue)
+              );
+            } else {
+              onRowSelectionChange([...selectedRows, rowIdValue]);
+            }
+          }}
+          size="small"
+        />
+      ),
+      meta: {
+        width: 50,
+      },
+    };
+
+    return [selectionColumn, ...columns];
+  }, [columns, disableRowSelection, selectedRows, onRowSelectionChange, rowId]);
 
   const table = useReactTable({
     data: rows,
@@ -97,7 +186,7 @@ const DataTable = <TData,>(props: DataTableProps<TData>): ReactNode => {
     getExpandedRowModel: getExpandedRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
     getSortedRowModel: getSortedRowModel(),
-    columns: columns,
+    columns: allColumns,
     initialState: {
       pagination: {
         pageIndex: 0,
@@ -124,8 +213,6 @@ const DataTable = <TData,>(props: DataTableProps<TData>): ReactNode => {
       return acc;
     }
   }, 0);
-
-  // const width = 100 / columns.length;
 
   //returns the flex values set on the meta in coldef.
   //if flex is not set, checks if size is set. If so returns 0 else 1
@@ -163,7 +250,7 @@ const DataTable = <TData,>(props: DataTableProps<TData>): ReactNode => {
     return width;
   };
 
-  const getColumnMinWIdth = (colDef: ColumnDef<TData>): string | number => {
+  const getColumnMinWidth = (colDef: ColumnDef<TData>): string | number => {
     let minWidth = DEFAULT_COLUMN_MIN_WIDTH;
     if (colDef.meta?.minWidth) {
       minWidth = colDef.meta?.minWidth;
@@ -179,130 +266,130 @@ const DataTable = <TData,>(props: DataTableProps<TData>): ReactNode => {
       <Stack minHeight="605px" justifyContent="space-between">
         <Box sx={{ overflowX: "auto", flexGrow: 1 }}>
           <Table sx={{ tableLayout: "fixed", width: "100%" }}>
-            {table.getHeaderGroups().map((headerGroup) => {
-              return (
-                <colgroup key={headerGroup.id}>
-                  {headerGroup.headers.map((header) => {
-                    return (
-                      <col
-                        key={header.id}
-                        style={{
-                          width: getColumnWidth(header.column.columnDef),
-                          minWidth: getColumnMinWIdth(header.column.columnDef),
-                        }}
-                      />
-                    );
-                  })}
-                </colgroup>
-              );
-            })}
+            {table.getHeaderGroups().map((headerGroup) => (
+              <colgroup key={headerGroup.id}>
+                {headerGroup.headers.map((header) => (
+                  <col
+                    key={header.id}
+                    style={{
+                      width: getColumnWidth(header.column.columnDef),
+                      minWidth: getColumnMinWidth(header.column.columnDef),
+                    }}
+                  />
+                ))}
+              </colgroup>
+            ))}
             <TableHead>
-              {table.getHeaderGroups().map((headerGroup) => {
-                return (
-                  <TableRow key={headerGroup.id}>
-                    {headerGroup.headers.map((header) => {
-                      const sortDirection = header.column.getIsSorted();
-                      const columnAlignment =
-                        header.column.columnDef.meta?.align || "left";
-                      return (
-                        <TableCell
-                          align={columnAlignment}
-                          key={header.id}
-                          onClick={header.column.getToggleSortingHandler()}
-                          sx={{
-                            cursor: "pointer",
+              {table.getHeaderGroups().map((headerGroup) => (
+                <TableRow key={headerGroup.id}>
+                  {headerGroup.headers.map((header) => {
+                    const sortDirection = header.column.getIsSorted();
+                    const columnAlignment =
+                      header.column.columnDef.meta?.align || "left";
+                    return (
+                      <TableCell
+                        align={columnAlignment}
+                        key={header.id}
+                        onClick={
+                          header.column.id === "selection"
+                            ? undefined
+                            : header.column.getToggleSortingHandler()
+                        }
+                        sx={{
+                          cursor:
+                            header.column.id === "selection"
+                              ? "default"
+                              : "pointer",
+                          "& .MuiIconButton-root": {
+                            display: sortDirection ? "inline-flex" : "none",
+                          },
+                          "&:hover": {
                             "& .MuiIconButton-root": {
-                              display: sortDirection ? "inline-flex" : "none",
+                              display: "inline-flex",
                             },
-                            "&:hover": {
-                              "& .MuiIconButton-root": {
-                                display: "inline-flex",
-                              },
-                            },
-                          }}
+                          },
+                        }}
+                      >
+                        <Stack
+                          display="inline-flex"
+                          direction="row"
+                          gap="8px"
+                          alignItems="center"
                         >
-                          <Stack
-                            display="inline-flex"
-                            direction="row"
-                            gap="8px"
-                            alignItems="center"
-                          >
-                            {flexRender(
-                              header.column.columnDef.header,
-                              header.getContext()
-                            )}
-                            {header.column.getCanSort() && (
+                          {flexRender(
+                            header.column.columnDef.header,
+                            header.getContext()
+                          )}
+                          {header.column.getCanSort() &&
+                            header.column.id !== "selection" && (
                               <SortIcon sortDirection={sortDirection} />
                             )}
-                          </Stack>
-                        </TableCell>
-                      );
-                    })}
-                  </TableRow>
-                );
-              })}
+                        </Stack>
+                      </TableCell>
+                    );
+                  })}
+                </TableRow>
+              ))}
             </TableHead>
             <TableBody>
               {!isLoading &&
-                rowData.map((row) => {
-                  return (
-                    <React.Fragment key={row.id}>
-                      <TableRow>
-                        {row.getVisibleCells().map((cell) => {
-                          const cellValue: any = cell.getValue();
-                          const columnAlignment =
-                            cell.column.columnDef.meta?.align || "left";
-                          let title = "";
-                          if (
-                            ["string", "number", "boolean"].includes(
-                              typeof cellValue
-                            )
-                          ) {
-                            title = cellValue.toString();
-                          }
-                          return (
-                            <TableCell
-                              key={cell.id}
-                              align={columnAlignment}
-                              title={title}
-                              sx={{
-                                fontSize: "14px",
-                                fontWeight: "500",
-                              }}
-                            >
-                              {flexRender(
-                                cell.column.columnDef.cell,
-                                cell.getContext()
-                              )}
-                            </TableCell>
-                          );
-                        })}
-                      </TableRow>
-                      {row.getIsExpanded() && renderDetailsComponent && (
-                        <DetailViewTableRow>
+                rowData.map((row) => (
+                  <React.Fragment key={row.id}>
+                    <TableRow>
+                      {row.getVisibleCells().map((cell) => {
+                        const cellValue: any = cell.getValue();
+                        const columnAlignment =
+                          cell.column.columnDef.meta?.align || "left";
+                        let title = "";
+                        if (
+                          ["string", "number", "boolean"].includes(
+                            typeof cellValue
+                          )
+                        ) {
+                          title = cellValue.toString();
+                        }
+                        return (
                           <TableCell
+                            key={cell.id}
+                            align={columnAlignment}
+                            title={title}
                             sx={{
-                              paddingBottom: 0,
-                              paddingTop: 0,
-                              whiteSpace: "normal",
+                              fontSize: "14px",
+                              fontWeight: "500",
                             }}
-                            colSpan={numsColumns}
                           >
-                            <Collapse
-                              in={row.getIsExpanded()}
-                              timeout="auto"
-                              unmountOnExit
-                            >
-                              {renderDetailsComponent({
-                                rowData: row.original,
-                              })}
-                            </Collapse>
+                            {flexRender(
+                              cell.column.columnDef.cell,
+                              cell.getContext()
+                            )}
                           </TableCell>
-                        </DetailViewTableRow>
-                      )}
-                    </React.Fragment>
-                  );
-                })}
+                        );
+                      })}
+                    </TableRow>
+                    {row.getIsExpanded() && renderDetailsComponent && (
+                      <DetailViewTableRow>
+                        <TableCell
+                          sx={{
+                            paddingBottom: 0,
+                            paddingTop: 0,
+                            whiteSpace: "normal",
+                          }}
+                          colSpan={numsColumns}
+                        >
+                          <Collapse
+                            in={row.getIsExpanded()}
+                            timeout="auto"
+                            unmountOnExit
+                          >
+                            {renderDetailsComponent({
+                              rowData: row.original,
+                            })}
+                          </Collapse>
+                        </TableCell>
+                      </DetailViewTableRow>
+                    )}
+                  </React.Fragment>
+                ))}
             </TableBody>
           </Table>
         </Box>

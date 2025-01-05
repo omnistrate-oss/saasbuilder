@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { useSelector } from "react-redux";
 import { createColumnHelper } from "@tanstack/react-table";
 
@@ -18,8 +18,11 @@ import { useGlobalDataContext } from "src/providers/GlobalDataProvider";
 const columnHelper = createColumnHelper<any>(); // TODO: Add type
 
 const SubscriptionsPage = () => {
+  const [selectedRows, setSelectedRows] = useState<string[]>([]);
   const { subscriptions, isFetchingSubscriptions } = useGlobalDataContext();
   const selectUser = useSelector(selectUserrootData);
+
+  console.log(selectedRows);
 
   const dataTableColumns = useMemo(() => {
     return [
@@ -74,6 +77,9 @@ const SubscriptionsPage = () => {
             HeaderComponent={SubscriptionsTableHeader}
             headerProps={{}}
             isLoading={isFetchingSubscriptions}
+            selectedRows={selectedRows}
+            onRowSelectionChange={setSelectedRows}
+            rowId="id"
           />
         </div>
       </PageContainer>
