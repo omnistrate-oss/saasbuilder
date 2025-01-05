@@ -214,16 +214,10 @@ const DataTable = <TData,>(props: DataTableProps<TData>): ReactNode => {
                             "& .MuiIconButton-root": {
                               display: sortDirection ? "inline-flex" : "none",
                             },
-                            // "& svg": {
-                            //   display: sortDirection ? "inline-block" : "none",
-                            // },
                             "&:hover": {
                               "& .MuiIconButton-root": {
                                 display: "inline-flex",
                               },
-                              // "& svg": {
-                              //   display: "inline-block",
-                              // },
                             },
                           }}
                         >
@@ -255,7 +249,7 @@ const DataTable = <TData,>(props: DataTableProps<TData>): ReactNode => {
                     <React.Fragment key={row.id}>
                       <TableRow>
                         {row.getVisibleCells().map((cell) => {
-                          const cellValue = cell.getValue();
+                          const cellValue: any = cell.getValue();
                           const columnAlignment =
                             cell.column.columnDef.meta?.align || "left";
                           let title = "";

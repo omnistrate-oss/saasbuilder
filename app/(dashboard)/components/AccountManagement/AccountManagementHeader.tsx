@@ -23,7 +23,7 @@ const AccountManagementHeader: FC<AccountManagementHeaderProps> = ({
         alt="Header Image"
         width={4575}
         height={479}
-        className="h-30 w-full"
+        className="h-[140px] w-full object-cover"
       />
 
       <div

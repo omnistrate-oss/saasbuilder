@@ -6,16 +6,22 @@ import { useSelector } from "react-redux";
 import PageTitle from "../components/Layout/PageTitle";
 import SettingsIcon from "../components/Icons/SettingsIcon";
 import AccountManagementHeader from "../components/AccountManagement/AccountManagementHeader";
-import { Tab, Tabs } from "src/components/Tab/Tab";
 import { selectUserrootData } from "src/slices/userDataSlice";
 
 import { tabLabels } from "./constants";
 import PageContainer from "../components/Layout/PageContainer";
+import ProfileForm from "./components/ProfileForm";
+import { Tab, Tabs } from "@mui/material";
+import BillingAddressForm from "./components/BillingAddressForm";
+import PasswordForm from "./components/PasswordForm";
+import useUserData from "src/hooks/usersData";
 
 type CurrentTab = "profile" | "billingAddress" | "password";
 
 const SettingsPage = () => {
   const selectUser = useSelector(selectUserrootData);
+  const { refetch: refetchUserData, isLoading: isLoadingUserData } =
+    useUserData();
   const [currentTab, setCurrentTab] = useState<CurrentTab>("profile");
 
   return (
@@ -39,25 +45,55 @@ const SettingsPage = () => {
             label={tabLabels.profile}
             value={"profile"}
             onClick={() => setCurrentTab("profile")}
-            sx={{ padding: "4px !important", marginRight: "16px !important" }}
+            sx={{
+              padding: "4px !important",
+              marginRight: "16px !important",
+              textTransform: "none",
+              fontWeight: "600",
+              color: "#717680",
+            }}
           />
           <Tab
             label={tabLabels.billingAddress}
             value={"billingAddress"}
             onClick={() => setCurrentTab("billingAddress")}
-            sx={{ padding: "4px !important", marginRight: "16px !important" }}
+            sx={{
+              padding: "4px !important",
+              marginRight: "16px !important",
+              textTransform: "none",
+              fontWeight: "600",
+              color: "#717680",
+            }}
           />
           <Tab
             label={tabLabels.password}
             value={"password"}
             onClick={() => setCurrentTab("password")}
-            sx={{ padding: "4px !important", marginRight: "16px !important" }}
+            sx={{
+              padding: "4px !important",
+              marginRight: "16px !important",
+              textTransform: "none",
+              fontWeight: "600",
+              color: "#717680",
+            }}
           />
         </Tabs>
 
-        {currentTab === "profile" && <div>Profile</div>}
-        {currentTab === "billingAddress" && <div>Billing Address</div>}
-        {currentTab === "password" && <div>Password</div>}
+        {currentTab === "profile" && (
+          <ProfileForm
+            userData={selectUser}
+            refetchUserData={refetchUserData}
+            isLoadingUserData={isLoadingUserData}
+          />
+        )}
+        {currentTab === "billingAddress" && (
+          <BillingAddressForm
+            userData={selectUser}
+            refetchUserData={refetchUserData}
+            isLoadingUserData={isLoadingUserData}
+          />
+        )}
+        {currentTab === "password" && <PasswordForm />}
       </PageContainer>
     </div>
   );
