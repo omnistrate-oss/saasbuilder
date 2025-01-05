@@ -99,6 +99,8 @@ function Events() {
     [events]
   );
 
+  console.log(nonCustomerEvents);
+
   if (isLoading || isLoadingSubscription) {
     return (
       <DashboardLayout

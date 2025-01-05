@@ -34,6 +34,7 @@ const Drawer = styled(MuiDrawer)(() => ({
     overflow: "visible",
     marginLeft: 120,
     maxWidth: "calc(100% - 180px)",
+    background: "#FCFCFC",
   },
 }));
 

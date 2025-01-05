@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext } from "react";
+import { createContext, useContext, useMemo } from "react";
 import NoServiceFoundUI from "app/(dashboard)/components/NoServiceFoundUI/NoServiceFoundUI";
 
 import useSubscriptions from "src/hooks/query/useSubscriptions";
@@ -43,6 +43,19 @@ const GlobalDataProvider = ({ children }: { children: React.ReactNode }) => {
     refetch: refetchServiceOfferings,
   } = useOrgServiceOfferings();
 
+  const serviceOfferingsObj = useMemo(() => {
+    return serviceOfferings.reduce((acc: any, offering: any) => {
+      if (acc[offering.serviceId]) {
+        acc[offering.serviceId][offering.productTierID] = offering;
+      } else {
+        acc[offering.serviceId] = {
+          [offering.productTierID]: offering,
+        };
+      }
+      return acc;
+    }, {});
+  }, [serviceOfferings]);
+
   if (!isFetchingServiceOfferings && serviceOfferings.length === 0) {
     return <NoServiceFoundUI text="No Service Offerings Found" />;
   }
@@ -64,6 +77,8 @@ const GlobalDataProvider = ({ children }: { children: React.ReactNode }) => {
         isLoadingServiceOfferings,
         isFetchingServiceOfferings,
         refetchServiceOfferings,
+
+        serviceOfferingsObj,
       }}
     >
       {children}

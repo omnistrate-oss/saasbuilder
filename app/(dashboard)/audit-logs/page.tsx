@@ -7,11 +7,14 @@ import { createColumnHelper } from "@tanstack/react-table";
 import PageTitle from "../components/Layout/PageTitle";
 import AuditLogsIcon from "../components/Icons/AuditLogsIcon";
 import PageContainer from "../components/Layout/PageContainer";
-import DataTable from "src/components/DataTable/DataTable";
 import AuditLogsTableHeader from "./components/AuditLogsTableHeader";
+
 import formatDateUTC from "src/utils/formatDateUTC";
-import EventMessageChip from "src/components/EventsTable/EventMessageChip";
-import { initialRangeState } from "src/components/DateRangePicker/DateRangePicker";
+
+import DataTable from "components/DataTable/DataTable";
+import EventMessageChip from "components/EventsTable/EventMessageChip";
+import { initialRangeState } from "components/DateRangePicker/DateRangePicker";
+import EventDetailsView from "src/components/EventsTable/EventDetailsView";
 
 const columnHelper = createColumnHelper<any>(); // TODO: Add type
 
@@ -27,7 +30,6 @@ const AuditLogsPage = () => {
         cell: (data) =>
           data.row.original.time ? formatDateUTC(data.row.original.time) : "-",
       }),
-
       columnHelper.accessor("message", {
         id: "message",
         header: "Message",
@@ -59,6 +61,11 @@ const AuditLogsPage = () => {
             setSelectedDateRange,
           }}
           isLoading={false}
+          disableRowSelection
+          getRowCanExpand={(rowData) =>
+            Boolean(rowData.original.workflowFailures?.length > 0)
+          }
+          renderDetailsComponent={EventDetailsView}
         />
       </div>
     </PageContainer>

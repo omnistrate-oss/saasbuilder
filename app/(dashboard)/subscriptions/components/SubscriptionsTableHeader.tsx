@@ -1,7 +1,14 @@
 import Button from "src/components/Button/Button";
 import DataGridHeaderTitle from "src/components/Headers/DataGridHeaderTitle";
 
-const SubscriptionsTableHeader = () => {
+const SubscriptionsTableHeader = ({
+  selectedRows,
+  refetchSubscriptions,
+  subscriptions,
+  searchText,
+  setSearchText,
+  onManageSubscriptions,
+}) => {
   return (
     <div className="py-5 px-6 flex items justify-between gap-4">
       <DataGridHeaderTitle
@@ -11,10 +18,20 @@ const SubscriptionsTableHeader = () => {
           singular: "Subscription",
           plural: "Subscriptions",
         }}
+        count={subscriptions?.length}
       />
 
       <div className="flex items-center gap-6">
-        <Button variant="contained">Manage Subscriptions</Button>
+        <Button
+          bgColor="#E2584D"
+          variant="contained"
+          disabled={selectedRows.length !== 1}
+        >
+          Unsubscribe
+        </Button>
+        <Button variant="contained" onClick={onManageSubscriptions}>
+          Manage Subscriptions
+        </Button>
       </div>
     </div>
   );

@@ -5,27 +5,50 @@ import { useSelector } from "react-redux";
 import { createColumnHelper } from "@tanstack/react-table";
 
 import formatDateUTC from "src/utils/formatDateUTC";
-import DataTable from "src/components/DataTable/DataTable";
 import { selectUserrootData } from "src/slices/userDataSlice";
+import { useGlobalDataContext } from "src/providers/GlobalDataProvider";
 
 import PageTitle from "../components/Layout/PageTitle";
 import SettingsIcon from "../components/Icons/SettingsIcon";
 import PageContainer from "../components/Layout/PageContainer";
 import SubscriptionsTableHeader from "./components/SubscriptionsTableHeader";
 import AccountManagementHeader from "../components/AccountManagement/AccountManagementHeader";
-import { useGlobalDataContext } from "src/providers/GlobalDataProvider";
+
+import DataTable from "components/DataTable/DataTable";
+import StatusChip from "components/StatusChip/StatusChip";
+import DataGridText from "components/DataGrid/DataGridText";
+import GridCellExpand from "components/GridCellExpand/GridCellExpand";
+import SubscriptionTypeDirectIcon from "components/Icons/SubscriptionType/SubscriptionTypeDirectIcon";
+import SubscriptionTypeInvitedIcon from "components/Icons/SubscriptionType/SubscriptionTypeInvitedIcon";
+import ServiceNameWithLogo from "src/components/ServiceNameWithLogo/ServiceNameWithLogo";
+import SideDrawerRight from "src/components/SideDrawerRight/SideDrawerRight";
+import ManageSubscriptionsForm from "./components/ManageSubscriptionsForm";
 
 const columnHelper = createColumnHelper<any>(); // TODO: Add type
 
 const SubscriptionsPage = () => {
+  const [searchText, setSearchText] = useState<string>("");
   const [selectedRows, setSelectedRows] = useState<string[]>([]);
-  const { subscriptions, isFetchingSubscriptions } = useGlobalDataContext();
-  const selectUser = useSelector(selectUserrootData);
+  const [overlayType, setOverlayType] = useState<
+    "manage-subscriptions" | "unsubscribe-dialog"
+  >("manage-subscriptions");
+  const [isOverlayOpen, setIsOverlayOpen] = useState<boolean>(false);
 
-  console.log(selectedRows);
+  const selectUser = useSelector(selectUserrootData);
+  const { subscriptions, isFetchingSubscriptions, refetchSubscriptions } =
+    useGlobalDataContext();
 
   const dataTableColumns = useMemo(() => {
     return [
+      columnHelper.accessor("id", {
+        id: "id",
+        header: "Subscription ID",
+        cell: (data) => {
+          return (
+            <DataGridText color="primary">{data.row.original.id}</DataGridText>
+          );
+        },
+      }),
       columnHelper.accessor("roleType", {
         id: "roleType",
         header: "Role",
@@ -34,7 +57,24 @@ const SubscriptionsPage = () => {
           return role ? role.charAt(0).toUpperCase() + role.slice(1) : "-";
         },
         meta: {
+          flex: 0.7,
           minWidth: 80,
+        },
+      }),
+      columnHelper.accessor("serviceName", {
+        id: "serviceName",
+        header: "Service Name",
+        cell: (data) => {
+          const { serviceName, serviceLogoURL } = data.row.original;
+          return (
+            <ServiceNameWithLogo
+              serviceName={serviceName}
+              serviceLogoURL={serviceLogoURL}
+            />
+          );
+        },
+        meta: {
+          minWidth: 230,
         },
       }),
       columnHelper.accessor("productTierName", {
@@ -43,8 +83,12 @@ const SubscriptionsPage = () => {
         cell: (data) => {
           return data.row.original.productTierName || "-";
         },
-        meta: {
-          minWidth: 150,
+      }),
+      columnHelper.accessor("status", {
+        id: "status",
+        header: "Status",
+        cell: (data) => {
+          return <StatusChip status={data.row.original.status} />;
         },
       }),
       columnHelper.accessor((row) => formatDateUTC(row.createdAt), {
@@ -54,6 +98,24 @@ const SubscriptionsPage = () => {
           data.row.original.createdAt
             ? formatDateUTC(data.row.original.createdAt)
             : "-",
+      }),
+      columnHelper.accessor("subscriptionOwnerName", {
+        id: "subscriptionOwnerName",
+        header: "Subscription Owner",
+        cell: (data) => {
+          return (
+            <GridCellExpand
+              value={data.row.original.subscriptionOwnerName}
+              startIcon={
+                data.row.original.roleType === "root" ? (
+                  <SubscriptionTypeDirectIcon />
+                ) : (
+                  <SubscriptionTypeInvitedIcon />
+                )
+              }
+            />
+          );
+        },
       }),
     ];
   }, []);
@@ -75,13 +137,30 @@ const SubscriptionsPage = () => {
             rows={subscriptions}
             noRowsText="No subscriptions"
             HeaderComponent={SubscriptionsTableHeader}
-            headerProps={{}}
+            headerProps={{
+              selectedRows,
+              refetchSubscriptions,
+              subscriptions,
+              searchText,
+              setSearchText,
+              onManageSubscriptions: () => {
+                setIsOverlayOpen(true);
+                setOverlayType("manage-subscriptions");
+              },
+            }}
             isLoading={isFetchingSubscriptions}
             selectedRows={selectedRows}
             onRowSelectionChange={setSelectedRows}
             rowId="id"
           />
         </div>
+
+        <SideDrawerRight
+          size="xlarge"
+          open={isOverlayOpen && overlayType === "manage-subscriptions"}
+          closeDrawer={() => setIsOverlayOpen(false)}
+          RenderUI={<ManageSubscriptionsForm />}
+        />
       </PageContainer>
     </div>
   );

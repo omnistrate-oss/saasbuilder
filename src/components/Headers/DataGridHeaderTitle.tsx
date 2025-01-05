@@ -47,12 +47,11 @@ const DataGridHeaderTitle: FC<DataGridHeaderTitleProps> = ({
     <Stack direction="row" gap="8px" alignItems="flex-start">
       {Icon && <Icon />}
       <Box sx={sx}>
-        <Stack direction="row" gap="8px" mb="2px">
-          <Text size="large" weight="semibold" color="#08386B">
-            {title}
-          </Text>
+        <Text size="large" weight="semibold" color="#08386B" sx={{ mb: "2px" }}>
+          <span style={{ marginRight: "8px" }}>{title}</span>
           {label && (
             <Chip
+              component="span"
               size="small"
               label={label}
               fontColor="#0E5FB5"
@@ -60,7 +59,7 @@ const DataGridHeaderTitle: FC<DataGridHeaderTitleProps> = ({
               borderColor="#93C7FF"
             />
           )}
-        </Stack>
+        </Text>
         {desc && (
           <Text size="small" weight="regular" color="#535862">
             {desc}
