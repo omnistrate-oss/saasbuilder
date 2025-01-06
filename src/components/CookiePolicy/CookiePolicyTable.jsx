@@ -29,15 +29,24 @@ function CookiePolicyTable({ orgName }) {
           <td className={styles.cell}>{orgName}</td>
         </tr>
         <tr>
-          <td className={styles.cell}>Analytics Cookies</td>
+          <td className={styles.cell}>Functional Cookies</td>
+          <td className={styles.cell}>
+            These cookies enable enhanced functionality. They may be set by us
+            or third-party providers whose services we use. Examples: Cookies
+            supporting login functionality via third parties such as Google.
+            Examples: ACCOUNT_CHOOSER, SSID, APISID, SAPISID, SID, HSID etc
+          </td>
+          <td className={styles.cell}>{orgName}, Google</td>
+        </tr>
+        <tr>
+          <td className={styles.cell}>Performance and Analytics Cookies</td>
           <td className={styles.cell}>
             These cookies help us understand how visitors interact with our
             websites by collecting and reporting information. They allow us to
-            measure and improve the performance of our services. Examples:
-            Google Analytics (_ga, _ga_*, _gid) and Koala Analytics (ko_id,
-            ko_sid).
+            measure and improve the performance of our services. Examples: _ga,
+            _ga_*, _gid
           </td>
-          <td className={styles.cell}>{orgName}, Google Analytics</td>
+          <td className={styles.cell}>Google</td>
         </tr>
       </tbody>
     </table>
