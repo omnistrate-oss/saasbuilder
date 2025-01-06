@@ -77,6 +77,7 @@ const ServicesDropdown = () => {
             scrollbarWidth: "thin",
           },
         }}
+        disableScrollLock
       >
         <Box p="15px 16px" borderBottom="1px solid #F1F1F2">
           <Text
