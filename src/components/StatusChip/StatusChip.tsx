@@ -42,12 +42,14 @@ export const statuses = {
 
 export const statusStyles = {
   ACTIVE: {
-    backgroundColor: "#F8F9FC",
-    color: "#669F2A",
+    backgroundColor: "#ECFDF3",
+    color: "#067647",
+    borderColor: "#ABEFC6",
   },
   Active: {
-    backgroundColor: "#F8F9FC",
-    color: "#669F2A",
+    backgroundColor: "#ECFDF3",
+    color: "#067647",
+    borderColor: "#ABEFC6",
   },
   CANCELLED: {
     backgroundColor: "#FEF3F2",
@@ -204,14 +206,12 @@ const StatusChip: FC<ChipProps & StatusChipProps> = (props) => {
     color,
     bgColor,
     capitalize = true,
-    label = statuses[status],
+    label = statuses[status as keyof typeof statuses],
     category,
     borderColor,
     ...restProps
   } = props;
-  let chipStyles = null;
-
-  chipStyles = getChipStyles(status);
+  let chipStyles = getChipStyles(status);
 
   if (category) {
     chipStyles = {

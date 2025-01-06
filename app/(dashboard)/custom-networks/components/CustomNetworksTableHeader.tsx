@@ -3,8 +3,22 @@ import DataGridHeaderTitle from "src/components/Headers/DataGridHeaderTitle";
 import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "src/components/Icons/Delete/Delete";
 import EditIcon from "src/components/Icons/Edit/Edit";
+import SearchInput from "src/components/DataGrid/SearchInput";
+import RefreshWithToolTip from "src/components/RefreshWithTooltip/RefreshWithToolTip";
+import useSnackbar from "src/hooks/useSnackbar";
 
-const CustomNetworksTableHeader = () => {
+const CustomNetworksTableHeader = ({
+  searchText,
+  setSearchText,
+  refetchCustomNetworks,
+  isFetchingCustomNetworks,
+  onPeeringInfoClick,
+  onDeleteClick,
+  onCreateClick,
+  selectedRows,
+}) => {
+  const snackbar = useSnackbar();
+
   return (
     <div className="py-5 px-6 flex items justify-between gap-4">
       <DataGridHeaderTitle
@@ -17,51 +31,48 @@ const CustomNetworksTableHeader = () => {
         }}
       />
 
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-4 flex-shrink-0">
+        <SearchInput
+          placeholder="Search by Name"
+          searchText={searchText}
+          setSearchText={setSearchText}
+          width="250px"
+        />
+        <RefreshWithToolTip
+          refetch={refetchCustomNetworks}
+          disabled={isFetchingCustomNetworks}
+        />
         <Button
           variant="outlined"
-          // disabled={!isCreateAllowed}
-          // TODO: Check this
+          disabled={selectedRows.length !== 1}
           onClick={() => {
-            setFormMode("create");
-            openCreationDrawer();
+            if (!selectedRows.length)
+              return snackbar.showError(
+                "Please select a custom network to delete"
+              );
+            onDeleteClick();
           }}
-          startIcon={<DeleteIcon />}
+          startIcon={<DeleteIcon disabled={selectedRows.length !== 1} />}
         >
           Delete
         </Button>
         <Button
           variant="outlined"
-          // disabled={!isCreateAllowed}
-          // TODO: Check this
+          disabled={selectedRows.length !== 1}
           onClick={() => {
-            setFormMode("create");
-            openCreationDrawer();
+            if (!selectedRows.length)
+              return snackbar.showError(
+                "Please select a custom network to view peering info"
+              );
+            onPeeringInfoClick();
           }}
-          startIcon={<EditIcon />}
-        >
-          Modify
-        </Button>
-        <Button
-          variant="outlined"
-          // disabled={!isCreateAllowed}
-          // TODO: Check this
-          onClick={() => {
-            setFormMode("create");
-            openCreationDrawer();
-          }}
-          startIcon={<EditIcon />}
+          startIcon={<EditIcon disabled={selectedRows.length !== 1} />}
         >
           Peering Info
         </Button>
         <Button
           variant="contained"
-          //   disabled={!isCreateAllowed}
-          // TODO: Check this
-          onClick={() => {
-            setFormMode("create");
-            openCreationDrawer();
-          }}
+          onClick={onCreateClick}
           startIcon={<AddIcon />}
         >
           Create

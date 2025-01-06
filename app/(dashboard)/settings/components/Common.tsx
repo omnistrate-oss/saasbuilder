@@ -4,7 +4,7 @@ import { passwordRegex, passwordText } from "src/utils/passwordRegex";
 
 export const FieldCell = ({ children }) => (
   <div className="col-span-3 pb-5 border-b border-[#E9EAEB] lg:pl-8">
-    {children}
+    <div className="max-w-2xl">{children}</div>
   </div>
 );
 

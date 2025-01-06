@@ -1,7 +1,7 @@
 import React, { FC, ReactNode, useMemo, useState } from "react";
 import Collapse from "@mui/material/Collapse";
 import IconButton from "@mui/material/IconButton";
-import { Box, Checkbox, Stack } from "@mui/material";
+import { Box, Stack } from "@mui/material";
 import {
   ColumnDef,
   ExpandedState,
@@ -28,6 +28,7 @@ import Pagination from "./components/Pagination";
 import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import LoadingSpinner from "../LoadingSpinner/LoadingSpinner";
+import CustomCheckbox from "../Checkbox/Checkbox";
 
 const sortIcon = {
   asc: ArrowUpwardIcon,
@@ -60,6 +61,8 @@ const SortIcon: React.FC<SortIconProps> = (props) => {
   );
 };
 
+type SelectionMode = "single" | "multiple" | "none";
+
 type DataTableProps<TData> = {
   rows: TData[];
   columns: ColumnDef<TData>[];
@@ -75,10 +78,10 @@ type DataTableProps<TData> = {
   headerProps: any;
 
   // Row Selection Props
+  selectionMode?: SelectionMode;
   selectedRows?: string[];
   // eslint-disable-next-line no-unused-vars
   onRowSelectionChange?: (selectedRows: string[]) => void;
-  disableRowSelection?: boolean;
   rowId?: keyof TData; // Property to use as row identifier
 };
 
@@ -97,79 +100,41 @@ const DataTable = <TData,>(props: DataTableProps<TData>): ReactNode => {
     getSubRows,
     selectedRows = [],
     onRowSelectionChange,
-    disableRowSelection = false,
+    selectionMode = "none",
     rowId = "id" as keyof TData,
   } = props;
 
   const [expanded, setExpanded] = useState<ExpandedState>({});
 
   const allColumns = useMemo(() => {
-    if (disableRowSelection) return columns;
+    if (selectionMode === "none") return columns;
+
+    const handleSelectionChange = (rowIdValue: string) => {
+      if (!onRowSelectionChange) return;
+
+      if (selectionMode === "single") {
+        if (selectedRows.includes(rowIdValue)) {
+          onRowSelectionChange([]);
+        } else {
+          onRowSelectionChange([rowIdValue]);
+        }
+      } else if (selectionMode === "multiple") {
+        if (selectedRows.includes(rowIdValue)) {
+          onRowSelectionChange(selectedRows.filter((id) => id !== rowIdValue));
+        } else {
+          onRowSelectionChange([...selectedRows, rowIdValue]);
+        }
+      }
+    };
 
     const selectionColumn: ColumnDef<TData> = {
       id: "selection",
-      header: ({ table }) => (
-        <Checkbox
-          checked={
-            table.getRowModel().rows.length > 0 &&
-            table
-              .getRowModel()
-              .rows.every((row) =>
-                selectedRows.includes(String(row.original[rowId]))
-              )
-          }
-          indeterminate={
-            table
-              .getRowModel()
-              .rows.some((row) =>
-                selectedRows.includes(String(row.original[rowId]))
-              ) &&
-            !table
-              .getRowModel()
-              .rows.every((row) =>
-                selectedRows.includes(String(row.original[rowId]))
-              )
-          }
-          onChange={() => {
-            if (!onRowSelectionChange) return;
-
-            const allRowIds = table
-              .getRowModel()
-              .rows.map((row) => String(row.original[rowId]));
-
-            const areAllSelected = allRowIds.every((id) =>
-              selectedRows.includes(id)
-            );
-
-            if (areAllSelected) {
-              onRowSelectionChange(
-                selectedRows.filter((id) => !allRowIds.includes(id))
-              );
-            } else {
-              onRowSelectionChange([
-                ...selectedRows,
-                ...allRowIds.filter((id) => !selectedRows.includes(id)),
-              ]);
-            }
-          }}
-          size="small"
-        />
-      ),
+      header: "",
       cell: ({ row }) => (
-        <Checkbox
+        <CustomCheckbox
+          // @ts-ignore
           checked={selectedRows.includes(String(row.original[rowId]))}
-          onChange={() => {
-            if (!onRowSelectionChange) return;
-            const rowIdValue = String(row.original[rowId]);
-            if (selectedRows.includes(rowIdValue)) {
-              onRowSelectionChange(
-                selectedRows.filter((id) => id !== rowIdValue)
-              );
-            } else {
-              onRowSelectionChange([...selectedRows, rowIdValue]);
-            }
-          }}
-          size="small"
+          onChange={() => handleSelectionChange(String(row.original[rowId]))}
         />
       ),
       meta: {
@@ -178,7 +143,7 @@ const DataTable = <TData,>(props: DataTableProps<TData>): ReactNode => {
     };
 
     return [selectionColumn, ...columns];
-  }, [columns, disableRowSelection, selectedRows, onRowSelectionChange, rowId]);
+  }, [columns, selectionMode, onRowSelectionChange, selectedRows, rowId]);
 
   const table = useReactTable({
     data: rows,

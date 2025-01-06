@@ -272,6 +272,7 @@ function ProductTiers(props) {
         )}
       </Box>
 
+      {/* TODO: Move this TextConfirmation Implementation to the New Type */}
       <TextConfirmationDialog
         formData={deleteFormik}
         open={isDeleteDialogOpen}

@@ -1,3 +1,5 @@
+"use client";
+
 import MuiDialog from "@mui/material/Dialog";
 import MuiDialogActions from "@mui/material/DialogActions";
 import MuiDialogContent from "@mui/material/DialogContent";
@@ -10,12 +12,15 @@ import LoadingSpinnerSmall from "../CircularProgress/CircularProgress";
 import DeleteCirleIcon from "../Icons/DeleteCircle/DeleteCirleIcon";
 import { Text } from "../Typography/Typography";
 import CloseIcon from "@mui/icons-material/Close";
+import { useFormik } from "formik";
+import useSnackbar from "src/hooks/useSnackbar";
 
 export default function TextConfirmationDialog(props) {
   const {
     open = false,
     handleClose,
-    formData,
+    confirmationText = "deleteme",
+    onConfirm,
     title = "Delete",
     subtitle = "Are you sure you want to delete?",
     message = "To confirm deletion, please enter <i><b> deleteme</b></i>, in the field below:",
@@ -25,8 +30,30 @@ export default function TextConfirmationDialog(props) {
     IconComponent = DeleteCirleIcon,
   } = props;
 
+  const snackbar = useSnackbar();
+
+  const formData = useFormik({
+    initialValues: {
+      confirmationText: "",
+    },
+    onSubmit: (values) => {
+      if (values.confirmationText === confirmationText) {
+        onConfirm();
+      } else {
+        snackbar.showError(`Please enter "${confirmationText}" to confirm.`);
+      }
+    },
+    validateOnChange: false,
+  });
+
   return (
-    <Dialog open={open} onClose={handleClose}>
+    <Dialog
+      open={open}
+      onClose={() => {
+        handleClose();
+        formData.resetForm();
+      }}
+    >
       <Form onSubmit={formData.handleSubmit}>
         <DialogTitle>
           <Stack

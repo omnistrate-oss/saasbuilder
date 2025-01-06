@@ -134,7 +134,6 @@ const NotificationsPage = () => {
             setSelectedDateRange,
           }}
           isLoading={false}
-          disableRowSelection
           getRowCanExpand={(rowData) =>
             Boolean(rowData.original.workflowFailures?.length > 0)
           }

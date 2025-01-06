@@ -36,17 +36,34 @@ const ManageSubscriptionsForm = () => {
   }, [selectedServiceId, serviceOfferingsObj]);
 
   const [selectedPlanId, setSelectedPlanId] = useState<any>(
+    // @ts-ignore
     services[0]?.productTierID || ""
   );
 
+  const subscriptionsObj = useMemo(() => {
+    return subscriptions?.reduce((acc, subscription) => {
+      if (subscription.defaultSubscription)
+        acc[subscription.productTierId] = subscription;
+      return acc;
+    }, {});
+  }, [subscriptions]);
+
+  const subscriptionRequestsObj = useMemo(() => {
+    return subscriptionRequests?.reduce((acc, request) => {
+      acc[request.productTierID] = request;
+      return acc;
+    }, {});
+  }, [subscriptionRequests]);
+
   useEffect(() => {
-    const planIds = Object.keys(serviceOfferingsObj[selectedServiceId]);
+    const planIds = Object.keys(serviceOfferingsObj[selectedServiceId] || {});
     if (planIds.length) {
       setSelectedPlanId(planIds[0]);
     }
   }, [selectedServiceId, serviceOfferingsObj]);
 
   const selectedPlan = serviceOfferingsObj[selectedServiceId]?.[selectedPlanId];
+  console.log(servicePlans, subscriptionsObj);
 
   return (
     <div className="space-y-6">
@@ -80,6 +97,13 @@ const ManageSubscriptionsForm = () => {
               servicePlan={plan}
               isSelected={selectedPlanId === plan.productTierID}
               setSelectedPlanId={setSelectedPlanId}
+              subscriptionStatus={
+                subscriptionsObj[plan.productTierID]
+                  ? "subscribed"
+                  : subscriptionRequestsObj[plan.productTierID]
+                    ? "pending-approval"
+                    : "not-subscribed"
+              }
             />
           ))}
         </div>

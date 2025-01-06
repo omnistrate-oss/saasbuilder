@@ -16,7 +16,7 @@ const Button = styled(
 
     if (disabledMessage && restProps.disabled) {
       return (
-        <Tooltip title={disabledMessage} placement="top-end" arrow>
+        <Tooltip title={disabledMessage} placement="top" arrow>
           {/* Wrapper Necessary for Tooltip */}
           <span>{button}</span>
         </Tooltip>
@@ -143,7 +143,7 @@ const Button = styled(
       // opacity: 0.38,
     },
     [`&.${buttonClasses.text}`]: {
-      color: "#6941C6",
+      color: theme.palette.primary.main,
     },
     [`&.${buttonClasses.text}:disabled`]: {
       opacity: 0.38,

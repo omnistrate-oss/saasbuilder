@@ -3,10 +3,10 @@ import { styled } from "@mui/material/styles";
 import Checkbox from "@mui/material/Checkbox";
 
 const UnCheckedIcon = styled("span")(() => ({
-  borderRadius: 4,
-  width: 16,
-  height: 16,
-  border: "1px solid #98A2B3",
+  borderRadius: "6px",
+  width: 20,
+  height: 20,
+  border: "1px solid #D0D5DD",
   background: "#fff",
   ".Mui-focusVisible &": {
     outline: "2px auto rgba(19,124,189,.6)",
@@ -22,14 +22,11 @@ const UnCheckedIcon = styled("span")(() => ({
 }));
 
 const CheckedIcon = styled(UnCheckedIcon)({
-  border: "1px solid  #7F56D9",
-  background: "#F9F5FF",
-  backgroundImage: `url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMiIgaGVpZ2h0PSIxMiIgdmlld0JveD0iMCAwIDEyIDEyIiBmaWxsPSJub25lIj4KICA8cGF0aCBkPSJNMTAgM0w0LjUgOC41TDIgNiIgc3Ryb2tlPSIjN0Y1NkQ5IiBzdHJva2Utd2lkdGg9IjEuNjY2NiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIi8+Cjwvc3ZnPg==)`,
+  border: "none",
+  background: "none",
+  backgroundImage: `url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHZpZXdCb3g9IjAgMCAyMCAyMCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTAgNkMwIDIuNjg2MjkgMi42ODYyOSAwIDYgMEgxNEMxNy4zMTM3IDAgMjAgMi42ODYyOSAyMCA2VjE0QzIwIDE3LjMxMzcgMTcuMzEzNyAyMCAxNCAyMEg2QzIuNjg2MjkgMjAgMCAxNy4zMTM3IDAgMTRWNloiIGZpbGw9IiMwRTVGQjUiLz4KPHBhdGggZD0iTTE0LjY2NjYgNi41TDguMjQ5OTggMTIuOTE2N0w1LjMzMzMxIDEwIiBzdHJva2U9IndoaXRlIiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIvPgo8L3N2Zz4K)`,
   backgroundPosition: "center center",
   backgroundRepeat: "no-repeat",
-  "input:hover ~ &": {
-    backgroundColor: "rgba(105, 65, 198, 0.15)",
-  },
 });
 
 const CustomCheckbox = React.forwardRef(function CustomCheckbox(props, ref) {

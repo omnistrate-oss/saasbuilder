@@ -2,15 +2,19 @@
 
 import { useMemo, useState } from "react";
 import { useSelector } from "react-redux";
+import { useMutation } from "@tanstack/react-query";
 import { createColumnHelper } from "@tanstack/react-table";
 
+import useSnackbar from "src/hooks/useSnackbar";
 import formatDateUTC from "src/utils/formatDateUTC";
+import { deleteSubscription } from "src/api/subscriptions";
 import { selectUserrootData } from "src/slices/userDataSlice";
 import { useGlobalDataContext } from "src/providers/GlobalDataProvider";
 
 import PageTitle from "../components/Layout/PageTitle";
 import SettingsIcon from "../components/Icons/SettingsIcon";
 import PageContainer from "../components/Layout/PageContainer";
+import ManageSubscriptionsForm from "./components/ManageSubscriptionsForm";
 import SubscriptionsTableHeader from "./components/SubscriptionsTableHeader";
 import AccountManagementHeader from "../components/AccountManagement/AccountManagementHeader";
 
@@ -18,20 +22,22 @@ import DataTable from "components/DataTable/DataTable";
 import StatusChip from "components/StatusChip/StatusChip";
 import DataGridText from "components/DataGrid/DataGridText";
 import GridCellExpand from "components/GridCellExpand/GridCellExpand";
+import SideDrawerRight from "components/SideDrawerRight/SideDrawerRight";
+import ServiceNameWithLogo from "components/ServiceNameWithLogo/ServiceNameWithLogo";
+import TextConfirmationDialog from "components/TextConfirmationDialog/TextConfirmationDialog";
 import SubscriptionTypeDirectIcon from "components/Icons/SubscriptionType/SubscriptionTypeDirectIcon";
 import SubscriptionTypeInvitedIcon from "components/Icons/SubscriptionType/SubscriptionTypeInvitedIcon";
-import ServiceNameWithLogo from "src/components/ServiceNameWithLogo/ServiceNameWithLogo";
-import SideDrawerRight from "src/components/SideDrawerRight/SideDrawerRight";
-import ManageSubscriptionsForm from "./components/ManageSubscriptionsForm";
 
 const columnHelper = createColumnHelper<any>(); // TODO: Add type
+type Overlay = "manage-subscriptions" | "unsubscribe-dialog";
 
 const SubscriptionsPage = () => {
+  const snackbar = useSnackbar();
   const [searchText, setSearchText] = useState<string>("");
   const [selectedRows, setSelectedRows] = useState<string[]>([]);
-  const [overlayType, setOverlayType] = useState<
-    "manage-subscriptions" | "unsubscribe-dialog"
-  >("manage-subscriptions");
+  const [overlayType, setOverlayType] = useState<Overlay>(
+    "manage-subscriptions"
+  );
   const [isOverlayOpen, setIsOverlayOpen] = useState<boolean>(false);
 
   const selectUser = useSelector(selectUserrootData);
@@ -120,6 +126,20 @@ const SubscriptionsPage = () => {
     ];
   }, []);
 
+  const selectedSubscription = useMemo(() => {
+    return subscriptions.find(
+      (subscription) => subscription.id === selectedRows[0]
+    );
+  }, [selectedRows, subscriptions]);
+
+  const unSubscribeMutation = useMutation(deleteSubscription, {
+    onSuccess: () => {
+      refetchSubscriptions();
+      setIsOverlayOpen(false);
+      snackbar.showSuccess("Unsubscribed successfully");
+    },
+  });
+
   return (
     <div>
       <AccountManagementHeader
@@ -139,16 +159,24 @@ const SubscriptionsPage = () => {
             HeaderComponent={SubscriptionsTableHeader}
             headerProps={{
               selectedRows,
-              refetchSubscriptions,
-              subscriptions,
               searchText,
               setSearchText,
               onManageSubscriptions: () => {
                 setIsOverlayOpen(true);
                 setOverlayType("manage-subscriptions");
               },
+              onUnsubscribe: () => {
+                setIsOverlayOpen(true);
+                setOverlayType("unsubscribe-dialog");
+              },
+              isUnsubscribing: unSubscribeMutation.isLoading,
+              subscriptions,
+              isFetchingSubscriptions,
+              refetchSubscriptions,
+              selectedSubscription,
             }}
             isLoading={isFetchingSubscriptions}
+            selectionMode="single"
             selectedRows={selectedRows}
             onRowSelectionChange={setSelectedRows}
             rowId="id"
@@ -160,6 +188,23 @@ const SubscriptionsPage = () => {
           open={isOverlayOpen && overlayType === "manage-subscriptions"}
           closeDrawer={() => setIsOverlayOpen(false)}
           RenderUI={<ManageSubscriptionsForm />}
+        />
+
+        <TextConfirmationDialog
+          open={isOverlayOpen && overlayType === "unsubscribe-dialog"}
+          handleClose={() => setIsOverlayOpen(false)}
+          onConfirm={() => {
+            if (!selectedSubscription) {
+              return snackbar.showError("Please select a subscription");
+            }
+            unSubscribeMutation.mutate(selectedSubscription.id);
+          }}
+          confirmationText="unsubscribe"
+          title="Unsubscribe Service"
+          buttonLabel="Unsubscribe"
+          isLoading={unSubscribeMutation.isLoading}
+          subtitle={`Are you sure you want to unsubscribe from ${selectedSubscription?.serviceName}?`}
+          message="To confirm, please enter <b>unsubscribe</b>, in the field below:"
         />
       </PageContainer>
     </div>

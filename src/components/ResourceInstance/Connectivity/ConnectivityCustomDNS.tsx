@@ -223,7 +223,6 @@ const ResourceConnectivityCustomDNS: FC<ResourceConnectivityEndpointProps> = (
       await addCustomDNSMutation?.mutateAsync(payload);
       setShouldShowConfigDialog(true);
       setIsTextFieldDisabled(true);
-
     } catch (err) {
       console.error(err);
     }
@@ -304,7 +303,7 @@ const ResourceConnectivityCustomDNS: FC<ResourceConnectivityEndpointProps> = (
                 }}
               />
               <TableCell colSpan={2} sx={{ paddingLeft: "4px", paddingTop: 0 }}>
-                <FieldContainer marginTop={0} sx={{maxWidth : "510px"}}>
+                <FieldContainer marginTop={0} sx={{ maxWidth: "510px" }}>
                   <Stack
                     direction="row"
                     alignItems="center"
@@ -397,6 +396,7 @@ const ResourceConnectivityCustomDNS: FC<ResourceConnectivityEndpointProps> = (
         </>
       )}
 
+      {/* TODO: Move this TextConfirmation Implementation to the New Type */}
       {isCustomDNSSetup && (
         <TextConfirmationDialog
           open={showDeleteConfirmationDialog}

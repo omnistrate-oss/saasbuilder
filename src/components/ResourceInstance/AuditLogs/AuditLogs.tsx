@@ -99,7 +99,6 @@ type AuditLogsTabProps = {
   instanceId: string;
   subscriptionId: string;
   serviceId: string;
-  environmentId: string;
   productTierId: string;
 };
 
@@ -132,7 +131,6 @@ const AuditLogs: FC<AuditLogsTabProps> = ({
   instanceId,
   subscriptionId,
   serviceId,
-  environmentId,
   productTierId,
 }) => {
   const [searchText, setSearchText] = useState("");
@@ -217,7 +215,7 @@ const AuditLogs: FC<AuditLogsTabProps> = ({
           if (!isUserServiceProvider && !isUserOmnistrateSystem && userId) {
             pageLink = getAccessControlRoute(
               serviceId,
-              environmentId,
+              "environmentId", // TODO: Fix this
               productTierId,
               subscriptionId,
               userId
@@ -276,7 +274,7 @@ const AuditLogs: FC<AuditLogsTabProps> = ({
 
     if (selectedEventTypes.length > 0) {
       filtered = filtered.filter((event) => {
-        return selectedEventTypes.includes(event.eventSource);
+        return selectedEventTypes.includes(event.eventSource as EventType);
       });
     }
 
@@ -309,7 +307,7 @@ const AuditLogs: FC<AuditLogsTabProps> = ({
         renderDetailsComponent={DetailTableRowView}
         noRowsText="No events"
         getRowCanExpand={(rowData) =>
-          Boolean(rowData.original.workflowFailures?.length > 0)
+          Boolean(Number(rowData.original.workflowFailures?.length) > 0)
         }
         HeaderComponent={AuditLogsTableHeader}
         headerProps={{

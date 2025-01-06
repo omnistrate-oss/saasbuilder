@@ -1,12 +1,12 @@
 import Image from "next/image";
-import CardCircleBg from "./CardCircleBg.svg";
-import ServicePlanCardIcon from "../Icons/ServicePlanCard/ServicePlanCardIcon";
-import { Text } from "../Typography/Typography";
 import Button from "../Button/Button";
+import { Text } from "../Typography/Typography";
 import CirclePlusIcon from "../Icons/ServicePlanCard/CirclePlusIcon";
 import CircleCheckIcon from "../Icons/ServicePlanCard/CircleCheckIcon";
-import clsx from "clsx";
+import ServicePlanCardIcon from "../Icons/ServicePlanCard/ServicePlanCardIcon";
+
 import { SetState } from "src/types/common/reactGenerics";
+import CardCircleBg from "./CardCircleBg.svg";
 
 type ServicePlanCardProps = {
   isSelected?: boolean;
@@ -24,10 +24,10 @@ const ServicePlanCard: React.FC<ServicePlanCardProps> = ({
   return (
     <div
       onClick={() => setSelectedPlanId(servicePlan.productTierID)}
-      className={clsx(
-        "overflow-hidden relative flex flex-col gap-3 items-center border border-[#E9EAEB] rounded-xl px-4 py-4 cursor-pointer",
-        isSelected && "outline-2 outline-[#0E5FB5]"
-      )}
+      className="overflow-hidden relative flex flex-col gap-3 items-center border border-[#E9EAEB] rounded-xl px-4 py-4 cursor-pointer"
+      style={{
+        outline: isSelected ? "2px solid #0E5FB5" : "none",
+      }}
     >
       <Image
         src={CardCircleBg}
@@ -60,7 +60,10 @@ const ServicePlanCard: React.FC<ServicePlanCardProps> = ({
 
       <Button
         variant="contained"
-        disabled={subscriptionStatus === "subscribed"}
+        disabled={
+          subscriptionStatus === "subscribed" ||
+          subscriptionStatus === "pending-approval"
+        }
         startIcon={
           subscriptionStatus === "not-subscribed" ? (
             <CirclePlusIcon />

@@ -4,6 +4,7 @@ import Button from "src/components/Button/Button";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import { Box, List } from "@mui/material";
+import { styleConfig } from "src/providerConfig";
 
 type PaginationProps = {
   isPreviousDisabled: boolean;
@@ -33,7 +34,6 @@ const Pagination: FC<PaginationProps> = (props) => {
     (item) => item.type !== "previous" && item.type !== "next"
   );
 
-
   return (
     <Box
       sx={{
@@ -58,7 +58,7 @@ const Pagination: FC<PaginationProps> = (props) => {
       </Button>
       <List sx={{ display: "flex", px: "20px", gap: "2px" }}>
         {filteredItems.map(({ page, type, selected, ...item }, index) => {
-          let children = null;
+          let children: null | React.ReactNode = null;
 
           if (type === "start-ellipsis" || type === "end-ellipsis") {
             children = (
@@ -78,7 +78,6 @@ const Pagination: FC<PaginationProps> = (props) => {
                   minWidth: 0,
                   width: 40,
                   height: 40,
-                  color: selected ? "#6941C6" : "#475467",
                   background: selected ? "#F2F4F7" : "transparent",
                   "&:hover": {
                     background: "#F2F4F7",
@@ -104,7 +103,7 @@ const Pagination: FC<PaginationProps> = (props) => {
         onClick={handleNext}
       >
         Next
-      </Button>{" "}
+      </Button>
     </Box>
   );
 };

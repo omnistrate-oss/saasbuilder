@@ -102,7 +102,7 @@ export const Actions = (props) => {
         placeholder="Search by Name"
         searchText={searchText}
         setSearchText={setSearchText}
-        width="250px"
+        width="200px"
       />
       <RefreshWithToolTip refetch={handleRefresh} disabled={isFetching} />
       <Tooltip
