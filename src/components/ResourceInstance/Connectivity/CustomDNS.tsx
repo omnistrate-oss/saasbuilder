@@ -26,6 +26,7 @@ import CustomDNSDetails from "./CustomDNSDetails";
 import AlertTrianglePITR from "src/components/Icons/AlertTrianglePITR/AlertTrianglePITR";
 import CircleCheckWithBorderIcon from "src/components/Icons/CircleCheck/CircleCheckWithBorderIcon";
 import CustomStatusChips from "src/components/CustomStatusChips/CustomStatusChips";
+import PlayIcon from "src/components/Icons/Play/Play";
 
 type EndpointProps = {
   resourceName: string;
@@ -215,33 +216,33 @@ const CustomDNS: FC<EndpointProps> = (props) => {
 
   return (
     <>
-      <Card
-        sx={{
-          p: 0,
-          borderRadius: "8px",
-        }}
-      >
-        <Box
-          display={"flex"}
-          gap="16px"
-          padding={"20px 24px"}
-          alignItems="center"
-          borderBottom={"1px solid rgba(213, 215, 218, 1)"}
+      {resourceHasCompute && customDNSData?.enabled && (
+        <Card
+          sx={{
+            p: 0,
+            borderRadius: "8px",
+          }}
         >
-          <Box>
-            <PublicIcon />
-          </Box>
-          <Text
-            size="medium"
-            weight="bold"
-            color="#6941C6"
-            sx={{ flex: 1, wordBreak: "break-word" }}
+          <Box
+            display={"flex"}
+            gap="16px"
+            padding={"20px 24px"}
+            alignItems="center"
+            borderBottom={"1px solid rgba(213, 215, 218, 1)"}
           >
-            {resourceName}
-          </Text>
-        </Box>
+            <Box>
+              <PublicIcon />
+            </Box>
+            <Text
+              size="medium"
+              weight="bold"
+              color="#6941C6"
+              sx={{ flex: 1, wordBreak: "break-word" }}
+            >
+              {resourceName}
+            </Text>
+          </Box>
 
-        {resourceHasCompute && customDNSData?.enabled && (
           <>
             <Box
               padding={"24px"}
@@ -305,6 +306,7 @@ const CustomDNS: FC<EndpointProps> = (props) => {
                         onClick={() => {
                           customDNSFormik.submitForm();
                         }}
+                        endIcon={<PlayIcon color="rgba(255, 255, 255, 1)" />}
                       >
                         Verify{" "}
                         {addCustomDNSMutation?.isLoading && (
@@ -361,26 +363,25 @@ const CustomDNS: FC<EndpointProps> = (props) => {
               )}
             </Box>
           </>
-        )}
-
-        {isCustomDNSSetup && (
-          <TextConfirmationDialog
-            open={showDeleteConfirmationDialog}
-            handleClose={() => {
-              setShowDeleteConfirmationDialog(false);
-              removeCustomDNSFormik.resetForm();
-            }}
-            formData={removeCustomDNSFormik}
-            title={`Delete Endpoint Alias`}
-            subtitle={deleteMessage}
-            message={
-              "To confirm deletion, please enter <b>deleteme</b>, in the field below:"
-            }
-            isLoading={removeCustomDNSMutation?.isLoading}
-            isDeleteEnable={true}
-          />
-        )}
-      </Card>
+          {isCustomDNSSetup && (
+            <TextConfirmationDialog
+              open={showDeleteConfirmationDialog}
+              handleClose={() => {
+                setShowDeleteConfirmationDialog(false);
+                removeCustomDNSFormik.resetForm();
+              }}
+              formData={removeCustomDNSFormik}
+              title={`Delete Endpoint Alias`}
+              subtitle={deleteMessage}
+              message={
+                "To confirm deletion, please enter <b>deleteme</b>, in the field below:"
+              }
+              isLoading={removeCustomDNSMutation?.isLoading}
+              isDeleteEnable={true}
+            />
+          )}
+        </Card>
+      )}
     </>
   );
 };

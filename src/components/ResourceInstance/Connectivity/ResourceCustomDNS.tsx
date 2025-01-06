@@ -46,43 +46,46 @@ function ResourceCustomDNS(props) {
     if (primaryResourceName || otherResourceFilteredEndpoints?.length > 0) {
       const customDNSEndpointName =
         globalEndpoints?.primary?.customDNSEndpoint?.name ?? "";
-
-      res.push({
-        label: primaryResourceName,
-        description: `The global endpoint of the ${sectionLabel.toLowerCase()}`,
-        valueType: "custom",
-        value: (
-          <>
-            {primaryResourceName && (
-              <CustomDNS
-                resourceName={`${primaryResourceName} ${customDNSEndpointName}`}
-                customDNSData={globalEndpoints?.primary?.customDNSEndpoint}
-                accessQueryParams={accessQueryParams}
-                resourceKey={globalEndpoints?.primary?.resourceKey}
-                resourceId={globalEndpoints?.primary?.resourceId}
-                refetchInstance={refetchInstance}
-                resourceHasCompute={
-                  globalEndpoints?.primary?.resourceHasCompute
-                }
-              />
-            )}
-          </>
-        ),
-      });
+      if (
+        globalEndpoints?.primary?.resourceHasCompute &&
+        globalEndpoints?.primary?.customDNSEndpoint?.enabled
+      ) {
+        res.push({
+          label: primaryResourceName,
+          description: `The global endpoint of the ${sectionLabel.toLowerCase()}`,
+          valueType: "custom",
+          value: (
+            <>
+              {primaryResourceName && (
+                <CustomDNS
+                  resourceName={`${primaryResourceName} ${customDNSEndpointName}`}
+                  customDNSData={globalEndpoints?.primary?.customDNSEndpoint}
+                  accessQueryParams={accessQueryParams}
+                  resourceKey={globalEndpoints?.primary?.resourceKey}
+                  resourceId={globalEndpoints?.primary?.resourceId}
+                  refetchInstance={refetchInstance}
+                  resourceHasCompute={
+                    globalEndpoints?.primary?.resourceHasCompute
+                  }
+                />
+              )}
+            </>
+          ),
+        });
+      }
     }
 
     if (otherResourceFilteredEndpoints?.length > 0) {
       otherResourceFilteredEndpoints.forEach(
         ({
           resourceName,
-          endpoint,
           resourceKey,
           resourceId,
           resourceHasCompute,
           customDNSEndpoint,
         }) => {
           const customDNSEndpointName = customDNSEndpoint?.name ?? "";
-          if (resourceName && endpoint) {
+          if (resourceHasCompute && customDNSEndpoint?.enabled) {
             res.push({
               label: resourceName,
               description: `The global endpoint of the ${sectionLabel.toLowerCase()}`,
