@@ -1544,7 +1544,6 @@ function MarketplaceService() {
       <DashboardLayout
         setSupportDrawerOpen={setSupportDrawerOpen}
         setCurrentTabValue={setCurrentTabValue}
-        isNotShow
         accessPage
         marketplacePage={currentSource === "access" ? false : true}
         SidebarUI={""}
@@ -1586,7 +1585,6 @@ function MarketplaceService() {
       <DashboardLayout
         setSupportDrawerOpen={setSupportDrawerOpen}
         setCurrentTabValue={setCurrentTabValue}
-        isNotShow
         serviceId={serviceId}
         serviceApiId={service?.serviceAPIID}
         marketplacePage
@@ -1611,7 +1609,6 @@ function MarketplaceService() {
         setSupportDrawerOpen={setSupportDrawerOpen}
         setCurrentTabValue={setCurrentTabValue}
         currentSubscription={subscriptionData}
-        isNotShow
         serviceId={serviceId}
         serviceApiId={service?.serviceAPIID}
         marketplacePage={currentSource === "access" ? false : true}
@@ -1739,7 +1736,6 @@ function MarketplaceService() {
       <DashboardLayout
         setSupportDrawerOpen={setSupportDrawerOpen}
         setCurrentTabValue={setCurrentTabValue}
-        isNotShow
         serviceId={serviceId}
         serviceApiId={service?.serviceAPIID}
         marketplacePage
@@ -1766,7 +1762,6 @@ function MarketplaceService() {
         setSupportDrawerOpen={setSupportDrawerOpen}
         setCurrentTabValue={setCurrentTabValue}
         currentSubscription={subscriptionData}
-        isNotShow
         serviceId={serviceId}
         serviceApiId={service?.serviceAPIID}
         marketplacePage={currentSource === "access" ? false : true}

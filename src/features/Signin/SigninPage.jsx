@@ -35,8 +35,6 @@ const createSigninValidationSchema = Yup.object({
 
 const SigninPage = (props) => {
   const {
-    orgName,
-    orgLogoURL,
     googleIdentityProvider,
     githubIdentityProvider,
     saasBuilderBaseURL,
@@ -104,7 +102,6 @@ const SigninPage = (props) => {
         return { serviceId: null, environmentId: null };
       }
     }
-    
 
     if (jwtToken) {
       Cookies.set("token", jwtToken, { sameSite: "Lax", secure: true });
@@ -205,11 +202,7 @@ const SigninPage = (props) => {
   const shouldHideSignupLink = environmentType !== ENVIRONMENT_TYPES.PROD;
 
   return (
-    <MainImageLayout
-      pageTitle="Sign in"
-      orgName={orgName}
-      orgLogoURL={orgLogoURL}
-    >
+    <MainImageLayout pageTitle="Sign in">
       <DisplayHeading mt="24px">Login to your account</DisplayHeading>
 
       <Stack component="form" gap="32px" mt="44px">

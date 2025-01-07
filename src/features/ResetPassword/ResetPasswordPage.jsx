@@ -26,8 +26,7 @@ const resetPasswordValidationSchema = Yup.object({
 });
 
 const ResetPasswordPage = (props) => {
-  const { orgName, orgLogoURL, googleReCaptchaSiteKey, isReCaptchaSetup } =
-    props;
+  const { googleReCaptchaSiteKey, isReCaptchaSetup } = props;
   const snackbar = useSnackbar();
   const reCaptchaRef = useRef(null);
   const [isScriptLoaded, setIsScriptLoaded] = useState(false);
@@ -84,7 +83,7 @@ const ResetPasswordPage = (props) => {
 
   if (showSuccess) {
     return (
-      <CenterContentLayout orgName={orgName} pageTitle="Reset Password">
+      <CenterContentLayout pageTitle="Reset Password">
         <Image
           src={Confetti}
           alt="Confetti"
@@ -124,12 +123,7 @@ const ResetPasswordPage = (props) => {
   }
 
   return (
-    <CenterContentLayout
-      orgName={orgName}
-      orgLogoURL={orgLogoURL}
-      showLogo
-      pageTitle="Reset Password"
-    >
+    <CenterContentLayout showLogo pageTitle="Reset Password">
       <Stack gap="16px">
         <DisplayHeading>Reset your password</DisplayHeading>
         <PageDescription>

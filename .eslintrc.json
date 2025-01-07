@@ -13,6 +13,7 @@
   "globals": {
     "React": true
   },
+
   "rules": {
     "no-use-before-define": [
       "warn",

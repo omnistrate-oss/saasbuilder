@@ -100,7 +100,6 @@ function Dashboard() {
       <DashboardLayout
         setSupportDrawerOpen={setSupportDrawerOpen}
         setCurrentTabValue={setCurrentTabValue}
-        isNotShow
         marketplacePage={currentSource === "access" ? false : true}
         accessPage
         customLogo
@@ -134,7 +133,6 @@ function Dashboard() {
       <DashboardLayout
         setSupportDrawerOpen={setSupportDrawerOpen}
         setCurrentTabValue={setCurrentTabValue}
-        isNotShow
         marketplacePage={currentSource === "access" ? false : true}
         accessPage
         customLogo
@@ -187,7 +185,6 @@ function Dashboard() {
       <DashboardLayout
         setSupportDrawerOpen={setSupportDrawerOpen}
         setCurrentTabValue={setCurrentTabValue}
-        isNotShow
         serviceId={serviceId}
         serviceApiId={serviceOffering?.serviceAPIID}
         marketplacePage
@@ -214,7 +211,6 @@ function Dashboard() {
       servicePlanUrlLink={servicePlanUrlLink}
       serviceId={serviceId}
       serviceApiId={serviceOffering?.serviceAPIID}
-      isNotShow
       SidebarUI={
         <MarketplaceServiceSidebar
           serviceId={serviceId}

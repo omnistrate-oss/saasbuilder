@@ -270,7 +270,6 @@ function ResourceInstance() {
       <DashboardLayout
         setSupportDrawerOpen={setSupportDrawerOpen}
         setCurrentTabValue={setCurrentTabValue}
-        isNotShow
         marketplacePage={currentSource === "access" ? false : true}
         accessPage
         currentSubscription={subscriptionData}
@@ -304,7 +303,6 @@ function ResourceInstance() {
       <DashboardLayout
         setSupportDrawerOpen={setSupportDrawerOpen}
         setCurrentTabValue={setCurrentTabValue}
-        isNotShow
         marketplacePage={currentSource === "access" ? false : true}
         accessPage
         currentSubscription={subscriptionData}
@@ -360,7 +358,6 @@ function ResourceInstance() {
       apiDocsurl={serviceAPIDocsLink}
       serviceId={serviceId}
       serviceApiId={serviceOffering?.serviceAPIID}
-      isNotShow
       SidebarUI={
         <MarketplaceServiceSidebar
           serviceId={serviceId}

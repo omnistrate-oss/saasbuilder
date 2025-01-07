@@ -22,8 +22,7 @@ const StyledImage = styled(Image)({
   alignSelf: "center",
 });
 
-const ValidateTokenPage = (props) => {
-  const { orgName, orgLogoURL } = props;
+const ValidateTokenPage = () => {
   const router = useRouter();
   const snackbar = useSnackbar();
   const { email, token } = router.query;
@@ -47,11 +46,7 @@ const ValidateTokenPage = (props) => {
   }, [router]);
 
   return (
-    <CenterContentLayout
-      orgName={orgName}
-      orgLogoURL={orgLogoURL}
-      pageTitle="Validate Token"
-    >
+    <CenterContentLayout pageTitle="Validate Token">
       <StyledImage
         src={ValidateTokenImg}
         alt="Validate Token"
