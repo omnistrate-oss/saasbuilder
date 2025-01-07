@@ -9,8 +9,10 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { Text } from "components/Typography/Typography";
 import LoadingSpinner from "components/LoadingSpinner/LoadingSpinner";
 
+import axios from "src/axios";
 import useSnackbar from "src/hooks/useSnackbar";
 import { customerSignInWithIdentityProvider } from "src/api/customer-user";
+import { PAGE_TITLE_MAP } from "src/constants/pageTitleMap";
 
 const IDPAuthPage = () => {
   const router = useRouter();
@@ -30,11 +32,7 @@ const IDPAuthPage = () => {
           axios.defaults.headers["Authorization"] = "Bearer " + jwtToken;
 
           // Redirect to the Destination URL
-          if (
-            destination &&
-            (destination.startsWith("/service-plans") ||
-              destination.startsWith("%2Fservice-plans"))
-          ) {
+          if (destination && PAGE_TITLE_MAP[destination]) {
             router.replace(decodeURIComponent(destination));
           } else {
             router.replace("/instances");

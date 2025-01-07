@@ -64,7 +64,7 @@ function FourHundredFourPage() {
               Please visit our homepage to get where you need to go. <br />
             </Description>
 
-            <Link href="/service-plans">
+            <Link href="/instances">
               <Button
                 variant="contained"
                 size="xlarge"

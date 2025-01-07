@@ -23,9 +23,9 @@ import FieldContainer from "components/NonDashboardComponents/FormElementsV2/Fie
 import axios from "src/axios";
 import useSnackbar from "src/hooks/useSnackbar";
 import { customerUserSignin } from "src/api/customer-user";
+import { PAGE_TITLE_MAP } from "src/constants/pageTitleMap";
 import useEnvironmentType from "src/hooks/useEnvironmentType";
 import { ENVIRONMENT_TYPES } from "src/constants/environmentTypes";
-import { getMarketplaceProductTierRoute } from "src/utils/route/access/accessRoute";
 
 import GoogleLogin from "./components/GoogleLogin";
 import GithubLogin from "./components/GitHubLogin";
@@ -73,42 +73,8 @@ const SigninPage = (props) => {
   function handleSignInSuccess(jwtToken) {
     function isValidDestination(destination) {
       const decodedURL = decodeURIComponent(destination);
-      const allowedPaths = ["/service-plans", "service-plans"];
-      const isAllowedPath = allowedPaths.some((path) =>
-        decodedURL.startsWith(path)
-      );
-
-      if (isAllowedPath) {
-        const { serviceId } = extractQueryParams(decodedURL);
-        if (serviceId) return true;
-      }
-
-      return false;
-    }
-
-    function extractQueryParams(decodedURL) {
-      try {
-        if (!decodedURL) return { serviceId: null, environmentId: null };
-
-        const queryString = decodedURL.split("?")[1];
-        if (!queryString) return { serviceId: null, environmentId: null };
-
-        const queryParams = new URLSearchParams(queryString);
-
-        const serviceId = queryParams.get("serviceId");
-        const environmentId = queryParams.get("environmentId");
-
-        // Sanitize parameters
-        const sanitizedServiceId = serviceId?.trim();
-        const sanitizedEnvironmentId = environmentId?.trim();
-
-        return {
-          serviceId: sanitizedServiceId || null,
-          environmentId: sanitizedEnvironmentId || null,
-        };
-      } catch (error) {
-        return { serviceId: null, environmentId: null };
-      }
+      const isAllowedPath = Boolean(PAGE_TITLE_MAP[decodedURL]);
+      return isAllowedPath;
     }
 
     if (jwtToken) {
@@ -118,25 +84,9 @@ const SigninPage = (props) => {
       // Redirect to the Destination URL
       if (destination && isValidDestination(destination)) {
         const decodedDestination = decodeURIComponent(destination);
-        const { serviceId, environmentId } =
-          extractQueryParams(decodedDestination);
-
-        const route = getMarketplaceProductTierRoute(serviceId, environmentId);
-        router.replace(
-          route,
-          {},
-          {
-            showProgressBar: true,
-          }
-        );
+        router.replace(decodedDestination, {}, { showProgressBar: true });
       } else {
-        router.replace(
-          "/instances",
-          {},
-          {
-            showProgressBar: true,
-          }
-        );
+        router.replace("/instances", {}, { showProgressBar: true });
       }
     }
   }

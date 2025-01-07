@@ -1,8 +1,8 @@
 "use client";
 
 import Image from "next/image";
-import { useMemo } from "react";
 import { Stack } from "@mui/material";
+import { useMemo, useState } from "react";
 import { createColumnHelper } from "@tanstack/react-table";
 
 import PageTitle from "../components/Layout/PageTitle";
@@ -11,20 +11,38 @@ import PageContainer from "../components/Layout/PageContainer";
 import InstancesTableHeader from "./components/InstancesTableHeader";
 
 import formatDateUTC from "src/utils/formatDateUTC";
-import DataTable from "src/components/DataTable/DataTable";
-import GridCellExpand from "src/components/GridCellExpand/GridCellExpand";
 
+import RegionIcon from "components/Region/RegionIcon";
 import AwsLogo from "components/Logos/AwsLogo/AwsLogo";
 import GcpLogo from "components/Logos/GcpLogo/GcpLogo";
-import RegionIcon from "src/components/Region/RegionIcon";
+import DataTable from "components/DataTable/DataTable";
 import AzureLogo from "components/Logos/AzureLogo/AzureLogo";
+import GridCellExpand from "components/GridCellExpand/GridCellExpand";
+
 import SpeedoMeterLow from "public/assets/images/dashboard/resource-instance-speedo-meter/idle.png";
 import SpeedoMeterHigh from "public/assets/images/dashboard/resource-instance-speedo-meter/high.png";
 import SpeedoMeterMedium from "public/assets/images/dashboard/resource-instance-speedo-meter/normal.png";
+import SideDrawerRight from "src/components/SideDrawerRight/SideDrawerRight";
+import InstanceForm from "./components/InstanceForm";
+import TextConfirmationDialog from "src/components/TextConfirmationDialog/TextConfirmationDialog";
 
 const columnHelper = createColumnHelper<any>(); // TODO: Add type
+type Overlay =
+  | "create-instance-form"
+  | "modify-instance-form"
+  | "capacity-dialog"
+  | "delete-dialog"
+  | "restore-dialog";
+
+const instances = [];
 
 const InstancesPage = () => {
+  const [selectedRows, setSelectedRows] = useState<string[]>([]);
+  const [overlayType, setOverlayType] = useState<Overlay>(
+    "create-instance-form"
+  );
+  const [isOverlayOpen, setIsOverlayOpen] = useState<boolean>(false);
+
   const dataTableColumns = useMemo(() => {
     return [
       columnHelper.accessor((row) => formatDateUTC(row.created_at), {
@@ -132,6 +150,10 @@ const InstancesPage = () => {
     ];
   }, []);
 
+  const selectedInstance = useMemo(() => {
+    return instances.find((instance) => instance.id === selectedRows[0]);
+  }, [selectedRows, instances]);
+
   return (
     <PageContainer>
       <PageTitle icon={InstancesIcon} className="mb-6">
@@ -141,13 +163,40 @@ const InstancesPage = () => {
       <div>
         <DataTable
           columns={dataTableColumns}
-          rows={[]}
+          rows={instances}
           noRowsText="No instances"
           HeaderComponent={InstancesTableHeader}
-          headerProps={{}}
+          headerProps={{
+            selectedInstance,
+            setSelectedRows,
+            setOverlayType,
+            setIsOverlayOpen,
+          }}
           isLoading={false}
+          selectedRows={selectedRows}
+          onRowSelectionChange={setSelectedRows}
+          selectionMode="single"
         />
       </div>
+
+      <SideDrawerRight
+        open={
+          isOverlayOpen &&
+          ["create-instance-form", "modify-instance-form"].includes(overlayType)
+        }
+        closeDrawer={() => setIsOverlayOpen(false)}
+        RenderUI={<InstanceForm />}
+      />
+
+      <TextConfirmationDialog
+        open={isOverlayOpen && overlayType === "delete-dialog"}
+        handleClose={() => setIsOverlayOpen(false)}
+        onConfirm={() => {}}
+        title="Delete Instance"
+        subtitle={`Are you sure you want to delete - ${selectedRows[0]}?`}
+        message="To confirm, please enter <b>deleteme</b>, in the field below:"
+        isLoading={false} //TODO: Change This
+      />
     </PageContainer>
   );
 };

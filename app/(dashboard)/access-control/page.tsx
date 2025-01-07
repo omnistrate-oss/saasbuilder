@@ -61,7 +61,7 @@ const AccessControlPage = () => {
         id: "action",
         header: "Action",
         cell: (data) => {
-          return (
+          return data.row.original.roleType !== "root" ? (
             <Button
               variant="outlined"
               fontColor="#B42318"
@@ -70,11 +70,11 @@ const AccessControlPage = () => {
                 setOverlayType("delete-dialog");
                 setSelectedUser(data.row.original);
               }}
-              startIcon={<DeleteIcon sx={{ color: "#B42318" }} />}
+              startIcon={<DeleteIcon color="#B42318" />}
             >
               Delete User
             </Button>
-          );
+          ) : null;
         },
         meta: {
           minWidth: 200,
@@ -87,13 +87,9 @@ const AccessControlPage = () => {
     (payload: any) => revokeSubscriptionUser(payload.subscriptionId, payload),
     {
       onSuccess: async () => {
-        setIsOverlayOpen(false);
-        snackbar.showSuccess("User Deleted");
         refetchUsers();
-      },
-      onError: (error) => {
-        console.error(error);
-        snackbar.showError("Failed to delete user");
+        setIsOverlayOpen(false);
+        snackbar.showSuccess("User deleted successfully");
       },
     }
   );
@@ -148,8 +144,9 @@ const AccessControlPage = () => {
           if (!selectedUser) return snackbar.showError("No user selected");
 
           const payload = {
-            email: selectedUser.emailAddress,
-            roleType: selectedUser.role,
+            email: selectedUser.email,
+            roleType: selectedUser.roleType,
+            subscriptionId: selectedUser.subscriptionId,
           };
           deleteUserMutation.mutate(payload);
         }}

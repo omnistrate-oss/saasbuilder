@@ -1,6 +1,10 @@
 import { Field } from "./types";
 import { PasswordInput, SelectField, TextInput } from "./Common";
 
+import FieldLabel from "../FormElements/FieldLabel/FieldLabel";
+import FieldError from "../FormElementsv2/FieldError/FieldError";
+import FieldDescription from "../FormElementsv2/FieldDescription/FieldDescription";
+
 type GridDynamicFieldProps = {
   field: Field;
   formData: any;
@@ -28,7 +32,22 @@ const GridDynamicField: React.FC<GridDynamicFieldProps> = ({
     Field = <SelectField field={field} formData={formData} />;
   }
 
-  return <div className="">{Field}</div>;
+  return (
+    <div className="flex gap-8">
+      <div className="w-[250px]">
+        <FieldLabel required={field.required}>{field.label}</FieldLabel>
+        <FieldDescription>{field.subLabel}</FieldDescription>
+      </div>
+
+      <div className="flex-1">
+        {Field}
+        {field.description && field.description}
+        <FieldError>
+          {formData.touched[field.name] && formData.errors[field.name]}
+        </FieldError>
+      </div>
+    </div>
+  );
 };
 
 export default GridDynamicField;
