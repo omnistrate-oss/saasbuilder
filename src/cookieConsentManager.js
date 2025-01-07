@@ -45,6 +45,7 @@ const handlerMap = {
 };
 
 function addGoogleAnalytics() {
+  window[`ga-disable-${this.gtag}`] = false;
   const id = `script-${this.name}`;
   if (document.getElementById(id)) return; // Avoid duplicate scripts
 
@@ -85,6 +86,8 @@ const removeScript = (id) => {
 const removeCookies = (cookieNames) => {
   cookieNames.forEach((name) => {
     const allCookies = document.cookie.split("; "); // Get all cookies as an array of "key=value" strings
+    const domains = [location.hostname]; // Current and parent domain
+    const paths = ["/"]; // Default path
 
     if (name.includes("*")) {
       // Handle wildcard pattern
@@ -92,12 +95,21 @@ const removeCookies = (cookieNames) => {
       allCookies.forEach((cookie) => {
         const cookieName = cookie.split("=")[0];
         if (regex.test(cookieName)) {
-          document.cookie = `${cookieName}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=${location.hostname}`;
+          // Attempt deletion for all domain-path combinations
+          domains.forEach((domain) => {
+            paths.forEach((path) => {
+              document.cookie = `${cookieName}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=${path}; domain=${domain}`;
+            });
+          });
         }
       });
     } else {
       // Exact match removal
-      document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=${location.hostname}`;
+      domains.forEach((domain) => {
+        paths.forEach((path) => {
+          document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=${path}; domain=${domain}`;
+        });
+      });
     }
   });
 };
@@ -105,6 +117,7 @@ const removeCookies = (cookieNames) => {
 function removeGoogleAnalyticsScriptsAndCookies() {
   removeScript(`script-${this.name}`);
   removeCookies(this.cookies);
+  window[`ga-disable-${this.gtag}`] = true;
   window.dataLayer = undefined; // Clear global state
   window.gaGlobal = undefined;
   window.google_tag_data = undefined;
