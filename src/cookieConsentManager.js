@@ -58,7 +58,6 @@ function addGoogleAnalytics() {
 
   script.onload = () => {
     initializeGoogleAnalytics.call(this);
-    console.log(`Script ${id} loaded successfully.`);
   };
 
   script.onerror = () => {
@@ -79,7 +78,6 @@ const removeScript = (id) => {
   const script = document.getElementById(id);
   if (script) {
     script.parentNode.removeChild(script);
-    console.log(`Script ${id} removed.`);
   }
 };
 
