@@ -50,7 +50,6 @@ function addGoogleAnalytics() {
   if (document.getElementById(id)) return; // Avoid duplicate scripts
 
   const script = document.createElement("script");
-
   script.src = this.src;
   script.id = id;
   script.async = true;
