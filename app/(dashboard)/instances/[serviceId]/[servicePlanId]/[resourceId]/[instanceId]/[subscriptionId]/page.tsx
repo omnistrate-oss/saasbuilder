@@ -22,7 +22,7 @@ import ResourceInstanceOverview from "components/ResourceInstance/ResourceInstan
 import { styleConfig } from "src/providerConfig";
 import { CLI_MANAGED_RESOURCES } from "src/constants/resource";
 import useResourceInstance from "src/hooks/useResourceInstance";
-import { useGlobalDataContext } from "src/providers/GlobalDataProvider";
+import { useGlobalData } from "src/providers/GlobalDataProvider";
 import {
   selectInstanceDetailsSummaryVisibility,
   toggleInstanceDetailsSummaryVisibility,
@@ -66,7 +66,7 @@ const InstanceDetailsPage = (params: {
     subscriptions,
     isFetchingServiceOfferings,
     isFetchingSubscriptions,
-  } = useGlobalDataContext();
+  } = useGlobalData();
 
   const offering = serviceOfferingsObj[serviceId]?.[servicePlanId];
 

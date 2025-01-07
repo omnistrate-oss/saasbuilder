@@ -201,9 +201,9 @@ const CustomNetworksPage = () => {
       <TextConfirmationDialog
         open={isOverlayOpen && overlayType === "delete-dialog"}
         handleClose={() => setIsOverlayOpen(false)}
-        onConfirm={() => {
+        onConfirm={async () => {
           if (!selectedRows.length) return;
-          deleteCustomNetworkMutation.mutate(selectedRows[0]);
+          await deleteCustomNetworkMutation.mutateAsync(selectedRows[0]);
         }}
         title="Delete Custom Network"
         subtitle="Are you sure you want to delete this custom network?"

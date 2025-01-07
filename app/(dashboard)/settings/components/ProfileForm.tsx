@@ -33,10 +33,12 @@ const ProfileForm: React.FC<ProfileFormProps> = ({
     (data) => updateProfile(userData?.id, data),
     {
       onSuccess: () => {
-        // eslint-disable-next-line no-use-before-define
-        formData.resetForm();
         refetchUserData();
         snackbar.showSuccess("Profile updated successfully");
+      },
+      onError: () => {
+        // eslint-disable-next-line no-use-before-define
+        formData.resetForm();
       },
     }
   );

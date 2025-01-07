@@ -13,6 +13,9 @@ type ServicePlanCardProps = {
   servicePlan: any;
   subscriptionStatus: "subscribed" | "pending-approval" | "not-subscribed";
   setSelectedPlanId: SetState<string>;
+  onSubscribeClick: () => void;
+  isSubscribing?: boolean;
+  isFetchingData?: boolean;
 };
 
 const ServicePlanCard: React.FC<ServicePlanCardProps> = ({
@@ -20,7 +23,16 @@ const ServicePlanCard: React.FC<ServicePlanCardProps> = ({
   servicePlan,
   subscriptionStatus,
   setSelectedPlanId,
+  onSubscribeClick,
+  isSubscribing,
+  isFetchingData,
 }) => {
+  const isDisabled =
+    subscriptionStatus === "subscribed" ||
+    subscriptionStatus === "pending-approval" ||
+    isSubscribing ||
+    isFetchingData;
+
   return (
     <div
       onClick={() => setSelectedPlanId(servicePlan.productTierID)}
@@ -38,12 +50,17 @@ const ServicePlanCard: React.FC<ServicePlanCardProps> = ({
 
       <ServicePlanCardIcon />
 
-      <div>
+      <div style={{ maxWidth: "100%" }}>
         <Text
           size="large"
           weight="semibold"
           color="#414651"
-          sx={{ textAlign: "center" }}
+          sx={{
+            textAlign: "center",
+            textOverflow: "ellipsis",
+            overflow: "hidden",
+            whiteSpace: "nowrap",
+          }}
         >
           {servicePlan.productTierName}
         </Text>
@@ -52,7 +69,12 @@ const ServicePlanCard: React.FC<ServicePlanCardProps> = ({
           size="small"
           weight="regular"
           color="#535862"
-          sx={{ textAlign: "center" }}
+          sx={{
+            textAlign: "center",
+            textOverflow: "ellipsis",
+            overflow: "hidden",
+            whiteSpace: "nowrap",
+          }}
         >
           {servicePlan.productTierDescription}
         </Text>
@@ -60,19 +82,17 @@ const ServicePlanCard: React.FC<ServicePlanCardProps> = ({
 
       <Button
         variant="contained"
-        disabled={
-          subscriptionStatus === "subscribed" ||
-          subscriptionStatus === "pending-approval"
-        }
+        disabled={isDisabled}
         startIcon={
           subscriptionStatus === "not-subscribed" ? (
-            <CirclePlusIcon />
+            <CirclePlusIcon disabled={isDisabled} />
           ) : (
-            <CircleCheckIcon />
+            <CircleCheckIcon disabled={isDisabled} />
           )
         }
         onClick={(e) => {
           e.stopPropagation();
+          onSubscribeClick();
         }}
       >
         {subscriptionStatus === "subscribed"

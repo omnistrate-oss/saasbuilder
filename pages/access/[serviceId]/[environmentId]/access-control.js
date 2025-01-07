@@ -87,6 +87,7 @@ function AccessControl() {
     subscriptionId: subscriptionData?.id,
   });
   const { subscriptionUsers: users = [] } = data || {};
+
   const [searchText, setSearchText] = useState("");
   const [supportDrawerOpen, setSupportDrawerOpen] = useState(false);
   const [currentTabValue, setCurrentTabValue] = useState(false);

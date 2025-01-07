@@ -1,14 +1,25 @@
-import Button from "src/components/Button/Button";
-import DataGridHeaderTitle from "src/components/Headers/DataGridHeaderTitle";
 import AddIcon from "@mui/icons-material/Add";
-import DeleteIcon from "src/components/Icons/Delete/Delete";
 
-const CloudAccountsTableHeader = () => {
+import Button from "components/Button/Button";
+import DeleteIcon from "components/Icons/Delete/Delete";
+import SearchInput from "components/DataGrid/SearchInput";
+import DataGridHeaderTitle from "components/Headers/DataGridHeaderTitle";
+import RefreshWithToolTip from "src/components/RefreshWithTooltip/RefreshWithToolTip";
+
+const CloudAccountsTableHeader = ({
+  searchText,
+  setSearchText,
+  onCreateClick,
+  onDeleteClick,
+  selectedRows,
+  refetchInstances,
+  isFetchingInstances,
+}) => {
   return (
     <div className="py-5 px-6 flex items justify-between gap-4">
       <DataGridHeaderTitle
-        title="List of Cloud Account Instances"
-        desc="Details of instances"
+        title="List of Cloud Accounts"
+        desc="Details of cloud account instances"
         count={1}
         units={{
           singular: "Instance",
@@ -17,26 +28,26 @@ const CloudAccountsTableHeader = () => {
       />
 
       <div className="flex items-center gap-4">
+        <SearchInput
+          placeholder="Search by ID"
+          searchText={searchText}
+          setSearchText={setSearchText}
+        />
+        <RefreshWithToolTip
+          refetch={refetchInstances}
+          disabled={isFetchingInstances}
+        />
         <Button
           variant="outlined"
-          // disabled={!isCreateAllowed}
-          // TODO: Check this
-          onClick={() => {
-            setFormMode("create");
-            openCreationDrawer();
-          }}
-          startIcon={<DeleteIcon />}
+          disabled={selectedRows.length !== 1}
+          onClick={onDeleteClick}
+          startIcon={<DeleteIcon disabled={selectedRows.length !== 1} />}
         >
           Delete
         </Button>
         <Button
           variant="contained"
-          //   disabled={!isCreateAllowed}
-          // TODO: Check this
-          onClick={() => {
-            setFormMode("create");
-            openCreationDrawer();
-          }}
+          onClick={onCreateClick}
           startIcon={<AddIcon />}
         >
           Create

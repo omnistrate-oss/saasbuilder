@@ -9,11 +9,12 @@ import useSnackbar from "src/hooks/useSnackbar";
 import formatDateUTC from "src/utils/formatDateUTC";
 import { deleteSubscription } from "src/api/subscriptions";
 import { selectUserrootData } from "src/slices/userDataSlice";
-import { useGlobalDataContext } from "src/providers/GlobalDataProvider";
+import { useGlobalData } from "src/providers/GlobalDataProvider";
 
 import PageTitle from "../components/Layout/PageTitle";
 import SettingsIcon from "../components/Icons/SettingsIcon";
 import PageContainer from "../components/Layout/PageContainer";
+import SubscriptionDetails from "./components/SubscriptionDetails";
 import ManageSubscriptionsForm from "./components/ManageSubscriptionsForm";
 import SubscriptionsTableHeader from "./components/SubscriptionsTableHeader";
 import AccountManagementHeader from "../components/AccountManagement/AccountManagementHeader";
@@ -29,7 +30,10 @@ import SubscriptionTypeDirectIcon from "components/Icons/SubscriptionType/Subscr
 import SubscriptionTypeInvitedIcon from "components/Icons/SubscriptionType/SubscriptionTypeInvitedIcon";
 
 const columnHelper = createColumnHelper<any>(); // TODO: Add type
-type Overlay = "manage-subscriptions" | "unsubscribe-dialog";
+type Overlay =
+  | "manage-subscriptions"
+  | "unsubscribe-dialog"
+  | "subscription-details";
 
 const SubscriptionsPage = () => {
   const snackbar = useSnackbar();
@@ -39,10 +43,15 @@ const SubscriptionsPage = () => {
     "manage-subscriptions"
   );
   const [isOverlayOpen, setIsOverlayOpen] = useState<boolean>(false);
+  const [clickedSubscription, setClickedSubscription] = useState<any>(null); // TODO: Add type
 
   const selectUser = useSelector(selectUserrootData);
-  const { subscriptions, isFetchingSubscriptions, refetchSubscriptions } =
-    useGlobalDataContext();
+  const {
+    subscriptions,
+    isFetchingSubscriptions,
+    refetchSubscriptions,
+    serviceOfferingsObj,
+  } = useGlobalData();
 
   const dataTableColumns = useMemo(() => {
     return [
@@ -51,7 +60,19 @@ const SubscriptionsPage = () => {
         header: "Subscription ID",
         cell: (data) => {
           return (
-            <DataGridText color="primary">{data.row.original.id}</DataGridText>
+            <DataGridText
+              color="primary"
+              onClick={() => {
+                setClickedSubscription(data.row.original);
+                setIsOverlayOpen(true);
+                setOverlayType("subscription-details");
+              }}
+              style={{
+                fontWeight: 600,
+              }}
+            >
+              {data.row.original.id}
+            </DataGridText>
           );
         },
       }),
@@ -185,19 +206,32 @@ const SubscriptionsPage = () => {
 
         <SideDrawerRight
           size="xlarge"
-          open={isOverlayOpen && overlayType === "manage-subscriptions"}
+          open={
+            isOverlayOpen &&
+            (overlayType === "manage-subscriptions" ||
+              overlayType === "subscription-details")
+          }
           closeDrawer={() => setIsOverlayOpen(false)}
-          RenderUI={<ManageSubscriptionsForm />}
+          RenderUI={
+            overlayType === "manage-subscriptions" ? (
+              <ManageSubscriptionsForm />
+            ) : (
+              <SubscriptionDetails
+                subscription={clickedSubscription}
+                serviceOfferingsObj={serviceOfferingsObj}
+              />
+            )
+          }
         />
 
         <TextConfirmationDialog
           open={isOverlayOpen && overlayType === "unsubscribe-dialog"}
           handleClose={() => setIsOverlayOpen(false)}
-          onConfirm={() => {
+          onConfirm={async () => {
             if (!selectedSubscription) {
               return snackbar.showError("Please select a subscription");
             }
-            unSubscribeMutation.mutate(selectedSubscription.id);
+            await unSubscribeMutation.mutateAsync(selectedSubscription.id);
           }}
           confirmationText="unsubscribe"
           title="Unsubscribe Service"

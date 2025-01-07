@@ -41,10 +41,12 @@ const BillingAddressForm: React.FC<BillingAddressFormProps> = ({
     (data) => updateProfile(userData?.id, data),
     {
       onSuccess: () => {
-        // eslint-disable-next-line no-use-before-define
-        formData.resetForm();
         refetchUserData();
         snackbar.showSuccess("Billing address updated successfully");
+      },
+      onError: () => {
+        // eslint-disable-next-line no-use-before-define
+        formData.resetForm();
       },
     }
   );

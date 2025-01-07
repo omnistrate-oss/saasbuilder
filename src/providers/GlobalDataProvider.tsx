@@ -9,7 +9,7 @@ import useSubscriptionRequests from "src/features/Marketplace/MarketplaceProduct
 
 export const GlobalDataContext: any = createContext(null); // TODO: Add a Type Here
 
-export const useGlobalDataContext = () => {
+export const useGlobalData = () => {
   const context: any = useContext(GlobalDataContext); // TODO: Add a Type Here
 
   if (context === undefined) {

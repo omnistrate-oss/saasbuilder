@@ -17,6 +17,9 @@ const ServiceNameWithLogo: React.FC<ServiceNameWithLogoProps> = ({
       value={serviceName || ""}
       textStyles={{
         color: "#101828",
+        fontSize: "14px",
+        fontWeight: 500,
+        lineHeight: "20px",
         cursor: "pointer",
       }}
       onClick={onClick}

@@ -36,9 +36,10 @@ export default function TextConfirmationDialog(props) {
     initialValues: {
       confirmationText: "",
     },
-    onSubmit: (values) => {
+    onSubmit: async (values) => {
       if (values.confirmationText === confirmationText) {
-        onConfirm();
+        await onConfirm();
+        formData.resetForm();
       } else {
         snackbar.showError(`Please enter "${confirmationText}" to confirm.`);
       }

@@ -1,14 +1,20 @@
 "use client";
 
+import { useMutation } from "@tanstack/react-query";
 import { useEffect, useMemo, useState } from "react";
-import CardWithTitle from "src/components/Card/CardWithTitle";
-import FieldDescription from "src/components/FormElementsv2/FieldDescription/FieldDescription";
-import FieldTitle from "src/components/FormElementsv2/FieldTitle/FieldTitle";
-import MenuItem from "src/components/FormElementsv2/MenuItem/MenuItem";
-import Select from "src/components/FormElementsv2/Select/Select";
-import ServicePlanCard from "src/components/ServicePlanCard/ServicePlanCard";
-import ServicePlanDetails from "src/components/ServicePlanDetails/ServicePlanDetails";
-import { useGlobalDataContext } from "src/providers/GlobalDataProvider";
+
+import CardWithTitle from "components/Card/CardWithTitle";
+import Select from "components/FormElementsv2/Select/Select";
+import MenuItem from "components/FormElementsv2/MenuItem/MenuItem";
+import FieldTitle from "components/FormElementsv2/FieldTitle/FieldTitle";
+import ServicePlanCard from "components/ServicePlanCard/ServicePlanCard";
+import ServicePlanDetails from "components/ServicePlanDetails/ServicePlanDetails";
+import FieldDescription from "components/FormElementsv2/FieldDescription/FieldDescription";
+
+import useSnackbar from "src/hooks/useSnackbar";
+import { createSubscriptions } from "src/api/subscriptions";
+import { useGlobalData } from "src/providers/GlobalDataProvider";
+import { createSubscriptionRequest } from "src/api/subscriptionRequests";
 
 const ManageSubscriptionsForm = () => {
   const {
@@ -16,7 +22,13 @@ const ManageSubscriptionsForm = () => {
     serviceOfferingsObj,
     subscriptions,
     subscriptionRequests,
-  } = useGlobalDataContext();
+    refetchSubscriptions,
+    refetchSubscriptionRequests,
+    isFetchingSubscriptions,
+    isFetchingSubscriptionRequests,
+  } = useGlobalData();
+
+  const snackbar = useSnackbar();
 
   const services = useMemo(() => {
     const servicesObj = serviceOfferings?.reduce((acc, offering) => {
@@ -31,18 +43,22 @@ const ManageSubscriptionsForm = () => {
     serviceOfferings[0]?.serviceId || ""
   );
 
+  // Plans for the Selected Service
   const servicePlans = useMemo(() => {
     return Object.values(serviceOfferingsObj[selectedServiceId] || {});
   }, [selectedServiceId, serviceOfferingsObj]);
+
+  console.log(subscriptions);
 
   const [selectedPlanId, setSelectedPlanId] = useState<any>(
     // @ts-ignore
     services[0]?.productTierID || ""
   );
 
+  // Object of Subscriptions and Subscription Requests
   const subscriptionsObj = useMemo(() => {
     return subscriptions?.reduce((acc, subscription) => {
-      if (subscription.defaultSubscription)
+      if (subscription.roleType === "root")
         acc[subscription.productTierId] = subscription;
       return acc;
     }, {});
@@ -50,10 +66,39 @@ const ManageSubscriptionsForm = () => {
 
   const subscriptionRequestsObj = useMemo(() => {
     return subscriptionRequests?.reduce((acc, request) => {
-      acc[request.productTierID] = request;
+      acc[request.productTierId] = request;
       return acc;
     }, {});
   }, [subscriptionRequests]);
+
+  const subscribeMutation = useMutation(
+    (payload: any) => {
+      if (payload.AutoApproveSubscription) {
+        return createSubscriptions({
+          productTierId: payload.productTierId,
+          serviceId: payload.serviceId,
+        });
+      } else {
+        return createSubscriptionRequest({
+          productTierId: payload.productTierId,
+          serviceId: payload.serviceId,
+        });
+      }
+    },
+    {
+      onSuccess: (res: any) => {
+        const id = Object.values(res.data || {}).join("");
+
+        refetchSubscriptions();
+        refetchSubscriptionRequests();
+        if (id.startsWith("subr")) {
+          snackbar.showSuccess("Subscription Request sent successfully");
+        } else {
+          snackbar.showSuccess("Subscribed successfully");
+        }
+      },
+    }
+  );
 
   useEffect(() => {
     const planIds = Object.keys(serviceOfferingsObj[selectedServiceId] || {});
@@ -63,7 +108,6 @@ const ManageSubscriptionsForm = () => {
   }, [selectedServiceId, serviceOfferingsObj]);
 
   const selectedPlan = serviceOfferingsObj[selectedServiceId]?.[selectedPlanId];
-  console.log(servicePlans, subscriptionsObj);
 
   return (
     <div className="space-y-6">
@@ -103,6 +147,17 @@ const ManageSubscriptionsForm = () => {
                   : subscriptionRequestsObj[plan.productTierID]
                     ? "pending-approval"
                     : "not-subscribed"
+              }
+              onSubscribeClick={() => {
+                subscribeMutation.mutate({
+                  productTierId: plan.productTierID,
+                  serviceId: plan.serviceId,
+                  AutoApproveSubscription: plan.AutoApproveSubscription,
+                });
+              }}
+              isSubscribing={subscribeMutation.isLoading}
+              isFetchingData={
+                isFetchingSubscriptions || isFetchingSubscriptionRequests
               }
             />
           ))}

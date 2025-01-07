@@ -1,8 +1,8 @@
 "use client";
 
-import { Suspense } from "react";
 import NProgress from "nprogress";
 import { Provider } from "react-redux";
+import { Suspense, useEffect } from "react";
 import { usePathname } from "next/navigation";
 import { ThemeProvider } from "@mui/material";
 import { AppProgressBar as ProgressBar } from "next-nprogress-bar";
@@ -10,6 +10,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v14-appRouter";
 
 import { store } from "src/redux-store";
+import { PAGE_TITLE_MAP } from "src/constants/pageTitleMap";
 import NotificationBarProvider from "src/context/NotificationBarProvider";
 import EnvironmentTypeProvider from "src/context/EnvironmentTypeProvider";
 import AxiosGlobalErrorHandler from "src/providers/AxiosGlobalErrorHandler";
@@ -59,6 +60,15 @@ const RootProviders = ({
 }) => {
   const pathname = usePathname();
   const isDashboardRoute = !nonDashboardRoutes.includes(pathname as string);
+
+  // Set Page Title
+  useEffect(() => {
+    document.title =
+      PAGE_TITLE_MAP[pathname as keyof typeof PAGE_TITLE_MAP] ||
+      providerOrgDetails?.orgName ||
+      "Dashboard";
+  }, [pathname]);
+
   return (
     <AppRouterCacheProvider>
       <Provider store={store}>

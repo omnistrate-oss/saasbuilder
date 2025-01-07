@@ -17,7 +17,7 @@ const SearchInput: FC<SearchInputProps> = ({
   placeholder,
   searchText,
   setSearchText,
-  width = "320px",
+  width = "250px",
 }) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
