@@ -43,7 +43,7 @@ function ResourceCustomDNS(props) {
 
     const res = [];
 
-    if (primaryResourceName || otherResourceFilteredEndpoints?.length > 0) {
+    if (primaryResourceName || primaryResourceEndpoint) {
       const customDNSEndpointName =
         globalEndpoints?.primary?.customDNSEndpoint?.name ?? "";
       if (
@@ -113,7 +113,7 @@ function ResourceCustomDNS(props) {
     primaryResourceName,
     primaryResourceEndpoint,
     otherResourceFilteredEndpoints,
-    globalEndpoints?.primary?.customDNSEndpoint,
+    globalEndpoints,
     addCustomDNSMutation,
     removeCustomDNSMutation,
   ]);
