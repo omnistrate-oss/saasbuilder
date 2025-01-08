@@ -50,7 +50,6 @@ function addGoogleAnalytics() {
   if (document.getElementById(id)) return; // Avoid duplicate scripts
 
   const script = document.createElement("script");
-
   script.src = this.src;
   script.id = id;
   script.async = true;
@@ -58,7 +57,6 @@ function addGoogleAnalytics() {
 
   script.onload = () => {
     initializeGoogleAnalytics.call(this);
-    console.log(`Script ${id} loaded successfully.`);
   };
 
   script.onerror = () => {
@@ -79,7 +77,6 @@ const removeScript = (id) => {
   const script = document.getElementById(id);
   if (script) {
     script.parentNode.removeChild(script);
-    console.log(`Script ${id} removed.`);
   }
 };
 
