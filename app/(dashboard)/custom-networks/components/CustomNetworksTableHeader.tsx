@@ -74,6 +74,7 @@ const CustomNetworksTableHeader = ({
           variant="contained"
           onClick={onCreateClick}
           startIcon={<AddIcon />}
+          disabled={isFetchingCustomNetworks}
         >
           Create
         </Button>

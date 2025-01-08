@@ -144,7 +144,7 @@ export const SelectField = ({ field, formData }) => {
   const { values, touched, errors, handleChange, handleBlur } = formData;
   return (
     <Select
-      selectProps={{
+      inputProps={{
         "data-testid": field.dataTestId || "",
       }}
       isLoading={field.isLoading}
@@ -170,7 +170,7 @@ export const SelectField = ({ field, formData }) => {
         ))
       ) : (
         <MenuItem value="" disabled>
-          <i>{field.emptyMenuText}</i>
+          <i>{field.emptyMenuText || "No Options"}</i>
         </MenuItem>
       )}
     </Select>

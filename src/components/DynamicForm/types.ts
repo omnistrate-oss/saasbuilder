@@ -24,6 +24,10 @@ export type Field = {
 
   // Generic
   value?: any;
+  previewValue?: React.FC<{
+    field: Field;
+    formData: any;
+  }>;
   customComponent?: React.ReactNode;
   // eslint-disable-next-line no-unused-vars
   onChange?: (e: any) => void;
@@ -37,10 +41,11 @@ export type Section = {
 };
 
 export type FormConfiguration = {
-  title: Record<FormMode, string>;
-  description: Record<FormMode, string>;
+  dataTestId?: string;
+  title: Partial<Record<FormMode, string>>;
+  description: Partial<Record<FormMode, string>>;
   sections: Section[];
   footer: {
-    submitButton: Record<FormMode, string>;
+    submitButton: Partial<Record<FormMode, string>>;
   };
 };

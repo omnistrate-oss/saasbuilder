@@ -5,12 +5,14 @@ import { Stack } from "@mui/material";
 import { useMemo, useState } from "react";
 import { createColumnHelper } from "@tanstack/react-table";
 
+import InstanceForm from "./components/InstanceForm";
 import PageTitle from "../components/Layout/PageTitle";
 import InstancesIcon from "../components/Icons/InstancesIcon";
 import PageContainer from "../components/Layout/PageContainer";
 import InstancesTableHeader from "./components/InstancesTableHeader";
 
 import formatDateUTC from "src/utils/formatDateUTC";
+import { useGlobalData } from "src/providers/GlobalDataProvider";
 
 import RegionIcon from "components/Region/RegionIcon";
 import AwsLogo from "components/Logos/AwsLogo/AwsLogo";
@@ -18,21 +20,24 @@ import GcpLogo from "components/Logos/GcpLogo/GcpLogo";
 import DataTable from "components/DataTable/DataTable";
 import AzureLogo from "components/Logos/AzureLogo/AzureLogo";
 import GridCellExpand from "components/GridCellExpand/GridCellExpand";
+import CapacityDialog from "components/CapacityDialog/CapacityDialog";
+import SideDrawerRight from "components/SideDrawerRight/SideDrawerRight";
+import GenerateTokenDialog from "components/GenerateToken/GenerateTokenDialog";
+import TextConfirmationDialog from "components/TextConfirmationDialog/TextConfirmationDialog";
 
 import SpeedoMeterLow from "public/assets/images/dashboard/resource-instance-speedo-meter/idle.png";
 import SpeedoMeterHigh from "public/assets/images/dashboard/resource-instance-speedo-meter/high.png";
 import SpeedoMeterMedium from "public/assets/images/dashboard/resource-instance-speedo-meter/normal.png";
-import SideDrawerRight from "src/components/SideDrawerRight/SideDrawerRight";
-import InstanceForm from "./components/InstanceForm";
-import TextConfirmationDialog from "src/components/TextConfirmationDialog/TextConfirmationDialog";
 
 const columnHelper = createColumnHelper<any>(); // TODO: Add type
 type Overlay =
   | "create-instance-form"
   | "modify-instance-form"
-  | "capacity-dialog"
+  | "add-capacity-dialog"
+  | "remove-capacity-dialog"
   | "delete-dialog"
-  | "restore-dialog";
+  | "restore-dialog"
+  | "generate-token-dialog";
 
 const instances = [];
 
@@ -42,6 +47,7 @@ const InstancesPage = () => {
     "create-instance-form"
   );
   const [isOverlayOpen, setIsOverlayOpen] = useState<boolean>(false);
+  const { subscriptions, serviceOfferingsObj } = useGlobalData();
 
   const dataTableColumns = useMemo(() => {
     return [
@@ -154,6 +160,19 @@ const InstancesPage = () => {
     return instances.find((instance) => instance.id === selectedRows[0]);
   }, [selectedRows, instances]);
 
+  // Subscription of the Selected Instance
+  const selectedInstanceSubscription = useMemo(() => {
+    return subscriptions.find(
+      (subscription) => subscription.id === selectedInstance?.subscriptionId
+    );
+  }, [selectedInstance, subscriptions]);
+
+  // Offering of the Selected Instance
+  const selectedInstanceOffering = useMemo(() => {
+    const { serviceId, productTierId } = selectedInstanceSubscription || {};
+    return serviceOfferingsObj[serviceId]?.[productTierId];
+  }, [selectedInstanceSubscription, serviceOfferingsObj]);
+
   return (
     <PageContainer>
       <PageTitle icon={InstancesIcon} className="mb-6">
@@ -171,6 +190,8 @@ const InstancesPage = () => {
             setSelectedRows,
             setOverlayType,
             setIsOverlayOpen,
+            selectedInstanceOffering,
+            selectedInstanceSubscription,
           }}
           isLoading={false}
           selectedRows={selectedRows}
@@ -180,6 +201,7 @@ const InstancesPage = () => {
       </div>
 
       <SideDrawerRight
+        size="xlarge"
         open={
           isOverlayOpen &&
           ["create-instance-form", "modify-instance-form"].includes(overlayType)
@@ -196,6 +218,37 @@ const InstancesPage = () => {
         subtitle={`Are you sure you want to delete - ${selectedRows[0]}?`}
         message="To confirm, please enter <b>deleteme</b>, in the field below:"
         isLoading={false} //TODO: Change This
+      />
+
+      <CapacityDialog
+        open={
+          isOverlayOpen &&
+          ["add-capacity-dialog", "remove-capacity-dialog"].includes(
+            overlayType
+          )
+        }
+        handleClose={() => setIsOverlayOpen(false)}
+        autoscaling={{
+          currentReplicas: selectedInstance?.currentReplicas,
+          maxReplicas: selectedInstance?.maxReplicas,
+          minReplicas: selectedInstance?.minReplicas,
+        }}
+        // data={capacityData} TODO
+        currentCapacityAction={
+          overlayType === "add-capacity-dialog" ? "add" : "remove"
+        }
+        contextType="access"
+        // refetch={fetchResourceInstancesOfSelectedResource} TODO
+      />
+
+      <GenerateTokenDialog
+        dashboardEndpoint={
+          selectedInstance?.kubernetesDashboardEndpoint?.dashboardEndpoint
+        }
+        open={isOverlayOpen && overlayType === "generate-token-dialog"}
+        onClose={() => setIsOverlayOpen(false)}
+        selectedInstanceId={selectedInstance?.id}
+        subscriptionId={selectedInstance?.subscriptionId}
       />
     </PageContainer>
   );

@@ -1,7 +1,7 @@
 const RemoveCapacityIcon = (props) => {
   let { color = "#D92D20" } = props;
   const { disabled, ...restProps } = props;
-  
+
   if (disabled) {
     color = "#a3a6ac";
   }
@@ -15,7 +15,7 @@ const RemoveCapacityIcon = (props) => {
       xmlns="http://www.w3.org/2000/svg"
       {...restProps}
     >
-      <g clip-path="url(#clip0_344_520)">
+      <g clipPath="url(#clip0_344_520)">
         <path
           d="M6.66675 9.99999H13.3334M18.3334 9.99999C18.3334 14.6024 14.6025 18.3333 10.0001 18.3333C5.39771 18.3333 1.66675 14.6024 1.66675 9.99999C1.66675 5.39762 5.39771 1.66666 10.0001 1.66666C14.6025 1.66666 18.3334 5.39762 18.3334 9.99999Z"
           stroke={color}

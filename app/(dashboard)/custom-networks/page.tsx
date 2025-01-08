@@ -27,6 +27,7 @@ import useSnackbar from "src/hooks/useSnackbar";
 import { CustomNetwork } from "src/types/customNetwork";
 import { deleteCustomNetwork } from "src/api/customNetworks";
 import { cloudProviderLogoMap } from "src/constants/cloudProviders";
+import useRegions from "./hooks/useRegions";
 
 const columnHelper = createColumnHelper<CustomNetwork>();
 type Overlay = "peering-info-dialog" | "custom-network-form" | "delete-dialog";
@@ -48,7 +49,7 @@ const CustomNetworksPage = () => {
     refetch: refetchCustomNetworks,
   } = useCustomNetworks();
 
-  console.log(customNetworks);
+  const { data: regions = [], isFetching: isFetchingRegions } = useRegions();
 
   const dataTableColumns = useMemo(() => {
     return [
@@ -162,8 +163,8 @@ const CustomNetworksPage = () => {
       <div>
         <DataTable
           columns={dataTableColumns}
-          rows={[]}
-          noRowsText="No instances"
+          rows={customNetworks}
+          noRowsText="No custom networks"
           HeaderComponent={CustomNetworksTableHeader}
           headerProps={{
             searchText,
@@ -187,7 +188,7 @@ const CustomNetworksPage = () => {
           selectionMode="single"
           selectedRows={selectedRows}
           onRowSelectionChange={setSelectedRows}
-          isLoading={false}
+          isLoading={isFetchingCustomNetworks}
         />
       </div>
 
@@ -195,7 +196,14 @@ const CustomNetworksPage = () => {
         size="xlarge"
         open={isOverlayOpen && overlayType === "custom-network-form"}
         closeDrawer={() => setIsOverlayOpen(false)}
-        RenderUI={<CustomNetworkForm />}
+        RenderUI={
+          <CustomNetworkForm
+            regions={regions}
+            isFetchingRegions={isFetchingRegions}
+            refetchCustomNetworks={refetchCustomNetworks}
+            onClose={() => setIsOverlayOpen(false)}
+          />
+        }
       />
 
       <TextConfirmationDialog

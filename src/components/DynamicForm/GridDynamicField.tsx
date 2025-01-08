@@ -34,9 +34,16 @@ const GridDynamicField: React.FC<GridDynamicFieldProps> = ({
 
   return (
     <div className="flex gap-8">
-      <div className="w-[250px]">
-        <FieldLabel required={field.required}>{field.label}</FieldLabel>
-        <FieldDescription>{field.subLabel}</FieldDescription>
+      <div style={{ width: "250px" }}>
+        <FieldLabel
+          required={field.required}
+          sx={{ color: "#414651", fontWeight: "600" }}
+        >
+          {field.label}
+        </FieldLabel>
+        <FieldDescription sx={{ mt: 0, color: "#535862" }}>
+          {field.subLabel}
+        </FieldDescription>
       </div>
 
       <div className="flex-1">
