@@ -39,14 +39,8 @@ export function getEventRoute(
 ) {
   return `/access/${serviceId}/${environmentId}/events?productTierId=${productTierId}&subscriptionId=${subscriptionId}`;
 }
-export function getAccessControlRoute(
-  serviceId,
-  environmentId,
-  productTierId,
-  subscriptionId = "",
-  searchUserId
-) {
-  let route = `/access/${serviceId}/${environmentId}/access-control?productTierId=${productTierId}&subscriptionId=${subscriptionId}`;
+export function getAccessControlRoute(searchUserId) {
+  let route = `/access-control`;
 
   if (searchUserId) {
     route = route + `&searchUserId=${searchUserId}`;

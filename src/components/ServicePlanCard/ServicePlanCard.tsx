@@ -1,37 +1,44 @@
 import Image from "next/image";
+
 import Button from "../Button/Button";
 import { Text } from "../Typography/Typography";
+import StatusChip from "../StatusChip/StatusChip";
 import CirclePlusIcon from "../Icons/ServicePlanCard/CirclePlusIcon";
 import CircleCheckIcon from "../Icons/ServicePlanCard/CircleCheckIcon";
 import ServicePlanCardIcon from "../Icons/ServicePlanCard/ServicePlanCardIcon";
 
 import { SetState } from "src/types/common/reactGenerics";
 import CardCircleBg from "./CardCircleBg.svg";
+import ClockIcon from "../Icons/ServicePlanCard/ClockIcon";
 
 type ServicePlanCardProps = {
   isSelected?: boolean;
   servicePlan: any;
-  subscriptionStatus: "subscribed" | "pending-approval" | "not-subscribed";
+  subscription: any;
+  subscriptionRequest: any;
   setSelectedPlanId: SetState<string>;
   onSubscribeClick: () => void;
+  onUnsubscribeClick: () => void;
   isSubscribing?: boolean;
+  isUnsubscribing?: boolean;
   isFetchingData?: boolean;
 };
 
 const ServicePlanCard: React.FC<ServicePlanCardProps> = ({
   isSelected,
   servicePlan,
-  subscriptionStatus,
+  subscription,
+  subscriptionRequest,
   setSelectedPlanId,
   onSubscribeClick,
+  onUnsubscribeClick,
   isSubscribing,
+  isUnsubscribing,
   isFetchingData,
 }) => {
-  const isDisabled =
-    subscriptionStatus === "subscribed" ||
-    subscriptionStatus === "pending-approval" ||
-    isSubscribing ||
-    isFetchingData;
+  const isAutoApprove = servicePlan.AutoApproveSubscription;
+  const isUnsubscribeAllowed =
+    !subscription?.defaultSubscription && subscription?.roleType === "root";
 
   return (
     <div
@@ -41,6 +48,18 @@ const ServicePlanCard: React.FC<ServicePlanCardProps> = ({
         outline: isSelected ? "2px solid #0E5FB5" : "none",
       }}
     >
+      <StatusChip
+        sx={{
+          position: "absolute",
+          top: "20px",
+          right: "12px",
+        }}
+        capitalize={false}
+        color={isAutoApprove ? "#175CD3" : "#B93815"}
+        bgColor={isAutoApprove ? "#EFF8FF" : "#FEF6EE"}
+        borderColor={isAutoApprove ? "#B2DDFF" : "#F9DBAF"}
+        status={isAutoApprove ? "Auto Approval" : "Approval Required"}
+      />
       <Image
         src={CardCircleBg}
         alt=""
@@ -80,27 +99,54 @@ const ServicePlanCard: React.FC<ServicePlanCardProps> = ({
         </Text>
       </div>
 
-      <Button
-        variant="contained"
-        disabled={isDisabled}
-        startIcon={
-          subscriptionStatus === "not-subscribed" ? (
-            <CirclePlusIcon disabled={isDisabled} />
-          ) : (
-            <CircleCheckIcon disabled={isDisabled} />
-          )
-        }
-        onClick={(e) => {
-          e.stopPropagation();
-          onSubscribeClick();
-        }}
-      >
-        {subscriptionStatus === "subscribed"
-          ? "Subscribed"
-          : subscriptionStatus === "pending-approval"
-            ? "Pending Approval"
-            : "Subscribe"}
-      </Button>
+      {!subscription && !subscriptionRequest && (
+        <Button
+          variant="contained"
+          disabled={isFetchingData || isSubscribing || isUnsubscribing}
+          startIcon={
+            <CirclePlusIcon
+              disabled={isFetchingData || isSubscribing || isUnsubscribing}
+            />
+          }
+          onClick={onSubscribeClick}
+        >
+          Subsribe
+        </Button>
+      )}
+
+      {subscription && isUnsubscribeAllowed && (
+        <Button
+          variant="contained"
+          bgColor="#D92D20"
+          disabled={isFetchingData || isSubscribing || isUnsubscribing}
+          onClick={onUnsubscribeClick}
+        >
+          Unsubscribe
+        </Button>
+      )}
+
+      {subscription && !isUnsubscribeAllowed && (
+        <Button
+          variant="contained"
+          disabled
+          startIcon={<CircleCheckIcon />}
+          disabledMessage={
+            subscription?.defaultSubscription
+              ? "Cannot unsubscribe from Default subscription"
+              : subscription && subscription?.roleType !== "root"
+                ? "Cannot unsubscribe without Root access"
+                : ""
+          }
+        >
+          Subscribed
+        </Button>
+      )}
+
+      {subscriptionRequest && (
+        <Button variant="contained" disabled startIcon={<ClockIcon />}>
+          Pending Approval
+        </Button>
+      )}
     </div>
   );
 };

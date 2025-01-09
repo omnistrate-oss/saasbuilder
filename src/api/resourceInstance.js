@@ -368,3 +368,7 @@ export const removeCapacityResourceInstanceAccess = ({ data, count }) => {
     }
   );
 };
+
+export const getAllResourceInstances = () => {
+  return axios.get("/resource-instance");
+};

@@ -4,6 +4,7 @@ import { useMemo, useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { createColumnHelper } from "@tanstack/react-table";
 
+import useAllUsers from "./hooks/useAllUsers";
 import PageTitle from "../components/Layout/PageTitle";
 import InviteUsersCard from "./components/InviteUsersCard";
 import PageContainer from "../components/Layout/PageContainer";
@@ -27,8 +28,12 @@ const AccessControlPage = () => {
   const [overlayType, setOverlayType] = useState<Overlay>("delete-dialog");
   const [isOverlayOpen, setIsOverlayOpen] = useState<boolean>(false);
   const [selectedUser, setSelectedUser] = useState<any>(null); // TODO: Add type
-  const refetchUsers = () => {};
-  const users = [];
+
+  const {
+    data: users = [],
+    isFetching: isFetchingUsers,
+    refetch: refetchUsers,
+  } = useAllUsers();
 
   const dataTableColumns = useMemo(() => {
     return [
@@ -131,9 +136,9 @@ const AccessControlPage = () => {
             setSearchText,
             refetchUsers,
             count: users.length,
-            isFetchingUsers: false,
+            isFetchingUsers,
           }}
-          isLoading={false}
+          isLoading={isFetchingUsers}
         />
       </div>
 

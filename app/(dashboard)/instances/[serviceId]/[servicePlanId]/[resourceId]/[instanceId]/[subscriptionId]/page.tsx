@@ -33,6 +33,7 @@ import { DisplayText } from "src/components/Typography/Typography";
 import { NetworkType } from "src/types/common/enums";
 import useServiceOfferingResourceSchema from "src/hooks/useServiceOfferingResourceSchema";
 import LoadingSpinner from "src/components/LoadingSpinner/LoadingSpinner";
+import PageContainer from "app/(dashboard)/components/Layout/PageContainer";
 
 type CurrentTab =
   | "Resource Instance Details"
@@ -45,15 +46,20 @@ type CurrentTab =
 
 const isResourceBYOA = false;
 
-const InstanceDetailsPage = (params: {
-  serviceId: string;
-  servicePlanId: string;
-  resourceId: string;
-  instanceId: string;
-  subscriptionId: string;
+const InstanceDetailsPage = ({
+  params,
+}: {
+  params: {
+    serviceId: string;
+    servicePlanId: string;
+    resourceId: string;
+    instanceId: string;
+    subscriptionId: string;
+  };
 }) => {
   const { serviceId, servicePlanId, resourceId, instanceId, subscriptionId } =
     params;
+
   const [currentTab, setCurrentTab] = useState<CurrentTab>(
     "Resource Instance Details"
   );
@@ -62,8 +68,8 @@ const InstanceDetailsPage = (params: {
   const dispatch = useDispatch();
 
   const {
-    serviceOfferingsObj,
     subscriptions,
+    serviceOfferingsObj,
     isFetchingServiceOfferings,
     isFetchingSubscriptions,
   } = useGlobalData();
@@ -75,13 +81,13 @@ const InstanceDetailsPage = (params: {
   }, [subscriptions, subscriptionId]);
 
   const { resourceName, resourceKey, resourceType } = useMemo(() => {
-    const resource = offering?.resources.find(
-      (resource) => resource.id === resourceId
+    const resource = offering?.resourceParameters.find(
+      (resource) => resource.resourceId === resourceId
     );
 
     return {
       resourceName: resource?.name,
-      resourceKey: resource?.key,
+      resourceKey: resource?.urlKey,
       resourceType: resource?.type,
     };
   }, [offering, resourceId]);
@@ -129,26 +135,36 @@ const InstanceDetailsPage = (params: {
   if (
     isFetchingServiceOfferings ||
     isFetchingSubscriptions ||
-    resourceInstanceQuery.isFetching
+    resourceInstanceQuery.isLoading
   ) {
-    return <LoadingSpinner />;
+    return (
+      <PageContainer>
+        <LoadingSpinner />
+      </PageContainer>
+    );
   }
 
   if (!subscription) {
-    return <SubscriptionNotFoundUI />;
+    return (
+      <PageContainer>
+        <SubscriptionNotFoundUI />
+      </PageContainer>
+    );
   }
 
   if (!resourceInstanceData) {
     return (
-      <Stack p={3} pt="200px" alignItems="center" justifyContent="center">
-        <DisplayText
-          // @ts-ignore
-          size="xsmall"
-          sx={{ wordBreak: "break-word", textAlign: "center", maxWidth: 900 }}
-        >
-          Resource Instance not found
-        </DisplayText>
-      </Stack>
+      <PageContainer>
+        <Stack p={3} pt="200px" alignItems="center" justifyContent="center">
+          <DisplayText
+            // @ts-ignore
+            size="xsmall"
+            sx={{ wordBreak: "break-word", textAlign: "center", maxWidth: 900 }}
+          >
+            Resource Instance not found
+          </DisplayText>
+        </Stack>
+      </PageContainer>
     );
   }
 
@@ -175,7 +191,7 @@ const InstanceDetailsPage = (params: {
   }
 
   return (
-    <>
+    <PageContainer>
       <Stack direction="row" alignItems="center" justifyContent="space-between">
         <Link href="/instances">
           <Button
@@ -228,7 +244,7 @@ const InstanceDetailsPage = (params: {
         value={currentTab}
         sx={{
           marginTop: "24px",
-          transition: "margin-top 0.5s ease-in-out",
+          borderBottom: "1px solid #E9EAEB",
         }}
       >
         {Object.entries(tabs).map(([key, value]) => {
@@ -360,7 +376,7 @@ const InstanceDetailsPage = (params: {
           }
         />
       )}
-    </>
+    </PageContainer>
   );
 };
 

@@ -211,15 +211,9 @@ const AuditLogs: FC<AuditLogsTabProps> = ({
             currentUserOrgId !== data.row.original.orgId &&
             !isUserOmnistrateSystem;
 
-          let pageLink = null;
+          let pageLink: null | string = null;
           if (!isUserServiceProvider && !isUserOmnistrateSystem && userId) {
-            pageLink = getAccessControlRoute(
-              serviceId,
-              "environmentId", // TODO: Fix this
-              productTierId,
-              subscriptionId,
-              userId
-            );
+            pageLink = getAccessControlRoute(userId);
           }
 
           let userDisplayLabel = userName;
@@ -252,13 +246,7 @@ const AuditLogs: FC<AuditLogsTabProps> = ({
         },
       }),
     ];
-  }, [
-    currentUserOrgId,
-    serviceId,
-    environmentId,
-    productTierId,
-    subscriptionId,
-  ]);
+  }, [currentUserOrgId]);
 
   const filteredEvents = useMemo(() => {
     let filtered = events;

@@ -63,7 +63,10 @@ const MarketplaceStaticNavList = (props) => {
     view
   );
   const isServicePlansActive = activePage === sidebarActiveOptions.servicePlans;
-  const servicePlansLink = getMarketplaceProductTierRoute(serviceId, environmentId);
+  const servicePlansLink = getMarketplaceProductTierRoute(
+    serviceId,
+    environmentId
+  );
 
   const closeSupportDrawer = () => {
     setSupportDrawerOpen(false);

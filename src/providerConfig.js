@@ -22,6 +22,22 @@ export const styleConfig = {
   secondaryHoverLight: "#6941C60d",
   linkColor: "#0E5FB5",
   headerIconColor: "#17B26A",
+
+  // Buttons
+  secondary: "#5925DC",
+  primaryButtonBg: "#079455",
+  secondaryButtonText: "#099250",
+  secondaryButtonBorder: "#73E2A3",
+  disabled: "A0AEC0",
+
+  // Layout - Navbar and Sidebar
+  headerIcon: "#17B26A",
+  sidebarText: "#414651",
+  sidebarActiveText: "#17B26A",
+  sidebarActiveBg: "#FAFAFA",
+
+  // Borders
+  primaryBorder: "#E9EAEB",
 };
 
 // Dark Mode - Sidebar and Navbar

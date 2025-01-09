@@ -1,6 +1,6 @@
 export type CloudProvider = "aws" | "gcp" | "azure";
 
-export type FormMode = "view" | "edit" | "create" | "delete";
+export type FormMode = "view" | "modify" | "create" | "delete";
 
 export type ResourceType =
   | "OperatorCRD"

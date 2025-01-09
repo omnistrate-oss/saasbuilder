@@ -73,10 +73,8 @@ const SubscriptionDetails = ({ subscription, serviceOfferingsObj }) => {
       <DetailsTable columns={columns} />
       <CardWithTitle title={subscription.productTierName} className="mt-6">
         <ServicePlanDetails
-          planDetails={selectedPlan?.productTierPlanDescription}
-          documentation={selectedPlan?.productTierDocumentation}
-          pricing={selectedPlan?.productTierPricing.value}
-          support={selectedPlan?.productTierSupport}
+          serviceOffering={selectedPlan}
+          subscription={subscription}
         />
       </CardWithTitle>
     </>

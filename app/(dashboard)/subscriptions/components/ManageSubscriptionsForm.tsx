@@ -12,7 +12,7 @@ import ServicePlanDetails from "components/ServicePlanDetails/ServicePlanDetails
 import FieldDescription from "components/FormElementsv2/FieldDescription/FieldDescription";
 
 import useSnackbar from "src/hooks/useSnackbar";
-import { createSubscriptions } from "src/api/subscriptions";
+import { createSubscriptions, deleteSubscription } from "src/api/subscriptions";
 import { useGlobalData } from "src/providers/GlobalDataProvider";
 import { createSubscriptionRequest } from "src/api/subscriptionRequests";
 
@@ -47,8 +47,6 @@ const ManageSubscriptionsForm = () => {
   const servicePlans = useMemo(() => {
     return Object.values(serviceOfferingsObj[selectedServiceId] || {});
   }, [selectedServiceId, serviceOfferingsObj]);
-
-  console.log(subscriptions);
 
   const [selectedPlanId, setSelectedPlanId] = useState<any>(
     // @ts-ignore
@@ -100,6 +98,13 @@ const ManageSubscriptionsForm = () => {
     }
   );
 
+  const unSubscribeMutation = useMutation(deleteSubscription, {
+    onSuccess: () => {
+      refetchSubscriptions();
+      snackbar.showSuccess("Unsubscribed successfully");
+    },
+  });
+
   useEffect(() => {
     const planIds = Object.keys(serviceOfferingsObj[selectedServiceId] || {});
     if (planIds.length) {
@@ -141,13 +146,8 @@ const ManageSubscriptionsForm = () => {
               servicePlan={plan}
               isSelected={selectedPlanId === plan.productTierID}
               setSelectedPlanId={setSelectedPlanId}
-              subscriptionStatus={
-                subscriptionsObj[plan.productTierID]
-                  ? "subscribed"
-                  : subscriptionRequestsObj[plan.productTierID]
-                    ? "pending-approval"
-                    : "not-subscribed"
-              }
+              subscription={subscriptionsObj[plan.productTierID]}
+              subscriptionRequest={subscriptionRequestsObj[plan.productTierID]}
               onSubscribeClick={() => {
                 subscribeMutation.mutate({
                   productTierId: plan.productTierID,
@@ -155,10 +155,18 @@ const ManageSubscriptionsForm = () => {
                   AutoApproveSubscription: plan.AutoApproveSubscription,
                 });
               }}
+              onUnsubscribeClick={() => {
+                if (!subscriptionsObj[plan.productTierID]?.id)
+                  return snackbar.showError("No subscription found");
+                unSubscribeMutation.mutate(
+                  subscriptionsObj[plan.productTierID]?.id
+                );
+              }}
               isSubscribing={subscribeMutation.isLoading}
               isFetchingData={
                 isFetchingSubscriptions || isFetchingSubscriptionRequests
               }
+              isUnsubscribing={unSubscribeMutation.isLoading}
             />
           ))}
         </div>
@@ -166,10 +174,8 @@ const ManageSubscriptionsForm = () => {
 
       <CardWithTitle title={selectedPlan?.productTierName}>
         <ServicePlanDetails
-          planDetails={selectedPlan?.productTierPlanDescription}
-          documentation={selectedPlan?.productTierDocumentation}
-          pricing={selectedPlan?.productTierPricing.value}
-          support={selectedPlan?.productTierSupport}
+          serviceOffering={selectedPlan}
+          subscription={subscriptionsObj[selectedPlan?.productTierID]}
         />
       </CardWithTitle>
     </div>

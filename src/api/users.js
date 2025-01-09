@@ -37,3 +37,7 @@ export const updatePassword = (payload) => {
 export const getBillingDetails = (userId) => {
   return axios.get(`/resource-instance/user/${userId}/billing-details`);
 };
+
+export const getAllSubscriptionUsers = () => {
+  return axios.get(`/resource-instance/subscription-users`);
+};
