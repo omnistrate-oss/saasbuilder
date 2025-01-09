@@ -15,7 +15,7 @@ const StyledConsentContainer = styled(Box)<{ maxWidth?: string }>(
     transform: "translateX(50%)",
     background: "#364152",
     borderRadius: "12px",
-    border: "1px solid ##4B5565",
+    border: "1px solid #4B5565",
     boxShadow:
       "0px 2px 2px -1px #0A0D120A, 0px 4px 6px -2px #0A0D1208, 0px 12px 16px -4px #0A0D1214",
     padding: "12px",
