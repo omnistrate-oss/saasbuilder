@@ -1,6 +1,5 @@
 import { Box, Divider, Typography, styled } from "@mui/material";
 import { useRouter } from "next/router";
-import DashboardLayout from "src/components/DashboardLayout/DashboardLayout";
 import useServiceOfferingById from "./hooks/useServiceOfferingById";
 import LoadingSpinner from "src/components/LoadingSpinner/LoadingSpinner";
 import ProductTiers from "src/features/ProductTiers/ProductTiers";
@@ -41,31 +40,18 @@ function MarketplaceProductTier({ orgLogoURL, orgName }) {
 
   if (shouldDisplayServiceNotFoundUI || shouldDisplayNoServicesUI) {
     return (
-      <DashboardLayout
-        noSidebar
-        marketplacePage
-        serviceName={orgName}
-        serviceLogoURL={orgLogoURL}
-        noServicesAvailable={true}
-      >
+      <>
         <NoServiceFoundUI
           text={
             shouldDisplayNoServicesUI ? "No service found" : "Service not found"
           }
         />
-      </DashboardLayout>
+      </>
     );
   }
 
   return (
-    <DashboardLayout
-      noSidebar
-      marketplacePage
-      serviceName={serviceOfferingData?.serviceName}
-      serviceLogoURL={
-        serviceOfferingData?.offerings?.[0]?.serviceLogoURL || orgLogoURL
-      }
-    >
+    <>
       {!serviceId ||
       !environmentId ||
       isFetching ||
@@ -92,7 +78,7 @@ function MarketplaceProductTier({ orgLogoURL, orgName }) {
           </Box>
         </>
       )}
-    </DashboardLayout>
+    </>
   );
 }
 

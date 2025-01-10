@@ -1,12 +1,8 @@
 import React, { useEffect, useMemo, useState } from "react";
-import DashboardLayout from "src/components/DashboardLayout/DashboardLayout";
 import { useRouter } from "next/router";
 import useServiceOffering from "src/hooks/useServiceOffering";
 import LoadingSpinner from "src/components/LoadingSpinner/LoadingSpinner";
 import Statistics from "src/components/MarketplaceDashboard/Statistics";
-import MarketplaceServiceSidebar, {
-  sidebarActiveOptions,
-} from "src/components/MarketplaceServiceSidebar/MarketplaceServiceSidebar";
 import useServiceOfferingResourceInstances from "src/hooks/useServiceOfferingResourceInstances";
 import SideDrawerRight from "src/components/SideDrawerRight/SideDrawerRight";
 import { AccessSupport } from "src/components/Access/AccessSupport";
@@ -97,69 +93,17 @@ function Dashboard() {
 
   if (isLoading || isLoadingSubscription) {
     return (
-      <DashboardLayout
-        setSupportDrawerOpen={setSupportDrawerOpen}
-        setCurrentTabValue={setCurrentTabValue}
-        isNotShow
-        marketplacePage={currentSource === "access" ? false : true}
-        accessPage
-        customLogo
-        serviceId={serviceId}
-        currentSubscription={subscriptionData}
-        SidebarUI={
-          <MarketplaceServiceSidebar
-            serviceId={serviceId}
-            environmentId={environmentId}
-            resourceParameters={serviceOffering?.resourceParameters}
-            isLoading={isServiceOfferingLoading}
-            serviceName={serviceOffering?.serviceName}
-            productTierId={productTierId}
-            active={sidebarActiveOptions.dashboard}
-            currentSource={currentSource}
-            currentSubscription={subscriptionData}
-            isCustomNetworkEnabled={isCustomNetworkEnabled}
-          />
-        }
-        serviceName={serviceOffering?.serviceName}
-        serviceLogoURL={serviceOffering?.serviceLogoURL}
-        pageType={sidebarActiveOptions.dashboard}
-      >
+      <>
         <LoadingSpinner />
-      </DashboardLayout>
+      </>
     );
   }
 
   if (!isLoadingSubscription && !subscriptionData?.id) {
     return (
-      <DashboardLayout
-        setSupportDrawerOpen={setSupportDrawerOpen}
-        setCurrentTabValue={setCurrentTabValue}
-        isNotShow
-        marketplacePage={currentSource === "access" ? false : true}
-        accessPage
-        customLogo
-        serviceId={serviceId}
-        currentSubscription={subscriptionData}
-        SidebarUI={
-          <MarketplaceServiceSidebar
-            serviceId={serviceId}
-            environmentId={environmentId}
-            resourceParameters={serviceOffering?.resourceParameters}
-            isLoading={isServiceOfferingLoading}
-            serviceName={serviceOffering?.serviceName}
-            productTierId={productTierId}
-            active={sidebarActiveOptions.dashboard}
-            currentSource={currentSource}
-            currentSubscription={subscriptionData}
-            isCustomNetworkEnabled={isCustomNetworkEnabled}
-          />
-        }
-        serviceName={serviceOffering?.serviceName}
-        serviceLogoURL={serviceOffering?.serviceLogoURL}
-        pageType={sidebarActiveOptions.dashboard}
-      >
+      <>
         <SubscriptionNotFoundUI />
-      </DashboardLayout>
+      </>
     );
   }
 
@@ -184,56 +128,14 @@ function Dashboard() {
     serviceOffering?.serviceModelStatus === "DEPLOYING"
   ) {
     return (
-      <DashboardLayout
-        setSupportDrawerOpen={setSupportDrawerOpen}
-        setCurrentTabValue={setCurrentTabValue}
-        isNotShow
-        serviceId={serviceId}
-        serviceApiId={serviceOffering?.serviceAPIID}
-        marketplacePage
-        customLogo
-        servicePlanUrlLink={servicePlanUrlLink}
-        accessPage
-        currentSubscription={subscriptionData}
-        pageType={sidebarActiveOptions.dashboard}
-      >
+      <>
         <OfferingUnavailableUI />
-      </DashboardLayout>
+      </>
     );
   }
 
   return (
-    <DashboardLayout
-      setSupportDrawerOpen={setSupportDrawerOpen}
-      setCurrentTabValue={setCurrentTabValue}
-      marketplacePage={currentSource === "access" ? false : true}
-      accessPage
-      currentSubscription={subscriptionData}
-      apiDocsurl={serviceAPIDocsLink}
-      enableConsumptionLinks
-      servicePlanUrlLink={servicePlanUrlLink}
-      serviceId={serviceId}
-      serviceApiId={serviceOffering?.serviceAPIID}
-      isNotShow
-      SidebarUI={
-        <MarketplaceServiceSidebar
-          serviceId={serviceId}
-          environmentId={environmentId}
-          resourceParameters={serviceOffering?.resourceParameters}
-          isLoading={isServiceOfferingLoading}
-          serviceName={serviceOffering?.serviceName}
-          productTierId={productTierId}
-          active={sidebarActiveOptions.dashboard}
-          currentSource={currentSource}
-          currentSubscription={subscriptionData}
-          isCustomNetworkEnabled={isCustomNetworkEnabled}
-        />
-      }
-      serviceName={serviceOffering?.serviceName}
-      customLogo
-      serviceLogoURL={serviceOffering?.serviceLogoURL}
-      pageType={sidebarActiveOptions.dashboard}
-    >
+    <>
       <Box
         display="flex"
         //@ts-ignore
@@ -268,7 +170,7 @@ function Dashboard() {
           />
         }
       />
-    </DashboardLayout>
+    </>
   );
 }
 

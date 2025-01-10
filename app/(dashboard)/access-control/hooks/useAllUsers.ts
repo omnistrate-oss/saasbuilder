@@ -7,7 +7,15 @@ const useAllUsers = (queryOptions = {}) => {
     async () => {
       // return getAllSubscriptionUsers()
       return {
-        subscriptionUsers: [],
+        subscriptionUsers: [
+          {
+            subscriptionId: "sub-NC3EXppUx7",
+            userId: "user-UsPpN9SXBm",
+            name: "Unregistered user",
+            email: "nihalm+abcd@omnistrate.com",
+            roleType: "editor",
+          },
+        ],
       };
     },
     {

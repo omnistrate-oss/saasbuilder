@@ -75,7 +75,7 @@ const SelectedDate = styled(Box)({
 });
 
 type DateRangePickerProps = {
-  dateRange: Range | null;
+  dateRange: Range;
   setDateRange: SetState<Range>;
 };
 

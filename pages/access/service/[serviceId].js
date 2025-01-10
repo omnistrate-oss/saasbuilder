@@ -21,7 +21,6 @@ import {
 } from "../../../src/api/resourceInstance";
 import { describeServiceOfferingResource } from "../../../src/api/serviceOffering";
 import Card from "../../../src/components/Card/Card";
-import DashboardLayout from "../../../src/components/DashboardLayout/DashboardLayout";
 import DataGrid, {
   selectSingleItem,
 } from "../../../src/components/DataGrid/DataGrid";
@@ -51,9 +50,6 @@ import {
 } from "../../../src/slices/resourceInstanceListSlice";
 import loadingStatuses from "../../../src/utils/constants/loadingStatuses";
 import formatDateUTC from "../../../src/utils/formatDateUTC";
-import MarketplaceServiceSidebar, {
-  sidebarActiveOptions,
-} from "../../../src/components/MarketplaceServiceSidebar/MarketplaceServiceSidebar";
 import AccessHeaderCard from "src/components/AccessHeader/AccessHeaderCard";
 import { AccessSupport } from "src/components/Access/AccessSupport";
 import {
@@ -1541,17 +1537,7 @@ function MarketplaceService() {
 
   if (isServiceLoading || isLoadingSubscription) {
     return (
-      <DashboardLayout
-        setSupportDrawerOpen={setSupportDrawerOpen}
-        setCurrentTabValue={setCurrentTabValue}
-        isNotShow
-        accessPage
-        marketplacePage={currentSource === "access" ? false : true}
-        SidebarUI={""}
-        customLogo
-        currentSubscription={subscriptionData}
-        pageType={sidebarActiveOptions.instancesList}
-      >
+      <>
         <Box
           display="flex"
           justifyContent="center"
@@ -1562,7 +1548,7 @@ function MarketplaceService() {
             <CircularProgress style={{ marginLeft: "50px" }} /> <br />
           </div>
         </Box>
-      </DashboardLayout>
+      </>
     );
   }
 
@@ -1583,21 +1569,9 @@ function MarketplaceService() {
   //handle the case of when someone tries to access the service w/o releasing
   if (service?.notAvailable || service?.serviceModelStatus === "DEPLOYING") {
     return (
-      <DashboardLayout
-        setSupportDrawerOpen={setSupportDrawerOpen}
-        setCurrentTabValue={setCurrentTabValue}
-        isNotShow
-        serviceId={serviceId}
-        serviceApiId={service?.serviceAPIID}
-        marketplacePage
-        customLogo
-        servicePlanUrlLink={servicePlanUrlLink}
-        accessPage
-        currentSubscription={subscriptionData}
-        pageType={sidebarActiveOptions.instancesList}
-      >
+      <>
         <OfferingUnavailableUI />
-      </DashboardLayout>
+      </>
     );
   }
 
@@ -1607,37 +1581,7 @@ function MarketplaceService() {
     service.resourceParameters.length === 0
   ) {
     return (
-      <DashboardLayout
-        setSupportDrawerOpen={setSupportDrawerOpen}
-        setCurrentTabValue={setCurrentTabValue}
-        currentSubscription={subscriptionData}
-        isNotShow
-        serviceId={serviceId}
-        serviceApiId={service?.serviceAPIID}
-        marketplacePage={currentSource === "access" ? false : true}
-        accessPage
-        enableConsumptionLinks
-        serviceName={service?.serviceName}
-        customLogo
-        servicePlanUrlLink={servicePlanUrlLink}
-        apiDocsurl={serviceAPIDocsLink}
-        serviceLogoURL={service?.serviceLogoURL}
-        SidebarUI={
-          <MarketplaceServiceSidebar
-            serviceId={serviceId}
-            environmentId={environmentId}
-            resourceParameters={service?.resourceParameters}
-            isLoading={isServiceLoading}
-            serviceName={service?.serviceName}
-            activeResourceId={resourceId}
-            productTierId={productTierId}
-            currentSource={currentSource}
-            selectedResource={selectedResource.key}
-            currentSubscription={subscriptionData}
-          />
-        }
-        pageType={sidebarActiveOptions.instancesList}
-      >
+      <>
         <Card mt={3} style={{ height: "700px", width: "100%" }}>
           <Box>
             <Image
@@ -1712,7 +1656,7 @@ function MarketplaceService() {
             />
           }
         />
-      </DashboardLayout>
+      </>
     );
   }
 
@@ -1736,22 +1680,11 @@ function MarketplaceService() {
 
   if (!isLoadingSubscription && !subscriptionData?.id) {
     return (
-      <DashboardLayout
-        setSupportDrawerOpen={setSupportDrawerOpen}
-        setCurrentTabValue={setCurrentTabValue}
-        isNotShow
-        serviceId={serviceId}
-        serviceApiId={service?.serviceAPIID}
-        marketplacePage
-        customLogo
-        accessPage
-        currentSubscription={subscriptionData}
-        pageType={sidebarActiveOptions.instancesList}
-      >
+      <>
         <>
           <SubscriptionNotFoundUI />
         </>
-      </DashboardLayout>
+      </>
     );
   }
 
@@ -1762,40 +1695,7 @@ function MarketplaceService() {
     const deploymentHeader = getTheHostingModel(modelType);
 
     return (
-      <DashboardLayout
-        setSupportDrawerOpen={setSupportDrawerOpen}
-        setCurrentTabValue={setCurrentTabValue}
-        currentSubscription={subscriptionData}
-        isNotShow
-        serviceId={serviceId}
-        serviceApiId={service?.serviceAPIID}
-        marketplacePage={currentSource === "access" ? false : true}
-        accessPage
-        enableConsumptionLinks
-        serviceName={service?.serviceName}
-        customLogo
-        servicePlanUrlLink={servicePlanUrlLink}
-        apiDocsurl={serviceAPIDocsLink}
-        serviceLogoURL={service?.serviceLogoURL}
-        environmentId={environmentId}
-        SidebarUI={
-          <MarketplaceServiceSidebar
-            serviceId={serviceId}
-            environmentId={environmentId}
-            resourceParameters={service?.resourceParameters}
-            isLoading={isServiceLoading}
-            serviceName={service?.serviceName}
-            activeResourceId={resourceId}
-            productTierId={productTierId}
-            currentSource={currentSource}
-            selectedResource={selectedResource.key}
-            currentSubscription={subscriptionData}
-            isCustomNetworkEnabled={isCustomNetworkEnabled}
-            isCustomNetworkActive={isCustomNetworksView}
-          />
-        }
-        pageType={sidebarActiveOptions.instancesList}
-      >
+      <>
         <Stack direction="row" justifyContent={"space-between"}>
           <Box
             display="flex"
@@ -2084,7 +1984,7 @@ function MarketplaceService() {
           selectedInstanceId={selectedResourceInstance?.id}
           networkType={selectedResourceInstance?.network_type}
         />
-      </DashboardLayout>
+      </>
     );
   }
 }

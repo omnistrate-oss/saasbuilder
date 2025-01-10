@@ -51,13 +51,13 @@ const BaseCodeEditor: FC<BaseCodeEditorProps> = ({
   spaces = 2,
   lineToHighlight,
 }) => {
-  const editorRef = useRef(null);
+  const editorRef = useRef<any>(null);
   const [isFullScreen, setIsFullScreen] = useState(false);
   const [cursorPosition, setCursorPosition] = useState<any>({
     lineNumber: 1,
     column: 1,
   });
-  const [decorationCollection, setDecorationCollection] = useState(null);
+  const [decorationCollection, setDecorationCollection] = useState<any>(null);
   const [completionDisposable, setCompletionDisposable] = useState<any>({});
   useEffect(
     () => completionDisposable.dispose,

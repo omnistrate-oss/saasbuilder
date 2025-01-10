@@ -46,8 +46,6 @@ export type accessQueryParams = {
 const Backup: FC<{
   instanceId: string;
   backupStatus: BackupStatus;
-  serviceId: string;
-  environmentId: string;
   accessQueryParams?: accessQueryParams;
   resourceName?: string;
   networkType: NetworkType;

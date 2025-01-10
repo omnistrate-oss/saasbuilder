@@ -1,10 +1,10 @@
-import { usePagination } from "@mui/lab";
 import { FC } from "react";
-import Button from "src/components/Button/Button";
+import { usePagination } from "@mui/lab";
+import { Box, List } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
-import { Box, List } from "@mui/material";
-import { styleConfig } from "src/providerConfig";
+
+import Button from "components/Button/Button";
 
 type PaginationProps = {
   isPreviousDisabled: boolean;
@@ -84,7 +84,7 @@ const Pagination: FC<PaginationProps> = (props) => {
                   },
                 }}
                 onClick={() => {
-                  setPageIndex(page - 1);
+                  setPageIndex((page || 1) - 1);
                 }}
               >
                 {page}

@@ -1,7 +1,6 @@
 import React, { Fragment } from "react";
 import usePublicServiceOfferings from "./hooks/useOrgServiceOfferings";
 import LoadingSpinner from "src/components/LoadingSpinner/LoadingSpinner";
-import DashboardLayout from "src/components/DashboardLayout/DashboardLayout";
 import MarketplaceSidebar from "src/components/MarketplaceSidebar/MarketplaceSidebar";
 import MarketplaceHeader from "src/components/Headers/MarketplaceHeader";
 import { Box, styled } from "@mui/material";

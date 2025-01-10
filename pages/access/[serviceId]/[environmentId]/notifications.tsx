@@ -1,12 +1,8 @@
 import React, { useMemo, useState } from "react";
-import DashboardLayout from "../../../../src/components/DashboardLayout/DashboardLayout";
 
 import EventsTable from "../../../../src/components/EventsTable/EventsTable";
 import { useSelector } from "react-redux";
 import { useRouter } from "next/router";
-import MarketplaceServiceSidebar, {
-  sidebarActiveOptions,
-} from "../../../../src/components/MarketplaceServiceSidebar/MarketplaceServiceSidebar";
 import useServiceOfferingEvents from "../../../../src/hooks/useServiceOfferingEvents";
 import { selectEvents } from "../../../../src/slices/eventsSlice";
 import LoadingSpinner from "../../../../src/components/LoadingSpinner/LoadingSpinner";
@@ -103,65 +99,17 @@ function Events() {
 
   if (isLoading || isLoadingSubscription) {
     return (
-      <DashboardLayout
-        setSupportDrawerOpen={setSupportDrawerOpen}
-        setCurrentTabValue={setCurrentTabValue}
-        accessPage
-        isNotShow
-        customLogo
-        serviceId={serviceId}
-        environmentId={environmentId}
-        SidebarUI={
-          <MarketplaceServiceSidebar
-            serviceId={serviceId}
-            environmentId={environmentId}
-            resourceParameters={serviceOffering?.resourceParameters}
-            isLoading={isServiceOfferingLoading}
-            productTierId={productTierId}
-            serviceName={serviceOffering?.serviceName}
-            active={sidebarActiveOptions.notifications}
-            currentSubscription={subscriptionData}
-            isCustomNetworkEnabled={isCustomNetworkEnabled}
-          />
-        }
-        serviceName={serviceOffering?.serviceName}
-        serviceLogoURL={serviceOffering?.serviceLogoURL}
-        pageType={sidebarActiveOptions.notifications}
-      >
+      <>
         <LoadingSpinner />
-      </DashboardLayout>
+      </>
     );
   }
 
   if (!isLoadingSubscription && !subscriptionData?.id) {
     return (
-      <DashboardLayout
-        setSupportDrawerOpen={setSupportDrawerOpen}
-        setCurrentTabValue={setCurrentTabValue}
-        accessPage
-        isNotShow
-        customLogo
-        serviceId={serviceId}
-        environmentId={environmentId}
-        SidebarUI={
-          <MarketplaceServiceSidebar
-            serviceId={serviceId}
-            environmentId={environmentId}
-            resourceParameters={serviceOffering?.resourceParameters}
-            isLoading={isServiceOfferingLoading}
-            productTierId={productTierId}
-            serviceName={serviceOffering?.serviceName}
-            active={sidebarActiveOptions.notifications}
-            currentSubscription={subscriptionData}
-            isCustomNetworkEnabled={isCustomNetworkEnabled}
-          />
-        }
-        serviceName={serviceOffering?.serviceName}
-        serviceLogoURL={serviceOffering?.serviceLogoURL}
-        pageType={sidebarActiveOptions.notifications}
-      >
+      <>
         <SubscriptionNotFoundUI />
-      </DashboardLayout>
+      </>
     );
   }
   const servicePlanUrlLink = getMarketplaceRoute(
@@ -183,56 +131,14 @@ function Events() {
     serviceOffering?.serviceModelStatus === "DEPLOYING"
   ) {
     return (
-      <DashboardLayout
-        setSupportDrawerOpen={setSupportDrawerOpen}
-        setCurrentTabValue={setCurrentTabValue}
-        isNotShow
-        serviceId={serviceId}
-        environmentId={environmentId}
-        serviceApiId={serviceOffering?.serviceAPIID}
-        marketplacePage
-        customLogo
-        servicePlanUrlLink={servicePlanUrlLink}
-        accessPage
-        currentSubscription={subscriptionData}
-        pageType={sidebarActiveOptions.notifications}
-      >
+      <>
         <OfferingUnavailableUI />
-      </DashboardLayout>
+      </>
     );
   }
 
   return (
-    <DashboardLayout
-      setSupportDrawerOpen={setSupportDrawerOpen}
-      setCurrentTabValue={setCurrentTabValue}
-      accessPage
-      currentSubscription={subscriptionData}
-      isNotShow
-      enableConsumptionLinks
-      apiDocsurl={serviceAPIDocsLink}
-      servicePlanUrlLink={servicePlanUrlLink}
-      serviceId={serviceId}
-      environmentId={environmentId}
-      serviceApiId={serviceOffering?.serviceAPIID}
-      SidebarUI={
-        <MarketplaceServiceSidebar
-          serviceId={serviceId}
-          environmentId={environmentId}
-          resourceParameters={serviceOffering?.resourceParameters}
-          isLoading={isServiceOfferingLoading}
-          serviceName={serviceOffering?.serviceName}
-          productTierId={productTierId}
-          active={sidebarActiveOptions.notifications}
-          currentSubscription={subscriptionData}
-          isCustomNetworkEnabled={isCustomNetworkEnabled}
-        />
-      }
-      serviceName={serviceOffering?.serviceName}
-      customLogo
-      serviceLogoURL={serviceOffering?.serviceLogoURL}
-      pageType={sidebarActiveOptions.notifications}
-    >
+    <>
       <Box
         display="flex"
         //@ts-ignore
@@ -269,7 +175,7 @@ function Events() {
           />
         }
       />
-    </DashboardLayout>
+    </>
   );
 }
 

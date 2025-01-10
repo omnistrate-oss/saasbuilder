@@ -11,7 +11,9 @@ import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import Button from "components/Button/Button";
 import Logs from "components/ResourceInstance/Logs/Logs";
 import Backup from "components/ResourceInstance/Backup/Backup";
+import { DisplayText } from "components/Typography/Typography";
 import Metrics from "components/ResourceInstance/Metrics/Metrics";
+import LoadingSpinner from "components/LoadingSpinner/LoadingSpinner";
 import AuditLogs from "components/ResourceInstance/AuditLogs/AuditLogs";
 import NodesTable from "components/ResourceInstance/NodesTable/NodesTable";
 import SubscriptionNotFoundUI from "components/Access/SubscriptionNotFoundUI";
@@ -20,19 +22,17 @@ import ResourceInstanceDetails from "components/ResourceInstance/ResourceInstanc
 import ResourceInstanceOverview from "components/ResourceInstance/ResourceInstanceOverview/ResourceInstanceOverview";
 
 import { styleConfig } from "src/providerConfig";
+import { NetworkType } from "src/types/common/enums";
 import { CLI_MANAGED_RESOURCES } from "src/constants/resource";
 import useResourceInstance from "src/hooks/useResourceInstance";
 import { useGlobalData } from "src/providers/GlobalDataProvider";
+import useServiceOfferingResourceSchema from "src/hooks/useServiceOfferingResourceSchema";
 import {
   selectInstanceDetailsSummaryVisibility,
   toggleInstanceDetailsSummaryVisibility,
 } from "src/slices/genericSlice";
 
 import { getTabs } from "./utils";
-import { DisplayText } from "src/components/Typography/Typography";
-import { NetworkType } from "src/types/common/enums";
-import useServiceOfferingResourceSchema from "src/hooks/useServiceOfferingResourceSchema";
-import LoadingSpinner from "src/components/LoadingSpinner/LoadingSpinner";
 import PageContainer from "app/(dashboard)/components/Layout/PageContainer";
 
 type CurrentTab =
@@ -144,7 +144,7 @@ const InstanceDetailsPage = ({
     );
   }
 
-  if (!subscription) {
+  if (!subscription || !offering) {
     return (
       <PageContainer>
         <SubscriptionNotFoundUI />
@@ -169,13 +169,13 @@ const InstanceDetailsPage = ({
   }
 
   const queryData = {
-    serviceProviderId: offering?.serviceProviderId,
-    serviceKey: offering?.serviceURLKey,
-    serviceAPIVersion: offering?.serviceAPIVersion,
-    serviceEnvironmentKey: offering?.serviceEnvironmentURLKey,
-    serviceModelKey: offering?.serviceModelURLKey,
-    productTierKey: offering?.productTierURLKey,
-    subscriptionId: subscription?.id,
+    serviceProviderId: offering.serviceProviderId,
+    serviceKey: offering.serviceURLKey,
+    serviceAPIVersion: offering.serviceAPIVersion,
+    serviceEnvironmentKey: offering.serviceEnvironmentURLKey,
+    serviceModelKey: offering.serviceModelURLKey,
+    productTierKey: offering.productTierURLKey,
+    subscriptionId: subscription.id,
     resourceInstanceId: instanceId,
     resourceKey: resourceKey,
   };
@@ -363,7 +363,6 @@ const InstanceDetailsPage = ({
         />
       )}
       {currentTab === tabs.backups && (
-        // @ts-ignore
         <Backup
           backupStatus={resourceInstanceData.backupStatus}
           instanceId={instanceId}

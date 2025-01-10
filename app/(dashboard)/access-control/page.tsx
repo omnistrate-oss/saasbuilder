@@ -14,10 +14,15 @@ import AccessControlTableHeader from "./components/AccessControlTableHeader";
 import Button from "components/Button/Button";
 import DataTable from "components/DataTable/DataTable";
 import DeleteIcon from "components/Icons/Delete/Delete";
+import GridCellExpand from "components/GridCellExpand/GridCellExpand";
+import ServiceNameWithLogo from "components/ServiceNameWithLogo/ServiceNameWithLogo";
 import TextConfirmationDialog from "components/TextConfirmationDialog/TextConfirmationDialog";
+import SubscriptionTypeDirectIcon from "components/Icons/SubscriptionType/SubscriptionTypeDirectIcon";
+import SubscriptionTypeInvitedIcon from "components/Icons/SubscriptionType/SubscriptionTypeInvitedIcon";
 
 import useSnackbar from "src/hooks/useSnackbar";
 import { revokeSubscriptionUser } from "src/api/users";
+import { useGlobalData } from "src/providers/GlobalDataProvider";
 
 const columnHelper = createColumnHelper<any>(); // TODO: Add type
 type Overlay = "delete-dialog";
@@ -28,6 +33,14 @@ const AccessControlPage = () => {
   const [overlayType, setOverlayType] = useState<Overlay>("delete-dialog");
   const [isOverlayOpen, setIsOverlayOpen] = useState<boolean>(false);
   const [selectedUser, setSelectedUser] = useState<any>(null); // TODO: Add type
+  const { subscriptions, isFetchingSubscriptions } = useGlobalData();
+
+  const subscriptionsObj = useMemo(() => {
+    return subscriptions.reduce((acc: any, sub: any) => {
+      acc[sub.id] = sub;
+      return acc;
+    }, {});
+  }, [subscriptions]);
 
   const {
     data: users = [],
@@ -44,22 +57,73 @@ const AccessControlPage = () => {
           minWidth: 200,
         },
       }),
-      columnHelper.accessor("emailAddress", {
-        id: "emailAddress",
+      columnHelper.accessor("email", {
+        id: "email",
         header: "Email Address",
         meta: {
           minWidth: 200,
         },
       }),
-      columnHelper.accessor("role", {
-        id: "role",
+      columnHelper.accessor("roleType", {
+        id: "roleType",
         header: "Role",
         cell: (data) => {
-          const role = data.row.original.role;
+          const role = data.row.original.roleType;
           return role ? role.charAt(0).toUpperCase() + role.slice(1) : "-";
         },
         meta: {
           minWidth: 100,
+        },
+      }),
+      columnHelper.accessor(
+        (row) => {
+          const subscription = subscriptionsObj[row.subscriptionId];
+          return subscription?.serviceName;
+        },
+        {
+          id: "serviceName",
+          header: "Service Name",
+          cell: (data) => {
+            const { serviceLogoURL, serviceName } =
+              subscriptionsObj[data.row.original.subscriptionId] || {};
+            return (
+              <ServiceNameWithLogo
+                serviceName={serviceName}
+                serviceLogoURL={serviceLogoURL}
+              />
+            );
+          },
+        }
+      ),
+      columnHelper.accessor(
+        (row) => {
+          const subscription = subscriptionsObj[row.subscriptionId];
+          return subscription?.productTierName || "-";
+        },
+        {
+          id: "servicePlanName",
+          header: "Subscription Plan",
+        }
+      ),
+      columnHelper.accessor("subscriptionOwnerName", {
+        id: "subscriptionOwnerName",
+        header: "Subscription Owner",
+        cell: (data) => {
+          const subscription =
+            subscriptionsObj[data.row.original.subscriptionId];
+
+          return (
+            <GridCellExpand
+              value={subscription?.subscriptionOwnerName}
+              startIcon={
+                data.row.original.roleType === "root" ? (
+                  <SubscriptionTypeDirectIcon />
+                ) : (
+                  <SubscriptionTypeInvitedIcon />
+                )
+              }
+            />
+          );
         },
       }),
       columnHelper.accessor("action", {
@@ -76,6 +140,12 @@ const AccessControlPage = () => {
                 setSelectedUser(data.row.original);
               }}
               startIcon={<DeleteIcon color="#B42318" />}
+              sx={{
+                border: "none !important",
+                padding: "0px !important",
+                boxShadow: "none !important",
+              }}
+              disableRipple
             >
               Delete User
             </Button>
@@ -86,7 +156,7 @@ const AccessControlPage = () => {
         },
       }),
     ];
-  }, []);
+  }, [subscriptionsObj]);
 
   const deleteUserMutation = useMutation(
     (payload: any) => revokeSubscriptionUser(payload.subscriptionId, payload),
@@ -123,7 +193,10 @@ const AccessControlPage = () => {
         Access Control
       </PageTitle>
 
-      <InviteUsersCard />
+      <InviteUsersCard
+        refetchUsers={refetchUsers}
+        isFetchingUsers={isFetchingUsers}
+      />
 
       <div>
         <DataTable
@@ -138,7 +211,7 @@ const AccessControlPage = () => {
             count: users.length,
             isFetchingUsers,
           }}
-          isLoading={isFetchingUsers}
+          isLoading={isFetchingUsers || isFetchingSubscriptions}
         />
       </div>
 
@@ -157,7 +230,7 @@ const AccessControlPage = () => {
         }}
         title="Delete User"
         isLoading={deleteUserMutation.isLoading}
-        subtitle={`Are you sure you want to Delete ${selectedUser?.emailAddress}?`}
+        subtitle={`Are you sure you want to delete ${selectedUser?.email}?`}
         message="To confirm deletion, please enter <b> deleteme </b>, in the field below:"
       />
     </PageContainer>

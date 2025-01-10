@@ -22,10 +22,10 @@ type ClusterLocationsProps = {
   isFetchingInstances: boolean;
 };
 
-
 const ClusterLocations: FC<ClusterLocationsProps> = (props) => {
   const { resourceInstances = [] } = props;
 
+  // @ts-ignore
   const regionProviderInstancesHash: Record<
     string,
     {
@@ -39,8 +39,8 @@ const ClusterLocations: FC<ClusterLocationsProps> = (props) => {
         string,
         {
           instanceCount: number;
-          cloudProvider: CloudProvider;
-          region: string;
+          cloudProvider?: CloudProvider;
+          region?: string;
         }
       >,
       curr
