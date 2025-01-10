@@ -5,15 +5,15 @@ import MainImg from "public/assets/images/non-dashboard/signin-main.svg";
 import Footer from "../Footer";
 import Logo from "../Logo";
 import CurvedArrow from "../Icons/CurvedArrow";
+import { useOrgDetails } from "src/context/OrgDetailsProvider";
 
 const MainImageLayout = ({
-  orgName,
-  orgLogoURL,
   pageTitle,
   showArrow,
   children,
   contentMaxWidth = 480,
 }) => {
+  const { orgName, orgLogoURL } = useOrgDetails();
   return (
     <>
       {pageTitle && (
@@ -63,7 +63,7 @@ const MainImageLayout = ({
             </Box>
             {children}
           </Box>
-          <Footer orgName={orgName} />
+          <Footer />
         </Box>
       </Box>
     </>

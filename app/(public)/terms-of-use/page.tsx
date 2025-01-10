@@ -278,45 +278,48 @@ const TermsPage = () => {
   }, [orgName]);
 
   return (
-    <Container
-      maxWidth="858px"
-      sx={{
-        paddingTop: {
-          mobile: "40px",
-          desktop: "100px",
-        },
-        paddingBottom: {
-          mobile: "40px",
-          desktop: "100px",
-        },
-      }}
-    >
-      <Title>Terms and Conditions</Title>
-      <StyledImage src={termsImg} alt="privacy-policy" />
-      {orgTermsOfUse && orgTermsOfUse !== "<p><br></p>" ? (
-        <Box
-          className="ql-editor"
-          sx={{
-            marginTop: "30px",
-            "& a": {
-              color: styleConfig.primaryColor,
-              textDecoration: "underline",
-            },
+    <>
+      <Container
+        maxWidth="858px"
+        sx={{
+          paddingTop: {
+            mobile: "40px",
+            desktop: "100px",
+          },
+          paddingBottom: {
+            mobile: "40px",
+            desktop: "100px",
+          },
+        }}
+      >
+        <Title>Terms and Conditions</Title>
+        <StyledImage src={termsImg} alt="privacy-policy" />
+        {orgTermsOfUse && orgTermsOfUse !== "<p><br></p>" ? (
+          <Box
+            className="ql-editor"
+            sx={{
+              marginTop: "30px",
+              "& a": {
+                color: styleConfig.primaryColor,
+                textDecoration: "underline",
+              },
 
-            "& blockquote": {
-              borderLeft: "4px solid #ccc",
-              paddingLeft: "16px !important",
-              paddingY: "5px !important",
-            },
-          }}
-          dangerouslySetInnerHTML={{
-            __html: DOMPurify.sanitize(orgTermsOfUse),
-          }}
-        />
-      ) : (
-        <DefaultTermsOfUse orgName={orgName} />
-      )}
-    </Container>
+              "& blockquote": {
+                borderLeft: "4px solid #ccc",
+                paddingLeft: "16px !important",
+                paddingY: "5px !important",
+              },
+            }}
+            dangerouslySetInnerHTML={{
+              __html: DOMPurify.sanitize(orgTermsOfUse),
+            }}
+          />
+        ) : (
+          <DefaultTermsOfUse orgName={orgName} />
+        )}
+      </Container>
+      <Footer nonFloatingBottomPosition />
+    </>
   );
 };
 

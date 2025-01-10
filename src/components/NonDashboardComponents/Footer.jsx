@@ -1,17 +1,22 @@
 import { Box, Typography } from "@mui/material";
 import Link from "next/link";
+import { useOrgDetails } from "src/context/OrgDetailsProvider";
+import { useCookieConsentContext } from "src/context/cookieConsentContext";
 
 const Footer = (props) => {
-  const { orgName } = props;
+  const { nonFloatingBottomPosition = false } = props;
+  const { setIsConsentModalOpen } = useCookieConsentContext();
+  const { orgName } = useOrgDetails();
   return (
     <Box
-      position="absolute"
+      position={nonFloatingBottomPosition ? "static" : "absolute"}
       bottom="14px"
       left="0"
       right="0"
       display="flex"
       justifyContent="center"
       gap="10px"
+      padding={nonFloatingBottomPosition ? "20px" : "0px"}
     >
       <Typography
         fontWeight="500"
@@ -47,6 +52,21 @@ const Footer = (props) => {
       >
         Privacy Policy
       </Link>
+      <Typography
+        component="p"
+        sx={{
+          fontWeight: "500",
+          fontSize: "14px",
+          lineHeight: "22px",
+          color: "#111827",
+          cursor: "pointer",
+        }}
+        onClick={() => {
+          setIsConsentModalOpen(true);
+        }}
+      >
+        Cookie Settings
+      </Typography>
     </Box>
   );
 };

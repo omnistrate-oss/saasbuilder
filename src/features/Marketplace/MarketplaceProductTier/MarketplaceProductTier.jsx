@@ -8,11 +8,12 @@ import useProductTierRedirect from "./hooks/useProductTierRedirect";
 import NoServiceFoundUI from "../components/NoServiceFoundUI";
 import useSubscriptionRequests from "./hooks/useSubscriptionRequests";
 import { useMemo } from "react";
+import { useOrgDetails } from "src/context/OrgDetailsProvider";
 
-function MarketplaceProductTier({ orgLogoURL, orgName }) {
+function MarketplaceProductTier() {
   const router = useRouter();
   const { serviceId, environmentId } = router.query;
-
+  const { orgLogoURL, orgName } = useOrgDetails();
   const serviceOfferingQuery = useServiceOfferingById(serviceId);
   const { data, isFetching } = serviceOfferingQuery;
   const serviceOfferingData = useMemo(() => {

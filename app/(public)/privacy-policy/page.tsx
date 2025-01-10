@@ -198,53 +198,56 @@ const PrivacyPolicyPage = () => {
   }, [orgName]);
 
   return (
-    <Container
-      maxWidth="858px"
-      sx={{
-        paddingTop: {
-          mobile: "40px",
-          desktop: "100px",
-        },
-        paddingBottom: {
-          mobile: "40px",
-          desktop: "100px",
-        },
-      }}
-    >
-      <Title>Privacy Policy</Title>
-      <StyledImage
-        quality={90}
-        src={privacyPolicyImg}
-        alt="privacy-policy"
-        priority
-      />
-      {orgPrivacyPolicy && orgPrivacyPolicy !== "<p><br></p>" ? (
-        <Box
-          className="ql-editor"
-          sx={{
-            marginTop: "30px",
-            "& a": {
-              color: styleConfig.primaryColor,
-              textDecoration: "underline",
-            },
+    <>
+      <Container
+        maxWidth="858px"
+        sx={{
+          paddingTop: {
+            mobile: "40px",
+            desktop: "100px",
+          },
+          paddingBottom: {
+            mobile: "40px",
+            desktop: "100px",
+          },
+        }}
+      >
+        <Title>Privacy Policy</Title>
+        <StyledImage
+          quality={90}
+          src={privacyPolicyImg}
+          alt="privacy-policy"
+          priority
+        />
+        {orgPrivacyPolicy && orgPrivacyPolicy !== "<p><br></p>" ? (
+          <Box
+            className="ql-editor"
+            sx={{
+              marginTop: "30px",
+              "& a": {
+                color: styleConfig.primaryColor,
+                textDecoration: "underline",
+              },
 
-            "& blockquote": {
-              borderLeft: "4px solid #ccc",
-              paddingLeft: "16px !important",
-              paddingY: "5px !important",
-            },
-          }}
-          dangerouslySetInnerHTML={{
-            __html: DOMPurify.sanitize(orgPrivacyPolicy),
-          }}
-        />
-      ) : (
-        <DefaultPrivacyPolicy
-          orgName={orgName}
-          orgSupportEmail={orgSupportEmail}
-        />
-      )}
-    </Container>
+              "& blockquote": {
+                borderLeft: "4px solid #ccc",
+                paddingLeft: "16px !important",
+                paddingY: "5px !important",
+              },
+            }}
+            dangerouslySetInnerHTML={{
+              __html: DOMPurify.sanitize(orgPrivacyPolicy),
+            }}
+          />
+        ) : (
+          <DefaultPrivacyPolicy
+            orgName={orgName}
+            orgSupportEmail={orgSupportEmail}
+          />
+        )}
+      </Container>
+      <Footer nonFloatingBottomPosition />
+    </>
   );
 };
 
