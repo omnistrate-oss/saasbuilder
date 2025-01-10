@@ -279,6 +279,13 @@ function MarketplaceService() {
     (instance) => instance.kubernetesDashboardEndpoint
   );
 
+  const isMultiTenancy = useMemo(
+    () =>
+      service?.productTierType === productTierTypes.OMNISTRATE_MULTI_TENANCY,
+
+    [service]
+  );
+
   const handleViewAccountConfigInstructions = (row) => {
     setViewInstructionsItem(row);
     const result_params = row.result_params;
@@ -938,7 +945,11 @@ function MarketplaceService() {
             }
           }
 
-          if (!isCloudProvider || isCustomNetworkEnabled) {
+          if (
+            !isCloudProvider ||
+            isMultiTenancy ||
+            !service?.supportsPublicNetwork
+          ) {
             delete data["network_type"];
           }
 
@@ -2024,6 +2035,7 @@ function MarketplaceService() {
                       gcp: service?.gcpRegions || [],
                     }}
                     isCustomNetworkEnabled={isCustomNetworkEnabled}
+                    isMultiTenancy={isMultiTenancy}
                   />
                 }
               />
