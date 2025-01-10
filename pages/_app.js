@@ -22,7 +22,6 @@ import { PAGE_TITLE_MAP } from "src/constants/pageTitleMap";
 import Head from "next/head";
 import CookieConsentProvider from "src/context/cookieConsentContext";
 import { getProviderOrgDetails } from "src/server/api/customer-user";
-import OrgDetailsProvider from "src/context/OrgDetailsProvider";
 import AxiosGlobalErrorHandler from "src/providers/AxiosGlobalErrorHandler";
 
 NProgress.configure({
@@ -86,15 +85,9 @@ export default function App(props) {
                   theme={isDashboardRoute ? dashboardTheme : nonDashboardTheme}
                 >
                   <EnvironmentTypeProvider envType={props.envType}>
-                    <OrgDetailsProvider
-                      orgLogoURL={props.orgLogoURL}
-                      orgName={props.orgName}
-                      orgSupportEmail={props.orgSupportEmail}
-                    >
-                      <CookieConsentProvider>
-                        <Component {...pageProps} />
-                      </CookieConsentProvider>
-                    </OrgDetailsProvider>
+                    <CookieConsentProvider>
+                      <Component {...pageProps} />
+                    </CookieConsentProvider>
                   </EnvironmentTypeProvider>
                 </ThemeProvider>
               </NotificationBarProvider>

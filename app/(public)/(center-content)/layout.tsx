@@ -35,7 +35,7 @@ const CenterContentLayout = ({ children }) => {
         )}
         {children}
       </Stack>
-      <Footer orgName={orgName} />
+      <Footer />
     </Box>
   );
 };

@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import Script from "next/script";
+// import Script from "next/script";
 import RootProviders from "./RootProviders";
 
 import { ENVIRONMENT_TYPES } from "src/constants/environmentTypes";
@@ -19,7 +19,7 @@ const RootLayout = async ({ children }: { children: React.ReactNode }) => {
   return (
     <html lang="en">
       <head>
-        {process.env.GOOGLE_ANALYTICS_TAG_ID && (
+        {/* {process.env.GOOGLE_ANALYTICS_TAG_ID && (
           <Script
             src={`https://www.googletagmanager.com/gtag/js?id=${process.env.GOOGLE_ANALYTICS_TAG_ID}`}
             strategy="afterInteractive"
@@ -35,7 +35,7 @@ const RootLayout = async ({ children }: { children: React.ReactNode }) => {
 	              gtag('config', '${process.env.GOOGLE_ANALYTICS_TAG_ID}');
 	            `}
           </Script>
-        )}
+        )} */}
         <link rel="icon" href="" id="provider-favicon" />
         <meta httpEquiv="cache-control" content="no-cache" />
         <meta httpEquiv="expires" content="0" />

@@ -6,8 +6,9 @@ import { Box } from "@mui/material";
 import DOMPurify from "isomorphic-dompurify";
 
 import { styleConfig } from "src/providerConfig";
+import Footer from "components/NonDashboardComponents/Footer";
+import Container from "components/NonDashboardComponents/Container/Container";
 import { useProviderOrgDetails } from "src/providers/ProviderOrgDetailsProvider";
-import Container from "src/components/NonDashboardComponents/Container/Container";
 import {
   SectionDescription,
   SectionHeading,
@@ -290,6 +291,7 @@ const TermsPage = () => {
             mobile: "40px",
             desktop: "100px",
           },
+          minHeight: "calc(100vh - 62px)",
         }}
       >
         <Title>Terms and Conditions</Title>

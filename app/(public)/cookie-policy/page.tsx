@@ -1,18 +1,18 @@
-import Head from "next/head";
-import React from "react";
-import { Title, SectionHeading, SectionDescription } from "./terms-of-use";
-import { Box, styled } from "@mui/material";
-import Link from "next/link";
-import Container from "src/components/NonDashboardComponents/Container/Container";
-import { useOrgDetails } from "src/context/OrgDetailsProvider";
-import CookiePolicyTable from "src/components/CookiePolicy/CookiePolicyTable";
-import Footer from "src/components/NonDashboardComponents/Footer";
+"use client";
 
-export const getServerSideProps = async () => {
-  return {
-    props: {},
-  };
-};
+import Link from "next/link";
+import { Box, styled } from "@mui/material";
+
+import Footer from "components/NonDashboardComponents/Footer";
+import CookiePolicyTable from "components/CookiePolicy/CookiePolicyTable";
+import Container from "components/NonDashboardComponents/Container/Container";
+
+import {
+  SectionDescription,
+  SectionHeading,
+  Title,
+} from "../terms-of-use/StyledComponents";
+import { useProviderOrgDetails } from "src/providers/ProviderOrgDetailsProvider";
 
 const List = styled("ul")(() => ({
   marginTop: "16px",
@@ -35,20 +35,11 @@ const ListItemHeading = styled("h3")({
   lineHeight: "24px",
 });
 
-function CookiePolicy() {
-  const { orgName, orgSupportEmail } = useOrgDetails();
-
-  const pageTitle = orgName ? `Cookie Policy - ${orgName}` : "Cookie Policy";
-  const metaDescription = orgName
-    ? `Cookie Policy - ${orgName}`
-    : "Cookie Policy";
+const CookiePolicyPage = () => {
+  const { orgName, orgSupportEmail } = useProviderOrgDetails();
 
   return (
     <>
-      <Head>
-        <title>{pageTitle}</title>
-        <meta name="description" content={metaDescription} />
-      </Head>
       <Container
         maxWidth="858px"
         sx={{
@@ -150,6 +141,6 @@ function CookiePolicy() {
       <Footer nonFloatingBottomPosition />
     </>
   );
-}
+};
 
-export default CookiePolicy;
+export default CookiePolicyPage;

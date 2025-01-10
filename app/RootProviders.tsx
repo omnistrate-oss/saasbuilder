@@ -11,6 +11,7 @@ import { AppRouterCacheProvider } from "@mui/material-nextjs/v14-appRouter";
 
 import { store } from "src/redux-store";
 import { PAGE_TITLE_MAP } from "src/constants/pageTitleMap";
+import CookieConsentProvider from "src/context/cookieConsentContext";
 import NotificationBarProvider from "src/context/NotificationBarProvider";
 import EnvironmentTypeProvider from "src/context/EnvironmentTypeProvider";
 import AxiosGlobalErrorHandler from "src/providers/AxiosGlobalErrorHandler";
@@ -83,12 +84,14 @@ const RootProviders = ({
                 >
                   <EnvironmentTypeProvider envType={envType}>
                     <ProviderOrgDetailsProvider details={providerOrgDetails}>
-                      {children}
-                      <ProgressBar
-                        height="3px"
-                        color="#8d67df"
-                        options={{ showSpinner: false }}
-                      />
+                      <CookieConsentProvider>
+                        {children}
+                        <ProgressBar
+                          height="3px"
+                          color="#8d67df"
+                          options={{ showSpinner: false }}
+                        />
+                      </CookieConsentProvider>
                     </ProviderOrgDetailsProvider>
                   </EnvironmentTypeProvider>
                 </ThemeProvider>

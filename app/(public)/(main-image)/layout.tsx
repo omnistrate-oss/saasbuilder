@@ -60,7 +60,7 @@ const MainImageLayout = ({ children }: { children: React.ReactNode }) => {
           </Box>
           {children}
         </Box>
-        <Footer orgName={orgName} />
+        <Footer />
       </Box>
     </Box>
   );
