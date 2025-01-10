@@ -92,7 +92,7 @@ function ResourceCustomDNS(props) {
               valueType: "custom",
               value: (
                 <CustomDNS
-                  resourceName={`${primaryResourceName} ${customDNSEndpointName}`}
+                  resourceName={`${resourceName} ${customDNSEndpointName}`}
                   customDNSData={customDNSEndpoint}
                   accessQueryParams={accessQueryParams}
                   resourceKey={resourceKey}
