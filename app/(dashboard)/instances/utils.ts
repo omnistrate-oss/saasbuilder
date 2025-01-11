@@ -1,3 +1,5 @@
+import { CloudProvider } from "src/types/common/enums";
+
 export const getServiceMenuItems = (serviceOfferings: any[]) => {
   const menuItems: any[] = [];
   if (!serviceOfferings?.length) {
@@ -15,7 +17,7 @@ export const getServiceMenuItems = (serviceOfferings: any[]) => {
     }
   });
 
-  return menuItems;
+  return menuItems.sort((a, b) => a.label.localeCompare(b.label));
 };
 
 export const getServicePlanMenuItems = (
@@ -36,7 +38,7 @@ export const getServicePlanMenuItems = (
     }
   });
 
-  return menuItems;
+  return menuItems.sort((a, b) => a.label.localeCompare(b.label));
 };
 
 export const getSubscriptionMenuItems = (
@@ -49,15 +51,74 @@ export const getSubscriptionMenuItems = (
   }
 
   subscriptions.forEach((subscription) => {
-    if (subscription.servicePlanId === servicePlanId) {
+    if (subscription.productTierId === servicePlanId) {
       menuItems.push({
         value: subscription.id,
-        label: subscription.name,
+        label: subscription.id,
       });
     }
   });
 
-  return menuItems;
+  return menuItems.sort((a, b) => a.label.localeCompare(b.label));
+};
+
+export const getResourceMenuItems = (offering: any) => {
+  const menuItems: any[] = [];
+
+  if (!offering?.resourceParameters?.length) {
+    return menuItems;
+  }
+
+  offering.resourceParameters.forEach((resource) => {
+    if (resource.resourceId?.startsWith("r-injectedaccountconfig")) {
+      return;
+    }
+
+    menuItems.push({
+      label: resource.name,
+      value: resource.resourceId,
+    });
+  });
+
+  return menuItems.sort((a, b) => a.label.localeCompare(b.label));
+};
+
+export const getRegionMenuItems = (
+  offering: any,
+  cloudProvider: CloudProvider
+) => {
+  const menuItems: any[] = [];
+
+  if (!offering || !cloudProvider) {
+    return menuItems;
+  }
+
+  console.log(offering);
+
+  if (cloudProvider === "aws") {
+    offering.awsRegions.forEach((region: string) => {
+      menuItems.push({
+        label: region,
+        value: region,
+      });
+    });
+  } else if (cloudProvider === "gcp") {
+    offering.gcpRegions.forEach((region: string) => {
+      menuItems.push({
+        label: region,
+        value: region,
+      });
+    });
+  } else if (cloudProvider === "azure") {
+    offering.azureRegions.forEach((region: string) => {
+      menuItems.push({
+        label: region,
+        value: region,
+      });
+    });
+  }
+
+  return menuItems.sort((a, b) => a.label.localeCompare(b.label));
 };
 
 export const getMainResourceFromInstance = (instance: any) => {

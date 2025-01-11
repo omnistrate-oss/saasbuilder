@@ -25,7 +25,6 @@ const Popover = styled(MuiPopover)({
 
 const NavigationRenderer = (
   currentFocusedDate: Date,
-  // eslint-disable-next-line no-unused-vars
   setShownDate: (shownDate: Date) => void
 ) => {
   return (

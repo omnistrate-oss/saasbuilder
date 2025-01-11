@@ -8,7 +8,6 @@ import Tooltip from "../Tooltip/Tooltip";
 type SearchInputProps = {
   placeholder?: string;
   searchText: string;
-  /* eslint-disable-next-line no-unused-vars*/
   setSearchText: (text: string) => void;
   width?: string;
 };

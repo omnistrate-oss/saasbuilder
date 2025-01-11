@@ -8,6 +8,7 @@ import RefreshWithToolTip from "src/components/RefreshWithTooltip/RefreshWithToo
 import useSnackbar from "src/hooks/useSnackbar";
 
 const CustomNetworksTableHeader = ({
+  count,
   searchText,
   setSearchText,
   refetchCustomNetworks,
@@ -24,7 +25,7 @@ const CustomNetworksTableHeader = ({
       <DataGridHeaderTitle
         title="List of Custom Networks"
         desc="List of configured custom networks"
-        count={1}
+        count={count}
         units={{
           singular: "Custom Network",
           plural: "Custom Networks",

@@ -12,7 +12,7 @@ const SubscriptionsTableHeader = ({
   onManageSubscriptions,
   onUnsubscribe,
   isUnsubscribing,
-  subscriptions,
+  count,
   isFetchingSubscriptions,
   refetchSubscriptions,
   selectedSubscription,
@@ -26,7 +26,7 @@ const SubscriptionsTableHeader = ({
           singular: "Subscription",
           plural: "Subscriptions",
         }}
-        count={subscriptions?.length}
+        count={count}
       />
 
       <div className="flex items-center gap-4 flex-shrink-0">
@@ -52,12 +52,14 @@ const SubscriptionsTableHeader = ({
             selectedSubscription?.roleType !== "root"
           }
           disabledMessage={
-            selectedSubscription?.defaultSubscription
-              ? "Cannot unsubscribe from Default subscription"
-              : selectedSubscription &&
-                  selectedSubscription?.roleType !== "root"
-                ? "Cannot unsubscribe without Root access"
-                : ""
+            selectedRows.length !== 1
+              ? "Please select a subscription to unsubscribe"
+              : selectedSubscription?.defaultSubscription
+                ? "Cannot unsubscribe from Default subscription"
+                : selectedSubscription &&
+                    selectedSubscription?.roleType !== "root"
+                  ? "Cannot unsubscribe without Root access"
+                  : ""
           }
         >
           Unsubscribe

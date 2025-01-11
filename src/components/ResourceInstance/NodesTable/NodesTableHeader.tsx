@@ -18,11 +18,9 @@ type NodesTableHeaderProps = {
   showFailoverButton: boolean;
   showGenerateTokenButton: boolean;
   onGenerateTokenClick?: () => void;
-  /* eslint-disable-next-line no-unused-vars*/
   handleFailover: (nodeId: string, resourceKey: string) => void;
   failoverMutation: { isLoading: boolean };
   searchText: string;
-  /* eslint-disable-next-line no-unused-vars*/
   setSearchText: (text: string) => void;
 };
 

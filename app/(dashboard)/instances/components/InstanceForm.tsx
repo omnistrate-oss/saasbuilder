@@ -2,7 +2,7 @@
 
 import { useMutation } from "@tanstack/react-query";
 import { useFormik } from "formik";
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import {
   createResourceInstance,
   getResourceInstanceDetails,
@@ -13,10 +13,18 @@ import { FormConfiguration } from "src/components/DynamicForm/types";
 import useSnackbar from "src/hooks/useSnackbar";
 import { useGlobalData } from "src/providers/GlobalDataProvider";
 import {
+  getMainResourceFromInstance,
+  getRegionMenuItems,
+  getResourceMenuItems,
   getServiceMenuItems,
   getServicePlanMenuItems,
   getSubscriptionMenuItems,
 } from "../utils";
+import { Text } from "src/components/Typography/Typography";
+import useResourceSchema from "../hooks/useResourceSchema";
+import CloudProviderRadio from "app/(dashboard)/components/CloudProviderRadio/CloudProviderRadio";
+import { cloudProviderLogoMap } from "src/constants/cloudProviders";
+import useAvailabilityZone from "src/hooks/query/useAvailabilityZone";
 
 const InstanceForm = ({
   formMode,
@@ -26,14 +34,14 @@ const InstanceForm = ({
 }) => {
   const snackbar = useSnackbar();
   const {
+    servicesObj,
     subscriptions,
     serviceOfferings,
+    subscriptionsObj,
     serviceOfferingsObj,
     isFetchingSubscriptions,
     isFetchingServiceOfferings,
   } = useGlobalData();
-
-  console.log("subscriptions", serviceOfferings);
 
   const selectedSubscription = useMemo(() => {
     return subscriptions.find(
@@ -105,7 +113,12 @@ const InstanceForm = ({
       serviceId: selectedSubscription?.serviceId || "",
       servicePlanId: selectedSubscription?.productTierId || "",
       subscriptionId: selectedInstance?.subscriptionId || "",
-      resourceKey: selectedInstance?.resourceKey || "",
+      resourceId: getMainResourceFromInstance(selectedInstance)?.id || "",
+      cloudProvider: selectedInstance?.cloudProvider || "",
+      region: selectedInstance?.region || "",
+      requestParams: {
+        ...(selectedInstance?.result_params || {}),
+      },
     },
     onSubmit: (values) => {
       if (formMode === "create") {
@@ -116,8 +129,66 @@ const InstanceForm = ({
     },
   });
 
+  const {
+    data: resourceSchemaData = {},
+    isFetching: isFetchingResourceSchema,
+  }: any = useResourceSchema({
+    serviceId: formData.values.serviceId,
+    resourceId: formData.values.resourceId,
+    instanceId: selectedInstance?.id,
+  });
+
+  const {
+    data: customAvailabilityZoneData,
+    isLoading: isFetchingCustomAvailabilityZones,
+  } = useAvailabilityZone(
+    formData.values.region,
+    formData.values.cloudProvider
+  );
+
+  console.log(formData.values);
+
+  // Sets the Default Values for the Request Parameters
+  useEffect(() => {
+    const inputParameters = resourceSchemaData?.inputParameters || [];
+
+    const defaultValues = inputParameters.reduce((acc: any, param: any) => {
+      acc[param.key] = param.defaultValue || "";
+      return acc;
+    }, {});
+
+    if (inputParameters.length && formMode === "create") {
+      formData.setValues((prev) => ({
+        ...prev,
+        requestParams: defaultValues,
+      }));
+    }
+  }, [resourceSchemaData, formMode]);
+
+  const customAvailabilityZones = useMemo(() => {
+    const availabilityZones = customAvailabilityZoneData?.availabilityZones;
+    return availabilityZones?.sort(function (a, b) {
+      if (a.code < b.code) return -1;
+      else if (a.code > b.code) {
+        return 1;
+      }
+      return -1;
+    });
+  }, [customAvailabilityZoneData?.availabilityZones]);
+
   const formConfiguration: FormConfiguration = useMemo(() => {
     const { values, setFieldValue } = formData;
+
+    const {
+      serviceId,
+      servicePlanId,
+      resourceId,
+      cloudProvider,
+      region,
+      requestParams,
+    } = values;
+
+    const offering = serviceOfferingsObj[serviceId]?.[servicePlanId];
 
     const standardFields: any[] = [
       {
@@ -131,8 +202,15 @@ const InstanceForm = ({
         isLoading: isFetchingServiceOfferings,
         menuItems: getServiceMenuItems(serviceOfferings),
         onChange: () => {
-          // TODO: Implement This
+          setFieldValue("servicePlanId", "");
+          setFieldValue("subscriptionId", "");
+          setFieldValue("resourceId", "");
         },
+        previewValue: () => (
+          <Text size="small" weight="medium" color="#181D27">
+            {servicesObj[values.serviceId]?.serviceName}
+          </Text>
+        ),
       },
       {
         label: "Subscription Plan",
@@ -141,55 +219,156 @@ const InstanceForm = ({
         required: true,
         type: "select",
         disabled: formMode !== "create",
-        emptyMenuText: "No plans available",
+        emptyMenuText: !serviceId ? "Select a service" : "No plans available",
         isLoading: isFetchingServiceOfferings || isFetchingSubscriptions,
         menuItems: getServicePlanMenuItems(serviceOfferings, values.serviceId),
+        previewValue: () => (
+          <Text size="small" weight="medium" color="#181D27">
+            {
+              serviceOfferingsObj[values.serviceId]?.[values.servicePlanId]
+                ?.productTierName
+            }
+          </Text>
+        ),
       },
     ];
-
-    const resources =
-      serviceOfferingsObj[values.serviceId]?.[values.servicePlanId]
-        ?.resourceParameters;
 
     const subscriptionMenuItems = getSubscriptionMenuItems(
       subscriptions,
       values.servicePlanId
     );
 
-    if (subscriptionMenuItems.length > 1) {
-      standardFields.push({
-        label: "Subscription",
-        subLabel: "Select the subscription",
-        name: "subscriptionId",
-        type: "select",
-        required: true,
-        disabled: formMode !== "create",
-        emptyMenuText: "No subscriptions available",
-        isLoading: isFetchingSubscriptions,
-        menuItems: subscriptionMenuItems,
-      });
-    } else {
+    standardFields.push({
+      label: "Subscription",
+      subLabel: "Select the subscription",
+      name: "subscriptionId",
+      type: "select",
+      required: true,
+      disabled: formMode !== "create",
+      emptyMenuText: !serviceId
+        ? "Select a service"
+        : !servicePlanId
+          ? "Select a subscription plan"
+          : "No subscriptions available",
+      isLoading: isFetchingSubscriptions,
+      menuItems: subscriptionMenuItems,
+      previewValue: () => (
+        <Text size="small" weight="medium" color="#181D27">
+          {subscriptionsObj[values.subscriptionId]?.id}
+        </Text>
+      ),
+    });
+
+    if (subscriptionMenuItems.length === 1) {
       setFieldValue("subscriptionId", subscriptionMenuItems[0]?.value || "");
     }
 
-    const resourceMenuItems =
-      resources?.map((resource) => ({
-        value: resource.resourceKey,
-        label: resource.name,
-      })) || [];
+    const resourceMenuItems = getResourceMenuItems(
+      serviceOfferingsObj[values.serviceId]?.[values.servicePlanId]
+    );
 
-    if (resourceMenuItems.length > 1) {
+    standardFields.push({
+      label: "Resource Type",
+      subLabel: "Select the resource",
+      name: "resourceId",
+      type: "select",
+      required: true,
+      emptyMenuText: !serviceId
+        ? "Select a service"
+        : !servicePlanId
+          ? "Select a subscription plan"
+          : "No resources available",
+      menuItems: resourceMenuItems,
+      previewValue: () => (
+        <Text size="small" weight="medium" color="#181D27">
+          {
+            resourceMenuItems.find((item) => item.value === values.resourceId)
+              ?.label
+          }
+        </Text>
+      ),
+    });
+
+    if (resourceMenuItems.length === 1) {
+      setFieldValue("resourceId", resourceMenuItems[0]?.value || "");
+    }
+
+    const inputParametersObj = (
+      resourceSchemaData?.inputParameters || []
+    ).reduce((acc: any, param: any) => {
+      acc[param.key] = param;
+      return acc;
+    }, {});
+
+    const cloudProviderFieldExists = inputParametersObj["cloud_provider"];
+    const regionFieldExists = inputParametersObj["region"];
+    const customAvailabilityZoneFieldExists =
+      inputParametersObj["custom_availability_zone"];
+
+    if (cloudProviderFieldExists) {
       standardFields.push({
-        label: "Resource Type",
-        subLabel: "Select the resource",
-        name: "resourceKey",
-        type: "select",
+        label: "Cloud Provider",
+        subLabel: "Select the cloud provider",
+        name: "cloudProvider",
         required: true,
-        emptyMenuText: "No resources available",
-        menuItems: resourceMenuItems,
+        customComponent: (
+          <CloudProviderRadio
+            cloudProviders={
+              serviceOfferingsObj[values.serviceId]?.[values.servicePlanId]
+                ?.cloudProviders || []
+            }
+            name="cloudProvider"
+            formData={formData}
+            onChange={() => {
+              formData.setFieldValue("region", "");
+              formData.setFieldTouched("cloudProvider", false);
+            }}
+            disabled={formMode !== "create"}
+          />
+        ),
+        previewValue: ({ field, formData }) => {
+          const cloudProvider = formData.values[field.name];
+          return cloudProviderLogoMap[cloudProvider] || "-";
+        },
       });
-    } else {
-      setFieldValue("resourceKey", resourceMenuItems[0]?.value || "");
+    }
+
+    if (regionFieldExists) {
+      standardFields.push({
+        label: "Region",
+        subLabel: "Select the region",
+        name: "requestParams.region",
+        value: values.requestParams.region,
+        required: true,
+        type: "select",
+        emptyMenuText: !resourceId
+          ? "Select a resource"
+          : !cloudProvider
+            ? "Select a cloud provider"
+            : "No regions available",
+        menuItems: getRegionMenuItems(offering, cloudProvider),
+      });
+    }
+
+    if (customAvailabilityZoneFieldExists) {
+      standardFields.push({
+        label: "Custom Availability Zone",
+        description:
+          "Select a specific availability zone for deploying your instance",
+        name: "requestParams.custom_availability_zone",
+        value: values.requestParams.custom_availability_zone,
+        type: "select",
+        menuItems: customAvailabilityZones.map((zone) => ({
+          label: `${zone.cloudProviderName} - ${zone.code}`,
+          value: zone.code,
+        })),
+        isLoading: isFetchingCustomAvailabilityZones,
+        required: true,
+        emptyMenuText: region
+          ? "No availability zones"
+          : "Please select a region first",
+        disabled: formMode !== "create",
+      });
     }
 
     return {
@@ -216,11 +395,14 @@ const InstanceForm = ({
     };
   }, [
     formMode,
-    isFetchingServiceOfferings,
-    isFetchingSubscriptions,
     subscriptions,
-    formData.values,
     serviceOfferings,
+    formData.values,
+    isFetchingSubscriptions,
+    isFetchingServiceOfferings,
+    resourceSchemaData?.inputParameters,
+    customAvailabilityZones,
+    isFetchingCustomAvailabilityZones,
   ]);
 
   return (

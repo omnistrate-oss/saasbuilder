@@ -33,6 +33,11 @@ const FullScreenDrawer: React.FC<FullScreenDrawerProps> = ({
       open={open}
       onClose={closeDrawer}
       TransitionComponent={Transition}
+      PaperProps={{
+        sx: {
+          backgroundColor: "#FCFCFC",
+        },
+      }}
     >
       <FullScreenDrawerNavbar
         title={title}

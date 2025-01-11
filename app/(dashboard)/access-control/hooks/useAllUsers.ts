@@ -1,26 +1,20 @@
 import { useQuery } from "@tanstack/react-query";
-// import { getAllSubscriptionUsers } from "src/api/users";
+import { getAllSubscriptionUsers } from "src/api/users";
+import useEnvironmentType from "src/hooks/useEnvironmentType";
 
 const useAllUsers = (queryOptions = {}) => {
+  const environmentType = useEnvironmentType();
+
   const instancesQuery = useQuery(
-    ["users"],
+    ["users", environmentType],
     async () => {
-      // return getAllSubscriptionUsers()
-      return {
-        subscriptionUsers: [
-          {
-            subscriptionId: "sub-NC3EXppUx7",
-            userId: "user-UsPpN9SXBm",
-            name: "Unregistered user",
-            email: "nihalm+abcd@omnistrate.com",
-            roleType: "editor",
-          },
-        ],
-      };
+      return getAllSubscriptionUsers({
+        environmentType,
+      });
     },
     {
       select: (data) => {
-        return data.subscriptionUsers;
+        return data.data.subscriptionUsers;
       },
       ...queryOptions,
     }

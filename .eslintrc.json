@@ -6,14 +6,15 @@
   "ignorePatterns": ["node_modules/*"],
   "plugins": ["react", "react-hooks", "import"],
   "extends": [
-    "next/core-web-vitals"
+    "next/core-web-vitals",
+    "plugin:@typescript-eslint/recommended"
     // "eslint:recommended",
     // "plugin:react/recommended"
   ],
   "globals": {
     "React": true
   },
-
+  "parser": "@typescript-eslint/parser",
   "rules": {
     "no-use-before-define": [
       "warn",
@@ -22,6 +23,7 @@
       }
     ],
     "no-undef": "error",
+    "@typescript-eslint/no-unused-vars": "error",
     "no-unused-vars": "error",
     "react/jsx-uses-vars": "warn",
     "no-duplicate-imports": "error",
@@ -31,6 +33,9 @@
     "react/self-closing-comp": "error",
     "react/no-unescaped-entities": "error",
     "react/prop-types": "off",
-    "react/react-in-jsx-scope": "off"
+    "react/react-in-jsx-scope": "off",
+    "@typescript-eslint/no-explicit-any": "off",
+    "@typescript-eslint/ban-ts-comment": "off",
+    "@typescript-eslint/no-wrapper-object-types": "off"
   }
 }

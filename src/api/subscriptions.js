@@ -18,8 +18,10 @@ export const createSubscriptions = (payload, ignoreError = false) => {
   });
 };
 
-export const getSubscriptions = () => {
-  return axios.get(`/subscription`);
+export const getSubscriptions = (params = {}) => {
+  return axios.get(`/subscription`, {
+    params,
+  });
 };
 
 export const listSubscriptions = (query) => {

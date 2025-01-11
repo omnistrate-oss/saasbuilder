@@ -15,6 +15,7 @@ import Select from "components/FormElementsv2/Select/Select";
 import MenuItem from "components/FormElementsv2/MenuItem/MenuItem";
 import TextField from "components/FormElementsv2/TextField/TextField";
 import DataGridHeaderTitle from "components/Headers/DataGridHeaderTitle";
+import LoadingSpinnerSmall from "components/CircularProgress/CircularProgress";
 
 import useSnackbar from "src/hooks/useSnackbar";
 import { inviteSubscriptionUser } from "src/api/users";
@@ -139,8 +140,10 @@ const InviteUsersCard: React.FC<InviteUsersCardProps> = ({
               variant="contained"
               startIcon={<EmailOutlinedIcon />}
               type="submit"
+              disabled={createUserInvitesMutation.isLoading || isFetchingUsers}
             >
               Send Invites
+              {createUserInvitesMutation.isLoading && <LoadingSpinnerSmall />}
             </Button>
           </div>
 
@@ -192,28 +195,7 @@ const InviteUsersCard: React.FC<InviteUsersCardProps> = ({
                                 ),
                               }}
                             />
-                            <Select
-                              required
-                              name={`userInvite[${index}].roleType`}
-                              value={invite.roleType}
-                              onChange={handleChange}
-                              sx={{ flex: 1, mt: 0 }}
-                              displayEmpty
-                              disabled={
-                                createUserInvitesMutation.isLoading ||
-                                isFetchingUsers
-                              }
-                              renderValue={(value) => {
-                                if (value) return value;
-                                return "Role";
-                              }}
-                            >
-                              {["Editor", "Reader"].map((option) => (
-                                <MenuItem key={option} value={option}>
-                                  {option}
-                                </MenuItem>
-                              ))}
-                            </Select>
+
                             <Select
                               required
                               isLoading={isFetchingServiceOfferings}
@@ -293,6 +275,28 @@ const InviteUsersCard: React.FC<InviteUsersCardProps> = ({
                                   </i>
                                 </MenuItem>
                               )}
+                            </Select>
+                            <Select
+                              required
+                              name={`userInvite[${index}].roleType`}
+                              value={invite.roleType}
+                              onChange={handleChange}
+                              sx={{ flex: 1, mt: 0 }}
+                              displayEmpty
+                              disabled={
+                                createUserInvitesMutation.isLoading ||
+                                isFetchingUsers
+                              }
+                              renderValue={(value) => {
+                                if (value) return value;
+                                return "Role";
+                              }}
+                            >
+                              {["Editor", "Reader"].map((option) => (
+                                <MenuItem key={option} value={option}>
+                                  {option}
+                                </MenuItem>
+                              ))}
                             </Select>
                             <div
                               onClick={() => {

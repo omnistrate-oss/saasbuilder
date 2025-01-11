@@ -46,7 +46,9 @@ const AccessControlPage = () => {
     data: users = [],
     isFetching: isFetchingUsers,
     refetch: refetchUsers,
-  } = useAllUsers();
+  } = useAllUsers({
+    subscriptions,
+  });
 
   const dataTableColumns = useMemo(() => {
     return [
@@ -130,7 +132,7 @@ const AccessControlPage = () => {
         id: "action",
         header: "Action",
         cell: (data) => {
-          return data.row.original.roleType !== "root" ? (
+          return (
             <Button
               variant="outlined"
               fontColor="#B42318"
@@ -139,17 +141,24 @@ const AccessControlPage = () => {
                 setOverlayType("delete-dialog");
                 setSelectedUser(data.row.original);
               }}
-              startIcon={<DeleteIcon color="#B42318" />}
+              startIcon={
+                <DeleteIcon
+                  color="#B42318"
+                  disabled={data.row.original.roleType === "root"}
+                />
+              }
               sx={{
                 border: "none !important",
-                padding: "0px !important",
+                padding: "4px !important",
                 boxShadow: "none !important",
               }}
               disableRipple
+              disabled={data.row.original.roleType === "root"}
+              disabledMessage="Cannot delete root user"
             >
               Delete User
             </Button>
-          ) : null;
+          );
         },
         meta: {
           minWidth: 200,
@@ -162,6 +171,7 @@ const AccessControlPage = () => {
     (payload: any) => revokeSubscriptionUser(payload.subscriptionId, payload),
     {
       onSuccess: async () => {
+        // TODO: Set the Query Data Directly without Refetching
         refetchUsers();
         setIsOverlayOpen(false);
         snackbar.showSuccess("User deleted successfully");

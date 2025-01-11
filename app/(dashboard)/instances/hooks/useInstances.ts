@@ -9,7 +9,7 @@ const useInstances = (queryOptions = {}) => {
     },
     {
       select: (data) => {
-        return data.resourceInstances;
+        return data.data.resourceInstances;
       },
       ...queryOptions,
     }

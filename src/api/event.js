@@ -44,3 +44,9 @@ export function getAllEvents(
     }
   );
 }
+
+export const getAllAuditEvents = (params = {}) => {
+  return axios.get("/resource-instance/audit-events", {
+    params,
+  });
+};

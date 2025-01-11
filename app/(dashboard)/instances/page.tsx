@@ -12,6 +12,7 @@ import PageTitle from "../components/Layout/PageTitle";
 import InstancesIcon from "../components/Icons/InstancesIcon";
 import PageContainer from "../components/Layout/PageContainer";
 import InstancesTableHeader from "./components/InstancesTableHeader";
+import FullScreenDrawer from "../components/FullScreenDrawer/FullScreenDrawer";
 
 import formatDateUTC from "src/utils/formatDateUTC";
 import { CLI_MANAGED_RESOURCES } from "src/constants/resource";
@@ -29,7 +30,6 @@ import DataGridText from "components/DataGrid/DataGridText";
 import AzureLogo from "components/Logos/AzureLogo/AzureLogo";
 import GridCellExpand from "components/GridCellExpand/GridCellExpand";
 import CapacityDialog from "components/CapacityDialog/CapacityDialog";
-import SideDrawerRight from "components/SideDrawerRight/SideDrawerRight";
 import GenerateTokenDialog from "components/GenerateToken/GenerateTokenDialog";
 import GradientProgressBar from "components/GradientProgessBar/GradientProgressBar";
 import ServiceNameWithLogo from "components/ServiceNameWithLogo/ServiceNameWithLogo";
@@ -369,8 +369,17 @@ const InstancesPage = () => {
         />
       </div>
 
-      <SideDrawerRight
-        size="xlarge"
+      <FullScreenDrawer
+        title={
+          overlayType === "create-instance-form"
+            ? "Create Deployment Instance"
+            : "Modify Deployment Instance"
+        }
+        description={
+          overlayType === "create-instance-form"
+            ? "Create new Deployment Instance"
+            : "Modify Deployment Instance"
+        }
         open={
           isOverlayOpen &&
           ["create-instance-form", "modify-instance-form"].includes(overlayType)

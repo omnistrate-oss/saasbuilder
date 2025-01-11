@@ -53,6 +53,13 @@ const SubscriptionsPage = () => {
     serviceOfferingsObj,
   } = useGlobalData();
 
+  // Show only subscriptions that have service offerings associated with them
+  const existingSubscriptions = useMemo(() => {
+    return subscriptions.filter(
+      (sub) => serviceOfferingsObj[sub.serviceId]?.[sub.productTierId]
+    );
+  }, [serviceOfferingsObj, subscriptions]);
+
   const dataTableColumns = useMemo(() => {
     return [
       columnHelper.accessor("id", {
@@ -162,12 +169,10 @@ const SubscriptionsPage = () => {
   });
 
   const filteredSubscriptions = useMemo(() => {
-    return subscriptions.filter((subscription) => {
-      return subscription.serviceName
-        .toLowerCase()
-        .includes(searchText.toLowerCase());
+    return existingSubscriptions.filter((sub) => {
+      return sub.serviceName.toLowerCase().includes(searchText.toLowerCase());
     });
-  }, [searchText, subscriptions]);
+  }, [searchText, existingSubscriptions]);
 
   return (
     <div>
@@ -199,7 +204,7 @@ const SubscriptionsPage = () => {
                 setOverlayType("unsubscribe-dialog");
               },
               isUnsubscribing: unSubscribeMutation.isLoading,
-              subscriptions,
+              count: existingSubscriptions?.length,
               isFetchingSubscriptions,
               refetchSubscriptions,
               selectedSubscription,
@@ -213,7 +218,6 @@ const SubscriptionsPage = () => {
         </div>
 
         <FullScreenDrawer
-          // size="xlarge"
           open={
             isOverlayOpen &&
             (overlayType === "manage-subscriptions" ||

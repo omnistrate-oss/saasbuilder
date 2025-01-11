@@ -64,8 +64,6 @@ const ProfileDropdown = () => {
         onClose={handleMenuClose}
         sx={{
           boxShadow: "0px 4px 6px -2px #10182808 0px 12px 16px -4px #10182814",
-          minWidth: "250px",
-          maxWidth: "350px",
           ".MuiMenu-list": {
             borderRadius: "8px",
             border: "1px solid #EAECF0",
@@ -80,6 +78,7 @@ const ProfileDropdown = () => {
             borderBottom: "1px solid #EAECF0",
             cursor: "auto",
             width: "100%",
+            minWidth: "250px",
           }}
           disableRipple
         >
@@ -88,7 +87,6 @@ const ProfileDropdown = () => {
             justifyContent="flex-start"
             alignItems="center"
             gap="12px"
-            width={"100%"}
           >
             <Avatar
               src={profile_icon}

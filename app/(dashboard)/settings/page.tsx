@@ -39,6 +39,7 @@ const SettingsPage = () => {
           value={currentTab}
           sx={{
             mb: "24px",
+            borderBottom: "1px solid #E9EAEB",
           }}
         >
           <Tab

@@ -10,6 +10,7 @@ import PageContainer from "../components/Layout/PageContainer";
 import CustomNetworkForm from "./components/CustomNetworkForm";
 import CustomNetworksIcon from "../components/Icons/CustomNetworksIcon";
 import CustomNetworksTableHeader from "./components/CustomNetworksTableHeader";
+import FullScreenDrawer from "../components/FullScreenDrawer/FullScreenDrawer";
 import PeeringInfoDialog, {
   ListItemProps,
 } from "./components/PeeringInfoDialog";
@@ -20,14 +21,13 @@ import AwsLogo from "components/Logos/AwsLogo/AwsLogo";
 import DataTable from "components/DataTable/DataTable";
 import DataGridText from "components/DataGrid/DataGridText";
 import GridCellExpand from "components/GridCellExpand/GridCellExpand";
-import SideDrawerRight from "components/SideDrawerRight/SideDrawerRight";
 import TextConfirmationDialog from "components/TextConfirmationDialog/TextConfirmationDialog";
 
 import useSnackbar from "src/hooks/useSnackbar";
 import { CustomNetwork } from "src/types/customNetwork";
 import { deleteCustomNetwork } from "src/api/customNetworks";
-import { cloudProviderLogoMap } from "src/constants/cloudProviders";
 import useRegions from "./hooks/useRegions";
+import { cloudProviderLogoMap } from "src/constants/cloudProviders";
 
 const columnHelper = createColumnHelper<CustomNetwork>();
 type Overlay = "peering-info-dialog" | "custom-network-form" | "delete-dialog";
@@ -167,6 +167,7 @@ const CustomNetworksPage = () => {
           noRowsText="No custom networks"
           HeaderComponent={CustomNetworksTableHeader}
           headerProps={{
+            count: customNetworks.length,
             searchText,
             setSearchText,
             onPeeringInfoClick: () => {
@@ -192,8 +193,9 @@ const CustomNetworksPage = () => {
         />
       </div>
 
-      <SideDrawerRight
-        size="xlarge"
+      <FullScreenDrawer
+        title="Create Custom Network"
+        description="Create a new custom network with the specified details"
         open={isOverlayOpen && overlayType === "custom-network-form"}
         closeDrawer={() => setIsOverlayOpen(false)}
         RenderUI={

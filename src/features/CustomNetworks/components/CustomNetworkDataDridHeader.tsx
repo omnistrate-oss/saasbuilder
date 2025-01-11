@@ -15,7 +15,6 @@ type CustomNetworkDataGridHeaderProps = {
   searchText: string;
   setSearchText: SetState<string>;
   openDialog: () => void;
-  /*eslint-disable-next-line no-unused-vars*/
   openSideDrawer: (drawerType: FormMode) => void;
   refetchCustomNetworks: () => Promise<
     QueryObserverResult<CustomNetwork[], unknown>

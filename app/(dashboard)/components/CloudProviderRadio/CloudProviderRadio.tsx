@@ -4,7 +4,12 @@ import clsx from "clsx";
 import { Text } from "components/Typography/Typography";
 import { cloudProviderLabels } from "src/constants/cloudProviders";
 
-const CloudProviderCard = ({ cloudProvider, isSelected, onClick }) => {
+const CloudProviderCard = ({
+  cloudProvider,
+  isSelected,
+  onClick,
+  disabled, // TODO: Add Fucntionality
+}) => {
   return (
     <div
       className={clsx(
@@ -20,13 +25,28 @@ const CloudProviderCard = ({ cloudProvider, isSelected, onClick }) => {
   );
 };
 
-const CloudProviderRadio = ({ cloudProviders, formData, name, onChange }) => {
+type CloudProviderRadioProps = {
+  cloudProviders: string[];
+  formData: any;
+  name: string;
+  onChange?: () => void;
+  disabled?: boolean;
+};
+
+const CloudProviderRadio: React.FC<CloudProviderRadioProps> = ({
+  cloudProviders,
+  formData,
+  name,
+  onChange = () => {},
+  disabled,
+}) => {
   return (
     <div className={clsx("grid gap-8", `grid-cols-${cloudProviders.length}`)}>
       {cloudProviders.map((cloudProvider, index) => {
         return (
           <CloudProviderCard
             key={index}
+            disabled={disabled}
             cloudProvider={cloudProvider}
             isSelected={
               formData.values[name]?.toLowerCase() ===

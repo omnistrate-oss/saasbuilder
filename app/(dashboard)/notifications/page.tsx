@@ -8,24 +8,47 @@ import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
 
 import PageTitle from "../components/Layout/PageTitle";
+import useAuditLogs from "../audit-logs/hooks/useAuditLogs";
 import PageContainer from "../components/Layout/PageContainer";
 import NotificationsIcon from "../components/Icons/NotificationsIcon";
 import NotificationsTableHeader from "./components/NotificationsTableHeader";
 
-import DataTable from "components/DataTable/DataTable";
+import DataGridText from "components/DataGrid/DataGridText";
 import EventTypeChip from "components/EventsTable/EventTypeChip";
 import EventDetailsView from "components/EventsTable/EventDetailsView";
 import EventMessageChip from "components/EventsTable/EventMessageChip";
 import { initialRangeState } from "components/DateRangePicker/DateRangePicker";
-// import ServiceNameWithLogo from "components/ServiceNameWithLogo/ServiceNameWithLogo";
+import ServiceNameWithLogo from "components/ServiceNameWithLogo/ServiceNameWithLogo";
+import CursorPaginatedDataTable from "components/DataTable/CursorPaginatedDataTable";
 
 import formatDateUTC from "src/utils/formatDateUTC";
+import { useGlobalData } from "src/providers/GlobalDataProvider";
+import { getAccessControlRoute } from "src/utils/route/access/accessRoute";
 
 const columnHelper = createColumnHelper<any>(); // TODO: Add type
 
 const NotificationsPage = () => {
+  const [pageIndex, setPageIndex] = useState(0);
   const [selectedDateRange, setSelectedDateRange] =
     useState<Range>(initialRangeState);
+  const { subscriptionsObj, isFetchingSubscriptions } = useGlobalData();
+
+  const {
+    data: notifications,
+    refetch: refetchNotifications,
+    isFetching: isFetchingNotifications,
+    hasNextPage,
+    fetchNextPage,
+    isFetchingNextPage,
+  } = useAuditLogs({
+    startDate: selectedDateRange.startDate
+      ? new Date(selectedDateRange.startDate).toISOString()
+      : undefined,
+    endDate: selectedDateRange.endDate
+      ? new Date(selectedDateRange.endDate).toISOString()
+      : undefined,
+    eventSourceTypes: ["Infra", "Maintenance"],
+  });
 
   const dataTableColumns = useMemo(() => {
     return [
@@ -52,42 +75,50 @@ const NotificationsPage = () => {
           );
         },
         meta: {
-          width: 75,
+          width: 60,
         },
       }),
       columnHelper.accessor("resourceInstanceId", {
         id: "resourceInstanceId",
         header: "Deployment ID",
+        meta: {
+          minWidth: 200,
+        },
       }),
-      // TODO: Check this, we're not getting this data
-      // columnHelper.accessor("serviceName", {
-      //   id: "serviceName",
-      //   header: "Service Name",
-      //   cell: (data) => {
-      //     const { serviceName, serviceLogoURL } = data.row.original;
-      //     return (
-      //       <ServiceNameWithLogo
-      //         serviceName={serviceName}
-      //         serviceLogoURL={serviceLogoURL}
-      //       />
-      //     );
-      //   },
-      //   meta: {
-      //     minWidth: 230,
-      //   },
-      // }),
+      columnHelper.accessor(
+        (row) => {
+          const subscription = subscriptionsObj[row.subscriptionId];
+          return subscription?.serviceName || "-";
+        },
+        {
+          id: "serviceName",
+          header: "Service Name",
+          cell: (data) => {
+            const { serviceLogoURL, serviceName } =
+              subscriptionsObj[data.row.original.subscriptionId] || {};
+            if (!serviceName) return "-";
+
+            return (
+              <ServiceNameWithLogo
+                serviceName={serviceName}
+                serviceLogoURL={serviceLogoURL}
+              />
+            );
+          },
+        }
+      ),
       columnHelper.accessor("resourceName", {
         id: "resourceName",
-        header: "Resource Name",
-        meta: {
-          flex: 0.7,
-        },
+        header: "Resource Type",
       }),
       columnHelper.accessor((row) => formatDateUTC(row.time), {
         id: "time",
         header: "Time",
         cell: (data) =>
           data.row.original.time ? formatDateUTC(data.row.original.time) : "-",
+        meta: {
+          minWidth: 200,
+        },
       }),
       columnHelper.accessor("eventSource", {
         id: "type",
@@ -113,9 +144,59 @@ const NotificationsPage = () => {
             "-"
           );
         },
+        meta: {
+          flex: 2,
+        },
       }),
+      columnHelper.accessor("userName", {
+        id: "userName",
+        header: "User",
+        cell: (data) => {
+          const userId = data.row.original.userId;
+          const userName = data.row.original.userName;
+          const orgName = data.row.original.orgName;
+
+          const isUserOmnistrateSystem =
+            userName === "System" && orgName === "System";
+
+          let pageLink = "",
+            props = {};
+          if (!isUserOmnistrateSystem && userId) {
+            pageLink = getAccessControlRoute(userId);
+            props = {
+              color: "primary",
+              linkProps: {
+                href: pageLink,
+                target: "_blank",
+              },
+            };
+          }
+
+          return <DataGridText {...props}>{userName || "-"}</DataGridText>;
+        },
+      }),
+      columnHelper.accessor(
+        (row) => {
+          return subscriptionsObj[row.subscriptionId]?.productTierName || "-";
+        },
+        {
+          id: "servicePlanName",
+          header: "Subscription Plan",
+        }
+      ),
+      columnHelper.accessor(
+        (row) => {
+          return (
+            subscriptionsObj[row.subscriptionId]?.subscriptionOwnerName || "-"
+          );
+        },
+        {
+          id: "subscriptionOwnerName",
+          header: "Subscription Owner",
+        }
+      ),
     ];
-  }, []);
+  }, [subscriptionsObj]);
 
   return (
     <PageContainer>
@@ -124,20 +205,35 @@ const NotificationsPage = () => {
       </PageTitle>
 
       <div>
-        <DataTable
+        <CursorPaginatedDataTable
+          pageIndex={pageIndex}
+          setPageIndex={setPageIndex}
           columns={dataTableColumns}
-          rows={[]}
-          noRowsText="No notifications"
-          HeaderComponent={NotificationsTableHeader}
-          headerProps={{
-            selectedDateRange,
-            setSelectedDateRange,
-          }}
-          isLoading={false}
+          data={notifications}
+          renderDetailsComponent={EventDetailsView}
+          noRowsText="No events"
           getRowCanExpand={(rowData) =>
             Boolean(rowData.original.workflowFailures?.length > 0)
           }
-          renderDetailsComponent={EventDetailsView}
+          HeaderComponent={NotificationsTableHeader}
+          headerProps={{
+            count: notifications?.pages.reduce(
+              (acc, page) => acc + page.events?.length || 0,
+              0
+            ),
+            refetchNotifications: () => {
+              setPageIndex(0);
+              refetchNotifications();
+            },
+            selectedDateRange,
+            setSelectedDateRange,
+            isFetchingNotifications,
+          }}
+          isLoading={isFetchingNotifications || isFetchingSubscriptions}
+          hasNextPage={hasNextPage}
+          fetchNextPage={fetchNextPage}
+          isFetchingNextPage={isFetchingNextPage}
+          pageSize={10}
         />
       </div>
     </PageContainer>

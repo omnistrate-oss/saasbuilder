@@ -1,13 +1,11 @@
-import React, { FC, ReactNode, useMemo, useState } from "react";
+import React, { FC, ReactNode, useState } from "react";
 import Collapse from "@mui/material/Collapse";
-import IconButton from "@mui/material/IconButton";
 import { Box, Stack } from "@mui/material";
 import {
   ColumnDef,
   ExpandedState,
   Row,
   RowData,
-  SortDirection,
   flexRender,
   getCoreRowModel,
   getExpandedRowModel,
@@ -25,68 +23,47 @@ import {
   TableRow,
 } from "./components/styled";
 import Pagination from "./components/Pagination";
-import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
-import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import LoadingSpinner from "../LoadingSpinner/LoadingSpinner";
-import CustomCheckbox from "../Checkbox/Checkbox";
+import { SetState } from "src/types/common/reactGenerics";
 
-const sortIcon = {
-  asc: ArrowUpwardIcon,
-  desc: ArrowDownwardIcon,
+type InfiniteData<TData> = {
+  pages: Array<{
+    events: TData[];
+    eventsSummary?: {
+      eventsSummary: Record<string, number>;
+    };
+  }>;
+  pageParams: Array<any>;
 };
 
-type SortIconProps = {
-  sortDirection: SortDirection | false;
-};
-
-const SortIcon: React.FC<SortIconProps> = (props) => {
-  const { sortDirection } = props;
-
-  let Icon = ArrowUpwardIcon;
-
-  if (sortDirection) {
-    Icon = sortIcon[sortDirection];
-  }
-
-  //if sort direction is available, then icon needs to be shown with darker color
-  return (
-    <IconButton size="small">
-      <Icon
-        sx={{
-          fontSize: "18px",
-          color: sortDirection ? "rgba(0,0,0,0.54)" : "rgba(0,0,0,0.27)",
-        }}
-      />
-    </IconButton>
-  );
-};
-
-type SelectionMode = "single" | "multiple" | "none";
-
-type DataTableProps<TData> = {
-  rows: TData[];
-  columns: ColumnDef<TData>[];
+type CursorPaginatedDataTableProps<TData> = {
+  pageIndex: number;
+  setPageIndex: SetState<number>;
+  columns: ColumnDef<TData, any>[];
+  data?: InfiniteData<TData>;
   renderDetailsComponent?: (props: { rowData: TData }) => ReactNode;
   noRowsText: string;
   isLoading?: boolean;
   getRowCanExpand?: (rowData: Row<TData>) => boolean;
-  getSubRows?: (orginalRow: TData) => TData[];
+  getSubRows?: (originalRow: TData) => TData[];
   HeaderComponent: FC;
   headerProps: any;
-
-  // Row Selection Props
-  selectionMode?: SelectionMode;
-  selectedRows?: string[];
-  onRowSelectionChange?: (selectedRows: string[]) => void;
-  rowId?: keyof TData; // Property to use as row identifier
+  hasNextPage?: boolean;
+  fetchNextPage?: () => void;
+  isFetchingNextPage?: boolean;
+  pageSize?: number;
 };
 
 const DEFAULT_COLUMN_MIN_WIDTH = 150;
 
-const DataTable = <TData,>(props: DataTableProps<TData>): ReactNode => {
+const CursorPaginatedDataTable = <TData,>(
+  props: CursorPaginatedDataTableProps<TData>
+): ReactNode => {
   const {
+    pageIndex,
+    setPageIndex,
     columns,
-    rows,
+    data,
     renderDetailsComponent,
     noRowsText,
     isLoading,
@@ -94,68 +71,38 @@ const DataTable = <TData,>(props: DataTableProps<TData>): ReactNode => {
     HeaderComponent,
     headerProps = {},
     getSubRows,
-    selectedRows = [],
-    onRowSelectionChange,
-    selectionMode = "none",
-    rowId = "id" as keyof TData,
+    hasNextPage,
+    fetchNextPage,
+    isFetchingNextPage,
+    pageSize = 10,
   } = props;
 
   const [expanded, setExpanded] = useState<ExpandedState>({});
 
-  const allColumns = useMemo(() => {
-    if (selectionMode === "none") return columns;
+  // Flatten all events from all pages into a single array
+  const rows =
+    data?.pages.reduce<TData[]>((acc, page) => {
+      return [...acc, ...(page.events || [])];
+    }, []) || [];
 
-    const handleSelectionChange = (rowIdValue: string) => {
-      if (!onRowSelectionChange) return;
-
-      if (selectionMode === "single") {
-        if (selectedRows.includes(rowIdValue)) {
-          onRowSelectionChange([]);
-        } else {
-          onRowSelectionChange([rowIdValue]);
-        }
-      } else if (selectionMode === "multiple") {
-        if (selectedRows.includes(rowIdValue)) {
-          onRowSelectionChange(selectedRows.filter((id) => id !== rowIdValue));
-        } else {
-          onRowSelectionChange([...selectedRows, rowIdValue]);
-        }
-      }
-    };
-
-    const selectionColumn: ColumnDef<TData> = {
-      id: "selection",
-      header: "",
-      cell: ({ row }) => (
-        <CustomCheckbox
-          // @ts-ignore
-          checked={selectedRows.includes(String(row.original[rowId]))}
-          onChange={() => handleSelectionChange(String(row.original[rowId]))}
-        />
-      ),
-      meta: {
-        width: 50,
-      },
-    };
-
-    return [selectionColumn, ...columns];
-  }, [columns, selectionMode, onRowSelectionChange, selectedRows, rowId]);
+  const currentPageData = rows.slice(
+    pageIndex * pageSize,
+    (pageIndex + 1) * pageSize
+  );
 
   const table = useReactTable({
-    data: rows,
+    data: currentPageData,
     getCoreRowModel: getCoreRowModel(),
     getExpandedRowModel: getExpandedRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
     getSortedRowModel: getSortedRowModel(),
-    columns: allColumns,
-    initialState: {
-      pagination: {
-        pageIndex: 0,
-        pageSize: 10,
-      },
-    },
+    columns: columns,
     state: {
-      expanded: expanded,
+      expanded,
+      pagination: {
+        pageIndex,
+        pageSize,
+      },
     },
     onExpandedChange: setExpanded,
     getRowCanExpand: getRowCanExpand,
@@ -163,6 +110,8 @@ const DataTable = <TData,>(props: DataTableProps<TData>): ReactNode => {
       minSize: 150,
     },
     getSubRows: getSubRows,
+    manualPagination: true,
+    pageCount: Math.ceil(rows.length / pageSize),
     paginateExpandedRows: false,
   });
 
@@ -173,6 +122,7 @@ const DataTable = <TData,>(props: DataTableProps<TData>): ReactNode => {
       acc = curr.headers.length;
       return acc;
     }
+    return acc;
   }, 0);
 
   //returns the flex values set on the meta in coldef.
@@ -251,16 +201,9 @@ const DataTable = <TData,>(props: DataTableProps<TData>): ReactNode => {
                       <TableCell
                         align={columnAlignment}
                         key={header.id}
-                        onClick={
-                          header.column.id === "selection"
-                            ? undefined
-                            : header.column.getToggleSortingHandler()
-                        }
+                        onClick={header.column.getToggleSortingHandler()}
                         sx={{
-                          cursor:
-                            header.column.id === "selection"
-                              ? "default"
-                              : "pointer",
+                          cursor: "pointer",
                           "& .MuiIconButton-root": {
                             display: sortDirection ? "inline-flex" : "none",
                           },
@@ -281,10 +224,6 @@ const DataTable = <TData,>(props: DataTableProps<TData>): ReactNode => {
                             header.column.columnDef.header,
                             header.getContext()
                           )}
-                          {header.column.getCanSort() &&
-                            header.column.id !== "selection" && (
-                              <SortIcon sortDirection={sortDirection} />
-                            )}
                         </Stack>
                       </TableCell>
                     );
@@ -359,7 +298,7 @@ const DataTable = <TData,>(props: DataTableProps<TData>): ReactNode => {
           <Stack
             justifyContent="center"
             alignItems="center"
-            fontSize="14px "
+            fontSize="14px"
             flexGrow={1}
             height="480px"
           >
@@ -367,20 +306,40 @@ const DataTable = <TData,>(props: DataTableProps<TData>): ReactNode => {
           </Stack>
         )}
         <Pagination
-          isPreviousDisabled={!table.getCanPreviousPage()}
-          isNextDisabled={!table.getCanNextPage()}
-          handlePrevious={() => table.previousPage()}
-          handleNext={() => table.nextPage()}
+          isPreviousDisabled={!table.getCanPreviousPage() || isLoading}
+          isNextDisabled={
+            (!table.getCanNextPage() && !hasNextPage) || isLoading
+          }
+          handlePrevious={() => {
+            setPageIndex(Math.max(0, pageIndex - 1));
+          }}
+          handleNext={async () => {
+            const nextPageIndex = pageIndex + 1;
+            const totalLoadedItems = rows.length;
+            const nextPageStartIndex = nextPageIndex * pageSize;
+
+            // If we're about to show items we haven't loaded yet and there are more pages
+            if (
+              nextPageStartIndex >= totalLoadedItems &&
+              hasNextPage &&
+              !isFetchingNextPage
+            ) {
+              await fetchNextPage?.();
+            }
+
+            setPageIndex(nextPageIndex);
+          }}
           pageCount={table.getPageCount()}
-          pageIndex={table.getState().pagination.pageIndex}
-          setPageIndex={table.setPageIndex}
+          pageIndex={pageIndex}
+          setPageIndex={setPageIndex}
+          hidePageNumbers
         />
       </Stack>
     </TableContainer>
   );
 };
 
-export default DataTable;
+export default CursorPaginatedDataTable;
 
 interface ColumnFlex {
   flex?: number;

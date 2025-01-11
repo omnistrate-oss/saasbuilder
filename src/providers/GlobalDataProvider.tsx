@@ -56,6 +56,24 @@ const GlobalDataProvider = ({ children }: { children: React.ReactNode }) => {
     }, {});
   }, [serviceOfferings]);
 
+  const servicesObj = useMemo(() => {
+    const servicesSet = new Set();
+    return serviceOfferings.reduce((acc: any, offering: any) => {
+      if (!servicesSet.has(offering.serviceId)) {
+        servicesSet.add(offering.serviceId);
+        acc[offering.serviceId] = offering;
+      }
+      return acc;
+    }, {});
+  }, [serviceOfferings]);
+
+  const subscriptionsObj = useMemo(() => {
+    return subscriptions.reduce((acc: any, subscription: any) => {
+      acc[subscription.id] = subscription;
+      return acc;
+    }, {});
+  }, [subscriptions]);
+
   if (!isFetchingServiceOfferings && serviceOfferings.length === 0) {
     return <NoServiceFoundUI text="No Service Offerings Found" />;
   }
@@ -79,6 +97,8 @@ const GlobalDataProvider = ({ children }: { children: React.ReactNode }) => {
         refetchServiceOfferings,
 
         serviceOfferingsObj,
+        subscriptionsObj,
+        servicesObj,
       }}
     >
       {children}

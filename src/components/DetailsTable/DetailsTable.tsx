@@ -30,7 +30,7 @@ const DetailsTable: React.FC<DetailsTableProps> = ({ columns }) => {
       {columns.map((column, index) => (
         <div
           key={index}
-          className="flex items-center px-6"
+          className="flex items-center px-6 bg-[#FFFFFF]"
           style={{ height: "48px" }}
         >
           {typeof column.content === "string" ? (

@@ -38,6 +38,6 @@ export const getBillingDetails = (userId) => {
   return axios.get(`/resource-instance/user/${userId}/billing-details`);
 };
 
-export const getAllSubscriptionUsers = () => {
-  return axios.get(`/resource-instance/subscription-users`);
+export const getAllSubscriptionUsers = (params = {}) => {
+  return axios.get(`/resource-instance/subscription-users`, { params });
 };

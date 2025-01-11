@@ -29,9 +29,7 @@ export type Field = {
     formData: any;
   }>;
   customComponent?: React.ReactNode;
-  // eslint-disable-next-line no-unused-vars
   onChange?: (e: any) => void;
-  // eslint-disable-next-line no-unused-vars
   onBlur?: (e: any) => void;
 };
 
