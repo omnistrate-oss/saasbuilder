@@ -17,13 +17,13 @@ import PageContainer from "../components/Layout/PageContainer";
 import SubscriptionDetails from "./components/SubscriptionDetails";
 import ManageSubscriptionsForm from "./components/ManageSubscriptionsForm";
 import SubscriptionsTableHeader from "./components/SubscriptionsTableHeader";
+import FullScreenDrawer from "../components/FullScreenDrawer/FullScreenDrawer";
 import AccountManagementHeader from "../components/AccountManagement/AccountManagementHeader";
 
 import DataTable from "components/DataTable/DataTable";
 import StatusChip from "components/StatusChip/StatusChip";
 import DataGridText from "components/DataGrid/DataGridText";
 import GridCellExpand from "components/GridCellExpand/GridCellExpand";
-import SideDrawerRight from "components/SideDrawerRight/SideDrawerRight";
 import ServiceNameWithLogo from "components/ServiceNameWithLogo/ServiceNameWithLogo";
 import TextConfirmationDialog from "components/TextConfirmationDialog/TextConfirmationDialog";
 import SubscriptionTypeDirectIcon from "components/Icons/SubscriptionType/SubscriptionTypeDirectIcon";
@@ -161,6 +161,14 @@ const SubscriptionsPage = () => {
     },
   });
 
+  const filteredSubscriptions = useMemo(() => {
+    return subscriptions.filter((subscription) => {
+      return subscription.serviceName
+        .toLowerCase()
+        .includes(searchText.toLowerCase());
+    });
+  }, [searchText, subscriptions]);
+
   return (
     <div>
       <AccountManagementHeader
@@ -175,7 +183,7 @@ const SubscriptionsPage = () => {
         <div>
           <DataTable
             columns={dataTableColumns}
-            rows={subscriptions}
+            rows={filteredSubscriptions}
             noRowsText="No subscriptions"
             HeaderComponent={SubscriptionsTableHeader}
             headerProps={{
@@ -204,14 +212,24 @@ const SubscriptionsPage = () => {
           />
         </div>
 
-        <SideDrawerRight
-          size="xlarge"
+        <FullScreenDrawer
+          // size="xlarge"
           open={
             isOverlayOpen &&
             (overlayType === "manage-subscriptions" ||
               overlayType === "subscription-details")
           }
           closeDrawer={() => setIsOverlayOpen(false)}
+          title={
+            overlayType === "manage-subscriptions"
+              ? "Manage Subscriptions"
+              : "Subscription Details"
+          }
+          description={
+            overlayType === "manage-subscriptions"
+              ? "Add or remove subscriptions"
+              : "View subscription details"
+          }
           RenderUI={
             overlayType === "manage-subscriptions" ? (
               <ManageSubscriptionsForm />

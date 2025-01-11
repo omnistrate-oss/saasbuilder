@@ -31,7 +31,7 @@ const SubscriptionsTableHeader = ({
 
       <div className="flex items-center gap-4 flex-shrink-0">
         <SearchInput
-          placeholder="Search by Service"
+          placeholder="Search by Service Name"
           searchText={searchText}
           setSearchText={setSearchText}
           width="250px"
@@ -67,6 +67,7 @@ const SubscriptionsTableHeader = ({
           onClick={onManageSubscriptions}
           startIcon={<AddIcon />}
           disabled={isUnsubscribing || isFetchingSubscriptions}
+          disableRipple
         >
           Manage Subscriptions
         </Button>

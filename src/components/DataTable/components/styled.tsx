@@ -29,8 +29,8 @@ export const Table = styled(MuiTable)({});
 export const TableContainer = styled(MuiTableContainer)({
   borderRadius: "12px",
   background: "white",
-  boxShadow: "rgb(16 24 40 / 10%) 0px 1px 3px, rgb(16 24 40 / 6%) 0px 1px 2px",
-  border: "1px solid rgb(234, 236, 240)",
+  boxShadow: "0px 1px 2px 0px #1018280D",
+  border: "1px solid #E4E7EC",
 });
 
 export const TableRow = styled(MuiTableRow)({

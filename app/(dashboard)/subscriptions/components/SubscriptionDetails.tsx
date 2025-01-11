@@ -71,7 +71,10 @@ const SubscriptionDetails = ({ subscription, serviceOfferingsObj }) => {
   return (
     <>
       <DetailsTable columns={columns} />
-      <CardWithTitle title={subscription.productTierName} className="mt-6">
+      <CardWithTitle
+        title={`Subscription ID - ${subscription.id}`}
+        className="mt-6"
+      >
         <ServicePlanDetails
           serviceOffering={selectedPlan}
           subscription={subscription}

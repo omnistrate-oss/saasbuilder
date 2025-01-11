@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import { useFormik } from "formik";
 import { useMutation } from "@tanstack/react-query";
 
@@ -22,6 +21,7 @@ import {
   BillingAddressValidationSchema,
 } from "./Common";
 import { countriesAlpha3 } from "../constants";
+import { useMemo } from "react";
 
 type BillingAddressFormProps = {
   userData: any;
@@ -35,7 +35,6 @@ const BillingAddressForm: React.FC<BillingAddressFormProps> = ({
   refetchUserData,
 }) => {
   const snackbar = useSnackbar();
-  const [currentCountry, setCurrentCountry] = useState<any>(null);
 
   const updateProfileMutation = useMutation(
     (data) => updateProfile(userData?.id, data),
@@ -78,6 +77,23 @@ const BillingAddressForm: React.FC<BillingAddressFormProps> = ({
   });
 
   const { values, handleChange, handleBlur, touched, errors } = formData;
+  const isDisabled =
+    updateProfileMutation.isLoading ||
+    isLoadingUserData ||
+    userData?.roleType !== "root";
+
+  const currentCountry = useMemo(() => {
+    const alpha3Code = values.address.country;
+
+    if (alpha3Code) {
+      const match = countriesAlpha3.find(
+        (country) =>
+          country["alpha-3"].toLowerCase() === alpha3Code.toLowerCase()
+      );
+      return match;
+    }
+    return null;
+  }, [values.address.country]);
 
   return (
     <div>
@@ -101,7 +117,7 @@ const BillingAddressForm: React.FC<BillingAddressFormProps> = ({
               value={values.address.addressLine1}
               onChange={handleChange}
               onBlur={handleBlur}
-              disabled={isLoadingUserData}
+              disabled={isDisabled}
               sx={{ mt: 0 }}
             />
             <FieldError>
@@ -119,7 +135,7 @@ const BillingAddressForm: React.FC<BillingAddressFormProps> = ({
               value={values.address.addressLine2}
               onChange={handleChange}
               onBlur={handleBlur}
-              disabled={isLoadingUserData}
+              disabled={isDisabled}
               sx={{ mt: 0 }}
             />
             <FieldError>
@@ -137,7 +153,7 @@ const BillingAddressForm: React.FC<BillingAddressFormProps> = ({
               value={values.address.city}
               onChange={handleChange}
               onBlur={handleBlur}
-              disabled={isLoadingUserData}
+              disabled={isDisabled}
               sx={{ mt: 0 }}
             />
             <FieldError>
@@ -155,7 +171,7 @@ const BillingAddressForm: React.FC<BillingAddressFormProps> = ({
               value={values.address.state}
               onChange={handleChange}
               onBlur={handleBlur}
-              disabled={isLoadingUserData}
+              disabled={isDisabled}
               sx={{ mt: 0 }}
             />
             <FieldError>
@@ -175,7 +191,6 @@ const BillingAddressForm: React.FC<BillingAddressFormProps> = ({
                 return "Select a country";
               }}
               onChange={(e, newValue) => {
-                setCurrentCountry(newValue);
                 formData.setFieldValue(
                   "address.country",
                   newValue?.["alpha-3"]?.toLowerCase()
@@ -184,6 +199,7 @@ const BillingAddressForm: React.FC<BillingAddressFormProps> = ({
               onBlur={() => {
                 formData.setFieldTouched("address.country", true);
               }}
+              disabled={isDisabled}
             />
             <FieldError>
               {touched.address?.country && errors.address?.country}
@@ -200,7 +216,7 @@ const BillingAddressForm: React.FC<BillingAddressFormProps> = ({
               value={values.address.zip}
               onChange={handleChange}
               onBlur={handleBlur}
-              disabled={isLoadingUserData}
+              disabled={isDisabled}
               sx={{ mt: 0 }}
             />
             <FieldError>
@@ -214,16 +230,15 @@ const BillingAddressForm: React.FC<BillingAddressFormProps> = ({
             variant="outlined"
             onClick={() => {
               formData.resetForm();
-              setCurrentCountry(null);
             }}
-            disabled={updateProfileMutation.isLoading}
+            disabled={updateProfileMutation.isLoading || isLoadingUserData}
           >
             Cancel
           </Button>
           <Button
             type="submit"
             variant="contained"
-            disabled={updateProfileMutation.isLoading}
+            disabled={updateProfileMutation.isLoading || isLoadingUserData}
           >
             Save
             {updateProfileMutation.isLoading && <LoadingSpinnerSmall />}
