@@ -7,7 +7,6 @@ import {
   styled,
   Typography,
 } from "@mui/material";
-import Flag from "../Icons/Flag/Flag";
 import CloseIcon from "@mui/icons-material/Close";
 import StyledButton from "../Button/Button";
 import _ from "lodash";
@@ -68,9 +67,7 @@ const Header = ({ handleClose }: HeaderProps) => {
           alignItems: "center",
           justifyContent: "center",
         }}
-      >
-        <Flag color="#414651" />
-      </Box>
+      />
 
       <IconButton onClick={handleClose}>
         <CloseIcon />
