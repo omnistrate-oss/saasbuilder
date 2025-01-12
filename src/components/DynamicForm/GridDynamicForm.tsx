@@ -38,7 +38,7 @@ const GridDynamicForm: React.FC<GridDynamicFormProps> = ({
     // @ts-ignore
     <Form
       data-testid={formConfiguration.dataTestId || "dynamic-form"}
-      className="flex gap-8"
+      className="flex items-start gap-8"
       onSubmit={formData.handleSubmit}
     >
       <div style={{ flex: 5 }}>
@@ -63,6 +63,8 @@ const GridDynamicForm: React.FC<GridDynamicFormProps> = ({
 
       <div
         style={{
+          position: "sticky",
+          top: "24px",
           flex: 2,
           minHeight: "660px",
           border: "1px solid #127AE8",

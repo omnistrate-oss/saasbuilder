@@ -15,6 +15,7 @@ const ContainerCard = styled(Box)({
   boxShadow: "box-shadow: 0px 1px 2px 0px ",
   padding: "24px",
   marginTop: "32px",
+  backgroundColor: "#FFFFFF",
 });
 
 type ClusterLocationsProps = {

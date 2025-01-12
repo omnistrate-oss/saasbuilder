@@ -22,6 +22,9 @@ export type Field = {
   // Text Field
   placeholder?: string;
 
+  // Password Field
+  showPasswordGenerator?: boolean;
+
   // Generic
   value?: any;
   previewValue?: React.FC<{

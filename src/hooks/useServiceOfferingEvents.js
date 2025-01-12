@@ -9,7 +9,7 @@ import {
 } from "../slices/eventsSlice";
 import { useDispatch } from "react-redux";
 import loadingStatuses from "../utils/constants/loadingStatuses";
-import {  getAllEvents } from "../api/event";
+import { getAllEvents } from "../api/event";
 import { useEffect } from "react";
 
 function useServiceOfferingEvents(
@@ -62,7 +62,7 @@ function useServiceOfferingEvents(
           environmentURLKey: serviceEnvironmentURLKey,
         })
       );
-      //console.log("Events Service id and env set");
+
       dispatch(
         setEventsLoadingStatus({
           serviceId: serviceId,

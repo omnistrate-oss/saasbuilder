@@ -1,5 +1,12 @@
 import { Field } from "./types";
-import { PasswordInput, SelectField, TextInput } from "./Common";
+import {
+  MultiSelectAutocomplete,
+  PasswordInput,
+  RadioField,
+  SelectField,
+  SingleSelectAutocomplete,
+  TextInput,
+} from "./Common";
 
 import FieldLabel from "../FormElements/FieldLabel/FieldLabel";
 import FieldError from "../FormElementsv2/FieldError/FieldError";
@@ -24,12 +31,23 @@ const GridDynamicField: React.FC<GridDynamicFieldProps> = ({
 
   if (customComponent) {
     Field = customComponent;
-  } else if (type === "text" || type === "description" || type === "number") {
+  } else if (
+    type === "text" ||
+    type === "text-multiline" ||
+    type === "description" ||
+    type === "number"
+  ) {
     Field = <TextInput field={field} formData={formData} />;
   } else if (type === "password") {
     Field = <PasswordInput field={field} formData={formData} />;
   } else if (type === "select") {
     Field = <SelectField field={field} formData={formData} />;
+  } else if (type === "radio") {
+    Field = <RadioField field={field} formData={formData} />;
+  } else if (type === "single-select-autocomplete") {
+    Field = <SingleSelectAutocomplete field={field} formData={formData} />;
+  } else if (type === "multi-select-autocomplete") {
+    Field = <MultiSelectAutocomplete field={field} formData={formData} />;
   }
 
   return (

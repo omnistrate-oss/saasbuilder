@@ -2,7 +2,11 @@ import { useMemo } from "react";
 import { useMutation } from "@tanstack/react-query";
 
 import Button from "components/Button/Button";
+import SearchInput from "components/DataGrid/SearchInput";
+import Select from "components/FormElementsv2/Select/Select";
+import MenuItem from "components/FormElementsv2/MenuItem/MenuItem";
 import DataGridHeaderTitle from "components/Headers/DataGridHeaderTitle";
+import RefreshWithToolTip from "components/RefreshWithTooltip/RefreshWithToolTip";
 
 import useSnackbar from "src/hooks/useSnackbar";
 import { CLI_MANAGED_RESOURCES } from "src/constants/resource";
@@ -11,9 +15,9 @@ import {
   startResourceInstance,
   stopResourceInstance,
 } from "src/api/resourceInstance";
+
 import { icons } from "../constants";
-import Select from "src/components/FormElementsv2/Select/Select";
-import MenuItem from "src/components/FormElementsv2/MenuItem/MenuItem";
+import { getMainResourceFromInstance } from "../utils";
 
 type Action = {
   onClick: () => void;
@@ -22,20 +26,23 @@ type Action = {
   label: string;
 };
 
-const selectedResourceId = "todo:";
-
 const InstancesTableHeader = ({
+  count,
+  searchText,
+  setSearchText,
   selectedInstance,
   setSelectedRows,
   setOverlayType,
   setIsOverlayOpen,
   selectedInstanceOffering,
+  refetchInstances,
+  isFetchingInstances,
 }) => {
   const snackbar = useSnackbar();
 
   const stopInstanceMutation = useMutation(stopResourceInstance, {
     onSuccess: async () => {
-      // TODO: Refetch Data
+      refetchInstances();
       setSelectedRows([]);
       snackbar.showSuccess("Stopping resource instance...");
     },
@@ -43,7 +50,7 @@ const InstancesTableHeader = ({
 
   const startInstanceMutation = useMutation(startResourceInstance, {
     onSuccess: async () => {
-      // TODO: Refetch Data
+      refetchInstances();
       setSelectedRows([]);
       snackbar.showSuccess("Starting resource instance...");
     },
@@ -51,23 +58,21 @@ const InstancesTableHeader = ({
 
   const restartInstanceMutation = useMutation(restartResourceInstance, {
     onSuccess: async () => {
-      // TODO: Refetch Data
+      refetchInstances();
       setSelectedRows([]);
       snackbar.showSuccess("Rebooting resource instance...");
     },
   });
 
+  const selectedResource = useMemo(() => {
+    return getMainResourceFromInstance(selectedInstance);
+  }, [selectedInstance]);
+
   const isComplexResource = CLI_MANAGED_RESOURCES.includes(
-    selectedInstance?.detailedNetworkTopology?.[selectedResourceId]
-      ?.resourceType
+    selectedResource?.resourceType
   );
 
-  const isProxyResource =
-    selectedInstance?.detailedNetworkTopology?.[selectedResourceId]
-      ?.resourceType === "PortsBasedProxy";
-
-  const selectedResource =
-    selectedInstance?.detailedNetworkTopology?.[selectedResourceId];
+  const isProxyResource = selectedResource?.resourceType === "PortsBasedProxy";
 
   const [mainActions, otherActions] = useMemo(() => {
     const actions: Action[] = [];
@@ -77,7 +82,7 @@ const InstancesTableHeader = ({
 
     const requestData = {
       serviceProviderId: selectedInstanceOffering?.serviceProviderId,
-      serviceKey: selectedInstanceOffering?.serviceKey,
+      serviceKey: selectedInstanceOffering?.serviceURLKey,
       serviceAPIVersion: selectedInstanceOffering?.serviceAPIVersion,
       serviceEnvironmentKey: selectedInstanceOffering?.serviceEnvironmentURLKey,
       serviceModelKey: selectedInstanceOffering?.serviceModelURLKey,
@@ -241,11 +246,22 @@ const InstancesTableHeader = ({
       <DataGridHeaderTitle
         title="List of Instances"
         desc="Details of instances"
-        count={0}
+        count={count}
         units={{ singular: "Instance", plural: "Instances" }}
       />
 
       <div className="flex items-center gap-4">
+        <SearchInput
+          placeholder="Search by Instance ID"
+          searchText={searchText}
+          setSearchText={setSearchText}
+          width="250px"
+        />
+        <RefreshWithToolTip
+          refetch={refetchInstances}
+          disabled={isFetchingInstances}
+        />
+
         {mainActions.map((action, index) => {
           const Icon = icons[action.label];
           return (

@@ -93,8 +93,6 @@ export const getRegionMenuItems = (
     return menuItems;
   }
 
-  console.log(offering);
-
   if (cloudProvider === "aws") {
     offering.awsRegions.forEach((region: string) => {
       menuItems.push({
@@ -118,7 +116,7 @@ export const getRegionMenuItems = (
     });
   }
 
-  return menuItems.sort((a, b) => a.label.localeCompare(b.label));
+  return menuItems;
 };
 
 export const getMainResourceFromInstance = (instance: any) => {

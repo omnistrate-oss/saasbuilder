@@ -200,7 +200,13 @@ const Sidebar = () => {
   }, [isBillingEnabled]);
 
   return (
-    <aside className="absolute left-0 top-0 bottom-0 overflow-auto flex flex-col justify-between gap-12 px-4 py-5 border-r border-[#E9EAEB] shadow-[0_1px_2px_0_#0A0D120D] bg-white w-80">
+    <aside
+      className="absolute left-0 top-0 bottom-0 overflow-auto flex flex-col justify-between gap-12 px-4 py-5 border-r border-[#E9EAEB] shadow-[0_1px_2px_0_#0A0D120D] bg-white w-[19rem]"
+      style={{
+        // Hide scrollbar
+        scrollbarWidth: "none",
+      }}
+    >
       <div>
         {topItems.map((item) =>
           item.subItems ? (

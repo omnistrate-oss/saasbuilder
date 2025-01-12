@@ -92,12 +92,8 @@ export function getRegionHexColor(
     if (resultColor) {
       regionColorHash[key] = resultColor;
     }
-    // console.log("Key", key);
-    // console.log("Color", resultColor);
-    // console.log("hash", regionColorHash);
-    // console.log("Stringified", JSON.stringify(regionColorHash))
+
     localStorage.setItem("regionColorHash", JSON.stringify(regionColorHash));
-    // console.log("Local storage value", localStorage.getItem("regionColorHash"))
   }
   return resultColor;
 }

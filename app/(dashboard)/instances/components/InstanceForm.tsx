@@ -2,29 +2,25 @@
 
 import { useMutation } from "@tanstack/react-query";
 import { useFormik } from "formik";
-import { useEffect, useMemo } from "react";
+import React, { useEffect, useMemo } from "react";
 import {
   createResourceInstance,
   getResourceInstanceDetails,
   updateResourceInstance,
 } from "src/api/resourceInstance";
-import GridDynamicForm from "src/components/DynamicForm/GridDynamicForm";
-import { FormConfiguration } from "src/components/DynamicForm/types";
 import useSnackbar from "src/hooks/useSnackbar";
 import { useGlobalData } from "src/providers/GlobalDataProvider";
-import {
-  getMainResourceFromInstance,
-  getRegionMenuItems,
-  getResourceMenuItems,
-  getServiceMenuItems,
-  getServicePlanMenuItems,
-  getSubscriptionMenuItems,
-} from "../utils";
+import { getMainResourceFromInstance } from "../utils";
 import { Text } from "src/components/Typography/Typography";
 import useResourceSchema from "../hooks/useResourceSchema";
-import CloudProviderRadio from "app/(dashboard)/components/CloudProviderRadio/CloudProviderRadio";
-import { cloudProviderLogoMap } from "src/constants/cloudProviders";
 import useAvailabilityZone from "src/hooks/query/useAvailabilityZone";
+import StandardInformationFields from "./StandardInformationFields";
+import Form from "src/components/FormElementsv2/Form/Form";
+import Button from "src/components/Button/Button";
+import LoadingSpinnerSmall from "src/components/CircularProgress/CircularProgress";
+import { styleConfig } from "src/providerConfig";
+import NetworkFields from "./NetworkFields";
+import DeploymentConfigurationFields from "./DeploymentConfigurationFields";
 
 const InstanceForm = ({
   formMode,
@@ -33,15 +29,8 @@ const InstanceForm = ({
   refetchResourceInstances,
 }) => {
   const snackbar = useSnackbar();
-  const {
-    servicesObj,
-    subscriptions,
-    serviceOfferings,
-    subscriptionsObj,
-    serviceOfferingsObj,
-    isFetchingSubscriptions,
-    isFetchingServiceOfferings,
-  } = useGlobalData();
+  const { subscriptions, serviceOfferings, serviceOfferingsObj } =
+    useGlobalData();
 
   const selectedSubscription = useMemo(() => {
     return subscriptions.find(
@@ -116,6 +105,7 @@ const InstanceForm = ({
       resourceId: getMainResourceFromInstance(selectedInstance)?.id || "",
       cloudProvider: selectedInstance?.cloudProvider || "",
       region: selectedInstance?.region || "",
+      networkType: "",
       requestParams: {
         ...(selectedInstance?.result_params || {}),
       },
@@ -130,7 +120,7 @@ const InstanceForm = ({
   });
 
   const {
-    data: resourceSchemaData = {},
+    data: resourceSchema = {},
     isFetching: isFetchingResourceSchema,
   }: any = useResourceSchema({
     serviceId: formData.values.serviceId,
@@ -146,14 +136,17 @@ const InstanceForm = ({
     formData.values.cloudProvider
   );
 
-  console.log(formData.values);
-
   // Sets the Default Values for the Request Parameters
   useEffect(() => {
-    const inputParameters = resourceSchemaData?.inputParameters || [];
+    const inputParameters = resourceSchema?.inputParameters || [];
 
     const defaultValues = inputParameters.reduce((acc: any, param: any) => {
       acc[param.key] = param.defaultValue || "";
+
+      // Default Value for Boolean Fields are Sent as a String
+      if (param.type === "Boolean" && param.defaultValue) {
+        acc[param.key] = param.defaultValue === "true";
+      }
       return acc;
     }, {});
 
@@ -163,7 +156,7 @@ const InstanceForm = ({
         requestParams: defaultValues,
       }));
     }
-  }, [resourceSchemaData, formMode]);
+  }, [resourceSchema, formMode]);
 
   const customAvailabilityZones = useMemo(() => {
     const availabilityZones = customAvailabilityZoneData?.availabilityZones;
@@ -176,247 +169,150 @@ const InstanceForm = ({
     });
   }, [customAvailabilityZoneData?.availabilityZones]);
 
-  const formConfiguration: FormConfiguration = useMemo(() => {
-    const { values, setFieldValue } = formData;
-
-    const {
-      serviceId,
-      servicePlanId,
-      resourceId,
-      cloudProvider,
-      region,
-      requestParams,
-    } = values;
-
-    const offering = serviceOfferingsObj[serviceId]?.[servicePlanId];
-
-    const standardFields: any[] = [
-      {
-        label: "Service Name",
-        subLabel: "Select the service you want to deploy",
-        name: "serviceId",
-        type: "select",
-        required: true,
-        disabled: formMode !== "create",
-        emptyMenuText: "No services available",
-        isLoading: isFetchingServiceOfferings,
-        menuItems: getServiceMenuItems(serviceOfferings),
-        onChange: () => {
-          setFieldValue("servicePlanId", "");
-          setFieldValue("subscriptionId", "");
-          setFieldValue("resourceId", "");
-        },
-        previewValue: () => (
-          <Text size="small" weight="medium" color="#181D27">
-            {servicesObj[values.serviceId]?.serviceName}
-          </Text>
-        ),
-      },
-      {
-        label: "Subscription Plan",
-        subLabel: "Select the subscription plan",
-        name: "servicePlanId",
-        required: true,
-        type: "select",
-        disabled: formMode !== "create",
-        emptyMenuText: !serviceId ? "Select a service" : "No plans available",
-        isLoading: isFetchingServiceOfferings || isFetchingSubscriptions,
-        menuItems: getServicePlanMenuItems(serviceOfferings, values.serviceId),
-        previewValue: () => (
-          <Text size="small" weight="medium" color="#181D27">
-            {
-              serviceOfferingsObj[values.serviceId]?.[values.servicePlanId]
-                ?.productTierName
-            }
-          </Text>
-        ),
-      },
-    ];
-
-    const subscriptionMenuItems = getSubscriptionMenuItems(
-      subscriptions,
-      values.servicePlanId
-    );
-
-    standardFields.push({
-      label: "Subscription",
-      subLabel: "Select the subscription",
-      name: "subscriptionId",
-      type: "select",
-      required: true,
-      disabled: formMode !== "create",
-      emptyMenuText: !serviceId
-        ? "Select a service"
-        : !servicePlanId
-          ? "Select a subscription plan"
-          : "No subscriptions available",
-      isLoading: isFetchingSubscriptions,
-      menuItems: subscriptionMenuItems,
-      previewValue: () => (
-        <Text size="small" weight="medium" color="#181D27">
-          {subscriptionsObj[values.subscriptionId]?.id}
-        </Text>
-      ),
-    });
-
-    if (subscriptionMenuItems.length === 1) {
-      setFieldValue("subscriptionId", subscriptionMenuItems[0]?.value || "");
-    }
-
-    const resourceMenuItems = getResourceMenuItems(
-      serviceOfferingsObj[values.serviceId]?.[values.servicePlanId]
-    );
-
-    standardFields.push({
-      label: "Resource Type",
-      subLabel: "Select the resource",
-      name: "resourceId",
-      type: "select",
-      required: true,
-      emptyMenuText: !serviceId
-        ? "Select a service"
-        : !servicePlanId
-          ? "Select a subscription plan"
-          : "No resources available",
-      menuItems: resourceMenuItems,
-      previewValue: () => (
-        <Text size="small" weight="medium" color="#181D27">
-          {
-            resourceMenuItems.find((item) => item.value === values.resourceId)
-              ?.label
-          }
-        </Text>
-      ),
-    });
-
-    if (resourceMenuItems.length === 1) {
-      setFieldValue("resourceId", resourceMenuItems[0]?.value || "");
-    }
-
-    const inputParametersObj = (
-      resourceSchemaData?.inputParameters || []
-    ).reduce((acc: any, param: any) => {
-      acc[param.key] = param;
-      return acc;
-    }, {});
-
-    const cloudProviderFieldExists = inputParametersObj["cloud_provider"];
-    const regionFieldExists = inputParametersObj["region"];
-    const customAvailabilityZoneFieldExists =
-      inputParametersObj["custom_availability_zone"];
-
-    if (cloudProviderFieldExists) {
-      standardFields.push({
-        label: "Cloud Provider",
-        subLabel: "Select the cloud provider",
-        name: "cloudProvider",
-        required: true,
-        customComponent: (
-          <CloudProviderRadio
-            cloudProviders={
-              serviceOfferingsObj[values.serviceId]?.[values.servicePlanId]
-                ?.cloudProviders || []
-            }
-            name="cloudProvider"
-            formData={formData}
-            onChange={() => {
-              formData.setFieldValue("region", "");
-              formData.setFieldTouched("cloudProvider", false);
-            }}
-            disabled={formMode !== "create"}
-          />
-        ),
-        previewValue: ({ field, formData }) => {
-          const cloudProvider = formData.values[field.name];
-          return cloudProviderLogoMap[cloudProvider] || "-";
-        },
-      });
-    }
-
-    if (regionFieldExists) {
-      standardFields.push({
-        label: "Region",
-        subLabel: "Select the region",
-        name: "requestParams.region",
-        value: values.requestParams.region,
-        required: true,
-        type: "select",
-        emptyMenuText: !resourceId
-          ? "Select a resource"
-          : !cloudProvider
-            ? "Select a cloud provider"
-            : "No regions available",
-        menuItems: getRegionMenuItems(offering, cloudProvider),
-      });
-    }
-
-    if (customAvailabilityZoneFieldExists) {
-      standardFields.push({
-        label: "Custom Availability Zone",
-        description:
-          "Select a specific availability zone for deploying your instance",
-        name: "requestParams.custom_availability_zone",
-        value: values.requestParams.custom_availability_zone,
-        type: "select",
-        menuItems: customAvailabilityZones.map((zone) => ({
-          label: `${zone.cloudProviderName} - ${zone.code}`,
-          value: zone.code,
-        })),
-        isLoading: isFetchingCustomAvailabilityZones,
-        required: true,
-        emptyMenuText: region
-          ? "No availability zones"
-          : "Please select a region first",
-        disabled: formMode !== "create",
-      });
-    }
-
-    return {
-      title: {
-        create: "Create Deployment Instance",
-        modify: "Modify Deployment Instance",
-      },
-      description: {
-        create: "Configure and launch a new instance of your service",
-        modify: "Modify your existing instance",
-      },
-      footer: {
-        submitButton: {
-          create: "Create",
-          modify: "Update",
-        },
-      },
-      sections: [
-        {
-          title: "Standard Information",
-          fields: standardFields,
-        },
-      ],
-    };
-  }, [
-    formMode,
-    subscriptions,
-    serviceOfferings,
-    formData.values,
-    isFetchingSubscriptions,
-    isFetchingServiceOfferings,
-    resourceSchemaData?.inputParameters,
-    customAvailabilityZones,
-    isFetchingCustomAvailabilityZones,
-  ]);
-
   return (
-    <GridDynamicForm
-      formConfiguration={formConfiguration}
-      formMode={formMode}
-      formData={formData}
-      onClose={onClose}
-      isFormSubmitting={
-        createInstanceMutation.isLoading ||
-        updateResourceInstanceMutation.isLoading
-      }
-      previewCardTitle="Deployment Instance Summary"
-    />
+    // @ts-ignore
+    <Form className="flex items-start gap-8" onSubmit={formData.handleSubmit}>
+      <div style={{ flex: 5 }} className="space-y-6">
+        <StandardInformationFields
+          formData={formData}
+          formMode={formMode}
+          customAvailabilityZones={customAvailabilityZones}
+          isFetchingCustomAvailabilityZones={isFetchingCustomAvailabilityZones}
+          resourceSchema={resourceSchema}
+          isFetchingResourceSchema={isFetchingResourceSchema}
+        />
+        <NetworkFields
+          formData={formData}
+          formMode={formMode}
+          resourceSchema={resourceSchema}
+          isFetchingResourceSchema={isFetchingResourceSchema}
+        />
+        <DeploymentConfigurationFields
+          formData={formData}
+          formMode={formMode}
+          resourceSchema={resourceSchema}
+          isFetchingResourceSchema={isFetchingResourceSchema}
+        />
+      </div>
+
+      <div
+        style={{
+          position: "sticky",
+          top: "24px",
+          flex: 2,
+          minHeight: "660px",
+          border: "1px solid #127AE8",
+          boxShadow: "0px 2px 2px -1px #0A0D120A, 0px 4px 6px -2px #0A0D1208",
+        }}
+        className="bg-white rounded-xl flex flex-col"
+      >
+        <div className="py-4 px-6 border-b border-[#E9EAEB]">
+          <Text size="large" weight="semibold" color="#0E5FB5">
+            Deployment Instance Summary
+          </Text>
+        </div>
+
+        <div className="px-4 py-4 flex-1">
+          {/* {sections.map((section, index) => {
+            return (
+              <div key={index}>
+                <Text
+                  size="small"
+                  weight="semibold"
+                  color={styleConfig.primaryColor}
+                  sx={{ mb: "10px" }}
+                >
+                  {section.title}
+                </Text>
+
+                <div
+                  className="grid grid-cols-5"
+                  style={{
+                    gap: "10px 8px",
+                  }}
+                >
+                  {section.fields.map((field, index) => {
+                    return (
+                      <React.Fragment key={index}>
+                        <div
+                          style={{
+                            gridColumn: "span 2 / span 2",
+                          }}
+                        >
+                          <Text size="small" weight="medium" color="#414651">
+                            {field.label}
+                          </Text>
+                        </div>
+                        <div className="col-span-3 flex">
+                          <div style={{ margin: "-3px 8px 0px 0px" }}>:</div>
+                          <div>
+                            {field.previewValue ? (
+                              <field.previewValue
+                                field={field}
+                                formData={formData}
+                              />
+                            ) : typeof formData.values[field.name] ===
+                              "string" ? (
+                              <Text
+                                size="small"
+                                weight="medium"
+                                color="#181D27"
+                              >
+
+                                {formData.values[field.name]} // TODO: Fix the Ellipses Overflow Issue
+                              </Text>
+                            ) : null}
+                          </div>
+                        </div>
+                      </React.Fragment>
+                    );
+                  })}
+                </div>
+              </div>
+            );
+          })} */}
+        </div>
+
+        <div
+          style={{
+            margin: "0px 16px 20px",
+            paddingTop: "20px",
+            borderTop: "1px solid #E9EAEB",
+          }}
+          className="flex items-center gap-3"
+        >
+          {onClose && (
+            <Button
+              data-testid="cancel-button"
+              variant="outlined"
+              onClick={onClose}
+              disabled={
+                createInstanceMutation.isLoading ||
+                updateResourceInstanceMutation.isLoading
+              }
+              sx={{ marginLeft: "auto" }} // Pushes the 2 buttons to the end
+            >
+              Cancel
+            </Button>
+          )}
+          <Button
+            data-testid="submit-button"
+            variant="contained"
+            disabled={
+              createInstanceMutation.isLoading ||
+              updateResourceInstanceMutation.isLoading
+            }
+            type="submit"
+          >
+            {formMode === "create" ? "Create" : "Update"}
+            {(createInstanceMutation.isLoading ||
+              updateResourceInstanceMutation.isLoading) && (
+              <LoadingSpinnerSmall />
+            )}
+          </Button>
+        </div>
+      </div>
+    </Form>
   );
 };
 

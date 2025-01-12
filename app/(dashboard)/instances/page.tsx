@@ -55,6 +55,7 @@ const InstancesPage = () => {
     "create-instance-form"
   );
   const [isOverlayOpen, setIsOverlayOpen] = useState<boolean>(false);
+  const [searchText, setSearchText] = useState("");
   const {
     subscriptions,
     serviceOfferingsObj,
@@ -317,8 +318,11 @@ const InstancesPage = () => {
     ];
   }, [subscriptionsObj]);
 
-  const { data: instances = [] as any[], isFetching: isFetchingInstances } =
-    useInstances();
+  const {
+    data: instances = [],
+    isFetching: isFetchingInstances,
+    refetch: refetchInstances,
+  } = useInstances();
 
   const selectedInstance = useMemo(() => {
     return instances.find((instance) => instance.id === selectedRows[0]);
@@ -350,12 +354,16 @@ const InstancesPage = () => {
           noRowsText="No instances"
           HeaderComponent={InstancesTableHeader}
           headerProps={{
+            count: instances.length,
+            searchText,
+            setSearchText,
             selectedInstance,
             setSelectedRows,
             setOverlayType,
             setIsOverlayOpen,
             selectedInstanceOffering,
             selectedInstanceSubscription,
+            refetchInstances,
             isFetchingInstances,
           }}
           isLoading={
