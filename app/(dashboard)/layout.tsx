@@ -11,9 +11,7 @@ const DashboardLayout = ({ children }) => {
         <div className="flex-1 relative overflow-hidden">
           <Sidebar />
           <div className="ml-[19rem] flex flex-col h-full">
-            <div className="flex-1 overflow-y-auto bg-[#FCFCFC]">
-              {children}
-            </div>
+            <div className="flex-1 overflow-y-auto">{children}</div>
             <Footer />
           </div>
         </div>

@@ -141,6 +141,9 @@ const InstancesPage = () => {
               />
             );
           },
+          meta: {
+            minWidth: 230,
+          },
         }
       ),
       columnHelper.accessor(
@@ -335,10 +338,8 @@ const InstancesPage = () => {
 
   // Subscription of the Selected Instance
   const selectedInstanceSubscription = useMemo(() => {
-    return subscriptions.find(
-      (subscription) => subscription.id === selectedInstance?.subscriptionId
-    );
-  }, [selectedInstance, subscriptions]);
+    return subscriptionsObj[selectedInstance?.subscriptionId];
+  }, [selectedInstance, subscriptionsObj]);
 
   // Offering of the Selected Instance
   const selectedInstanceOffering = useMemo(() => {
@@ -373,20 +374,13 @@ const InstancesPage = () => {
 
   const deleteInstanceMutation = useMutation(
     () => {
-      if (!selectedInstance) return snackbar.showError("No instance selected");
-      if (!selectedInstanceOffering || selectedInstanceSubscription) {
-        return snackbar.showError("Subscription not found");
-      }
-      if (!selectedResource) {
-        return snackbar.showError("Resource not found");
-      }
-
       return deleteResourceInstance(selectedInstanceData);
     },
     {
       onSuccess: () => {
         setSelectedRows([]);
         refetchInstances();
+        setIsOverlayOpen(false);
         snackbar.showSuccess("Deleting resource instance...");
       },
     }
@@ -458,6 +452,14 @@ const InstancesPage = () => {
         open={isOverlayOpen && overlayType === "delete-dialog"}
         handleClose={() => setIsOverlayOpen(false)}
         onConfirm={async () => {
+          if (!selectedInstance)
+            return snackbar.showError("No instance selected");
+          if (!selectedInstanceOffering || !selectedInstanceSubscription) {
+            return snackbar.showError("Subscription not found");
+          }
+          if (!selectedResource) {
+            return snackbar.showError("Resource not found");
+          }
           await deleteInstanceMutation.mutateAsync();
         }}
         title="Delete Instance"
@@ -473,6 +475,10 @@ const InstancesPage = () => {
             overlayType
           )
         }
+        currentCapacityAction={
+          overlayType === "add-capacity-dialog" ? "add" : "remove"
+        }
+        contextType="access"
         handleClose={() => setIsOverlayOpen(false)}
         autoscaling={{
           currentReplicas: selectedInstance?.currentReplicas,
@@ -480,10 +486,6 @@ const InstancesPage = () => {
           minReplicas: selectedInstance?.minReplicas,
         }}
         data={selectedInstanceData}
-        currentCapacityAction={
-          overlayType === "add-capacity-dialog" ? "add" : "remove"
-        }
-        contextType="access"
         refetch={refetchInstances}
       />
 

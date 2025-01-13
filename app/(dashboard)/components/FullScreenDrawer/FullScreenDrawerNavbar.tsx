@@ -1,5 +1,6 @@
 import CloseIcon from "@mui/icons-material/Close";
 import { DisplayText, Text } from "src/components/Typography/Typography";
+import { colors } from "src/themeConfig";
 
 type FullScreenDrawerNavbarProps = {
   title?: string;
@@ -24,7 +25,7 @@ const FullScreenDrawerNavbar: React.FC<FullScreenDrawerNavbarProps> = ({
             // @ts-ignore
             size="xsmall"
             weight="bold"
-            color="#181D27"
+            color={colors.gray900}
             sx={{ mb: "4px" }}
           >
             {title}

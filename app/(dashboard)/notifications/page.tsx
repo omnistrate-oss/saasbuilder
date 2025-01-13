@@ -105,6 +105,9 @@ const NotificationsPage = () => {
               />
             );
           },
+          meta: {
+            minWidth: 230,
+          },
         }
       ),
       columnHelper.accessor("resourceName", {

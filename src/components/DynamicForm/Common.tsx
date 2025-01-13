@@ -237,10 +237,11 @@ export const SingleSelectAutocomplete = ({ field, formData }) => {
         formData.setFieldTouched(field.name, true);
       }}
       disabled={field.disabled}
-      getOptionLabel={(option) => option}
+      getOptionLabel={(option) => String(option)}
       error={Boolean(
         formData.touched[field.name] && formData.errors[field.name]
       )}
+      isOptionEqualToValue={(option, value) => option.value === value.value}
     />
   );
 };

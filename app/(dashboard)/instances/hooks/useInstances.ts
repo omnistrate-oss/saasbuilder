@@ -9,7 +9,16 @@ const useInstances = (queryOptions = {}) => {
     },
     {
       select: (data) => {
-        return data.data.resourceInstances;
+        return data.data.resourceInstances
+          .filter(
+            (instance) =>
+              instance.resourceKey !== "omnistrateCloudAccountConfig"
+          )
+          .sort(
+            (a, b) =>
+              new Date(b.created_at).getTime() -
+              new Date(a.created_at).getTime()
+          );
       },
       refetchInterval: 60000,
       ...queryOptions,

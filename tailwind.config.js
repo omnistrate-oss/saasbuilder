@@ -21,6 +21,7 @@ module.exports = {
           600: "var(--gray-600)",
           700: "var(--gray-700)",
           800: "var(--gray-800)",
+          900: "var(--gray-900)",
         },
 
         success: {

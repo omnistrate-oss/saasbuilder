@@ -130,6 +130,9 @@ export const getMainResourceFromInstance = (instance: any) => {
       ([, resource]: any) => resource.main
     ) || [];
 
-  mainResource.id = mainResourceId;
+  if (mainResource) {
+    mainResource.id = mainResourceId;
+  }
+
   return mainResource;
 };

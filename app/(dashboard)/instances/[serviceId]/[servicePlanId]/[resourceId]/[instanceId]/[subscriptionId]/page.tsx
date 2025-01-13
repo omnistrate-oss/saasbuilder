@@ -34,6 +34,7 @@ import {
 
 import { getTabs } from "./utils";
 import PageContainer from "app/(dashboard)/components/Layout/PageContainer";
+import { colors } from "src/themeConfig";
 
 type CurrentTab =
   | "Resource Instance Details"
@@ -261,7 +262,7 @@ const InstanceDetailsPage = ({
                 marginRight: "16px",
                 textTransform: "none",
                 fontWeight: "600",
-                color: "#717680",
+                color: colors.purple700,
               }}
             />
           );

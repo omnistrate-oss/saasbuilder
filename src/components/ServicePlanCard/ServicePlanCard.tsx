@@ -3,13 +3,15 @@ import Image from "next/image";
 import Button from "../Button/Button";
 import { Text } from "../Typography/Typography";
 import StatusChip from "../StatusChip/StatusChip";
+import ClockIcon from "../Icons/ServicePlanCard/ClockIcon";
 import CirclePlusIcon from "../Icons/ServicePlanCard/CirclePlusIcon";
 import CircleCheckIcon from "../Icons/ServicePlanCard/CircleCheckIcon";
 import ServicePlanCardIcon from "../Icons/ServicePlanCard/ServicePlanCardIcon";
 
+import { colors } from "src/themeConfig";
 import { SetState } from "src/types/common/reactGenerics";
+
 import CardCircleBg from "./CardCircleBg.svg";
-import ClockIcon from "../Icons/ServicePlanCard/ClockIcon";
 
 type ServicePlanCardProps = {
   isSelected?: boolean;
@@ -45,7 +47,7 @@ const ServicePlanCard: React.FC<ServicePlanCardProps> = ({
       onClick={() => setSelectedPlanId(servicePlan.productTierID)}
       className="overflow-hidden relative flex flex-col gap-3 items-center border border-[#E9EAEB] rounded-xl px-4 py-4 cursor-pointer"
       style={{
-        outline: isSelected ? "2px solid #0E5FB5" : "none",
+        outline: isSelected ? `2px solid ${colors.purple700}` : "none",
       }}
     >
       <StatusChip
@@ -110,7 +112,7 @@ const ServicePlanCard: React.FC<ServicePlanCardProps> = ({
           }
           onClick={onSubscribeClick}
         >
-          Subsribe
+          Subscribe
         </Button>
       )}
 
@@ -142,7 +144,7 @@ const ServicePlanCard: React.FC<ServicePlanCardProps> = ({
         </Button>
       )}
 
-      {subscriptionRequest && (
+      {subscriptionRequest && !subscription && (
         <Button variant="contained" disabled startIcon={<ClockIcon />}>
           Pending Approval
         </Button>

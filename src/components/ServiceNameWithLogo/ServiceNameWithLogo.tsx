@@ -20,7 +20,6 @@ const ServiceNameWithLogo: React.FC<ServiceNameWithLogoProps> = ({
         fontSize: "14px",
         fontWeight: 500,
         lineHeight: "20px",
-        cursor: "pointer",
       }}
       onClick={onClick}
       startIcon={

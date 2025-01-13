@@ -1,18 +1,21 @@
 "use client";
 
-import { useMutation } from "@tanstack/react-query";
 import clsx from "clsx";
 import { useMemo } from "react";
-import { createSubscriptionRequest } from "src/api/subscriptionRequests";
-import { createSubscriptions } from "src/api/subscriptions";
-import Button from "src/components/Button/Button";
-import CircleCheckIcon from "src/components/Icons/ServicePlanCard/CircleCheckIcon";
-import CirclePlusIcon from "src/components/Icons/ServicePlanCard/CirclePlusIcon";
-import ClockIcon from "src/components/Icons/ServicePlanCard/ClockIcon";
-import { Text } from "src/components/Typography/Typography";
-import useSnackbar from "src/hooks/useSnackbar";
-import { useGlobalData } from "src/providers/GlobalDataProvider";
+import { useMutation } from "@tanstack/react-query";
+
+import Button from "components/Button/Button";
+import { Text } from "components/Typography/Typography";
+import ClockIcon from "components/Icons/ServicePlanCard/ClockIcon";
+import CirclePlusIcon from "components/Icons/ServicePlanCard/CirclePlusIcon";
+import CircleCheckIcon from "components/Icons/ServicePlanCard/CircleCheckIcon";
+
 import { colors } from "src/themeConfig";
+import useSnackbar from "src/hooks/useSnackbar";
+import { createSubscriptions } from "src/api/subscriptions";
+import { useGlobalData } from "src/providers/GlobalDataProvider";
+import { createSubscriptionRequest } from "src/api/subscriptionRequests";
+import Tooltip from "src/components/Tooltip/Tooltip";
 
 const SubscriptionPlanCard = ({
   plan,
@@ -24,13 +27,21 @@ const SubscriptionPlanCard = ({
   isFetchingData,
   onClick,
 }) => {
-  return (
+  const card = (
     <div
       className={clsx(
-        "flex items-start justify-between gap-3 px-4 py-4 rounded-xl cursor-pointer outline outline-[2px]",
-        isSelected ? "outline-purple-600" : "outline-gray-300"
+        "flex items-start justify-between gap-3 px-4 py-4 rounded-xl outline outline-[2px]",
+        isSelected ? "outline-purple-600" : "outline-gray-300",
+        !subscription && "bg-gray-50"
       )}
-      onClick={onClick}
+      style={{
+        cursor: subscription ? "pointer" : "default",
+      }}
+      onClick={() => {
+        if (subscription) {
+          onClick();
+        }
+      }}
     >
       <div>
         <Text
@@ -59,23 +70,50 @@ const SubscriptionPlanCard = ({
           }
           onClick={onSubscribeClick}
         >
-          Subsribe
+          Subscribe
         </Button>
       )}
 
       {subscription && (
-        <Button variant="contained" disabled startIcon={<CircleCheckIcon />}>
+        <Button
+          variant="contained"
+          disabled
+          startIcon={<CircleCheckIcon />}
+          bgColor={colors.gray100}
+          outlineColor={colors.gray200}
+          fontColor={colors.gray400}
+        >
           Subscribed
         </Button>
       )}
 
-      {subscriptionRequest && (
-        <Button variant="contained" disabled startIcon={<ClockIcon />}>
+      {subscriptionRequest && !subscription && (
+        <Button
+          variant="contained"
+          disabled
+          startIcon={<ClockIcon />}
+          bgColor={colors.gray100}
+          outlineColor={colors.gray200}
+          fontColor={colors.gray400}
+        >
           Pending Approval
         </Button>
       )}
     </div>
   );
+
+  if (!subscription && !subscriptionRequest) {
+    return (
+      <Tooltip
+        placement="top"
+        title="Subscribe to this plan before you can use it"
+      >
+        {card}
+      </Tooltip>
+    );
+  }
+
+  return card;
 };
 
 const SubscriptionPlanRadio = ({
@@ -94,7 +132,9 @@ const SubscriptionPlanRadio = ({
   } = useGlobalData();
 
   const servicePlans = useMemo(() => {
-    return Object.values(serviceOfferingsObj[serviceId] || {});
+    return Object.values(serviceOfferingsObj[serviceId] || {}).sort(
+      (a: any, b: any) => a.productTierName.localeCompare(b.productTierName)
+    );
   }, [serviceId, serviceOfferingsObj]);
 
   const subscriptionsObj = useMemo(() => {

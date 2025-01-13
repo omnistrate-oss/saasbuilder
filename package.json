@@ -11,6 +11,12 @@
     "format:fix": "prettier --write --ignore-path .gitignore .",
     "find:unused": "next-unused"
   },
+  "next-unused": {
+    "alias": {},
+    "include": [],
+    "exclude": [],
+    "entrypoints": []
+  },
   "dependencies": {
     "@curvenote/ansi-to-react": "^7.0.0",
     "@emotion/react": "^11.10.5",

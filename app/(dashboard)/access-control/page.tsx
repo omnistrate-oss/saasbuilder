@@ -101,6 +101,9 @@ const AccessControlPage = () => {
               />
             );
           },
+          meta: {
+            minWidth: 230,
+          },
         }
       ),
       columnHelper.accessor(

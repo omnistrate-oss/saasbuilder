@@ -94,8 +94,8 @@ const Button = styled(
       },
     },
     [`&.${buttonClasses.contained}:disabled`]: {
-      background: "white",
-      color: "#D0D5DD",
+      background: bgColor ? bgColor : "white",
+      color: fontColor ? fontColor : "#D0D5DD",
       outlineWidth: "1px",
       outlineStyle: "solid",
       outlineColor: outlineColor ? outlineColor : "#D0D5DD",

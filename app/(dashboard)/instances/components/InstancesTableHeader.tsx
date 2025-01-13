@@ -374,56 +374,51 @@ const InstancesTableHeader = ({
           );
         })}
 
-        {otherActions.length > 0 && (
-          <Select
-            value=""
-            renderValue={(value: string) => {
-              if (!value) {
-                return "Action";
-              } else {
-                return "";
-              }
-            }}
-            displayEmpty
-            sx={{ margin: "0px", height: "40px" }}
-          >
-            {otherActions.map(
-              ({ label, onClick, isDisabled, disabledMessage }) => {
-                const Icon = icons[label];
-                const menuItem = (
-                  <MenuItem
-                    value={label}
-                    key={label}
-                    sx={{
-                      gap: "10px",
-                      fontSize: "14px",
-                      color: isDisabled ? "#a3a6ac" : "",
-                    }}
-                    disabled={isDisabled}
-                    onClick={onClick}
-                  >
-                    <Icon disabled={isDisabled} />
-                    {label}
-                  </MenuItem>
+        <Select
+          value=""
+          renderValue={(value: string) => {
+            if (!value) {
+              return "Action";
+            } else {
+              return "";
+            }
+          }}
+          displayEmpty
+          disabled={otherActions.length === 0}
+          sx={{ margin: "0px", height: "40px" }}
+        >
+          {otherActions.map(
+            ({ label, onClick, isDisabled, disabledMessage }) => {
+              const Icon = icons[label];
+              const menuItem = (
+                <MenuItem
+                  value={label}
+                  key={label}
+                  sx={{
+                    gap: "10px",
+                    fontSize: "14px",
+                    color: isDisabled ? "#a3a6ac" : "",
+                  }}
+                  disabled={isDisabled}
+                  onClick={onClick}
+                >
+                  <Icon disabled={isDisabled} />
+                  {label}
+                </MenuItem>
+              );
+
+              if (disabledMessage) {
+                return (
+                  <Tooltip key={label} title={disabledMessage} placement="top">
+                    <span>{menuItem}</span>
+                  </Tooltip>
                 );
-
-                if (disabledMessage) {
-                  return (
-                    <Tooltip
-                      key={label}
-                      title={disabledMessage}
-                      placement="top"
-                    >
-                      <span>{menuItem}</span>
-                    </Tooltip>
-                  );
-                }
-
-                return menuItem;
               }
-            )}
-          </Select>
-        )}
+
+              return menuItem;
+            }
+          )}
+        </Select>
       </div>
     </div>
   );

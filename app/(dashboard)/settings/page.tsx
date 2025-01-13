@@ -1,20 +1,22 @@
 "use client";
 
 import { useState } from "react";
+import { Tab, Tabs } from "@mui/material";
 import { useSelector } from "react-redux";
 
 import PageTitle from "../components/Layout/PageTitle";
 import SettingsIcon from "../components/Icons/SettingsIcon";
 import AccountManagementHeader from "../components/AccountManagement/AccountManagementHeader";
-import { selectUserrootData } from "src/slices/userDataSlice";
 
 import { tabLabels } from "./constants";
-import PageContainer from "../components/Layout/PageContainer";
 import ProfileForm from "./components/ProfileForm";
-import { Tab, Tabs } from "@mui/material";
-import BillingAddressForm from "./components/BillingAddressForm";
 import PasswordForm from "./components/PasswordForm";
+import PageContainer from "../components/Layout/PageContainer";
+import BillingAddressForm from "./components/BillingAddressForm";
+
+import { colors } from "src/themeConfig";
 import useUserData from "src/hooks/usersData";
+import { selectUserrootData } from "src/slices/userDataSlice";
 
 type CurrentTab = "profile" | "billingAddress" | "password";
 
@@ -51,7 +53,7 @@ const SettingsPage = () => {
               marginRight: "16px !important",
               textTransform: "none",
               fontWeight: "600",
-              color: "#717680",
+              color: colors.purple700,
             }}
           />
           <Tab
@@ -63,7 +65,7 @@ const SettingsPage = () => {
               marginRight: "16px !important",
               textTransform: "none",
               fontWeight: "600",
-              color: "#717680",
+              color: colors.purple700,
             }}
           />
           <Tab
@@ -75,7 +77,7 @@ const SettingsPage = () => {
               marginRight: "16px !important",
               textTransform: "none",
               fontWeight: "600",
-              color: "#717680",
+              color: colors.purple700,
             }}
           />
         </Tabs>
