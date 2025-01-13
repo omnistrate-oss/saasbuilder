@@ -4,6 +4,14 @@ module.exports = {
   theme: {
     extend: {
       colors: {
+        purple: {
+          50: "var(--purple-50)",
+          200: "var(--purple-200)",
+          600: "var(--purple-600)",
+          700: "var(--purple-700)",
+          900: "var(--purple-900)",
+        },
+
         gray: {
           50: "var(--gray-50)",
           200: "var(--gray-200)",
@@ -21,6 +29,12 @@ module.exports = {
           500: "var(--success-500)",
           600: "var(--success-600)",
           700: "var(--success-700)",
+        },
+
+        error: {
+          50: "var(--error-50)",
+          200: "var(--error-200)",
+          700: "var(--error-700)",
         },
       },
     },

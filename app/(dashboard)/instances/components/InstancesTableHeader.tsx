@@ -24,6 +24,7 @@ import {
   viewEnum,
 } from "src/utils/isAllowedByRBAC";
 import Tooltip from "src/components/Tooltip/Tooltip";
+import { colors } from "src/themeConfig";
 
 type Action = {
   onClick: () => void;
@@ -366,6 +367,7 @@ const InstancesTableHeader = ({
               onClick={action.onClick}
               startIcon={<Icon disabled={action.isDisabled} />}
               disabledMessage={action.disabledMessage}
+              outlineColor={colors.green300}
             >
               {action.label}
             </Button>

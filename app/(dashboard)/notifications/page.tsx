@@ -217,10 +217,6 @@ const NotificationsPage = () => {
           }
           HeaderComponent={NotificationsTableHeader}
           headerProps={{
-            count: notifications?.pages.reduce(
-              (acc, page) => acc + page.events?.length || 0,
-              0
-            ),
             refetchNotifications: () => {
               setPageIndex(0);
               refetchNotifications();

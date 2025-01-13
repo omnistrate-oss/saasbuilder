@@ -90,7 +90,7 @@ const Button = styled(
       color: fontColor ? fontColor : styleConfig.primaryTextColor,
       boxShadow: "none",
       "&:hover": {
-        background: bgColor ? bgColor : theme.palette.primary.hover,
+        background: bgColor ? bgColor : colors.success600,
       },
     },
     [`&.${buttonClasses.contained}:disabled`]: {
@@ -102,11 +102,11 @@ const Button = styled(
       boxShadow: "0px 1px 2px rgba(16, 24, 40, 0.05)",
     },
     [`&.${buttonClasses.outlined}`]: {
-      color: fontColor ? fontColor : theme.palette.primary.main,
+      color: fontColor ? fontColor : colors.gray700,
       background: outlineBg ? outlineBg : "white",
       borderWidth: "1px",
       borderStyle: "solid",
-      borderColor: outlineColor ? outlineColor : "#62AEFF",
+      borderColor: outlineColor ? outlineColor : colors.gray300,
       boxShadow: "0px 1px 2px 0px rgba(16, 24, 40, 0.05)",
     },
     [`&.${buttonClasses.outlined}:disabled`]: {

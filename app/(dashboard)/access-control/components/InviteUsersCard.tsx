@@ -20,6 +20,7 @@ import LoadingSpinnerSmall from "components/CircularProgress/CircularProgress";
 import useSnackbar from "src/hooks/useSnackbar";
 import { inviteSubscriptionUser } from "src/api/users";
 import { useGlobalData } from "src/providers/GlobalDataProvider";
+import { colors } from "src/themeConfig";
 
 const getNewEnvVariable = () => {
   return {
@@ -306,11 +307,11 @@ const InviteUsersCard: React.FC<InviteUsersCardProps> = ({
                                 remove(index);
                               }}
                               className={clsx(
-                                "cursor-pointer border border-[#B42318] h-10 w-10 rounded-md flex items-center justify-center",
+                                "cursor-pointer border border-error-700 h-10 w-10 rounded-md flex items-center justify-center",
                                 index === 0 ? "invisible" : "visible"
                               )}
                             >
-                              <DeleteIcon color="#B42318" />
+                              <DeleteIcon color={colors.error700} />
                             </div>
                           </div>
                         );
@@ -322,8 +323,12 @@ const InviteUsersCard: React.FC<InviteUsersCardProps> = ({
                           push(getNewEnvVariable());
                         }}
                       >
-                        <Add sx={{ color: "#0E5FB5" }} />
-                        <Text size="small" weight="semibold" color="#0E5FB5">
+                        <Add sx={{ color: colors.green600 }} />
+                        <Text
+                          size="small"
+                          weight="semibold"
+                          color={colors.green600}
+                        >
                           Add Another
                         </Text>
                       </div>

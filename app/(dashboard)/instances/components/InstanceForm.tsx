@@ -18,15 +18,15 @@ import StandardInformationFields from "./StandardInformationFields";
 import Form from "src/components/FormElementsv2/Form/Form";
 import Button from "src/components/Button/Button";
 import LoadingSpinnerSmall from "src/components/CircularProgress/CircularProgress";
-import { styleConfig } from "src/providerConfig";
 import NetworkFields from "./NetworkFields";
 import DeploymentConfigurationFields from "./DeploymentConfigurationFields";
+import { colors } from "src/themeConfig";
 
 const InstanceForm = ({
   formMode,
   onClose,
   selectedInstance,
-  refetchResourceInstances,
+  refetchInstances,
 }) => {
   const snackbar = useSnackbar();
   const { subscriptions, serviceOfferings, serviceOfferingsObj } =
@@ -90,7 +90,7 @@ const InstanceForm = ({
 
   const updateResourceInstanceMutation = useMutation(updateResourceInstance, {
     onSuccess: () => {
-      refetchResourceInstances();
+      refetchInstances();
       formData.resetForm();
       snackbar.showSuccess("Updated Resource Instance");
       onClose();
@@ -201,13 +201,13 @@ const InstanceForm = ({
           top: "24px",
           flex: 2,
           minHeight: "660px",
-          border: "1px solid #127AE8",
+          border: `1px solid ${colors.purple600}`,
           boxShadow: "0px 2px 2px -1px #0A0D120A, 0px 4px 6px -2px #0A0D1208",
         }}
         className="bg-white rounded-xl flex flex-col"
       >
-        <div className="py-4 px-6 border-b border-[#E9EAEB]">
-          <Text size="large" weight="semibold" color="#0E5FB5">
+        <div className="py-4 px-6 border-b border-gray-200">
+          <Text size="large" weight="semibold" color={colors.purple700}>
             Deployment Instance Summary
           </Text>
         </div>

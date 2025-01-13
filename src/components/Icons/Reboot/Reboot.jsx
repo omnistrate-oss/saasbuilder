@@ -1,14 +1,7 @@
-import * as React from "react";
-const RebootIcon = (props) => {
-  let { color } = props;
-  const { disabled } = props;
-  if (!color) {
-    color = "#175CD3";
-  }
+import { colors } from "src/themeConfig";
 
-  if (disabled) {
-    color = "#a3a6ac";
-  }
+const RebootIcon = (props) => {
+  const { color = colors.green600, disabled } = props;
 
   return (
     <svg
@@ -20,7 +13,7 @@ const RebootIcon = (props) => {
       {...props}
     >
       <path
-        stroke={color}
+        stroke={disabled ? "#a3a6ac" : color}
         strokeLinecap="round"
         strokeLinejoin="round"
         strokeWidth={1.667}

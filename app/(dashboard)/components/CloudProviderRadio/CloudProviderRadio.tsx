@@ -1,8 +1,12 @@
 "use client";
 
 import clsx from "clsx";
+
 import { Text } from "components/Typography/Typography";
+
+import { colors } from "src/themeConfig";
 import { cloudProviderLabels } from "src/constants/cloudProviders";
+
 import AWSLogo from "../Icons/AWSLogo";
 import GCPFullLogo from "../Icons/GCPFullLogo";
 
@@ -19,7 +23,9 @@ const CloudProviderCard = ({
         disabled ? "cursor-not-allowed opacity-50" : "cursor-pointer"
       )}
       style={{
-        outline: isSelected ? "2px solid #0E5FB5" : "1px solid #E9EAEB",
+        outline: isSelected
+          ? `2px solid ${colors.purple600}`
+          : `1px solid ${colors.gray200}`,
       }}
       onClick={() => {
         if (!disabled) {

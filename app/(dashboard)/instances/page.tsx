@@ -387,7 +387,7 @@ const InstancesPage = () => {
       onSuccess: () => {
         setSelectedRows([]);
         refetchInstances();
-        snackbar.showSuccess("Deleting instance");
+        snackbar.showSuccess("Deleting resource instance...");
       },
     }
   );
@@ -449,7 +449,7 @@ const InstancesPage = () => {
             }
             onClose={() => setIsOverlayOpen(false)}
             selectedInstance={selectedInstance}
-            refetchResourceInstances={() => {}} // TODO
+            refetchInstances={refetchInstances}
           />
         }
       />

@@ -10,6 +10,7 @@ import { Text } from "../Typography/Typography";
 import CardWithTitle from "../Card/CardWithTitle";
 import LoadingSpinnerSmall from "../CircularProgress/CircularProgress";
 import Form from "../FormElementsv2/Form/Form";
+import { colors } from "src/themeConfig";
 
 type GridDynamicFormProps = {
   formData: any;
@@ -67,13 +68,13 @@ const GridDynamicForm: React.FC<GridDynamicFormProps> = ({
           top: "24px",
           flex: 2,
           minHeight: "660px",
-          border: "1px solid #127AE8",
+          border: `1px solid ${colors.purple600}`,
           boxShadow: "0px 2px 2px -1px #0A0D120A, 0px 4px 6px -2px #0A0D1208",
         }}
         className="bg-white rounded-xl flex flex-col"
       >
-        <div className="py-4 px-6 border-b border-[#E9EAEB]">
-          <Text size="large" weight="semibold" color="#0E5FB5">
+        <div className="py-4 px-6 border-b border-gray-200">
+          <Text size="large" weight="semibold" color={colors.purple700}>
             {previewCardTitle || "Preview"}
           </Text>
         </div>
@@ -85,7 +86,7 @@ const GridDynamicForm: React.FC<GridDynamicFormProps> = ({
                 <Text
                   size="small"
                   weight="semibold"
-                  color={styleConfig.primaryColor}
+                  color={colors.purple700}
                   sx={{ mb: "10px" }}
                 >
                   {section.title}

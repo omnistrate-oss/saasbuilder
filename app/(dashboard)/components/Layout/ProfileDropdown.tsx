@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useSelector } from "react-redux";
 import { Box, Stack, styled } from "@mui/material";
 
+import { colors } from "src/themeConfig";
 import useLogout from "src/hooks/useLogout";
 import { styleConfig } from "src/providerConfig";
 import { selectUserData } from "src/slices/userDataSlice";
@@ -52,7 +53,12 @@ const ProfileDropdown = () => {
       <Avatar
         src={profile_icon}
         alt="avatar"
-        sx={{ cursor: "pointer" }}
+        sx={{
+          cursor: "pointer",
+          outline: open ? `2px solid ${colors.success500}` : "none",
+          outlineOffset: "2px",
+          transition: "outline 0.1s",
+        }}
         onClick={handleMenuOpen}
       />
 

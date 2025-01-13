@@ -6,6 +6,7 @@ import EditIcon from "src/components/Icons/Edit/Edit";
 import SearchInput from "src/components/DataGrid/SearchInput";
 import RefreshWithToolTip from "src/components/RefreshWithTooltip/RefreshWithToolTip";
 import useSnackbar from "src/hooks/useSnackbar";
+import { colors } from "src/themeConfig";
 
 const CustomNetworksTableHeader = ({
   count,
@@ -54,6 +55,7 @@ const CustomNetworksTableHeader = ({
             onDeleteClick();
           }}
           startIcon={<DeleteIcon disabled={selectedRows.length !== 1} />}
+          outlineColor={colors.green300}
         >
           Delete
         </Button>
@@ -68,6 +70,7 @@ const CustomNetworksTableHeader = ({
             onPeeringInfoClick();
           }}
           startIcon={<EditIcon disabled={selectedRows.length !== 1} />}
+          outlineColor={colors.green300}
         >
           Peering Info
         </Button>

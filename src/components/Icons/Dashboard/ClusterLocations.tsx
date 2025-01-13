@@ -1,7 +1,7 @@
-import { styleConfig } from "src/providerConfig";
+import { colors } from "src/themeConfig";
 
 function ClusterLocationsIcon(props) {
-  const { color = styleConfig.headerIconColor, ...restProps } = props;
+  const { color = colors.success500, ...restProps } = props;
 
   return (
     <svg

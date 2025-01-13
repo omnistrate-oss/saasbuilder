@@ -43,6 +43,17 @@ const GlobalDataProvider = ({ children }: { children: React.ReactNode }) => {
     refetch: refetchServiceOfferings,
   } = useOrgServiceOfferings();
 
+  const servicesObj = useMemo(() => {
+    const servicesSet = new Set();
+    return serviceOfferings.reduce((acc: any, offering: any) => {
+      if (!servicesSet.has(offering.serviceId)) {
+        servicesSet.add(offering.serviceId);
+        acc[offering.serviceId] = offering;
+      }
+      return acc;
+    }, {});
+  }, [serviceOfferings]);
+
   const serviceOfferingsObj = useMemo(() => {
     return serviceOfferings.reduce((acc: any, offering: any) => {
       if (acc[offering.serviceId]) {
@@ -51,17 +62,6 @@ const GlobalDataProvider = ({ children }: { children: React.ReactNode }) => {
         acc[offering.serviceId] = {
           [offering.productTierID]: offering,
         };
-      }
-      return acc;
-    }, {});
-  }, [serviceOfferings]);
-
-  const servicesObj = useMemo(() => {
-    const servicesSet = new Set();
-    return serviceOfferings.reduce((acc: any, offering: any) => {
-      if (!servicesSet.has(offering.serviceId)) {
-        servicesSet.add(offering.serviceId);
-        acc[offering.serviceId] = offering;
       }
       return acc;
     }, {});

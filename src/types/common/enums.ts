@@ -29,3 +29,5 @@ export type InstanceStatus =
   | "STOPPED"
   | "DELETING"
   | "UNKNOWN";
+
+export type EnvironmentType = "DEV" | "PROD" | "CANARY" | "QA" | "STAGING";

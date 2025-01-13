@@ -206,10 +206,6 @@ const AuditLogsPage = () => {
           }
           HeaderComponent={AuditLogsTableHeader}
           headerProps={{
-            count: auditLogs?.pages.reduce(
-              (acc, page) => acc + page.events?.length || 0,
-              0
-            ),
             refetchAuditLogs: () => {
               setPageIndex(0);
               refetchAuditLogs();

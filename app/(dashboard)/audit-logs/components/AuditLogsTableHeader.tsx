@@ -7,7 +7,6 @@ import RefreshWithToolTip from "components/RefreshWithTooltip/RefreshWithToolTip
 import { SetState } from "src/types/common/reactGenerics";
 
 type AuditLogsTableHeaderProps = {
-  count?: number;
   refetchAuditLogs: () => void;
   isFetchingAuditLogs: boolean;
   selectedDateRange: Range;
@@ -15,7 +14,6 @@ type AuditLogsTableHeaderProps = {
 };
 
 const AuditLogsTableHeader: React.FC<AuditLogsTableHeaderProps> = ({
-  count,
   refetchAuditLogs,
   isFetchingAuditLogs,
   selectedDateRange,
@@ -26,11 +24,6 @@ const AuditLogsTableHeader: React.FC<AuditLogsTableHeaderProps> = ({
       <DataGridHeaderTitle
         title="List of Audit Logs"
         desc="Detailed audit trail of user actions performed on resource instances"
-        count={count}
-        units={{
-          singular: "Log",
-          plural: "Logs",
-        }}
       />
 
       <div className="flex items-center gap-4 flex-nowrap">

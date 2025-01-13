@@ -10,6 +10,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v14-appRouter";
 
 import { store } from "src/redux-store";
+import { EnvironmentType } from "src/types/common/enums";
 import { PAGE_TITLE_MAP } from "src/constants/pageTitleMap";
 import CookieConsentProvider from "src/context/cookieConsentContext";
 import NotificationBarProvider from "src/context/NotificationBarProvider";
@@ -56,7 +57,7 @@ const RootProviders = ({
   providerOrgDetails,
 }: {
   children: React.ReactNode;
-  envType: string; // TODO: Add a Type Here
+  envType: EnvironmentType;
   providerOrgDetails: any; // TODO: Add a Type Here
 }) => {
   const pathname = usePathname();

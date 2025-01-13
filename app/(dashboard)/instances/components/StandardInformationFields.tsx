@@ -17,6 +17,7 @@ import { useGlobalData } from "src/providers/GlobalDataProvider";
 import CloudProviderRadio from "app/(dashboard)/components/CloudProviderRadio/CloudProviderRadio";
 import { cloudProviderLogoMap } from "src/constants/cloudProviders";
 import { Field } from "src/components/DynamicForm/types";
+import SubscriptionPlanRadio from "app/(dashboard)/components/SubscriptionPlanRadio/SubscriptionPlanRadio";
 
 type StandardInformationFieldsProps = {
   formData: any;
@@ -112,11 +113,14 @@ const StandardInformationFields: React.FC<StandardInformationFieldsProps> = ({
         subLabel: "Select the subscription plan",
         name: "servicePlanId",
         required: true,
-        type: "select",
-        disabled: formMode !== "create",
-        emptyMenuText: !serviceId ? "Select a service" : "No plans available",
-        isLoading: isFetchingServiceOfferings || isFetchingSubscriptions,
-        menuItems: servicePlanMenuItems,
+        customComponent: (
+          <SubscriptionPlanRadio
+            serviceId={values.serviceId}
+            servicePlanId={values.servicePlanId}
+            name="servicePlanId"
+            formData={formData}
+          />
+        ),
         previewValue: () => (
           <Text size="small" weight="medium" color="#181D27">
             {

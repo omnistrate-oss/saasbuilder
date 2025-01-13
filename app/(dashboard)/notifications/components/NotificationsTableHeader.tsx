@@ -6,7 +6,6 @@ import RefreshWithToolTip from "src/components/RefreshWithTooltip/RefreshWithToo
 import { SetState } from "src/types/common/reactGenerics";
 
 type NotificationsTableHeaderProps = {
-  count?: number;
   refetchNotifications: () => void;
   isFetchingNotifications: boolean;
   selectedDateRange: Range;
@@ -14,7 +13,6 @@ type NotificationsTableHeaderProps = {
 };
 
 const NotificationsTableHeader: React.FC<NotificationsTableHeaderProps> = ({
-  count,
   refetchNotifications,
   selectedDateRange,
   setSelectedDateRange,
@@ -25,11 +23,6 @@ const NotificationsTableHeader: React.FC<NotificationsTableHeaderProps> = ({
       <DataGridHeaderTitle
         title="List of Notifications"
         desc="Notifications related to system activities"
-        count={count}
-        units={{
-          singular: "Notification",
-          plural: "Notifications",
-        }}
       />
 
       <div className="flex items-center gap-4 flex-nowrap">

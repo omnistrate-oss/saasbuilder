@@ -36,6 +36,7 @@ const FullScreenDrawer: React.FC<FullScreenDrawerProps> = ({
       PaperProps={{
         sx: {
           backgroundColor: "#FCFCFC",
+          scrollbarGutter: "stable",
         },
       }}
     >
