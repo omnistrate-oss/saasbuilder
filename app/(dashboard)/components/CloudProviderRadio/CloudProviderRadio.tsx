@@ -3,21 +3,31 @@
 import clsx from "clsx";
 import { Text } from "components/Typography/Typography";
 import { cloudProviderLabels } from "src/constants/cloudProviders";
+import AWSLogo from "../Icons/AWSLogo";
+import GCPFullLogo from "../Icons/GCPFullLogo";
 
 const CloudProviderCard = ({
   cloudProvider,
   isSelected,
   onClick,
-  disabled, // TODO: Add Fucntionality
+  disabled,
 }) => {
   return (
     <div
       className={clsx(
-        "px-4 py-4 rounded-xl cursor-pointer text-center",
-        isSelected ? "border-2 border-[#0E5FB5]" : "border border-[#E9EAEB]"
+        "px-4 py-4 rounded-xl text-center flex flex-col justify-between items-center min-h-28",
+        disabled ? "cursor-not-allowed opacity-50" : "cursor-pointer"
       )}
-      onClick={onClick}
+      style={{
+        outline: isSelected ? "2px solid #0E5FB5" : "1px solid #E9EAEB",
+      }}
+      onClick={() => {
+        if (!disabled) {
+          onClick();
+        }
+      }}
     >
+      {cloudProvider === "aws" ? <AWSLogo /> : <GCPFullLogo />}
       <Text size="small" weight="medium" color="#414651">
         {cloudProviderLabels[cloudProvider]}
       </Text>

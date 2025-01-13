@@ -1,6 +1,6 @@
 import { colors } from "src/themeConfig";
 
-const DashboardIcon = () => {
+const SubscriptionsIcon = () => {
   return (
     <svg
       width="32"
@@ -19,4 +19,4 @@ const DashboardIcon = () => {
   );
 };
 
-export default DashboardIcon;
+export default SubscriptionsIcon;

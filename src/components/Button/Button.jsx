@@ -4,6 +4,7 @@ import { textStyles, weights } from "../Typography/Typography";
 import LoadingSpinnerSmall from "../CircularProgress/CircularProgress";
 import { styleConfig } from "src/providerConfig";
 import Tooltip from "../Tooltip/Tooltip";
+import { colors } from "src/themeConfig";
 
 const Button = styled(
   ({ children, isLoading, disabledMessage, ...restProps }) => {
@@ -80,12 +81,12 @@ const Button = styled(
 
   return {
     ...buttonStyles,
-    borderRadius: "200px",
+    borderRadius: "8px",
     textTransform: "none",
     minWidth: "auto",
     [`&.${buttonClasses.contained}`]: {
       color: "#FFF",
-      background: bgColor ? bgColor : theme.palette.primary.main,
+      background: bgColor ? bgColor : colors.success600,
       color: fontColor ? fontColor : styleConfig.primaryTextColor,
       boxShadow: "none",
       "&:hover": {

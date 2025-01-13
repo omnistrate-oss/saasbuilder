@@ -7,7 +7,7 @@ import { Box, LinearProgress, Stack } from "@mui/material";
 import ArrowOutwardIcon from "@mui/icons-material/ArrowOutward";
 
 import PageTitle from "../components/Layout/PageTitle";
-import SettingsIcon from "../components/Icons/SettingsIcon";
+import BillingIcon from "../components/Icons/BillingIcon";
 import PageContainer from "../components/Layout/PageContainer";
 import AccountManagementHeader from "../components/AccountManagement/AccountManagementHeader";
 
@@ -69,7 +69,7 @@ const BillingPage = () => {
         userEmail={selectUser?.email}
       />
       <PageContainer>
-        <PageTitle icon={SettingsIcon} className="mb-6">
+        <PageTitle icon={BillingIcon} className="mb-6">
           Billing
         </PageTitle>
 

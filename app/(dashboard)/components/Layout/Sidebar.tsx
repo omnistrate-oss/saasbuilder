@@ -18,7 +18,7 @@ import DeveloperDocsIcon from "components/Icons/SideNavbar/DeveloperDocs/Develop
 
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 
-import { styleConfig } from "src/providerConfig";
+import { colors } from "src/themeConfig";
 import useBillingDetails from "src/hooks/query/useBillingDetails";
 
 const bottomItems = [
@@ -62,15 +62,15 @@ const SingleNavItem = ({
     return (
       <Link
         href={href}
-        className="flex items-center gap-2.5 py-2.5 px-3 rounded-md group cursor-pointer hover:bg-[#FAFAFA] transition-colors mb-1"
+        className="flex items-center gap-2.5 py-2.5 px-3 rounded-md group cursor-pointer hover:bg-gray-50 transition-colors mb-1"
       >
         <Icon />
 
         <Text
           size="medium"
           weight="semibold"
-          color={currentPath === href ? "#0E5FB5" : "#414651"}
-          className="group-hover:text-[#0E5FB5] transition-colors"
+          color={currentPath === href ? colors.success500 : colors.gray700}
+          className="group-hover:text-success-500 transition-colors"
         >
           {name}
         </Text>
@@ -79,13 +79,13 @@ const SingleNavItem = ({
   }
 
   return (
-    <div className="flex items-center gap-2.5 py-2.5 px-3 rounded-md group cursor-pointer hover:bg-[#FAFAFA] transition-colors mb-1">
+    <div className="flex items-center gap-2.5 py-2.5 px-3 rounded-md group cursor-pointer hover:bg-gray-50 transition-colors mb-1">
       <Icon />
 
       <Text
         size="medium"
         weight="semibold"
-        className="group-hover:text-[#0E5FB5] transition-colors"
+        className="group-hover:text-success-500 transition-colors"
       >
         {name}
       </Text>
@@ -101,7 +101,7 @@ const ExpandibleNavItem = ({ name, icon: Icon, subItems, currentPath }) => {
   return (
     <div>
       <div
-        className="flex items-center gap-2.5 py-2.5 px-3 rounded-md group cursor-pointer hover:bg-[#FAFAFA] transition-colors mb-1"
+        className="flex items-center gap-2.5 py-2.5 px-3 rounded-md group cursor-pointer hover:bg-gray-50 transition-colors mb-1"
         onClick={() => setIsExpanded((prev) => !prev)}
       >
         <Icon />
@@ -109,14 +109,14 @@ const ExpandibleNavItem = ({ name, icon: Icon, subItems, currentPath }) => {
         <Text
           size="medium"
           weight="semibold"
-          className="group-hover:text-[#0E5FB5] transition-colors"
+          className="group-hover:text-success-500 transition-colors select-none"
         >
           {name}
         </Text>
 
         <div className="ml-auto">
           <ExpandLessIcon
-            sx={{ color: styleConfig.sidebarIconColor }}
+            sx={{ color: colors.gray400 }}
             className={`transition-all ${isExpanded ? "rotate-0" : "rotate-180"}`}
           />
         </div>
@@ -129,16 +129,18 @@ const ExpandibleNavItem = ({ name, icon: Icon, subItems, currentPath }) => {
               href={item.href}
               key={item.name}
               className={clsx(
-                "flex items-center gap-2.5 py-2.5 px-3 pl-10 rounded-md group cursor-pointer hover:bg-[#FAFAFA] transition-colors mb-1",
-                currentPath === item.href && "bg-[#FAFAFA]"
+                "flex items-center gap-2.5 py-2.5 px-3 pl-10 rounded-md group cursor-pointer hover:bg-gray-50 transition-colors mb- select-none",
+                currentPath === item.href && "bg-gray-50"
               )}
             >
-              <div className="w-2 h-2 rounded-full bg-[#127AE8]" />
+              <div className="w-2 h-2 rounded-full bg-success-500" />
               <Text
                 size="medium"
                 weight="semibold"
-                color={currentPath === item.href ? "#0E5FB5" : "#414651"}
-                className="group-hover:text-[#0E5FB5] transition-colors"
+                color={
+                  currentPath === item.href ? colors.success500 : colors.gray700
+                }
+                className="group-hover:text-success-500 transition-colors"
               >
                 {item.name}
               </Text>

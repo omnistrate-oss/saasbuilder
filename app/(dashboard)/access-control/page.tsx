@@ -23,6 +23,12 @@ import SubscriptionTypeInvitedIcon from "components/Icons/SubscriptionType/Subsc
 import useSnackbar from "src/hooks/useSnackbar";
 import { revokeSubscriptionUser } from "src/api/users";
 import { useGlobalData } from "src/providers/GlobalDataProvider";
+import {
+  getEnumFromUserRoleString,
+  isOperationAllowedByRBAC,
+  operationEnum,
+  viewEnum,
+} from "src/utils/isAllowedByRBAC";
 
 const columnHelper = createColumnHelper<any>(); // TODO: Add type
 type Overlay = "delete-dialog";
@@ -132,6 +138,15 @@ const AccessControlPage = () => {
         id: "action",
         header: "Action",
         cell: (data) => {
+          const subscription =
+            subscriptionsObj[data.row.original.subscriptionId];
+
+          const isDeleteAllowed = isOperationAllowedByRBAC(
+            operationEnum.UnInvite,
+            getEnumFromUserRoleString(subscription?.roleType),
+            viewEnum.Access_AccessControl
+          );
+
           return (
             <Button
               variant="outlined"
@@ -153,8 +168,16 @@ const AccessControlPage = () => {
                 boxShadow: "none !important",
               }}
               disableRipple
-              disabled={data.row.original.roleType === "root"}
-              disabledMessage="Cannot delete root user"
+              disabled={
+                data.row.original.roleType === "root" || !isDeleteAllowed
+              }
+              disabledMessage={
+                !isDeleteAllowed
+                  ? "You do not have permission to delete this user"
+                  : data.row.original.roleType === "root"
+                    ? "Cannot delete root user"
+                    : ""
+              }
             >
               Delete User
             </Button>

@@ -44,24 +44,24 @@ const DeploymentConfigurationFields: React.FC<
         param.dependentResourceID &&
         param.key !== "cloud_provider_account_config_id"
       ) {
-        const dependentResourceId = param.dependentResourceID;
-        const options = resourceIdInstancesHashMap[dependentResourceId]
-          ? resourceIdInstancesHashMap[dependentResourceId]
-          : [];
-
-        fields.push({
-          label: param.displayName || param.key,
-          subLabel: param.description,
-          name: `requestParams.${param.key}`,
-          value: values.requestParams[param.key],
-          type: "select",
-          menuItems: options.map((option) => ({
-            label: option,
-            value: option,
-          })),
-          required: formMode !== "modify" && param.required,
-          isLoading: isFetchingResourceInstanceIds,
-        });
+        // TODO: Fix This
+        // const dependentResourceId = param.dependentResourceID;
+        // const options = resourceIdInstancesHashMap[dependentResourceId]
+        //   ? resourceIdInstancesHashMap[dependentResourceId]
+        //   : [];
+        // fields.push({
+        //   label: param.displayName || param.key,
+        //   subLabel: param.description,
+        //   name: `requestParams.${param.key}`,
+        //   value: values.requestParams[param.key],
+        //   type: "select",
+        //   menuItems: options.map((option) => ({
+        //     label: option,
+        //     value: option,
+        //   })),
+        //   required: formMode !== "modify" && param.required,
+        //   isLoading: isFetchingResourceInstanceIds,
+        // });
       } else if (param.type === "Boolean") {
         fields.push({
           label: param.displayName || param.key,

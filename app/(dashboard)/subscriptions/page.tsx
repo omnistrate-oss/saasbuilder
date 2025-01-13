@@ -12,9 +12,9 @@ import { selectUserrootData } from "src/slices/userDataSlice";
 import { useGlobalData } from "src/providers/GlobalDataProvider";
 
 import PageTitle from "../components/Layout/PageTitle";
-import SettingsIcon from "../components/Icons/SettingsIcon";
 import PageContainer from "../components/Layout/PageContainer";
 import SubscriptionDetails from "./components/SubscriptionDetails";
+import SubscriptionsIcon from "../components/Icons/SubscriptionsIcon";
 import ManageSubscriptionsForm from "./components/ManageSubscriptionsForm";
 import SubscriptionsTableHeader from "./components/SubscriptionsTableHeader";
 import FullScreenDrawer from "../components/FullScreenDrawer/FullScreenDrawer";
@@ -77,6 +77,7 @@ const SubscriptionsPage = () => {
               style={{
                 fontWeight: 600,
               }}
+              showCopyButton
             >
               {data.row.original.id}
             </DataGridText>
@@ -181,7 +182,7 @@ const SubscriptionsPage = () => {
         userEmail={selectUser?.email}
       />
       <PageContainer>
-        <PageTitle icon={SettingsIcon} className="mb-6">
+        <PageTitle icon={SubscriptionsIcon} className="mb-6">
           Subscriptions
         </PageTitle>
 

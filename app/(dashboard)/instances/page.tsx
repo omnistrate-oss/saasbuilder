@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { Stack } from "@mui/material";
 import { useMemo, useState } from "react";
+import { useMutation } from "@tanstack/react-query";
 import { createColumnHelper } from "@tanstack/react-table";
 
 import useInstances from "./hooks/useInstances";
@@ -14,10 +15,12 @@ import PageContainer from "../components/Layout/PageContainer";
 import InstancesTableHeader from "./components/InstancesTableHeader";
 import FullScreenDrawer from "../components/FullScreenDrawer/FullScreenDrawer";
 
+import useSnackbar from "src/hooks/useSnackbar";
 import formatDateUTC from "src/utils/formatDateUTC";
 import { CLI_MANAGED_RESOURCES } from "src/constants/resource";
 import { useGlobalData } from "src/providers/GlobalDataProvider";
 import { getInstanceDetailsRoute } from "src/utils/route/routes";
+import { deleteResourceInstance } from "src/api/resourceInstance";
 import { calculateInstanceHealthPercentage } from "src/utils/instanceHealthPercentage";
 import { getResourceInstanceStatusStylesAndLabel } from "src/constants/statusChipStyles/resourceInstanceStatus";
 
@@ -33,6 +36,7 @@ import CapacityDialog from "components/CapacityDialog/CapacityDialog";
 import GenerateTokenDialog from "components/GenerateToken/GenerateTokenDialog";
 import GradientProgressBar from "components/GradientProgessBar/GradientProgressBar";
 import ServiceNameWithLogo from "components/ServiceNameWithLogo/ServiceNameWithLogo";
+import AccessSideRestoreInstance from "components/RestoreInstance/AccessSideRestoreInstance";
 import TextConfirmationDialog from "components/TextConfirmationDialog/TextConfirmationDialog";
 
 import SpeedoMeterLow from "public/assets/images/dashboard/resource-instance-speedo-meter/idle.png";
@@ -50,12 +54,12 @@ type Overlay =
   | "generate-token-dialog";
 
 const InstancesPage = () => {
+  const snackbar = useSnackbar();
   const [selectedRows, setSelectedRows] = useState<string[]>([]);
   const [overlayType, setOverlayType] = useState<Overlay>(
     "create-instance-form"
   );
   const [isOverlayOpen, setIsOverlayOpen] = useState<boolean>(false);
-  const [searchText, setSearchText] = useState("");
   const {
     subscriptions,
     serviceOfferingsObj,
@@ -320,6 +324,7 @@ const InstancesPage = () => {
 
   const {
     data: instances = [],
+    isLoading: isLoadingInstances,
     isFetching: isFetchingInstances,
     refetch: refetchInstances,
   } = useInstances();
@@ -341,6 +346,52 @@ const InstancesPage = () => {
     return serviceOfferingsObj[serviceId]?.[productTierId];
   }, [selectedInstanceSubscription, serviceOfferingsObj]);
 
+  // Resource of the Selected Instance
+  const selectedResource = useMemo(() => {
+    return getMainResourceFromInstance(selectedInstance);
+  }, [selectedInstance]);
+
+  const selectedInstanceData = useMemo(() => {
+    return {
+      id: selectedInstance?.id,
+      instanceId: selectedInstance?.id,
+      serviceProviderId: selectedInstanceOffering?.serviceProviderId,
+      serviceKey: selectedInstanceOffering?.serviceURLKey,
+      serviceAPIVersion: selectedInstanceOffering?.serviceAPIVersion,
+      serviceEnvironmentKey: selectedInstanceOffering?.serviceEnvironmentURLKey,
+      serviceModelKey: selectedInstanceOffering?.serviceModelURLKey,
+      productTierKey: selectedInstanceOffering?.productTierURLKey,
+      resourceKey: selectedResource?.resourceKey,
+      subscriptionId: selectedInstanceSubscription?.id,
+    };
+  }, [
+    selectedInstance,
+    selectedInstanceOffering,
+    selectedInstanceSubscription,
+    selectedResource,
+  ]);
+
+  const deleteInstanceMutation = useMutation(
+    () => {
+      if (!selectedInstance) return snackbar.showError("No instance selected");
+      if (!selectedInstanceOffering || selectedInstanceSubscription) {
+        return snackbar.showError("Subscription not found");
+      }
+      if (!selectedResource) {
+        return snackbar.showError("Resource not found");
+      }
+
+      return deleteResourceInstance(selectedInstanceData);
+    },
+    {
+      onSuccess: () => {
+        setSelectedRows([]);
+        refetchInstances();
+        snackbar.showSuccess("Deleting instance");
+      },
+    }
+  );
+
   return (
     <PageContainer>
       <PageTitle icon={InstancesIcon} className="mb-6">
@@ -355,8 +406,6 @@ const InstancesPage = () => {
           HeaderComponent={InstancesTableHeader}
           headerProps={{
             count: instances.length,
-            searchText,
-            setSearchText,
             selectedInstance,
             setSelectedRows,
             setOverlayType,
@@ -367,7 +416,7 @@ const InstancesPage = () => {
             isFetchingInstances,
           }}
           isLoading={
-            isFetchingInstances ||
+            isLoadingInstances ||
             isFetchingSubscriptions ||
             isFetchingServiceOfferings
           }
@@ -408,11 +457,13 @@ const InstancesPage = () => {
       <TextConfirmationDialog
         open={isOverlayOpen && overlayType === "delete-dialog"}
         handleClose={() => setIsOverlayOpen(false)}
-        onConfirm={() => {}}
+        onConfirm={async () => {
+          await deleteInstanceMutation.mutateAsync();
+        }}
         title="Delete Instance"
         subtitle={`Are you sure you want to delete - ${selectedRows[0]}?`}
         message="To confirm, please enter <b>deleteme</b>, in the field below:"
-        isLoading={false} //TODO: Change This
+        isLoading={deleteInstanceMutation.isLoading}
       />
 
       <CapacityDialog
@@ -428,12 +479,12 @@ const InstancesPage = () => {
           maxReplicas: selectedInstance?.maxReplicas,
           minReplicas: selectedInstance?.minReplicas,
         }}
-        // data={capacityData} TODO
+        data={selectedInstanceData}
         currentCapacityAction={
           overlayType === "add-capacity-dialog" ? "add" : "remove"
         }
         contextType="access"
-        // refetch={fetchResourceInstancesOfSelectedResource} TODO
+        refetch={refetchInstances}
       />
 
       <GenerateTokenDialog
@@ -444,6 +495,21 @@ const InstancesPage = () => {
         onClose={() => setIsOverlayOpen(false)}
         selectedInstanceId={selectedInstance?.id}
         subscriptionId={selectedInstance?.subscriptionId}
+      />
+
+      <AccessSideRestoreInstance
+        open={isOverlayOpen && overlayType === "restore-dialog"}
+        handleClose={() => setIsOverlayOpen(false)}
+        earliestRestoreTime={
+          selectedResource?.backupStatus?.earliestRestoreTime
+        }
+        service={selectedInstanceOffering}
+        setSelectionModel={setSelectedRows}
+        fetchResourceInstances={refetchInstances}
+        selectedResource={selectedResource}
+        subscriptionId={selectedInstanceSubscription?.id}
+        selectedInstanceId={selectedResource?.id}
+        networkType={selectedResource?.network_type}
       />
     </PageContainer>
   );

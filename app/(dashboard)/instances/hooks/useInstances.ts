@@ -11,6 +11,7 @@ const useInstances = (queryOptions = {}) => {
       select: (data) => {
         return data.data.resourceInstances;
       },
+      refetchInterval: 60000,
       ...queryOptions,
     }
   );

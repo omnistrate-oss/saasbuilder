@@ -5,6 +5,7 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import { Box, List } from "@mui/material";
 import { Text } from "src/components/Typography/Typography";
+import { colors } from "src/themeConfig";
 
 type PaginationProps = {
   isPreviousDisabled?: boolean;
@@ -45,7 +46,7 @@ const Pagination: FC<PaginationProps> = (props) => {
         alignItems: "center",
         px: "24px",
         gap: "12px",
-        borderTop: "1px solid #EAECF0",
+        borderTop: `1px solid ${colors.gray200}`,
       }}
     >
       {pageCount > 0 && hidePageNumbers && (
@@ -84,18 +85,18 @@ const Pagination: FC<PaginationProps> = (props) => {
                   {...item}
                   size="small"
                   variant="text"
+                  fontColor={selected ? colors.gray800 : colors.gray600}
                   sx={{
                     minWidth: 0,
                     width: 40,
                     height: 40,
-                    color: selected ? "#6941C6" : "#475467",
-                    background: selected ? "#F2F4F7" : "transparent",
+                    background: selected ? colors.gray50 : "transparent",
                     "&:hover": {
-                      background: "#F2F4F7",
+                      background: colors.gray50,
                     },
                   }}
                   onClick={() => {
-                    setPageIndex(page - 1);
+                    setPageIndex((page || 1) - 1);
                   }}
                 >
                   {page}

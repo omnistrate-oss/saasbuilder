@@ -79,18 +79,21 @@ const InviteUsersCard: React.FC<InviteUsersCardProps> = ({
             roleType: d.roleType,
           };
 
-          const subscription = subscriptions.find(
+          const filteredSubscriptions = subscriptions.filter(
             (sub) =>
               sub.serviceId === d.serviceId &&
               sub.productTierId === d.servicePlanId
           );
-          return inviteSubscriptionUser(subscription?.id, payload);
+          const rootSubscription = filteredSubscriptions.find(
+            (sub) => sub.roleType === "root"
+          );
+          return inviteSubscriptionUser(rootSubscription?.id, payload);
         })
       );
       snackbar.showSuccess("Invites Sent");
       // eslint-disable-next-line no-use-before-define
       formData.resetForm();
-    } catch (error) {
+    } catch {
       snackbar.showError("Failed to send invites");
     } finally {
       refetchUsers();

@@ -10,7 +10,7 @@ type DetailsTableProps = {
 const DetailsTable: React.FC<DetailsTableProps> = ({ columns }) => {
   return (
     <div
-      className="grid rounded-xl border border-[#E9EAEB] shadow-[0_1px_2px_0_#0A0D120D] overflow-hidden"
+      className="grid rounded-xl border border-gray-200 shadow-[0_1px_2px_0_#0A0D120D] overflow-hidden"
       style={{
         gridTemplateColumns: `repeat(${columns.length}, minmax(0, 1fr))`,
       }}
@@ -18,7 +18,7 @@ const DetailsTable: React.FC<DetailsTableProps> = ({ columns }) => {
       {columns.map((column, index) => (
         <div
           key={index}
-          className="bg-[#FAFAFA] border-b border-[#E9EAEB]"
+          className="bg-gray-50 border-b border-gray-200"
           style={{ padding: "12px 24px" }}
         >
           <Text size="xsmall" weight="semibold" color="#717680">

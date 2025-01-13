@@ -1,7 +1,8 @@
 import React from "react";
 import NextImage from "next/image";
-import gcpIcon from "../../../../public/assets/images/logos/gcp.svg";
 import { styled } from "@mui/material";
+
+import gcpIcon from "public/assets/images/logos/gcp.svg";
 
 function GcpLogo(props) {
   return <Image src={gcpIcon} alt="gcp-logo" {...props} />;

@@ -1,9 +1,6 @@
 import clsx from "clsx";
 import { FC } from "react";
-import Image from "next/image";
 import { DisplayText, Text } from "components/Typography/Typography";
-
-import HeaderImage from "public/assets/images/settings/HeaderImage.png";
 
 type AccountManagementHeaderProps = {
   userName?: string;
@@ -18,13 +15,7 @@ const AccountManagementHeader: FC<AccountManagementHeaderProps> = ({
 }) => {
   return (
     <div>
-      <Image
-        src={HeaderImage}
-        alt="Header Image"
-        width={4575}
-        height={479}
-        className="h-[140px] w-full object-cover"
-      />
+      <div className="h-[140px] w-full bg-gradient-to-b from-[#A5C0EE] to-[#FBC5EC]" />
 
       <div
         className={clsx("flex items-end gap-6 px-8 -mt-6", className)}
