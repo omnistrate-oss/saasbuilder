@@ -327,9 +327,17 @@ const InstancesPage = () => {
     refetch: refetchInstances,
   } = useInstances();
 
+  const nonBYOAInstances = useMemo(() => {
+    return instances.filter(
+      // Filter BYOA Account Instances
+      // @ts-ignore
+      (instance) => !instance.result_params?.account_configuration_method
+    );
+  }, [instances]);
+
   const selectedInstance = useMemo(() => {
-    return instances.find((instance) => instance.id === selectedRows[0]);
-  }, [selectedRows, instances]);
+    return nonBYOAInstances.find((instance) => instance.id === selectedRows[0]);
+  }, [selectedRows, nonBYOAInstances]);
 
   // Subscription of the Selected Instance
   const selectedInstanceSubscription = useMemo(() => {
@@ -390,11 +398,11 @@ const InstancesPage = () => {
       <div>
         <DataTable
           columns={dataTableColumns}
-          rows={instances}
+          rows={nonBYOAInstances}
           noRowsText="No instances"
           HeaderComponent={InstancesTableHeader}
           headerProps={{
-            count: instances.length,
+            count: nonBYOAInstances.length,
             selectedInstance,
             setSelectedRows,
             setOverlayType,

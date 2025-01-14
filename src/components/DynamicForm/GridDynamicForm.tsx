@@ -1,16 +1,15 @@
 import React from "react";
-import { styleConfig } from "src/providerConfig";
+import { colors } from "src/themeConfig";
 import { FormMode } from "src/types/common/enums";
 
 import { FormConfiguration } from "./types";
 import GridDynamicField from "./GridDynamicField";
 
 import Button from "../Button/Button";
+import Form from "../FormElementsv2/Form/Form";
 import { Text } from "../Typography/Typography";
 import CardWithTitle from "../Card/CardWithTitle";
 import LoadingSpinnerSmall from "../CircularProgress/CircularProgress";
-import Form from "../FormElementsv2/Form/Form";
-import { colors } from "src/themeConfig";
 
 type GridDynamicFormProps = {
   formData: any;

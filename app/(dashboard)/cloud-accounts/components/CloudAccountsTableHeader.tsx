@@ -4,9 +4,12 @@ import Button from "components/Button/Button";
 import DeleteIcon from "components/Icons/Delete/Delete";
 import SearchInput from "components/DataGrid/SearchInput";
 import DataGridHeaderTitle from "components/Headers/DataGridHeaderTitle";
-import RefreshWithToolTip from "src/components/RefreshWithTooltip/RefreshWithToolTip";
+import RefreshWithToolTip from "components/RefreshWithTooltip/RefreshWithToolTip";
+
+import { colors } from "src/themeConfig";
 
 const CloudAccountsTableHeader = ({
+  count,
   searchText,
   setSearchText,
   onCreateClick,
@@ -20,10 +23,10 @@ const CloudAccountsTableHeader = ({
       <DataGridHeaderTitle
         title="List of Cloud Accounts"
         desc="Details of cloud account instances"
-        count={1}
+        count={count}
         units={{
-          singular: "Instance",
-          plural: "Instances",
+          singular: "Account",
+          plural: "Accounts",
         }}
       />
 
@@ -42,6 +45,7 @@ const CloudAccountsTableHeader = ({
           disabled={selectedRows.length !== 1}
           onClick={onDeleteClick}
           startIcon={<DeleteIcon disabled={selectedRows.length !== 1} />}
+          outlineColor={colors.green300}
         >
           Delete
         </Button>

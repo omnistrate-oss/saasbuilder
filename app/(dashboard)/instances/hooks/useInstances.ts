@@ -9,17 +9,11 @@ const useInstances = (queryOptions = {}) => {
     },
     {
       select: (data) => {
-        return data.data.resourceInstances
-          .filter(
-            // Filter BYOA Account Instances
-            // @ts-ignore
-            (instance) => instance.result_params?.account_configuration_method
-          )
-          .sort(
-            (a, b) =>
-              new Date(b.created_at || "").getTime() -
-              new Date(a.created_at || "").getTime()
-          );
+        return data.data.resourceInstances.sort(
+          (a, b) =>
+            new Date(b.created_at || "").getTime() -
+            new Date(a.created_at || "").getTime()
+        );
       },
       refetchInterval: 60000,
       ...queryOptions,

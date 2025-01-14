@@ -43,8 +43,6 @@ export type Section = {
 
 export type FormConfiguration = {
   dataTestId?: string;
-  title: Partial<Record<FormMode, string>>;
-  description: Partial<Record<FormMode, string>>;
   sections: Section[];
   footer: {
     submitButton: Partial<Record<FormMode, string>>;

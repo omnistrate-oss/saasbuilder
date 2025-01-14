@@ -28,7 +28,7 @@ type Context = {
   refetchServiceOfferings: () => void; // TODO Later: Add a Proper Type
 
   subscriptionsObj: Record<string, Subscription>;
-  serviceOfferingsObj: Record<string, ServiceOffering>;
+  serviceOfferingsObj: Record<string, Record<string, ServiceOffering>>;
   servicesObj: Record<string, any>;
 };
 

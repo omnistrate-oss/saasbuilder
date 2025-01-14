@@ -47,6 +47,7 @@ export const PasswordInput = ({ field, formData }) => {
           border: "none",
           paddingRight: 0,
         },
+        mt: 0,
       }}
       InputProps={{
         endAdornment: (
@@ -144,6 +145,7 @@ export const TextInput = ({
         maxRows: 3,
       })}
       placeholder={field.placeholder || ""}
+      sx={{ mt: 0 }}
     />
   );
 };
@@ -169,6 +171,7 @@ export const SelectField = ({ field, formData }) => {
       }}
       error={Boolean(touched[field.name] && errors[field.name])}
       disabled={field.disabled}
+      sx={{ mt: 0 }}
     >
       {field.menuItems?.length > 0 ? (
         field.menuItems.map((option) => (

@@ -17,6 +17,7 @@ import { createSubscriptions } from "src/api/subscriptions";
 import { useGlobalData } from "src/providers/GlobalDataProvider";
 import { SubscriptionRequest } from "src/types/subscriptionRequest";
 import { createSubscriptionRequest } from "src/api/subscriptionRequests";
+import { Subscription } from "src/types/subscription";
 
 const SubscriptionPlanCard = ({
   plan,
@@ -125,12 +126,21 @@ const SubscriptionPlanRadio = ({
 }) => {
   const snackbar = useSnackbar();
   const {
-    subscriptionsObj,
+    subscriptions,
     subscriptionRequests,
     serviceOfferingsObj,
     refetchSubscriptions,
     refetchSubscriptionRequests,
   } = useGlobalData();
+
+  const subscriptionsObj: Record<string, Subscription> = useMemo(() => {
+    return subscriptions?.reduce((acc, sub) => {
+      if (sub.roleType === "root") {
+        acc[sub.productTierId] = sub;
+      }
+      return acc;
+    }, {});
+  }, [subscriptions]);
 
   const servicePlans = useMemo(() => {
     return Object.values(serviceOfferingsObj[serviceId] || {}).sort(
