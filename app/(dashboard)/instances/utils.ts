@@ -1,4 +1,5 @@
 import { CloudProvider } from "src/types/common/enums";
+import { ResourceInstance } from "src/types/resourceInstance";
 
 export const getServiceMenuItems = (serviceOfferings: any[]) => {
   const menuItems: any[] = [];
@@ -119,7 +120,7 @@ export const getRegionMenuItems = (
   return menuItems;
 };
 
-export const getMainResourceFromInstance = (instance: any) => {
+export const getMainResourceFromInstance = (instance?: ResourceInstance) => {
   if (!instance) {
     return null;
   }

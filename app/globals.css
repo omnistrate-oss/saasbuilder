@@ -10,6 +10,8 @@ body,
 
 @layer base {
   :root {
+    --white: #ffffff;
+
     --purple-50: #f4f3ff;
     --purple-200: #d9d6fe;
     --purple-600: #6938ef;

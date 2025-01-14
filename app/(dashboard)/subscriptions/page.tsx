@@ -28,8 +28,9 @@ import ServiceNameWithLogo from "components/ServiceNameWithLogo/ServiceNameWithL
 import TextConfirmationDialog from "components/TextConfirmationDialog/TextConfirmationDialog";
 import SubscriptionTypeDirectIcon from "components/Icons/SubscriptionType/SubscriptionTypeDirectIcon";
 import SubscriptionTypeInvitedIcon from "components/Icons/SubscriptionType/SubscriptionTypeInvitedIcon";
+import { Subscription } from "src/types/subscription";
 
-const columnHelper = createColumnHelper<any>(); // TODO: Add type
+const columnHelper = createColumnHelper<Subscription>();
 type Overlay =
   | "manage-subscriptions"
   | "unsubscribe-dialog"
@@ -43,7 +44,8 @@ const SubscriptionsPage = () => {
     "manage-subscriptions"
   );
   const [isOverlayOpen, setIsOverlayOpen] = useState<boolean>(false);
-  const [clickedSubscription, setClickedSubscription] = useState<any>(null); // TODO: Add type
+  const [clickedSubscription, setClickedSubscription] =
+    useState<Subscription | null>(null);
 
   const selectUser = useSelector(selectUserrootData);
   const {
@@ -82,6 +84,9 @@ const SubscriptionsPage = () => {
               {data.row.original.id}
             </DataGridText>
           );
+        },
+        meta: {
+          minWidth: 230,
         },
       }),
       columnHelper.accessor("roleType", {

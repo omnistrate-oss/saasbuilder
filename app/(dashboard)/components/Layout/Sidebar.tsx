@@ -12,6 +12,7 @@ import APIDocsIcon from "components/Icons/SideNavbar/APIDocs/APIDocsIcon";
 import SupportIcon from "components/Icons/SideNavbar/Support/SupportIcon";
 import PricingIcon from "components/Icons/SideNavbar/Pricing/PricingIcon";
 import ResourcesIcon from "components/Icons/SideNavbar/Resources/Resources";
+import FileLockIcon from "components/Icons/SideNavbar/FileLock/FileLockIcon";
 import DashboardNavIcon from "components/Icons/SideNavbar/Dashboard/Dashboard";
 import DownloadCLIIcon from "components/Icons/SideNavbar/DownloadCLI/DownloadCLIIcon";
 import DeveloperDocsIcon from "components/Icons/SideNavbar/DeveloperDocs/DeveloperDocsIcon";
@@ -19,6 +20,7 @@ import DeveloperDocsIcon from "components/Icons/SideNavbar/DeveloperDocs/Develop
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 
 import { colors } from "src/themeConfig";
+import { useGlobalData } from "src/providers/GlobalDataProvider";
 import useBillingDetails from "src/hooks/query/useBillingDetails";
 
 const bottomItems = [
@@ -154,6 +156,13 @@ const ExpandibleNavItem = ({ name, icon: Icon, subItems, currentPath }) => {
 
 const Sidebar = () => {
   const currentPath = usePathname();
+  const { serviceOfferings } = useGlobalData();
+
+  const showCloudProvidersPage = useMemo(() => {
+    return Boolean(
+      serviceOfferings.find((offering) => offering.serviceModelType === "BYOA")
+    );
+  }, [serviceOfferings]);
 
   // Prefetch Billing Data
   const billingDetailsQuery = useBillingDetails();
@@ -175,7 +184,11 @@ const Sidebar = () => {
         subItems: [
           { name: "Instances", href: "/instances" },
           { name: "Custom Networks", href: "/custom-networks" },
-          { name: "Cloud Accounts", href: "/cloud-accounts" },
+          {
+            name: "Cloud Accounts",
+            href: "/cloud-accounts",
+            isHidden: !showCloudProvidersPage,
+          },
         ],
       },
       {
@@ -190,7 +203,7 @@ const Sidebar = () => {
       },
       {
         name: "Account Management",
-        icon: ShieldIcon,
+        icon: FileLockIcon,
         isExpandible: true,
         subItems: [
           { name: "Settings", href: "/settings" },
@@ -199,7 +212,7 @@ const Sidebar = () => {
         ],
       },
     ];
-  }, [isBillingEnabled]);
+  }, [isBillingEnabled, showCloudProvidersPage]);
 
   return (
     <aside

@@ -23,8 +23,9 @@ import ServiceNameWithLogo from "components/ServiceNameWithLogo/ServiceNameWithL
 import CursorPaginatedDataTable from "components/DataTable/CursorPaginatedDataTable";
 import DataGridText from "src/components/DataGrid/DataGridText";
 import { getAccessControlRoute } from "src/utils/route/access/accessRoute";
+import { AuditEvent } from "src/types/auditEvent";
 
-const columnHelper = createColumnHelper<any>(); // TODO: Add type
+const columnHelper = createColumnHelper<AuditEvent>();
 
 const AuditLogsPage = () => {
   const [pageIndex, setPageIndex] = useState(0);
@@ -46,7 +47,7 @@ const AuditLogsPage = () => {
     endDate: selectedDateRange.endDate
       ? new Date(selectedDateRange.endDate).toISOString()
       : undefined,
-    eventSourceTypes: ["Customer"],
+    eventSourceTypes: "Customer",
   });
 
   useEffect(() => {
@@ -205,7 +206,7 @@ const AuditLogsPage = () => {
           renderDetailsComponent={EventDetailsView}
           noRowsText="No events"
           getRowCanExpand={(rowData) =>
-            Boolean(rowData.original.workflowFailures?.length > 0)
+            Number(rowData.original.workflowFailures?.length) > 0
           }
           HeaderComponent={AuditLogsTableHeader}
           headerProps={{

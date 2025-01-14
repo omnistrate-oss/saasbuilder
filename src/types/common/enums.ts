@@ -30,4 +30,10 @@ export type InstanceStatus =
   | "DELETING"
   | "UNKNOWN";
 
-export type EnvironmentType = "DEV" | "PROD" | "CANARY" | "QA" | "STAGING";
+export type EnvironmentType =
+  | "DEV"
+  | "PROD"
+  | "CANARY"
+  | "QA"
+  | "STAGING"
+  | "PRIVATE";

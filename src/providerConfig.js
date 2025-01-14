@@ -9,7 +9,7 @@ export const styleConfig = {
   //sidebarTextColor: "#182230",
   sidebarTextColor: "#344054",
   sidebarTextActiveColor: "#079455",
-  sidebarIconColor: "#667085",
+  sidebarIconColor: "#717680",
   sidebarIconActiveColor: "#079455",
   sidebarIconDisabledColor: "#A0AEC0",
   primaryColor: "#5925DC", // Filled Button Background

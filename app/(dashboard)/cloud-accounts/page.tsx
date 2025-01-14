@@ -114,8 +114,8 @@ const CloudAccountsPage = () => {
               setOverlayType("delete-dialog");
             },
             selectedRows,
-            refetchInstances: () => {}, // TODO
-            isFetchingInstances: false, // TODO
+            refetchInstances: () => {}, // TODO:
+            isFetchingInstances: false, // TODO:
           }}
           isLoading={false}
           selectionMode="single"

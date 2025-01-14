@@ -1,6 +1,11 @@
-import axios from "../axios";
+import { AxiosResponse } from "axios";
 
-export const listSubscriptionRequests = (query) => {
+import axios from "../axios";
+import { ListSubscriptionRequestsSuccessResponse } from "src/types/subscriptionRequest";
+
+export const listSubscriptionRequests = (
+  query
+): Promise<AxiosResponse<ListSubscriptionRequestsSuccessResponse>> => {
   return axios.get("/subscription/request", {
     params: query,
   });

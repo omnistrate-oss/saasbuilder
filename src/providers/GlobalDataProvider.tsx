@@ -7,10 +7,35 @@ import useSubscriptions from "src/hooks/query/useSubscriptions";
 import useOrgServiceOfferings from "src/features/Marketplace/PublicServices/hooks/useOrgServiceOfferings";
 import useSubscriptionRequests from "src/features/Marketplace/MarketplaceProductTier/hooks/useSubscriptionRequests";
 
-export const GlobalDataContext: any = createContext(null); // TODO: Add a Type Here
+import { Subscription } from "src/types/subscription";
+import { SubscriptionRequest } from "src/types/subscriptionRequest";
+import { ServiceOffering } from "src/types/serviceOffering";
+
+type Context = {
+  subscriptions: Subscription[];
+  isLoadingSubscriptions: boolean;
+  isFetchingSubscriptions: boolean;
+  refetchSubscriptions: () => void; // TODO Later: Add a Proper Type
+
+  subscriptionRequests: SubscriptionRequest[];
+  isLoadingSubscriptionRequests: boolean;
+  isFetchingSubscriptionRequests: boolean;
+  refetchSubscriptionRequests: () => void; // TODO Later: Add a Proper Type
+
+  serviceOfferings: ServiceOffering[];
+  isLoadingServiceOfferings: boolean;
+  isFetchingServiceOfferings: boolean;
+  refetchServiceOfferings: () => void; // TODO Later: Add a Proper Type
+
+  subscriptionsObj: Record<string, Subscription>;
+  serviceOfferingsObj: Record<string, ServiceOffering>;
+  servicesObj: Record<string, any>;
+};
+
+export const GlobalDataContext = createContext<Context | undefined>(undefined);
 
 export const useGlobalData = () => {
-  const context: any = useContext(GlobalDataContext); // TODO: Add a Type Here
+  const context = useContext(GlobalDataContext);
 
   if (context === undefined) {
     throw new Error(

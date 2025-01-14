@@ -1,5 +1,7 @@
 export const themeConfig = {
   colors: {
+    white: "var(--white)",
+
     purple50: "var(--purple-50)",
     purple200: "var(--purple-200)",
     purple600: "var(--purple-600)",

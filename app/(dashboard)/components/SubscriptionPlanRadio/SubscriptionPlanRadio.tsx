@@ -5,6 +5,7 @@ import { useMemo } from "react";
 import { useMutation } from "@tanstack/react-query";
 
 import Button from "components/Button/Button";
+import Tooltip from "components/Tooltip/Tooltip";
 import { Text } from "components/Typography/Typography";
 import ClockIcon from "components/Icons/ServicePlanCard/ClockIcon";
 import CirclePlusIcon from "components/Icons/ServicePlanCard/CirclePlusIcon";
@@ -14,8 +15,8 @@ import { colors } from "src/themeConfig";
 import useSnackbar from "src/hooks/useSnackbar";
 import { createSubscriptions } from "src/api/subscriptions";
 import { useGlobalData } from "src/providers/GlobalDataProvider";
+import { SubscriptionRequest } from "src/types/subscriptionRequest";
 import { createSubscriptionRequest } from "src/api/subscriptionRequests";
-import Tooltip from "src/components/Tooltip/Tooltip";
 
 const SubscriptionPlanCard = ({
   plan,
@@ -124,7 +125,7 @@ const SubscriptionPlanRadio = ({
 }) => {
   const snackbar = useSnackbar();
   const {
-    subscriptions,
+    subscriptionsObj,
     subscriptionRequests,
     serviceOfferingsObj,
     refetchSubscriptions,
@@ -137,20 +138,13 @@ const SubscriptionPlanRadio = ({
     );
   }, [serviceId, serviceOfferingsObj]);
 
-  const subscriptionsObj = useMemo(() => {
-    return subscriptions?.reduce((acc, subscription) => {
-      if (subscription.roleType === "root")
-        acc[subscription.productTierId] = subscription;
-      return acc;
-    }, {});
-  }, [subscriptions]);
-
-  const subscriptionRequestsObj = useMemo(() => {
-    return subscriptionRequests?.reduce((acc, request) => {
-      acc[request.productTierId] = request;
-      return acc;
-    }, {});
-  }, [subscriptionRequests]);
+  const subscriptionRequestsObj: Record<string, SubscriptionRequest> =
+    useMemo(() => {
+      return subscriptionRequests?.reduce((acc, request) => {
+        acc[request.productTierId] = request;
+        return acc;
+      }, {});
+    }, [subscriptionRequests]);
 
   const subscribeMutation = useMutation(
     (payload: any) => {

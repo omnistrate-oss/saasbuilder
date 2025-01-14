@@ -119,7 +119,8 @@ const ServicePlanCard: React.FC<ServicePlanCardProps> = ({
       {subscription && isUnsubscribeAllowed && (
         <Button
           variant="contained"
-          bgColor="#D92D20"
+          bgColor={colors.error700}
+          fontColor={colors.white}
           disabled={isFetchingData || isSubscribing || isUnsubscribing}
           onClick={onUnsubscribeClick}
         >

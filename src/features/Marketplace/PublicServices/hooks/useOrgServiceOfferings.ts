@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { listServiceOfferings } from "src/api/serviceOffering";
 import useEnvironmentType from "src/hooks/useEnvironmentType";
+import { ServiceOffering } from "src/types/serviceOffering";
 
 function useOrgServiceOfferings(queryOptions = {}) {
   const environmentType = useEnvironmentType();
@@ -10,7 +11,7 @@ function useOrgServiceOfferings(queryOptions = {}) {
     {
       select: (data) => {
         const services = data.data?.services || [];
-        const serviceOfferings = [];
+        const serviceOfferings: ServiceOffering[] = [];
 
         services.forEach((service) => {
           service?.offerings.forEach((offering) => {
@@ -18,6 +19,8 @@ function useOrgServiceOfferings(queryOptions = {}) {
               ...service,
               ...offering,
             };
+
+            // @ts-ignore
             delete offeringData.offerings;
 
             serviceOfferings.push(offeringData);
@@ -25,6 +28,7 @@ function useOrgServiceOfferings(queryOptions = {}) {
         });
 
         serviceOfferings.sort(
+          // @ts-ignore
           (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
         );
 

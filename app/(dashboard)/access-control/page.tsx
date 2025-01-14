@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { createColumnHelper } from "@tanstack/react-table";
 
@@ -29,17 +29,29 @@ import {
   operationEnum,
   viewEnum,
 } from "src/utils/isAllowedByRBAC";
+import { useSearchParams } from "next/navigation";
+import { SubscriptionUser } from "src/types/consumptionUser";
 
-const columnHelper = createColumnHelper<any>(); // TODO: Add type
+const columnHelper = createColumnHelper<SubscriptionUser>();
 type Overlay = "delete-dialog";
 
 const AccessControlPage = () => {
   const snackbar = useSnackbar();
+  const searchParams = useSearchParams();
+  const searchUserId = searchParams?.get("searchUserId");
   const [searchText, setSearchText] = useState<string>("");
   const [overlayType, setOverlayType] = useState<Overlay>("delete-dialog");
   const [isOverlayOpen, setIsOverlayOpen] = useState<boolean>(false);
-  const [selectedUser, setSelectedUser] = useState<any>(null); // TODO: Add type
+  const [selectedUser, setSelectedUser] = useState<SubscriptionUser | null>(
+    null
+  );
   const { subscriptions, isFetchingSubscriptions } = useGlobalData();
+
+  useEffect(() => {
+    if (searchUserId) {
+      setSearchText(searchUserId);
+    }
+  }, [searchUserId]);
 
   const subscriptionsObj = useMemo(() => {
     return subscriptions.reduce((acc: any, sub: any) => {
@@ -116,30 +128,35 @@ const AccessControlPage = () => {
           header: "Subscription Plan",
         }
       ),
-      columnHelper.accessor("subscriptionOwnerName", {
-        id: "subscriptionOwnerName",
-        header: "Subscription Owner",
-        cell: (data) => {
-          const subscription =
-            subscriptionsObj[data.row.original.subscriptionId];
+      columnHelper.accessor(
+        (row) => subscriptionsObj[row.subscriptionId]?.subscriptionOwnerName,
+        {
+          id: "subscriptionOwnerName",
+          header: "Subscription Owner",
+          cell: (data) => {
+            const subscription =
+              subscriptionsObj[data.row.original.subscriptionId];
 
-          return (
-            <GridCellExpand
-              value={subscription?.subscriptionOwnerName}
-              startIcon={
-                data.row.original.roleType === "root" ? (
-                  <SubscriptionTypeDirectIcon />
-                ) : (
-                  <SubscriptionTypeInvitedIcon />
-                )
-              }
-            />
-          );
-        },
-      }),
+            return (
+              <GridCellExpand
+                value={subscription?.subscriptionOwnerName}
+                startIcon={
+                  data.row.original.roleType === "root" ? (
+                    <SubscriptionTypeDirectIcon />
+                  ) : (
+                    <SubscriptionTypeInvitedIcon />
+                  )
+                }
+              />
+            );
+          },
+        }
+      ),
+      // @ts-ignore
       columnHelper.accessor("action", {
         id: "action",
         header: "Action",
+        enableSorting: false,
         cell: (data) => {
           const subscription =
             subscriptionsObj[data.row.original.subscriptionId];
@@ -197,7 +214,7 @@ const AccessControlPage = () => {
     (payload: any) => revokeSubscriptionUser(payload.subscriptionId, payload),
     {
       onSuccess: async () => {
-        // TODO: Set the Query Data Directly without Refetching
+        // TODO Later: Set the Query Data Directly without Refetching
         refetchUsers();
         setIsOverlayOpen(false);
         snackbar.showSuccess("User deleted successfully");
@@ -214,8 +231,8 @@ const AccessControlPage = () => {
       res = res.filter((user: any) => {
         return (
           user.name.toLowerCase().includes(searchTerm) ||
-          user.emailAddress.toLowerCase().includes(searchTerm) ||
-          user.id.toLowerCase().includes(searchTerm)
+          user.email.toLowerCase().includes(searchTerm) ||
+          user.userId.toLowerCase().includes(searchTerm)
         );
       });
     }

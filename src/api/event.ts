@@ -1,7 +1,9 @@
+import { AxiosResponse } from "axios";
 import axios from "../axios";
+import { ListAllAuditEventsSuccessResponse } from "src/types/auditEvent";
 
 export function getResourceInstanceEvents(resourceInstanceId, subscriptionId) {
-  const queryParams = {};
+  const queryParams: any = {};
 
   if (subscriptionId) {
     queryParams.subscriptionId = subscriptionId;
@@ -13,7 +15,7 @@ export function getResourceInstanceEvents(resourceInstanceId, subscriptionId) {
 }
 
 export function getEvent(eventId, subscriptionId) {
-  const queryParams = {};
+  const queryParams: any = {};
 
   if (subscriptionId) {
     queryParams.subscriptionId = subscriptionId;
@@ -32,7 +34,7 @@ export function getAllEvents(
   productTierURLKey,
   subscriptionId
 ) {
-  const queryParams = {};
+  const queryParams: any = {};
 
   if (subscriptionId) {
     queryParams.subscriptionId = subscriptionId;
@@ -45,7 +47,9 @@ export function getAllEvents(
   );
 }
 
-export const getAllAuditEvents = (params = {}) => {
+export const getAllAuditEvents = (
+  params = {}
+): Promise<AxiosResponse<ListAllAuditEventsSuccessResponse>> => {
   return axios.get("/resource-instance/audit-events", {
     params,
   });

@@ -1,20 +1,6 @@
-import { CloudProvider } from "./common/enums";
+import type { paths, components } from "./schema";
 
-export type Subscription = {
-  accountConfigIdentityId: string;
-  cloudProviderNames: CloudProvider[];
-  createdAt: string;
-  defaultSubscription: boolean;
-  id: string;
-  productTierId: string;
-  productTierName: string;
-  roleType: string;
-  rootUserId: string;
-  serviceId: string;
-  serviceLogoURL: string;
-  serviceName: string;
-  serviceOrgId: string;
-  serviceOrgName: string;
-  status: string;
-  subscriptionOwnerName: string;
-};
+export type ListSubscriptionsSuccessResponse =
+  paths["/2022-09-01-00/subscription"]["get"]["responses"]["200"]["content"]["application/json"];
+
+export type Subscription = components["schemas"]["DescribeSubscriptionResult"];

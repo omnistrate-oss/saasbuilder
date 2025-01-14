@@ -39,13 +39,17 @@ export function getEventRoute(
 ) {
   return `/access/${serviceId}/${environmentId}/events?productTierId=${productTierId}&subscriptionId=${subscriptionId}`;
 }
-export function getAccessControlRoute(searchUserId) {
-  let route = `/access-control`;
+export function getAccessControlRoute(searchUserId, subscriptionId) {
+  let route = `/access-control?`;
 
   if (searchUserId) {
-    route = route + `&searchUserId=${searchUserId}`;
+    route = route + `searchUserId=${searchUserId}&`;
   }
-  return route;
+
+  if (subscriptionId) {
+    route = route + `subscriptionId=${subscriptionId}&`;
+  }
+  return route.slice(0, -1);
 }
 
 export function getAuditLogsRoute(

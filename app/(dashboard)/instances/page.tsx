@@ -17,6 +17,7 @@ import FullScreenDrawer from "../components/FullScreenDrawer/FullScreenDrawer";
 
 import useSnackbar from "src/hooks/useSnackbar";
 import formatDateUTC from "src/utils/formatDateUTC";
+import { ResourceInstance } from "src/types/resourceInstance";
 import { CLI_MANAGED_RESOURCES } from "src/constants/resource";
 import { useGlobalData } from "src/providers/GlobalDataProvider";
 import { getInstanceDetailsRoute } from "src/utils/route/routes";
@@ -43,7 +44,7 @@ import SpeedoMeterLow from "public/assets/images/dashboard/resource-instance-spe
 import SpeedoMeterHigh from "public/assets/images/dashboard/resource-instance-speedo-meter/high.png";
 import SpeedoMeterMedium from "public/assets/images/dashboard/resource-instance-speedo-meter/normal.png";
 
-const columnHelper = createColumnHelper<any>(); // TODO: Add type
+const columnHelper = createColumnHelper<ResourceInstance>();
 type Overlay =
   | "create-instance-form"
   | "modify-instance-form"
@@ -61,18 +62,11 @@ const InstancesPage = () => {
   );
   const [isOverlayOpen, setIsOverlayOpen] = useState<boolean>(false);
   const {
-    subscriptions,
+    subscriptionsObj,
     serviceOfferingsObj,
     isFetchingSubscriptions,
     isFetchingServiceOfferings,
   } = useGlobalData();
-
-  const subscriptionsObj = useMemo(() => {
-    return subscriptions.reduce((acc, subscription) => {
-      acc[subscription.id] = subscription;
-      return acc;
-    }, {});
-  }, [subscriptions]);
 
   const dataTableColumns = useMemo(() => {
     return [
@@ -86,7 +80,7 @@ const InstancesPage = () => {
             detailedNetworkTopology = {},
           } = data.row.original;
           const { serviceId, productTierId } =
-            subscriptionsObj[subscriptionId] || {};
+            subscriptionsObj[subscriptionId as string] || {};
 
           const [mainResourceId] =
             Object.entries(detailedNetworkTopology).find(
@@ -122,7 +116,7 @@ const InstancesPage = () => {
       }),
       columnHelper.accessor(
         (row) => {
-          const subscription = subscriptionsObj[row.subscriptionId];
+          const subscription = subscriptionsObj[row.subscriptionId as string];
           return subscription?.serviceName;
         },
         {
@@ -130,7 +124,7 @@ const InstancesPage = () => {
           header: "Service Name",
           cell: (data) => {
             const subscription =
-              subscriptionsObj[data.row.original.subscriptionId];
+              subscriptionsObj[data.row.original.subscriptionId as string];
             const serviceName = subscription?.serviceName;
             const serviceLogoURL = subscription?.serviceLogoURL;
 
@@ -155,7 +149,7 @@ const InstancesPage = () => {
       ),
       columnHelper.accessor(
         (row) => {
-          const subscription = subscriptionsObj[row.subscriptionId];
+          const subscription = subscriptionsObj[row.subscriptionId as string];
           return subscription?.productTierName;
         },
         {
@@ -168,8 +162,9 @@ const InstancesPage = () => {
         header: "Lifecycle Status",
         cell: (data) => {
           const status = data.row.original.status;
-          const statusSytlesAndLabel =
-            getResourceInstanceStatusStylesAndLabel(status);
+          const statusSytlesAndLabel = getResourceInstanceStatusStylesAndLabel(
+            status as string
+          );
 
           return <StatusChip status={status} {...statusSytlesAndLabel} />;
         },
@@ -302,7 +297,7 @@ const InstancesPage = () => {
       }),
       columnHelper.accessor(
         (row) => {
-          const subscription = subscriptionsObj[row.subscriptionId];
+          const subscription = subscriptionsObj[row.subscriptionId as string];
           return subscription?.subscriptionOwnerName;
         },
         {
@@ -338,7 +333,7 @@ const InstancesPage = () => {
 
   // Subscription of the Selected Instance
   const selectedInstanceSubscription = useMemo(() => {
-    return subscriptionsObj[selectedInstance?.subscriptionId];
+    return subscriptionsObj[selectedInstance?.subscriptionId as string];
   }, [selectedInstance, subscriptionsObj]);
 
   // Offering of the Selected Instance
@@ -485,6 +480,7 @@ const InstancesPage = () => {
           maxReplicas: selectedInstance?.maxReplicas,
           minReplicas: selectedInstance?.minReplicas,
         }}
+        // @ts-ignore
         data={selectedInstanceData}
         refetch={refetchInstances}
       />

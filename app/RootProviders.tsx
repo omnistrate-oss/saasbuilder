@@ -28,6 +28,7 @@ import "../styles/nprogress.css";
 import "../styles/quill-editor.css";
 import "../styles/monaco-editor.css";
 import "../src/components/DateRangePicker/date-range-picker-styles.css";
+import { ProviderUser } from "src/types/users";
 
 NProgress.configure({
   trickleSpeed: 50,
@@ -58,7 +59,7 @@ const RootProviders = ({
 }: {
   children: React.ReactNode;
   envType: EnvironmentType;
-  providerOrgDetails: any; // TODO: Add a Type Here
+  providerOrgDetails: ProviderUser;
 }) => {
   const pathname = usePathname();
   const isDashboardRoute = !nonDashboardRoutes.includes(pathname as string);

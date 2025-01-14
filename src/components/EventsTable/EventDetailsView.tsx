@@ -2,9 +2,9 @@ import { Box } from "@mui/material";
 import JSONView from "../JSONView/JSONView";
 import { OnCopyProps } from "react-json-view";
 
-import { AccessEvent } from "src/types/event";
+import { AuditEvent } from "src/types/auditEvent";
 
-const EventDetailsView = (props: { rowData: AccessEvent }) => {
+const EventDetailsView = (props: { rowData: AuditEvent }) => {
   const { rowData: event } = props;
   const { workflowFailures } = event;
 

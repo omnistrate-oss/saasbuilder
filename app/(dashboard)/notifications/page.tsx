@@ -21,11 +21,13 @@ import { initialRangeState } from "components/DateRangePicker/DateRangePicker";
 import ServiceNameWithLogo from "components/ServiceNameWithLogo/ServiceNameWithLogo";
 import CursorPaginatedDataTable from "components/DataTable/CursorPaginatedDataTable";
 
+import { EventType } from "src/types/event";
+import { AuditEvent } from "src/types/auditEvent";
 import formatDateUTC from "src/utils/formatDateUTC";
 import { useGlobalData } from "src/providers/GlobalDataProvider";
 import { getAccessControlRoute } from "src/utils/route/access/accessRoute";
 
-const columnHelper = createColumnHelper<any>(); // TODO: Add type
+const columnHelper = createColumnHelper<AuditEvent>();
 
 const NotificationsPage = () => {
   const [pageIndex, setPageIndex] = useState(0);
@@ -47,7 +49,7 @@ const NotificationsPage = () => {
     endDate: selectedDateRange.endDate
       ? new Date(selectedDateRange.endDate).toISOString()
       : undefined,
-    eventSourceTypes: ["Infra", "Maintenance"],
+    eventSourceTypes: "Infra",
   });
 
   const dataTableColumns = useMemo(() => {
@@ -128,7 +130,9 @@ const NotificationsPage = () => {
         header: "Type",
         cell: (data) => {
           return data.row.original.eventSource ? (
-            <EventTypeChip eventType={data.row.original.eventSource} />
+            <EventTypeChip
+              eventType={data.row.original.eventSource as EventType}
+            />
           ) : (
             "-"
           );
@@ -216,7 +220,7 @@ const NotificationsPage = () => {
           renderDetailsComponent={EventDetailsView}
           noRowsText="No events"
           getRowCanExpand={(rowData) =>
-            Boolean(rowData.original.workflowFailures?.length > 0)
+            Number(rowData.original.workflowFailures?.length) > 0
           }
           HeaderComponent={NotificationsTableHeader}
           headerProps={{

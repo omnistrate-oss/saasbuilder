@@ -1,9 +1,12 @@
 import { createContext, useContext, useEffect, useState } from "react";
+import { ProviderUser } from "src/types/users";
 
-export const ProviderOrgDetailsContext = createContext(null);
+export const ProviderOrgDetailsContext = createContext<
+  ProviderUser | undefined
+>(undefined);
 
 export const useProviderOrgDetails = () => {
-  const context: any = useContext(ProviderOrgDetailsContext); // TODO: Add a Type Here
+  const context = useContext(ProviderOrgDetailsContext);
 
   if (context === undefined) {
     throw new Error(
@@ -14,7 +17,10 @@ export const useProviderOrgDetails = () => {
   return context || {};
 };
 
-export default function ProviderOrgDetailsProvider(props) {
+export default function ProviderOrgDetailsProvider(props: {
+  details: ProviderUser;
+  children: React.ReactNode;
+}) {
   const { details, children } = props;
   const [providerOrgDetails, setProviderOrgDetails] = useState(details);
 

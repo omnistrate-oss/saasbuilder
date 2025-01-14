@@ -20,7 +20,7 @@ const colorMap = {
 };
 
 type DataGridTextProps = {
-  children: string;
+  children?: string;
   showCopyButton?: boolean;
   linkProps?: LinkProps;
   onClick?: () => void;
@@ -30,7 +30,7 @@ type DataGridTextProps = {
 };
 
 const DataGridText: FC<DataGridTextProps> = ({
-  children,
+  children = "",
   showCopyButton,
   linkProps,
   onClick,

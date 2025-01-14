@@ -1,7 +1,11 @@
+import { AxiosResponse } from "axios";
+
 import axios from "../axios";
 
+import { ListAllResourceInstancesSuccessResponse } from "src/types/resourceInstance";
+
 export const createResourceInstance = (payload) => {
-  const queryParams = {};
+  const queryParams: any = {};
   if (payload.subscriptionId) {
     queryParams.subscriptionId = payload.subscriptionId;
   }
@@ -20,7 +24,7 @@ export const createResourceInstance = (payload) => {
 };
 
 export const updateResourceInstance = (payload) => {
-  const queryParams = {};
+  const queryParams: any = {};
   if (payload.subscriptionId) {
     queryParams.subscriptionId = payload.subscriptionId;
   }
@@ -35,7 +39,7 @@ export const updateResourceInstance = (payload) => {
 };
 
 export const startResourceInstance = (payload) => {
-  const queryParams = {};
+  const queryParams: any = {};
   if (payload.subscriptionId) {
     queryParams.subscriptionId = payload.subscriptionId;
   }
@@ -48,7 +52,7 @@ export const startResourceInstance = (payload) => {
 };
 
 export const stopResourceInstance = (payload) => {
-  const queryParams = {};
+  const queryParams: any = {};
   if (payload.subscriptionId) {
     queryParams.subscriptionId = payload.subscriptionId;
   }
@@ -61,7 +65,7 @@ export const stopResourceInstance = (payload) => {
 };
 
 export const restartResourceInstance = (payload) => {
-  const queryParams = {};
+  const queryParams: any = {};
   if (payload.subscriptionId) {
     queryParams.subscriptionId = payload.subscriptionId;
   }
@@ -83,7 +87,7 @@ export const getResourceInstanceIds = (
   resourceKey,
   subscriptionId
 ) => {
-  const queryParams = {};
+  const queryParams: any = {};
 
   if (subscriptionId) {
     queryParams.subscriptionId = subscriptionId;
@@ -108,7 +112,7 @@ export const getResourceInstanceDetails = (
   id,
   subscriptionId
 ) => {
-  const queryParams = {};
+  const queryParams: any = {};
 
   if (subscriptionId) {
     queryParams.subscriptionId = subscriptionId;
@@ -129,7 +133,7 @@ export const getDeploymentCellToken = (payload) => {
 };
 
 export const deleteResourceInstance = (payload) => {
-  const queryParams = {};
+  const queryParams: any = {};
   if (payload.subscriptionId) {
     queryParams.subscriptionId = payload.subscriptionId;
   }
@@ -150,7 +154,7 @@ export const getTerraformKitURL = (
   subscriptionId,
   cloudProvider
 ) => {
-  const queryParams = {};
+  const queryParams: any = {};
 
   if (subscriptionId) {
     queryParams.subscriptionId = subscriptionId;
@@ -167,7 +171,7 @@ export const getTerraformKit = (
   subscriptionId,
   cloudProvider
 ) => {
-  const queryParams = {};
+  const queryParams: any = {};
 
   if (subscriptionId) {
     queryParams.subscriptionId = subscriptionId;
@@ -195,7 +199,7 @@ export const failoverResourceInstanceNode = (data) => {
     failedReplicaAction = "FAILOVER_AND_RESTART",
     subscriptionId,
   } = data;
-  const queryParams = {};
+  const queryParams: any = {};
 
   if (subscriptionId) {
     queryParams.subscriptionId = subscriptionId;
@@ -212,7 +216,7 @@ export const failoverResourceInstanceNode = (data) => {
 };
 
 export const restoreResourceInstance = (payload) => {
-  const queryParams = {};
+  const queryParams: any = {};
   if (payload.subscriptionId) {
     queryParams.subscriptionId = payload.subscriptionId;
   }
@@ -238,7 +242,7 @@ export const addCustomDNSToResourceInstance = (
   subscriptionID,
   payload
 ) => {
-  const queryParams = {};
+  const queryParams: any = {};
 
   if (subscriptionID) {
     queryParams.subscriptionId = subscriptionID;
@@ -264,7 +268,7 @@ export const removeCustomDNSFromResourceInstance = (
   instanceId,
   subscriptionID
 ) => {
-  const queryParams = {};
+  const queryParams: any = {};
 
   if (subscriptionID) {
     queryParams.subscriptionId = subscriptionID;
@@ -369,6 +373,8 @@ export const removeCapacityResourceInstanceAccess = ({ data, count }) => {
   );
 };
 
-export const getAllResourceInstances = () => {
+export const getAllResourceInstances = (): Promise<
+  AxiosResponse<ListAllResourceInstancesSuccessResponse>
+> => {
   return axios.get("/resource-instance");
 };

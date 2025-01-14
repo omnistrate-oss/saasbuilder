@@ -1,4 +1,6 @@
+import { AxiosResponse } from "axios";
 import axios from "../axios";
+import { ListAllSubscriptionUsersSuccessResponse } from "src/types/consumptionUser";
 
 export const revokeSubscriptionUser = (subscriptionId, payload) =>
   axios.delete(
@@ -38,6 +40,8 @@ export const getBillingDetails = (userId) => {
   return axios.get(`/resource-instance/user/${userId}/billing-details`);
 };
 
-export const getAllSubscriptionUsers = (params = {}) => {
+export const getAllSubscriptionUsers = (
+  params = {}
+): Promise<AxiosResponse<ListAllSubscriptionUsersSuccessResponse>> => {
   return axios.get(`/resource-instance/subscription-users`, { params });
 };

@@ -6,6 +6,8 @@ import { ENVIRONMENT_TYPES } from "src/constants/environmentTypes";
 import { getProviderOrgDetails } from "src/server/api/customer-user";
 
 import "./globals.css";
+import { EnvironmentType } from "src/types/common/enums";
+import { ProviderUser } from "src/types/users";
 
 export const metadata: Metadata = {
   title: "Omnistrate",
@@ -14,7 +16,8 @@ export const metadata: Metadata = {
 };
 
 const RootLayout = async ({ children }: { children: React.ReactNode }) => {
-  const providerOrgDetails = await getProviderOrgDetails();
+  const providerOrgDetails: { data: ProviderUser } =
+    await getProviderOrgDetails();
 
   return (
     <html lang="en">
@@ -67,7 +70,10 @@ const RootLayout = async ({ children }: { children: React.ReactNode }) => {
           </noscript>
         )}
         <RootProviders
-          envType={process.env.ENVIRONMENT_TYPE || ENVIRONMENT_TYPES.PROD}
+          envType={
+            (process.env.ENVIRONMENT_TYPE ||
+              ENVIRONMENT_TYPES.PROD) as EnvironmentType
+          }
           providerOrgDetails={providerOrgDetails.data}
         >
           {children}
