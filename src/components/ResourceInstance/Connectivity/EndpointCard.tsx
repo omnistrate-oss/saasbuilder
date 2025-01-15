@@ -100,11 +100,11 @@ const EndpointCard: FC<EndpointCardProps> = ({
         <EndpointLine
           endpointURL={endpointURL}
           isPrimary={isPrimary}
-          openPort={openPorts[0]}
+          openPort={openPorts?.[0]}
         />
 
         {isExpanded &&
-          openPorts.map((port, index) =>
+          openPorts?.map((port, index) =>
             index >= 1 ? (
               <EndpointLine
                 key={index}

@@ -113,6 +113,7 @@ const InstanceForm = ({
       serviceId: selectedSubscription?.serviceId || "",
       servicePlanId: selectedSubscription?.productTierId || "",
       subscriptionId: selectedInstance?.subscriptionId || "",
+      // @ts-ignore
       resourceId: getMainResourceFromInstance(selectedInstance)?.id || "",
       cloudProvider: selectedInstance?.cloudProvider || "",
       region: selectedInstance?.region || "",

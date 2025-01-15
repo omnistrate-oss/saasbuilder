@@ -1,6 +1,5 @@
 "use client";
 
-import NProgress from "nprogress";
 import { Provider } from "react-redux";
 import { Suspense, useEffect } from "react";
 import { usePathname } from "next/navigation";
@@ -29,10 +28,6 @@ import "../styles/quill-editor.css";
 import "../styles/monaco-editor.css";
 import "../src/components/DateRangePicker/date-range-picker-styles.css";
 import { ProviderUser } from "src/types/users";
-
-NProgress.configure({
-  trickleSpeed: 50,
-});
 
 const queryQlient = new QueryClient({
   defaultOptions: {

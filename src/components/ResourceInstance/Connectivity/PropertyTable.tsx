@@ -48,7 +48,7 @@ const PropertyTable: FC<PropertyTableProps> = ({ rows }) => {
           } else if (valueType === "link") {
             value = (
               <Link
-                href={row.linkProps?.href}
+                href={row.linkProps?.href || "#"}
                 target={row.linkProps?.target || "_self"}
                 style={{
                   fontWeight: 600,

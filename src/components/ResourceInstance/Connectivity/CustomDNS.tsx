@@ -151,7 +151,7 @@ const CustomDNS: FC<EndpointProps> = (props) => {
               const topologyDetails =
                 response.data?.detailedNetworkTopology?.[resourceId];
               //check for dnsName field in the response, absence means dns removal complete
-              if (!Boolean(topologyDetails?.customDNSEndpoint.dnsName)) {
+              if (!Boolean(topologyDetails?.customDNSEndpoint?.dnsName)) {
                 refetchInstance();
               } else {
                 verifyDNSRemoval();

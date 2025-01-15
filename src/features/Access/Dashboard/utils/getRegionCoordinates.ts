@@ -152,7 +152,6 @@ const AWS_REGION_COORDINATES = {
   // "cn-northwest-1": { name: "China (Ningxia)", latitude: "", longitude: "" },
 };
 
-
 export const GCP_REGION_COORDINATES = {
   "africa-south1": {
     name: "Johannesburg, South Africa",
@@ -364,7 +363,7 @@ export function getRegionCoordinates(
   latitude: number;
   longitude: number;
 } {
-  let regionData = null;
+  let regionData;
   if (cloudProvider === "aws") {
     regionData = AWS_REGION_COORDINATES[region];
   } else if (cloudProvider === "gcp") {

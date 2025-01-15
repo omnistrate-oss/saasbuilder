@@ -13,7 +13,7 @@ const useResourceSchema = (queryParams: QueryParams = {}) => {
 
   const query = useQuery(
     ["resource-schema", serviceId, resourceId, instanceId],
-    () => describeServiceOfferingResource(serviceId, resourceId, instanceId),
+    () => describeServiceOfferingResource(serviceId!, resourceId!, instanceId),
     {
       enabled: isEnabled,
       select: (response) => {

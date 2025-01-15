@@ -325,9 +325,9 @@ const InstancesPage = () => {
     refetch: refetchInstances,
   } = useInstances();
 
+  // Filter BYOA Account Instances
   const nonBYOAInstances = useMemo(() => {
     return instances.filter(
-      // Filter BYOA Account Instances
       // @ts-ignore
       (instance) => !instance.result_params?.account_configuration_method
     );

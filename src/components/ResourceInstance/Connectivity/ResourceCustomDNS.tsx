@@ -19,7 +19,7 @@ function ResourceCustomDNS(props) {
   const [otherResourceFilteredEndpoints] = useMemo(() => {
     const otherEndpoints = globalEndpoints?.others;
 
-    const otherResourceFilteredEndpoints = [];
+    const otherResourceFilteredEndpoints: any[] = [];
 
     otherEndpoints?.forEach((endpointData) => {
       const { resourceName, endpoint } = endpointData;
@@ -41,7 +41,7 @@ function ResourceCustomDNS(props) {
       sectionLabel = "Service Component";
     }
 
-    const res = [];
+    const res: any[] = [];
 
     if (primaryResourceName || primaryResourceEndpoint) {
       const customDNSEndpointName =

@@ -76,7 +76,7 @@ const InstancesTableHeader = ({
   }, [selectedInstance]);
 
   const isComplexResource = CLI_MANAGED_RESOURCES.includes(
-    selectedResource?.resourceType
+    selectedResource?.resourceType as string
   );
 
   const isProxyResource = selectedResource?.resourceType === "PortsBasedProxy";
@@ -247,7 +247,7 @@ const InstancesTableHeader = ({
               : "",
       });
 
-      if (selectedResource?.isBackupEnabled) {
+      if (selectedInstance?.isBackupEnabled) {
         other.push({
           label: "Restore",
           isDisabled:

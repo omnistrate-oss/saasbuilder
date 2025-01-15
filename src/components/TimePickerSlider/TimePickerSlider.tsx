@@ -291,7 +291,7 @@ const TimePickerSlider: React.FC<TimePickerSliderProps> = (props) => {
     [selectedDate]
   );
 
-  function checkIfTimeInputIsValid(timeInput: string): boolean {
+  function checkIfTimeInputIsValid(timeInput: string): boolean | undefined {
     function checkIfMinutesAreValid(minutes: number) {
       if (!isSelectedDateSameAsEarliestTimeDate && !isSelectedDateSameAsToday)
         return true;

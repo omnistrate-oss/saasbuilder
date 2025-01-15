@@ -44,7 +44,7 @@ const CustomDNSDetails: React.FC<CustomDNSDetailsProps> = ({
   cnameTarget,
   domainName,
 }) => {
-  const records = [];
+  const records: any[] = [];
   if (aRecordTarget) {
     records.push({
       recordLabel: "A",

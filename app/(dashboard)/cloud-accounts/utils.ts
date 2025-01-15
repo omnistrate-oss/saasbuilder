@@ -26,13 +26,18 @@ export const getInitialValues = (
     serviceId: subscription.serviceId,
     servicePlanId: subscription.productTierId,
     subscriptionId: subscription.id,
+    // @ts-ignore
     cloudProvider: selectedInstance.result_params?.gcp_project_id
       ? "gcp"
       : "aws",
     accountConfigurationMethod:
+      // @ts-ignore
       selectedInstance.result_params?.account_configuration_method,
+    // @ts-ignore
     awsAccountId: selectedInstance.result_params?.aws_account_id,
+    // @ts-ignore
     gcpProjectId: selectedInstance.result_params?.gcp_project_id,
+    // @ts-ignore
     gcpProjectNumber: selectedInstance.result_params?.gcp_project_number,
   };
 };

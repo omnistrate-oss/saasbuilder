@@ -50,6 +50,40 @@ const maxStorageTime = 3600 * 4;
 const dataIncomeFrequency = 60;
 const maxDataPoints = maxStorageTime / dataIncomeFrequency;
 
+const ContainerCard = ({ children }) => {
+  return (
+    <Card
+      mt={"32px"}
+      sx={{
+        paddingTop: "12.5px",
+        paddingLeft: "20px",
+        paddingRight: "20px",
+        minHeight: "500px",
+        borderRadius: "8px",
+      }}
+    >
+      {children}
+    </Card>
+  );
+};
+
+const MetricsContainerCard = ({ children }) => {
+  return (
+    <Card
+      mt={8}
+      sx={{
+        boxShadow: "0px 4px 30px 0px #2E2D740D",
+        borderRadius: "0px",
+        padding: "0px",
+        marginTop: "12px",
+        background: "#F9FAFB",
+      }}
+    >
+      {children}
+    </Card>
+  );
+};
+
 function Metrics(props) {
   const snackbar = useSnackbar();
   const {
@@ -962,37 +996,3 @@ export const MetricsCardsContainer = styled(Box)({
 //     </Card>
 //   );
 // };
-
-const ContainerCard = ({ children }) => {
-  return (
-    <Card
-      mt={"32px"}
-      sx={{
-        paddingTop: "12.5px",
-        paddingLeft: "20px",
-        paddingRight: "20px",
-        minHeight: "500px",
-        borderRadius: "8px",
-      }}
-    >
-      {children}
-    </Card>
-  );
-};
-
-const MetricsContainerCard = ({ children }) => {
-  return (
-    <Card
-      mt={8}
-      sx={{
-        boxShadow: "0px 4px 30px 0px #2E2D740D",
-        borderRadius: "0px",
-        padding: "0px",
-        marginTop: "12px",
-        background: "#F9FAFB",
-      }}
-    >
-      {children}
-    </Card>
-  );
-};
