@@ -81,7 +81,7 @@ const ResourceConnectivityCustomDNS: FC<ResourceConnectivityEndpointProps> = (
   const [isVerifyingDNSRemoval, setIsVerifyingDNSRemoval] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const textfieldRef = useRef<HTMLInputElement>();
-  const timeoutID = useRef(null);
+  const timeoutID = useRef<any>(null);
   const pollCount = useRef(0);
 
   const { dnsName } = customDNSData;
@@ -130,7 +130,6 @@ const ResourceConnectivityCustomDNS: FC<ResourceConnectivityEndpointProps> = (
     onSuccess: () => {
       pollInstanceQueryToVerifyDNSRemoval();
       setShowDeleteConfirmationDialog(false);
-      removeCustomDNSFormik.resetForm();
     },
   });
 
@@ -206,17 +205,6 @@ const ResourceConnectivityCustomDNS: FC<ResourceConnectivityEndpointProps> = (
     enableReinitialize: true,
   });
 
-  const removeCustomDNSFormik = useFormik({
-    initialValues: {
-      confirmationText: "",
-    },
-    onSubmit: async (values) => {
-      if (values.confirmationText === "deleteme") {
-        removeCustomDNSMutation?.mutate();
-      }
-    },
-  });
-
   async function handleAddDNS(payload: AddCustomDNSToResourceInstancePayload) {
     addCustomDNSMutation?.mutate(payload);
   }
@@ -254,7 +242,7 @@ const ResourceConnectivityCustomDNS: FC<ResourceConnectivityEndpointProps> = (
   }
 
   const statusStylesAndLabel = getCustomDNSStatusStylesAndLabel(
-    customDNSData?.status
+    customDNSData?.status as string
   );
 
   return (
@@ -384,22 +372,19 @@ const ResourceConnectivityCustomDNS: FC<ResourceConnectivityEndpointProps> = (
         </>
       )}
 
-      {/* TODO: Move this TextConfirmation Implementation to the New Type */}
       {isCustomDNSSetup && (
         <TextConfirmationDialog
           open={showDeleteConfirmationDialog}
           handleClose={() => {
             setShowDeleteConfirmationDialog(false);
-            removeCustomDNSFormik.resetForm();
           }}
-          formData={removeCustomDNSFormik}
-          title={`Delete Endpoint Alias`}
+          onConfirm={async () => {
+            await removeCustomDNSMutation?.mutateAsync();
+          }}
+          title="Delete Endpoint Alias"
           subtitle={deleteMessage}
-          message={
-            "To confirm deletion, please enter <b>deleteme</b>, in the field below:"
-          }
+          message="To confirm deletion, please enter <b>deleteme</b>, in the field below:"
           isLoading={removeCustomDNSMutation?.isLoading}
-          isDeleteEnable={true}
         />
       )}
     </>

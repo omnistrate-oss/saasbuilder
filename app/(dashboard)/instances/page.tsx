@@ -61,12 +61,8 @@ const InstancesPage = () => {
     "create-instance-form"
   );
   const [isOverlayOpen, setIsOverlayOpen] = useState<boolean>(false);
-  const {
-    subscriptionsObj,
-    serviceOfferingsObj,
-    isFetchingSubscriptions,
-    isFetchingServiceOfferings,
-  } = useGlobalData();
+  const { subscriptionsObj, serviceOfferingsObj, isFetchingSubscriptions } =
+    useGlobalData();
 
   const dataTableColumns = useMemo(() => {
     return [
@@ -177,7 +173,9 @@ const InstancesPage = () => {
           const status = row.status;
           const mainResource = getMainResourceFromInstance(row);
 
-          if (CLI_MANAGED_RESOURCES.includes(mainResource?.resourceType)) {
+          if (
+            CLI_MANAGED_RESOURCES.includes(mainResource?.resourceType as string)
+          ) {
             return "Unknown";
           }
 
@@ -358,14 +356,14 @@ const InstancesPage = () => {
   const selectedInstanceData = useMemo(() => {
     return {
       id: selectedInstance?.id,
-      instanceId: selectedInstance?.id,
+      instanceId: selectedInstance?.id as string,
       serviceProviderId: selectedInstanceOffering?.serviceProviderId,
       serviceKey: selectedInstanceOffering?.serviceURLKey,
       serviceAPIVersion: selectedInstanceOffering?.serviceAPIVersion,
       serviceEnvironmentKey: selectedInstanceOffering?.serviceEnvironmentURLKey,
       serviceModelKey: selectedInstanceOffering?.serviceModelURLKey,
       productTierKey: selectedInstanceOffering?.productTierURLKey,
-      resourceKey: selectedResource?.resourceKey,
+      resourceKey: selectedResource?.resourceKey as string,
       subscriptionId: selectedInstanceSubscription?.id,
     };
   }, [
@@ -412,11 +410,7 @@ const InstancesPage = () => {
             refetchInstances,
             isFetchingInstances,
           }}
-          isLoading={
-            isLoadingInstances ||
-            isFetchingSubscriptions ||
-            isFetchingServiceOfferings
-          }
+          isLoading={isLoadingInstances || isFetchingSubscriptions}
           selectedRows={selectedRows}
           onRowSelectionChange={setSelectedRows}
           selectionMode="single"
@@ -488,7 +482,6 @@ const InstancesPage = () => {
           maxReplicas: selectedInstance?.maxReplicas,
           minReplicas: selectedInstance?.minReplicas,
         }}
-        // @ts-ignore
         data={selectedInstanceData}
         refetch={refetchInstances}
       />
@@ -507,15 +500,15 @@ const InstancesPage = () => {
         open={isOverlayOpen && overlayType === "restore-dialog"}
         handleClose={() => setIsOverlayOpen(false)}
         earliestRestoreTime={
-          selectedResource?.backupStatus?.earliestRestoreTime
+          selectedInstance?.backupStatus?.earliestRestoreTime
         }
         service={selectedInstanceOffering}
         setSelectionModel={setSelectedRows}
         fetchResourceInstances={refetchInstances}
         selectedResource={selectedResource}
         subscriptionId={selectedInstanceSubscription?.id}
-        selectedInstanceId={selectedResource?.id}
-        networkType={selectedResource?.network_type}
+        selectedInstanceId={selectedInstance?.id}
+        networkType={selectedInstance?.network_type}
       />
     </PageContainer>
   );

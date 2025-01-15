@@ -135,12 +135,7 @@ const CustomNetworkForm = ({
         },
       ],
     };
-  }, [
-    cloudProviders,
-    isFetchingRegions,
-    regionMenuItems,
-    formData.values.cloudProviderName,
-  ]);
+  }, [cloudProviders, isFetchingRegions, regionMenuItems, formData.values]);
 
   return (
     <GridDynamicForm

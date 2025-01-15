@@ -1,21 +1,49 @@
 "use client";
 
-import MuiDialog from "@mui/material/Dialog";
-import MuiDialogActions from "@mui/material/DialogActions";
-import MuiDialogContent from "@mui/material/DialogContent";
-import MuiDialogTitle from "@mui/material/DialogTitle";
-import Button from "components/Button/Button";
-import TextField from "components/FormElements/TextField/TextField";
-import Form from "components/FormElements/Form/Form";
-import { IconButton, Stack, styled } from "@mui/material";
-import LoadingSpinnerSmall from "../CircularProgress/CircularProgress";
-import DeleteCirleIcon from "../Icons/DeleteCircle/DeleteCirleIcon";
-import { Text } from "../Typography/Typography";
-import CloseIcon from "@mui/icons-material/Close";
 import { useFormik } from "formik";
+import CloseIcon from "@mui/icons-material/Close";
+import {
+  Dialog as MuiDialog,
+  DialogActions as MuiDialogActions,
+  DialogContent as MuiDialogContent,
+  DialogTitle as MuiDialogTitle,
+  IconButton,
+  Stack,
+  styled,
+} from "@mui/material";
+
+import Button from "components/Button/Button";
+import Form from "components/FormElements/Form/Form";
+import TextField from "components/FormElements/TextField/TextField";
+
+import { Text } from "../Typography/Typography";
+import DeleteCirleIcon from "../Icons/DeleteCircle/DeleteCirleIcon";
+import LoadingSpinnerSmall from "../CircularProgress/CircularProgress";
+
 import useSnackbar from "src/hooks/useSnackbar";
 
-export default function TextConfirmationDialog(props) {
+const Dialog = styled(MuiDialog)(() => ({
+  [`& .MuiPaper-root `]: {
+    width: "100%",
+    maxWidth: "521px",
+    padding: "24px",
+  },
+}));
+
+const DialogTitle = styled(MuiDialogTitle)(() => ({
+  padding: 0,
+}));
+
+const DialogContent = styled(MuiDialogContent)(() => ({
+  padding: 0,
+}));
+
+const DialogActions = styled(MuiDialogActions)(() => ({
+  padding: 0,
+  paddingTop: 30,
+}));
+
+const TextConfirmationDialog = (props) => {
   const {
     open = false,
     handleClose,
@@ -113,6 +141,7 @@ export default function TextConfirmationDialog(props) {
             variant="contained"
             disabled={isLoading}
             bgColor={buttonColor}
+            fontColor="#FFFFFF"
           >
             {buttonLabel} {isLoading && <LoadingSpinnerSmall />}
           </Button>
@@ -120,25 +149,6 @@ export default function TextConfirmationDialog(props) {
       </Form>
     </Dialog>
   );
-}
+};
 
-const Dialog = styled(MuiDialog)(() => ({
-  [`& .MuiPaper-root `]: {
-    width: "100%",
-    maxWidth: "521px",
-    padding: "24px",
-  },
-}));
-
-const DialogTitle = styled(MuiDialogTitle)(() => ({
-  padding: 0,
-}));
-
-const DialogContent = styled(MuiDialogContent)(() => ({
-  padding: 0,
-}));
-
-const DialogActions = styled(MuiDialogActions)(() => ({
-  padding: 0,
-  paddingTop: 30,
-}));
+export default TextConfirmationDialog;

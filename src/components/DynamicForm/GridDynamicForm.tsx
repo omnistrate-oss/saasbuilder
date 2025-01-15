@@ -2,6 +2,7 @@ import React from "react";
 import { colors } from "src/themeConfig";
 import { FormMode } from "src/types/common/enums";
 
+import PreviewCard from "./PreviewCard";
 import { FormConfiguration } from "./types";
 import GridDynamicField from "./GridDynamicField";
 
@@ -32,7 +33,6 @@ const GridDynamicForm: React.FC<GridDynamicFormProps> = ({
 }) => {
   const sections = formConfiguration.sections || [];
   const footer = formConfiguration.footer;
-  const values = formData.values;
 
   return (
     // @ts-ignore
@@ -78,65 +78,7 @@ const GridDynamicForm: React.FC<GridDynamicFormProps> = ({
           </Text>
         </div>
 
-        <div className="px-4 py-4 flex-1">
-          {sections.map((section, index) => {
-            return (
-              <div key={index}>
-                <Text
-                  size="small"
-                  weight="semibold"
-                  color={colors.purple700}
-                  sx={{ mb: "10px" }}
-                >
-                  {section.title}
-                </Text>
-
-                <div
-                  className="grid grid-cols-5"
-                  style={{
-                    gap: "10px 8px",
-                  }}
-                >
-                  {section.fields.map((field, index) => {
-                    return (
-                      <React.Fragment key={index}>
-                        <div
-                          style={{
-                            gridColumn: "span 2 / span 2",
-                          }}
-                        >
-                          <Text size="small" weight="medium" color="#414651">
-                            {field.label}
-                          </Text>
-                        </div>
-                        <div className="col-span-3 flex">
-                          <div style={{ margin: "-3px 8px 0px 0px" }}>:</div>
-                          <div>
-                            {field.previewValue ? (
-                              <field.previewValue
-                                field={field}
-                                formData={formData}
-                              />
-                            ) : typeof values[field.name] === "string" ? (
-                              <Text
-                                size="small"
-                                weight="medium"
-                                color="#181D27"
-                              >
-                                {/* TODO: Fix the Overflow Ellipses Issue */}
-                                {values[field.name]}
-                              </Text>
-                            ) : null}
-                          </div>
-                        </div>
-                      </React.Fragment>
-                    );
-                  })}
-                </div>
-              </div>
-            );
-          })}
-        </div>
+        <PreviewCard sections={sections} formData={formData} />
 
         <div
           style={{

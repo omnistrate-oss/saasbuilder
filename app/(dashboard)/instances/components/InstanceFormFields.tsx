@@ -81,11 +81,7 @@ export const getStandardInformationFields = (
         setFieldValue("subscriptionId", "");
         setFieldValue("resourceId", "");
       },
-      previewValue: () => (
-        <Text size="small" weight="medium" color={colors.gray900}>
-          {servicesObj[values.serviceId]?.serviceName}
-        </Text>
-      ),
+      previewValue: servicesObj[values.serviceId]?.serviceName,
     },
     {
       label: "Subscription Plan",
@@ -94,20 +90,18 @@ export const getStandardInformationFields = (
       required: true,
       customComponent: (
         <SubscriptionPlanRadio
-          serviceId={values.serviceId}
-          servicePlanId={values.servicePlanId}
+          servicePlans={Object.values(
+            serviceOfferingsObj[serviceId] || {}
+          ).sort((a: any, b: any) =>
+            a.productTierName.localeCompare(b.productTierName)
+          )}
           name="servicePlanId"
           formData={formData}
         />
       ),
-      previewValue: () => (
-        <Text size="small" weight="medium" color={colors.gray900}>
-          {
-            serviceOfferingsObj[values.serviceId]?.[values.servicePlanId]
-              ?.productTierName
-          }
-        </Text>
-      ),
+      previewValue:
+        serviceOfferingsObj[values.serviceId]?.[values.servicePlanId]
+          ?.productTierName,
     },
     {
       label: "Subscription",
@@ -123,11 +117,7 @@ export const getStandardInformationFields = (
           : "No subscriptions available",
       isLoading: isFetchingSubscriptions,
       menuItems: subscriptionMenuItems,
-      previewValue: () => (
-        <Text size="small" weight="medium" color={colors.gray900}>
-          {subscriptionsObj[values.subscriptionId]?.id}
-        </Text>
-      ),
+      previewValue: subscriptionsObj[values.subscriptionId]?.id,
     },
     {
       label: "Resource Type",
@@ -141,14 +131,9 @@ export const getStandardInformationFields = (
           ? "Select a subscription plan"
           : "No resources available",
       menuItems: resourceMenuItems,
-      previewValue: () => (
-        <Text size="small" weight="medium" color={colors.gray900}>
-          {
-            resourceMenuItems.find((item) => item.value === values.resourceId)
-              ?.label
-          }
-        </Text>
-      ),
+      previewValue: resourceMenuItems.find(
+        (item) => item.value === values.resourceId
+      )?.label,
     },
   ];
 

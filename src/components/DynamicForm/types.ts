@@ -27,10 +27,13 @@ export type Field = {
 
   // Generic
   value?: any;
-  previewValue?: React.FC<{
-    field: Field;
-    formData: any;
-  }>;
+  previewValue?:
+    | React.FC<{
+        field: Field;
+        formData: any;
+      }>
+    | string
+    | null;
   customComponent?: React.ReactNode;
   onChange?: (e: any) => void;
   onBlur?: (e: any) => void;

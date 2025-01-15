@@ -21,6 +21,8 @@ import useSnackbar from "src/hooks/useSnackbar";
 import { inviteSubscriptionUser } from "src/api/users";
 import { useGlobalData } from "src/providers/GlobalDataProvider";
 import { colors } from "src/themeConfig";
+import { Subscription } from "src/types/subscription";
+import { ServiceOffering } from "src/types/serviceOffering";
 
 const getNewEnvVariable = () => {
   return {
@@ -31,22 +33,34 @@ const getNewEnvVariable = () => {
   };
 };
 
-const getServiceMenuItems = (serviceOfferings: any) => {
+const getServiceMenuItems = (
+  subscriptions: Subscription[]
+): {
+  label: string;
+  value: string;
+}[] => {
   const serviceIdSet = new Set();
-  const serviceMenuItems = serviceOfferings.map((service) => {
-    if (!serviceIdSet.has(service.serviceId)) {
-      serviceIdSet.add(service.serviceId);
-      return {
-        label: service.serviceName,
-        value: service.serviceId,
-      };
-    }
-    return null;
-  });
+
+  const serviceMenuItems = subscriptions
+    .filter((sub) => sub.roleType === "root")
+    .map((sub) => {
+      if (!serviceIdSet.has(sub.serviceId)) {
+        serviceIdSet.add(sub.serviceId);
+        return {
+          label: sub.serviceName,
+          value: sub.serviceId,
+        };
+      }
+      return null;
+    });
+
   return serviceMenuItems.filter((item) => item !== null);
 };
 
-const getServicePlanMenuItems = (serviceOfferings: any, serviceId: string) => {
+const getServicePlanMenuItems = (
+  serviceOfferings: ServiceOffering[],
+  serviceId: string
+) => {
   const servicePlanMenuItems = serviceOfferings
     .filter((service) => service.serviceId === serviceId)
     .map((service) => {
@@ -80,13 +94,11 @@ const InviteUsersCard: React.FC<InviteUsersCardProps> = ({
             roleType: d.roleType,
           };
 
-          const filteredSubscriptions = subscriptions.filter(
+          const rootSubscription = subscriptions.find(
             (sub) =>
               sub.serviceId === d.serviceId &&
-              sub.productTierId === d.servicePlanId
-          );
-          const rootSubscription = filteredSubscriptions.find(
-            (sub) => sub.roleType === "root"
+              sub.productTierId === d.servicePlanId &&
+              sub.roleType === "root"
           );
           return inviteSubscriptionUser(rootSubscription?.id, payload);
         })
@@ -160,7 +172,7 @@ const InviteUsersCard: React.FC<InviteUsersCardProps> = ({
                     <>
                       {values.userInvite.map((invite, index) => {
                         const serivceMenuItems =
-                          getServiceMenuItems(serviceOfferings);
+                          getServiceMenuItems(subscriptions);
 
                         const servicePlanMenuItems = getServicePlanMenuItems(
                           serviceOfferings,

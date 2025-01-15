@@ -56,6 +56,16 @@ const CloudProviderRadio: React.FC<CloudProviderRadioProps> = ({
   onChange = () => {},
   disabled,
 }) => {
+  if (!cloudProviders.length) {
+    return (
+      <div className="flex items-center justify-center h-10">
+        <Text size="small" weight="medium" color={colors.gray500}>
+          No cloud providers available
+        </Text>
+      </div>
+    );
+  }
+
   return (
     <div className={clsx("grid gap-8", `grid-cols-${cloudProviders.length}`)}>
       {cloudProviders.map((cloudProvider, index) => {
@@ -71,7 +81,8 @@ const CloudProviderRadio: React.FC<CloudProviderRadioProps> = ({
             onClick={() => {
               formData.setFieldValue(name, cloudProvider);
               if (formData.values[name] !== cloudProvider) {
-                onChange();
+                // @ts-ignore
+                onChange(cloudProvider);
               }
             }}
           />

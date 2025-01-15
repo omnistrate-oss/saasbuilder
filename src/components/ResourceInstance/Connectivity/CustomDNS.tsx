@@ -41,7 +41,7 @@ type EndpointProps = {
     cnameTarget?: string;
     aRecordTarget?: string;
   };
-  accessQueryParams?: {
+  accessQueryParams: {
     serviceProviderId: string;
     serviceKey: string;
     serviceAPIVersion: string;
@@ -71,7 +71,7 @@ const CustomDNS: FC<EndpointProps> = (props) => {
   const [deleteMessage, setDeleteMessage] = useState("");
   const [isTextfieldDisabled, setIsTextFieldDisabled] = useState(false);
   const textfieldRef = useRef<HTMLInputElement>();
-  const timeoutID = useRef(null);
+  const timeoutID = useRef<any>(null);
   const pollCount = useRef(0);
 
   const { dnsName } = customDNSData;
@@ -118,7 +118,6 @@ const CustomDNS: FC<EndpointProps> = (props) => {
     onSuccess: () => {
       pollInstanceQueryToVerifyDNSRemoval();
       setShowDeleteConfirmationDialog(false);
-      removeCustomDNSFormik.resetForm();
     },
   });
 
@@ -191,17 +190,6 @@ const CustomDNS: FC<EndpointProps> = (props) => {
     enableReinitialize: true,
   });
 
-  const removeCustomDNSFormik = useFormik({
-    initialValues: {
-      confirmationText: "",
-    },
-    onSubmit: async (values) => {
-      if (values.confirmationText === "deleteme") {
-        removeCustomDNSMutation?.mutate();
-      }
-    },
-  });
-
   async function handleAddDNS(payload: AddCustomDNSToResourceInstancePayload) {
     addCustomDNSMutation?.mutate(payload);
   }
@@ -252,7 +240,7 @@ const CustomDNS: FC<EndpointProps> = (props) => {
                 <CustomDNSDetails
                   aRecordTarget={customDNSData?.aRecordTarget}
                   cnameTarget={customDNSData?.cnameTarget}
-                  domainName={customDNSData?.dnsName}
+                  domainName={customDNSData?.dnsName as string}
                 />
               )}
               <FieldContainer marginTop={0} sx={{ maxWidth: "1000px" }}>
@@ -363,21 +351,20 @@ const CustomDNS: FC<EndpointProps> = (props) => {
               )}
             </Box>
           </>
+
           {isCustomDNSSetup && (
             <TextConfirmationDialog
               open={showDeleteConfirmationDialog}
               handleClose={() => {
                 setShowDeleteConfirmationDialog(false);
-                removeCustomDNSFormik.resetForm();
               }}
-              formData={removeCustomDNSFormik}
-              title={`Delete Endpoint Alias`}
+              onConfirm={async () => {
+                await removeCustomDNSMutation?.mutateAsync();
+              }}
+              title="Delete Endpoint Alias"
               subtitle={deleteMessage}
-              message={
-                "To confirm deletion, please enter <b>deleteme</b>, in the field below:"
-              }
+              message="To confirm deletion, please enter <b>deleteme</b>, in the field below:"
               isLoading={removeCustomDNSMutation?.isLoading}
-              isDeleteEnable={true}
             />
           )}
         </Card>

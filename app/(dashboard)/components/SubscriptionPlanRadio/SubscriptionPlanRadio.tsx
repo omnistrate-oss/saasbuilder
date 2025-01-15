@@ -17,11 +17,10 @@ import { createSubscriptions } from "src/api/subscriptions";
 import { useGlobalData } from "src/providers/GlobalDataProvider";
 import { SubscriptionRequest } from "src/types/subscriptionRequest";
 import { createSubscriptionRequest } from "src/api/subscriptionRequests";
-import { Subscription } from "src/types/subscription";
 
 const SubscriptionPlanCard = ({
   plan,
-  subscription,
+  subscriptions,
   subscriptionRequest,
   isSubscribing,
   onSubscribeClick,
@@ -29,18 +28,19 @@ const SubscriptionPlanCard = ({
   isFetchingData,
   onClick,
 }) => {
+  const rootSubscription = subscriptions.find((sub) => sub.roleType === "root");
   const card = (
     <div
       className={clsx(
         "flex items-start justify-between gap-3 px-4 py-4 rounded-xl outline outline-[2px]",
         isSelected ? "outline-purple-600" : "outline-gray-300",
-        !subscription && "bg-gray-50"
+        !subscriptions.length && "bg-gray-50"
       )}
       style={{
-        cursor: subscription ? "pointer" : "default",
+        cursor: subscriptions.length ? "pointer" : "default",
       }}
       onClick={() => {
-        if (subscription) {
+        if (subscriptions.length) {
           onClick();
         }
       }}
@@ -63,7 +63,7 @@ const SubscriptionPlanCard = ({
           {plan.productTierDescription}
         </Text>
       </div>
-      {!subscription && !subscriptionRequest && (
+      {!rootSubscription && !subscriptionRequest && (
         <Button
           variant="contained"
           disabled={isFetchingData || isSubscribing}
@@ -76,7 +76,7 @@ const SubscriptionPlanCard = ({
         </Button>
       )}
 
-      {subscription && (
+      {rootSubscription && (
         <Button
           variant="contained"
           disabled
@@ -89,7 +89,7 @@ const SubscriptionPlanCard = ({
         </Button>
       )}
 
-      {subscriptionRequest && !subscription && (
+      {subscriptionRequest && !subscriptions.length && (
         <Button
           variant="contained"
           disabled
@@ -104,7 +104,7 @@ const SubscriptionPlanCard = ({
     </div>
   );
 
-  if (!subscription && !subscriptionRequest) {
+  if (!subscriptions.length && !subscriptionRequest) {
     return (
       <Tooltip
         placement="top"
@@ -115,38 +115,32 @@ const SubscriptionPlanCard = ({
     );
   }
 
+  if (subscriptionRequest) {
+    return (
+      <Tooltip placement="top" title="Subscription request is pending approval">
+        {card}
+      </Tooltip>
+    );
+  }
+
   return card;
 };
 
 const SubscriptionPlanRadio = ({
-  serviceId,
-  servicePlanId,
+  servicePlans,
   name,
   formData,
+  onChange = () => {},
 }) => {
   const snackbar = useSnackbar();
   const {
     subscriptions,
     subscriptionRequests,
-    serviceOfferingsObj,
     refetchSubscriptions,
     refetchSubscriptionRequests,
   } = useGlobalData();
 
-  const subscriptionsObj: Record<string, Subscription> = useMemo(() => {
-    return subscriptions?.reduce((acc, sub) => {
-      if (sub.roleType === "root") {
-        acc[sub.productTierId] = sub;
-      }
-      return acc;
-    }, {});
-  }, [subscriptions]);
-
-  const servicePlans = useMemo(() => {
-    return Object.values(serviceOfferingsObj[serviceId] || {}).sort(
-      (a: any, b: any) => a.productTierName.localeCompare(b.productTierName)
-    );
-  }, [serviceId, serviceOfferingsObj]);
+  const servicePlanId = formData.values[name];
 
   const subscriptionRequestsObj: Record<string, SubscriptionRequest> =
     useMemo(() => {
@@ -194,7 +188,9 @@ const SubscriptionPlanRadio = ({
         <SubscriptionPlanCard
           key={plan.productTierID}
           plan={plan}
-          subscription={subscriptionsObj[plan.productTierID]}
+          subscriptions={subscriptions.filter(
+            (sub) => sub.productTierId === plan.productTierID
+          )}
           subscriptionRequest={subscriptionRequestsObj[plan.productTierID]}
           onSubscribeClick={() =>
             subscribeMutation.mutate({
@@ -204,6 +200,10 @@ const SubscriptionPlanRadio = ({
             })
           }
           onClick={() => {
+            if (servicePlanId !== plan.productTierID) {
+              // @ts-ignore
+              onChange(plan.productTierID);
+            }
             formData.setFieldValue(name, plan.productTierID);
           }}
           isSubscribing={subscribeMutation.isLoading}

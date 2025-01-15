@@ -126,12 +126,13 @@ export const getMainResourceFromInstance = (instance?: ResourceInstance) => {
   }
 
   const { detailedNetworkTopology = {} } = instance;
-  const [mainResourceId, mainResource]: any =
+  const [mainResourceId, mainResource] =
     Object.entries(detailedNetworkTopology).find(
       ([, resource]: any) => resource.main
     ) || [];
 
   if (mainResource) {
+    // @ts-ignore
     mainResource.id = mainResourceId;
   }
 

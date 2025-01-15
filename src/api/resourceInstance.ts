@@ -2,7 +2,10 @@ import { AxiosResponse } from "axios";
 
 import axios from "../axios";
 
-import { ListAllResourceInstancesSuccessResponse } from "src/types/resourceInstance";
+import {
+  DescribeResourceInstanceSuccessResponse,
+  ListAllResourceInstancesSuccessResponse,
+} from "src/types/resourceInstance";
 
 export const createResourceInstance = (payload) => {
   const queryParams: any = {};
@@ -102,16 +105,16 @@ export const getResourceInstanceIds = (
 };
 
 export const getResourceInstanceDetails = (
-  serviceProviderId,
-  serviceKey,
-  serviceAPIVersion,
+  serviceProviderId: string,
+  serviceKey: string,
+  serviceAPIVersion: string,
   serviceEnvironmentKey,
   serviceModelKey,
   productTierKey,
   resourceKey,
   id,
   subscriptionId
-) => {
+): Promise<AxiosResponse<DescribeResourceInstanceSuccessResponse>> => {
   const queryParams: any = {};
 
   if (subscriptionId) {

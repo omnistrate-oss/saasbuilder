@@ -27,6 +27,17 @@ import GoogleLogin from "../Signin/components/GoogleLogin";
 import GithubLogin from "../Signin/components/GitHubLogin";
 import { IDENTITY_PROVIDER_STATUS_TYPES } from "../Signin/constants";
 
+const FormGrid = styled(Box)(() => ({
+  display: "grid",
+  gridTemplateColumns: "1fr 1fr",
+  columnGap: "22px",
+  rowGap: "27px",
+  "@media (max-width: 1280px)": {
+    gridTemplateColumns: "1fr",
+    rowGap: "22px",
+  },
+}));
+
 const signupValidationSchema = Yup.object({
   name: Yup.string().required("Name is required"),
   email: Yup.string()
@@ -430,14 +441,3 @@ const SignupPage = (props) => {
 };
 
 export default SignupPage;
-
-const FormGrid = styled(Box)(() => ({
-  display: "grid",
-  gridTemplateColumns: "1fr 1fr",
-  columnGap: "22px",
-  rowGap: "27px",
-  "@media (max-width: 1280px)": {
-    gridTemplateColumns: "1fr",
-    rowGap: "22px",
-  },
-}));

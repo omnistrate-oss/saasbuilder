@@ -9,7 +9,6 @@ import Footer from "src/components/NonDashboardComponents/Footer";
 import { useProviderOrgDetails } from "src/providers/ProviderOrgDetailsProvider";
 
 import MainImg from "public/assets/images/non-dashboard/signin-main.svg";
-// import CurvedArrow from "src/components/NonDashboardComponents/Icons/CurvedArrow";
 
 const MainImageLayout = ({ children }: { children: React.ReactNode }) => {
   const pathname = usePathname();
@@ -46,16 +45,7 @@ const MainImageLayout = ({ children }: { children: React.ReactNode }) => {
       >
         <Box maxWidth={contentMaxWidth} width="100%" mx="auto">
           {/* Logo */}
-          <Box
-            position="relative" // For the Curved Arrow
-            textAlign="center"
-          >
-            {/* TODO: Check and Make this Work */}
-            {/* {showArrow && (
-              <CurvedArrow
-                style={{ position: "absolute", top: "-80px", left: "0px" }}
-              />
-            )} */}
+          <Box textAlign="center">
             {orgLogoURL ? <Logo src={orgLogoURL} alt={orgName} /> : ""}
           </Box>
           {children}

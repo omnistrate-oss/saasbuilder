@@ -69,17 +69,14 @@ const InstanceDetailsPage = ({
   const dispatch = useDispatch();
 
   const {
-    subscriptions,
+    subscriptionsObj,
     serviceOfferingsObj,
     isFetchingServiceOfferings,
     isFetchingSubscriptions,
   } = useGlobalData();
 
   const offering = serviceOfferingsObj[serviceId]?.[servicePlanId];
-
-  const subscription = useMemo(() => {
-    return subscriptions.find((sub) => sub.id === subscriptionId);
-  }, [subscriptions, subscriptionId]);
+  const subscription = subscriptionsObj[subscriptionId];
 
   const { resourceName, resourceKey, resourceType } = useMemo(() => {
     const resource = offering?.resourceParameters.find(
@@ -89,12 +86,12 @@ const InstanceDetailsPage = ({
     return {
       resourceName: resource?.name,
       resourceKey: resource?.urlKey,
-      resourceType: resource?.type,
+      resourceType: resource?.resourceType,
     };
   }, [offering, resourceId]);
 
   const isCliManagedResource = useMemo(
-    () => CLI_MANAGED_RESOURCES.includes(resourceType),
+    () => CLI_MANAGED_RESOURCES.includes(resourceType as string),
     [resourceType]
   );
 
@@ -186,7 +183,9 @@ const InstanceDetailsPage = ({
   // The api doesn't return cloud provider field in the root object for a Cloud Provider Account instance
   // Get the cloud provider data from result parameters in this case
   if (!cloudProvider) {
+    // @ts-ignore
     if (resourceInstanceData?.resultParameters?.cloud_provider) {
+      // @ts-ignore
       cloudProvider = resourceInstanceData?.resultParameters?.cloud_provider;
     }
   }
@@ -283,8 +282,7 @@ const InstanceDetailsPage = ({
           serviceOffering={offering}
           subscriptionId={subscriptionId}
           customNetworkDetails={resourceInstanceData.customNetworkDetails}
-          // cloudProviderAccountInstanceURL={cloudProviderAccountInstanceURL}
-          // TODO: Check This
+          cloudProviderAccountInstanceURL="/cloud-accounts"
           resourceInstanceData={resourceInstanceData}
           autoscalingEnabled={resourceInstanceData.autoscalingEnabled}
           highAvailability={resourceInstanceData.highAvailability}
@@ -365,6 +363,7 @@ const InstanceDetailsPage = ({
       )}
       {currentTab === tabs.backups && (
         <Backup
+          // @ts-ignore
           backupStatus={resourceInstanceData.backupStatus}
           instanceId={instanceId}
           accessQueryParams={queryData}
