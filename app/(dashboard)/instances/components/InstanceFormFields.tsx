@@ -1,8 +1,8 @@
 import Link from "next/link";
 import { Field } from "src/components/DynamicForm/types";
-import { Text } from "src/components/Typography/Typography";
 import { productTierTypes } from "src/constants/servicePlan";
 import {
+  getCustomNetworksMenuItems,
   getRegionMenuItems,
   getResourceMenuItems,
   getServiceMenuItems,
@@ -11,26 +11,32 @@ import {
 import SubscriptionPlanRadio from "../../components/SubscriptionPlanRadio/SubscriptionPlanRadio";
 import CloudProviderRadio from "../../components/CloudProviderRadio/CloudProviderRadio";
 import { cloudProviderLogoMap } from "src/constants/cloudProviders";
-import { colors } from "src/themeConfig";
+import { APIEntity, ServiceOffering } from "src/types/serviceOffering";
+import { Subscription } from "src/types/subscription";
+import { CloudProvider, FormMode } from "src/types/common/enums";
+import { AvailabilityZone } from "src/types/availabilityZone";
+import { CustomNetwork } from "src/types/customNetwork";
 
 export const getStandardInformationFields = (
   servicesObj,
-  serviceOfferings,
-  serviceOfferingsObj,
-  isFetchingServiceOfferings,
-  subscriptions,
-  subscriptionsObj,
-  isFetchingSubscriptions,
-  formData,
-  resourceSchema,
-  formMode,
-  customAvailabilityZones,
-  isFetchingCustomAvailabilityZones
+  serviceOfferings: ServiceOffering[],
+  serviceOfferingsObj: Record<string, Record<string, ServiceOffering>>,
+  isFetchingServiceOfferings: boolean,
+  subscriptions: Subscription[],
+  subscriptionsObj: Record<string, Subscription>,
+  isFetchingSubscriptions: boolean,
+  formData: any,
+  resourceSchema: APIEntity,
+  formMode: FormMode,
+  customAvailabilityZones: AvailabilityZone[],
+  isFetchingCustomAvailabilityZones: boolean
 ) => {
-  const { values, setFieldValue, setFieldTouched } = formData;
+  if (isFetchingServiceOfferings || isFetchingSubscriptions) return [];
+  const { values, setFieldValue } = formData;
   const {
     serviceId,
     servicePlanId,
+    subscriptionId,
     resourceId,
     cloudProvider,
     region,
@@ -38,18 +44,58 @@ export const getStandardInformationFields = (
   } = values;
 
   const serviceMenuItems = getServiceMenuItems(serviceOfferings);
+  const offering = serviceOfferingsObj[serviceId]?.[servicePlanId];
 
+  // Initialize the Form
   if (!serviceId) {
-    setFieldValue("serviceId", serviceMenuItems[0]?.value || "");
+    const filteredSubscriptions = subscriptions.filter(
+      (sub) =>
+        serviceOfferingsObj[sub.serviceId]?.[sub.productTierId] &&
+        ["root", "editor"].includes(sub.roleType)
+    );
+
+    const rootSubscription = filteredSubscriptions.find(
+      (sub) => sub.roleType === "root"
+    );
+
+    const serviceId =
+      rootSubscription?.serviceId || filteredSubscriptions[0]?.serviceId || "";
+    const servicePlanId =
+      rootSubscription?.productTierId ||
+      filteredSubscriptions[0]?.productTierId ||
+      "";
+
+    setFieldValue("serviceId", serviceId);
+    setFieldValue("servicePlanId", servicePlanId);
+    setFieldValue(
+      "subscriptionId",
+      rootSubscription?.id || filteredSubscriptions[0]?.id || ""
+    );
+
+    const offering = serviceOfferingsObj[serviceId]?.[servicePlanId];
+    const cloudProvider = offering?.cloudProviders?.[0] || "";
+    setFieldValue("cloudProvider", cloudProvider);
+    if (cloudProvider === "aws") {
+      setFieldValue("region", offering.awsRegions?.[0] || "");
+    } else if (cloudProvider === "gcp") {
+      setFieldValue("region", offering.gcpRegions?.[0] || "");
+    } else if (cloudProvider === "azure") {
+      // @ts-ignore
+      setFieldValue("region", offering.azureRegions?.[0] || "");
+    }
+
+    const resources = getResourceMenuItems(offering);
+    setFieldValue("resourceId", resources[0]?.value || "");
+    setFieldValue("requestParams", {});
   }
 
   const subscriptionMenuItems = getSubscriptionMenuItems(
     subscriptions,
-    values.servicePlanId
+    servicePlanId
   );
 
   const resourceMenuItems = getResourceMenuItems(
-    serviceOfferingsObj[values.serviceId]?.[values.servicePlanId]
+    serviceOfferingsObj[serviceId]?.[servicePlanId]
   );
 
   const inputParametersObj = (resourceSchema?.inputParameters || []).reduce(
@@ -74,12 +120,43 @@ export const getStandardInformationFields = (
       required: true,
       disabled: formMode !== "create",
       emptyMenuText: "No services available",
-      isLoading: isFetchingServiceOfferings,
       menuItems: serviceMenuItems,
-      onChange: () => {
-        setFieldValue("servicePlanId", "");
-        setFieldValue("subscriptionId", "");
-        setFieldValue("resourceId", "");
+      onChange: (e) => {
+        const serviceId = e.target.value;
+
+        const filteredSubscriptions = subscriptions.filter(
+          (sub) =>
+            sub.serviceId === serviceId &&
+            ["root", "editor"].includes(sub.roleType)
+        );
+        const rootSubscription = filteredSubscriptions.find(
+          (sub) => sub.roleType === "root"
+        );
+
+        const servicePlanId =
+          rootSubscription?.productTierId ||
+          filteredSubscriptions[0]?.productTierId ||
+          "";
+        const subscriptionId =
+          rootSubscription?.id || filteredSubscriptions[0]?.id || "";
+        setFieldValue("servicePlanId", servicePlanId);
+        setFieldValue("subscriptionId", subscriptionId);
+
+        const offering = serviceOfferingsObj[serviceId]?.[servicePlanId];
+        const cloudProvider = offering?.cloudProviders?.[0] || "";
+        setFieldValue("cloudProvider", cloudProvider);
+        if (cloudProvider === "aws") {
+          setFieldValue("region", offering.awsRegions?.[0] || "");
+        } else if (cloudProvider === "gcp") {
+          setFieldValue("region", offering.gcpRegions?.[0] || "");
+        } else if (cloudProvider === "azure") {
+          // @ts-ignore
+          setFieldValue("region", offering.azureRegions?.[0] || "");
+        }
+
+        const resources = getResourceMenuItems(offering);
+        setFieldValue("resourceId", resources[0]?.value || "");
+        setFieldValue("requestParams", {});
       },
       previewValue: servicesObj[values.serviceId]?.serviceName,
     },
@@ -97,11 +174,43 @@ export const getStandardInformationFields = (
           )}
           name="servicePlanId"
           formData={formData}
+          disabled={formMode !== "create"}
+          // @ts-ignore
+          onChange={(servicePlanId: string) => {
+            const offering = serviceOfferingsObj[serviceId]?.[servicePlanId];
+            const cloudProvider = offering?.cloudProviders?.[0] || "";
+
+            setFieldValue("cloudProvider", cloudProvider);
+            if (cloudProvider === "aws") {
+              setFieldValue("region", offering.awsRegions?.[0] || "");
+            } else if (cloudProvider === "gcp") {
+              setFieldValue("region", offering.gcpRegions?.[0] || "");
+            } else if (cloudProvider === "azure") {
+              // @ts-ignore
+              setFieldValue("region", offering.azureRegions?.[0] || "");
+            }
+
+            const resources = getResourceMenuItems(offering);
+            setFieldValue("resourceId", resources[0]?.value || "");
+            setFieldValue("requestParams", {});
+
+            const filteredSubscriptions = subscriptions.filter(
+              (sub) =>
+                sub.productTierId === servicePlanId &&
+                ["root", "editor"].includes(sub.roleType)
+            );
+            const rootSubscription = filteredSubscriptions.find(
+              (sub) => sub.roleType === "root"
+            );
+
+            setFieldValue(
+              "subscriptionId",
+              rootSubscription?.id || filteredSubscriptions[0]?.id || ""
+            );
+          }}
         />
       ),
-      previewValue:
-        serviceOfferingsObj[values.serviceId]?.[values.servicePlanId]
-          ?.productTierName,
+      previewValue: offering?.productTierName,
     },
     {
       label: "Subscription",
@@ -115,9 +224,8 @@ export const getStandardInformationFields = (
         : !servicePlanId
           ? "Select a subscription plan"
           : "No subscriptions available",
-      isLoading: isFetchingSubscriptions,
       menuItems: subscriptionMenuItems,
-      previewValue: subscriptionsObj[values.subscriptionId]?.id,
+      previewValue: subscriptionsObj[subscriptionId]?.id,
     },
     {
       label: "Resource Type",
@@ -134,6 +242,10 @@ export const getStandardInformationFields = (
       previewValue: resourceMenuItems.find(
         (item) => item.value === values.resourceId
       )?.label,
+      disabled: formMode !== "create",
+      onChange: () => {
+        setFieldValue("requestParams", {});
+      },
     },
   ];
 
@@ -145,23 +257,29 @@ export const getStandardInformationFields = (
       required: true,
       customComponent: (
         <CloudProviderRadio
-          cloudProviders={
-            serviceOfferingsObj[serviceId]?.[servicePlanId]?.cloudProviders ||
-            []
-          }
+          cloudProviders={offering?.cloudProviders || []}
           name="cloudProvider"
           formData={formData}
-          onChange={() => {
-            setFieldValue("region", "");
-            setFieldTouched("cloudProvider", false);
+          // @ts-ignore
+          onChange={(newCloudProvider: CloudProvider) => {
+            if (newCloudProvider === "aws") {
+              setFieldValue("region", offering.awsRegions?.[0] || "");
+            } else if (newCloudProvider === "gcp") {
+              setFieldValue("region", offering.gcpRegions?.[0] || "");
+            } else if (newCloudProvider === "azure") {
+              // @ts-ignore
+              setFieldValue("region", offering.azureRegions?.[0] || "");
+            }
           }}
           disabled={formMode !== "create"}
         />
       ),
-      previewValue: ({ field, formData }) => {
-        const cloudProvider = formData.values[field.name];
-        return cloudProviderLogoMap[cloudProvider];
-      },
+      previewValue: values.cloudProvider
+        ? () => {
+            const cloudProvider = values.cloudProvider;
+            return cloudProviderLogoMap[cloudProvider];
+          }
+        : null,
     });
   }
 
@@ -181,17 +299,17 @@ export const getStandardInformationFields = (
         serviceOfferingsObj[serviceId]?.[servicePlanId],
         cloudProvider
       ),
+      disabled: formMode !== "create",
     });
   }
 
   if (customAvailabilityZoneFieldExists) {
     fields.push({
       label: "Custom Availability Zone",
-      subLabel: "Select the availability zone",
-      description:
+      subLabel:
         "Select a specific availability zone for deploying your instance",
       name: "requestParams.custom_availability_zone",
-      value: requestParams.custom_availability_zone,
+      value: requestParams.custom_availability_zone || "",
       type: "select",
       menuItems: customAvailabilityZones.map((zone) => ({
         label: `${zone.cloudProviderName} - ${zone.code}`,
@@ -203,6 +321,7 @@ export const getStandardInformationFields = (
         ? "No availability zones"
         : "Please select a region first",
       disabled: formMode !== "create",
+      previewValue: requestParams.custom_availability_zone,
     });
   }
 
@@ -210,10 +329,12 @@ export const getStandardInformationFields = (
 };
 
 export const getNetworkConfigurationFields = (
-  formMode,
+  formMode: FormMode,
   values,
-  resourceSchema,
-  serviceOfferingsObj
+  resourceSchema: APIEntity,
+  serviceOfferingsObj: Record<string, Record<string, ServiceOffering>>,
+  customNetworks: CustomNetwork[],
+  isFetchingCustomNetworks: boolean
 ) => {
   const fields: Field[] = [];
   const { serviceId, servicePlanId } = values;
@@ -233,6 +354,7 @@ export const getNetworkConfigurationFields = (
   const customNetworkFieldExists = inputParametersObj["custom_network_id"];
 
   const networkTypeFieldExists =
+    inputParametersObj["network_type"] &&
     cloudProviderFieldExists &&
     !isMultiTenancy &&
     offering?.supportsPublicNetwork;
@@ -241,7 +363,8 @@ export const getNetworkConfigurationFields = (
     fields.push({
       label: "Network",
       subLabel: "Type of Network",
-      name: "networkType",
+      name: "requestParams.network_type",
+      value: values.requestParams.network_type || "",
       type: "radio",
       required: true,
       disabled: formMode !== "create",
@@ -249,6 +372,7 @@ export const getNetworkConfigurationFields = (
         { label: "Public", value: "PUBLIC" },
         { label: "Internal", value: "INTERNAL" },
       ],
+      previewValue: values.requestParams.network_type,
     });
   }
 
@@ -256,12 +380,27 @@ export const getNetworkConfigurationFields = (
     fields.push({
       label: "Custom Network ID",
       subLabel: "Select the custom network ID",
-      name: "customNetworkId",
+      name: "requestParams.custom_network_id",
+      value: values.requestParams.custom_network_id || "",
       type: "select",
       required: true,
       disabled: formMode !== "create",
-      menuItems: [],
+      menuItems: getCustomNetworksMenuItems(
+        customNetworks,
+        values.cloudProvider,
+        values.cloudProvider === "aws"
+          ? offering.awsRegions
+          : values.cloudProvider === "gcp"
+            ? offering.gcpRegions
+            : // @ts-ignore
+              offering.azureRegions || [],
+        values.region
+      ),
       emptyMenuText: "No custom networks available",
+      isLoading: isFetchingCustomNetworks,
+      previewValue: customNetworks.find(
+        (network) => network.id === values.requestParams.custom_network_id
+      )?.name,
     });
   }
 
@@ -291,15 +430,11 @@ export const getDeploymentConfigurationFields = (
         label: param.displayName || param.key,
         subLabel: param.description,
         name: `requestParams.${param.key}`,
-        value: values.requestParams[param.key],
+        value: values.requestParams[param.key] || "",
         type: "password",
         required: formMode !== "modify" && param.required,
         showPasswordGenerator: true,
-        previewValue: () => (
-          <Text size="small" weight="medium" color={colors.gray900}>
-            *********
-          </Text>
-        ),
+        previewValue: "*********",
       });
     } else if (
       param.dependentResourceID &&
@@ -328,57 +463,40 @@ export const getDeploymentConfigurationFields = (
         label: param.displayName || param.key,
         subLabel: param.description,
         name: `requestParams.${param.key}`,
-        value: values.requestParams[param.key],
+        value: values.requestParams[param.key] || "",
         type: "radio",
         options: [
           { label: "True", value: "true" },
           { label: "False", value: "false" },
         ],
         required: formMode !== "modify" && param.required,
-        previewValue: () => {
-          return (
-            <Text size="small" weight="medium" color={colors.gray900}>
-              {values.requestParams[param.key] === "true" ? "true" : "false"}
-            </Text>
-          );
-        },
+        previewValue:
+          values.requestParams[param.key] === "true" ? "true" : "false",
       });
     } else if (param.options !== undefined && param.isList === true) {
       fields.push({
         label: param.displayName || param.key,
         subLabel: param.description,
         name: `requestParams.${param.key}`,
-        value: values.requestParams[param.key],
+        value: values.requestParams[param.key] || "",
         type: "multi-select-autocomplete",
         menuItems: param.options.map((option) => ({
           label: option,
           value: option,
         })),
         required: formMode !== "modify" && param.required,
-        previewValue: () => {
-          return (
-            <Text size="small" weight="medium" color={colors.gray900}>
-              {values.requestParams[param.key]?.join(", ")}
-            </Text>
-          );
-        },
+        previewValue: values.requestParams[param.key]?.join(", "),
       });
     } else if (param.options !== undefined && param.isList === false) {
       fields.push({
         label: param.displayName || param.key,
         subLabel: param.description,
         name: `requestParams.${param.key}`,
-        value: values.requestParams[param.key],
+        value: values.requestParams[param.key] || "",
         type: "single-select-autocomplete",
         menuItems: param.options.map((option) => option),
         required: formMode !== "modify" && param.required,
-        previewValue: () => {
-          return (
-            <Text size="small" weight="medium" color={colors.gray900}>
-              {values.requestParams[param.key]}
-            </Text>
-          );
-        },
+        previewValue: values.requestParams[param.key],
       });
     } else {
       if (
@@ -418,16 +536,10 @@ export const getDeploymentConfigurationFields = (
               param.description
             ),
           name: `requestParams.${param.key}`,
-          value: values.requestParams[param.key],
+          value: values.requestParams[param.key] || "",
           type: "text-multiline",
           required: formMode !== "modify" && param.required,
-          previewValue: () => {
-            return (
-              <Text size="small" weight="medium" color={colors.gray900}>
-                {values.requestParams[param.key]}
-              </Text>
-            );
-          },
+          previewValue: values.requestParams[param.key],
         });
       }
     }

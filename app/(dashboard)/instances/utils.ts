@@ -1,4 +1,5 @@
 import { CloudProvider } from "src/types/common/enums";
+import { CustomNetwork } from "src/types/customNetwork";
 import { ResourceInstance } from "src/types/resourceInstance";
 
 export const getServiceMenuItems = (serviceOfferings: any[]) => {
@@ -56,6 +57,8 @@ export const getSubscriptionMenuItems = (
       menuItems.push({
         value: subscription.id,
         label: subscription.id,
+        disabled: !["editor", "root"].includes(subscription.roleType),
+        disabledMessage: "Cannot create instances under this subscription",
       });
     }
   });
@@ -118,6 +121,35 @@ export const getRegionMenuItems = (
   }
 
   return menuItems;
+};
+
+export const getCustomNetworksMenuItems = (
+  customNetworks: CustomNetwork[],
+  cloudProvider: CloudProvider,
+  cloudProviderRegions: string[],
+  region: string
+) => {
+  let options = customNetworks;
+  if (cloudProvider) {
+    options = customNetworks.filter((customNetwork) => {
+      return customNetwork.cloudProviderName === cloudProvider;
+    });
+
+    options = customNetworks.filter((customNetwork) => {
+      return cloudProviderRegions.includes(customNetwork.cloudProviderRegion);
+    });
+  }
+
+  if (region) {
+    options = customNetworks.filter((customNetwork) => {
+      return customNetwork.cloudProviderRegion === region;
+    });
+  }
+
+  return options.map((customNetwork) => ({
+    label: customNetwork.name,
+    value: customNetwork.id,
+  }));
 };
 
 export const getMainResourceFromInstance = (instance?: ResourceInstance) => {

@@ -40,8 +40,6 @@ const CustomNetworksPage = () => {
     "peering-info-dialog"
   );
   const [isOverlayOpen, setIsOverlayOpen] = useState<boolean>(false);
-  // const [selectedCustomNetwork, setSelectedCustomNetwork] =
-  //   useState<CustomNetwork | null>(null);
 
   const {
     data: customNetworks = [],
@@ -58,17 +56,7 @@ const CustomNetworksPage = () => {
         header: "Network ID",
         cell: (data) => {
           return (
-            <DataGridText
-              // onClick={() => {
-              //   setSelectedCustomNetwork(data.row.original);
-              //   setOverlayType("custom-network-form");
-              //   setIsOverlayOpen(true);
-              // }}
-              // color="primary"
-              showCopyButton
-            >
-              {data.row.original.id}
-            </DataGridText>
+            <DataGridText showCopyButton>{data.row.original.id}</DataGridText>
           );
         },
       }),

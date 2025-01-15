@@ -1,7 +1,9 @@
 "use client";
 
 import clsx from "clsx";
+import Link from "next/link";
 import { useMemo } from "react";
+import { ArrowOutward } from "@mui/icons-material";
 import { useMutation } from "@tanstack/react-query";
 
 import Button from "components/Button/Button";
@@ -17,6 +19,7 @@ import { createSubscriptions } from "src/api/subscriptions";
 import { useGlobalData } from "src/providers/GlobalDataProvider";
 import { SubscriptionRequest } from "src/types/subscriptionRequest";
 import { createSubscriptionRequest } from "src/api/subscriptionRequests";
+import { getSubscriptionsRoute } from "src/utils/routes";
 
 const SubscriptionPlanCard = ({
   plan,
@@ -27,6 +30,7 @@ const SubscriptionPlanCard = ({
   isSelected,
   isFetchingData,
   onClick,
+  disabled,
 }) => {
   const rootSubscription = subscriptions.find((sub) => sub.roleType === "root");
   const card = (
@@ -34,13 +38,13 @@ const SubscriptionPlanCard = ({
       className={clsx(
         "flex items-start justify-between gap-3 px-4 py-4 rounded-xl outline outline-[2px]",
         isSelected ? "outline-purple-600" : "outline-gray-300",
-        !subscriptions.length && "bg-gray-50"
+        (!subscriptions.length || disabled) && "bg-gray-50"
       )}
       style={{
-        cursor: subscriptions.length ? "pointer" : "default",
+        cursor: subscriptions.length && !disabled ? "pointer" : "default",
       }}
       onClick={() => {
-        if (subscriptions.length) {
+        if (subscriptions.length && !disabled) {
           onClick();
         }
       }}
@@ -58,10 +62,20 @@ const SubscriptionPlanCard = ({
           size="small"
           weight="regular"
           color={colors.gray600}
-          className="line-clamp-2"
+          className="line-clamp-2 mb-1"
         >
           {plan.productTierDescription}
         </Text>
+        <Link
+          href={getSubscriptionsRoute({
+            serviceId: plan.serviceId,
+            servicePlanId: plan.productTierID,
+          })}
+          target="_blank"
+          className="text-purple-700 font-semibold text-sm"
+        >
+          Click here to view plan details <ArrowOutward />
+        </Link>
       </div>
       {!rootSubscription && !subscriptionRequest && (
         <Button
@@ -89,7 +103,7 @@ const SubscriptionPlanCard = ({
         </Button>
       )}
 
-      {subscriptionRequest && !subscriptions.length && (
+      {subscriptionRequest && !rootSubscription && (
         <Button
           variant="contained"
           disabled
@@ -115,7 +129,7 @@ const SubscriptionPlanCard = ({
     );
   }
 
-  if (subscriptionRequest) {
+  if (!subscriptions.length && subscriptionRequest) {
     return (
       <Tooltip placement="top" title="Subscription request is pending approval">
         {card}
@@ -131,6 +145,7 @@ const SubscriptionPlanRadio = ({
   name,
   formData,
   onChange = () => {},
+  disabled,
 }) => {
   const snackbar = useSnackbar();
   const {
@@ -209,6 +224,7 @@ const SubscriptionPlanRadio = ({
           isSubscribing={subscribeMutation.isLoading}
           isSelected={servicePlanId === plan.productTierID}
           isFetchingData={false}
+          disabled={disabled}
         />
       ))}
     </div>

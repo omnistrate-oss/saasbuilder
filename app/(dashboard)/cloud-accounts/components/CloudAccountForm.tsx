@@ -200,39 +200,33 @@ const CloudAccountForm = ({ onClose, formMode, selectedInstance }) => {
                 // Otherwise, Reset the Service Plan and Subscription
 
                 const serviceId = e.target.value;
-                const servicePlans = Object.values(
-                  byoaServiceOfferingsObj[serviceId] || {}
+                const filteredSubscriptions = subscriptions.filter(
+                  (sub) =>
+                    sub.serviceId === serviceId &&
+                    ["root", "editor"].includes(sub.roleType)
+                );
+                const rootSubscription = filteredSubscriptions.find(
+                  (sub) => sub.roleType === "root"
                 );
 
-                const subscription = subscriptions.find
-                  ? subscriptions.find(
-                      (subscription) =>
-                        subscription.productTierId ===
-                        servicePlans[0]?.productTierID
-                    )
-                  : null;
+                const servicePlanId =
+                  rootSubscription?.productTierId ||
+                  filteredSubscriptions[0]?.productTierId ||
+                  "";
+                const subscriptionId =
+                  rootSubscription?.id || filteredSubscriptions[0]?.id || "";
 
-                if (subscription) {
-                  const offering =
-                    serviceOfferingsObj[serviceId]?.[
-                      subscription.productTierId
-                    ];
+                setFieldValue("servicePlanId", servicePlanId);
+                setFieldValue("subscriptionId", subscriptionId);
 
-                  const cloudProvider = offering?.cloudProviders?.[0] || "";
-
-                  setFieldValue("servicePlanId", subscription.productTierId);
-                  setFieldValue("subscriptionId", subscription.id);
-                  setFieldValue("cloudProvider", cloudProvider);
-                  setFieldValue(
-                    "accountConfigurationMethod",
-                    cloudProvider === "aws" ? "CloudFormation" : "Terraform"
-                  );
-                } else {
-                  setFieldValue("servicePlanId", "");
-                  setFieldValue("subscriptionId", "");
-                  setFieldValue("cloudProvider", "");
-                  setFieldValue("accountConfigurationMethod", "");
-                }
+                const offering =
+                  byoaServiceOfferingsObj[serviceId]?.[servicePlanId];
+                const cloudProvider = offering?.cloudProviders?.[0] || "";
+                setFieldValue("cloudProvider", cloudProvider);
+                setFieldValue(
+                  "accountConfigurationMethod",
+                  cloudProvider === "aws" ? "CloudFormation" : "Terraform"
+                );
               },
               previewValue: servicesObj[values.serviceId]?.serviceName,
             },

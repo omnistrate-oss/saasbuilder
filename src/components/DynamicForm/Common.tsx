@@ -174,11 +174,31 @@ export const SelectField = ({ field, formData }) => {
       sx={{ mt: 0 }}
     >
       {field.menuItems?.length > 0 ? (
-        field.menuItems.map((option) => (
-          <MenuItem key={option.value} value={option.value}>
-            {option.label}
-          </MenuItem>
-        ))
+        field.menuItems.map((option) => {
+          const menuItem = (
+            <MenuItem
+              key={option.value}
+              value={option.value}
+              disabled={option.disabled}
+            >
+              {option.label}
+            </MenuItem>
+          );
+
+          if (option.disabled && option.disabledMessage) {
+            return (
+              <Tooltip
+                title={option.disabledMessage}
+                key={option.value}
+                placement="top"
+              >
+                <span>{menuItem}</span>
+              </Tooltip>
+            );
+          }
+
+          return menuItem;
+        })
       ) : (
         <MenuItem value="" disabled>
           <i>{field.emptyMenuText || "No Options"}</i>

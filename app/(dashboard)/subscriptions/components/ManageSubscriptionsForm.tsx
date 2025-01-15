@@ -16,7 +16,10 @@ import { createSubscriptions, deleteSubscription } from "src/api/subscriptions";
 import { useGlobalData } from "src/providers/GlobalDataProvider";
 import { createSubscriptionRequest } from "src/api/subscriptionRequests";
 
-const ManageSubscriptionsForm = () => {
+const ManageSubscriptionsForm = ({
+  defaultServiceId,
+  defaultServicePlanId,
+}) => {
   const {
     serviceOfferings,
     serviceOfferingsObj,
@@ -40,7 +43,7 @@ const ManageSubscriptionsForm = () => {
   }, [serviceOfferings]);
 
   const [selectedServiceId, setSelectedServiceId] = useState<any>(
-    serviceOfferings[0]?.serviceId || ""
+    defaultServiceId || serviceOfferings[0]?.serviceId || ""
   );
 
   // Plans for the Selected Service
@@ -50,7 +53,7 @@ const ManageSubscriptionsForm = () => {
 
   const [selectedPlanId, setSelectedPlanId] = useState<any>(
     // @ts-ignore
-    services[0]?.productTierID || ""
+    defaultServicePlanId || services[0]?.productTierID || ""
   );
 
   // Object of Subscriptions and Subscription Requests
@@ -107,10 +110,10 @@ const ManageSubscriptionsForm = () => {
 
   useEffect(() => {
     const planIds = Object.keys(serviceOfferingsObj[selectedServiceId] || {});
-    if (planIds.length) {
+    if (planIds.length && !planIds.includes(selectedPlanId)) {
       setSelectedPlanId(planIds[0]);
     }
-  }, [selectedServiceId, serviceOfferingsObj]);
+  }, [selectedServiceId, serviceOfferingsObj, selectedPlanId]);
 
   const selectedPlan = serviceOfferingsObj[selectedServiceId]?.[selectedPlanId];
 

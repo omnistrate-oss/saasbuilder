@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { Box, Typography } from "@mui/material";
 import { useCookieConsentContext } from "src/context/cookieConsentContext";
-import useProviderOrgDetails from "src/hooks/query/useProviderOrgDetails";
+import { useProviderOrgDetails } from "src/providers/ProviderOrgDetailsProvider";
 
 const Footer = (props) => {
   const { nonFloatingBottomPosition = false } = props;

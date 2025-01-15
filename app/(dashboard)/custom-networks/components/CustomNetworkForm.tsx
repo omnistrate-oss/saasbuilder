@@ -110,10 +110,12 @@ const CustomNetworkForm = ({
                   }}
                 />
               ),
-              previewValue: ({ field, formData }) => {
-                const cloudProvider = formData.values[field.name];
-                return cloudProviderLogoMap[cloudProvider] || "-";
-              },
+              previewValue: formData.values.cloudProviderName
+                ? () => {
+                    const cloudProvider = formData.values.cloudProviderName;
+                    return cloudProviderLogoMap[cloudProvider] || "-";
+                  }
+                : null,
             },
             {
               label: "Region",

@@ -96,6 +96,8 @@ const PreviewCard: React.FC<PreviewCardProps> = ({ sections, formData }) => {
   return (
     <div className="px-4 py-4 flex-1 space-y-6">
       {sections.map((section, index) => {
+        if (!section.fields.length) return null;
+
         return (
           <div key={index}>
             <Text
