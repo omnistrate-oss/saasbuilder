@@ -80,7 +80,7 @@ const InstancesPage = () => {
 
           const [mainResourceId] =
             Object.entries(detailedNetworkTopology).find(
-              ([, resource]: any) => resource.main
+              ([, resource]) => resource.main
             ) || [];
 
           const resourceInstanceUrlLink = getInstanceDetailsRoute({

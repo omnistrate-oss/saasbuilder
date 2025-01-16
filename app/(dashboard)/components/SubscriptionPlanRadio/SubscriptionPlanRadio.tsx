@@ -31,6 +31,7 @@ const SubscriptionPlanCard = ({
   isFetchingData,
   onClick,
   disabled,
+  disabledMessage,
 }) => {
   const rootSubscription = subscriptions.find((sub) => sub.roleType === "root");
   const card = (
@@ -137,6 +138,14 @@ const SubscriptionPlanCard = ({
     );
   }
 
+  if (disabled && disabledMessage) {
+    return (
+      <Tooltip placement="top" title={disabledMessage}>
+        {card}
+      </Tooltip>
+    );
+  }
+
   return card;
 };
 
@@ -199,7 +208,7 @@ const SubscriptionPlanRadio = ({
 
   return (
     <div className="space-y-4">
-      {servicePlans.map((plan: any) => (
+      {servicePlans.map((plan) => (
         <SubscriptionPlanCard
           key={plan.productTierID}
           plan={plan}
@@ -224,7 +233,12 @@ const SubscriptionPlanRadio = ({
           isSubscribing={subscribeMutation.isLoading}
           isSelected={servicePlanId === plan.productTierID}
           isFetchingData={false}
-          disabled={disabled}
+          disabled={disabled || plan.serviceModelStatus !== "READY"}
+          disabledMessage={
+            plan.serviceModelStatus !== "READY"
+              ? "Service model is not active"
+              : ""
+          }
         />
       ))}
     </div>

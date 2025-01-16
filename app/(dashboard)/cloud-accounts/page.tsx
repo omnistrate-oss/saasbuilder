@@ -331,6 +331,9 @@ const CloudAccountsPage = () => {
     },
     {
       onSuccess: (response: any) => {
+        if (!response?.data) {
+          return snackbar.showError("Failed to download terraform kit");
+        }
         const href = URL.createObjectURL(response.data);
         const link = document.createElement("a");
         link.href = href;

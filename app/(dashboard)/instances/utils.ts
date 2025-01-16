@@ -1,9 +1,12 @@
 import { CloudProvider } from "src/types/common/enums";
+import { MenuItem } from "src/types/common/generalTypes";
 import { CustomNetwork } from "src/types/customNetwork";
 import { ResourceInstance } from "src/types/resourceInstance";
+import { ServiceOffering } from "src/types/serviceOffering";
+import { Subscription } from "src/types/subscription";
 
-export const getServiceMenuItems = (serviceOfferings: any[]) => {
-  const menuItems: any[] = [];
+export const getServiceMenuItems = (serviceOfferings: ServiceOffering[]) => {
+  const menuItems: MenuItem[] = [];
   if (!serviceOfferings?.length) {
     return menuItems;
   }
@@ -23,10 +26,10 @@ export const getServiceMenuItems = (serviceOfferings: any[]) => {
 };
 
 export const getServicePlanMenuItems = (
-  serviceOfferings: any[],
+  serviceOfferings: ServiceOffering[],
   serviceId: string
 ) => {
-  const menuItems: any[] = [];
+  const menuItems: MenuItem[] = [];
   if (!serviceOfferings?.length) {
     return menuItems;
   }
@@ -44,10 +47,10 @@ export const getServicePlanMenuItems = (
 };
 
 export const getSubscriptionMenuItems = (
-  subscriptions: any[],
+  subscriptions: Subscription[],
   servicePlanId: string
 ) => {
-  const menuItems: any[] = [];
+  const menuItems: MenuItem[] = [];
   if (!subscriptions?.length) {
     return menuItems;
   }
@@ -66,8 +69,8 @@ export const getSubscriptionMenuItems = (
   return menuItems.sort((a, b) => a.label.localeCompare(b.label));
 };
 
-export const getResourceMenuItems = (offering: any) => {
-  const menuItems: any[] = [];
+export const getResourceMenuItems = (offering: ServiceOffering) => {
+  const menuItems: MenuItem[] = [];
 
   if (!offering?.resourceParameters?.length) {
     return menuItems;
@@ -88,31 +91,32 @@ export const getResourceMenuItems = (offering: any) => {
 };
 
 export const getRegionMenuItems = (
-  offering: any,
+  offering: ServiceOffering,
   cloudProvider: CloudProvider
 ) => {
-  const menuItems: any[] = [];
+  const menuItems: MenuItem[] = [];
 
   if (!offering || !cloudProvider) {
     return menuItems;
   }
 
   if (cloudProvider === "aws") {
-    offering.awsRegions.forEach((region: string) => {
+    offering.awsRegions?.forEach((region: string) => {
       menuItems.push({
         label: region,
         value: region,
       });
     });
   } else if (cloudProvider === "gcp") {
-    offering.gcpRegions.forEach((region: string) => {
+    offering.gcpRegions?.forEach((region: string) => {
       menuItems.push({
         label: region,
         value: region,
       });
     });
   } else if (cloudProvider === "azure") {
-    offering.azureRegions.forEach((region: string) => {
+    // @ts-ignore
+    offering.azureRegions?.forEach((region: string) => {
       menuItems.push({
         label: region,
         value: region,

@@ -276,7 +276,7 @@ const CloudAccountForm = ({
                   disabled={formMode !== "create"}
                   servicePlans={Object.values(
                     byoaServiceOfferingsObj[serviceId] || {}
-                  ).sort((a: any, b: any) =>
+                  ).sort((a, b) =>
                     a.productTierName.localeCompare(b.productTierName)
                   )}
                   name="servicePlanId"

@@ -343,7 +343,7 @@ export const getNetworkConfigurationFields = (
     offering?.productTierType === productTierTypes.OMNISTRATE_MULTI_TENANCY;
 
   const inputParametersObj = (resourceSchema?.inputParameters || []).reduce(
-    (acc: any, param: any) => {
+    (acc, param) => {
       acc[param.key] = param;
       return acc;
     },
