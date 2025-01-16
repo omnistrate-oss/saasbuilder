@@ -64,7 +64,7 @@ const SingleNavItem = ({
     return (
       <Link
         href={href}
-        className="flex items-center gap-2.5 py-2.5 px-3 rounded-md group cursor-pointer hover:bg-gray-50 transition-colors mb-1"
+        className="flex items-center gap-2.5 py-2.5 px-3 rounded-md group cursor-pointer hover:bg-gray-50 transition-colors mb-1 select-none"
       >
         <Icon />
 
@@ -87,7 +87,7 @@ const SingleNavItem = ({
       <Text
         size="medium"
         weight="semibold"
-        className="group-hover:text-success-500 transition-colors"
+        className="group-hover:text-success-500 transition-colors select-none"
       >
         {name}
       </Text>

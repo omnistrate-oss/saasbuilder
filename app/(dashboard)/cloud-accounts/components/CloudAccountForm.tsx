@@ -9,7 +9,10 @@ import { CloudAccountValidationSchema } from "../constants";
 import { FormConfiguration } from "components/DynamicForm/types";
 import GridDynamicForm from "components/DynamicForm/GridDynamicForm";
 import useSnackbar from "src/hooks/useSnackbar";
-import { createResourceInstance } from "src/api/resourceInstance";
+import {
+  createResourceInstance,
+  getResourceInstanceDetails,
+} from "src/api/resourceInstance";
 import { useGlobalData } from "src/providers/GlobalDataProvider";
 import {
   getAwsBootstrapArn,
@@ -32,6 +35,9 @@ const CloudAccountForm = ({
   formMode,
   selectedInstance,
   refetchInstances,
+  setIsAccountCreation,
+  setOverlayType,
+  setClickedInstance,
 }) => {
   const snackbar = useSnackbar();
   const selectUser = useSelector(selectUserrootData);
@@ -63,9 +69,33 @@ const CloudAccountForm = ({
   }, [byoaServiceOfferings]);
 
   const createCloudAccountMutation = useMutation(createResourceInstance, {
-    onSuccess: () => {
-      onClose();
+    onSuccess: async (response: any) => {
+      const values = formData.values;
+      const instanceId = response.data.id;
+      const { serviceId, servicePlanId } = values;
+      const offering = byoaServiceOfferingsObj[serviceId]?.[servicePlanId];
+      const selectedResource = offering?.resourceParameters.find((resource) =>
+        resource.resourceId.startsWith("r-injectedaccountconfig")
+      );
+
+      const resourceInstanceResponse = await getResourceInstanceDetails(
+        offering?.serviceProviderId,
+        offering?.serviceURLKey,
+        offering?.serviceAPIVersion,
+        offering?.serviceEnvironmentURLKey,
+        offering?.serviceModelURLKey,
+        offering?.productTierURLKey,
+        selectedResource?.urlKey,
+        instanceId,
+        values.subscriptionId
+      );
+
+      const resourceInstance = resourceInstanceResponse.data;
+
       refetchInstances();
+      setIsAccountCreation(true);
+      setClickedInstance(resourceInstance);
+      setOverlayType("view-instructions-dialog");
       snackbar.showSuccess("Cloud Account created successfully");
     },
   });
