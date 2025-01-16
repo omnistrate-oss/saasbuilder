@@ -103,8 +103,8 @@ const CloudAccountForm = ({
   const formData = useFormik({
     initialValues: getInitialValues(
       selectedInstance,
-      formMode,
-      subscriptionsObj
+      subscriptions,
+      byoaServiceOfferingsObj
     ),
     validationSchema: CloudAccountValidationSchema,
     onSubmit: (values) => {
@@ -167,43 +167,6 @@ const CloudAccountForm = ({
       subscriptions,
       values.servicePlanId
     );
-
-    // Initialise the Form
-    if (!values.serviceId && subscriptions.length > 0) {
-      const filteredSubscriptions = subscriptions.filter(
-        (sub) => byoaServiceOfferingsObj[sub.serviceId]?.[sub.productTierId]
-      );
-
-      const rootSubscription = filteredSubscriptions.find(
-        (sub) => sub.roleType === "root"
-      );
-
-      const serviceId =
-        rootSubscription?.serviceId ||
-        filteredSubscriptions[0]?.serviceId ||
-        "";
-      const servicePlanId =
-        rootSubscription?.productTierId ||
-        filteredSubscriptions[0]?.productTierId ||
-        "";
-
-      setFieldValue("serviceId", serviceId);
-      setFieldValue("servicePlanId", servicePlanId);
-      setFieldValue(
-        "subscriptionId",
-        rootSubscription?.id || filteredSubscriptions[0]?.id || ""
-      );
-
-      const cloudProvider =
-        byoaServiceOfferingsObj[serviceId]?.[servicePlanId]
-          ?.cloudProviders?.[0] || "";
-
-      setFieldValue("cloudProvider", cloudProvider);
-      setFieldValue(
-        "accountConfigurationMethod",
-        cloudProvider === "aws" ? "CloudFormation" : "Terraform"
-      );
-    }
 
     const accountConfigurationMethods =
       values.cloudProvider === "aws"
@@ -327,6 +290,7 @@ const CloudAccountForm = ({
               isLoading: isFetchingSubscriptions,
               menuItems: subscriptionMenuItems,
               previewValue: subscriptionsObj[values.subscriptionId]?.id,
+              isHidden: subscriptionMenuItems.length === 1,
             },
             {
               label: "Cloud Provider",

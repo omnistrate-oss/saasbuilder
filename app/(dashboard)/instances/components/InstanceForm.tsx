@@ -25,7 +25,7 @@ import LoadingSpinner from "components/LoadingSpinner/LoadingSpinner";
 import GridDynamicField from "components/DynamicForm/GridDynamicField";
 import LoadingSpinnerSmall from "components/CircularProgress/CircularProgress";
 
-import { getMainResourceFromInstance } from "../utils";
+import { getInitialValues } from "../utils";
 import useResourceSchema from "../hooks/useResourceSchema";
 import {
   getDeploymentConfigurationFields,
@@ -34,6 +34,7 @@ import {
 } from "./InstanceFormFields";
 import useCustomNetworks from "app/(dashboard)/custom-networks/hooks/useCustomNetworks";
 import useResourcesInstanceIds from "src/hooks/useResourcesInstanceIds";
+import { CloudProvider } from "src/types/common/enums";
 
 const InstanceForm = ({
   formMode,
@@ -52,12 +53,6 @@ const InstanceForm = ({
     subscriptionsObj,
     isFetchingSubscriptions,
   } = useGlobalData();
-
-  const selectedSubscription = useMemo(() => {
-    return subscriptions.find(
-      (sub) => sub.id === selectedInstance?.subscriptionId
-    );
-  }, [selectedInstance, subscriptions]);
 
   const { data: customNetworks = [], isFetching: isFetchingCustomNetworks } =
     useCustomNetworks({
@@ -88,18 +83,11 @@ const InstanceForm = ({
   });
 
   const formData = useFormik({
-    initialValues: {
-      serviceId: selectedSubscription?.serviceId || "",
-      servicePlanId: selectedSubscription?.productTierId || "",
-      subscriptionId: selectedInstance?.subscriptionId || "",
-      // @ts-ignore
-      resourceId: getMainResourceFromInstance(selectedInstance)?.id || "",
-      cloudProvider: selectedInstance?.cloud_provider || "",
-      region: selectedInstance?.region || "",
-      requestParams: {
-        ...(selectedInstance?.result_params || {}),
-      },
-    },
+    initialValues: getInitialValues(
+      selectedInstance,
+      subscriptions,
+      serviceOfferingsObj
+    ),
     validationSchema: yup.object({
       serviceId: yup.string().required("Service is required"),
       servicePlanId: yup.string().required("Service Plan is required"),
@@ -320,7 +308,7 @@ const InstanceForm = ({
   const {
     data: customAvailabilityZoneData,
     isLoading: isFetchingCustomAvailabilityZones,
-  } = useAvailabilityZone(values.region, values.cloudProvider);
+  } = useAvailabilityZone(values.region, values.cloudProvider as CloudProvider);
 
   const {
     isFetching: isFetchingResourceInstanceIds,

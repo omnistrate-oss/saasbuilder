@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Field } from "src/components/DynamicForm/types";
 import { productTierTypes } from "src/constants/servicePlan";
+import { cloudProviderLogoMap } from "src/constants/cloudProviders";
 import {
   getCustomNetworksMenuItems,
   getRegionMenuItems,
@@ -8,14 +9,15 @@ import {
   getServiceMenuItems,
   getSubscriptionMenuItems,
 } from "../utils";
-import SubscriptionPlanRadio from "../../components/SubscriptionPlanRadio/SubscriptionPlanRadio";
+
 import CloudProviderRadio from "../../components/CloudProviderRadio/CloudProviderRadio";
-import { cloudProviderLogoMap } from "src/constants/cloudProviders";
-import { APIEntity, ServiceOffering } from "src/types/serviceOffering";
+import SubscriptionPlanRadio from "../../components/SubscriptionPlanRadio/SubscriptionPlanRadio";
+
 import { Subscription } from "src/types/subscription";
-import { CloudProvider, FormMode } from "src/types/common/enums";
-import { AvailabilityZone } from "src/types/availabilityZone";
 import { CustomNetwork } from "src/types/customNetwork";
+import { AvailabilityZone } from "src/types/availabilityZone";
+import { CloudProvider, FormMode } from "src/types/common/enums";
+import { APIEntity, ServiceOffering } from "src/types/serviceOffering";
 
 export const getStandardInformationFields = (
   servicesObj,
@@ -45,49 +47,6 @@ export const getStandardInformationFields = (
 
   const serviceMenuItems = getServiceMenuItems(serviceOfferings);
   const offering = serviceOfferingsObj[serviceId]?.[servicePlanId];
-
-  // Initialize the Form
-  if (!serviceId && subscriptions.length > 0) {
-    const filteredSubscriptions = subscriptions.filter(
-      (sub) =>
-        serviceOfferingsObj[sub.serviceId]?.[sub.productTierId] &&
-        ["root", "editor"].includes(sub.roleType)
-    );
-
-    const rootSubscription = filteredSubscriptions.find(
-      (sub) => sub.roleType === "root"
-    );
-
-    const serviceId =
-      rootSubscription?.serviceId || filteredSubscriptions[0]?.serviceId || "";
-    const servicePlanId =
-      rootSubscription?.productTierId ||
-      filteredSubscriptions[0]?.productTierId ||
-      "";
-
-    setFieldValue("serviceId", serviceId);
-    setFieldValue("servicePlanId", servicePlanId);
-    setFieldValue(
-      "subscriptionId",
-      rootSubscription?.id || filteredSubscriptions[0]?.id || ""
-    );
-
-    const offering = serviceOfferingsObj[serviceId]?.[servicePlanId];
-    const cloudProvider = offering?.cloudProviders?.[0] || "";
-    setFieldValue("cloudProvider", cloudProvider);
-    if (cloudProvider === "aws") {
-      setFieldValue("region", offering.awsRegions?.[0] || "");
-    } else if (cloudProvider === "gcp") {
-      setFieldValue("region", offering.gcpRegions?.[0] || "");
-    } else if (cloudProvider === "azure") {
-      // @ts-ignore
-      setFieldValue("region", offering.azureRegions?.[0] || "");
-    }
-
-    const resources = getResourceMenuItems(offering);
-    setFieldValue("resourceId", resources[0]?.value || "");
-    setFieldValue("requestParams", {});
-  }
 
   const subscriptionMenuItems = getSubscriptionMenuItems(
     subscriptions,
@@ -226,6 +185,7 @@ export const getStandardInformationFields = (
           : "No subscriptions available",
       menuItems: subscriptionMenuItems,
       previewValue: subscriptionsObj[subscriptionId]?.id,
+      isHidden: subscriptionMenuItems.length === 1,
     },
     {
       label: "Resource Type",
@@ -246,6 +206,7 @@ export const getStandardInformationFields = (
       onChange: () => {
         setFieldValue("requestParams", {});
       },
+      isHidden: resourceMenuItems.length === 1,
     },
   ];
 

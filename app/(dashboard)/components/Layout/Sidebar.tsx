@@ -164,6 +164,16 @@ const Sidebar = () => {
     );
   }, [serviceOfferings]);
 
+  const showCustomNetworksPage = useMemo(() => {
+    return Boolean(
+      serviceOfferings.some((offering) =>
+        offering.serviceModelFeatures?.find(
+          (el) => el.feature === "CUSTOM_NETWORKS"
+        )
+      )
+    );
+  }, [serviceOfferings]);
+
   // Prefetch Billing Data
   const billingDetailsQuery = useBillingDetails();
   const isBillingEnabled = Boolean(
@@ -183,7 +193,11 @@ const Sidebar = () => {
         isExpandible: true,
         subItems: [
           { name: "Instances", href: "/instances" },
-          { name: "Custom Networks", href: "/custom-networks" },
+          {
+            name: "Custom Networks",
+            href: "/custom-networks",
+            isHidden: !showCustomNetworksPage,
+          },
           {
             name: "Cloud Accounts",
             href: "/cloud-accounts",
