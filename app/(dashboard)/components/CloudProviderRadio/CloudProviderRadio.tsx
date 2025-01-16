@@ -34,7 +34,11 @@ const CloudProviderCard = ({
       }}
     >
       {cloudProvider === "aws" ? <AWSLogo /> : <GCPFullLogo />}
-      <Text size="small" weight="medium" color="#414651">
+      <Text
+        size="small"
+        weight="medium"
+        color={disabled ? "#667085" : "#414651"}
+      >
         {cloudProviderLabels[cloudProvider]}
       </Text>
     </div>

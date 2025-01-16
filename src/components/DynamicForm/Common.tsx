@@ -28,7 +28,7 @@ export const PasswordInput = ({ field, formData }) => {
       type={isPasswordVisible ? "text" : "password"}
       id={field.name}
       name={field.name}
-      value={field.value || formData.values[field.name]}
+      value={field.value || formData.values[field.name] || ""}
       onChange={(e) => {
         field.onChange?.(e);
         formData.handleChange(e);
@@ -123,7 +123,7 @@ export const TextInput = ({
       type={field.type === "number" ? "number" : "text"}
       id={field.name}
       name={field.name}
-      value={field.value || values[field.name]}
+      value={field.value || values[field.name] || ""}
       onChange={(e) => {
         field.onChange?.(e);
         handleChange(e);
@@ -160,7 +160,7 @@ export const SelectField = ({ field, formData }) => {
       isLoading={field.isLoading}
       id={field.name}
       name={field.name}
-      value={field.value || values[field.name]}
+      value={field.value || values[field.name] || ""}
       onBlur={(e) => {
         field.onBlur?.(e);
         handleBlur(e);
@@ -250,7 +250,7 @@ export const SingleSelectAutocomplete = ({ field, formData }) => {
       data-testid={field.dataTestId || ""}
       options={field.menuItems || []}
       name={field.name}
-      value={field.value}
+      value={field.value || field.values[field.name] || ""}
       onChange={(e, newValue) => {
         field.onChange?.(e);
         formData.setFieldValue(field.name, newValue);
@@ -276,7 +276,7 @@ export const MultiSelectAutocomplete = ({ field, formData }) => {
       multiple
       options={field.menuItems || []}
       name={field.name}
-      value={field.value || field.values[field.name]}
+      value={field.value || field.values[field.name] || ""}
       onChange={(e, newValue) => {
         field.onChange?.(e);
         formData.setFieldValue(field.name, newValue);

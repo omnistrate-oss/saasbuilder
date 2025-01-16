@@ -410,7 +410,10 @@ export const getNetworkConfigurationFields = (
 export const getDeploymentConfigurationFields = (
   formMode,
   values,
-  resourceSchema
+  resourceSchema,
+  resourceIdInstancesHashMap,
+  isFetchingResourceInstanceIds,
+  cloudAccountInstances
 ) => {
   const fields: Field[] = [];
   if (!resourceSchema?.inputParameters) return fields;
@@ -440,24 +443,26 @@ export const getDeploymentConfigurationFields = (
       param.dependentResourceID &&
       param.key !== "cloud_provider_account_config_id"
     ) {
-      // TODO: Fix This
-      // const dependentResourceId = param.dependentResourceID;
-      // const options = resourceIdInstancesHashMap[dependentResourceId]
-      //   ? resourceIdInstancesHashMap[dependentResourceId]
-      //   : [];
-      // fields.push({
-      //   label: param.displayName || param.key,
-      //   subLabel: param.description,
-      //   name: `requestParams.${param.key}`,
-      //   value: values.requestParams[param.key],
-      //   type: "select",
-      //   menuItems: options.map((option) => ({
-      //     label: option,
-      //     value: option,
-      //   })),
-      //   required: formMode !== "modify" && param.required,
-      //   isLoading: isFetchingResourceInstanceIds,
-      // });
+      const dependentResourceId = param.dependentResourceID;
+      const options = resourceIdInstancesHashMap[dependentResourceId]
+        ? resourceIdInstancesHashMap[dependentResourceId]
+        : [];
+
+      fields.push({
+        label: param.displayName || param.key,
+        subLabel: param.description,
+        name: `requestParams.${param.key}`,
+        value: values.requestParams[param.key],
+        type: "select",
+        menuItems: options.map((option) => ({
+          label: option,
+          value: option,
+        })),
+        required: formMode !== "modify" && param.required,
+        isLoading: isFetchingResourceInstanceIds,
+        emptyMenuText: "No dependent resources available",
+        previewValue: values.requestParams[param.key],
+      });
     } else if (param.type === "Boolean") {
       fields.push({
         label: param.displayName || param.key,
@@ -497,6 +502,23 @@ export const getDeploymentConfigurationFields = (
         menuItems: param.options.map((option) => option),
         required: formMode !== "modify" && param.required,
         previewValue: values.requestParams[param.key],
+      });
+    } else if (param.key === "cloud_provider_account_config_id") {
+      fields.push({
+        label: param.displayName || param.key,
+        subLabel: param.description,
+        name: `requestParams.${param.key}`,
+        value: values.requestParams[param.key] || "",
+        type: "select",
+        menuItems: cloudAccountInstances.map((config) => ({
+          label: config.label,
+          value: config.id,
+        })),
+        required: formMode !== "modify" && param.required,
+        disabled: formMode !== "create",
+        previewValue: cloudAccountInstances.find(
+          (config) => config.id === values.requestParams[param.key]
+        )?.label,
       });
     } else {
       if (

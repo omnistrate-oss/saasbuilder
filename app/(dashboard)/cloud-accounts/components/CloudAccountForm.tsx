@@ -27,7 +27,12 @@ import CustomLabelDescription from "./CustomLabelDescription";
 import { ServiceOffering } from "src/types/serviceOffering";
 import { getInitialValues } from "../utils";
 
-const CloudAccountForm = ({ onClose, formMode, selectedInstance }) => {
+const CloudAccountForm = ({
+  onClose,
+  formMode,
+  selectedInstance,
+  refetchInstances,
+}) => {
   const snackbar = useSnackbar();
   const selectUser = useSelector(selectUserrootData);
   const {
@@ -60,6 +65,7 @@ const CloudAccountForm = ({ onClose, formMode, selectedInstance }) => {
   const createCloudAccountMutation = useMutation(createResourceInstance, {
     onSuccess: () => {
       onClose();
+      refetchInstances();
       snackbar.showSuccess("Cloud Account created successfully");
     },
   });

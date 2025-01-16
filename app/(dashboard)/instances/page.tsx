@@ -435,6 +435,7 @@ const InstancesPage = () => {
         closeDrawer={() => setIsOverlayOpen(false)}
         RenderUI={
           <InstanceForm
+            instances={instances}
             formMode={
               overlayType === "create-instance-form" ? "create" : "modify"
             }

@@ -77,7 +77,7 @@ const CloudAccountsPage = () => {
           "-",
         {
           id: "account_id",
-          header: "Account ID",
+          header: "Account ID / Project ID",
           cell: (data) => {
             const value =
               // @ts-ignore
@@ -314,6 +314,7 @@ const CloudAccountsPage = () => {
               setSelectedInstance(undefined);
             }}
             formMode={overlayType === "view-instance-form" ? "view" : "create"}
+            refetchInstances={refetchInstances}
           />
         }
       />
