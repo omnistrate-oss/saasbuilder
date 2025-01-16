@@ -169,7 +169,7 @@ const CloudAccountForm = ({
     );
 
     // Initialise the Form
-    if (!values.serviceId) {
+    if (!values.serviceId && subscriptions.length > 0) {
       const filteredSubscriptions = subscriptions.filter(
         (sub) => byoaServiceOfferingsObj[sub.serviceId]?.[sub.productTierId]
       );

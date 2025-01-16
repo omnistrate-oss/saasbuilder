@@ -5,7 +5,7 @@ import useEnvironmentType from "src/hooks/useEnvironmentType";
 type QueryParams = {
   startDate?: string;
   endDate?: string;
-  eventSourceTypes?: string;
+  eventSourceTypes?: string | string[];
 };
 
 const useAuditLogs = (queryParams: QueryParams = {}, queryOptions = {}) => {

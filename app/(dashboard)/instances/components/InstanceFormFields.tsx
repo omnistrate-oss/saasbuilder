@@ -47,7 +47,7 @@ export const getStandardInformationFields = (
   const offering = serviceOfferingsObj[serviceId]?.[servicePlanId];
 
   // Initialize the Form
-  if (!serviceId) {
+  if (!serviceId && subscriptions.length > 0) {
     const filteredSubscriptions = subscriptions.filter(
       (sub) =>
         serviceOfferingsObj[sub.serviceId]?.[sub.productTierId] &&

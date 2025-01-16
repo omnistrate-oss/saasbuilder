@@ -353,8 +353,6 @@ const CloudAccountsPage = () => {
     }
   }, [isAccountCreation]);
 
-  console.log(clickedInstance);
-
   return (
     <PageContainer>
       <PageTitle icon={CloudAccountsIcon} className="mb-6">
