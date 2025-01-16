@@ -204,7 +204,7 @@ const InstanceForm = ({
         }
 
         for (const field of requiredFields) {
-          if (!data.requestParams[field.key]) {
+          if (data.requestParams[field.key] === undefined) {
             snackbar.showError(`${field.key} is required`);
             return;
           }
@@ -288,7 +288,7 @@ const InstanceForm = ({
         }
 
         for (const field of requiredFields) {
-          if (!data.requestParams[field.key]) {
+          if (data.requestParams[field.key] === undefined) {
             snackbar.showError(`${field.key} is required`);
             return;
           }
