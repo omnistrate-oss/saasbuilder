@@ -20,6 +20,7 @@ import { useGlobalData } from "src/providers/GlobalDataProvider";
 import { SubscriptionRequest } from "src/types/subscriptionRequest";
 import { createSubscriptionRequest } from "src/api/subscriptionRequests";
 import { getSubscriptionsRoute } from "src/utils/routes";
+import { ServiceOffering } from "src/types/serviceOffering";
 
 const SubscriptionPlanCard = ({
   plan,
@@ -149,7 +150,15 @@ const SubscriptionPlanCard = ({
   return card;
 };
 
-const SubscriptionPlanRadio = ({
+type SubscriptionPlanRadioProps = {
+  servicePlans: ServiceOffering[];
+  formData: any;
+  name: string;
+  onChange?: (value?: string) => void;
+  disabled?: boolean;
+};
+
+const SubscriptionPlanRadio: React.FC<SubscriptionPlanRadioProps> = ({
   servicePlans,
   name,
   formData,
@@ -203,7 +212,13 @@ const SubscriptionPlanRadio = ({
   );
 
   if (!servicePlans.length) {
-    return null;
+    return (
+      <div className="flex items-center justify-center h-10">
+        <Text size="small" weight="medium" color={colors.gray500}>
+          No service plans found
+        </Text>
+      </div>
+    );
   }
 
   return (
@@ -225,7 +240,6 @@ const SubscriptionPlanRadio = ({
           }
           onClick={() => {
             if (servicePlanId !== plan.productTierID) {
-              // @ts-ignore
               onChange(plan.productTierID);
             }
             formData.setFieldValue(name, plan.productTierID);
