@@ -250,7 +250,7 @@ export const SingleSelectAutocomplete = ({ field, formData }) => {
       data-testid={field.dataTestId || ""}
       options={field.menuItems || []}
       name={field.name}
-      value={field.value || field.values[field.name] || ""}
+      value={field.value || ""}
       onChange={(e, newValue) => {
         field.onChange?.(e);
         formData.setFieldValue(field.name, newValue);
