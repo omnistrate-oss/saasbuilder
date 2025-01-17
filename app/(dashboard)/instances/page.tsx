@@ -64,6 +64,8 @@ const InstancesPage = () => {
   const { subscriptionsObj, serviceOfferingsObj, isFetchingSubscriptions } =
     useGlobalData();
 
+  const [appliedFilters, setAppliedFilters] = useState({});
+
   const dataTableColumns = useMemo(() => {
     return [
       columnHelper.accessor("id", {
@@ -409,6 +411,8 @@ const InstancesPage = () => {
             selectedInstanceSubscription,
             refetchInstances,
             isFetchingInstances,
+            appliedFilters,
+            setAppliedFilters,
           }}
           isLoading={isLoadingInstances || isFetchingSubscriptions}
           selectedRows={selectedRows}

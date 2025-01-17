@@ -25,6 +25,93 @@ import {
 } from "src/utils/isAllowedByRBAC";
 import Tooltip from "src/components/Tooltip/Tooltip";
 import { colors } from "src/themeConfig";
+import AddInstanceFilters from "./AddInstanceFilters";
+import EditInstanceFilters from "./EditInstanceFilters";
+
+const categories = {
+  services: {
+    label: "Services",
+    value: "services",
+    options: [
+      {
+        name: "Postgres",
+        id: "s-1",
+      },
+      {
+        name: "Redis",
+        id: "s-2",
+      },
+    ],
+  },
+  servicePlans: {
+    label: "ServicePlans",
+    value: "servicePlans",
+    options: [
+      {
+        name: "[Free][Postgres]",
+        id: "pt-1",
+        serviceId: "s-1",
+      },
+      {
+        name: "[Pro][Postgres]",
+        id: "pt-2",
+        serviceId: "s-1",
+      },
+      {
+        name: "[Free][Redis]",
+        id: "pt-3",
+        serviceId: "s-2",
+      },
+      {
+        name: "[Pro][Redis]",
+        id: "pt-4",
+        serviceId: "s-2",
+      },
+    ],
+  },
+  resources: {
+    label: "Resources",
+    value: "resources",
+    options: [
+      {
+        name: "[Resource-1][Free][Postgres]",
+        id: "r-1",
+        servicePlanId: "pt-1",
+      },
+      {
+        name: "[Resource-2][Free][Postgres]",
+        id: "r-2",
+        servicePlanId: "pt-1",
+      },
+
+      {
+        name: "[Resource-1][Pro][Postgres]",
+        id: "r-3",
+        servicePlanId: "pt-2",
+      },
+      {
+        name: "[Resource-2][Pro][Postgres]",
+        id: "r-4",
+        servicePlanId: "pt-2",
+      },
+
+      {
+        name: "[Resource-1][Free][Redis]",
+        id: "r-5",
+        servicePlanId: "pt-3",
+      },
+      {
+        name: "[Resource-2][Free][Redis]",
+        id: "r-6",
+        servicePlanId: "pt-3",
+      },
+    ],
+  },
+  createdOn: {
+    label: "CreatedOn",
+    value: "createdOn",
+  },
+};
 
 type Action = {
   onClick: () => void;
@@ -44,6 +131,8 @@ const InstancesTableHeader = ({
   selectedInstanceSubscription,
   refetchInstances,
   isFetchingInstances,
+  appliedFilters,
+  setAppliedFilters,
 }) => {
   const snackbar = useSnackbar();
 
@@ -341,84 +430,103 @@ const InstancesTableHeader = ({
   ]);
 
   return (
-    <div className="flex items-center justify-between gap-4 py-4 px-6">
-      <DataGridHeaderTitle
-        title="List of Instances"
-        desc="Details of instances"
-        count={count}
-        units={{ singular: "Instance", plural: "Instances" }}
-      />
-
-      <div className="flex items-center gap-4">
-        <RefreshWithToolTip
-          refetch={refetchInstances}
-          disabled={isFetchingInstances}
+    <div>
+      <div className="flex items-center justify-between gap-4 py-4 px-6">
+        <DataGridHeaderTitle
+          title="List of Instances"
+          desc="Details of instances"
+          count={count}
+          units={{ singular: "Instance", plural: "Instances" }}
         />
 
-        {mainActions.map((action, index) => {
-          const Icon = icons[action.label];
-          return (
-            <Button
-              key={index}
-              variant={
-                action.actionType === "primary" ? "contained" : "outlined"
+        <div className="flex items-center gap-4">
+          <RefreshWithToolTip
+            refetch={refetchInstances}
+            disabled={isFetchingInstances}
+          />
+
+          {mainActions.map((action, index) => {
+            const Icon = icons[action.label];
+            return (
+              <Button
+                key={index}
+                variant={
+                  action.actionType === "primary" ? "contained" : "outlined"
+                }
+                disabled={action.isDisabled}
+                onClick={action.onClick}
+                startIcon={<Icon disabled={action.isDisabled} />}
+                disabledMessage={action.disabledMessage}
+                outlineColor={colors.green300}
+              >
+                {action.label}
+              </Button>
+            );
+          })}
+
+          <Select
+            value=""
+            renderValue={(value: string) => {
+              if (!value) {
+                return "Action";
+              } else {
+                return "";
               }
-              disabled={action.isDisabled}
-              onClick={action.onClick}
-              startIcon={<Icon disabled={action.isDisabled} />}
-              disabledMessage={action.disabledMessage}
-              outlineColor={colors.green300}
-            >
-              {action.label}
-            </Button>
-          );
-        })}
-
-        <Select
-          value=""
-          renderValue={(value: string) => {
-            if (!value) {
-              return "Action";
-            } else {
-              return "";
-            }
-          }}
-          displayEmpty
-          disabled={otherActions.length === 0}
-          sx={{ margin: "0px", height: "40px" }}
-        >
-          {otherActions.map(
-            ({ label, onClick, isDisabled, disabledMessage }) => {
-              const Icon = icons[label];
-              const menuItem = (
-                <MenuItem
-                  value={label}
-                  key={label}
-                  sx={{
-                    gap: "10px",
-                    fontSize: "14px",
-                    color: isDisabled ? "#a3a6ac" : "",
-                  }}
-                  disabled={isDisabled}
-                  onClick={onClick}
-                >
-                  <Icon disabled={isDisabled} />
-                  {label}
-                </MenuItem>
-              );
-
-              if (disabledMessage) {
-                return (
-                  <Tooltip key={label} title={disabledMessage} placement="top">
-                    <span>{menuItem}</span>
-                  </Tooltip>
+            }}
+            displayEmpty
+            disabled={otherActions.length === 0}
+            sx={{ margin: "0px", height: "40px" }}
+          >
+            {otherActions.map(
+              ({ label, onClick, isDisabled, disabledMessage }) => {
+                const Icon = icons[label];
+                const menuItem = (
+                  <MenuItem
+                    value={label}
+                    key={label}
+                    sx={{
+                      gap: "10px",
+                      fontSize: "14px",
+                      color: isDisabled ? "#a3a6ac" : "",
+                    }}
+                    disabled={isDisabled}
+                    onClick={onClick}
+                  >
+                    <Icon disabled={isDisabled} />
+                    {label}
+                  </MenuItem>
                 );
-              }
 
-              return menuItem;
-            }
-          )}
-        </Select>
+                if (disabledMessage) {
+                  return (
+                    <Tooltip
+                      key={label}
+                      title={disabledMessage}
+                      placement="top"
+                    >
+                      <span>{menuItem}</span>
+                    </Tooltip>
+                  );
+                }
+
+                return menuItem;
+              }
+            )}
+          </Select>
+        </div>
+      </div>
+
+      <div className="px-6 py-3 border-y-[1px]">
+        <AddInstanceFilters
+          setAppliedFilters={setAppliedFilters}
+          categories={categories}
+        />
+
+        <EditInstanceFilters
+          appliedFilters={appliedFilters}
+          setAppliedFilters={setAppliedFilters}
+          categories={categories}
+        />
       </div>
     </div>
   );
