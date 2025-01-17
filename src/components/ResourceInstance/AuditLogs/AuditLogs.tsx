@@ -98,8 +98,6 @@ const AuditLogsTableHeader: FC<AuditLogsTableHeaderProps> = (props) => {
 type AuditLogsTabProps = {
   instanceId: string;
   subscriptionId: string;
-  serviceId: string;
-  productTierId: string;
 };
 
 function DetailTableRowView(props: { rowData: AccessEvent }) {
@@ -127,12 +125,7 @@ function DetailTableRowView(props: { rowData: AccessEvent }) {
   );
 }
 
-const AuditLogs: FC<AuditLogsTabProps> = ({
-  instanceId,
-  subscriptionId,
-  serviceId,
-  productTierId,
-}) => {
+const AuditLogs: FC<AuditLogsTabProps> = ({ instanceId, subscriptionId }) => {
   const [searchText, setSearchText] = useState("");
   const [selectedDateRange, setSelectedDateRange] =
     useState<Range>(initialRangeState);
@@ -211,7 +204,7 @@ const AuditLogs: FC<AuditLogsTabProps> = ({
             currentUserOrgId !== data.row.original.orgId &&
             !isUserOmnistrateSystem;
 
-          let pageLink: null | string = null;
+          let pageLink: string | undefined;
           if (!isUserServiceProvider && !isUserOmnistrateSystem && userId) {
             pageLink = getAccessControlRoute(userId);
           }

@@ -1,7 +1,7 @@
 import React, { FC, ReactNode, useMemo, useState } from "react";
 import Collapse from "@mui/material/Collapse";
 import IconButton from "@mui/material/IconButton";
-import { Box, Stack } from "@mui/material";
+import { Box, CircularProgress, Stack } from "@mui/material";
 import {
   ColumnDef,
   ExpandedState,
@@ -27,7 +27,6 @@ import {
 import Pagination from "./components/Pagination";
 import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
-import LoadingSpinner from "../LoadingSpinner/LoadingSpinner";
 import CustomCheckbox from "../Checkbox/Checkbox";
 
 const sortIcon = {
@@ -225,7 +224,7 @@ const DataTable = <TData,>(props: DataTableProps<TData>): ReactNode => {
     <TableContainer sx={{ borderRadius: "8px" }}>
       <HeaderComponent {...headerProps} />
       <Stack minHeight="605px" justifyContent="space-between">
-        <Box sx={{ overflowX: "auto", flexGrow: 1 }}>
+        <Box sx={{ overflowX: "auto", flexGrow: 1, position: "relative" }}>
           <Table sx={{ tableLayout: "fixed", width: "100%" }}>
             {table.getHeaderGroups().map((headerGroup) => (
               <colgroup key={headerGroup.id}>
@@ -353,19 +352,23 @@ const DataTable = <TData,>(props: DataTableProps<TData>): ReactNode => {
                 ))}
             </TableBody>
           </Table>
+
+          {(rows.length === 0 || isLoading) && (
+            <Stack
+              position="sticky"
+              top="50%"
+              left="50%"
+              fontSize="14px"
+              display="inline-block"
+              sx={{
+                transform: "translateX(-50%) translateY(-50%)",
+              }}
+            >
+              {isLoading ? <CircularProgress /> : noRowsText}
+            </Stack>
+          )}
         </Box>
 
-        {(rows.length === 0 || isLoading) && (
-          <Stack
-            justifyContent="center"
-            alignItems="center"
-            fontSize="14px "
-            flexGrow={1}
-            height="480px"
-          >
-            {isLoading ? <LoadingSpinner /> : noRowsText}
-          </Stack>
-        )}
         <Pagination
           isPreviousDisabled={!table.getCanPreviousPage()}
           isNextDisabled={!table.getCanNextPage()}

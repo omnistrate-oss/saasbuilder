@@ -4,33 +4,42 @@ import * as yup from "yup";
 import { useFormik } from "formik";
 import React, { useEffect, useMemo } from "react";
 import { useMutation } from "@tanstack/react-query";
+
+import { colors } from "src/themeConfig";
 import {
   createResourceInstance,
   updateResourceInstance,
 } from "src/api/resourceInstance";
 import useSnackbar from "src/hooks/useSnackbar";
+import { APIEntity } from "src/types/serviceOffering";
 import { useGlobalData } from "src/providers/GlobalDataProvider";
-import { getMainResourceFromInstance } from "../utils";
-import { Text } from "src/components/Typography/Typography";
-import useResourceSchema from "../hooks/useResourceSchema";
 import useAvailabilityZone from "src/hooks/query/useAvailabilityZone";
-import Form from "src/components/FormElementsv2/Form/Form";
-import Button from "src/components/Button/Button";
-import LoadingSpinnerSmall from "src/components/CircularProgress/CircularProgress";
-import { colors } from "src/themeConfig";
-import CardWithTitle from "src/components/Card/CardWithTitle";
-import GridDynamicField from "src/components/DynamicForm/GridDynamicField";
-import LoadingSpinner from "src/components/LoadingSpinner/LoadingSpinner";
+import { describeServiceOfferingResource } from "src/api/serviceOffering";
+
+import Button from "components/Button/Button";
+import Form from "components/FormElementsv2/Form/Form";
+import { Text } from "components/Typography/Typography";
+import CardWithTitle from "components/Card/CardWithTitle";
+import PreviewCard from "components/DynamicForm/PreviewCard";
+import LoadingSpinner from "components/LoadingSpinner/LoadingSpinner";
+import GridDynamicField from "components/DynamicForm/GridDynamicField";
+import LoadingSpinnerSmall from "components/CircularProgress/CircularProgress";
+
+import { getInitialValues } from "../utils";
+import useResourceSchema from "../hooks/useResourceSchema";
 import {
   getDeploymentConfigurationFields,
   getNetworkConfigurationFields,
   getStandardInformationFields,
 } from "./InstanceFormFields";
-import { describeServiceOfferingResource } from "src/api/serviceOffering";
+import useCustomNetworks from "app/(dashboard)/custom-networks/hooks/useCustomNetworks";
+import useResourcesInstanceIds from "src/hooks/useResourcesInstanceIds";
+import { CloudProvider } from "src/types/common/enums";
 
 const InstanceForm = ({
   formMode,
   onClose,
+  instances,
   selectedInstance,
   refetchInstances,
 }) => {
@@ -45,49 +54,14 @@ const InstanceForm = ({
     isFetchingSubscriptions,
   } = useGlobalData();
 
-  const selectedSubscription = useMemo(() => {
-    return subscriptions.find(
-      (sub) => sub.id === selectedInstance?.subscriptionId
-    );
-  }, [selectedInstance, subscriptions]);
+  const { data: customNetworks = [], isFetching: isFetchingCustomNetworks } =
+    useCustomNetworks({
+      refetchOnMount: false,
+    });
 
   const createInstanceMutation = useMutation(
     async (payload: any) => {
       return createResourceInstance(payload);
-      // const { data } = await createResourceInstance(payload);
-      // const service =
-      //   serviceOfferingsObj[payload.serviceId]?.[payload.servicePlanId]
-      //     ?.offering;
-
-      // Fetch the New Instance to Update the Query Data
-      // const instanceData = await getResourceInstanceDetails(
-      //   payload.serviceProviderId,
-      //   payload.serviceKey,
-      //   payload.serviceAPIVersion,
-      //   payload.serviceEnvironmentKey,
-      //   payload.serviceModelKey,
-      //   payload.productTierKey,
-      //   payload.resourceKey,
-      //   data.id,
-      //   payload.subscriptionId
-      // );
-
-      // This Data will be used to update the Query Data
-      // return {
-      //   ...instanceData.data,
-      //   serviceProviderId: payload.serviceProviderId,
-      //   serviceURLKey: payload.serviceKey,
-      //   serviceAPIVersion: payload.serviceAPIVersion,
-      //   serviceEnvironmentURLKey: payload.serviceEnvironmentKey,
-      //   serviceModelURLKey: payload.serviceModelKey,
-      //   productTierURLKey: payload.productTierKey,
-      //   resourceKey: payload.resourceKey,
-      //   instanceId: data.id,
-      //   subscriptionId: payload.subscriptionId,
-      //   serviceId: service?.serviceId,
-      //   serviceEnvironmentID: service?.serviceEnvironmentID,
-      //   productTierID: service?.productTierID,
-      // };
     },
     {
       onSuccess: () => {
@@ -109,18 +83,11 @@ const InstanceForm = ({
   });
 
   const formData = useFormik({
-    initialValues: {
-      serviceId: selectedSubscription?.serviceId || "",
-      servicePlanId: selectedSubscription?.productTierId || "",
-      subscriptionId: selectedInstance?.subscriptionId || "",
-      resourceId: getMainResourceFromInstance(selectedInstance)?.id || "",
-      cloudProvider: selectedInstance?.cloudProvider || "",
-      region: selectedInstance?.region || "",
-      networkType: "",
-      requestParams: {
-        ...(selectedInstance?.result_params || {}),
-      },
-    },
+    initialValues: getInitialValues(
+      selectedInstance,
+      subscriptions,
+      serviceOfferingsObj
+    ),
     validationSchema: yup.object({
       serviceId: yup.string().required("Service is required"),
       servicePlanId: yup.string().required("Service Plan is required"),
@@ -145,20 +112,30 @@ const InstanceForm = ({
         resourceKey: selectedResource?.urlKey,
       };
 
-      const schema = await describeServiceOfferingResource(
+      const schemaData = await describeServiceOfferingResource(
         values.serviceId,
         values.resourceId,
         selectedInstance?.id || "none"
       );
 
-      if (formMode === "create") {
-        const createSchema = schema.data?.apis?.find(
-          (api) => api.verb === "CREATE"
-        )?.inputParameters;
+      const createSchema =
+        schemaData.data?.apis?.find((api) => api.verb === "CREATE")
+          ?.inputParameters || [];
 
+      const updateSchema =
+        schemaData.data?.apis?.find((api) => api.verb === "UPDATE")
+          ?.inputParameters || [];
+
+      const schema = formMode === "create" ? createSchema : updateSchema;
+      const inputParametersObj = schema.reduce((acc: any, param: any) => {
+        acc[param.key] = param;
+        return acc;
+      }, {});
+
+      if (formMode === "create") {
         let isTypeError = false;
         Object.keys(data.requestParams).forEach((key) => {
-          const result = createSchema.find((schemaParam) => {
+          const result = schema.find((schemaParam) => {
             return schemaParam.key === key;
           });
 
@@ -200,30 +177,22 @@ const InstanceForm = ({
         }
 
         // Check for Required Fields
-        const requiredFields = createSchema
-          .filter(
-            (field) =>
-              ![
-                "cloud_provider",
-                "network_type",
-                "region",
-                "custom_network_id",
-              ].includes(field.key)
-          )
+        const requiredFields = schema
+          .filter((field) => !["cloud_provider", "region"].includes(field.key))
           .filter((schemaParam) => schemaParam.required);
 
         data.cloud_provider = data.cloudProvider;
-        data.network_type = data.networkType;
-        if (!data.cloudProvider) {
+        data.network_type = data.requestParams.network_type;
+        data.custom_network_id = data.requestParams.custom_network_id;
+
+        if (!data.cloudProvider && inputParametersObj["cloud_provider"]) {
           return snackbar.showError("Cloud Provider is required");
-        } else if (!data.region) {
+        } else if (!data.region && inputParametersObj["region"]) {
           return snackbar.showError("Region is required");
-        } else if (!data.networkType) {
-          return snackbar.showError("Network Type is required");
         }
 
         for (const field of requiredFields) {
-          if (!data.requestParams[field.key]) {
+          if (data.requestParams[field.key] === undefined) {
             snackbar.showError(`${field.key} is required`);
             return;
           }
@@ -233,10 +202,6 @@ const InstanceForm = ({
           createInstanceMutation.mutate(data);
         }
       } else {
-        const updateSchema = schema.data?.apis?.find(
-          (api) => api.verb === "UPDATE"
-        )?.inputParameters;
-
         // Only send the fields that have changed
         const requestParams = {},
           oldResultParams = selectedInstance?.result_params;
@@ -258,7 +223,7 @@ const InstanceForm = ({
 
         let isTypeError = false;
         Object.keys(data.requestParams).forEach((key) => {
-          const result = updateSchema.find((schemaParam) => {
+          const result = schema.find((schemaParam) => {
             return schemaParam.key === key;
           });
 
@@ -296,30 +261,22 @@ const InstanceForm = ({
         }
 
         // Check for Required Fields
-        const requiredFields = updateSchema
-          .filter(
-            (field) =>
-              ![
-                "cloud_provider",
-                "network_type",
-                "region",
-                "custom_network_id",
-              ].includes(field.key)
-          )
+        const requiredFields = schema
+          .filter((field) => !["cloud_provider", "region"].includes(field.key))
           .filter((schemaParam) => schemaParam.required);
 
         data.cloud_provider = data.cloudProvider;
-        data.network_type = data.networkType;
-        if (!data.cloudProvider) {
+        data.network_type = data.requestParams.network_type;
+        data.custom_network_id = data.requestParams.custom_network_id;
+
+        if (!data.cloudProvider && inputParametersObj["cloud_provider"]) {
           return snackbar.showError("Cloud Provider is required");
-        } else if (!data.region) {
+        } else if (!data.region && inputParametersObj["region"]) {
           return snackbar.showError("Region is required");
-        } else if (!data.networkType) {
-          return snackbar.showError("Network Type is required");
         }
 
         for (const field of requiredFields) {
-          if (!data.requestParams[field.key]) {
+          if (data.requestParams[field.key] === undefined) {
             snackbar.showError(`${field.key} is required`);
             return;
           }
@@ -332,21 +289,40 @@ const InstanceForm = ({
     },
   });
 
+  const { values } = formData;
+  const offering =
+    serviceOfferingsObj[values.serviceId]?.[values.servicePlanId];
+
   const {
-    data: resourceSchema = {},
+    data: resourceSchema = {} as APIEntity,
     isFetching: isFetchingResourceSchema,
-  }: any = useResourceSchema({
-    serviceId: formData.values.serviceId,
-    resourceId: formData.values.resourceId,
+  } = useResourceSchema({
+    serviceId: values.serviceId,
+    resourceId:
+      offering?.resourceParameters.find(
+        (resource) => resource.resourceId === values.resourceId
+      )?.resourceId && values.resourceId,
     instanceId: selectedInstance?.id,
   });
 
   const {
     data: customAvailabilityZoneData,
     isLoading: isFetchingCustomAvailabilityZones,
-  } = useAvailabilityZone(
-    formData.values.region,
-    formData.values.cloudProvider
+  } = useAvailabilityZone(values.region, values.cloudProvider as CloudProvider);
+
+  const {
+    isFetching: isFetchingResourceInstanceIds,
+    data: resourceIdInstancesHashMap = {},
+  } = useResourcesInstanceIds(
+    offering?.serviceProviderId,
+    offering?.serviceURLKey,
+    offering?.serviceAPIVersion,
+    offering?.serviceEnvironmentURLKey,
+    offering?.serviceModelURLKey,
+    offering?.productTierURLKey,
+    offering?.resourceParameters,
+    subscriptionsObj[values.subscriptionId]?.productTierId ===
+      values.servicePlanId && values.subscriptionId
   );
 
   // Sets the Default Values for the Request Parameters
@@ -367,7 +343,8 @@ const InstanceForm = ({
   }, [resourceSchema, formMode]);
 
   const customAvailabilityZones = useMemo(() => {
-    const availabilityZones = customAvailabilityZoneData?.availabilityZones;
+    const availabilityZones =
+      customAvailabilityZoneData?.availabilityZones || [];
     return availabilityZones?.sort(function (a, b) {
       if (a.code < b.code) return -1;
       else if (a.code > b.code) {
@@ -376,6 +353,30 @@ const InstanceForm = ({
       return -1;
     });
   }, [customAvailabilityZoneData?.availabilityZones]);
+
+  const cloudAccountInstances = useMemo(
+    () =>
+      instances
+        .filter(
+          // @ts-ignore
+          (instance) => instance.result_params?.account_configuration_method
+        )
+        .filter((instance) => {
+          if (instance.result_params?.gcp_project_id) {
+            return values.cloudProvider === "gcp";
+          } else if (instance.result_params?.aws_account_id) {
+            return values.cloudProvider === "aws";
+          }
+        })
+        .filter((instance) => ["READY", "RUNNING"].includes(instance.status))
+        .map((instance) => ({
+          ...instance,
+          label: instance.result_params?.gcp_project_id
+            ? `${instance.id} (Project ID - ${instance.result_params?.gcp_project_id})`
+            : `${instance.id} (Account ID - ${instance.result_params?.aws_account_id})`,
+        })),
+    [instances, values.cloudProvider]
+  );
 
   const standardInformationFields = useMemo(() => {
     return getStandardInformationFields(
@@ -399,7 +400,9 @@ const InstanceForm = ({
       formMode,
       formData.values,
       resourceSchema,
-      serviceOfferingsObj
+      serviceOfferingsObj,
+      customNetworks,
+      isFetchingCustomNetworks
     );
   }, [formMode, formData.values, resourceSchema, serviceOfferingsObj]);
 
@@ -407,9 +410,18 @@ const InstanceForm = ({
     return getDeploymentConfigurationFields(
       formMode,
       formData.values,
-      resourceSchema
+      resourceSchema,
+      resourceIdInstancesHashMap,
+      isFetchingResourceInstanceIds,
+      cloudAccountInstances
     );
-  }, [formMode, formData.values, resourceSchema]);
+  }, [
+    formMode,
+    formData.values,
+    resourceSchema,
+    resourceIdInstancesHashMap,
+    cloudAccountInstances,
+  ]);
 
   const sections = useMemo(
     () => [
@@ -428,6 +440,10 @@ const InstanceForm = ({
     ],
     [formData.values]
   );
+
+  if (isFetchingServiceOfferings || isFetchingSubscriptions) {
+    return <LoadingSpinner />;
+  }
 
   return (
     // @ts-ignore
@@ -497,67 +513,7 @@ const InstanceForm = ({
           </Text>
         </div>
 
-        <div className="px-4 py-4 flex-1">
-          {sections.map((section, index) => {
-            if (!section.fields.length) return null;
-
-            return (
-              <div key={index}>
-                <Text
-                  size="small"
-                  weight="semibold"
-                  color={colors.purple700}
-                  sx={{ my: "10px" }}
-                >
-                  {section.title}
-                </Text>
-
-                <div
-                  className="grid grid-cols-5"
-                  style={{
-                    gap: "10px 8px",
-                  }}
-                >
-                  {section.fields.map((field, index) => {
-                    return (
-                      <React.Fragment key={index}>
-                        <div
-                          style={{
-                            gridColumn: "span 2 / span 2",
-                          }}
-                        >
-                          <Text size="small" weight="medium" color="#414651">
-                            {field.label}
-                          </Text>
-                        </div>
-                        <div className="col-span-3 flex">
-                          <div style={{ margin: "-3px 8px 0px 0px" }}>:</div>
-                          <div>
-                            {field.previewValue ? (
-                              <field.previewValue
-                                field={field}
-                                formData={formData}
-                              />
-                            ) : typeof formData.values[field.name] ===
-                              "string" ? (
-                              <Text
-                                size="small"
-                                weight="medium"
-                                color={colors.gray900}
-                              >
-                                {formData.values[field.name]}
-                              </Text>
-                            ) : null}
-                          </div>
-                        </div>
-                      </React.Fragment>
-                    );
-                  })}
-                </div>
-              </div>
-            );
-          })}
-        </div>
+        <PreviewCard formData={formData} sections={sections} />
 
         <div
           style={{

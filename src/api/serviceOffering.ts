@@ -3,7 +3,10 @@ import { AxiosResponse } from "axios";
 import axios from "../axios";
 
 import { EnvironmentType } from "src/types/common/enums";
-import { ListServiceOfferingSuccessResponse } from "src/types/serviceOffering";
+import {
+  DescribeServiceOfferingResourceSuccessResponse,
+  ListServiceOfferingSuccessResponse,
+} from "src/types/serviceOffering";
 
 export const getServiceOfferingIds = (): Promise<
   AxiosResponse<ListServiceOfferingSuccessResponse>
@@ -29,7 +32,7 @@ export const describeServiceOfferingResource = (
   serviceId: string,
   resourceId: string,
   instanceId = "none"
-) => {
+): Promise<AxiosResponse<DescribeServiceOfferingResourceSuccessResponse>> => {
   return axios.get(
     `/service-offering/${serviceId}/resource/${resourceId}/instance/${instanceId}`
   );

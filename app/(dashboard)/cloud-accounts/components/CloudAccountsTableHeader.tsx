@@ -14,7 +14,7 @@ const CloudAccountsTableHeader = ({
   setSearchText,
   onCreateClick,
   onDeleteClick,
-  selectedRows,
+  selectedInstance,
   refetchInstances,
   isFetchingInstances,
 }) => {
@@ -42,9 +42,15 @@ const CloudAccountsTableHeader = ({
         />
         <Button
           variant="outlined"
-          disabled={selectedRows.length !== 1}
+          disabled={!selectedInstance || selectedInstance.status === "DELETING"}
           onClick={onDeleteClick}
-          startIcon={<DeleteIcon disabled={selectedRows.length !== 1} />}
+          startIcon={
+            <DeleteIcon
+              disabled={
+                !selectedInstance || selectedInstance.status === "DELETING"
+              }
+            />
+          }
           outlineColor={colors.green300}
         >
           Delete

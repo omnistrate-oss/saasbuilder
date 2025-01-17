@@ -49,7 +49,7 @@ const NotificationsPage = () => {
     endDate: selectedDateRange.endDate
       ? new Date(selectedDateRange.endDate).toISOString()
       : undefined,
-    eventSourceTypes: "Infra",
+    eventSourceTypes: ["Infra", "Maintenance"],
   });
 
   const dataTableColumns = useMemo(() => {

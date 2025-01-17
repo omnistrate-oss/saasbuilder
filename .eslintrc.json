@@ -24,6 +24,7 @@
     ],
     "no-undef": "error",
     "@typescript-eslint/no-unused-vars": "error",
+    "@typescript-eslint/no-require-imports": "off",
     "no-unused-vars": "error",
     "react/jsx-uses-vars": "warn",
     "no-duplicate-imports": "error",

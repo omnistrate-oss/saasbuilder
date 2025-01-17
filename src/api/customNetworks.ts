@@ -1,7 +1,13 @@
+import { AxiosResponse } from "axios";
 import axios from "src/axios";
-import { CustomNetworkCreatePayload } from "src/types/customNetwork";
+import {
+  CustomNetworkCreatePayload,
+  ListCustomNetworksSuccessResponse,
+} from "src/types/customNetwork";
 
-export function getCustomNetworks() {
+export function getCustomNetworks(): Promise<
+  AxiosResponse<ListCustomNetworksSuccessResponse>
+> {
   return axios.get("/resource-instance/custom-network");
 }
 

@@ -10,7 +10,7 @@ type NonOmnistrateIntegrationRowProps = {
     featureName: string;
     scope: string;
     provider: string;
-    Url?: string;
+    Url: string;
     healthStatus: "HEALTHY" | "UNHEALTHY" | "UNKNOWN" | "STOPPED";
     message?: string;
   };

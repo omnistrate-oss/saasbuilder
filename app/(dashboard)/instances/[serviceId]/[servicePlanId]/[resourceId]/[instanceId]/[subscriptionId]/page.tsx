@@ -354,12 +354,7 @@ const InstanceDetailsPage = ({
       )}
 
       {currentTab === tabs.auditLogs && (
-        <AuditLogs
-          instanceId={instanceId}
-          subscriptionId={subscriptionId}
-          serviceId={serviceId}
-          productTierId={servicePlanId}
-        />
+        <AuditLogs instanceId={instanceId} subscriptionId={subscriptionId} />
       )}
       {currentTab === tabs.backups && (
         <Backup

@@ -26,9 +26,9 @@ const STATUS_DESCRIPTION_MAP = {
 
 const StyledContainer = styled(Box)({
   position: "fixed",
-  top: "0",
+  top: "50%",
   right: "50%",
-  transform: "translateX(50%)",
+  transform: "translateX(50%) translateY(-50%)",
   background: "white",
   borderRadius: "12px",
   boxShadow:
@@ -200,7 +200,7 @@ const CreationTimeInstructions = (props) => {
 
 const NonCreationTimeInstructions = (props) => {
   const {
-    viewInstructionsItem,
+    selectedAccountConfig,
     accountConfigMethod,
     terraformlink,
     cloudformationlink,
@@ -215,7 +215,7 @@ const NonCreationTimeInstructions = (props) => {
     <>
       <Box width={"100%"} mb="30px">
         <BodyText>
-          {STATUS_DESCRIPTION_MAP[viewInstructionsItem?.status] ??
+          {STATUS_DESCRIPTION_MAP[selectedAccountConfig?.status] ??
             "To complete the account configuration setup -"}{" "}
         </BodyText>
 
@@ -314,29 +314,19 @@ const CloudFormationLink = ({ cloudFormationTemplateUrl }) => {
   );
 };
 
-function CloudProviderAccountOrgIdModal(props) {
-  const {
-    open,
-    handleClose,
-    orgId,
-    isAccountCreation,
-    accountConfigMethod,
-    cloudFormationTemplateUrl,
-    cloudProvider,
-    isAccessPage = false,
-    downloadTerraformKitMutation,
-    accountConfigStatus,
-    accountConfigId,
-    service,
-    selectedResourceKey,
-    subscriptionId,
-    setCloudFormationTemplateUrl,
-    setCloudFormationTemplateUrlNoLB,
-    fetchResourceInstancesOfSelectedResource,
-    cloudFormationTemplateUrlNoLB,
-    viewInstructionsItem,
-  } = props;
-
+function CloudProviderAccountOrgIdModal({
+  open,
+  handleClose,
+  orgId,
+  isAccountCreation,
+  accountConfigMethod,
+  cloudFormationTemplateUrl,
+  isAccessPage = false,
+  downloadTerraformKitMutation,
+  accountConfigId,
+  cloudFormationTemplateUrlNoLB,
+  selectedAccountConfig,
+}) {
   const terraformlink = isAccessPage ? (
     <>
       <Box
@@ -445,9 +435,9 @@ function CloudProviderAccountOrgIdModal(props) {
             </Box>
             <Text size="large" weight="semibold">
               {isAccountCreation ||
-              !STATUS_TITLE_MAP[viewInstructionsItem?.status]
+              !STATUS_TITLE_MAP[selectedAccountConfig?.status]
                 ? "Account Configuration Instructions"
-                : STATUS_TITLE_MAP[viewInstructionsItem?.status]}
+                : STATUS_TITLE_MAP[selectedAccountConfig?.status]}
             </Text>
           </Stack>
           <IconButton onClick={handleClose} sx={{ alignSelf: "flex-start" }}>
@@ -463,19 +453,9 @@ function CloudProviderAccountOrgIdModal(props) {
               cloudFormationGuide={cloudFormationGuide}
               terraformGuide={terraformGuide}
               orgId={orgId}
-              accountConfigStatus={accountConfigStatus}
+              accountConfigStatus={selectedAccountConfig?.status}
               accountConfigId={accountConfigId}
               cloudFormationTemplateUrl={cloudFormationTemplateUrl}
-              setCloudFormationTemplateUrl={setCloudFormationTemplateUrl}
-              setCloudFormationTemplateUrlNoLB={
-                setCloudFormationTemplateUrlNoLB
-              }
-              service={service}
-              selectedResourceKey={selectedResourceKey}
-              subscriptionId={subscriptionId}
-              fetchResourceInstancesOfSelectedResource={
-                fetchResourceInstancesOfSelectedResource
-              }
               cloudformationNoLBlink={
                 cloudFormationTemplateUrlNoLB ? (
                   cloudFormationTemplateUrlNoLBLink
@@ -489,9 +469,8 @@ function CloudProviderAccountOrgIdModal(props) {
           ) : (
             <NonCreationTimeInstructions
               isAccessPage={isAccessPage}
-              viewInstructionsItem={viewInstructionsItem}
+              selectedAccountConfig={selectedAccountConfig}
               accountConfigMethod={accountConfigMethod}
-              cloudProvider={cloudProvider}
               cloudformationlink={cloudformationlink}
               terraformlink={terraformlink}
               cloudFormationGuide={cloudFormationGuide}

@@ -36,8 +36,9 @@ export function getRegionHexColor(
   if (region && cloudProvider && inUseProviderRegionsList.length > 0) {
     const key = `${cloudProvider}-${region}`;
 
-    const regionColorHashString: LocalStorageRegionColorHash =
-      localStorage.getItem("regionColorHash");
+    const regionColorHashString = localStorage.getItem(
+      "regionColorHash"
+    ) as LocalStorageRegionColorHash;
     try {
       if (
         regionColorHashString &&

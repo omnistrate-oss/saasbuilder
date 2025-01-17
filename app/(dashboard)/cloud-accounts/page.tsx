@@ -1,7 +1,7 @@
 "use client";
 
 import { useFormik } from "formik";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Box, Stack } from "@mui/material";
 import { useMutation } from "@tanstack/react-query";
 import { createColumnHelper } from "@tanstack/react-table";
@@ -27,9 +27,14 @@ import useSnackbar from "src/hooks/useSnackbar";
 import formatDateUTC from "src/utils/formatDateUTC";
 import { ResourceInstance } from "src/types/resourceInstance";
 import { useGlobalData } from "src/providers/GlobalDataProvider";
-import { deleteResourceInstance } from "src/api/resourceInstance";
+import {
+  deleteResourceInstance,
+  getTerraformKit,
+} from "src/api/resourceInstance";
 import { getResourceInstanceStatusStylesAndLabel } from "src/constants/statusChipStyles/resourceInstanceStatus";
 import DeleteAccountConfigConfirmationDialog from "src/components/DeleteAccountConfigConfirmationDialog/DeleteAccountConfigConfirmationDialog";
+import CloudProviderAccountOrgIdModal from "src/components/CloudProviderAccountOrgIdModal/CloudProviderAccountOrgIdModal";
+import ServiceNameWithLogo from "src/components/ServiceNameWithLogo/ServiceNameWithLogo";
 
 const columnHelper = createColumnHelper<ResourceInstance>();
 
@@ -42,13 +47,14 @@ type Overlay =
 const CloudAccountsPage = () => {
   const snackbar = useSnackbar();
   const { subscriptionsObj, serviceOfferingsObj } = useGlobalData();
-  const [searchText, setSearchText] = useState<string>("");
+  const [searchText, setSearchText] = useState("");
   const [selectedRows, setSelectedRows] = useState<string[]>([]);
   const [overlayType, setOverlayType] = useState<Overlay>(
     "create-instance-form"
   );
-  const [isOverlayOpen, setIsOverlayOpen] = useState<boolean>(false);
-  const [selectedInstance, setSelectedInstance] = useState<ResourceInstance>();
+  const [isOverlayOpen, setIsOverlayOpen] = useState(false);
+  const [isAccountCreation, setIsAccountCreation] = useState(false);
+  const [clickedInstance, setClickedInstance] = useState<ResourceInstance>();
 
   const {
     data: instances = [],
@@ -77,7 +83,7 @@ const CloudAccountsPage = () => {
           "-",
         {
           id: "account_id",
-          header: "Account ID",
+          header: "Account ID / Project ID",
           cell: (data) => {
             const value =
               // @ts-ignore
@@ -91,9 +97,9 @@ const CloudAccountsPage = () => {
                 showCopyButton={value !== "-"}
                 color="primary"
                 onClick={() => {
-                  setSelectedInstance(data.row.original);
+                  setClickedInstance(data.row.original);
                   setIsOverlayOpen(true);
-                  setOverlayType("view-instance-form");
+                  setOverlayType("view-instructions-dialog");
                 }}
               >
                 {value}
@@ -141,7 +147,7 @@ const CloudAccountsPage = () => {
                       alignItems: "center",
                     }}
                     onClick={() => {
-                      setSelectedInstance(data.row.original);
+                      setClickedInstance(data.row.original);
                       setIsOverlayOpen(true);
                       setOverlayType("view-instructions-dialog");
                     }}
@@ -157,6 +163,41 @@ const CloudAccountsPage = () => {
           minWidth: 170,
         },
       }),
+      columnHelper.accessor(
+        (row) => {
+          const subscription = subscriptionsObj[row.subscriptionId as string];
+          return subscription?.serviceName;
+        },
+        {
+          id: "serviceName",
+          header: "Service Name",
+          cell: (data) => {
+            const { serviceLogoURL, serviceName } =
+              subscriptionsObj[data.row.original.subscriptionId as string] ||
+              {};
+            return (
+              <ServiceNameWithLogo
+                serviceName={serviceName}
+                serviceLogoURL={serviceLogoURL}
+              />
+            );
+          },
+          meta: {
+            minWidth: 230,
+          },
+        }
+      ),
+      columnHelper.accessor(
+        (row) => {
+          const subscription = subscriptionsObj[row.subscriptionId as string];
+          return subscription?.productTierName || "-";
+        },
+        {
+          id: "servicePlanName",
+          header: "Subscription Plan",
+        }
+      ),
+
       columnHelper.accessor(
         // @ts-ignore
         (row) => row.cloud_provider || row.result_params?.cloud_provider || "-",
@@ -180,6 +221,16 @@ const CloudAccountsPage = () => {
           },
         }
       ),
+      columnHelper.accessor(
+        (row) => {
+          const subscription = subscriptionsObj[row.subscriptionId as string];
+          return subscription?.subscriptionOwnerName;
+        },
+        {
+          id: "subscriptionOwner",
+          header: "Subscription Owner",
+        }
+      ),
       columnHelper.accessor((row) => formatDateUTC(row.created_at), {
         id: "created_at",
         header: "Created On",
@@ -194,6 +245,10 @@ const CloudAccountsPage = () => {
       }),
     ];
   }, []);
+
+  const selectedInstance = useMemo(() => {
+    return instances.find((instance) => instance.id === selectedRows[0]);
+  }, [selectedRows, instances]);
 
   // Subscription of the Selected Instance
   const selectedInstanceSubscription = useMemo(() => {
@@ -235,6 +290,9 @@ const CloudAccountsPage = () => {
         refetchInstances();
         setIsOverlayOpen(false);
         snackbar.showSuccess("Deleting account config...");
+
+        // eslint-disable-next-line no-use-before-define
+        deleteformik.resetForm();
       },
     }
   );
@@ -255,6 +313,45 @@ const CloudAccountsPage = () => {
     },
     validateOnChange: false,
   });
+
+  const downloadTerraformKitMutation = useMutation(
+    () => {
+      if (selectedInstanceOffering && selectedInstanceSubscription) {
+        return getTerraformKit(
+          selectedInstanceOffering.serviceProviderId,
+          selectedInstanceOffering.serviceURLKey,
+          selectedInstanceOffering.serviceAPIVersion,
+          selectedInstanceOffering.serviceEnvironmentURLKey,
+          selectedInstanceOffering.serviceModelURLKey,
+          selectedInstanceSubscription.id,
+          // @ts-ignore
+          clickedInstance?.result_params?.gcp_project_id ? "gcp" : "aws"
+        );
+      }
+    },
+    {
+      onSuccess: (response: any) => {
+        if (!response?.data) {
+          return snackbar.showError("Failed to download terraform kit");
+        }
+        const href = URL.createObjectURL(response.data);
+        const link = document.createElement("a");
+        link.href = href;
+        link.setAttribute("download", "terraformkit.tar");
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(href);
+      },
+    }
+  );
+
+  useEffect(() => {
+    if (isAccountCreation) {
+      setIsOverlayOpen(true);
+      setOverlayType("view-instructions-dialog");
+    }
+  }, [isAccountCreation]);
 
   return (
     <PageContainer>
@@ -277,13 +374,10 @@ const CloudAccountsPage = () => {
               setOverlayType("create-instance-form");
             },
             onDeleteClick: () => {
-              setSelectedInstance(
-                instances.find((instance) => instance.id === selectedRows[0])
-              );
               setIsOverlayOpen(true);
               setOverlayType("delete-dialog");
             },
-            selectedRows,
+            selectedInstance,
             refetchInstances: refetchInstances,
             isFetchingInstances: isFetchingInstances,
           }}
@@ -304,16 +398,19 @@ const CloudAccountsPage = () => {
         }
         closeDrawer={() => {
           setIsOverlayOpen(false);
-          setSelectedInstance(undefined);
+          setClickedInstance(undefined);
         }}
         RenderUI={
           <CloudAccountForm
             selectedInstance={selectedInstance}
             onClose={() => {
               setIsOverlayOpen(false);
-              setSelectedInstance(undefined);
             }}
             formMode={overlayType === "view-instance-form" ? "view" : "create"}
+            refetchInstances={refetchInstances}
+            setIsAccountCreation={setIsAccountCreation}
+            setOverlayType={setOverlayType}
+            setClickedInstance={setClickedInstance}
           />
         }
       />
@@ -327,6 +424,36 @@ const CloudAccountsPage = () => {
         formData={deleteformik}
         title="Delete Account Config"
         isLoading={deleteAccountConfigMutation.isLoading}
+      />
+
+      <CloudProviderAccountOrgIdModal
+        isAccessPage
+        open={isOverlayOpen && overlayType === "view-instructions-dialog"}
+        handleClose={() => {
+          setIsOverlayOpen(false);
+          setTimeout(() => {
+            setClickedInstance(undefined);
+            setIsAccountCreation(false);
+          }, 1000);
+        }}
+        orgId={
+          subscriptionsObj[clickedInstance?.subscriptionId as string]
+            ?.accountConfigIdentityId
+        }
+        downloadTerraformKitMutation={downloadTerraformKitMutation}
+        accountConfigId={clickedInstance?.id}
+        selectedAccountConfig={clickedInstance}
+        accountConfigMethod={
+          // @ts-ignore
+          clickedInstance?.result_params?.account_configuration_method
+        }
+        cloudFormationTemplateUrl={
+          selectedInstanceOffering?.assets?.cloudFormationURL
+        }
+        cloudFormationTemplateUrlNoLB={
+          selectedInstanceOffering?.assets?.cloudFormationURLNoLB
+        }
+        isAccountCreation={isAccountCreation}
       />
     </PageContainer>
   );

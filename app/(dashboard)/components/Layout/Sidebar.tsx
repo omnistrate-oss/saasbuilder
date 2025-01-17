@@ -64,7 +64,7 @@ const SingleNavItem = ({
     return (
       <Link
         href={href}
-        className="flex items-center gap-2.5 py-2.5 px-3 rounded-md group cursor-pointer hover:bg-gray-50 transition-colors mb-1"
+        className="flex items-center gap-2.5 py-2.5 px-3 rounded-md group cursor-pointer hover:bg-gray-50 transition-colors mb-1 select-none"
       >
         <Icon />
 
@@ -87,7 +87,7 @@ const SingleNavItem = ({
       <Text
         size="medium"
         weight="semibold"
-        className="group-hover:text-success-500 transition-colors"
+        className="group-hover:text-success-500 transition-colors select-none"
       >
         {name}
       </Text>
@@ -164,6 +164,16 @@ const Sidebar = () => {
     );
   }, [serviceOfferings]);
 
+  const showCustomNetworksPage = useMemo(() => {
+    return Boolean(
+      serviceOfferings.some((offering) =>
+        offering.serviceModelFeatures?.find(
+          (el) => el.feature === "CUSTOM_NETWORKS"
+        )
+      )
+    );
+  }, [serviceOfferings]);
+
   // Prefetch Billing Data
   const billingDetailsQuery = useBillingDetails();
   const isBillingEnabled = Boolean(
@@ -183,7 +193,11 @@ const Sidebar = () => {
         isExpandible: true,
         subItems: [
           { name: "Instances", href: "/instances" },
-          { name: "Custom Networks", href: "/custom-networks" },
+          {
+            name: "Custom Networks",
+            href: "/custom-networks",
+            isHidden: !showCustomNetworksPage,
+          },
           {
             name: "Cloud Accounts",
             href: "/cloud-accounts",

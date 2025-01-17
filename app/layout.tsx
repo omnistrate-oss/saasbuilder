@@ -5,15 +5,18 @@ import RootProviders from "./RootProviders";
 import { ENVIRONMENT_TYPES } from "src/constants/environmentTypes";
 import { getProviderOrgDetails } from "src/server/api/customer-user";
 
-import "./globals.css";
-import { EnvironmentType } from "src/types/common/enums";
 import { ProviderUser } from "src/types/users";
+import { EnvironmentType } from "src/types/common/enums";
+
+import "./globals.css";
 
 export const metadata: Metadata = {
   title: "Omnistrate",
   description:
     "Working template for a SaaS service Front-end for Services created using Omnistrate",
 };
+
+export const dynamic = "force-dynamic";
 
 const RootLayout = async ({ children }: { children: React.ReactNode }) => {
   const providerOrgDetails: { data: ProviderUser } =

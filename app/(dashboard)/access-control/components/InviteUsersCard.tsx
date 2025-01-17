@@ -33,12 +33,7 @@ const getNewEnvVariable = () => {
   };
 };
 
-const getServiceMenuItems = (
-  subscriptions: Subscription[]
-): {
-  label: string;
-  value: string;
-}[] => {
+const getServiceMenuItems = (subscriptions: Subscription[]) => {
   const serviceIdSet = new Set();
 
   const serviceMenuItems = subscriptions
@@ -54,7 +49,10 @@ const getServiceMenuItems = (
       return null;
     });
 
-  return serviceMenuItems.filter((item) => item !== null);
+  return serviceMenuItems.filter((item) => item !== null) as {
+    label: string;
+    value: string;
+  }[];
 };
 
 const getServicePlanMenuItems = (

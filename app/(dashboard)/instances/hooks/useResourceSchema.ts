@@ -7,18 +7,22 @@ type QueryParams = {
   instanceId?: string;
 };
 
-const useResourceSchema = (queryParams: QueryParams = {}) => {
+const useResourceSchema = (
+  queryParams: QueryParams = {},
+  queryOptions = { enabled: true }
+) => {
   const { serviceId, resourceId, instanceId = "none" } = queryParams;
   const isEnabled = Boolean(serviceId && resourceId);
 
   const query = useQuery(
     ["resource-schema", serviceId, resourceId, instanceId],
-    () => describeServiceOfferingResource(serviceId, resourceId, instanceId),
+    () => describeServiceOfferingResource(serviceId!, resourceId!, instanceId),
     {
-      enabled: isEnabled,
+      ...queryOptions,
+      enabled: isEnabled && queryOptions.enabled,
       select: (response) => {
         // Get the CREATE API
-        return response.data?.apis?.find((api) => api.verb === "CREATE") || {};
+        return response.data?.apis?.find((api) => api.verb === "CREATE");
       },
     }
   );

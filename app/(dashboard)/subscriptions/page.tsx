@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
 import { useMutation } from "@tanstack/react-query";
 import { createColumnHelper } from "@tanstack/react-table";
@@ -29,6 +29,7 @@ import TextConfirmationDialog from "components/TextConfirmationDialog/TextConfir
 import SubscriptionTypeDirectIcon from "components/Icons/SubscriptionType/SubscriptionTypeDirectIcon";
 import SubscriptionTypeInvitedIcon from "components/Icons/SubscriptionType/SubscriptionTypeInvitedIcon";
 import { Subscription } from "src/types/subscription";
+import { useSearchParams } from "next/navigation";
 
 const columnHelper = createColumnHelper<Subscription>();
 type Overlay =
@@ -38,6 +39,12 @@ type Overlay =
 
 const SubscriptionsPage = () => {
   const snackbar = useSnackbar();
+  const searchParams = useSearchParams();
+
+  const serviceId = searchParams?.get("serviceId");
+  const servicePlanId = searchParams?.get("servicePlanId");
+  // const subscriptionId = searchParams?.get("subscriptionId");
+
   const [searchText, setSearchText] = useState<string>("");
   const [selectedRows, setSelectedRows] = useState<string[]>([]);
   const [overlayType, setOverlayType] = useState<Overlay>(
@@ -53,7 +60,25 @@ const SubscriptionsPage = () => {
     isFetchingSubscriptions,
     refetchSubscriptions,
     serviceOfferingsObj,
+    isFetchingServiceOfferings,
   } = useGlobalData();
+
+  useEffect(() => {
+    if (
+      serviceId &&
+      servicePlanId &&
+      !isFetchingSubscriptions &&
+      !isFetchingServiceOfferings
+    ) {
+      setIsOverlayOpen(true);
+      setOverlayType("manage-subscriptions");
+    }
+  }, [
+    serviceId,
+    servicePlanId,
+    isFetchingSubscriptions,
+    isFetchingServiceOfferings,
+  ]);
 
   // Show only subscriptions that have service offerings associated with them
   const existingSubscriptions = useMemo(() => {
@@ -215,7 +240,7 @@ const SubscriptionsPage = () => {
               refetchSubscriptions,
               selectedSubscription,
             }}
-            isLoading={isFetchingSubscriptions}
+            isLoading={isFetchingSubscriptions || isFetchingServiceOfferings}
             selectionMode="single"
             selectedRows={selectedRows}
             onRowSelectionChange={setSelectedRows}
@@ -242,7 +267,10 @@ const SubscriptionsPage = () => {
           }
           RenderUI={
             overlayType === "manage-subscriptions" ? (
-              <ManageSubscriptionsForm />
+              <ManageSubscriptionsForm
+                defaultServiceId={serviceId}
+                defaultServicePlanId={servicePlanId}
+              />
             ) : (
               <SubscriptionDetails
                 subscription={clickedSubscription}

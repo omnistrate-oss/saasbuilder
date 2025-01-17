@@ -82,7 +82,7 @@ const InstancesPage = () => {
 
           const [mainResourceId] =
             Object.entries(detailedNetworkTopology).find(
-              ([, resource]: any) => resource.main
+              ([, resource]) => resource.main
             ) || [];
 
           const resourceInstanceUrlLink = getInstanceDetailsRoute({
@@ -327,9 +327,9 @@ const InstancesPage = () => {
     refetch: refetchInstances,
   } = useInstances();
 
+  // Filter BYOA Account Instances
   const nonBYOAInstances = useMemo(() => {
     return instances.filter(
-      // Filter BYOA Account Instances
       // @ts-ignore
       (instance) => !instance.result_params?.account_configuration_method
     );
@@ -439,6 +439,7 @@ const InstancesPage = () => {
         closeDrawer={() => setIsOverlayOpen(false)}
         RenderUI={
           <InstanceForm
+            instances={instances}
             formMode={
               overlayType === "create-instance-form" ? "create" : "modify"
             }

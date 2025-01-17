@@ -20,7 +20,7 @@ const CloudProviderCard = ({
     <div
       className={clsx(
         "px-4 py-4 rounded-xl text-center flex flex-col justify-between items-center min-h-28",
-        disabled ? "cursor-not-allowed opacity-50" : "cursor-pointer"
+        disabled ? "cursor-default bg-gray-50" : "cursor-pointer"
       )}
       style={{
         outline: isSelected
@@ -34,7 +34,11 @@ const CloudProviderCard = ({
       }}
     >
       {cloudProvider === "aws" ? <AWSLogo /> : <GCPFullLogo />}
-      <Text size="small" weight="medium" color="#414651">
+      <Text
+        size="small"
+        weight="medium"
+        color={disabled ? "#667085" : "#414651"}
+      >
         {cloudProviderLabels[cloudProvider]}
       </Text>
     </div>

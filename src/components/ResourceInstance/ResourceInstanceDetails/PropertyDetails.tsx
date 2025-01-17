@@ -199,7 +199,7 @@ const PropertyDetails: FC<PropertyTableProps> = ({ rows, ...otherProps }) => {
             value = (
               <>
                 <Link
-                  href={row.linkProps?.href}
+                  href={row.linkProps?.href || "#"}
                   target={row.linkProps?.target || "_self"}
                   style={{
                     fontWeight: 600,
