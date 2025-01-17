@@ -17,6 +17,11 @@ export type CustomNetwork = {
   networkInstances: NetworkInstance[];
 };
 
+export type ModifyCustomNetwork = {
+  id: string;
+  name: string;
+};
+
 export type CustomNetworkCreatePayload = {
   cidr: string;
   cloudProviderName: CloudProvider;
