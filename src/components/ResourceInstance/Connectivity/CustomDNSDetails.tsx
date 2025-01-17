@@ -178,18 +178,20 @@ const CustomDNSDetails: React.FC<CustomDNSDetailsProps> = ({
               </Box>
             </RecordColumn>
           </RecordRowContainer>
-          {record.recordValueDetails && (
-            <RecordRowContainer marginTop={"-4px"}>
-              <RecordColumn></RecordColumn>
-              <Box px="8px"></Box>
+          {record?.recordValueDetails && (
+            <RecordRowContainer marginTop="-4px">
+              {/* @ts-ignore */}
+              <RecordColumn />
+              {/* @ts-ignore */}
+              <Box px="8px" />
               <RecordColumn>
-                <Box paddingLeft={"15px"}>
+                <Box paddingLeft="15px">
                   <Text
                     size="small"
                     weight="regular"
                     color="rgba(52, 64, 84, 1)"
                   >
-                    {record.recordValueDetails}
+                    {record?.recordValueDetails}
                   </Text>
                 </Box>
               </RecordColumn>
