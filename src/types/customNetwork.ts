@@ -9,12 +9,12 @@ export type NetworkInstance = {
 };
 
 export type CustomNetwork = {
-  cidr: string;
-  cloudProviderName: CloudProvider;
-  cloudProviderRegion: string;
+  cidr?: string;
+  cloudProviderName?: CloudProvider;
+  cloudProviderRegion?: string;
   id: string;
-  name: string;
-  networkInstances: NetworkInstance[];
+  name?: string;
+  networkInstances?: NetworkInstance[];
 };
 
 export type CustomNetworkCreatePayload = {
