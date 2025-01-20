@@ -429,6 +429,50 @@ function ResourceUpdateView(props) {
                 if (isCurrentResourceBYOA && !shouldShowParamField(param.key)) {
                   return null;
                 }
+                if (param.key === "custom_dns_configuration") {
+                  return (
+                    <FieldContainer key={param.key}>
+                      <FieldLabel required={param.required === true}>
+                        {param.displayName}
+                      </FieldLabel>
+                      <FieldDescription sx={{ mt: "5px" }}>
+                        {param.description}
+                      </FieldDescription>
+
+                      <TextField
+                        disabled
+                        id={`requestParams.${param.key}`}
+                        type="text"
+                        name={`requestParams.${param.key}`}
+                        value={
+                          formData.values.requestParams[param.key] &&
+                          typeof formData.values.requestParams[param.key] ===
+                            "string"
+                            ? (() => {
+                                try {
+                                  const parsed = JSON.parse(
+                                    formData.values.requestParams[param.key]
+                                  );
+                                  return typeof parsed === "object"
+                                    ? Object.values(parsed)[0]
+                                    : "";
+                                } catch {
+                                  return formData.values.requestParams[
+                                    param.key
+                                  ]; // Fallback to original string if not valid JSON
+                                }
+                              })()
+                            : formData.values.requestParams[param.key] || ""
+                        }
+                        onChange={formData.handleChange}
+                        sx={{ marginTop: "16px" }}
+                        modifiable={param.modifiable}
+                        required={param.required ? "required" : ""}
+                      />
+                    </FieldContainer>
+                  );
+                }
+
                 if (param.type === "Password") {
                   return (
                     <FieldContainer key={param.key}>
