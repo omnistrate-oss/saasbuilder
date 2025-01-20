@@ -22,37 +22,15 @@ import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import { colors } from "src/themeConfig";
 import { useGlobalData } from "src/providers/GlobalDataProvider";
 import useBillingDetails from "src/hooks/query/useBillingDetails";
-
-const bottomItems = [
-  {
-    name: "API Documentation",
-    icon: APIDocsIcon,
-    href: "/api-documentation",
-  },
-  {
-    name: "Download CLI",
-    icon: DownloadCLIIcon,
-  },
-  {
-    name: "Support",
-    icon: SupportIcon,
-  },
-  {
-    name: "Pricing",
-    icon: PricingIcon,
-  },
-  {
-    name: "Documentation",
-    icon: DeveloperDocsIcon,
-  },
-];
+import FullScreenDrawer from "../FullScreenDrawer/FullScreenDrawer";
+import PlanDetails from "./PlanDetails";
 
 const SingleNavItem = ({
   name,
   icon: Icon,
   href,
   currentPath,
-  // onClick,
+  onClick,
 }: {
   name: string;
   icon: any;
@@ -81,7 +59,10 @@ const SingleNavItem = ({
   }
 
   return (
-    <div className="flex items-center gap-2.5 py-2.5 px-3 rounded-md group cursor-pointer hover:bg-gray-50 transition-colors mb-1">
+    <div
+      className="flex items-center gap-2.5 py-2.5 px-3 rounded-md group cursor-pointer hover:bg-gray-50 transition-colors mb-1"
+      onClick={onClick}
+    >
       <Icon />
 
       <Text
@@ -154,9 +135,18 @@ const ExpandibleNavItem = ({ name, icon: Icon, subItems, currentPath }) => {
   );
 };
 
+type Overlay =
+  | "plan-details"
+  | "documentation"
+  | "pricing"
+  | "support"
+  | "api-documentation";
+
 const Sidebar = () => {
   const currentPath = usePathname();
   const { serviceOfferings } = useGlobalData();
+  const [isOverlayOpen, setIsOverlayOpen] = useState(false);
+  const [overlayType, setOverlayType] = useState<Overlay>("plan-details");
 
   const showCloudProvidersPage = useMemo(() => {
     return Boolean(
@@ -178,6 +168,52 @@ const Sidebar = () => {
   const billingDetailsQuery = useBillingDetails();
   const isBillingEnabled = Boolean(
     billingDetailsQuery.isFetched && billingDetailsQuery.data
+  );
+
+  const bottomItems = useMemo(
+    () => [
+      {
+        name: "API Documentation",
+        icon: APIDocsIcon,
+        onClick: () => {
+          setIsOverlayOpen(true);
+          setOverlayType("api-documentation");
+        },
+      },
+      {
+        name: "Download CLI",
+        icon: DownloadCLIIcon,
+        onClick: () => {
+          setIsOverlayOpen(true);
+          setOverlayType("plan-details");
+        },
+      },
+      {
+        name: "Support",
+        icon: SupportIcon,
+        onClick: () => {
+          setIsOverlayOpen(true);
+          setOverlayType("support");
+        },
+      },
+      {
+        name: "Pricing",
+        icon: PricingIcon,
+        onClick: () => {
+          setIsOverlayOpen(true);
+          setOverlayType("pricing");
+        },
+      },
+      {
+        name: "Documentation",
+        icon: DeveloperDocsIcon,
+        onClick: () => {
+          setIsOverlayOpen(true);
+          setOverlayType("documentation");
+        },
+      },
+    ],
+    []
   );
 
   const topItems = useMemo(() => {
@@ -226,7 +262,7 @@ const Sidebar = () => {
         ],
       },
     ];
-  }, [isBillingEnabled, showCloudProvidersPage]);
+  }, [isBillingEnabled, showCloudProvidersPage, showCustomNetworksPage]);
 
   return (
     <aside
@@ -258,6 +294,14 @@ const Sidebar = () => {
           <SingleNavItem key={item.name} currentPath={currentPath} {...item} />
         ))}
       </div>
+
+      <FullScreenDrawer
+        open={isOverlayOpen}
+        closeDrawer={() => setIsOverlayOpen(false)}
+        title="Plan Details"
+        description="View the details of the selected plan"
+        RenderUI={<PlanDetails startingTab={overlayType} />}
+      />
     </aside>
   );
 };

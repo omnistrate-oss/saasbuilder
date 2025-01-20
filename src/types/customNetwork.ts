@@ -1,4 +1,3 @@
-import { CloudProvider } from "./common/enums";
 import type { paths, components } from "./schema";
 
 export type ListCustomNetworksSuccessResponse =
@@ -12,14 +11,8 @@ export type UpdateCustomNetworkRequestBody =
 export type UpdateCustomNetworkSuccessResponse =
   paths["/2022-09-01-00/resource-instance/custom-network/{id}"]["patch"]["responses"]["200"]["content"]["application/json"];
 
-export type ModifyCustomNetwork = {
-  id: string;
-  name: string;
-};
+export type CreateCustomNetworkRequestBody =
+  components["schemas"]["CreateCustomNetworkRequestBody"];
 
-export type CustomNetworkCreatePayload = {
-  cidr: string;
-  cloudProviderName: CloudProvider;
-  cloudProviderRegion: string;
-  name: string;
-};
+export type CreateCustomNetworkSuccessResponse =
+  paths["/2022-09-01-00/resource-instance/custom-network"]["post"]["responses"]["200"]["content"]["application/json"];

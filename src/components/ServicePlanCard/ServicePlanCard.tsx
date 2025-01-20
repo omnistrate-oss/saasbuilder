@@ -12,12 +12,14 @@ import { colors } from "src/themeConfig";
 import { SetState } from "src/types/common/reactGenerics";
 
 import CardCircleBg from "./CardCircleBg.svg";
+import { Subscription } from "src/types/subscription";
+import { SubscriptionRequest } from "src/types/subscriptionRequest";
 
 type ServicePlanCardProps = {
   isSelected?: boolean;
   servicePlan: any;
-  subscription: any;
-  subscriptionRequest: any;
+  rootSubscription: Subscription;
+  subscriptionRequest: SubscriptionRequest;
   setSelectedPlanId: SetState<string>;
   onSubscribeClick: () => void;
   onUnsubscribeClick: () => void;
@@ -29,7 +31,7 @@ type ServicePlanCardProps = {
 const ServicePlanCard: React.FC<ServicePlanCardProps> = ({
   isSelected,
   servicePlan,
-  subscription,
+  rootSubscription,
   subscriptionRequest,
   setSelectedPlanId,
   onSubscribeClick,
@@ -40,7 +42,8 @@ const ServicePlanCard: React.FC<ServicePlanCardProps> = ({
 }) => {
   const isAutoApprove = servicePlan.AutoApproveSubscription;
   const isUnsubscribeAllowed =
-    !subscription?.defaultSubscription && subscription?.roleType === "root";
+    !rootSubscription?.defaultSubscription &&
+    rootSubscription?.roleType === "root";
 
   return (
     <div
@@ -101,7 +104,7 @@ const ServicePlanCard: React.FC<ServicePlanCardProps> = ({
         </Text>
       </div>
 
-      {!subscription && !subscriptionRequest && (
+      {!rootSubscription && !subscriptionRequest && (
         <Button
           variant="contained"
           disabled={isFetchingData || isSubscribing || isUnsubscribing}
@@ -116,7 +119,7 @@ const ServicePlanCard: React.FC<ServicePlanCardProps> = ({
         </Button>
       )}
 
-      {subscription && isUnsubscribeAllowed && (
+      {rootSubscription && isUnsubscribeAllowed && (
         <Button
           variant="contained"
           bgColor={colors.error700}
@@ -128,15 +131,15 @@ const ServicePlanCard: React.FC<ServicePlanCardProps> = ({
         </Button>
       )}
 
-      {subscription && !isUnsubscribeAllowed && (
+      {rootSubscription && !isUnsubscribeAllowed && (
         <Button
           variant="contained"
           disabled
           startIcon={<CircleCheckIcon />}
           disabledMessage={
-            subscription?.defaultSubscription
+            rootSubscription?.defaultSubscription
               ? "Cannot unsubscribe from Default subscription"
-              : subscription && subscription?.roleType !== "root"
+              : rootSubscription && rootSubscription?.roleType !== "root"
                 ? "Cannot unsubscribe without Root access"
                 : ""
           }
@@ -145,7 +148,7 @@ const ServicePlanCard: React.FC<ServicePlanCardProps> = ({
         </Button>
       )}
 
-      {subscriptionRequest && !subscription && (
+      {subscriptionRequest && !rootSubscription && (
         <Button variant="contained" disabled startIcon={<ClockIcon />}>
           Pending Approval
         </Button>

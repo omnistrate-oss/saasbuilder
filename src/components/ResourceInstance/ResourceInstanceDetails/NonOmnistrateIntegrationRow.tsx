@@ -2,7 +2,6 @@ import Link from "next/link";
 import { Stack } from "@mui/material";
 
 import CopyButton from "src/components/Button/CopyButton";
-// import { PROVIDER_LOGO_ICON_MAP } from "src/constants/productTierFeatures";
 
 type NonOmnistrateIntegrationRowProps = {
   integration: {
@@ -28,7 +27,6 @@ function NonOmnistrateIntegrationRow({
       justifyContent="flex-end"
       gap="6px"
     >
-      {/* {PROVIDER_LOGO_ICON_MAP[provider]} */}
       <Link
         style={{
           fontSize: "18px",

@@ -4,11 +4,13 @@ import { Text } from "../Typography/Typography";
 
 type CardWithTitleProps = {
   title: string;
+  actionButton?: React.ReactNode;
   children: React.ReactNode;
 } & React.HTMLAttributes<HTMLDivElement>;
 
 const CardWithTitle: React.FC<CardWithTitleProps> = ({
   title,
+  actionButton,
   children,
   className,
   ...otherProps
@@ -21,10 +23,12 @@ const CardWithTitle: React.FC<CardWithTitleProps> = ({
       )}
       {...otherProps}
     >
-      <div className="py-5 px-6 border-b border-gray-200">
+      <div className="py-5 px-6 border-b border-gray-200 flex items-center justify-between gap-4">
         <Text size="large" weight="semibold" color={colors.purple700}>
           {title}
         </Text>
+
+        {actionButton && actionButton}
       </div>
       <div className="px-6 py-6">{children}</div>
     </div>

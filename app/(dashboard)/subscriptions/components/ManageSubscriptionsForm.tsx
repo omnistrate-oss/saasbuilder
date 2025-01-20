@@ -58,7 +58,7 @@ const ManageSubscriptionsForm = ({
     defaultServicePlanId || services[0]?.productTierID || ""
   );
 
-  // Object of Subscriptions and Subscription Requests
+  // Object of Root Subscriptions and Subscription Requests
   const subscriptionsObj = useMemo(() => {
     return subscriptions?.reduce((acc, subscription) => {
       if (subscription.roleType === "root")
@@ -152,7 +152,7 @@ const ManageSubscriptionsForm = ({
               servicePlan={plan}
               isSelected={selectedPlanId === plan.productTierID}
               setSelectedPlanId={setSelectedPlanId}
-              subscription={subscriptionsObj[plan.productTierID]}
+              rootSubscription={subscriptionsObj[plan.productTierID]}
               subscriptionRequest={subscriptionRequestsObj[plan.productTierID]}
               onSubscribeClick={() => {
                 subscribeMutation.mutate({
@@ -175,10 +175,7 @@ const ManageSubscriptionsForm = ({
       </CardWithTitle>
 
       <CardWithTitle title={selectedPlan?.productTierName}>
-        <ServicePlanDetails
-          serviceOffering={selectedPlan}
-          subscription={subscriptionsObj[selectedPlan?.productTierID]}
-        />
+        <ServicePlanDetails serviceOffering={selectedPlan} />
       </CardWithTitle>
 
       <TextConfirmationDialog

@@ -4,25 +4,27 @@ import SwaggerDocs from "../SwaggerDocs/SwaggerDocs";
 import LoadingSpinner from "../LoadingSpinner/LoadingSpinner";
 
 type APIDocumentationProps = {
-  subscription: any;
+  serviceId: string;
   serviceAPIID: string;
+  actionButton?: React.ReactNode;
 };
 
 const APIDocumentation: React.FC<APIDocumentationProps> = ({
-  subscription,
+  serviceId,
   serviceAPIID,
+  actionButton,
 }) => {
   const { data: serviceAPIDocs, isLoading: isLoadingServiceAPIDocs } =
-    useServiceApiDocsData(
-      subscription?.serviceId,
-      serviceAPIID,
-      subscription?.id
-    );
+    useServiceApiDocsData(serviceId, serviceAPIID);
 
-  if (!subscription || !serviceAPIID) return null;
+  if (!serviceAPIID) return null;
 
   return (
-    <CardWithTitle title="API Documentation" style={{ minHeight: "500px" }}>
+    <CardWithTitle
+      title="API Documentation"
+      style={{ minHeight: "500px" }}
+      actionButton={actionButton}
+    >
       {isLoadingServiceAPIDocs ? (
         <LoadingSpinner />
       ) : (

@@ -2,7 +2,7 @@
 
 import { useMemo } from "react";
 import { useFormik } from "formik";
-import { useMutation, UseMutationResult } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 
 import { FormConfiguration } from "components/DynamicForm/types";
 import GridDynamicForm from "components/DynamicForm/GridDynamicForm";
@@ -27,18 +27,15 @@ const CustomNetworkForm = ({
   selectedCustomNetwork,
 }) => {
   const snackbar = useSnackbar();
-  const createCustomNetworkMutation: UseMutationResult = useMutation(
-    createCustomNetwork,
-    {
-      onSuccess: async () => {
-        onClose();
-        snackbar.showSuccess("Custom Network created successfully");
-        refetchCustomNetworks();
-      },
-    }
-  );
+  const createCustomNetworkMutation = useMutation(createCustomNetwork, {
+    onSuccess: async () => {
+      onClose();
+      snackbar.showSuccess("Custom Network created successfully");
+      refetchCustomNetworks();
+    },
+  });
 
-  const updateCustomNetworkMutation: UseMutationResult = useMutation(
+  const updateCustomNetworkMutation = useMutation(
     (data: UpdateCustomNetworkRequestBody) =>
       updateCustomNetwork(selectedCustomNetwork.id, data),
     {
@@ -63,7 +60,9 @@ const CustomNetworkForm = ({
       if (formMode === "create") {
         createCustomNetworkMutation.mutate(data);
       } else {
-        updateCustomNetworkMutation.mutate(data);
+        updateCustomNetworkMutation.mutate({
+          name: data.name,
+        });
       }
     },
   });

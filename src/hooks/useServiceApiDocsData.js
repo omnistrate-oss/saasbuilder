@@ -1,14 +1,14 @@
 import { useQuery } from "@tanstack/react-query";
 import { getServiceApiDocs } from "../api/service-api";
 
-function useServiceApiDocsData(serviceId, serviceApiId, subscriptionId) {
+function useServiceApiDocsData(serviceId, serviceApiId) {
   const query = useQuery(
     ["service-api-docs", serviceId, serviceApiId],
     () => {
-      return getServiceApiDocs(serviceId, serviceApiId, subscriptionId);
+      return getServiceApiDocs(serviceId, serviceApiId);
     },
     {
-      enabled: Boolean(serviceId && serviceApiId && subscriptionId),
+      enabled: Boolean(serviceId && serviceApiId),
       refetchOnWindowFocus: false,
       select: (response) => {
         return response.data;
