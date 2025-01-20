@@ -98,6 +98,7 @@ import {
   selectInstanceListSummaryVisibility,
   toggleInstanceListSummaryVisibility,
 } from "src/slices/genericSlice";
+import CreateResourceInstanceModel from "src/components/ResourceInstance/CreateResourceInstanceModel/CreateResourceInstanceModel";
 
 export const getServerSideProps = async () => {
   return {
@@ -117,6 +118,9 @@ function MarketplaceService() {
     useState(false);
 
   const [isOrgIdModalOpen, setIsOrgIdModalOpen] = useState(false);
+  const [isInstanceIdModalOpen, setIsInstanceIdModalOpen] = useState(false);
+  const [isCustomDNS, setIsCustomDNS] = useState(false);
+  const [instanceId, setInstanceId] = useState("");
 
   //this is required to show some extra text on CloudProviderAccountModal on creation
   const [isAccountCreation, setIsAccountCreation] = useState(false);
@@ -141,6 +145,10 @@ function MarketplaceService() {
 
   function handleOrgIdModalClose() {
     setIsOrgIdModalOpen(false);
+  }
+
+  function handleInstanceIdModalClose() {
+    setIsInstanceIdModalOpen(false);
   }
 
   const handleRestoreInstanceModalOpen = () => {
@@ -945,6 +953,16 @@ function MarketplaceService() {
             }
           }
 
+          for (const param of schemaArray) {
+            if (["custom_dns_configuration"].includes(param.key)) {
+              const resourceKey = selectedResource.key;
+              data.requestParams.custom_dns_configuration = {
+                [resourceKey]: data.requestParams.custom_dns_configuration,
+              };
+              setIsCustomDNS(true);
+            }
+          }
+
           if (
             !isCloudProvider ||
             isMultiTenancy ||
@@ -993,8 +1011,8 @@ function MarketplaceService() {
     },
     {
       onSuccess: async (response) => {
+        const resourceInstanceId = response?.data?.id;
         if (selectedResource?.id.includes("r-injectedaccountconfig")) {
-          const resourceInstanceId = response?.data?.id;
           const resourceInstanceResponse = await getResourceInstanceDetails(
             service.serviceProviderId,
             service.serviceURLKey,
@@ -1016,6 +1034,8 @@ function MarketplaceService() {
           setIsAccountCreation(true);
         } else {
           snackbar.showSuccess("Created Instance");
+          setIsInstanceIdModalOpen(true);
+          setInstanceId(resourceInstanceId);
         }
 
         fetchResourceInstances(selectedResource);
@@ -2053,6 +2073,14 @@ function MarketplaceService() {
             />
           }
         />
+
+        <CreateResourceInstanceModel
+          open={isInstanceIdModalOpen}
+          handleClose={handleInstanceIdModalClose}
+          instanceId={instanceId}
+          isCustomDNS={isCustomDNS}
+        />
+
         <CloudProviderAccountOrgIdModal
           orgId={subscriptionData?.accountConfigIdentityId}
           handleClose={handleOrgIdModalClose}
