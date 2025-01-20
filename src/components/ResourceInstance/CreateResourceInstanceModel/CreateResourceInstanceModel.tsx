@@ -3,7 +3,6 @@ import Button from "src/components/Button/Button";
 import { Text } from "src/components/Typography/Typography";
 import CloseIcon from "@mui/icons-material/Close";
 import InstructionsModalIcon from "src/components/Icons/AccountConfig/InstructionsModalIcon";
-import ArrowBulletIcon from "src/components/Icons/ArrowIcon/ArrowBulletIcon";
 import CopyToClipboardButton from "src/components/CopyClipboardButton/CopyClipboardButton";
 
 const StyledContainer = styled(Box)({
@@ -48,17 +47,6 @@ const List = styled(Box)({
   flexDirection: "column",
   gap: "12px",
   marginTop: "12px",
-});
-
-const ListItem = styled(Box)({
-  display: "flex",
-  justifyContent: "flex-start",
-  alignItems: "flex-start",
-  gap: "12px",
-});
-
-const ListItemIcon = styled(Box)({
-  flexShrink: 0,
 });
 
 const BodyText = ({ children, ...restProps }) => {
@@ -155,32 +143,15 @@ function CreateResourceInstanceModel(props) {
             within a few minutes). You can track its status in the dashboard.
             Below is the Instance ID for your reference.
           </BodyText>
+          <InstanceIdContainer instanceId={instanceId} />
           <List>
-            <ListItem>
-              <ListItemIcon>
-                <ArrowBulletIcon />
-              </ListItemIcon>
-              <Box display={"flex"} flexDirection={"column"} gap={"10px"}>
-                <BodyText>
-                  Your instance is being set up and will be ready shortly
-                  (usually within a few minutes). You can track its status in
-                  the dashboard. Below is the Instance ID for your reference.
-                </BodyText>
-                <InstanceIdContainer instanceId={instanceId} />
-              </Box>
-            </ListItem>
             {isCustomDNS && (
-              <ListItem>
-                <ListItemIcon>
-                  <ArrowBulletIcon />
-                </ListItemIcon>
-
-                <BodyText>
-                  As you have configured a custom DNS, please visit the Custom
-                  DNS tab for the details you need to configure it with your DNS
-                  provider.
-                </BodyText>
-              </ListItem>
+              <BodyText>
+                As you have provided a custom DNS, it will need to be configured
+                with your DNS provider. The configuration details will be
+                available after some time. Please revisit the Custom DNS tab
+                later to access the necessary information.
+              </BodyText>
             )}
           </List>
         </Content>
