@@ -106,8 +106,20 @@ const InstanceIdContainer = (props) => {
   );
 };
 
+type CreateResourceInstanceModelProps = {
+  open: boolean;
+  handleClose: () => void;
+  instanceId: string;
+  isCustomDNS?: boolean;
+};
+
 function CreateResourceInstanceModel(props) {
-  const { open, handleClose, instanceId, isCustomDNS = true } = props;
+  const {
+    open,
+    handleClose,
+    instanceId,
+    isCustomDNS = true,
+  }: CreateResourceInstanceModelProps = props;
 
   return (
     <Dialog open={open} onClose={handleClose} fullWidth>
