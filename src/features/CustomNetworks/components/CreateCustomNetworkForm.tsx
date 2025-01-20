@@ -7,7 +7,10 @@ import {
 } from "@tanstack/react-query";
 import useSnackbar from "src/hooks/useSnackbar";
 import DynamicForm from "src/components/DynamicForm/DynamicForm";
-import { createCustomNetwork } from "src/api/customNetworks";
+import {
+  createCustomNetwork,
+  modifyCustomNetwork,
+} from "src/api/customNetworks";
 import { customNetworkValidationSchema } from "../constants";
 import { CustomNetwork } from "src/types/customNetwork";
 import { CloudProvider, FormMode } from "src/types/common/enums";
@@ -38,7 +41,7 @@ const CustomNetworkForm: FC<CustomNetworkFormProps> = ({
   supportedGCPRegions,
 }) => {
   const snackbar = useSnackbar();
-  const formMode: FormMode = selectedCustomNetwork ? "view" : "create";
+  const formMode: FormMode = selectedCustomNetwork ? "edit" : "create";
 
   const createCustomNetworkMutation: UseMutationResult = useMutation(
     createCustomNetwork,
@@ -46,6 +49,17 @@ const CustomNetworkForm: FC<CustomNetworkFormProps> = ({
       onSuccess: async () => {
         closeDrawer();
         snackbar.showSuccess("Created Custom Network successfully");
+        refetchCustomNetworks();
+      },
+    }
+  );
+
+  const modifyCustomNetworkMutation: UseMutationResult = useMutation(
+    modifyCustomNetwork,
+    {
+      onSuccess: async () => {
+        closeDrawer();
+        snackbar.showSuccess("Update Custom Network successfully");
         refetchCustomNetworks();
       },
     }
@@ -70,6 +84,13 @@ const CustomNetworkForm: FC<CustomNetworkFormProps> = ({
 
       if (formMode === "create") {
         createCustomNetworkMutation.mutate(data);
+      }
+      if (formMode === "edit") {
+        const nameOnlyPyload = {
+          name: values?.name,
+          id: selectedCustomNetwork?.id,
+        };
+        modifyCustomNetworkMutation.mutate(nameOnlyPyload);
       }
     },
   });
@@ -125,15 +146,16 @@ const CustomNetworkForm: FC<CustomNetworkFormProps> = ({
     () => ({
       title: {
         create: "Create Custom Network",
-        view: "View Custom Network",
+        edit: "Modify Custom Network",
       },
       description: {
         create: "Create a new custom network with the specified details",
-        view: "View the existing custom network details",
+        edit: "Update the existing custom network details",
       },
       footer: {
         submitButton: {
           create: "Create Custom Network",
+          edit: "Save",
         },
       },
 
@@ -150,7 +172,6 @@ const CustomNetworkForm: FC<CustomNetworkFormProps> = ({
               required: true,
               description:
                 "The unique name for the custom network for easy reference",
-              disabled: formMode === "view",
             },
             {
               label: "Cloud Provider",
@@ -159,7 +180,7 @@ const CustomNetworkForm: FC<CustomNetworkFormProps> = ({
               required: true,
               description:
                 "Choose the cloud provider on which the instance will run",
-              disabled: formMode === "view",
+              disabled: formMode === "edit",
               menuItems: cloudProviderOptions,
               onChange: () => {
                 formData.setFieldValue("cloudProviderRegion", "");
@@ -171,7 +192,7 @@ const CustomNetworkForm: FC<CustomNetworkFormProps> = ({
               type: "select",
               required: true,
               description: "Choose the cloud provider region",
-              disabled: formMode === "view",
+              disabled: formMode === "edit",
               menuItems: cloudProviderRegionOptions,
             },
             {
@@ -180,15 +201,14 @@ const CustomNetworkForm: FC<CustomNetworkFormProps> = ({
               type: "text",
               required: true,
               description: "CIDR block for the network",
-              disabled: formMode === "view",
+              disabled: formMode === "edit",
             },
           ],
         },
       ],
     }),
-    [formMode, cloudProviderOptions, cloudProviderRegionOptions, formData]
+    [formMode, cloudProviderOptions, cloudProviderRegionOptions]
   );
-
   return (
     <>
       <DynamicForm
@@ -196,7 +216,10 @@ const CustomNetworkForm: FC<CustomNetworkFormProps> = ({
         formData={formData}
         formMode={formMode}
         onClose={closeDrawer}
-        isFormSubmitting={createCustomNetworkMutation.isLoading}
+        isFormSubmitting={
+          createCustomNetworkMutation.isLoading ||
+          modifyCustomNetworkMutation.isLoading
+        }
         onDelete={onDelete}
       />
     </>
