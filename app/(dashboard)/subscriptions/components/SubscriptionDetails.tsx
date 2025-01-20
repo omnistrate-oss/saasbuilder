@@ -75,10 +75,7 @@ const SubscriptionDetails = ({ subscription, serviceOfferingsObj }) => {
         title={`Subscription ID - ${subscription.id}`}
         className="mt-6"
       >
-        <ServicePlanDetails
-          serviceOffering={selectedPlan}
-          subscription={subscription}
-        />
+        <ServicePlanDetails serviceOffering={selectedPlan} />
       </CardWithTitle>
     </>
   );

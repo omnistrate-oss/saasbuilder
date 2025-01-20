@@ -405,7 +405,7 @@ export const getDeploymentConfigurationFields = (
         type: "password",
         required: formMode !== "modify" && param.required,
         showPasswordGenerator: true,
-        previewValue: "*********",
+        previewValue: values.requestParams[param.key],
       });
     } else if (
       param.dependentResourceID &&
@@ -429,7 +429,7 @@ export const getDeploymentConfigurationFields = (
         required: formMode !== "modify" && param.required,
         isLoading: isFetchingResourceInstanceIds,
         emptyMenuText: "No dependent resources available",
-        previewValue: values.requestParams[param.key],
+        previewValue: values.requestParams[param.key] ? "********" : "",
       });
     } else if (param.type === "Boolean") {
       fields.push({
