@@ -160,17 +160,14 @@ function CreateResourceInstanceModel(props) {
               <ListItemIcon>
                 <ArrowBulletIcon />
               </ListItemIcon>
-
-              <>
-                <Box display={"flex"} flexDirection={"column"} gap={"10px"}>
-                  <BodyText>
-                    Your instance is being set up and will be ready shortly
-                    (usually within a few minutes). You can track its status in
-                    the dashboard. Below is the Instance ID for your reference.
-                  </BodyText>
-                  <InstanceIdContainer instanceId={instanceId} />
-                </Box>
-              </>
+              <Box display={"flex"} flexDirection={"column"} gap={"10px"}>
+                <BodyText>
+                  Your instance is being set up and will be ready shortly
+                  (usually within a few minutes). You can track its status in
+                  the dashboard. Below is the Instance ID for your reference.
+                </BodyText>
+                <InstanceIdContainer instanceId={instanceId} />
+              </Box>
             </ListItem>
             {isCustomDNS && (
               <ListItem>
