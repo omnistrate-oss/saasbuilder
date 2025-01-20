@@ -1,6 +1,13 @@
 const SubscriptionTypeDirectIcon = (props) => {
   return (
-    <svg width="16" height="16" viewBox="0 0 25 24" fill="none" {...props}>
+    <svg
+      width="16"
+      height="16"
+      viewBox="0 0 25 24"
+      fill="none"
+      style={{ flexShrink: 0 }}
+      {...props}
+    >
       <g clipPath="url(#clip0_7429_33685)">
         <path
           d="M12.2522 0.743912C18.4691 0.743912 23.5059 5.78077 23.5059 11.9976C23.5059 18.2145 18.4691 23.256 12.2522 23.256C6.03535 23.256 0.993896 18.2145 0.993896 11.9977C0.993896 5.78082 6.03535 0.743912 12.2522 0.743912Z"

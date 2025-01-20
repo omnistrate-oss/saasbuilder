@@ -43,7 +43,6 @@ const SubscriptionsPage = () => {
 
   const serviceId = searchParams?.get("serviceId");
   const servicePlanId = searchParams?.get("servicePlanId");
-  // const subscriptionId = searchParams?.get("subscriptionId");
 
   const [searchText, setSearchText] = useState<string>("");
   const [selectedRows, setSelectedRows] = useState<string[]>([]);

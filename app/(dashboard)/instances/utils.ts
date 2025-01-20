@@ -46,29 +46,6 @@ export const getServicePlanMenuItems = (
   return menuItems.sort((a, b) => a.label.localeCompare(b.label));
 };
 
-export const getSubscriptionMenuItems = (
-  subscriptions: Subscription[],
-  servicePlanId: string
-) => {
-  const menuItems: MenuItem[] = [];
-  if (!subscriptions?.length) {
-    return menuItems;
-  }
-
-  subscriptions.forEach((subscription) => {
-    if (subscription.productTierId === servicePlanId) {
-      menuItems.push({
-        value: subscription.id,
-        label: subscription.id,
-        disabled: !["editor", "root"].includes(subscription.roleType),
-        disabledMessage: "Cannot create instances under this subscription",
-      });
-    }
-  });
-
-  return menuItems.sort((a, b) => a.label.localeCompare(b.label));
-};
-
 export const getResourceMenuItems = (offering: ServiceOffering) => {
   const menuItems: MenuItem[] = [];
 

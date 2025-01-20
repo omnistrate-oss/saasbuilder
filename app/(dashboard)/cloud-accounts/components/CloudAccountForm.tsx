@@ -19,16 +19,14 @@ import {
   getGcpServiceEmail,
 } from "src/utils/accountConfig/accountConfig";
 import { selectUserrootData } from "src/slices/userDataSlice";
-import {
-  getServiceMenuItems,
-  getSubscriptionMenuItems,
-} from "app/(dashboard)/instances/utils";
+import { getServiceMenuItems } from "app/(dashboard)/instances/utils";
 import SubscriptionPlanRadio from "app/(dashboard)/components/SubscriptionPlanRadio/SubscriptionPlanRadio";
 import CloudProviderRadio from "app/(dashboard)/components/CloudProviderRadio/CloudProviderRadio";
 import { cloudProviderLogoMap } from "src/constants/cloudProviders";
 import CustomLabelDescription from "./CustomLabelDescription";
 import { ServiceOffering } from "src/types/serviceOffering";
 import { getInitialValues } from "../utils";
+import SubscriptionMenu from "app/(dashboard)/components/SubscriptionMenu/SubscriptionMenu";
 
 const CloudAccountForm = ({
   onClose,
@@ -163,9 +161,8 @@ const CloudAccountForm = ({
     const { serviceId, servicePlanId, cloudProvider } = values;
 
     const serviceMenuItems = getServiceMenuItems(byoaServiceOfferings);
-    const subscriptionMenuItems = getSubscriptionMenuItems(
-      subscriptions,
-      values.servicePlanId
+    const subscriptionMenuItems = subscriptions.filter(
+      (sub) => sub.productTierId === servicePlanId
     );
 
     const accountConfigurationMethods =
@@ -279,18 +276,26 @@ const CloudAccountForm = ({
               label: "Subscription",
               subLabel: "Select the subscription",
               name: "subscriptionId",
-              type: "select",
               required: true,
-              disabled: formMode !== "create",
-              emptyMenuText: !serviceId
-                ? "Select a service"
-                : !servicePlanId
-                  ? "Select a subscription plan"
-                  : "No subscriptions available",
-              isLoading: isFetchingSubscriptions,
-              menuItems: subscriptionMenuItems,
-              previewValue: subscriptionsObj[values.subscriptionId]?.id,
               isHidden: subscriptionMenuItems.length === 1,
+              customComponent: (
+                <SubscriptionMenu
+                  field={{
+                    name: "subscriptionId",
+                    value: values.subscriptionId,
+                    isLoading: isFetchingSubscriptions,
+                    disabled: formMode !== "create",
+                    emptyMenuText: !serviceId
+                      ? "Select a service"
+                      : !servicePlanId
+                        ? "Select a subscription plan"
+                        : "No subscriptions available",
+                  }}
+                  formData={formData}
+                  subscriptions={subscriptionMenuItems}
+                />
+              ),
+              previewValue: subscriptionsObj[values.subscriptionId]?.id,
             },
             {
               label: "Cloud Provider",

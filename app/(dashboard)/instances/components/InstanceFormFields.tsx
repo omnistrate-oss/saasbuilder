@@ -7,7 +7,6 @@ import {
   getRegionMenuItems,
   getResourceMenuItems,
   getServiceMenuItems,
-  getSubscriptionMenuItems,
 } from "../utils";
 
 import CloudProviderRadio from "../../components/CloudProviderRadio/CloudProviderRadio";
@@ -18,6 +17,7 @@ import { CustomNetwork } from "src/types/customNetwork";
 import { AvailabilityZone } from "src/types/availabilityZone";
 import { CloudProvider, FormMode } from "src/types/common/enums";
 import { APIEntity, ServiceOffering } from "src/types/serviceOffering";
+import SubscriptionMenu from "app/(dashboard)/components/SubscriptionMenu/SubscriptionMenu";
 
 export const getStandardInformationFields = (
   servicesObj,
@@ -38,7 +38,6 @@ export const getStandardInformationFields = (
   const {
     serviceId,
     servicePlanId,
-    subscriptionId,
     resourceId,
     cloudProvider,
     region,
@@ -48,9 +47,8 @@ export const getStandardInformationFields = (
   const serviceMenuItems = getServiceMenuItems(serviceOfferings);
   const offering = serviceOfferingsObj[serviceId]?.[servicePlanId];
 
-  const subscriptionMenuItems = getSubscriptionMenuItems(
-    subscriptions,
-    servicePlanId
+  const subscriptionMenuItems = subscriptions.filter(
+    (sub) => sub.productTierId === servicePlanId
   );
 
   const resourceMenuItems = getResourceMenuItems(
@@ -175,17 +173,26 @@ export const getStandardInformationFields = (
       label: "Subscription",
       subLabel: "Select the subscription",
       name: "subscriptionId",
-      type: "select",
       required: true,
-      disabled: formMode !== "create",
-      emptyMenuText: !serviceId
-        ? "Select a service"
-        : !servicePlanId
-          ? "Select a subscription plan"
-          : "No subscriptions available",
-      menuItems: subscriptionMenuItems,
-      previewValue: subscriptionsObj[subscriptionId]?.id,
       isHidden: subscriptionMenuItems.length === 1,
+      customComponent: (
+        <SubscriptionMenu
+          field={{
+            name: "subscriptionId",
+            value: values.subscriptionId,
+            isLoading: isFetchingSubscriptions,
+            disabled: formMode !== "create",
+            emptyMenuText: !serviceId
+              ? "Select a service"
+              : !servicePlanId
+                ? "Select a subscription plan"
+                : "No subscriptions available",
+          }}
+          formData={formData}
+          subscriptions={subscriptionMenuItems}
+        />
+      ),
+      previewValue: subscriptionsObj[values.subscriptionId]?.id,
     },
     {
       label: "Resource Type",

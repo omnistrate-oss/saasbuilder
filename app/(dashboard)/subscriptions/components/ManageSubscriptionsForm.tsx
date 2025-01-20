@@ -15,6 +15,7 @@ import useSnackbar from "src/hooks/useSnackbar";
 import { createSubscriptions, deleteSubscription } from "src/api/subscriptions";
 import { useGlobalData } from "src/providers/GlobalDataProvider";
 import { createSubscriptionRequest } from "src/api/subscriptionRequests";
+import TextConfirmationDialog from "src/components/TextConfirmationDialog/TextConfirmationDialog";
 
 const ManageSubscriptionsForm = ({
   defaultServiceId,
@@ -32,6 +33,7 @@ const ManageSubscriptionsForm = ({
   } = useGlobalData();
 
   const snackbar = useSnackbar();
+  const [isUnsubscribeDialogOpen, setIsUnsubscribeDialogOpen] = useState(false);
 
   const services = useMemo(() => {
     const servicesObj = serviceOfferings?.reduce((acc, offering) => {
@@ -104,6 +106,7 @@ const ManageSubscriptionsForm = ({
   const unSubscribeMutation = useMutation(deleteSubscription, {
     onSuccess: () => {
       refetchSubscriptions();
+      setIsUnsubscribeDialogOpen(false);
       snackbar.showSuccess("Unsubscribed successfully");
     },
   });
@@ -159,11 +162,7 @@ const ManageSubscriptionsForm = ({
                 });
               }}
               onUnsubscribeClick={() => {
-                if (!subscriptionsObj[plan.productTierID]?.id)
-                  return snackbar.showError("No subscription found");
-                unSubscribeMutation.mutate(
-                  subscriptionsObj[plan.productTierID]?.id
-                );
+                setIsUnsubscribeDialogOpen(true);
               }}
               isSubscribing={subscribeMutation.isLoading}
               isFetchingData={
@@ -181,6 +180,25 @@ const ManageSubscriptionsForm = ({
           subscription={subscriptionsObj[selectedPlan?.productTierID]}
         />
       </CardWithTitle>
+
+      <TextConfirmationDialog
+        open={isUnsubscribeDialogOpen}
+        handleClose={() => setIsUnsubscribeDialogOpen(false)}
+        onConfirm={async () => {
+          if (!subscriptionsObj[selectedPlanId]) {
+            return snackbar.showError("Please select a subscription");
+          }
+          await unSubscribeMutation.mutateAsync(
+            subscriptionsObj[selectedPlanId].id
+          );
+        }}
+        confirmationText="unsubscribe"
+        title="Unsubscribe Service"
+        buttonLabel="Unsubscribe"
+        isLoading={unSubscribeMutation.isLoading}
+        subtitle={`Are you sure you want to unsubscribe from ${subscriptionsObj[selectedPlanId]?.serviceName}?`}
+        message="To confirm, please enter <b>unsubscribe</b>, in the field below:"
+      />
     </div>
   );
 };

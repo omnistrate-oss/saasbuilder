@@ -25,6 +25,7 @@ import {
 } from "src/utils/isAllowedByRBAC";
 import Tooltip from "src/components/Tooltip/Tooltip";
 import { colors } from "src/themeConfig";
+import { CircularProgress } from "@mui/material";
 
 type Action = {
   onClick: () => void;
@@ -350,6 +351,10 @@ const InstancesTableHeader = ({
       />
 
       <div className="flex items-center gap-4">
+        <div className="flex items-center">
+          {isFetchingInstances && <CircularProgress size={20} />}
+        </div>
+
         <RefreshWithToolTip
           refetch={refetchInstances}
           disabled={isFetchingInstances}
