@@ -8,6 +8,7 @@ type CustomDNSDetailsProps = {
   aRecordTarget?: string;
   cnameTarget?: string;
   domainName: string;
+  resourceInstanceId?: string;
 };
 
 const RecordContainer = styled(Box)({
@@ -16,17 +17,21 @@ const RecordContainer = styled(Box)({
   width: "100%",
   padding: "24px",
   border: "1px solid #EAECF0",
-  marginBottom: "16px",
+  marginBottom: "24px",
   boxShadow: "0px 1px 2px 0px rgba(16, 24, 40, 0.05)",
 });
 
-const RecordRowContainer = styled(Box)({
+const RecordRowContainer = styled(Box)<{
+  marginBottom?: string;
+  marginTop?: string;
+}>(({ marginBottom, marginTop }) => ({
   display: "flex",
   flexDirection: "row",
   alignItems: "center",
   width: "100%",
-  marginBottom: "16px",
-});
+  marginBottom: marginBottom ? marginBottom : "8px",
+  marginTop: marginTop,
+}));
 const RecordColumn = styled(Box)<{ hasBorder?: boolean }>(({ hasBorder }) => ({
   display: "flex",
   alignItems: "center",
@@ -43,6 +48,7 @@ const CustomDNSDetails: React.FC<CustomDNSDetailsProps> = ({
   aRecordTarget,
   cnameTarget,
   domainName,
+  resourceInstanceId,
 }) => {
   const records: any[] = [];
   if (aRecordTarget) {
@@ -60,15 +66,21 @@ const CustomDNSDetails: React.FC<CustomDNSDetailsProps> = ({
       recordValue: cnameTarget,
     });
   }
+  records.push({
+    recordLabel: "TXT",
+    domainValue: domainName,
+    recordValue: `target-${domainName}=${resourceInstanceId}`,
+    recordValueDetails: `The TXT record is a name-value pair, where the name must start with the prefix "target-", and the value should is the instance ID.`,
+  });
 
   return (
     <RecordContainer>
       {records.map((record, index) => (
-        <Box key={index} width="100%">
+        <Box key={index} width="100%" marginBottom={"16px"}>
           <RecordRowContainer>
             <RecordColumn>
               <Text size="small" weight="medium" color="rgba(52, 64, 84, 1)">
-                Record Name
+                {`${record.recordLabel} Record`}
               </Text>
             </RecordColumn>
 
@@ -166,6 +178,25 @@ const CustomDNSDetails: React.FC<CustomDNSDetailsProps> = ({
               </Box>
             </RecordColumn>
           </RecordRowContainer>
+          {record?.recordValueDetails && (
+            <RecordRowContainer marginTop="-4px">
+              {/* @ts-ignore */}
+              <RecordColumn />
+              {/* @ts-ignore */}
+              <Box px="8px" />
+              <RecordColumn>
+                <Box paddingLeft="15px">
+                  <Text
+                    size="small"
+                    weight="regular"
+                    color="rgba(52, 64, 84, 1)"
+                  >
+                    {record?.recordValueDetails}
+                  </Text>
+                </Box>
+              </RecordColumn>
+            </RecordRowContainer>
+          )}
         </Box>
       ))}
     </RecordContainer>

@@ -241,6 +241,7 @@ const CustomDNS: FC<EndpointProps> = (props) => {
                   aRecordTarget={customDNSData?.aRecordTarget}
                   cnameTarget={customDNSData?.cnameTarget}
                   domainName={customDNSData?.dnsName as string}
+                  resourceInstanceId={accessQueryParams.resourceInstanceId}
                 />
               )}
               <FieldContainer marginTop={0} sx={{ maxWidth: "1000px" }}>
