@@ -6,15 +6,16 @@ import React, { useEffect, useMemo } from "react";
 import { useMutation } from "@tanstack/react-query";
 
 import { colors } from "src/themeConfig";
-import {
-  createResourceInstance,
-  updateResourceInstance,
-} from "src/api/resourceInstance";
 import useSnackbar from "src/hooks/useSnackbar";
 import { APIEntity } from "src/types/serviceOffering";
 import { useGlobalData } from "src/providers/GlobalDataProvider";
 import useAvailabilityZone from "src/hooks/query/useAvailabilityZone";
+import useResourcesInstanceIds from "src/hooks/useResourcesInstanceIds";
 import { describeServiceOfferingResource } from "src/api/serviceOffering";
+import {
+  createResourceInstance,
+  updateResourceInstance,
+} from "src/api/resourceInstance";
 
 import Button from "components/Button/Button";
 import Form from "components/FormElementsv2/Form/Form";
@@ -33,7 +34,6 @@ import {
   getStandardInformationFields,
 } from "./InstanceFormFields";
 import useCustomNetworks from "app/(dashboard)/custom-networks/hooks/useCustomNetworks";
-import useResourcesInstanceIds from "src/hooks/useResourcesInstanceIds";
 import { CloudProvider } from "src/types/common/enums";
 
 const InstanceForm = ({
@@ -42,6 +42,9 @@ const InstanceForm = ({
   instances,
   selectedInstance,
   refetchInstances,
+  setOverlayType,
+  setIsOverlayOpen,
+  setCreateInstanceModalData,
 }) => {
   const snackbar = useSnackbar();
   const {
@@ -64,7 +67,15 @@ const InstanceForm = ({
       return createResourceInstance(payload);
     },
     {
-      onSuccess: () => {
+      onSuccess: (response) => {
+        // Show the Create Instance Dialog
+        setIsOverlayOpen(true);
+        setOverlayType("create-instance-dialog");
+        setCreateInstanceModalData((prev) => ({
+          ...prev,
+          instanceId: response.data.id,
+        }));
+
         snackbar.showSuccess("Instance created successfully");
         refetchInstances();
         formData.resetForm();
