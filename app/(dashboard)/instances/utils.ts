@@ -162,17 +162,20 @@ export const getInitialValues = (
       (sub) => sub.id === instance?.subscriptionId
     );
 
+    const requestParams: any = { ...(instance.result_params as object) };
+    if (instance.network_type) {
+      requestParams.network_type = instance.network_type;
+    }
+
     return {
       serviceId: subscription?.serviceId || "",
       servicePlanId: subscription?.productTierId || "",
-      subscriptionId: instance?.subscriptionId || "",
+      subscriptionId: instance.subscriptionId || "",
       // @ts-ignore
       resourceId: getMainResourceFromInstance(instance)?.id || "",
-      cloudProvider: instance?.cloud_provider || "",
-      region: instance?.region || "",
-      requestParams: {
-        ...(instance?.result_params || {}),
-      },
+      cloudProvider: instance.cloud_provider,
+      region: instance.region,
+      requestParams,
     };
   }
 
