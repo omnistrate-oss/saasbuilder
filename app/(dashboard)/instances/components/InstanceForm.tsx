@@ -38,7 +38,6 @@ import { CloudProvider } from "src/types/common/enums";
 
 const InstanceForm = ({
   formMode,
-  onClose,
   instances,
   selectedInstance,
   refetchInstances,
@@ -68,18 +67,19 @@ const InstanceForm = ({
     },
     {
       onSuccess: (response) => {
+        console.log(response.data);
         // Show the Create Instance Dialog
         setIsOverlayOpen(true);
         setOverlayType("create-instance-dialog");
-        setCreateInstanceModalData((prev) => ({
-          ...prev,
-          instanceId: response.data.id,
-        }));
+        setCreateInstanceModalData({
+          // @ts-ignore
+          isCustomDNS: formData.values.requestParams?.custom_dns_configuration,
+          instanceId: response.data?.id,
+        });
 
         snackbar.showSuccess("Instance created successfully");
         refetchInstances();
         formData.resetForm();
-        onClose();
       },
     }
   );
@@ -89,7 +89,7 @@ const InstanceForm = ({
       refetchInstances();
       formData.resetForm();
       snackbar.showSuccess("Updated Resource Instance");
-      onClose();
+      setIsOverlayOpen(false);
     },
   });
 
@@ -207,7 +207,7 @@ const InstanceForm = ({
 
         for (const field of requiredFields) {
           if (data.requestParams[field.key] === undefined) {
-            snackbar.showError(`${field.key} is required`);
+            snackbar.showError(`${field.displayName || field.key} is required`);
             return;
           }
         }
@@ -291,7 +291,7 @@ const InstanceForm = ({
 
         for (const field of requiredFields) {
           if (data.requestParams[field.key] === undefined) {
-            snackbar.showError(`${field.key} is required`);
+            snackbar.showError(`${field.displayName || field.key} is required`);
             return;
           }
         }
@@ -322,7 +322,12 @@ const InstanceForm = ({
   const {
     data: customAvailabilityZoneData,
     isLoading: isFetchingCustomAvailabilityZones,
-  } = useAvailabilityZone(values.region, values.cloudProvider as CloudProvider);
+  } = useAvailabilityZone(
+    values.region,
+    values.cloudProvider as CloudProvider,
+    // @ts-ignore
+    values.requestParams?.custom_availability_zone !== undefined
+  );
 
   const {
     isFetching: isFetchingResourceInstanceIds,
@@ -359,7 +364,7 @@ const InstanceForm = ({
   const customAvailabilityZones = useMemo(() => {
     const availabilityZones =
       customAvailabilityZoneData?.availabilityZones || [];
-    return availabilityZones?.sort(function (a, b) {
+    return availabilityZones.sort(function (a, b) {
       if (a.code < b.code) return -1;
       else if (a.code > b.code) {
         return 1;
@@ -537,20 +542,19 @@ const InstanceForm = ({
           }}
           className="flex items-center gap-3"
         >
-          {onClose && (
-            <Button
-              data-testid="cancel-button"
-              variant="outlined"
-              onClick={onClose}
-              disabled={
-                createInstanceMutation.isLoading ||
-                updateResourceInstanceMutation.isLoading
-              }
-              sx={{ marginLeft: "auto" }} // Pushes the 2 buttons to the end
-            >
-              Cancel
-            </Button>
-          )}
+          <Button
+            data-testid="cancel-button"
+            variant="outlined"
+            onClick={() => setIsOverlayOpen(false)}
+            disabled={
+              createInstanceMutation.isLoading ||
+              updateResourceInstanceMutation.isLoading
+            }
+            sx={{ marginLeft: "auto" }} // Pushes the 2 buttons to the end
+          >
+            Cancel
+          </Button>
+
           <Button
             data-testid="submit-button"
             variant="contained"

@@ -169,8 +169,6 @@ const CloudAccountForm = ({
 
   const { values, setFieldValue } = formData;
 
-  console.log(formData.errors);
-
   const formConfiguration: FormConfiguration = useMemo(() => {
     const { serviceId, servicePlanId, cloudProvider } = values;
 

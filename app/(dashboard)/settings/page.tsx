@@ -49,8 +49,9 @@ const SettingsPage = () => {
             value={"profile"}
             onClick={() => setCurrentTab("profile")}
             sx={{
-              padding: "4px !important",
-              marginRight: "16px !important",
+              paddingY: "12px !important",
+              paddingX: "16px !important",
+              minWidth: "0px",
               textTransform: "none",
               fontWeight: "600",
               color: colors.purple700,
@@ -61,8 +62,9 @@ const SettingsPage = () => {
             value={"billingAddress"}
             onClick={() => setCurrentTab("billingAddress")}
             sx={{
-              padding: "4px !important",
-              marginRight: "16px !important",
+              paddingY: "12px !important",
+              paddingX: "16px !important",
+              minWidth: "0px",
               textTransform: "none",
               fontWeight: "600",
               color: colors.purple700,
@@ -73,8 +75,9 @@ const SettingsPage = () => {
             value={"password"}
             onClick={() => setCurrentTab("password")}
             sx={{
-              padding: "4px !important",
-              marginRight: "16px !important",
+              paddingY: "12px !important",
+              paddingX: "16px !important",
+              minWidth: "0px",
               textTransform: "none",
               fontWeight: "600",
               color: colors.purple700,

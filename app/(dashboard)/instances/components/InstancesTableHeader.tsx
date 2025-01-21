@@ -131,11 +131,11 @@ const InstancesTableHeader = ({
       disabledMessage: !selectedInstance
         ? "Please select an instance"
         : status !== "RUNNING"
-          ? "Instance is not running"
+          ? "Instance must be running to stop it"
           : isComplexResource || isProxyResource
-            ? "Operation not allowed for selected resource"
+            ? "System manages instances cannot be stopped"
             : !isUpdateAllowedByRBAC
-              ? "Operation not allowed"
+              ? "Unauthorized to stop instances"
               : "",
     });
 
@@ -156,11 +156,11 @@ const InstancesTableHeader = ({
       disabledMessage: !selectedInstance
         ? "Please select an instance"
         : status !== "STOPPED"
-          ? "Instance is not stopped"
+          ? "Instances must be stopped before starting"
           : isComplexResource || isProxyResource
-            ? "Operation not allowed for selected resource"
+            ? "System managed instances cannot be started"
             : !isUpdateAllowedByRBAC
-              ? "Operation not allowed"
+              ? "Unauthorized to start instances"
               : "",
     });
 
@@ -181,11 +181,11 @@ const InstancesTableHeader = ({
       disabledMessage: !selectedInstance
         ? "Please select an instance"
         : status === "DELETING"
-          ? "Instance is being deleted"
+          ? "Instance deletion is already in progress"
           : isProxyResource
-            ? "Operation not allowed for proxy resources"
+            ? "System managed instances cannot be deleted"
             : !isDeleteAllowedByRBAC
-              ? "Operation not allowed"
+              ? "Unauthorized to delete instances"
               : "",
     });
 
@@ -207,11 +207,11 @@ const InstancesTableHeader = ({
       disabledMessage: !selectedInstance
         ? "Please select an instance"
         : status !== "RUNNING" && status !== "FAILED"
-          ? "Instance is not running or failed"
+          ? "Instance must be running or failed to modify"
           : isComplexResource || isProxyResource
-            ? "Operation not allowed for selected resource"
+            ? "System managed instances cannot be modified"
             : !isUpdateAllowedByRBAC
-              ? "Operation not allowed"
+              ? "Unauthorized to modify instances"
               : "",
     });
 
@@ -242,13 +242,13 @@ const InstancesTableHeader = ({
         disabledMessage: !selectedInstance
           ? "Please select an instance"
           : status !== "RUNNING" && status !== "FAILED"
-            ? "Instance is not running or failed"
+            ? "Instance must be running or failed to reboot"
             : !isUpdateAllowedByRBAC
-              ? "Operation not allowed"
+              ? "Unauthorized to reboot instances"
               : "",
       });
 
-      if (selectedInstance?.isBackupEnabled) {
+      if (selectedInstance?.isBackupEnabled || selectedInstance?.backupStatus) {
         other.push({
           label: "Restore",
           isDisabled:
@@ -266,7 +266,7 @@ const InstancesTableHeader = ({
             : !selectedInstance.backupStatus?.earliestRestoreTime
               ? "No restore points available"
               : !isUpdateAllowedByRBAC
-                ? "Operation not allowed"
+                ? "Unauthorized to restore instances"
                 : "",
         });
       }
@@ -285,9 +285,9 @@ const InstancesTableHeader = ({
           disabledMessage: !selectedInstance
             ? "Please select an instance"
             : status !== "RUNNING"
-              ? "Instance is not running"
+              ? "Instance must be running to add capacity"
               : !isUpdateAllowedByRBAC
-                ? "Operation not allowed"
+                ? "Unauthorized to add capacity"
                 : "",
         });
 
@@ -304,9 +304,9 @@ const InstancesTableHeader = ({
           disabledMessage: !selectedInstance
             ? "Please select an instance"
             : status !== "RUNNING"
-              ? "Instance is not running"
+              ? "Instance must be running to remove capacity"
               : !isUpdateAllowedByRBAC
-                ? "Operation not allowed"
+                ? "Unauthorized to remove capacity"
                 : "",
         });
       }
@@ -315,7 +315,8 @@ const InstancesTableHeader = ({
     if (selectedInstance?.kubernetesDashboardEndpoint?.dashboardEndpoint) {
       other.push({
         label: "Generate Token",
-        isDisabled: false,
+        isDisabled: !selectedInstance,
+        disabledMessage: !selectedInstance ? "Please select an instance" : "",
         onClick: () => {
           if (!selectedInstance)
             return snackbar.showError("Please select an instance");

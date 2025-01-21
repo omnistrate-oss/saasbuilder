@@ -542,6 +542,8 @@ export const getDeploymentConfigurationFields = (
             ) : (
               param.description
             ),
+          disabled:
+            param.key === "custom_dns_configuration" && formMode !== "create", // Special case for custom DNS configuration
           name: `requestParams.${param.key}`,
           value: values.requestParams[param.key] || "",
           type: "text-multiline",

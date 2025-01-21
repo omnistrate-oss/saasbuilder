@@ -269,11 +269,12 @@ const InstanceDetailsPage = ({
                 setCurrentTab(value as CurrentTab);
               }}
               sx={{
-                padding: "4px !important",
-                marginRight: "16px",
+                paddingY: "12px !important",
+                paddingX: "16px !important",
                 textTransform: "none",
                 fontWeight: "600",
                 color: colors.purple700,
+                minWidth: "0px",
               }}
             />
           );

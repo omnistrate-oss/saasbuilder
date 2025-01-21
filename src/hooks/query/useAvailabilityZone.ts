@@ -5,9 +5,12 @@ import { CloudProvider } from "src/types/common/enums";
 export default function useAvailabilityZone(
   regionCode?: string,
   cloudProviderName?: CloudProvider,
+  hasCustomAvailabilityZoneField = true,
   queryOptions = {}
 ) {
-  const isQueryEnabled = Boolean(regionCode && cloudProviderName);
+  const isQueryEnabled = Boolean(
+    regionCode && cloudProviderName && hasCustomAvailabilityZoneField
+  );
   const query = useQuery(
     ["cloud-providers-custom-regions", regionCode, cloudProviderName],
     async () => {

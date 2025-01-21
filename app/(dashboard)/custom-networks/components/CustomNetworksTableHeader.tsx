@@ -6,6 +6,7 @@ import EditIcon from "src/components/Icons/Edit/Edit";
 import SearchInput from "src/components/DataGrid/SearchInput";
 import RefreshWithToolTip from "src/components/RefreshWithTooltip/RefreshWithToolTip";
 import { colors } from "src/themeConfig";
+import PeeringInfoIcon from "app/(dashboard)/components/Icons/PeeringInfoIcon";
 
 const CustomNetworksTableHeader = ({
   count,
@@ -66,7 +67,7 @@ const CustomNetworksTableHeader = ({
           variant="outlined"
           disabled={selectedRows.length !== 1}
           onClick={onPeeringInfoClick}
-          startIcon={<EditIcon disabled={selectedRows.length !== 1} />}
+          startIcon={<PeeringInfoIcon disabled={selectedRows.length !== 1} />}
           outlineColor={colors.green300}
           disabledMessage="Please select a custom network"
         >

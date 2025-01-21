@@ -103,7 +103,7 @@ type CreateInstanceModalProps = {
 function CreateInstanceModal(props: CreateInstanceModalProps) {
   const { open, handleClose, data } = props;
 
-  const instanceId = data?.id;
+  const instanceId = data?.instanceId;
   const isCustomDNS = data?.isCustomDNS;
 
   return (

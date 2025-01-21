@@ -76,18 +76,14 @@ const InstancesPage = () => {
         id: "id",
         header: "Instance ID",
         cell: (data) => {
-          const {
-            id: instanceId,
-            subscriptionId,
-            detailedNetworkTopology = {},
-          } = data.row.original;
+          const { id: instanceId, subscriptionId } = data.row.original;
           const { serviceId, productTierId } =
             subscriptionsObj[subscriptionId as string] || {};
 
-          const [mainResourceId] =
-            Object.entries(detailedNetworkTopology).find(
-              ([, resource]) => resource.main
-            ) || [];
+          const mainResourceId = getMainResourceFromInstance(
+            data.row.original
+            // @ts-ignore
+          )?.id;
 
           const resourceInstanceUrlLink = getInstanceDetailsRoute({
             serviceId,
@@ -445,7 +441,6 @@ const InstancesPage = () => {
             formMode={
               overlayType === "create-instance-form" ? "create" : "modify"
             }
-            onClose={() => setIsOverlayOpen(false)}
             selectedInstance={selectedInstance}
             refetchInstances={refetchInstances}
             setCreateInstanceModalData={setCreateInstanceModalData}
