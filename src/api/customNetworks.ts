@@ -8,10 +8,10 @@ import {
   CreateCustomNetworkSuccessResponse,
 } from "src/types/customNetwork";
 
-export function getCustomNetworks(): Promise<
-  AxiosResponse<ListCustomNetworksSuccessResponse>
-> {
-  return axios.get("/resource-instance/custom-network");
+export function getCustomNetworks(
+  params = {}
+): Promise<AxiosResponse<ListCustomNetworksSuccessResponse>> {
+  return axios.get("/resource-instance/custom-network", { params });
 }
 
 export function getCustomNetwork(customNetworkID: string) {

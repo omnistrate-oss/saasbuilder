@@ -42,6 +42,9 @@ const SettingsPage = () => {
           sx={{
             mb: "24px",
             borderBottom: "1px solid #E9EAEB",
+            "& .MuiTabs-indicator": {
+              backgroundColor: colors.purple700,
+            },
           }}
         >
           <Tab
@@ -54,7 +57,10 @@ const SettingsPage = () => {
               minWidth: "0px",
               textTransform: "none",
               fontWeight: "600",
-              color: colors.purple700,
+              color: "#717680",
+              "&.Mui-selected": {
+                color: colors.purple700,
+              },
             }}
           />
           <Tab

@@ -4,10 +4,10 @@ import axios from "../axios";
 import { ListSubscriptionRequestsSuccessResponse } from "src/types/subscriptionRequest";
 
 export const listSubscriptionRequests = (
-  query
+  params = {}
 ): Promise<AxiosResponse<ListSubscriptionRequestsSuccessResponse>> => {
   return axios.get("/subscription/request", {
-    params: query,
+    params,
   });
 };
 

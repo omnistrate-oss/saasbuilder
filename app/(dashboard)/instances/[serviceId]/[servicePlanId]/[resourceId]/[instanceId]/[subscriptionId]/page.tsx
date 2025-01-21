@@ -257,6 +257,9 @@ const InstanceDetailsPage = ({
         sx={{
           marginTop: "24px",
           borderBottom: "1px solid #E9EAEB",
+          "& .MuiTabs-indicator": {
+            backgroundColor: colors.purple700,
+          },
         }}
       >
         {Object.entries(tabs).map(([key, value]) => {
@@ -271,10 +274,13 @@ const InstanceDetailsPage = ({
               sx={{
                 paddingY: "12px !important",
                 paddingX: "16px !important",
+                minWidth: "0px",
                 textTransform: "none",
                 fontWeight: "600",
-                color: colors.purple700,
-                minWidth: "0px",
+                color: "#717680",
+                "&.Mui-selected": {
+                  color: colors.purple700,
+                },
               }}
             />
           );

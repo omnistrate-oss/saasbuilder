@@ -70,6 +70,9 @@ const ServicePlanDetails: React.FC<ServicePlanDetailsProps> = ({
         sx={{
           mb: "32px",
           borderBottom: "1px solid #E9EAEB",
+          "& .MuiTabs-indicator": {
+            backgroundColor: colors.purple700,
+          },
         }}
       >
         {Object.keys(tabLabels).map((tab) => (
@@ -88,6 +91,9 @@ const ServicePlanDetails: React.FC<ServicePlanDetailsProps> = ({
               textTransform: "none",
               fontWeight: "600",
               color: "#717680",
+              "&.Mui-selected": {
+                color: colors.purple700,
+              },
             }}
           />
         ))}

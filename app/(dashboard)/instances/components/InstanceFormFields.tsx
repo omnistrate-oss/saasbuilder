@@ -437,7 +437,7 @@ export const getDeploymentConfigurationFields = (
         })),
         required: formMode !== "modify" && param.required,
         isLoading: isFetchingResourceInstanceIds,
-        emptyMenuText: "No dependent resources available",
+        emptyMenuText: "No dependent instances available",
         previewValue: values.requestParams[param.key],
       });
     } else if (param.type === "Boolean") {

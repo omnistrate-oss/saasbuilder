@@ -67,7 +67,6 @@ const InstanceForm = ({
     },
     {
       onSuccess: (response) => {
-        console.log(response.data);
         // Show the Create Instance Dialog
         setIsOverlayOpen(true);
         setOverlayType("create-instance-dialog");
