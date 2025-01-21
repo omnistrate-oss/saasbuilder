@@ -34,7 +34,7 @@ export const getStandardInformationFields = (
   isFetchingCustomAvailabilityZones: boolean
 ) => {
   if (isFetchingServiceOfferings || isFetchingSubscriptions) return [];
-  const { values, setFieldValue } = formData;
+  const { values, setFieldValue, setFieldTouched } = formData;
   const {
     serviceId,
     servicePlanId,
@@ -114,6 +114,10 @@ export const getStandardInformationFields = (
         const resources = getResourceMenuItems(offering);
         setFieldValue("resourceId", resources[0]?.value || "");
         setFieldValue("requestParams", {});
+
+        setFieldTouched("servicePlanId", false);
+        setFieldTouched("subscriptionId", false);
+        setFieldTouched("resourceId", false);
       },
       previewValue: servicesObj[values.serviceId]?.serviceName,
     },
@@ -164,6 +168,9 @@ export const getStandardInformationFields = (
               "subscriptionId",
               rootSubscription?.id || filteredSubscriptions[0]?.id || ""
             );
+
+            setFieldTouched("subscriptionId", false);
+            setFieldTouched("resourceId", false);
           }}
         />
       ),

@@ -228,7 +228,9 @@ const SubscriptionPlanRadio: React.FC<SubscriptionPlanRadioProps> = ({
           key={plan.productTierID}
           plan={plan}
           subscriptions={subscriptions.filter(
-            (sub) => sub.productTierId === plan.productTierID
+            (sub) =>
+              sub.productTierId === plan.productTierID &&
+              ["root", "editor"].includes(sub.roleType)
           )}
           subscriptionRequest={subscriptionRequestsObj[plan.productTierID]}
           onSubscribeClick={() =>

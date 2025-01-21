@@ -17,12 +17,11 @@ import TextField from "components/FormElementsv2/TextField/TextField";
 import DataGridHeaderTitle from "components/Headers/DataGridHeaderTitle";
 import LoadingSpinnerSmall from "components/CircularProgress/CircularProgress";
 
+import { colors } from "src/themeConfig";
 import useSnackbar from "src/hooks/useSnackbar";
+import { Subscription } from "src/types/subscription";
 import { inviteSubscriptionUser } from "src/api/users";
 import { useGlobalData } from "src/providers/GlobalDataProvider";
-import { colors } from "src/themeConfig";
-import { Subscription } from "src/types/subscription";
-import { ServiceOffering } from "src/types/serviceOffering";
 
 const getNewEnvVariable = () => {
   return {
@@ -56,15 +55,15 @@ const getServiceMenuItems = (subscriptions: Subscription[]) => {
 };
 
 const getServicePlanMenuItems = (
-  serviceOfferings: ServiceOffering[],
+  subscriptions: Subscription[],
   serviceId: string
 ) => {
-  const servicePlanMenuItems = serviceOfferings
-    .filter((service) => service.serviceId === serviceId)
-    .map((service) => {
+  const servicePlanMenuItems = subscriptions
+    .filter((sub) => sub.serviceId === serviceId)
+    .map((sub) => {
       return {
-        label: service.productTierName,
-        value: service.productTierID,
+        label: sub.productTierName,
+        value: sub.productTierId,
       };
     });
   return servicePlanMenuItems;
@@ -80,8 +79,7 @@ const InviteUsersCard: React.FC<InviteUsersCardProps> = ({
   isFetchingUsers,
 }) => {
   const snackbar = useSnackbar();
-  const { subscriptions, isFetchingServiceOfferings, serviceOfferings } =
-    useGlobalData();
+  const { subscriptions, isFetchingSubscriptions } = useGlobalData();
 
   const createUserInvitesMutation = useMutation(async (data: any) => {
     try {
@@ -173,7 +171,7 @@ const InviteUsersCard: React.FC<InviteUsersCardProps> = ({
                           getServiceMenuItems(subscriptions);
 
                         const servicePlanMenuItems = getServicePlanMenuItems(
-                          serviceOfferings,
+                          subscriptions,
                           values.userInvite[index].serviceId
                         );
 
@@ -212,7 +210,7 @@ const InviteUsersCard: React.FC<InviteUsersCardProps> = ({
 
                             <Select
                               required
-                              isLoading={isFetchingServiceOfferings}
+                              isLoading={isFetchingSubscriptions}
                               name={`userInvite[${index}].serviceId`}
                               value={invite.serviceId}
                               onBlur={handleBlur}
@@ -253,7 +251,7 @@ const InviteUsersCard: React.FC<InviteUsersCardProps> = ({
                             </Select>
                             <Select
                               required
-                              isLoading={isFetchingServiceOfferings}
+                              isLoading={isFetchingSubscriptions}
                               name={`userInvite[${index}].servicePlanId`}
                               value={invite.servicePlanId}
                               onBlur={handleBlur}

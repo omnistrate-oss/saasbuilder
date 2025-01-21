@@ -101,7 +101,9 @@ const InstanceForm = ({
     ),
     validationSchema: yup.object({
       serviceId: yup.string().required("Service is required"),
-      servicePlanId: yup.string().required("Service Plan is required"),
+      servicePlanId: yup
+        .string()
+        .required("Plan with active subscription is required"),
       subscriptionId: yup.string().required("Subscription is required"),
       resourceId: yup.string().required("Resource is required"),
     }),

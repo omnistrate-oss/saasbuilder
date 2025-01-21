@@ -93,15 +93,7 @@ const CloudAccountsPage = () => {
               "-";
 
             return (
-              <DataGridText
-                showCopyButton={value !== "-"}
-                color="primary"
-                onClick={() => {
-                  setClickedInstance(data.row.original);
-                  setIsOverlayOpen(true);
-                  setOverlayType("view-instructions-dialog");
-                }}
-              >
+              <DataGridText showCopyButton={value !== "-"}>
                 {value}
               </DataGridText>
             );
@@ -431,10 +423,8 @@ const CloudAccountsPage = () => {
         open={isOverlayOpen && overlayType === "view-instructions-dialog"}
         handleClose={() => {
           setIsOverlayOpen(false);
-          setTimeout(() => {
-            setClickedInstance(undefined);
-            setIsAccountCreation(false);
-          }, 1000);
+          setClickedInstance(undefined);
+          setIsAccountCreation(false);
         }}
         orgId={
           subscriptionsObj[clickedInstance?.subscriptionId as string]

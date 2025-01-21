@@ -52,6 +52,7 @@ type CursorPaginatedDataTableProps<TData> = {
   fetchNextPage?: () => void;
   isFetchingNextPage?: boolean;
   pageSize?: number;
+  rowId?: keyof TData;
 };
 
 const DEFAULT_COLUMN_MIN_WIDTH = 150;
@@ -75,6 +76,7 @@ const CursorPaginatedDataTable = <TData,>(
     fetchNextPage,
     isFetchingNextPage,
     pageSize = 10,
+    rowId = "id" as keyof TData,
   } = props;
 
   const [expanded, setExpanded] = useState<ExpandedState>({});
@@ -113,6 +115,7 @@ const CursorPaginatedDataTable = <TData,>(
     manualPagination: true,
     pageCount: Math.ceil(rows.length / pageSize),
     paginateExpandedRows: false,
+    getRowId: (row) => String(row[rowId]),
   });
 
   const rowData = table.getRowModel().rows;

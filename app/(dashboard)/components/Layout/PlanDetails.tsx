@@ -71,14 +71,20 @@ const PlanDetails = ({ startingTab }) => {
               onChange={(e) => setSelectedServiceId(e.target.value)}
               sx={{ mt: 0 }}
             >
-              {serviceMenuItems.map((item) => (
-                <MenuItem
-                  key={item.value as string}
-                  value={item.value as string}
-                >
-                  {item.label}
+              {serviceMenuItems?.length ? (
+                serviceMenuItems.map((item) => (
+                  <MenuItem
+                    key={item.value as string}
+                    value={item.value as string}
+                  >
+                    {item.label}
+                  </MenuItem>
+                ))
+              ) : (
+                <MenuItem value="" disabled>
+                  <i>No services found</i>
                 </MenuItem>
-              ))}
+              )}
             </Select>
           </div>
 
@@ -97,14 +103,20 @@ const PlanDetails = ({ startingTab }) => {
               onChange={(e) => setSelectedPlanId(e.target.value)}
               sx={{ mt: 0 }}
             >
-              {servicePlanMenuItems.map((item) => (
-                <MenuItem
-                  key={item.value as string}
-                  value={item.value as string}
-                >
-                  {item.label}
+              {servicePlanMenuItems?.length ? (
+                servicePlanMenuItems.map((item) => (
+                  <MenuItem
+                    key={item.value as string}
+                    value={item.value as string}
+                  >
+                    {item.label}
+                  </MenuItem>
+                ))
+              ) : (
+                <MenuItem value="" disabled>
+                  <i>No subscription plans found</i>
                 </MenuItem>
-              ))}
+              )}
             </Select>
           </div>
         </div>
