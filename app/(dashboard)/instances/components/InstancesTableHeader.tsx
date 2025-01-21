@@ -220,6 +220,7 @@ const InstancesTableHeader = ({
       actionType: "primary",
       isDisabled: false,
       onClick: () => {
+        setSelectedRows([]); // To make selectedInstance becomes undefined. See page.tsx
         setOverlayType("create-instance-form");
         setIsOverlayOpen(true);
       },

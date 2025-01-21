@@ -35,6 +35,7 @@ import {
 } from "./InstanceFormFields";
 import useCustomNetworks from "app/(dashboard)/custom-networks/hooks/useCustomNetworks";
 import { CloudProvider } from "src/types/common/enums";
+import { productTierTypes } from "src/constants/servicePlan";
 
 const InstanceForm = ({
   formMode,
@@ -195,13 +196,20 @@ const InstanceForm = ({
           .filter((schemaParam) => schemaParam.required);
 
         data.cloud_provider = data.cloudProvider;
-        data.network_type = data.requestParams.network_type;
         data.custom_network_id = data.requestParams.custom_network_id;
+
+        const networkTypeFieldExists =
+          inputParametersObj["cloud_provider"] &&
+          offering?.productTierType !==
+            productTierTypes.OMNISTRATE_MULTI_TENANCY &&
+          offering?.supportsPublicNetwork;
 
         if (!data.cloudProvider && inputParametersObj["cloud_provider"]) {
           return snackbar.showError("Cloud Provider is required");
         } else if (!data.region && inputParametersObj["region"]) {
           return snackbar.showError("Region is required");
+        } else if (!data.network_type && networkTypeFieldExists) {
+          return snackbar.showError("Network Type is required");
         }
 
         for (const field of requiredFields) {
@@ -279,13 +287,20 @@ const InstanceForm = ({
           .filter((schemaParam) => schemaParam.required);
 
         data.cloud_provider = data.cloudProvider;
-        data.network_type = data.requestParams.network_type;
         data.custom_network_id = data.requestParams.custom_network_id;
+
+        const networkTypeFieldExists =
+          inputParametersObj["cloud_provider"] &&
+          offering?.productTierType !==
+            productTierTypes.OMNISTRATE_MULTI_TENANCY &&
+          offering?.supportsPublicNetwork;
 
         if (!data.cloudProvider && inputParametersObj["cloud_provider"]) {
           return snackbar.showError("Cloud Provider is required");
         } else if (!data.region && inputParametersObj["region"]) {
           return snackbar.showError("Region is required");
+        } else if (!data.network_type && networkTypeFieldExists) {
+          return snackbar.showError("Network Type is required");
         }
 
         for (const field of requiredFields) {

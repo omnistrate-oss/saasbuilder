@@ -331,7 +331,6 @@ export const getNetworkConfigurationFields = (
   const customNetworkFieldExists = inputParametersObj["custom_network_id"];
 
   const networkTypeFieldExists =
-    inputParametersObj["network_type"] &&
     cloudProviderFieldExists &&
     !isMultiTenancy &&
     offering?.supportsPublicNetwork;
@@ -340,8 +339,8 @@ export const getNetworkConfigurationFields = (
     fields.push({
       label: "Network",
       subLabel: "Type of Network",
-      name: "requestParams.network_type",
-      value: values.requestParams.network_type || "",
+      name: "network_type",
+      value: values.network_type || "",
       type: "radio",
       required: true,
       disabled: formMode !== "create",
@@ -349,7 +348,7 @@ export const getNetworkConfigurationFields = (
         { label: "Public", value: "PUBLIC" },
         { label: "Internal", value: "INTERNAL" },
       ],
-      previewValue: values.requestParams.network_type,
+      previewValue: values.network_type,
     });
   }
 

@@ -167,6 +167,10 @@ export const getInitialValues = (
       requestParams.network_type = instance.network_type;
     }
 
+    if (instance.customNetworkDetail) {
+      requestParams.custom_network_id = instance.customNetworkDetail.id;
+    }
+
     return {
       serviceId: subscription?.serviceId || "",
       servicePlanId: subscription?.productTierId || "",
@@ -175,6 +179,7 @@ export const getInitialValues = (
       resourceId: getMainResourceFromInstance(instance)?.id || "",
       cloudProvider: instance.cloud_provider,
       region: instance.region,
+      network_type: instance.network_type || "",
       requestParams,
     };
   }
@@ -218,6 +223,7 @@ export const getInitialValues = (
     resourceId: resources[0]?.value || "",
     cloudProvider,
     region: region || "",
+    network_type: "",
     requestParams: {},
   };
 };

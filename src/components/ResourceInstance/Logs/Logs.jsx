@@ -216,9 +216,6 @@ function Logs(props) {
               value={selectedNodeId}
               sx={{
                 width: "auto",
-                height: "40px !important",
-                padding: "10px 14px !important",
-                minHeight: "40px",
                 maxWidth: "250px",
               }}
               onChange={handleNodeChange}

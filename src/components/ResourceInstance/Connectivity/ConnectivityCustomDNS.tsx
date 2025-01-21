@@ -26,6 +26,7 @@ import StatusChip from "src/components/StatusChip/StatusChip";
 import { getCustomDNSStatusStylesAndLabel } from "src/constants/statusChipStyles/customDNS";
 import { useMutation } from "@tanstack/react-query";
 import ViewInstructionsIcon from "src/components/Icons/AccountConfig/ViewInstrcutionsIcon";
+import { colors } from "src/themeConfig";
 
 export type AddCustomDNSToResourceInstancePayload = {
   customDNS: string;
@@ -324,7 +325,7 @@ const ResourceConnectivityCustomDNS: FC<ResourceConnectivityEndpointProps> = (
                             setShowDeleteConfirmationDialog(true);
                           }}
                         >
-                          <DeleteIcon />
+                          <DeleteIcon color={colors.error700} />
                         </IconButtonSquare>
                       </>
                     ) : (
