@@ -99,6 +99,7 @@ const InstanceForm = ({
       subscriptions,
       serviceOfferingsObj
     ),
+    enableReinitialize: true,
     validationSchema: yup.object({
       serviceId: yup.string().required("Service is required"),
       servicePlanId: yup
@@ -454,7 +455,7 @@ const InstanceForm = ({
     [formData.values]
   );
 
-  if (isFetchingServiceOfferings || isFetchingSubscriptions) {
+  if (isFetchingServiceOfferings) {
     return <LoadingSpinner />;
   }
 
@@ -512,7 +513,7 @@ const InstanceForm = ({
       <div
         style={{
           position: "sticky",
-          top: "24px",
+          top: "104px",
           flex: 2,
           minHeight: "660px",
           border: `1px solid ${colors.purple600}`,

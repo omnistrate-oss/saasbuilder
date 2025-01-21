@@ -93,9 +93,9 @@ const Button = styled(
         background: bgColor ? bgColor : colors.success600,
       },
     },
-    [`&.${buttonClasses.contained}:disabled`]: {
-      background: bgColor ? bgColor : "white",
-      color: fontColor ? fontColor : "#D0D5DD",
+    [`&.${buttonClasses.contained}.Mui-disabled`]: {
+      background: "white",
+      color: "#D0D5DD",
       outlineWidth: "1px",
       outlineStyle: "solid",
       outlineColor: outlineColor ? outlineColor : "#D0D5DD",
@@ -109,7 +109,7 @@ const Button = styled(
       borderColor: outlineColor ? outlineColor : colors.gray300,
       boxShadow: "0px 1px 2px 0px rgba(16, 24, 40, 0.05)",
     },
-    [`&.${buttonClasses.outlined}:disabled`]: {
+    [`&.${buttonClasses.outlined}.Mui-disabled`]: {
       background: "white",
       borderColor: "#EAECF0",
       color: "#D0D5DD",

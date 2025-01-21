@@ -12,7 +12,7 @@ type StyledListItemProps = {
   linkText?: string;
 };
 
-const StyledListItem: FC<StyledListItemProps> = (props) => {
+export const StyledListItem: FC<StyledListItemProps> = (props) => {
   const { text, link, linkText = "Click here" } = props;
 
   return (
@@ -45,14 +45,6 @@ const CustomLabelDescription: FC<{
 }> = ({ hideLinks, variant }) => {
   return (
     <Box mt="8px">
-      {/* <Text size="small" weight="regular" color="#6f7174">
-        {variant === "aws"
-          ? "The unique identifier associated with the AWS Account that you are integrating with Percona"
-          : variant === "gcpProjectId"
-            ? "The unique identifier associated with the GCP Project that you are integrating with Percona"
-            : "A unique numerical value assigned to the GCP project, different from the project ID"}
-      </Text> */}
-
       {!hideLinks &&
         (variant === "aws" ? (
           <>

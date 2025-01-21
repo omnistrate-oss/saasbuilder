@@ -60,7 +60,10 @@ const ServicePlanDetails: React.FC<ServicePlanDetailsProps> = ({
   );
 
   return (
-    <div>
+    <CardWithTitle
+      title={serviceOffering.productTierName}
+      actionButton={actionButton}
+    >
       <Tabs
         value={currentTab}
         centered
@@ -95,7 +98,6 @@ const ServicePlanDetails: React.FC<ServicePlanDetailsProps> = ({
         <CardWithTitle
           title={tabLabels[currentTab]}
           style={{ minHeight: "500px" }}
-          actionButton={actionButton}
         >
           <div className="ql-snow">
             <div
@@ -124,10 +126,9 @@ const ServicePlanDetails: React.FC<ServicePlanDetailsProps> = ({
         <APIDocumentation
           serviceId={serviceOffering.serviceId}
           serviceAPIID={serviceOffering.serviceAPIID}
-          actionButton={actionButton}
         />
       )}
-    </div>
+    </CardWithTitle>
   );
 };
 

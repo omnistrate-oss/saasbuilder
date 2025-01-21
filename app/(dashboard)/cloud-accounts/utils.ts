@@ -3,12 +3,17 @@ import { ServiceOffering } from "src/types/serviceOffering";
 import { ResourceInstance } from "src/types/resourceInstance";
 
 export const getInitialValues = (
+  initialFormValues: {
+    serviceId: string;
+    servicePlanId: string;
+    subscriptionId: string;
+  },
   selectedInstance: ResourceInstance | undefined,
-  subscriptions: Subscription[],
+  byoaSubscriptions: Subscription[],
   byoaServiceOfferingsObj: Record<string, Record<string, ServiceOffering>>
 ) => {
   if (selectedInstance) {
-    const subscription = subscriptions.find(
+    const subscription = byoaSubscriptions.find(
       (sub) => sub.id === selectedInstance.subscriptionId
     );
     return {
@@ -31,7 +36,31 @@ export const getInitialValues = (
     };
   }
 
-  const filteredSubscriptions = subscriptions.filter(
+  const isValidFormValues = Boolean(
+    byoaSubscriptions.find(
+      (sub) =>
+        sub.serviceId === initialFormValues?.serviceId &&
+        sub.productTierId === initialFormValues?.servicePlanId &&
+        sub.id === initialFormValues?.subscriptionId &&
+        sub.roleType === "root"
+    )
+  );
+
+  if (isValidFormValues) {
+    const cloudProvider =
+      byoaServiceOfferingsObj[initialFormValues?.serviceId]?.[
+        initialFormValues?.servicePlanId
+      ]?.cloudProviders?.[0] || "";
+
+    return {
+      ...initialFormValues,
+      cloudProvider,
+      accountConfigurationMethod:
+        cloudProvider === "aws" ? "CloudFormation" : "Terraform",
+    };
+  }
+
+  const filteredSubscriptions = byoaSubscriptions.filter(
     (sub) => byoaServiceOfferingsObj[sub.serviceId]?.[sub.productTierId]
   );
 

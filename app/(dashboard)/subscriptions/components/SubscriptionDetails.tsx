@@ -5,12 +5,11 @@ import formatDateUTC from "src/utils/formatDateUTC";
 
 import StatusChip from "components/StatusChip/StatusChip";
 import DetailsTable from "components/DetailsTable/DetailsTable";
+import GridCellExpand from "components/GridCellExpand/GridCellExpand";
+import ServicePlanDetails from "components/ServicePlanDetails/ServicePlanDetails";
 import ServiceNameWithLogo from "components/ServiceNameWithLogo/ServiceNameWithLogo";
-import GridCellExpand from "src/components/GridCellExpand/GridCellExpand";
-import SubscriptionTypeDirectIcon from "src/components/Icons/SubscriptionType/SubscriptionTypeDirectIcon";
-import SubscriptionTypeInvitedIcon from "src/components/Icons/SubscriptionType/SubscriptionTypeInvitedIcon";
-import CardWithTitle from "src/components/Card/CardWithTitle";
-import ServicePlanDetails from "src/components/ServicePlanDetails/ServicePlanDetails";
+import SubscriptionTypeDirectIcon from "components/Icons/SubscriptionType/SubscriptionTypeDirectIcon";
+import SubscriptionTypeInvitedIcon from "components/Icons/SubscriptionType/SubscriptionTypeInvitedIcon";
 
 const SubscriptionDetails = ({ subscription, serviceOfferingsObj }) => {
   const columns = useMemo(
@@ -71,12 +70,9 @@ const SubscriptionDetails = ({ subscription, serviceOfferingsObj }) => {
   return (
     <>
       <DetailsTable columns={columns} />
-      <CardWithTitle
-        title={`Subscription ID - ${subscription.id}`}
-        className="mt-6"
-      >
+      <div className="mt-6">
         <ServicePlanDetails serviceOffering={selectedPlan} />
-      </CardWithTitle>
+      </div>
     </>
   );
 };

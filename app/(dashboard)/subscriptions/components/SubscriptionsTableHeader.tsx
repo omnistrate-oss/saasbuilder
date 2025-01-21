@@ -43,7 +43,6 @@ const SubscriptionsTableHeader = ({
         />
         <Button
           bgColor={colors.error700}
-          fontColor={colors.white}
           variant="contained"
           onClick={onUnsubscribe}
           disabled={

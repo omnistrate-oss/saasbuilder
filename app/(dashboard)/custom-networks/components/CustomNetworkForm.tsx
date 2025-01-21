@@ -82,12 +82,17 @@ const CustomNetworkForm = ({
   }, [regions, formData.values.cloudProviderName]);
 
   const cloudProviders = useMemo(() => {
-    return regions.reduce((acc, region) => {
-      if (!acc.includes(region.cloudProviderName)) {
-        acc.push(region.cloudProviderName);
-      }
-      return acc;
-    }, []);
+    return (
+      regions
+        .reduce((acc, region) => {
+          if (!acc.includes(region.cloudProviderName)) {
+            acc.push(region.cloudProviderName);
+          }
+          return acc;
+        }, [])
+        // Sort as ['aws', 'azure', 'gcp']
+        .sort((a, b) => a.localeCompare(b))
+    );
   }, [regions]);
 
   const formConfiguration: FormConfiguration = useMemo(() => {

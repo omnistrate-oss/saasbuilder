@@ -45,7 +45,7 @@ const FullScreenDrawer: React.FC<FullScreenDrawerProps> = ({
         description={description}
         closeDrawer={closeDrawer}
       />
-      <div className="px-4 pt-6 pb-20 max-w-[84rem] w-full mx-auto">
+      <div className="px-4 pt-6 py-20 max-w-[84rem] w-full mx-auto">
         {RenderUI}
       </div>
     </Dialog>

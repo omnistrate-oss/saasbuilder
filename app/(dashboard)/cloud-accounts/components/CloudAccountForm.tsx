@@ -8,6 +8,7 @@ import { useMutation } from "@tanstack/react-query";
 import { CloudAccountValidationSchema } from "../constants";
 import { FormConfiguration } from "components/DynamicForm/types";
 import GridDynamicForm from "components/DynamicForm/GridDynamicForm";
+import LoadingSpinner from "components/LoadingSpinner/LoadingSpinner";
 import useSnackbar from "src/hooks/useSnackbar";
 import {
   createResourceInstance,
@@ -18,17 +19,19 @@ import {
   getAwsBootstrapArn,
   getGcpServiceEmail,
 } from "src/utils/accountConfig/accountConfig";
-import { selectUserrootData } from "src/slices/userDataSlice";
-import { getServiceMenuItems } from "app/(dashboard)/instances/utils";
-import SubscriptionPlanRadio from "app/(dashboard)/components/SubscriptionPlanRadio/SubscriptionPlanRadio";
-import CloudProviderRadio from "app/(dashboard)/components/CloudProviderRadio/CloudProviderRadio";
-import { cloudProviderLogoMap } from "src/constants/cloudProviders";
-import CustomLabelDescription from "./CustomLabelDescription";
 import { ServiceOffering } from "src/types/serviceOffering";
-import { getInitialValues } from "../utils";
+import { selectUserrootData } from "src/slices/userDataSlice";
+import { cloudProviderLogoMap } from "src/constants/cloudProviders";
+
+import { getServiceMenuItems } from "app/(dashboard)/instances/utils";
 import SubscriptionMenu from "app/(dashboard)/components/SubscriptionMenu/SubscriptionMenu";
+import CloudProviderRadio from "app/(dashboard)/components/CloudProviderRadio/CloudProviderRadio";
+import SubscriptionPlanRadio from "app/(dashboard)/components/SubscriptionPlanRadio/SubscriptionPlanRadio";
+import CustomLabelDescription from "./CustomLabelDescription";
+import { getInitialValues } from "../utils";
 
 const CloudAccountForm = ({
+  initialFormValues,
   onClose,
   formMode,
   selectedInstance,
@@ -107,6 +110,7 @@ const CloudAccountForm = ({
 
   const formData = useFormik({
     initialValues: getInitialValues(
+      initialFormValues,
       selectedInstance,
       byoaSubscriptions,
       byoaServiceOfferingsObj
@@ -164,6 +168,8 @@ const CloudAccountForm = ({
   });
 
   const { values, setFieldValue } = formData;
+
+  console.log(formData.errors);
 
   const formConfiguration: FormConfiguration = useMemo(() => {
     const { serviceId, servicePlanId, cloudProvider } = values;
@@ -403,6 +409,10 @@ const CloudAccountForm = ({
       ],
     };
   }, [formMode, subscriptions, byoaServiceOfferings, values]);
+
+  if (isFetchingServiceOfferings) {
+    return <LoadingSpinner />;
+  }
 
   return (
     <GridDynamicForm

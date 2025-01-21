@@ -8,4 +8,16 @@ export const CloudAccountValidationSchema = yup.object({
   accountConfigurationMethod: yup
     .string()
     .required("Account Configuration Method is required"),
+  awsAccountId: yup.string().when("cloudProvider", {
+    is: "aws",
+    then: yup.string().required("AWS Account ID is required"),
+  }),
+  gcpProjectId: yup.string().when("cloudProvider", {
+    is: "gcp",
+    then: yup.string().required("GCP Project ID is required"),
+  }),
+  gcpProjectNumber: yup.string().when("cloudProvider", {
+    is: "gcp",
+    then: yup.string().required("GCP Project Number is required"),
+  }),
 });

@@ -43,5 +43,5 @@ export const PasswordValidationSchema = yup.object({
   confirmPassword: yup
     .string()
     .required("Confirm Password is required")
-    .oneOf([yup.ref("password"), null], "Passwords must match"),
+    .oneOf([yup.ref("newPassword"), null], "Passwords must match"),
 });

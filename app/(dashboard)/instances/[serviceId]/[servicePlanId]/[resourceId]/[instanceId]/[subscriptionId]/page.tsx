@@ -1,8 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { useMemo, useState } from "react";
 import { RiArrowGoBackFill } from "react-icons/ri";
+import { useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Stack, Collapse, Tabs, Tab } from "@mui/material";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
@@ -32,9 +32,10 @@ import {
   toggleInstanceDetailsSummaryVisibility,
 } from "src/slices/genericSlice";
 
-import { getTabs } from "./utils";
+import { checkCustomDNSEndpoint, getTabs } from "./utils";
 import PageContainer from "app/(dashboard)/components/Layout/PageContainer";
 import { colors } from "src/themeConfig";
+import ResourceCustomDNS from "src/components/ResourceInstance/Connectivity/ResourceCustomDNS";
 
 type CurrentTab =
   | "Resource Instance Details"
@@ -43,7 +44,8 @@ type CurrentTab =
   | "Metrics"
   | "Logs"
   | "Events"
-  | "Backups";
+  | "Backups"
+  | "Custom DNS";
 
 const isResourceBYOA = false;
 
@@ -64,6 +66,11 @@ const InstanceDetailsPage = ({
   const [currentTab, setCurrentTab] = useState<CurrentTab>(
     "Resource Instance Details"
   );
+
+  // Set Page Title
+  useEffect(() => {
+    document.title = currentTab;
+  }, [currentTab]);
 
   const insightsVisible = useSelector(selectInstanceDetailsSummaryVisibility);
   const dispatch = useDispatch();
@@ -125,7 +132,12 @@ const InstanceDetailsPage = ({
         isResourceBYOA,
         isCliManagedResource,
         resourceType,
-        resourceInstanceData?.backupStatus?.backupPeriodInHours
+        resourceInstanceData?.backupStatus?.backupPeriodInHours,
+        checkCustomDNSEndpoint(
+          resourceInstanceData
+            ? resourceInstanceData?.connectivity?.globalEndpoints
+            : {}
+        )
       ),
     [resourceInstanceData, isCliManagedResource, resourceType]
   );
@@ -368,6 +380,14 @@ const InstanceDetailsPage = ({
               ? resourceInstanceData?.connectivity?.networkType.toUpperCase()
               : "PUBLIC") as NetworkType
           }
+        />
+      )}
+      {currentTab === tabs.customDNS && (
+        <ResourceCustomDNS
+          globalEndpoints={resourceInstanceData.connectivity.globalEndpoints}
+          context="access"
+          accessQueryParams={queryData}
+          refetchInstance={resourceInstanceQuery.refetch}
         />
       )}
     </PageContainer>

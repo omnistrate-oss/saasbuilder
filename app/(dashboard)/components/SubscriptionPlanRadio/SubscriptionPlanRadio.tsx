@@ -38,7 +38,7 @@ const SubscriptionPlanCard = ({
   const card = (
     <div
       className={clsx(
-        "flex items-start justify-between gap-3 px-4 py-4 rounded-xl outline outline-[2px]",
+        "flex items-start justify-between gap-3 px-4 pt-4 pb-3 rounded-xl outline outline-[2px]",
         isSelected ? "outline-purple-600" : "outline-gray-300",
         (!subscriptions.length || disabled) && "bg-gray-50"
       )}

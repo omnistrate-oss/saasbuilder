@@ -6,13 +6,11 @@ import LoadingSpinner from "../LoadingSpinner/LoadingSpinner";
 type APIDocumentationProps = {
   serviceId: string;
   serviceAPIID: string;
-  actionButton?: React.ReactNode;
 };
 
 const APIDocumentation: React.FC<APIDocumentationProps> = ({
   serviceId,
   serviceAPIID,
-  actionButton,
 }) => {
   const { data: serviceAPIDocs, isLoading: isLoadingServiceAPIDocs } =
     useServiceApiDocsData(serviceId, serviceAPIID);
@@ -20,11 +18,7 @@ const APIDocumentation: React.FC<APIDocumentationProps> = ({
   if (!serviceAPIID) return null;
 
   return (
-    <CardWithTitle
-      title="API Documentation"
-      style={{ minHeight: "500px" }}
-      actionButton={actionButton}
-    >
+    <CardWithTitle title="API Documentation" style={{ minHeight: "500px" }}>
       {isLoadingServiceAPIDocs ? (
         <LoadingSpinner />
       ) : (

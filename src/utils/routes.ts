@@ -15,3 +15,18 @@ export const getSubscriptionsRoute = ({
   }
   return "/subscriptions";
 };
+
+export const getCloudAccountsRoute = ({
+  serviceId,
+  servicePlanId,
+  subscriptionId,
+}: {
+  serviceId?: string;
+  servicePlanId?: string;
+  subscriptionId?: string;
+}) => {
+  if (serviceId && servicePlanId && subscriptionId) {
+    return `/cloud-accounts?serviceId=${serviceId}&servicePlanId=${servicePlanId}&subscriptionId=${subscriptionId}`;
+  }
+  return "/cloud-accounts";
+};

@@ -7,7 +7,8 @@ export const getTabs = (
   isResourceBYOA,
   isCliManagedResource,
   resourceType,
-  isBackup
+  isBackup,
+  isCustomDNS
 ) => {
   const tabs: Record<string, string | undefined> = {
     resourceInstanceDetails: "Resource Instance Details",
@@ -27,6 +28,28 @@ export const getTabs = (
   if (isBackup) {
     tabs["backups"] = "Backups";
   }
+  if (isCustomDNS) {
+    tabs["customDNS"] = "Custom DNS";
+  }
 
   return tabs;
+};
+
+export const checkCustomDNSEndpoint = (resources) => {
+  if (
+    resources.primary?.customDNSEndpoint &&
+    resources.primary?.customDNSEndpoint.enabled === true
+  ) {
+    return true;
+  }
+
+  if (Array.isArray(resources.others)) {
+    return resources.others.some(
+      (resource) =>
+        resource.customDNSEndpoint &&
+        resource.customDNSEndpoint.enabled === true
+    );
+  }
+
+  return false;
 };

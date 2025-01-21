@@ -6,20 +6,22 @@ import { useEffect, useMemo, useState } from "react";
 import CardWithTitle from "components/Card/CardWithTitle";
 import Select from "components/FormElementsv2/Select/Select";
 import MenuItem from "components/FormElementsv2/MenuItem/MenuItem";
+import LoadingSpinner from "components/LoadingSpinner/LoadingSpinner";
 import FieldTitle from "components/FormElementsv2/FieldTitle/FieldTitle";
 import ServicePlanCard from "components/ServicePlanCard/ServicePlanCard";
 import ServicePlanDetails from "components/ServicePlanDetails/ServicePlanDetails";
 import FieldDescription from "components/FormElementsv2/FieldDescription/FieldDescription";
+import TextConfirmationDialog from "components/TextConfirmationDialog/TextConfirmationDialog";
 
 import useSnackbar from "src/hooks/useSnackbar";
 import { createSubscriptions, deleteSubscription } from "src/api/subscriptions";
 import { useGlobalData } from "src/providers/GlobalDataProvider";
 import { createSubscriptionRequest } from "src/api/subscriptionRequests";
-import TextConfirmationDialog from "src/components/TextConfirmationDialog/TextConfirmationDialog";
 
 const ManageSubscriptionsForm = ({
   defaultServiceId,
   defaultServicePlanId,
+  isFetchingServiceOfferings,
 }) => {
   const {
     serviceOfferings,
@@ -120,6 +122,10 @@ const ManageSubscriptionsForm = ({
 
   const selectedPlan = serviceOfferingsObj[selectedServiceId]?.[selectedPlanId];
 
+  if (isFetchingServiceOfferings) {
+    return <LoadingSpinner />;
+  }
+
   return (
     <div className="space-y-6">
       <CardWithTitle title="Standard Information">
@@ -174,9 +180,7 @@ const ManageSubscriptionsForm = ({
         </div>
       </CardWithTitle>
 
-      <CardWithTitle title={selectedPlan?.productTierName}>
-        <ServicePlanDetails serviceOffering={selectedPlan} />
-      </CardWithTitle>
+      <ServicePlanDetails serviceOffering={selectedPlan} />
 
       <TextConfirmationDialog
         open={isUnsubscribeDialogOpen}

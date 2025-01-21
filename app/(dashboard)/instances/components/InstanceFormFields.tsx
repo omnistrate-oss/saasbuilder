@@ -18,6 +18,7 @@ import { AvailabilityZone } from "src/types/availabilityZone";
 import { CloudProvider, FormMode } from "src/types/common/enums";
 import { APIEntity, ServiceOffering } from "src/types/serviceOffering";
 import SubscriptionMenu from "app/(dashboard)/components/SubscriptionMenu/SubscriptionMenu";
+import AccountConfigDescription from "./AccountConfigDescription";
 
 export const getStandardInformationFields = (
   servicesObj,
@@ -33,7 +34,8 @@ export const getStandardInformationFields = (
   customAvailabilityZones: AvailabilityZone[],
   isFetchingCustomAvailabilityZones: boolean
 ) => {
-  if (isFetchingServiceOfferings || isFetchingSubscriptions) return [];
+  if (isFetchingServiceOfferings) return [];
+
   const { values, setFieldValue, setFieldTouched } = formData;
   const {
     serviceId,
@@ -412,7 +414,7 @@ export const getDeploymentConfigurationFields = (
         type: "password",
         required: formMode !== "modify" && param.required,
         showPasswordGenerator: true,
-        previewValue: values.requestParams[param.key],
+        previewValue: values.requestParams[param.key] ? "********" : "",
       });
     } else if (
       param.dependentResourceID &&
@@ -436,7 +438,7 @@ export const getDeploymentConfigurationFields = (
         required: formMode !== "modify" && param.required,
         isLoading: isFetchingResourceInstanceIds,
         emptyMenuText: "No dependent resources available",
-        previewValue: values.requestParams[param.key] ? "********" : "",
+        previewValue: values.requestParams[param.key],
       });
     } else if (param.type === "Boolean") {
       fields.push({
@@ -483,6 +485,13 @@ export const getDeploymentConfigurationFields = (
         label: param.displayName || param.key,
         subLabel: param.description,
         name: `requestParams.${param.key}`,
+        description: (
+          <AccountConfigDescription
+            serviceId={values.serviceId}
+            servicePlanId={values.servicePlanId}
+            subscriptionId={values.subscriptionId}
+          />
+        ),
         value: values.requestParams[param.key] || "",
         type: "select",
         menuItems: cloudAccountInstances.map((config) => ({
@@ -494,6 +503,7 @@ export const getDeploymentConfigurationFields = (
         previewValue: cloudAccountInstances.find(
           (config) => config.id === values.requestParams[param.key]
         )?.label,
+        emptyMenuText: "No cloud accounts available",
       });
     } else {
       if (

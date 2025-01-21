@@ -64,7 +64,7 @@ const GridDynamicForm: React.FC<GridDynamicFormProps> = ({
       <div
         style={{
           position: "sticky",
-          top: "24px",
+          top: "104px",
           flex: 2,
           minHeight: "660px",
           border: `1px solid ${colors.purple600}`,

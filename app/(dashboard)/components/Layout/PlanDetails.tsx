@@ -122,12 +122,10 @@ const PlanDetails = ({ startingTab }) => {
         </div>
       </CardWithTitle>
 
-      <CardWithTitle title={selectedPlan?.productTierName}>
-        <ServicePlanDetails
-          serviceOffering={selectedPlan}
-          startingTab={startingTab}
-        />
-      </CardWithTitle>
+      <ServicePlanDetails
+        serviceOffering={selectedPlan}
+        startingTab={startingTab}
+      />
     </div>
   );
 };
