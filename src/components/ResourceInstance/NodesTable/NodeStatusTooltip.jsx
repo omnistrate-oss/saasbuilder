@@ -61,7 +61,7 @@ const NodeStatusTooltip = ({ detailedHealth, children }) => {
                 <CircleCheckIcon />
               ) : (
                 <CircleCrossIcon
-                  color={item.status === "UNHEALTHY" ? "" : "#808080"}
+                  color={item.status === "UNHEALTHY" ? "#F44336" : "#808080"}
                 />
               )}
               <Text size="xsmall" weight="regular" color="rgba(52, 64, 84, 1)">
