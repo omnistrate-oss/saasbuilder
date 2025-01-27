@@ -3,9 +3,7 @@ import { useEffect, useMemo, useState } from "react";
 import Card from "components/Card/Card";
 import { Text } from "components/Typography/Typography";
 import ResourceConnectivityEndpoint from "./ConnectivityEndpoint";
-
 import PropertyTable from "./PropertyTable";
-import ResourceConnectivityCustomDNS from "./ConnectivityCustomDNS";
 import CLIManagedConnectivityDetails from "./CLIManagedConnectivityDetails";
 
 function Connectivity(props) {
@@ -18,8 +16,6 @@ function Connectivity(props) {
     globalEndpoints,
     context,
     nodes,
-    queryData,
-    refetchInstance,
     additionalEndpoints,
   } = props;
 
@@ -102,22 +98,7 @@ function Connectivity(props) {
                   resourceHasCompute={
                     globalEndpoints?.primary?.resourceHasCompute
                   }
-                  ResourceConnectivityCustomDNS={
-                    <ResourceConnectivityCustomDNS
-                      context={context}
-                      endpointURL={primaryResourceEndpoint}
-                      customDNSData={
-                        globalEndpoints?.primary?.customDNSEndpoint
-                      }
-                      queryData={queryData}
-                      resourceKey={globalEndpoints?.primary?.resourceKey}
-                      resourceId={globalEndpoints?.primary?.resourceId}
-                      refetchInstance={refetchInstance}
-                      resourceHasCompute={
-                        globalEndpoints?.primary?.resourceHasCompute
-                      }
-                    />
-                  }
+                  customDNSData={globalEndpoints?.primary?.customDNSEndpoint}
                 />
               )}
           </>
@@ -127,14 +108,7 @@ function Connectivity(props) {
 
     if (otherResourceFilteredEndpoints?.length > 0) {
       otherResourceFilteredEndpoints.forEach(
-        ({
-          resourceName,
-          endpoint,
-          resourceId,
-          customDNSEndpoint,
-          resourceKey,
-          resourceHasCompute,
-        }) => {
+        ({ resourceName, endpoint, resourceId, customDNSEndpoint }) => {
           if (resourceName && endpoint && otherResourceFilteredPorts) {
             res.push({
               label: resourceName,
@@ -149,18 +123,7 @@ function Connectivity(props) {
                   viewType="endpoint"
                   endpointURL={endpoint}
                   containerStyles={{ marginTop: "16px" }}
-                  ResourceConnectivityCustomDNS={
-                    <ResourceConnectivityCustomDNS
-                      context={context}
-                      endpointURL={endpoint}
-                      customDNSData={customDNSEndpoint}
-                      queryData={queryData}
-                      resourceKey={resourceKey}
-                      resourceId={resourceId}
-                      refetchInstance={refetchInstance}
-                      resourceHasCompute={resourceHasCompute}
-                    />
-                  }
+                  customDNSData={customDNSEndpoint}
                 />
               ),
             });
@@ -177,9 +140,7 @@ function Connectivity(props) {
     otherResourceFilteredEndpoints,
     primaryResourcePorts,
     otherResourceFilteredPorts,
-    globalEndpoints,
-    queryData,
-    refetchInstance,
+    globalEndpoints?.primary?.customDNSEndpoint,
   ]);
 
   if (additionalEndpoints.some((el) => el.additionalEndpoints)) {
