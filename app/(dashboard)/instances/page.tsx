@@ -8,7 +8,12 @@ import { createColumnHelper } from "@tanstack/react-table";
 
 import useInstances from "./hooks/useInstances";
 import InstanceForm from "./components/InstanceForm";
-import { getMainResourceFromInstance } from "./utils";
+import {
+  FilterCategorySchema,
+  getFilteredInstances,
+  getInstanceFiltersObject,
+  getMainResourceFromInstance,
+} from "./utils";
 import PageTitle from "../components/Layout/PageTitle";
 import InstancesIcon from "../components/Icons/InstancesIcon";
 import PageContainer from "../components/Layout/PageContainer";
@@ -64,7 +69,11 @@ const InstancesPage = () => {
   const { subscriptionsObj, serviceOfferingsObj, isFetchingSubscriptions } =
     useGlobalData();
 
-  const [appliedFilters, setAppliedFilters] = useState({});
+  const [selectedFilters, setSelectedFilters] = useState<
+    Record<string, FilterCategorySchema>
+  >({});
+
+  console.log(selectedFilters);
 
   const dataTableColumns = useMemo(() => {
     return [
@@ -335,6 +344,17 @@ const InstancesPage = () => {
     );
   }, [instances]);
 
+  const filterOptionsMap = useMemo(
+    () => getInstanceFiltersObject(nonBYOAInstances, subscriptionsObj),
+    [nonBYOAInstances, subscriptionsObj]
+  );
+
+  const filteredInstances = useMemo(
+    () =>
+      getFilteredInstances(nonBYOAInstances, selectedFilters, subscriptionsObj),
+    [nonBYOAInstances, selectedFilters, subscriptionsObj]
+  );
+
   const selectedInstance = useMemo(() => {
     return nonBYOAInstances.find((instance) => instance.id === selectedRows[0]);
   }, [selectedRows, nonBYOAInstances]);
@@ -394,15 +414,14 @@ const InstancesPage = () => {
       <PageTitle icon={InstancesIcon} className="mb-6">
         Deployment Instances
       </PageTitle>
-
       <div>
         <DataTable
           columns={dataTableColumns}
-          rows={nonBYOAInstances}
+          rows={filteredInstances}
           noRowsText="No instances"
           HeaderComponent={InstancesTableHeader}
           headerProps={{
-            count: nonBYOAInstances.length,
+            count: filteredInstances.length,
             selectedInstance,
             setSelectedRows,
             setOverlayType,
@@ -411,8 +430,9 @@ const InstancesPage = () => {
             selectedInstanceSubscription,
             refetchInstances,
             isFetchingInstances,
-            appliedFilters,
-            setAppliedFilters,
+            filterOptionsMap,
+            selectedFilters,
+            setSelectedFilters,
           }}
           isLoading={isLoadingInstances || isFetchingSubscriptions}
           selectedRows={selectedRows}

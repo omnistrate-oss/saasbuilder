@@ -1,0 +1,490 @@
+import { useMemo, useState } from "react";
+import { SetState } from "src/types/common/reactGenerics";
+import {
+  addMilliseconds,
+  addMonths,
+  format,
+  startOfDay,
+  subMonths,
+} from "date-fns";
+import { Box, IconButton, styled } from "@mui/material";
+import { Stack } from "@mui/system";
+import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
+import ChevronRightIcon from "@mui/icons-material/ChevronRight";
+import Button from "../Button/Button";
+import { DateRange as ReactDateRange, Range } from "react-date-range";
+import { themeConfig } from "src/themeConfig";
+import { ChevronLeft } from "@mui/icons-material";
+import Radio from "../FormElementsv2/Radio/Radio";
+import TextField from "../FormElementsv2/TextField/TextField";
+import { Text } from "../Typography/Typography";
+import { useFormik } from "formik";
+import { timeValidationSchema } from "./constants";
+import FieldError from "../FormElementsv2/FieldError/FieldError";
+import {
+  getISOStringfromDateAndTime,
+  getLocalStartOfDayfromISODateString,
+} from "./utils";
+import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
+dayjs.extend(utc);
+
+const StyledIconCard = styled(Box)({
+  padding: "8px",
+  borderRadius: "8px",
+  border: `1px solid ${themeConfig.colors.gray200}`,
+  boxShadow: `box-shadow: 0px 1px 2px 0px #0A0D120D, 0px -2px 0px 0px #0A0D120D inset, 0px 0px 0px 1px #0A0D122E inset`,
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+});
+
+const NavigationRenderer = (
+  currentFocusedDate: Date,
+  setShownDate: (shownDate: Date) => void
+) => {
+  return (
+    <Box position="relative" width="100%">
+      <Stack
+        direction="row"
+        justifyContent="space-between"
+        position="absolute"
+        top="24px"
+        left="0px"
+        right="0px"
+      >
+        <IconButton
+          onClick={() => {
+            setShownDate(subMonths(currentFocusedDate, 1));
+          }}
+          sx={{ color: "#667085" }}
+        >
+          <ChevronLeftIcon />
+        </IconButton>
+        <IconButton
+          onClick={() => {
+            setShownDate(addMonths(currentFocusedDate, 1));
+          }}
+          sx={{ color: "#667085" }}
+        >
+          <ChevronRightIcon />
+        </IconButton>
+      </Stack>
+    </Box>
+  );
+};
+
+type DateRange = {
+  startDate?: string;
+  endDate?: string;
+};
+
+type DateRangePickerStaticProps = {
+  dateRange: DateRange;
+  setDateRange: SetState<DateRange>;
+  handleCancel: () => void;
+};
+
+export const initialRangeState: DateRange = {
+  startDate: undefined,
+  endDate: undefined,
+  //   key: "selection",
+};
+
+type RelativeRangeOption = {
+  label: string;
+  value: number; // relative past time from now in milliseconds
+};
+const relativeRangeOptions: RelativeRangeOption[] = [
+  {
+    label: "Last 5 minutes",
+    value: 5 * 60 * 1000, // relative past time in milliseconds
+  },
+  {
+    label: "Last 30 minutes",
+    value: 30 * 60 * 1000,
+  },
+
+  {
+    label: "Last 1 hour",
+    value: 1 * 60 * 60 * 1000,
+  },
+  {
+    label: "Last 6 hours",
+    value: 6 * 60 * 60 * 1000,
+  },
+  {
+    label: "Last 1 day",
+    value: 1 * 24 * 60 * 60 * 1000,
+  },
+  {
+    label: "Last 3 days",
+    value: 3 * 24 * 60 * 60 * 1000,
+  },
+];
+
+const RelativeRange = ({
+  setDateRange,
+  handleCancel,
+}: DateRangePickerStaticProps) => {
+  const [selectedValue, setSelectedValue] = useState<number | null>(null);
+
+  const handleApply = () => {
+    if (selectedValue) {
+      const endDate = new Date();
+      const startDate = addMilliseconds(endDate, -selectedValue);
+      setDateRange({ startDate, endDate });
+    } else {
+      setDateRange({ startDate: undefined, endDate: undefined });
+    }
+  };
+
+  const handleSelectOption = (value: number) => {
+    setSelectedValue(value);
+  };
+
+  return (
+    <Box
+      sx={{
+        width: "664px",
+      }}
+    >
+      <Stack
+        direction="column"
+        alignItems="flex-start"
+        sx={{ paddingBottom: "7px" }}
+      >
+        {relativeRangeOptions?.map((option, i) => (
+          <Stack
+            direction="row"
+            sx={{
+              marginTop: "7px",
+              padding: "9px 24px",
+              fontSize: "14px",
+              lineHeight: "20px",
+              fontWeight: 600,
+              color: themeConfig.colors.gray700,
+              cursor: "pointer",
+            }}
+            key={i}
+            onClick={() => handleSelectOption(option.value)}
+          >
+            <Radio
+              sx={{ padding: "0px", marginRight: "8px" }}
+              checked={selectedValue === option.value}
+            />
+            {option.label}
+          </Stack>
+        ))}
+      </Stack>
+      <Stack
+        direction="row"
+        padding="16px"
+        justifyContent="flex-end"
+        alignItems="center"
+        gap="12px"
+        borderTop={`1px solid ${themeConfig.colors.gray200}`}
+      >
+        <Button variant="outlined" onClick={handleCancel}>
+          Cancel
+        </Button>
+        <Button variant="contained" onClick={handleApply}>
+          Apply
+        </Button>
+      </Stack>
+    </Box>
+  );
+};
+
+const AbsoulteRange = (props: DateRangePickerStaticProps) => {
+  const { dateRange = initialRangeState, setDateRange, handleCancel } = props;
+
+  const [selectedStartDate, setSelectedStartDate] = useState(
+    // dateRange.startDate ? startOfDay(new Date(dateRange.startDate)) : undefined
+    dateRange.startDate
+      ? getLocalStartOfDayfromISODateString(dateRange.startDate)
+      : undefined
+  );
+  const [selectedEndDate, setSelectedEndDate] = useState(
+    // dateRange.endDate ? startOfDay(new Date(dateRange.endDate)) : undefined
+    dateRange.endDate
+      ? getLocalStartOfDayfromISODateString(dateRange.endDate)
+      : undefined
+  );
+
+  const timeFormik = useFormik({
+    initialValues: {
+      startDate: dateRange.startDate
+        ? getLocalStartOfDayfromISODateString(dateRange.startDate)
+        : undefined,
+      endDate: dateRange.endDate
+        ? getLocalStartOfDayfromISODateString(dateRange.endDate)
+        : undefined,
+      startTime: dateRange.startDate
+        ? dayjs(new Date(dateRange.startDate)).utc().format("HH:mm:ss")
+        : "00:00:00",
+      endTime: dateRange.endDate
+        ? dayjs(new Date(dateRange.endDate)).utc().format("HH:mm:ss")
+        : "00:00:00",
+    },
+    enableReinitialize: true,
+    onSubmit: (values) => {
+      if (values.startDate && values.endDate) {
+        setDateRange({
+          startDate: getISOStringfromDateAndTime(
+            values.startDate,
+            values.startTime
+          ),
+          endDate: getISOStringfromDateAndTime(values.endDate, values.endTime),
+        });
+      } else {
+        setDateRange({
+          startDate: undefined,
+          endDate: undefined,
+        });
+      }
+    },
+    validationSchema: timeValidationSchema,
+  });
+
+  const {
+    values,
+    handleChange,
+    handleBlur,
+    touched,
+    errors,
+    setFieldValue,
+    handleSubmit,
+  } = timeFormik;
+
+  const dateRanges: Range[] = useMemo(() => {
+    return [
+      {
+        startDate: selectedStartDate,
+        endDate: selectedEndDate,
+        key: "selection",
+      },
+    ];
+  }, [selectedStartDate, selectedEndDate]);
+
+  const handleChangeDateRange = (item: Range) => {
+    setSelectedStartDate(item.startDate);
+    setSelectedEndDate(item.endDate);
+    setFieldValue("startDate", item.startDate);
+    setFieldValue("endDate", item.endDate);
+  };
+
+  return (
+    <Box>
+      {/*@ts-ignore */}
+      <ReactDateRange
+        onChange={(item) => {
+          handleChangeDateRange(item.selection);
+        }}
+        showSelectionPreview={true}
+        moveRangeOnFirstSelection={false}
+        months={2}
+        ranges={dateRanges}
+        direction="horizontal"
+        color="#7F56D9"
+        showMonthAndYearPickers={false}
+        navigatorRenderer={NavigationRenderer}
+        showDateDisplay={false}
+      />
+
+      <Stack direction="row" gap="12px" alignItems="center" padding="16px">
+        <Stack direction={"row"} gap="12px" alignItems="center" flex={1}>
+          <Box>
+            <Text size="small" color={themeConfig.colors.gray600}>
+              Start Date
+            </Text>
+            <TextField
+              sx={{
+                width: "136px",
+              }}
+              value={
+                selectedStartDate
+                  ? format(selectedStartDate, "yyyy/MM/dd")
+                  : null
+              }
+              disabled
+            />
+            <Box height="18px">
+              <FieldError>{touched.startDate && errors.startDate}</FieldError>
+            </Box>
+          </Box>
+          -
+          <Box>
+            <Text size="small" color={themeConfig.colors.gray600}>
+              Start Time
+            </Text>
+            <TextField
+              sx={{
+                width: "136px",
+              }}
+              name="startTime"
+              placeholder="hh:mm:ss"
+              value={values.startTime}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              error={Boolean(touched.startTime && errors.startTime)}
+            />
+            <Box height="18px">
+              <FieldError>{touched.startTime && errors.startTime}</FieldError>
+            </Box>
+          </Box>{" "}
+        </Stack>
+
+        <Stack direction={"row"} gap="12px" alignItems="center" flex={1}>
+          <Box>
+            <Text size="small" color={themeConfig.colors.gray600}>
+              End Date
+            </Text>
+            <TextField
+              sx={{
+                width: "136px",
+              }}
+              value={
+                selectedEndDate ? format(selectedEndDate, "yyyy/MM/dd") : null
+              }
+              disabled
+            />
+            <Box height="18px">
+              <FieldError>{touched.endDate && errors.endDate}</FieldError>
+            </Box>
+          </Box>
+          -
+          <Box>
+            <Text size="small" color={themeConfig.colors.gray600}>
+              End Time
+            </Text>
+            <TextField
+              sx={{
+                width: "136px",
+              }}
+              name="endTime"
+              placeholder="hh:mm:ss"
+              value={values.endTime}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              error={Boolean(touched.endTime && errors.endTime)}
+            />
+            <Box height="18px">
+              <FieldError>{touched.endTime && errors.endTime}</FieldError>
+            </Box>
+          </Box>{" "}
+        </Stack>
+      </Stack>
+
+      <Stack
+        direction="row"
+        borderTop={`1px solid ${themeConfig.colors.gray200}`}
+        padding="16px"
+        justifyContent="flex-end"
+        alignItems="center"
+        gap="8px"
+      >
+        <Button variant="outlined" onClick={handleCancel}>
+          Cancel
+        </Button>
+        <Button variant="contained" onClick={handleSubmit}>
+          Apply
+        </Button>
+      </Stack>
+    </Box>
+  );
+};
+
+type TabType = "relative" | "absolute";
+
+export const DateTimeRangePickerStatic = (
+  props: DateRangePickerStaticProps
+) => {
+  const { handleCancel, dateRange } = props;
+  const [tab, setTab] = useState<TabType>(
+    dateRange?.startDate ? "absolute" : "relative"
+  );
+
+  const handleTabChange = (value: TabType) => {
+    setTab(value);
+  };
+
+  return (
+    <>
+      <Stack
+        direction="row"
+        padding="16px"
+        justifyContent="flex-start"
+        alignItems="center"
+        gap="12px"
+        borderBottom={`1px solid ${themeConfig.colors.gray200}`}
+      >
+        <StyledIconCard sx={{ cursor: "pointer" }} onClick={handleCancel}>
+          <ChevronLeft
+            sx={{
+              color: themeConfig.colors.purple600,
+            }}
+          />
+        </StyledIconCard>
+
+        <Stack
+          direction="row"
+          sx={{
+            fontSize: "14px",
+            lineHeight: "20px",
+            fontWeight: 600,
+            color: themeConfig.colors.gray700,
+          }}
+        >
+          <Box
+            sx={{
+              cursor: "pointer",
+              paddingX: "14px",
+              paddingY: "10px",
+              borderRight: "none",
+              borderTopLeftRadius: "999px",
+              borderBottomLeftRadius: "999px",
+              ...(tab === "relative"
+                ? {
+                    background: themeConfig.colors.purple600,
+                    color: themeConfig.colors.white,
+                    border: `1px solid ${themeConfig.colors.purple600}`,
+                  }
+                : {
+                    border: `1px solid ${themeConfig.colors.gray300}`,
+                  }),
+            }}
+            onClick={() => handleTabChange("relative")}
+          >
+            Relative Range
+          </Box>
+          <Box
+            sx={{
+              cursor: "pointer",
+              paddingX: "14px",
+              paddingY: "10px",
+              borderLeft: "none",
+              borderTopRightRadius: "999px",
+              borderBottomRightRadius: "999px",
+              ...(tab === "absolute"
+                ? {
+                    background: themeConfig.colors.purple600,
+                    color: themeConfig.colors.white,
+                    border: `1px solid ${themeConfig.colors.purple600}`,
+                  }
+                : {
+                    border: `1px solid ${themeConfig.colors.gray300}`,
+                  }),
+            }}
+            onClick={() => handleTabChange("absolute")}
+          >
+            Absoulte Range
+          </Box>
+        </Stack>
+      </Stack>
+
+      {tab === "relative" && <RelativeRange {...props} />}
+      {tab === "absolute" && <AbsoulteRange {...props} />}
+    </>
+  );
+};

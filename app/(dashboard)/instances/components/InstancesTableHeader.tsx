@@ -28,91 +28,6 @@ import { colors } from "src/themeConfig";
 import AddInstanceFilters from "./AddInstanceFilters";
 import EditInstanceFilters from "./EditInstanceFilters";
 
-const categories = {
-  services: {
-    label: "Services",
-    value: "services",
-    options: [
-      {
-        name: "Postgres",
-        id: "s-1",
-      },
-      {
-        name: "Redis",
-        id: "s-2",
-      },
-    ],
-  },
-  servicePlans: {
-    label: "ServicePlans",
-    value: "servicePlans",
-    options: [
-      {
-        name: "[Free][Postgres]",
-        id: "pt-1",
-        serviceId: "s-1",
-      },
-      {
-        name: "[Pro][Postgres]",
-        id: "pt-2",
-        serviceId: "s-1",
-      },
-      {
-        name: "[Free][Redis]",
-        id: "pt-3",
-        serviceId: "s-2",
-      },
-      {
-        name: "[Pro][Redis]",
-        id: "pt-4",
-        serviceId: "s-2",
-      },
-    ],
-  },
-  resources: {
-    label: "Resources",
-    value: "resources",
-    options: [
-      {
-        name: "[Resource-1][Free][Postgres]",
-        id: "r-1",
-        servicePlanId: "pt-1",
-      },
-      {
-        name: "[Resource-2][Free][Postgres]",
-        id: "r-2",
-        servicePlanId: "pt-1",
-      },
-
-      {
-        name: "[Resource-1][Pro][Postgres]",
-        id: "r-3",
-        servicePlanId: "pt-2",
-      },
-      {
-        name: "[Resource-2][Pro][Postgres]",
-        id: "r-4",
-        servicePlanId: "pt-2",
-      },
-
-      {
-        name: "[Resource-1][Free][Redis]",
-        id: "r-5",
-        servicePlanId: "pt-3",
-      },
-      {
-        name: "[Resource-2][Free][Redis]",
-        id: "r-6",
-        servicePlanId: "pt-3",
-      },
-    ],
-  },
-  createdOn: {
-    label: "CreatedOn",
-    value: "createdOn",
-  },
-};
-
 type Action = {
   onClick: () => void;
   isDisabled?: boolean;
@@ -131,8 +46,9 @@ const InstancesTableHeader = ({
   selectedInstanceSubscription,
   refetchInstances,
   isFetchingInstances,
-  appliedFilters,
-  setAppliedFilters,
+  filterOptionsMap,
+  selectedFilters,
+  setSelectedFilters,
 }) => {
   const snackbar = useSnackbar();
 
@@ -518,14 +434,14 @@ const InstancesTableHeader = ({
 
       <div className="px-6 py-3 border-y-[1px]">
         <AddInstanceFilters
-          setAppliedFilters={setAppliedFilters}
-          categories={categories}
+          setSelectedFilters={setSelectedFilters}
+          filterOptionsMap={filterOptionsMap}
         />
 
         <EditInstanceFilters
-          appliedFilters={appliedFilters}
-          setAppliedFilters={setAppliedFilters}
-          categories={categories}
+          selectedFilters={selectedFilters}
+          setSelectedFilters={setSelectedFilters}
+          filterOptionsMap={filterOptionsMap}
         />
       </div>
     </div>
