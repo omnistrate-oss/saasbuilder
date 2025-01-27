@@ -955,11 +955,13 @@ function MarketplaceService() {
 
           for (const param of schemaArray) {
             if (["custom_dns_configuration"].includes(param.key)) {
+              if (data.requestParams.custom_dns_configuration) {
+                setIsCustomDNS(true);
+              }
               const resourceKey = selectedResource.key;
               data.requestParams.custom_dns_configuration = {
                 [resourceKey]: data.requestParams.custom_dns_configuration,
               };
-              setIsCustomDNS(true);
             }
           }
 
