@@ -1,5 +1,5 @@
 import { Box, Stack } from "@mui/material";
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import PropertyTable from "./PropertyTable";
 import CustomDNS from "./CustomDNS";
 import Card from "src/components/Card/Card";
@@ -14,6 +14,10 @@ function ResourceCustomDNS(props) {
     accessQueryParams,
     refetchInstance,
   } = props;
+
+  useEffect(() => {
+    refetchInstance();
+  }, []);
 
   const primaryResourceName = globalEndpoints?.primary?.resourceName;
   const primaryResourceEndpoint = globalEndpoints?.primary?.endpoint;
