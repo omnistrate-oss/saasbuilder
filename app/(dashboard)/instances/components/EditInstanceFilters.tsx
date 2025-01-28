@@ -3,7 +3,6 @@ import { useEffect, useMemo, useState } from "react";
 import Button from "src/components/Button/Button";
 import CloseIcon from "src/components/Icons/Close/CloseIcon";
 import { themeConfig } from "src/themeConfig";
-import { format } from "date-fns";
 import { Paper, Popover } from "@mui/material";
 import {
   SelectedCategoryDateTimeRange,

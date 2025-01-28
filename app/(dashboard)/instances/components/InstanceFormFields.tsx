@@ -8,7 +8,7 @@ import {
   getResourceMenuItems,
   getServiceMenuItems,
   getSubscriptionMenuItems,
-} from "../utils.tsx";
+} from "../utils";
 
 import CloudProviderRadio from "../../components/CloudProviderRadio/CloudProviderRadio";
 import SubscriptionPlanRadio from "../../components/SubscriptionPlanRadio/SubscriptionPlanRadio";

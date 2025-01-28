@@ -4,15 +4,17 @@ import { CustomNetwork } from "src/types/customNetwork";
 import { MenuItem } from "src/types/common/generalTypes";
 import { ServiceOffering } from "src/types/serviceOffering";
 import { ResourceInstance } from "src/types/resourceInstance";
-import { Range } from "react-date-range";
 import { cloudProviderLogoMap } from "src/constants/cloudProviders";
-import { initialRangeState } from "src/components/DateRangePicker/DateRangePicketStatic";
 import { getResourceInstanceStatusStylesAndLabel } from "src/constants/statusChipStyles/resourceInstanceStatus";
 import StatusChip from "src/components/StatusChip/StatusChip";
 import { Stack } from "@mui/system";
 import { Box } from "@mui/material";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
+import {
+  DateRange,
+  initialRangeState,
+} from "src/components/DateRangePicker/DateTimeRangePickerStatic";
 dayjs.extend(utc);
 
 export const getServiceMenuItems = (serviceOfferings: ServiceOffering[]) => {
@@ -257,7 +259,7 @@ export type FilterCategorySchema = {
   name: string;
   type: "list" | "date-range";
   options?: { value: string; label: string; logoURL?: string }[];
-  range?: Range;
+  range?: DateRange;
   renderOption?: (...args: any) => React.ReactNode;
 };
 
@@ -483,10 +485,7 @@ export const getFilteredInstances = (
     const cloudProviderOptions = new Set(
       filterOptionsMap.cloudProviders?.options?.map((option) => option.value)
     );
-    console.log("cloud prvider filters", cloudProviderOptions);
     result = result.filter((instance) => {
-      console.log("cloud prvider filters", cloudProviderOptions);
-
       const cloudProvider = instance.cloud_provider;
       return cloudProvider && cloudProviderOptions.has(cloudProvider);
     });

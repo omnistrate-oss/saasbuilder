@@ -25,7 +25,7 @@ import LoadingSpinner from "components/LoadingSpinner/LoadingSpinner";
 import GridDynamicField from "components/DynamicForm/GridDynamicField";
 import LoadingSpinnerSmall from "components/CircularProgress/CircularProgress";
 
-import { getInitialValues } from "../utils.tsx";
+import { getInitialValues } from "../utils";
 import useResourceSchema from "../hooks/useResourceSchema";
 import {
   getDeploymentConfigurationFields,

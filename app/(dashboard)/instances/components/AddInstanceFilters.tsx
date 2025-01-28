@@ -8,7 +8,6 @@ import {
   Stack,
   styled,
 } from "@mui/material";
-import _ from "lodash";
 import { useState } from "react";
 import SearchLens from "src/components/Icons/SearchLens/SearchLens";
 import { themeConfig } from "src/themeConfig";
@@ -17,8 +16,10 @@ import FilterFunnel from "src/components/Icons/Filter/FilterFunnel";
 import { FilterCategorySchema } from "../utils";
 import { SetState } from "src/types/common/reactGenerics";
 import Button from "src/components/Button/Button";
-import { DateTimeRangePickerStatic } from "src/components/DateRangePicker/DateTimeRangePickerStatic";
-import { Range } from "react-date-range";
+import {
+  DateRange,
+  DateTimeRangePickerStatic,
+} from "src/components/DateRangePicker/DateTimeRangePickerStatic";
 
 const StyledIconCard = styled(Box)({
   padding: "8px",
@@ -41,7 +42,7 @@ export const SelectedCategoryDateTimeRange = ({
   handleRemoveCategory,
   setSelectedFilters,
 }: SelectedCategoryDateTimeRangeProps) => {
-  const handleApplyDateRange = (value: Range) => {
+  const handleApplyDateRange = (value: DateRange) => {
     setSelectedFilters((prev) => {
       return {
         ...prev,
@@ -56,7 +57,7 @@ export const SelectedCategoryDateTimeRange = ({
 
   return (
     <DateTimeRangePickerStatic
-      dateRange={selectedCategory.range as Range}
+      dateRange={selectedCategory.range as DateRange}
       setDateRange={handleApplyDateRange}
       handleCancel={handleRemoveCategory}
     />

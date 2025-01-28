@@ -73,8 +73,6 @@ const InstancesPage = () => {
     Record<string, FilterCategorySchema>
   >({});
 
-  console.log(selectedFilters);
-
   const dataTableColumns = useMemo(() => {
     return [
       columnHelper.accessor("id", {

@@ -1,12 +1,6 @@
 import { useMemo, useState } from "react";
 import { SetState } from "src/types/common/reactGenerics";
-import {
-  addMilliseconds,
-  addMonths,
-  format,
-  startOfDay,
-  subMonths,
-} from "date-fns";
+import { addMilliseconds, addMonths, format, subMonths } from "date-fns";
 import { Box, IconButton, styled } from "@mui/material";
 import { Stack } from "@mui/system";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
@@ -74,7 +68,7 @@ const NavigationRenderer = (
   );
 };
 
-type DateRange = {
+export type DateRange = {
   startDate?: string;
   endDate?: string;
 };
