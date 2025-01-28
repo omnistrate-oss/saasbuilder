@@ -4,22 +4,18 @@ import SwaggerDocs from "../SwaggerDocs/SwaggerDocs";
 import LoadingSpinner from "../LoadingSpinner/LoadingSpinner";
 
 type APIDocumentationProps = {
-  subscription: any;
+  serviceId: string;
   serviceAPIID: string;
 };
 
 const APIDocumentation: React.FC<APIDocumentationProps> = ({
-  subscription,
+  serviceId,
   serviceAPIID,
 }) => {
   const { data: serviceAPIDocs, isLoading: isLoadingServiceAPIDocs } =
-    useServiceApiDocsData(
-      subscription?.serviceId,
-      serviceAPIID,
-      subscription?.id
-    );
+    useServiceApiDocsData(serviceId, serviceAPIID);
 
-  if (!subscription || !serviceAPIID) return null;
+  if (!serviceAPIID) return null;
 
   return (
     <CardWithTitle title="API Documentation" style={{ minHeight: "500px" }}>

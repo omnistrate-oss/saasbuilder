@@ -821,13 +821,9 @@ function Metrics(props) {
               value={selectedNode}
               sx={{
                 width: "auto",
-                height: "40px !important",
-                padding: "10px 14px !important",
-                minHeight: "40px",
                 maxWidth: "250px",
               }}
               onChange={handleNodeChange}
-              MenuProps={{ disableScrollLock: true }}
             >
               {nodes.map((node) => (
                 <MenuItem

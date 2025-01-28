@@ -1,9 +1,10 @@
 "use client";
 
 import { useFormik } from "formik";
-import { useEffect, useMemo, useState } from "react";
 import { Box, Stack } from "@mui/material";
+import { useSearchParams, useRouter } from "next/navigation";
 import { useMutation } from "@tanstack/react-query";
+import { useEffect, useMemo, useState } from "react";
 import { createColumnHelper } from "@tanstack/react-table";
 
 import Tooltip from "components/Tooltip/Tooltip";
@@ -13,7 +14,10 @@ import GcpLogo from "components/Logos/GcpLogo/GcpLogo";
 import StatusChip from "components/StatusChip/StatusChip";
 import DataGridText from "components/DataGrid/DataGridText";
 import AzureLogo from "components/Logos/AzureLogo/AzureLogo";
+import ServiceNameWithLogo from "components/ServiceNameWithLogo/ServiceNameWithLogo";
 import ViewInstructionsIcon from "components/Icons/AccountConfig/ViewInstrcutionsIcon";
+import CloudProviderAccountOrgIdModal from "components/CloudProviderAccountOrgIdModal/CloudProviderAccountOrgIdModal";
+import DeleteAccountConfigConfirmationDialog from "components/DeleteAccountConfigConfirmationDialog/DeleteAccountConfigConfirmationDialog";
 
 import PageTitle from "../components/Layout/PageTitle";
 import useInstances from "../instances/hooks/useInstances";
@@ -32,9 +36,7 @@ import {
   getTerraformKit,
 } from "src/api/resourceInstance";
 import { getResourceInstanceStatusStylesAndLabel } from "src/constants/statusChipStyles/resourceInstanceStatus";
-import DeleteAccountConfigConfirmationDialog from "src/components/DeleteAccountConfigConfirmationDialog/DeleteAccountConfigConfirmationDialog";
-import CloudProviderAccountOrgIdModal from "src/components/CloudProviderAccountOrgIdModal/CloudProviderAccountOrgIdModal";
-import ServiceNameWithLogo from "src/components/ServiceNameWithLogo/ServiceNameWithLogo";
+import { getCloudAccountsRoute } from "src/utils/routes";
 
 const columnHelper = createColumnHelper<ResourceInstance>();
 
@@ -46,7 +48,14 @@ type Overlay =
 
 const CloudAccountsPage = () => {
   const snackbar = useSnackbar();
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const serviceId = searchParams?.get("serviceId");
+  const servicePlanId = searchParams?.get("servicePlanId");
+  const subscriptionId = searchParams?.get("subscriptionId");
+
   const { subscriptionsObj, serviceOfferingsObj } = useGlobalData();
+  const [initialFormValues, setInitialFormValues] = useState<any>();
   const [searchText, setSearchText] = useState("");
   const [selectedRows, setSelectedRows] = useState<string[]>([]);
   const [overlayType, setOverlayType] = useState<Overlay>(
@@ -62,6 +71,20 @@ const CloudAccountsPage = () => {
     isFetching: isFetchingInstances,
     refetch: refetchInstances,
   } = useInstances();
+
+  // Open the Create Form Overlay when serviceId, servicePlanId and subscriptionId are present in the URL
+  useEffect(() => {
+    if (serviceId && servicePlanId && subscriptionId) {
+      setOverlayType("create-instance-form");
+      setIsOverlayOpen(true);
+      setInitialFormValues({
+        serviceId,
+        servicePlanId,
+        subscriptionId,
+      });
+      router.replace(getCloudAccountsRoute({}));
+    }
+  }, [serviceId, servicePlanId, subscriptionId]);
 
   const byoaInstances = useMemo(
     () =>
@@ -93,15 +116,7 @@ const CloudAccountsPage = () => {
               "-";
 
             return (
-              <DataGridText
-                showCopyButton={value !== "-"}
-                color="primary"
-                onClick={() => {
-                  setClickedInstance(data.row.original);
-                  setIsOverlayOpen(true);
-                  setOverlayType("view-instructions-dialog");
-                }}
-              >
+              <DataGridText showCopyButton={value !== "-"}>
                 {value}
               </DataGridText>
             );
@@ -402,6 +417,7 @@ const CloudAccountsPage = () => {
         }}
         RenderUI={
           <CloudAccountForm
+            initialFormValues={initialFormValues}
             selectedInstance={selectedInstance}
             onClose={() => {
               setIsOverlayOpen(false);
@@ -431,10 +447,8 @@ const CloudAccountsPage = () => {
         open={isOverlayOpen && overlayType === "view-instructions-dialog"}
         handleClose={() => {
           setIsOverlayOpen(false);
-          setTimeout(() => {
-            setClickedInstance(undefined);
-            setIsAccountCreation(false);
-          }, 1000);
+          setClickedInstance(undefined);
+          setIsAccountCreation(false);
         }}
         orgId={
           subscriptionsObj[clickedInstance?.subscriptionId as string]

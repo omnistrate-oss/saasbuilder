@@ -1,12 +1,14 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
+import { useSearchParams } from "next/navigation";
 import { useMutation } from "@tanstack/react-query";
+import { useEffect, useMemo, useState } from "react";
 import { createColumnHelper } from "@tanstack/react-table";
 
 import useSnackbar from "src/hooks/useSnackbar";
 import formatDateUTC from "src/utils/formatDateUTC";
+import { Subscription } from "src/types/subscription";
 import { deleteSubscription } from "src/api/subscriptions";
 import { selectUserrootData } from "src/slices/userDataSlice";
 import { useGlobalData } from "src/providers/GlobalDataProvider";
@@ -28,8 +30,6 @@ import ServiceNameWithLogo from "components/ServiceNameWithLogo/ServiceNameWithL
 import TextConfirmationDialog from "components/TextConfirmationDialog/TextConfirmationDialog";
 import SubscriptionTypeDirectIcon from "components/Icons/SubscriptionType/SubscriptionTypeDirectIcon";
 import SubscriptionTypeInvitedIcon from "components/Icons/SubscriptionType/SubscriptionTypeInvitedIcon";
-import { Subscription } from "src/types/subscription";
-import { useSearchParams } from "next/navigation";
 
 const columnHelper = createColumnHelper<Subscription>();
 type Overlay =
@@ -43,7 +43,6 @@ const SubscriptionsPage = () => {
 
   const serviceId = searchParams?.get("serviceId");
   const servicePlanId = searchParams?.get("servicePlanId");
-  // const subscriptionId = searchParams?.get("subscriptionId");
 
   const [searchText, setSearchText] = useState<string>("");
   const [selectedRows, setSelectedRows] = useState<string[]>([]);
@@ -64,12 +63,7 @@ const SubscriptionsPage = () => {
   } = useGlobalData();
 
   useEffect(() => {
-    if (
-      serviceId &&
-      servicePlanId &&
-      !isFetchingSubscriptions &&
-      !isFetchingServiceOfferings
-    ) {
+    if (serviceId && servicePlanId) {
       setIsOverlayOpen(true);
       setOverlayType("manage-subscriptions");
     }
@@ -270,6 +264,7 @@ const SubscriptionsPage = () => {
               <ManageSubscriptionsForm
                 defaultServiceId={serviceId}
                 defaultServicePlanId={servicePlanId}
+                isFetchingServiceOfferings={isFetchingServiceOfferings}
               />
             ) : (
               <SubscriptionDetails

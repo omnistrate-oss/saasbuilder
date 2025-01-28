@@ -6,10 +6,12 @@ import { useEffect, useMemo, useState } from "react";
 import CardWithTitle from "components/Card/CardWithTitle";
 import Select from "components/FormElementsv2/Select/Select";
 import MenuItem from "components/FormElementsv2/MenuItem/MenuItem";
+import LoadingSpinner from "components/LoadingSpinner/LoadingSpinner";
 import FieldTitle from "components/FormElementsv2/FieldTitle/FieldTitle";
 import ServicePlanCard from "components/ServicePlanCard/ServicePlanCard";
 import ServicePlanDetails from "components/ServicePlanDetails/ServicePlanDetails";
 import FieldDescription from "components/FormElementsv2/FieldDescription/FieldDescription";
+import TextConfirmationDialog from "components/TextConfirmationDialog/TextConfirmationDialog";
 
 import useSnackbar from "src/hooks/useSnackbar";
 import { createSubscriptions, deleteSubscription } from "src/api/subscriptions";
@@ -19,6 +21,7 @@ import { createSubscriptionRequest } from "src/api/subscriptionRequests";
 const ManageSubscriptionsForm = ({
   defaultServiceId,
   defaultServicePlanId,
+  isFetchingServiceOfferings,
 }) => {
   const {
     serviceOfferings,
@@ -32,6 +35,7 @@ const ManageSubscriptionsForm = ({
   } = useGlobalData();
 
   const snackbar = useSnackbar();
+  const [isUnsubscribeDialogOpen, setIsUnsubscribeDialogOpen] = useState(false);
 
   const services = useMemo(() => {
     const servicesObj = serviceOfferings?.reduce((acc, offering) => {
@@ -56,7 +60,7 @@ const ManageSubscriptionsForm = ({
     defaultServicePlanId || services[0]?.productTierID || ""
   );
 
-  // Object of Subscriptions and Subscription Requests
+  // Object of Root Subscriptions and Subscription Requests
   const subscriptionsObj = useMemo(() => {
     return subscriptions?.reduce((acc, subscription) => {
       if (subscription.roleType === "root")
@@ -104,6 +108,7 @@ const ManageSubscriptionsForm = ({
   const unSubscribeMutation = useMutation(deleteSubscription, {
     onSuccess: () => {
       refetchSubscriptions();
+      setIsUnsubscribeDialogOpen(false);
       snackbar.showSuccess("Unsubscribed successfully");
     },
   });
@@ -116,6 +121,10 @@ const ManageSubscriptionsForm = ({
   }, [selectedServiceId, serviceOfferingsObj, selectedPlanId]);
 
   const selectedPlan = serviceOfferingsObj[selectedServiceId]?.[selectedPlanId];
+
+  if (isFetchingServiceOfferings) {
+    return <LoadingSpinner />;
+  }
 
   return (
     <div className="space-y-6">
@@ -149,7 +158,7 @@ const ManageSubscriptionsForm = ({
               servicePlan={plan}
               isSelected={selectedPlanId === plan.productTierID}
               setSelectedPlanId={setSelectedPlanId}
-              subscription={subscriptionsObj[plan.productTierID]}
+              rootSubscription={subscriptionsObj[plan.productTierID]}
               subscriptionRequest={subscriptionRequestsObj[plan.productTierID]}
               onSubscribeClick={() => {
                 subscribeMutation.mutate({
@@ -159,11 +168,7 @@ const ManageSubscriptionsForm = ({
                 });
               }}
               onUnsubscribeClick={() => {
-                if (!subscriptionsObj[plan.productTierID]?.id)
-                  return snackbar.showError("No subscription found");
-                unSubscribeMutation.mutate(
-                  subscriptionsObj[plan.productTierID]?.id
-                );
+                setIsUnsubscribeDialogOpen(true);
               }}
               isSubscribing={subscribeMutation.isLoading}
               isFetchingData={
@@ -175,12 +180,26 @@ const ManageSubscriptionsForm = ({
         </div>
       </CardWithTitle>
 
-      <CardWithTitle title={selectedPlan?.productTierName}>
-        <ServicePlanDetails
-          serviceOffering={selectedPlan}
-          subscription={subscriptionsObj[selectedPlan?.productTierID]}
-        />
-      </CardWithTitle>
+      <ServicePlanDetails serviceOffering={selectedPlan} />
+
+      <TextConfirmationDialog
+        open={isUnsubscribeDialogOpen}
+        handleClose={() => setIsUnsubscribeDialogOpen(false)}
+        onConfirm={async () => {
+          if (!subscriptionsObj[selectedPlanId]) {
+            return snackbar.showError("Please select a subscription");
+          }
+          await unSubscribeMutation.mutateAsync(
+            subscriptionsObj[selectedPlanId].id
+          );
+        }}
+        confirmationText="unsubscribe"
+        title="Unsubscribe Service"
+        buttonLabel="Unsubscribe"
+        isLoading={unSubscribeMutation.isLoading}
+        subtitle={`Are you sure you want to unsubscribe from ${subscriptionsObj[selectedPlanId]?.serviceName}?`}
+        message="To confirm, please enter <b>unsubscribe</b>, in the field below:"
+      />
     </div>
   );
 };

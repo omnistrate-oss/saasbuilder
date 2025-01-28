@@ -5,8 +5,8 @@ import DeleteIcon from "src/components/Icons/Delete/Delete";
 import EditIcon from "src/components/Icons/Edit/Edit";
 import SearchInput from "src/components/DataGrid/SearchInput";
 import RefreshWithToolTip from "src/components/RefreshWithTooltip/RefreshWithToolTip";
-import useSnackbar from "src/hooks/useSnackbar";
 import { colors } from "src/themeConfig";
+import PeeringInfoIcon from "app/(dashboard)/components/Icons/PeeringInfoIcon";
 
 const CustomNetworksTableHeader = ({
   count,
@@ -17,10 +17,9 @@ const CustomNetworksTableHeader = ({
   onPeeringInfoClick,
   onDeleteClick,
   onCreateClick,
+  onModifyClick,
   selectedRows,
 }) => {
-  const snackbar = useSnackbar();
-
   return (
     <div className="py-5 px-6 flex items justify-between gap-4">
       <DataGridHeaderTitle
@@ -45,32 +44,32 @@ const CustomNetworksTableHeader = ({
           disabled={isFetchingCustomNetworks}
         />
         <Button
+          variant={"outlined"}
+          disabled={selectedRows.length !== 1}
+          onClick={onModifyClick}
+          startIcon={<EditIcon disabled={selectedRows.length !== 1} />}
+          outlineColor={colors.green300}
+          disabledMessage="Please select a custom network"
+        >
+          Modify
+        </Button>
+        <Button
           variant="outlined"
           disabled={selectedRows.length !== 1}
-          onClick={() => {
-            if (!selectedRows.length)
-              return snackbar.showError(
-                "Please select a custom network to delete"
-              );
-            onDeleteClick();
-          }}
+          onClick={onDeleteClick}
           startIcon={<DeleteIcon disabled={selectedRows.length !== 1} />}
           outlineColor={colors.green300}
+          disabledMessage="Please select a custom network"
         >
           Delete
         </Button>
         <Button
           variant="outlined"
           disabled={selectedRows.length !== 1}
-          onClick={() => {
-            if (!selectedRows.length)
-              return snackbar.showError(
-                "Please select a custom network to view peering info"
-              );
-            onPeeringInfoClick();
-          }}
-          startIcon={<EditIcon disabled={selectedRows.length !== 1} />}
+          onClick={onPeeringInfoClick}
+          startIcon={<PeeringInfoIcon disabled={selectedRows.length !== 1} />}
           outlineColor={colors.green300}
+          disabledMessage="Please select a custom network"
         >
           Peering Info
         </Button>

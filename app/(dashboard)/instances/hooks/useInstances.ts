@@ -1,11 +1,16 @@
 import { useQuery } from "@tanstack/react-query";
 import { getAllResourceInstances } from "src/api/resourceInstance";
+import useEnvironmentType from "src/hooks/useEnvironmentType";
 
 const useInstances = (queryOptions = {}) => {
+  const environmentType = useEnvironmentType();
+
   const instancesQuery = useQuery(
     ["instances"],
     async () => {
-      return getAllResourceInstances();
+      return getAllResourceInstances({
+        environmentType,
+      });
     },
     {
       select: (data) => {

@@ -30,7 +30,11 @@ import useRegions from "./hooks/useRegions";
 import { cloudProviderLogoMap } from "src/constants/cloudProviders";
 
 const columnHelper = createColumnHelper<CustomNetwork>();
-type Overlay = "peering-info-dialog" | "custom-network-form" | "delete-dialog";
+type Overlay =
+  | "peering-info-dialog"
+  | "create-custom-network"
+  | "modify-custom-network"
+  | "delete-dialog";
 
 const CustomNetworksPage = () => {
   const snackbar = useSnackbar();
@@ -170,7 +174,11 @@ const CustomNetworksPage = () => {
             isFetchingCustomNetworks,
             selectedRows,
             onCreateClick: () => {
-              setOverlayType("custom-network-form");
+              setOverlayType("create-custom-network");
+              setIsOverlayOpen(true);
+            },
+            onModifyClick: () => {
+              setOverlayType("modify-custom-network");
               setIsOverlayOpen(true);
             },
           }}
@@ -184,14 +192,25 @@ const CustomNetworksPage = () => {
       <FullScreenDrawer
         title="Create Custom Network"
         description="Create a new custom network with the specified details"
-        open={isOverlayOpen && overlayType === "custom-network-form"}
+        open={
+          isOverlayOpen &&
+          ["create-custom-network", "modify-custom-network"].includes(
+            overlayType
+          )
+        }
         closeDrawer={() => setIsOverlayOpen(false)}
         RenderUI={
           <CustomNetworkForm
+            formMode={
+              overlayType === "create-custom-network" ? "create" : "modify"
+            }
             regions={regions}
             isFetchingRegions={isFetchingRegions}
             refetchCustomNetworks={refetchCustomNetworks}
             onClose={() => setIsOverlayOpen(false)}
+            selectedCustomNetwork={customNetworks.find(
+              (customNetwork) => customNetwork.id === selectedRows[0]
+            )}
           />
         }
       />

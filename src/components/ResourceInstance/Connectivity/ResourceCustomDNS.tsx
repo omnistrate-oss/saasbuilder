@@ -1,7 +1,9 @@
-import { Box } from "@mui/material";
+import { Box, Stack } from "@mui/material";
 import { useMemo } from "react";
 import PropertyTable from "./PropertyTable";
 import CustomDNS from "./CustomDNS";
+import Card from "src/components/Card/Card";
+import { Text } from "src/components/Typography/Typography";
 
 function ResourceCustomDNS(props) {
   const {
@@ -118,12 +120,24 @@ function ResourceCustomDNS(props) {
     removeCustomDNSMutation,
   ]);
 
-  return (
-    rows.length > 0 && (
-      <Box paddingTop={context === "fleet" ? "-10px" : "22px"}>
-        <PropertyTable data-testid="connectivity-table" rows={rows} />
-      </Box>
-    )
+  return rows.length === 0 ? (
+    <Card
+      mt={3}
+      sx={{
+        paddingTop: "12.5px",
+        paddingLeft: "20px",
+        paddingRight: "20px",
+        minHeight: "500px",
+      }}
+    >
+      <Stack direction="row" justifyContent="center" marginTop="200px">
+        <Text size="medium">{` Custom DNS configurations will be available once the instance setup process is complete. Please wait or revisit later.`}</Text>
+      </Stack>
+    </Card>
+  ) : (
+    <Box paddingTop={context === "fleet" ? "-10px" : "22px"}>
+      <PropertyTable data-testid="connectivity-table" rows={rows} />
+    </Box>
   );
 }
 

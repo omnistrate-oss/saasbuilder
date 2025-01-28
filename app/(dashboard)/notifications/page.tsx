@@ -237,6 +237,7 @@ const NotificationsPage = () => {
           fetchNextPage={fetchNextPage}
           isFetchingNextPage={isFetchingNextPage}
           pageSize={10}
+          rowId="id"
         />
       </div>
     </PageContainer>

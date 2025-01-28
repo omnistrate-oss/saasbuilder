@@ -9,7 +9,8 @@ function useResourcesInstanceIds(
   serviceModelKey,
   productTierKey,
   resources = [],
-  subscriptionId
+  subscriptionId,
+  enabled = true
 ) {
   const resourceKeys = resources.reduce((acc, curr) => {
     const { urlKey } = curr;
@@ -23,7 +24,8 @@ function useResourcesInstanceIds(
       serviceAPIVersion &&
       serviceEnvironmentKey &&
       serviceModelKey &&
-      subscriptionId
+      subscriptionId &&
+      enabled
   );
 
   const queryDependencies = {

@@ -1,10 +1,15 @@
 import { useQuery } from "@tanstack/react-query";
+import useEnvironmentType from "src/hooks/useEnvironmentType";
 import { listSubscriptionRequests } from "src/api/subscriptionRequests";
 
-function useSubscriptionRequests(queryParams = {}, queryOptions = {}) {
+function useSubscriptionRequests(queryOptions = {}) {
+  const environmentType = useEnvironmentType();
   const query = useQuery(
     ["subscription-requests"],
-    () => listSubscriptionRequests(queryParams),
+    () =>
+      listSubscriptionRequests({
+        environmentType,
+      }),
     {
       select: (response) => {
         return response.data.subscriptionRequests;

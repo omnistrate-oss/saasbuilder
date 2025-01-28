@@ -2,18 +2,17 @@
 
 import { useState } from "react";
 import DOMPurify from "isomorphic-dompurify";
-import { Stack, Tab, Tabs } from "@mui/material";
+import { Tab, Tabs } from "@mui/material";
 
 import CardWithTitle from "../Card/CardWithTitle";
 import APIDocumentation from "../APIDocumentation/APIDocumentation";
 import LoadingSpinnerSmall from "../CircularProgress/CircularProgress";
 
 import useDownloadCLI from "src/hooks/useDownloadCLI";
-
-type ServicePlanDetailsProps = {
-  serviceOffering?: any;
-  subscription?: any;
-};
+import { ServiceOffering } from "src/types/serviceOffering";
+import Button from "../Button/Button";
+import DownloadCLIIcon from "../Icons/DownloadCLI/DownloadCLIIcon";
+import { colors } from "src/themeConfig";
 
 type CurrentTab =
   | "plan-details"
@@ -23,77 +22,83 @@ type CurrentTab =
   | "api-documentation"
   | "download-cli";
 
-const tabLabels: any = {
+type ServicePlanDetailsProps = {
+  serviceOffering?: ServiceOffering;
+  startingTab?: CurrentTab;
+};
+
+const tabLabels = {
   "plan-details": "Plan Details",
   documentation: "Documentation",
   pricing: "Pricing",
   support: "Support",
   "api-documentation": "API Documentation",
-  "download-cli": "Download CLI",
 };
 
 const ServicePlanDetails: React.FC<ServicePlanDetailsProps> = ({
   serviceOffering,
-  subscription,
+  startingTab = "plan-details",
 }) => {
   const { downloadCLI, isDownloading } = useDownloadCLI();
-  const [currentTab, setCurrentTab] = useState<CurrentTab>("plan-details");
+  const [currentTab, setCurrentTab] = useState<CurrentTab>(startingTab);
 
   if (!serviceOffering) return null;
 
-  if (!subscription) {
-    delete tabLabels["api-documentation"];
-    delete tabLabels["download-cli"];
-  }
+  const actionButton = (
+    <Button
+      variant="outlined"
+      startIcon={<DownloadCLIIcon disabled={isDownloading} />}
+      outlineColor={colors.green300}
+      disabled={isDownloading}
+      onClick={() => {
+        downloadCLI(serviceOffering.serviceId, serviceOffering.serviceAPIID);
+      }}
+    >
+      Download CLI
+      {isDownloading && <LoadingSpinnerSmall />}
+    </Button>
+  );
 
   return (
-    <div>
+    <CardWithTitle
+      title={serviceOffering.productTierName}
+      actionButton={actionButton}
+    >
       <Tabs
         value={currentTab}
         centered
         sx={{
           mb: "32px",
           borderBottom: "1px solid #E9EAEB",
+          "& .MuiTabs-indicator": {
+            backgroundColor: colors.purple700,
+          },
         }}
       >
         {Object.keys(tabLabels).map((tab) => (
           <Tab
             key={tab}
             disabled={tab === "download-cli" && isDownloading}
-            label={
-              tab === "download-cli" ? (
-                <Stack direction="row" spacing={1} alignItems="center">
-                  <span>Download CLI</span>
-                  {isDownloading && <LoadingSpinnerSmall />}
-                </Stack>
-              ) : (
-                tabLabels[tab]
-              )
-            }
+            label={tabLabels[tab]}
             value={tab}
             onClick={() => {
-              if (tab === "download-cli") {
-                if (!isDownloading) {
-                  downloadCLI(
-                    serviceOffering.serviceId,
-                    serviceOffering.serviceAPIID,
-                    subscription?.id
-                  );
-                }
-              } else {
-                setCurrentTab(tab as CurrentTab);
-              }
+              setCurrentTab(tab as CurrentTab);
             }}
             sx={{
-              padding: "4px !important",
-              marginRight: "16px !important",
+              paddingY: "12px !important",
+              paddingX: "16px !important",
+              minWidth: "0px",
               textTransform: "none",
               fontWeight: "600",
               color: "#717680",
+              "&.Mui-selected": {
+                color: colors.purple700,
+              },
             }}
           />
         ))}
       </Tabs>
+
       {["plan-details", "documentation", "pricing", "support"].includes(
         currentTab
       ) && (
@@ -112,7 +117,8 @@ const ServicePlanDetails: React.FC<ServicePlanDetailsProps> = ({
                     : currentTab === "documentation"
                       ? serviceOffering.productTierDocumentation
                       : currentTab === "pricing"
-                        ? serviceOffering.productTierPricing?.value
+                        ? // @ts-ignore
+                          serviceOffering.productTierPricing?.value
                         : currentTab === "support"
                           ? serviceOffering.productTierSupport
                           : ""
@@ -123,13 +129,13 @@ const ServicePlanDetails: React.FC<ServicePlanDetailsProps> = ({
         </CardWithTitle>
       )}
 
-      {subscription && currentTab === "api-documentation" ? (
+      {currentTab === "api-documentation" && (
         <APIDocumentation
-          subscription={subscription}
+          serviceId={serviceOffering.serviceId}
           serviceAPIID={serviceOffering.serviceAPIID}
         />
-      ) : null}
-    </div>
+      )}
+    </CardWithTitle>
   );
 };
 

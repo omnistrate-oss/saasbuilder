@@ -7,6 +7,7 @@ import DataGridHeaderTitle from "components/Headers/DataGridHeaderTitle";
 import RefreshWithToolTip from "components/RefreshWithTooltip/RefreshWithToolTip";
 
 import { colors } from "src/themeConfig";
+import { CircularProgress } from "@mui/material";
 
 const CloudAccountsTableHeader = ({
   count,
@@ -31,6 +32,10 @@ const CloudAccountsTableHeader = ({
       />
 
       <div className="flex items-center gap-4">
+        <div className="flex items-center mr-6">
+          {isFetchingInstances && <CircularProgress size={20} />}
+        </div>
+
         <SearchInput
           placeholder="Search by ID"
           searchText={searchText}

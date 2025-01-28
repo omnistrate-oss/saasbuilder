@@ -8,6 +8,7 @@ import { useMutation } from "@tanstack/react-query";
 import { CloudAccountValidationSchema } from "../constants";
 import { FormConfiguration } from "components/DynamicForm/types";
 import GridDynamicForm from "components/DynamicForm/GridDynamicForm";
+import LoadingSpinner from "components/LoadingSpinner/LoadingSpinner";
 import useSnackbar from "src/hooks/useSnackbar";
 import {
   createResourceInstance,
@@ -18,19 +19,19 @@ import {
   getAwsBootstrapArn,
   getGcpServiceEmail,
 } from "src/utils/accountConfig/accountConfig";
-import { selectUserrootData } from "src/slices/userDataSlice";
-import {
-  getServiceMenuItems,
-  getSubscriptionMenuItems,
-} from "app/(dashboard)/instances/utils";
-import SubscriptionPlanRadio from "app/(dashboard)/components/SubscriptionPlanRadio/SubscriptionPlanRadio";
-import CloudProviderRadio from "app/(dashboard)/components/CloudProviderRadio/CloudProviderRadio";
-import { cloudProviderLogoMap } from "src/constants/cloudProviders";
-import CustomLabelDescription from "./CustomLabelDescription";
 import { ServiceOffering } from "src/types/serviceOffering";
+import { selectUserrootData } from "src/slices/userDataSlice";
+import { cloudProviderLogoMap } from "src/constants/cloudProviders";
+
+import { getServiceMenuItems } from "app/(dashboard)/instances/utils";
+import SubscriptionMenu from "app/(dashboard)/components/SubscriptionMenu/SubscriptionMenu";
+import CloudProviderRadio from "app/(dashboard)/components/CloudProviderRadio/CloudProviderRadio";
+import SubscriptionPlanRadio from "app/(dashboard)/components/SubscriptionPlanRadio/SubscriptionPlanRadio";
+import CustomLabelDescription from "./CustomLabelDescription";
 import { getInitialValues } from "../utils";
 
 const CloudAccountForm = ({
+  initialFormValues,
   onClose,
   formMode,
   selectedInstance,
@@ -68,6 +69,13 @@ const CloudAccountForm = ({
     }, {});
   }, [byoaServiceOfferings]);
 
+  // Find Subscriptions for BYOA Service Offerings
+  const byoaSubscriptions = useMemo(() => {
+    return subscriptions.filter(
+      (sub) => byoaServiceOfferingsObj[sub.serviceId]?.[sub.productTierId]
+    );
+  }, [subscriptions, byoaServiceOfferingsObj]);
+
   const createCloudAccountMutation = useMutation(createResourceInstance, {
     onSuccess: async (response: any) => {
       const values = formData.values;
@@ -102,14 +110,16 @@ const CloudAccountForm = ({
 
   const formData = useFormik({
     initialValues: getInitialValues(
+      initialFormValues,
       selectedInstance,
-      subscriptions,
+      byoaSubscriptions,
       byoaServiceOfferingsObj
     ),
+    enableReinitialize: true,
     validationSchema: CloudAccountValidationSchema,
     onSubmit: (values) => {
       const { serviceId, servicePlanId } = values;
-      const offering = serviceOfferingsObj[serviceId]?.[servicePlanId];
+      const offering = byoaServiceOfferingsObj[serviceId]?.[servicePlanId];
 
       let requestParams: Record<string, any>;
       if (values.cloudProvider === "aws") {
@@ -137,17 +147,17 @@ const CloudAccountForm = ({
       );
 
       if (!resource) {
-        return snackbar.showError("Resource not found");
+        return snackbar.showError("BYOA Resource not found");
       }
 
       const data = {
-        serviceProviderId: offering?.serviceProviderId,
-        serviceKey: offering?.serviceURLKey,
-        serviceAPIVersion: offering?.serviceAPIVersion,
-        serviceEnvironmentKey: offering?.serviceEnvironmentURLKey,
-        serviceModelKey: offering?.serviceModelURLKey,
-        productTierKey: offering?.productTierURLKey,
-        resourceKey: resource?.urlKey,
+        serviceProviderId: offering.serviceProviderId,
+        serviceKey: offering.serviceURLKey,
+        serviceAPIVersion: offering.serviceAPIVersion,
+        serviceEnvironmentKey: offering.serviceEnvironmentURLKey,
+        serviceModelKey: offering.serviceModelURLKey,
+        productTierKey: offering.productTierURLKey,
+        resourceKey: resource.urlKey,
         subscriptionId: values.subscriptionId,
         cloud_provider: values.cloudProvider,
         requestParams: requestParams,
@@ -163,9 +173,8 @@ const CloudAccountForm = ({
     const { serviceId, servicePlanId, cloudProvider } = values;
 
     const serviceMenuItems = getServiceMenuItems(byoaServiceOfferings);
-    const subscriptionMenuItems = getSubscriptionMenuItems(
-      subscriptions,
-      values.servicePlanId
+    const subscriptionMenuItems = byoaSubscriptions.filter(
+      (sub) => sub.productTierId === servicePlanId
     );
 
     const accountConfigurationMethods =
@@ -199,7 +208,7 @@ const CloudAccountForm = ({
                 // Otherwise, Reset the Service Plan and Subscription
 
                 const serviceId = e.target.value;
-                const filteredSubscriptions = subscriptions.filter(
+                const filteredSubscriptions = byoaSubscriptions.filter(
                   (sub) =>
                     sub.serviceId === serviceId &&
                     ["root", "editor"].includes(sub.roleType)
@@ -215,17 +224,22 @@ const CloudAccountForm = ({
                 const subscriptionId =
                   rootSubscription?.id || filteredSubscriptions[0]?.id || "";
 
-                setFieldValue("servicePlanId", servicePlanId);
-                setFieldValue("subscriptionId", subscriptionId);
-
                 const offering =
                   byoaServiceOfferingsObj[serviceId]?.[servicePlanId];
                 const cloudProvider = offering?.cloudProviders?.[0] || "";
+
+                setFieldValue("servicePlanId", servicePlanId);
+                setFieldValue("subscriptionId", subscriptionId);
                 setFieldValue("cloudProvider", cloudProvider);
                 setFieldValue(
                   "accountConfigurationMethod",
                   cloudProvider === "aws" ? "CloudFormation" : "Terraform"
                 );
+
+                // Set Field Touched to False
+                formData.setFieldTouched("servicePlanId", false);
+                formData.setFieldTouched("subscriptionId", false);
+                formData.setFieldTouched("cloudProvider", false);
               },
               previewValue: servicesObj[values.serviceId]?.serviceName,
             },
@@ -257,7 +271,7 @@ const CloudAccountForm = ({
                       cloudProvider === "aws" ? "CloudFormation" : "Terraform"
                     );
 
-                    const filteredSubscriptions = subscriptions.filter(
+                    const filteredSubscriptions = byoaSubscriptions.filter(
                       (sub) => sub.productTierId === servicePlanId
                     );
                     const rootSubscription = filteredSubscriptions.find(
@@ -268,6 +282,10 @@ const CloudAccountForm = ({
                       "subscriptionId",
                       rootSubscription?.id || filteredSubscriptions[0]?.id || ""
                     );
+
+                    // Set Field Touched to False
+                    formData.setFieldTouched("subscriptionId", false);
+                    formData.setFieldTouched("cloudProvider", false);
                   }}
                 />
               ),
@@ -279,18 +297,26 @@ const CloudAccountForm = ({
               label: "Subscription",
               subLabel: "Select the subscription",
               name: "subscriptionId",
-              type: "select",
               required: true,
-              disabled: formMode !== "create",
-              emptyMenuText: !serviceId
-                ? "Select a service"
-                : !servicePlanId
-                  ? "Select a subscription plan"
-                  : "No subscriptions available",
-              isLoading: isFetchingSubscriptions,
-              menuItems: subscriptionMenuItems,
-              previewValue: subscriptionsObj[values.subscriptionId]?.id,
               isHidden: subscriptionMenuItems.length === 1,
+              customComponent: (
+                <SubscriptionMenu
+                  field={{
+                    name: "subscriptionId",
+                    value: values.subscriptionId,
+                    isLoading: isFetchingSubscriptions,
+                    disabled: formMode !== "create",
+                    emptyMenuText: !serviceId
+                      ? "Select a service"
+                      : !servicePlanId
+                        ? "Select a subscription plan"
+                        : "No subscriptions available",
+                  }}
+                  formData={formData}
+                  subscriptions={subscriptionMenuItems}
+                />
+              ),
+              previewValue: subscriptionsObj[values.subscriptionId]?.id,
             },
             {
               label: "Cloud Provider",
@@ -381,6 +407,10 @@ const CloudAccountForm = ({
       ],
     };
   }, [formMode, subscriptions, byoaServiceOfferings, values]);
+
+  if (isFetchingServiceOfferings) {
+    return <LoadingSpinner />;
+  }
 
   return (
     <GridDynamicForm

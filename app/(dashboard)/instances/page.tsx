@@ -44,6 +44,7 @@ import GradientProgressBar from "components/GradientProgessBar/GradientProgressB
 import ServiceNameWithLogo from "components/ServiceNameWithLogo/ServiceNameWithLogo";
 import AccessSideRestoreInstance from "components/RestoreInstance/AccessSideRestoreInstance";
 import TextConfirmationDialog from "components/TextConfirmationDialog/TextConfirmationDialog";
+import CreateInstanceModal from "components/ResourceInstance/CreateInstanceModal/CreateInstanceModal";
 
 import SpeedoMeterLow from "public/assets/images/dashboard/resource-instance-speedo-meter/idle.png";
 import SpeedoMeterHigh from "public/assets/images/dashboard/resource-instance-speedo-meter/high.png";
@@ -57,7 +58,8 @@ type Overlay =
   | "remove-capacity-dialog"
   | "delete-dialog"
   | "restore-dialog"
-  | "generate-token-dialog";
+  | "generate-token-dialog"
+  | "create-instance-dialog";
 
 const InstancesPage = () => {
   const snackbar = useSnackbar();
@@ -66,6 +68,10 @@ const InstancesPage = () => {
     "create-instance-form"
   );
   const [isOverlayOpen, setIsOverlayOpen] = useState<boolean>(false);
+  const [createInstanceModalData, setCreateInstanceModalData] = useState<{
+    instanceId?: string;
+    isCustomDNS?: boolean;
+  }>({});
   const { subscriptionsObj, serviceOfferingsObj, isFetchingSubscriptions } =
     useGlobalData();
 
@@ -79,18 +85,14 @@ const InstancesPage = () => {
         id: "id",
         header: "Instance ID",
         cell: (data) => {
-          const {
-            id: instanceId,
-            subscriptionId,
-            detailedNetworkTopology = {},
-          } = data.row.original;
+          const { id: instanceId, subscriptionId } = data.row.original;
           const { serviceId, productTierId } =
             subscriptionsObj[subscriptionId as string] || {};
 
-          const [mainResourceId] =
-            Object.entries(detailedNetworkTopology).find(
-              ([, resource]) => resource.main
-            ) || [];
+          const mainResourceId = getMainResourceFromInstance(
+            data.row.original
+            // @ts-ignore
+          )?.id;
 
           const resourceInstanceUrlLink = getInstanceDetailsRoute({
             serviceId,
@@ -461,9 +463,11 @@ const InstancesPage = () => {
             formMode={
               overlayType === "create-instance-form" ? "create" : "modify"
             }
-            onClose={() => setIsOverlayOpen(false)}
             selectedInstance={selectedInstance}
             refetchInstances={refetchInstances}
+            setCreateInstanceModalData={setCreateInstanceModalData}
+            setIsOverlayOpen={setIsOverlayOpen}
+            setOverlayType={setOverlayType}
           />
         }
       />
@@ -532,6 +536,12 @@ const InstancesPage = () => {
         subscriptionId={selectedInstanceSubscription?.id}
         selectedInstanceId={selectedInstance?.id}
         networkType={selectedInstance?.network_type}
+      />
+
+      <CreateInstanceModal
+        open={isOverlayOpen && overlayType === "create-instance-dialog"}
+        handleClose={() => setIsOverlayOpen(false)}
+        data={createInstanceModalData}
       />
     </PageContainer>
   );

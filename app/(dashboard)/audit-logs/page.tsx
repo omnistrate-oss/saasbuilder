@@ -223,6 +223,7 @@ const AuditLogsPage = () => {
           fetchNextPage={fetchNextPage}
           isFetchingNextPage={isFetchingNextPage}
           pageSize={10}
+          rowId="id"
         />
       </div>
     </PageContainer>

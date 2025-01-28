@@ -38,8 +38,8 @@ const SubscriptionPlanCard = ({
   const card = (
     <div
       className={clsx(
-        "flex items-start justify-between gap-3 px-4 py-4 rounded-xl outline outline-[2px]",
-        isSelected ? "outline-purple-600" : "outline-gray-300",
+        "flex items-start justify-between gap-3 px-4 pt-4 pb-3 rounded-xl outline outline-[2px]",
+        isSelected ? "outline-success-500" : "outline-gray-300",
         (!subscriptions.length || disabled) && "bg-gray-50"
       )}
       style={{
@@ -228,7 +228,9 @@ const SubscriptionPlanRadio: React.FC<SubscriptionPlanRadioProps> = ({
           key={plan.productTierID}
           plan={plan}
           subscriptions={subscriptions.filter(
-            (sub) => sub.productTierId === plan.productTierID
+            (sub) =>
+              sub.productTierId === plan.productTierID &&
+              ["root", "editor"].includes(sub.roleType)
           )}
           subscriptionRequest={subscriptionRequestsObj[plan.productTierID]}
           onSubscribeClick={() =>

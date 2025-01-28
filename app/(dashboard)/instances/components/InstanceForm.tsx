@@ -6,15 +6,16 @@ import React, { useEffect, useMemo } from "react";
 import { useMutation } from "@tanstack/react-query";
 
 import { colors } from "src/themeConfig";
-import {
-  createResourceInstance,
-  updateResourceInstance,
-} from "src/api/resourceInstance";
 import useSnackbar from "src/hooks/useSnackbar";
 import { APIEntity } from "src/types/serviceOffering";
 import { useGlobalData } from "src/providers/GlobalDataProvider";
 import useAvailabilityZone from "src/hooks/query/useAvailabilityZone";
+import useResourcesInstanceIds from "src/hooks/useResourcesInstanceIds";
 import { describeServiceOfferingResource } from "src/api/serviceOffering";
+import {
+  createResourceInstance,
+  updateResourceInstance,
+} from "src/api/resourceInstance";
 
 import Button from "components/Button/Button";
 import Form from "components/FormElementsv2/Form/Form";
@@ -33,15 +34,17 @@ import {
   getStandardInformationFields,
 } from "./InstanceFormFields";
 import useCustomNetworks from "app/(dashboard)/custom-networks/hooks/useCustomNetworks";
-import useResourcesInstanceIds from "src/hooks/useResourcesInstanceIds";
 import { CloudProvider } from "src/types/common/enums";
+import { productTierTypes } from "src/constants/servicePlan";
 
 const InstanceForm = ({
   formMode,
-  onClose,
   instances,
   selectedInstance,
   refetchInstances,
+  setOverlayType,
+  setIsOverlayOpen,
+  setCreateInstanceModalData,
 }) => {
   const snackbar = useSnackbar();
   const {
@@ -64,11 +67,19 @@ const InstanceForm = ({
       return createResourceInstance(payload);
     },
     {
-      onSuccess: () => {
+      onSuccess: (response) => {
+        // Show the Create Instance Dialog
+        setIsOverlayOpen(true);
+        setOverlayType("create-instance-dialog");
+        setCreateInstanceModalData({
+          // @ts-ignore
+          isCustomDNS: formData.values.requestParams?.custom_dns_configuration,
+          instanceId: response.data?.id,
+        });
+
         snackbar.showSuccess("Instance created successfully");
         refetchInstances();
         formData.resetForm();
-        onClose();
       },
     }
   );
@@ -78,7 +89,7 @@ const InstanceForm = ({
       refetchInstances();
       formData.resetForm();
       snackbar.showSuccess("Updated Resource Instance");
-      onClose();
+      setIsOverlayOpen(false);
     },
   });
 
@@ -88,9 +99,12 @@ const InstanceForm = ({
       subscriptions,
       serviceOfferingsObj
     ),
+    enableReinitialize: true,
     validationSchema: yup.object({
       serviceId: yup.string().required("Service is required"),
-      servicePlanId: yup.string().required("Service Plan is required"),
+      servicePlanId: yup
+        .string()
+        .required("Plan with active subscription is required"),
       subscriptionId: yup.string().required("Subscription is required"),
       resourceId: yup.string().required("Resource is required"),
     }),
@@ -182,18 +196,25 @@ const InstanceForm = ({
           .filter((schemaParam) => schemaParam.required);
 
         data.cloud_provider = data.cloudProvider;
-        data.network_type = data.requestParams.network_type;
         data.custom_network_id = data.requestParams.custom_network_id;
+
+        const networkTypeFieldExists =
+          inputParametersObj["cloud_provider"] &&
+          offering?.productTierType !==
+            productTierTypes.OMNISTRATE_MULTI_TENANCY &&
+          offering?.supportsPublicNetwork;
 
         if (!data.cloudProvider && inputParametersObj["cloud_provider"]) {
           return snackbar.showError("Cloud Provider is required");
         } else if (!data.region && inputParametersObj["region"]) {
           return snackbar.showError("Region is required");
+        } else if (!data.network_type && networkTypeFieldExists) {
+          return snackbar.showError("Network Type is required");
         }
 
         for (const field of requiredFields) {
           if (data.requestParams[field.key] === undefined) {
-            snackbar.showError(`${field.key} is required`);
+            snackbar.showError(`${field.displayName || field.key} is required`);
             return;
           }
         }
@@ -266,18 +287,25 @@ const InstanceForm = ({
           .filter((schemaParam) => schemaParam.required);
 
         data.cloud_provider = data.cloudProvider;
-        data.network_type = data.requestParams.network_type;
         data.custom_network_id = data.requestParams.custom_network_id;
+
+        const networkTypeFieldExists =
+          inputParametersObj["cloud_provider"] &&
+          offering?.productTierType !==
+            productTierTypes.OMNISTRATE_MULTI_TENANCY &&
+          offering?.supportsPublicNetwork;
 
         if (!data.cloudProvider && inputParametersObj["cloud_provider"]) {
           return snackbar.showError("Cloud Provider is required");
         } else if (!data.region && inputParametersObj["region"]) {
           return snackbar.showError("Region is required");
+        } else if (!data.network_type && networkTypeFieldExists) {
+          return snackbar.showError("Network Type is required");
         }
 
         for (const field of requiredFields) {
           if (data.requestParams[field.key] === undefined) {
-            snackbar.showError(`${field.key} is required`);
+            snackbar.showError(`${field.displayName || field.key} is required`);
             return;
           }
         }
@@ -308,7 +336,12 @@ const InstanceForm = ({
   const {
     data: customAvailabilityZoneData,
     isLoading: isFetchingCustomAvailabilityZones,
-  } = useAvailabilityZone(values.region, values.cloudProvider as CloudProvider);
+  } = useAvailabilityZone(
+    values.region,
+    values.cloudProvider as CloudProvider,
+    // @ts-ignore
+    values.requestParams?.custom_availability_zone !== undefined
+  );
 
   const {
     isFetching: isFetchingResourceInstanceIds,
@@ -345,7 +378,7 @@ const InstanceForm = ({
   const customAvailabilityZones = useMemo(() => {
     const availabilityZones =
       customAvailabilityZoneData?.availabilityZones || [];
-    return availabilityZones?.sort(function (a, b) {
+    return availabilityZones.sort(function (a, b) {
       if (a.code < b.code) return -1;
       else if (a.code > b.code) {
         return 1;
@@ -441,7 +474,7 @@ const InstanceForm = ({
     [formData.values]
   );
 
-  if (isFetchingServiceOfferings || isFetchingSubscriptions) {
+  if (isFetchingServiceOfferings) {
     return <LoadingSpinner />;
   }
 
@@ -499,7 +532,7 @@ const InstanceForm = ({
       <div
         style={{
           position: "sticky",
-          top: "24px",
+          top: "104px",
           flex: 2,
           minHeight: "660px",
           border: `1px solid ${colors.purple600}`,
@@ -523,20 +556,19 @@ const InstanceForm = ({
           }}
           className="flex items-center gap-3"
         >
-          {onClose && (
-            <Button
-              data-testid="cancel-button"
-              variant="outlined"
-              onClick={onClose}
-              disabled={
-                createInstanceMutation.isLoading ||
-                updateResourceInstanceMutation.isLoading
-              }
-              sx={{ marginLeft: "auto" }} // Pushes the 2 buttons to the end
-            >
-              Cancel
-            </Button>
-          )}
+          <Button
+            data-testid="cancel-button"
+            variant="outlined"
+            onClick={() => setIsOverlayOpen(false)}
+            disabled={
+              createInstanceMutation.isLoading ||
+              updateResourceInstanceMutation.isLoading
+            }
+            sx={{ marginLeft: "auto" }} // Pushes the 2 buttons to the end
+          >
+            Cancel
+          </Button>
+
           <Button
             data-testid="submit-button"
             variant="contained"

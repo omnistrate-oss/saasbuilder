@@ -7,7 +7,6 @@ import {
   getRegionMenuItems,
   getResourceMenuItems,
   getServiceMenuItems,
-  getSubscriptionMenuItems,
 } from "../utils";
 
 import CloudProviderRadio from "../../components/CloudProviderRadio/CloudProviderRadio";
@@ -18,6 +17,8 @@ import { CustomNetwork } from "src/types/customNetwork";
 import { AvailabilityZone } from "src/types/availabilityZone";
 import { CloudProvider, FormMode } from "src/types/common/enums";
 import { APIEntity, ServiceOffering } from "src/types/serviceOffering";
+import SubscriptionMenu from "app/(dashboard)/components/SubscriptionMenu/SubscriptionMenu";
+import AccountConfigDescription from "./AccountConfigDescription";
 
 export const getStandardInformationFields = (
   servicesObj,
@@ -33,12 +34,12 @@ export const getStandardInformationFields = (
   customAvailabilityZones: AvailabilityZone[],
   isFetchingCustomAvailabilityZones: boolean
 ) => {
-  if (isFetchingServiceOfferings || isFetchingSubscriptions) return [];
-  const { values, setFieldValue } = formData;
+  if (isFetchingServiceOfferings) return [];
+
+  const { values, setFieldValue, setFieldTouched } = formData;
   const {
     serviceId,
     servicePlanId,
-    subscriptionId,
     resourceId,
     cloudProvider,
     region,
@@ -48,9 +49,8 @@ export const getStandardInformationFields = (
   const serviceMenuItems = getServiceMenuItems(serviceOfferings);
   const offering = serviceOfferingsObj[serviceId]?.[servicePlanId];
 
-  const subscriptionMenuItems = getSubscriptionMenuItems(
-    subscriptions,
-    servicePlanId
+  const subscriptionMenuItems = subscriptions.filter(
+    (sub) => sub.productTierId === servicePlanId
   );
 
   const resourceMenuItems = getResourceMenuItems(
@@ -116,6 +116,10 @@ export const getStandardInformationFields = (
         const resources = getResourceMenuItems(offering);
         setFieldValue("resourceId", resources[0]?.value || "");
         setFieldValue("requestParams", {});
+
+        setFieldTouched("servicePlanId", false);
+        setFieldTouched("subscriptionId", false);
+        setFieldTouched("resourceId", false);
       },
       previewValue: servicesObj[values.serviceId]?.serviceName,
     },
@@ -166,6 +170,9 @@ export const getStandardInformationFields = (
               "subscriptionId",
               rootSubscription?.id || filteredSubscriptions[0]?.id || ""
             );
+
+            setFieldTouched("subscriptionId", false);
+            setFieldTouched("resourceId", false);
           }}
         />
       ),
@@ -175,17 +182,26 @@ export const getStandardInformationFields = (
       label: "Subscription",
       subLabel: "Select the subscription",
       name: "subscriptionId",
-      type: "select",
       required: true,
-      disabled: formMode !== "create",
-      emptyMenuText: !serviceId
-        ? "Select a service"
-        : !servicePlanId
-          ? "Select a subscription plan"
-          : "No subscriptions available",
-      menuItems: subscriptionMenuItems,
-      previewValue: subscriptionsObj[subscriptionId]?.id,
       isHidden: subscriptionMenuItems.length === 1,
+      customComponent: (
+        <SubscriptionMenu
+          field={{
+            name: "subscriptionId",
+            value: values.subscriptionId,
+            isLoading: isFetchingSubscriptions,
+            disabled: formMode !== "create",
+            emptyMenuText: !serviceId
+              ? "Select a service"
+              : !servicePlanId
+                ? "Select a subscription plan"
+                : "No subscriptions available",
+          }}
+          formData={formData}
+          subscriptions={subscriptionMenuItems}
+        />
+      ),
+      previewValue: subscriptionsObj[values.subscriptionId]?.id,
     },
     {
       label: "Resource Type",
@@ -315,7 +331,6 @@ export const getNetworkConfigurationFields = (
   const customNetworkFieldExists = inputParametersObj["custom_network_id"];
 
   const networkTypeFieldExists =
-    inputParametersObj["network_type"] &&
     cloudProviderFieldExists &&
     !isMultiTenancy &&
     offering?.supportsPublicNetwork;
@@ -324,8 +339,8 @@ export const getNetworkConfigurationFields = (
     fields.push({
       label: "Network",
       subLabel: "Type of Network",
-      name: "requestParams.network_type",
-      value: values.requestParams.network_type || "",
+      name: "network_type",
+      value: values.network_type || "",
       type: "radio",
       required: true,
       disabled: formMode !== "create",
@@ -333,7 +348,7 @@ export const getNetworkConfigurationFields = (
         { label: "Public", value: "PUBLIC" },
         { label: "Internal", value: "INTERNAL" },
       ],
-      previewValue: values.requestParams.network_type,
+      previewValue: values.network_type,
     });
   }
 
@@ -398,7 +413,7 @@ export const getDeploymentConfigurationFields = (
         type: "password",
         required: formMode !== "modify" && param.required,
         showPasswordGenerator: true,
-        previewValue: "*********",
+        previewValue: values.requestParams[param.key] ? "********" : "",
       });
     } else if (
       param.dependentResourceID &&
@@ -421,7 +436,7 @@ export const getDeploymentConfigurationFields = (
         })),
         required: formMode !== "modify" && param.required,
         isLoading: isFetchingResourceInstanceIds,
-        emptyMenuText: "No dependent resources available",
+        emptyMenuText: "No dependent instances available",
         previewValue: values.requestParams[param.key],
       });
     } else if (param.type === "Boolean") {
@@ -469,6 +484,13 @@ export const getDeploymentConfigurationFields = (
         label: param.displayName || param.key,
         subLabel: param.description,
         name: `requestParams.${param.key}`,
+        description: (
+          <AccountConfigDescription
+            serviceId={values.serviceId}
+            servicePlanId={values.servicePlanId}
+            subscriptionId={values.subscriptionId}
+          />
+        ),
         value: values.requestParams[param.key] || "",
         type: "select",
         menuItems: cloudAccountInstances.map((config) => ({
@@ -480,6 +502,7 @@ export const getDeploymentConfigurationFields = (
         previewValue: cloudAccountInstances.find(
           (config) => config.id === values.requestParams[param.key]
         )?.label,
+        emptyMenuText: "No cloud accounts available",
       });
     } else {
       if (
@@ -518,6 +541,8 @@ export const getDeploymentConfigurationFields = (
             ) : (
               param.description
             ),
+          disabled:
+            param.key === "custom_dns_configuration" && formMode !== "create", // Special case for custom DNS configuration
           name: `requestParams.${param.key}`,
           value: values.requestParams[param.key] || "",
           type: "text-multiline",

@@ -58,29 +58,6 @@ export const getServicePlanMenuItems = (
   return menuItems.sort((a, b) => a.label.localeCompare(b.label));
 };
 
-export const getSubscriptionMenuItems = (
-  subscriptions: Subscription[],
-  servicePlanId: string
-) => {
-  const menuItems: MenuItem[] = [];
-  if (!subscriptions?.length) {
-    return menuItems;
-  }
-
-  subscriptions.forEach((subscription) => {
-    if (subscription.productTierId === servicePlanId) {
-      menuItems.push({
-        value: subscription.id,
-        label: subscription.id,
-        disabled: !["editor", "root"].includes(subscription.roleType),
-        disabledMessage: "Cannot create instances under this subscription",
-      });
-    }
-  });
-
-  return menuItems.sort((a, b) => a.label.localeCompare(b.label));
-};
-
 export const getResourceMenuItems = (offering: ServiceOffering) => {
   const menuItems: MenuItem[] = [];
 
@@ -197,17 +174,25 @@ export const getInitialValues = (
       (sub) => sub.id === instance?.subscriptionId
     );
 
+    const requestParams: any = { ...(instance.result_params as object) };
+    if (instance.network_type) {
+      requestParams.network_type = instance.network_type;
+    }
+
+    if (instance.customNetworkDetail) {
+      requestParams.custom_network_id = instance.customNetworkDetail.id;
+    }
+
     return {
       serviceId: subscription?.serviceId || "",
       servicePlanId: subscription?.productTierId || "",
-      subscriptionId: instance?.subscriptionId || "",
+      subscriptionId: instance.subscriptionId || "",
       // @ts-ignore
       resourceId: getMainResourceFromInstance(instance)?.id || "",
-      cloudProvider: instance?.cloud_provider || "",
-      region: instance?.region || "",
-      requestParams: {
-        ...(instance?.result_params || {}),
-      },
+      cloudProvider: instance.cloud_provider,
+      region: instance.region,
+      network_type: instance.network_type || "",
+      requestParams,
     };
   }
 
@@ -250,6 +235,7 @@ export const getInitialValues = (
     resourceId: resources[0]?.value || "",
     cloudProvider,
     region: region || "",
+    network_type: "",
     requestParams: {},
   };
 };

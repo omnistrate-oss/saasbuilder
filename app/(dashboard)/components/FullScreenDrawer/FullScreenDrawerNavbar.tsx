@@ -18,7 +18,7 @@ const FullScreenDrawerNavbar: React.FC<FullScreenDrawerNavbarProps> = ({
   }
 
   return (
-    <div className="bg-[#FFFFFF] border-b border-[#E9EAEB]">
+    <div className="bg-[#FFFFFF] border-b border-[#E9EAEB] sticky top-0 z-10">
       <div className="max-w-[84rem] py-2.5 px-4 mx-auto flex items-center justify-between gap-6">
         <div>
           <DisplayText
@@ -37,11 +37,7 @@ const FullScreenDrawerNavbar: React.FC<FullScreenDrawerNavbarProps> = ({
           )}
         </div>
 
-        <button
-          className="flex items-center gap-1.5 p-1"
-          onClick={closeDrawer}
-          autoFocus
-        >
+        <button className="flex items-center gap-1.5 p-1" onClick={closeDrawer}>
           <Text size="small" weight="semibold" color="#414651">
             Close
           </Text>

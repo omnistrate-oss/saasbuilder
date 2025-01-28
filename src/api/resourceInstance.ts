@@ -376,8 +376,8 @@ export const removeCapacityResourceInstanceAccess = ({ data, count }) => {
   );
 };
 
-export const getAllResourceInstances = (): Promise<
-  AxiosResponse<ListAllResourceInstancesSuccessResponse>
-> => {
-  return axios.get("/resource-instance");
+export const getAllResourceInstances = (
+  params = {}
+): Promise<AxiosResponse<ListAllResourceInstancesSuccessResponse>> => {
+  return axios.get("/resource-instance", { params });
 };
