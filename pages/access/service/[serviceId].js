@@ -74,7 +74,7 @@ import Tooltip from "src/components/Tooltip/Tooltip";
 import ViewInstructionsIcon from "src/components/Icons/AccountConfig/ViewInstrcutionsIcon";
 import DeleteAccountConfigConfirmationDialog from "src/components/DeleteAccountConfigConfirmationDialog/DeleteAccountConfigConfirmationDialog";
 import { selectUserrootData } from "src/slices/userDataSlice";
-import { deepClone } from "lodash";
+import { cloneDeep } from "lodash";
 import { calculateInstanceHealthPercentage } from "src/utils/instanceHealthPercentage";
 import AccessServiceHealthStatus from "src/components/ServiceHealthStatus/AccessServiceHealthStatus";
 import AccessSideRestoreInstance from "src/components/RestoreInstance/AccessSideRestoreInstance";
