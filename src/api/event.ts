@@ -9,7 +9,7 @@ export function getResourceInstanceEvents(resourceInstanceId, subscriptionId) {
     queryParams.subscriptionId = subscriptionId;
   }
 
-  return axios.get(`/resource-instance/${resourceInstanceId}/event`, {
+  return axios.get(`/resource-instance/${resourceInstanceId}/audit-events`, {
     params: queryParams,
   });
 }
@@ -20,7 +20,7 @@ export function getEvent(eventId, subscriptionId) {
   if (subscriptionId) {
     queryParams.subscriptionId = subscriptionId;
   }
-  return axios.get(`/resource-instance/event/${eventId}`, {
+  return axios.get(`/resource-instance/audit-events/${eventId}`, {
     params: queryParams,
   });
 }
@@ -40,7 +40,7 @@ export function getAllEvents(
     queryParams.subscriptionId = subscriptionId;
   }
   return axios.get(
-    `/resource-instance/${serviceProviderId}/${serviceURLKey}/${serviceAPIVersion}/${serviceEnvironmentURLKey}/${serviceModelURLKey}/${productTierURLKey}/event`,
+    `/resource-instance/${serviceProviderId}/${serviceURLKey}/${serviceAPIVersion}/${serviceEnvironmentURLKey}/${serviceModelURLKey}/${productTierURLKey}/audit-events`,
     {
       params: queryParams,
     }
