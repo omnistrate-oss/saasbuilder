@@ -74,7 +74,7 @@ import Tooltip from "src/components/Tooltip/Tooltip";
 import ViewInstructionsIcon from "src/components/Icons/AccountConfig/ViewInstrcutionsIcon";
 import DeleteAccountConfigConfirmationDialog from "src/components/DeleteAccountConfigConfirmationDialog/DeleteAccountConfigConfirmationDialog";
 import { selectUserrootData } from "src/slices/userDataSlice";
-import { cloneDeep } from "lodash";
+import { deepClone } from "lodash";
 import { calculateInstanceHealthPercentage } from "src/utils/instanceHealthPercentage";
 import AccessServiceHealthStatus from "src/components/ServiceHealthStatus/AccessServiceHealthStatus";
 import AccessSideRestoreInstance from "src/components/RestoreInstance/AccessSideRestoreInstance";
@@ -791,16 +791,7 @@ function MarketplaceService() {
     },
     enableReinitialize: true,
     onSubmit: (values) => {
-      const data = {};
-      for (const key in values) {
-        if (values[key]) {
-          if (values[key] === "requestParams") {
-            data["requestParams"] = cloneDeep(values["requestParams"]);
-          } else {
-            data[key] = values[key];
-          }
-        }
-      }
+      const data = deepClone(values);
 
       async function getSchema() {
         try {
