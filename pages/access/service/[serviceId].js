@@ -791,7 +791,7 @@ function MarketplaceService() {
     },
     enableReinitialize: true,
     onSubmit: (values) => {
-      const data = deepClone(values);
+      const data = cloneDeep(values);
 
       async function getSchema() {
         try {
