@@ -33,7 +33,7 @@ function getInstanceNodes(
 
 export function getInstanceHealthStatus(
   detailedNetworkTopology: Record<string, ResourceInstanceNetworkTopology> = {},
-  instanceLifecycleStatus: string
+  instanceLifecycleStatus: string | undefined
 ): InstanceComputedHealthStatus {
   let isCLIManagedResource = false;
 

@@ -3,7 +3,12 @@ import { CloudProvider } from "src/types/common/enums";
 import { CustomNetwork } from "src/types/customNetwork";
 import { MenuItem } from "src/types/common/generalTypes";
 import { ServiceOffering } from "src/types/serviceOffering";
-import { ResourceInstance } from "src/types/resourceInstance";
+import {
+  ResourceInstance,
+  InstanceComputedHealthStatus,
+} from "src/types/resourceInstance";
+import { SxProps } from "@mui/material";
+import { instaceHealthStatusMap } from "src/constants/statusChipStyles/resourceInstanceHealthStatus";
 
 export const getServiceMenuItems = (serviceOfferings: ServiceOffering[]) => {
   const menuItems: MenuItem[] = [];
@@ -226,4 +231,37 @@ export const getInitialValues = (
     network_type: "",
     requestParams: {},
   };
+};
+
+export const getRowBorderStyles = () => {
+  const styles: Record<string, SxProps> = {};
+
+  for (const status in instaceHealthStatusMap) {
+    const colorMap: Record<InstanceComputedHealthStatus, string> = {
+      DEGRADED: "#F79009",
+      HEALTHY: "#17B26A",
+      UNHEALTHY: "#F04438",
+      UNKNOWN: "#363F72",
+      NA: "#676b83",
+    };
+
+    const color = colorMap[status as InstanceComputedHealthStatus];
+
+    styles[`& .${status} td:first-child`] = {
+      position: "relative",
+    };
+
+    styles[`& .${status} td:first-child::before`] = {
+      content: '""',
+      height: "38px",
+      width: "4px",
+      background: color,
+      transform: "translateY(1px)",
+      position: "absolute",
+      borderTopRightRadius: "3px",
+      borderBottomRightRadius: "3px",
+      left: 0,
+    };
+  }
+  return styles;
 };

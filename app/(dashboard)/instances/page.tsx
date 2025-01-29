@@ -5,16 +5,14 @@ import { Stack } from "@mui/material";
 import { useMemo, useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { createColumnHelper } from "@tanstack/react-table";
-
 import useInstances from "./hooks/useInstances";
 import InstanceForm from "./components/InstanceForm";
-import { getMainResourceFromInstance } from "./utils";
+import { getMainResourceFromInstance, getRowBorderStyles } from "./utils";
 import PageTitle from "../components/Layout/PageTitle";
 import InstancesIcon from "../components/Icons/InstancesIcon";
 import PageContainer from "../components/Layout/PageContainer";
 import InstancesTableHeader from "./components/InstancesTableHeader";
 import FullScreenDrawer from "../components/FullScreenDrawer/FullScreenDrawer";
-
 import useSnackbar from "src/hooks/useSnackbar";
 import formatDateUTC from "src/utils/formatDateUTC";
 import {
@@ -488,6 +486,14 @@ const InstancesPage = () => {
           selectedRows={selectedRows}
           onRowSelectionChange={setSelectedRows}
           selectionMode="single"
+          getRowClassName={(rowData) => {
+            const healthStatus = getInstanceHealthStatus(
+              rowData.detailedNetworkTopology,
+              rowData.status
+            );
+            return healthStatus;
+          }}
+          tableStyles={{ ...getRowBorderStyles() }}
         />
       </div>
 
