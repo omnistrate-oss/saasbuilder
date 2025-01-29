@@ -792,7 +792,7 @@ function MarketplaceService() {
     enableReinitialize: true,
     onSubmit: (values) => {
       const data = cloneDeep(values);
-
+      setIsCustomDNS(false);
       async function getSchema() {
         try {
           let schemaArray = [];
