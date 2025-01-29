@@ -133,21 +133,17 @@ export const getCustomNetworksMenuItems = (
   }));
 };
 
-export const getMainResourceFromInstance = (instance?: ResourceInstance) => {
-  if (!instance) {
+export const getMainResourceFromInstance = (
+  instance?: ResourceInstance,
+  offering?: ServiceOffering
+) => {
+  if (!instance || !offering) {
     return null;
   }
 
-  const { detailedNetworkTopology = {} } = instance;
-  const [mainResourceId, mainResource] =
-    Object.entries(detailedNetworkTopology).find(
-      ([, resource]: any) => resource.main
-    ) || [];
-
-  if (mainResource) {
-    // @ts-ignore
-    mainResource.id = mainResourceId;
-  }
+  const mainResource = offering.resourceParameters.find(
+    (resource) => resource.resourceId === instance.resourceID
+  );
 
   return mainResource;
 };

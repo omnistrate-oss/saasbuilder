@@ -2,6 +2,7 @@
 
 import * as yup from "yup";
 import { useFormik } from "formik";
+import { cloneDeep } from "lodash";
 import React, { useEffect, useMemo } from "react";
 import { useMutation } from "@tanstack/react-query";
 
@@ -116,7 +117,7 @@ const InstanceForm = ({
       );
 
       const data: any = {
-        ...values,
+        ...cloneDeep(values),
         serviceProviderId: offering?.serviceProviderId,
         serviceKey: offering?.serviceURLKey,
         serviceAPIVersion: offering?.serviceAPIVersion,
@@ -210,6 +211,16 @@ const InstanceForm = ({
           return snackbar.showError("Region is required");
         } else if (!data.network_type && networkTypeFieldExists) {
           return snackbar.showError("Network Type is required");
+        }
+
+        if (
+          inputParametersObj["custom_dns_configuration"] &&
+          data.requestParams["custom_dns_configuration"]
+        ) {
+          data.requestParams.custom_dns_configuration = {
+            [selectedResource?.urlKey || ""]:
+              data.requestParams.custom_dns_configuration,
+          };
         }
 
         for (const field of requiredFields) {
