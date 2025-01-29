@@ -78,21 +78,20 @@ const InstancesPage = () => {
     return [
       columnHelper.accessor("id", {
         id: "id",
-        header: "Instance ID",
+        header: "Deployment ID",
         cell: (data) => {
-          const { id: instanceId, subscriptionId } = data.row.original;
+          const {
+            id: instanceId,
+            subscriptionId,
+            resourceID,
+          } = data.row.original;
           const { serviceId, productTierId } =
             subscriptionsObj[subscriptionId as string] || {};
-
-          const mainResourceId = getMainResourceFromInstance(
-            data.row.original
-            // @ts-ignore
-          )?.id;
 
           const resourceInstanceUrlLink = getInstanceDetailsRoute({
             serviceId,
             servicePlanId: productTierId,
-            resourceId: mainResourceId,
+            resourceId: resourceID as string,
             instanceId: instanceId as string,
             subscriptionId: subscriptionId as string,
           });
@@ -143,7 +142,16 @@ const InstancesPage = () => {
         }
       ),
       columnHelper.accessor(
-        (row) => getMainResourceFromInstance(row)?.resourceName,
+        (row) => {
+          const subscription = subscriptionsObj[row.subscriptionId as string];
+          const offering =
+            serviceOfferingsObj[subscription?.serviceId as string]?.[
+              subscription?.productTierId as string
+            ];
+
+          const mainResource = getMainResourceFromInstance(row, offering);
+          return mainResource?.name || "-";
+        },
         {
           id: "resourceName",
           header: "Resource Type",
@@ -179,7 +187,10 @@ const InstancesPage = () => {
           const status = row.status;
           const detailedNetworkTopology = row.detailedNetworkTopology;
           const healthStatus = getInstanceHealthStatus(
-            detailedNetworkTopology,
+            detailedNetworkTopology as Record<
+              string,
+              ResourceInstanceNetworkTopology
+            >,
             status as string
           );
           return healthStatus;
@@ -364,7 +375,11 @@ const InstancesPage = () => {
   const unhealthyInstances = useMemo(() => {
     return nonBYOAInstances.filter((instance) => {
       const instanceHealthStatus = getInstanceHealthStatus(
-        instance.detailedNetworkTopology,
+        instance.detailedNetworkTopology as Record<
+          string,
+          ResourceInstanceNetworkTopology
+        >,
+
         instance.status as string
       );
       if (instanceHealthStatus === "UNHEALTHY") return true;
@@ -413,8 +428,11 @@ const InstancesPage = () => {
 
   // Resource of the Selected Instance
   const selectedResource = useMemo(() => {
-    return getMainResourceFromInstance(selectedInstance);
-  }, [selectedInstance]);
+    return getMainResourceFromInstance(
+      selectedInstance,
+      selectedInstanceOffering
+    );
+  }, [selectedInstance, selectedInstanceOffering]);
 
   const selectedInstanceData = useMemo(() => {
     return {
@@ -426,7 +444,7 @@ const InstancesPage = () => {
       serviceEnvironmentKey: selectedInstanceOffering?.serviceEnvironmentURLKey,
       serviceModelKey: selectedInstanceOffering?.serviceModelURLKey,
       productTierKey: selectedInstanceOffering?.productTierURLKey,
-      resourceKey: selectedResource?.resourceKey as string,
+      resourceKey: selectedResource?.urlKey as string,
       subscriptionId: selectedInstanceSubscription?.id,
     };
   }, [
@@ -488,7 +506,10 @@ const InstancesPage = () => {
           selectionMode="single"
           getRowClassName={(rowData) => {
             const healthStatus = getInstanceHealthStatus(
-              rowData.detailedNetworkTopology,
+              rowData.detailedNetworkTopology as Record<
+                string,
+                ResourceInstanceNetworkTopology
+              >,
               rowData.status
             );
             return healthStatus;

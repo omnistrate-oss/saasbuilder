@@ -65,27 +65,53 @@ const ResourceConnectivityEndpoint: FC<ResourceConnectivityEndpointProps> = (
       (item) => item.resourceName === resourceName
     );
 
+    const parsePorts = (portsString: string): number[] | string[] => {
+      if (portsString.includes("-")) {
+        const [start, end] = portsString
+          .split("-")
+          .map((part) => Number(part.trim()));
+        if (!isNaN(start) && !isNaN(end) && start <= end) {
+          // Return the original range string
+          return [portsString];
+        }
+      }
+      // Split comma-separated values into numbers
+      return portsString
+        .split(",")
+        .map((port) => Number(port.trim()))
+        .filter((port) => !isNaN(port));
+    };
+
     const portValues =
       typeof selectedPortItem?.ports === "string"
-        ? selectedPortItem.ports.split(",").map((port) => Number(port.trim()))
+        ? parsePorts(selectedPortItem.ports)
         : Array.isArray(selectedPortItem?.ports)
           ? selectedPortItem.ports.map((port) =>
               typeof port === "string" ? Number(port.trim()) : port
             )
           : typeof ports === "string"
-            ? ports.split(",").map((port) => Number(port.trim()))
+            ? parsePorts(ports)
             : [];
 
-    return portValues.filter((port) => !isNaN(port));
+    return portValues;
   }, [ports, resourceName]);
 
-  const sortedPortsArray = portsArray.sort((a, b) => {
-    if (a === 443) return -1; // Ensure 443 comes first
-    if (b === 443) return 1;
-    if (a === 80) return -1; // Ensure 80 comes after 443
-    if (b === 80) return 1;
-    return 0; // Keep the rest in their original order
-  });
+  const sortedPortsArray = Array.isArray(portsArray)
+    ? portsArray.sort((a, b) => {
+        // If either value is a string, do not sort
+        if (typeof a === "string" || typeof b === "string") return 0;
+
+        // Sort 443 to come first
+        if (a === 443) return -1;
+        if (b === 443) return 1;
+
+        // Sort 80 to come after 443
+        if (a === 80) return -1;
+        if (b === 80) return 1;
+
+        return 0; // Keep other numbers in their original order
+      })
+    : portsArray; // If not an array, return as is
 
   const portEndpoint = { 443: "https://", 80: "http://" };
 

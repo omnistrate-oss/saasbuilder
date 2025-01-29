@@ -78,7 +78,7 @@ function ResourceInstanceDetails(props) {
   const instanceInfoData = useMemo(() => {
     const res = [
       {
-        label: "Instance ID",
+        label: "Deployment ID",
         value: resourceInstanceId,
       },
       {

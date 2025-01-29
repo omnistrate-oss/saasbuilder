@@ -1,6 +1,6 @@
 import React, { FC, ReactNode, useState } from "react";
 import Collapse from "@mui/material/Collapse";
-import { Box, Stack } from "@mui/material";
+import { Box, CircularProgress, Stack } from "@mui/material";
 import {
   ColumnDef,
   ExpandedState,
@@ -23,7 +23,6 @@ import {
   TableRow,
 } from "./components/styled";
 import Pagination from "./components/Pagination";
-import LoadingSpinner from "../LoadingSpinner/LoadingSpinner";
 import { SetState } from "src/types/common/reactGenerics";
 
 type InfiniteData<TData> = {
@@ -178,7 +177,7 @@ const CursorPaginatedDataTable = <TData,>(
     <TableContainer sx={{ borderRadius: "8px" }}>
       <HeaderComponent {...headerProps} />
       <Stack minHeight="605px" justifyContent="space-between">
-        <Box sx={{ overflowX: "auto", flexGrow: 1 }}>
+        <Box sx={{ overflowX: "auto", flexGrow: 1, position: "relative" }}>
           <Table sx={{ tableLayout: "fixed", width: "100%" }}>
             {table.getHeaderGroups().map((headerGroup) => (
               <colgroup key={headerGroup.id}>
@@ -295,19 +294,23 @@ const CursorPaginatedDataTable = <TData,>(
                 ))}
             </TableBody>
           </Table>
+
+          {(rows.length === 0 || isLoading) && (
+            <Stack
+              position="sticky"
+              top="50%"
+              left="50%"
+              fontSize="14px"
+              display="inline-block"
+              sx={{
+                transform: "translateX(-50%) translateY(-50%)",
+              }}
+            >
+              {isLoading ? <CircularProgress /> : noRowsText}
+            </Stack>
+          )}
         </Box>
 
-        {(rows.length === 0 || isLoading) && (
-          <Stack
-            justifyContent="center"
-            alignItems="center"
-            fontSize="14px"
-            flexGrow={1}
-            height="480px"
-          >
-            {isLoading ? <LoadingSpinner /> : noRowsText}
-          </Stack>
-        )}
         <Pagination
           isPreviousDisabled={!table.getCanPreviousPage() || isLoading}
           isNextDisabled={
