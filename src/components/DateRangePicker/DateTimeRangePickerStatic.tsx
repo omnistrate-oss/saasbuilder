@@ -7,6 +7,7 @@ import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import Button from "../Button/Button";
 import { DateRange as ReactDateRange, Range } from "react-date-range";
+import "react-date-range/dist/styles.css"; // main css file
 import { themeConfig } from "src/themeConfig";
 import { ChevronLeft } from "@mui/icons-material";
 import Radio from "../FormElementsv2/Radio/Radio";
@@ -26,7 +27,7 @@ dayjs.extend(utc);
 const StyledIconCard = styled(Box)({
   padding: "8px",
   borderRadius: "8px",
-  border: `1px solid ${themeConfig.colors.gray200}`,
+  border: `1px solid ${themeConfig.colors.green300}`,
   boxShadow: `box-shadow: 0px 1px 2px 0px #0A0D120D, 0px -2px 0px 0px #0A0D120D inset, 0px 0px 0px 1px #0A0D122E inset`,
   display: "flex",
   justifyContent: "center",
@@ -77,6 +78,7 @@ type DateRangePickerStaticProps = {
   dateRange: DateRange;
   setDateRange: SetState<DateRange>;
   handleCancel: () => void;
+  handleClear: () => void;
 };
 
 export const initialRangeState: DateRange = {
@@ -120,6 +122,7 @@ const relativeRangeOptions: RelativeRangeOption[] = [
 const RelativeRange = ({
   setDateRange,
   handleCancel,
+  handleClear,
 }: DateRangePickerStaticProps) => {
   const [selectedValue, setSelectedValue] = useState<number | null>(null);
 
@@ -127,7 +130,10 @@ const RelativeRange = ({
     if (selectedValue) {
       const endDate = new Date();
       const startDate = addMilliseconds(endDate, -selectedValue);
-      setDateRange({ startDate, endDate });
+      setDateRange({
+        startDate: startDate.toISOString(),
+        endDate: endDate.toISOString(),
+      });
     } else {
       setDateRange({ startDate: undefined, endDate: undefined });
     }
@@ -135,6 +141,11 @@ const RelativeRange = ({
 
   const handleSelectOption = (value: number) => {
     setSelectedValue(value);
+  };
+
+  const onClear = () => {
+    setSelectedValue(null);
+    handleClear();
   };
 
   return (
@@ -146,18 +157,18 @@ const RelativeRange = ({
       <Stack
         direction="column"
         alignItems="flex-start"
-        sx={{ paddingBottom: "7px" }}
+        sx={{ paddingBottom: "10px", paddingTop: "4px" }}
       >
         {relativeRangeOptions?.map((option, i) => (
           <Stack
             direction="row"
             sx={{
-              marginTop: "7px",
-              padding: "9px 24px",
+              marginTop: "1px",
+              padding: "8px 20px",
               fontSize: "14px",
               lineHeight: "20px",
-              fontWeight: 600,
-              color: themeConfig.colors.gray700,
+              fontWeight: 500,
+              color: themeConfig.colors.gray900,
               cursor: "pointer",
             }}
             key={i}
@@ -173,25 +184,43 @@ const RelativeRange = ({
       </Stack>
       <Stack
         direction="row"
-        padding="16px"
-        justifyContent="flex-end"
+        justifyContent="space-between"
         alignItems="center"
-        gap="12px"
         borderTop={`1px solid ${themeConfig.colors.gray200}`}
+        padding="16px"
       >
-        <Button variant="outlined" onClick={handleCancel}>
-          Cancel
+        <Button
+          variant="text"
+          fontColor={themeConfig.colors.success600}
+          onClick={onClear}
+        >
+          Clear
         </Button>
-        <Button variant="contained" onClick={handleApply}>
-          Apply
-        </Button>
+        <Stack
+          direction="row"
+          justifyContent="flex-end"
+          alignItems="center"
+          gap="12px"
+        >
+          <Button variant="outlined" onClick={handleCancel}>
+            Cancel
+          </Button>
+          <Button variant="contained" onClick={handleApply}>
+            Apply
+          </Button>
+        </Stack>
       </Stack>
     </Box>
   );
 };
 
 const AbsoulteRange = (props: DateRangePickerStaticProps) => {
-  const { dateRange = initialRangeState, setDateRange, handleCancel } = props;
+  const {
+    dateRange = initialRangeState,
+    setDateRange,
+    handleCancel,
+    handleClear,
+  } = props;
 
   const [selectedStartDate, setSelectedStartDate] = useState(
     // dateRange.startDate ? startOfDay(new Date(dateRange.startDate)) : undefined
@@ -268,6 +297,16 @@ const AbsoulteRange = (props: DateRangePickerStaticProps) => {
     setFieldValue("endDate", item.endDate);
   };
 
+  const onClear = () => {
+    setSelectedStartDate(undefined);
+    setSelectedEndDate(undefined);
+    setFieldValue("startDate", "");
+    setFieldValue("endDate", "");
+    setFieldValue("startTime", "00:00:00");
+    setFieldValue("endTime", "00:00:00");
+    handleClear();
+  };
+
   return (
     <Box>
       {/*@ts-ignore */}
@@ -297,9 +336,7 @@ const AbsoulteRange = (props: DateRangePickerStaticProps) => {
                 width: "136px",
               }}
               value={
-                selectedStartDate
-                  ? format(selectedStartDate, "yyyy/MM/dd")
-                  : null
+                selectedStartDate ? format(selectedStartDate, "yyyy/MM/dd") : ""
               }
               disabled
             />
@@ -339,7 +376,7 @@ const AbsoulteRange = (props: DateRangePickerStaticProps) => {
                 width: "136px",
               }}
               value={
-                selectedEndDate ? format(selectedEndDate, "yyyy/MM/dd") : null
+                selectedEndDate ? format(selectedEndDate, "yyyy/MM/dd") : ""
               }
               disabled
             />
@@ -372,18 +409,31 @@ const AbsoulteRange = (props: DateRangePickerStaticProps) => {
 
       <Stack
         direction="row"
+        justifyContent="space-between"
+        alignItems="center"
         borderTop={`1px solid ${themeConfig.colors.gray200}`}
         padding="16px"
-        justifyContent="flex-end"
-        alignItems="center"
-        gap="8px"
       >
-        <Button variant="outlined" onClick={handleCancel}>
-          Cancel
+        <Button
+          variant="text"
+          fontColor={themeConfig.colors.success600}
+          onClick={onClear}
+        >
+          Clear
         </Button>
-        <Button variant="contained" onClick={handleSubmit}>
-          Apply
-        </Button>
+        <Stack
+          direction="row"
+          justifyContent="flex-end"
+          alignItems="center"
+          gap="8px"
+        >
+          <Button variant="outlined" onClick={handleCancel}>
+            Cancel
+          </Button>
+          <Button variant="contained" onClick={handleSubmit}>
+            Apply
+          </Button>
+        </Stack>
       </Stack>
     </Box>
   );
@@ -416,7 +466,8 @@ export const DateTimeRangePickerStatic = (
         <StyledIconCard sx={{ cursor: "pointer" }} onClick={handleCancel}>
           <ChevronLeft
             sx={{
-              color: themeConfig.colors.purple600,
+              color: themeConfig.colors.green600,
+              fontSize: "20px",
             }}
           />
         </StyledIconCard>
@@ -434,15 +485,15 @@ export const DateTimeRangePickerStatic = (
             sx={{
               cursor: "pointer",
               paddingX: "14px",
-              paddingY: "10px",
+              paddingY: "8px",
               borderRight: "none",
-              borderTopLeftRadius: "999px",
-              borderBottomLeftRadius: "999px",
+              borderTopLeftRadius: "8px",
+              borderBottomLeftRadius: "8px",
               ...(tab === "relative"
                 ? {
-                    background: themeConfig.colors.purple600,
-                    color: themeConfig.colors.white,
-                    border: `1px solid ${themeConfig.colors.purple600}`,
+                    background: themeConfig.colors.green50,
+                    color: themeConfig.colors.green700,
+                    border: `1px solid ${themeConfig.colors.green300}`,
                   }
                 : {
                     border: `1px solid ${themeConfig.colors.gray300}`,
@@ -456,15 +507,15 @@ export const DateTimeRangePickerStatic = (
             sx={{
               cursor: "pointer",
               paddingX: "14px",
-              paddingY: "10px",
+              paddingY: "8px",
               borderLeft: "none",
-              borderTopRightRadius: "999px",
-              borderBottomRightRadius: "999px",
+              borderTopRightRadius: "8px",
+              borderBottomRightRadius: "8px",
               ...(tab === "absolute"
                 ? {
-                    background: themeConfig.colors.purple600,
-                    color: themeConfig.colors.white,
-                    border: `1px solid ${themeConfig.colors.purple600}`,
+                    background: themeConfig.colors.green50,
+                    color: themeConfig.colors.green700,
+                    border: `1px solid ${themeConfig.colors.green300}`,
                   }
                 : {
                     border: `1px solid ${themeConfig.colors.gray300}`,

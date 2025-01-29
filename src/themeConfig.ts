@@ -14,8 +14,10 @@ export const themeConfig = {
     success600: "var(--success-600)",
     success700: "var(--success-700)",
 
+    green50: "var(--green-50)",
     green300: "var(--green-300)",
     green600: "var(--green-600)",
+    green700: "var(--green-700)",
 
     error50: "var(--error-50)",
     error200: "var(--error-200)",

@@ -1,15 +1,15 @@
 import _ from "lodash";
 import { useEffect, useMemo, useState } from "react";
 import Button from "src/components/Button/Button";
-import CloseIcon from "src/components/Icons/Close/CloseIcon";
-import { themeConfig } from "src/themeConfig";
-import { Paper, Popover } from "@mui/material";
+import { Box, Paper, Popover } from "@mui/material";
 import {
   SelectedCategoryDateTimeRange,
   SelectedCategoryOptions,
 } from "./AddInstanceFilters";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
+import { Close } from "@mui/icons-material";
+import { themeConfig } from "src/themeConfig";
 dayjs.extend(utc);
 
 const FilterChip = ({
@@ -20,8 +20,18 @@ const FilterChip = ({
   handleEditCategory,
 }) => {
   return (
-    <div
-      className="rounded-2xl border border-purple-200 px-1 py-0.5 flex justify-between items-center gap-1 bg-purple-50 text-purple-700"
+    <Box
+      sx={{
+        borderRadius: "16px",
+        border: `1px solid ${themeConfig.colors.purple200}`,
+        padding: "2px 8px",
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center",
+        gap: "8px",
+        background: themeConfig.colors.purple50,
+        color: themeConfig.colors.purple700,
+      }}
       onClick={(event) => handleEditCategory(event, categoryObj.name)}
       {...(categoryObj.name === categoryToEdit && {
         "aria-describedby": popoverAnchor,
@@ -30,7 +40,7 @@ const FilterChip = ({
       {categoryObj.type === "list" && (
         <p className="whitespace-pre-wrap">
           {categoryObj.label} ={" "}
-          {categoryObj.options?.map((option) => option?.value)?.join(", ")}
+          {categoryObj.options?.map((option) => option?.label)?.join(", ")}
         </p>
       )}
       {categoryObj.type === "date-range" && (
@@ -46,20 +56,17 @@ const FilterChip = ({
           UTC
         </p>
       )}
-      <div
+      <Close
         onClick={(e) => {
           e.stopPropagation();
           handleRemoveCategory(categoryObj.name);
         }}
-        style={{ cursor: "pointer" }}
-      >
-        <CloseIcon
-          width="14"
-          height="14"
-          color={themeConfig.colors.purple700}
-        />
-      </div>
-    </div>
+        sx={{
+          cursor: "pointer",
+          fontSize: "16px",
+        }}
+      />
+    </Box>
   );
 };
 
@@ -133,8 +140,11 @@ const EditInstanceFilters = ({
       })}
       <Button
         variant="outlined"
-        startIcon={<CloseIcon />}
+        startIcon={<Close />}
         onClick={handleResetAll}
+        sx={{
+          padding: "8px 16px !important",
+        }}
       >
         Reset
       </Button>

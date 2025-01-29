@@ -443,6 +443,7 @@ const InstancesTableHeader = ({
         <AddInstanceFilters
           setSelectedFilters={setSelectedFilters}
           filterOptionsMap={filterOptionsMap}
+          selectedFilters={selectedFilters}
         />
 
         <EditInstanceFilters

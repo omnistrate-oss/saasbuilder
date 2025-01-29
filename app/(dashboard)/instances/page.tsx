@@ -12,6 +12,7 @@ import {
   FilterCategorySchema,
   getFilteredInstances,
   getInstanceFiltersObject,
+  getIntialFiltersObject,
   getMainResourceFromInstance,
 } from "./utils";
 import PageTitle from "../components/Layout/PageTitle";
@@ -77,7 +78,7 @@ const InstancesPage = () => {
 
   const [selectedFilters, setSelectedFilters] = useState<
     Record<string, FilterCategorySchema>
-  >({});
+  >(getIntialFiltersObject());
 
   const dataTableColumns = useMemo(() => {
     return [

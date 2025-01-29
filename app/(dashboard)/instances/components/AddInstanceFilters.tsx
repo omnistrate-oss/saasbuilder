@@ -13,18 +13,19 @@ import SearchLens from "src/components/Icons/SearchLens/SearchLens";
 import { themeConfig } from "src/themeConfig";
 import Checkbox from "src/components/Checkbox/Checkbox";
 import FilterFunnel from "src/components/Icons/Filter/FilterFunnel";
-import { FilterCategorySchema } from "../utils";
 import { SetState } from "src/types/common/reactGenerics";
 import Button from "src/components/Button/Button";
 import {
   DateRange,
   DateTimeRangePickerStatic,
+  initialRangeState,
 } from "src/components/DateRangePicker/DateTimeRangePickerStatic";
+import { FilterCategorySchema } from "../utils";
 
 const StyledIconCard = styled(Box)({
   padding: "8px",
   borderRadius: "8px",
-  border: `1px solid ${themeConfig.colors.gray200}`,
+  border: `1px solid ${themeConfig.colors.green300}`,
   boxShadow: `box-shadow: 0px 1px 2px 0px #0A0D120D, 0px -2px 0px 0px #0A0D120D inset, 0px 0px 0px 1px #0A0D122E inset`,
   display: "flex",
   justifyContent: "center",
@@ -55,17 +56,30 @@ export const SelectedCategoryDateTimeRange = ({
     handleRemoveCategory();
   };
 
+  const handleClear = () => {
+    setSelectedFilters((prev) => {
+      return {
+        ...prev,
+        [selectedCategory.name]: {
+          ...selectedCategory,
+          range: initialRangeState,
+        },
+      };
+    });
+    // handleRemoveCategory();
+  };
+
   return (
     <DateTimeRangePickerStatic
-      dateRange={selectedCategory.range as DateRange}
+      dateRange={selectedCategory?.range as DateRange}
       setDateRange={handleApplyDateRange}
       handleCancel={handleRemoveCategory}
+      handleClear={handleClear}
     />
   );
 };
 
 type SelectedCategoryOptionsProps = {
-  // isEditView?: boolean;
   initialSelection?: Set<string>;
   selectedCategory: FilterCategorySchema;
   handleRemoveCategory: () => void;
@@ -73,7 +87,6 @@ type SelectedCategoryOptionsProps = {
 };
 
 export const SelectedCategoryOptions = ({
-  // isEditView = false,
   initialSelection = new Set(),
   selectedCategory,
   handleRemoveCategory,
@@ -114,6 +127,19 @@ export const SelectedCategoryOptions = ({
     handleRemoveCategory();
   };
 
+  const handleClearOptions = () => {
+    setSelectedFilters((prev) => {
+      return {
+        ...prev,
+        [selectedCategory.name]: {
+          ...selectedCategory,
+          options: [],
+        },
+      };
+    });
+    setSelectedOptionsSet(new Set());
+  };
+
   return (
     <>
       <Stack
@@ -127,25 +153,29 @@ export const SelectedCategoryOptions = ({
         <StyledIconCard sx={{ cursor: "pointer" }} onClick={handleCancel}>
           <ChevronLeft
             sx={{
-              color: themeConfig.colors.purple600,
+              color: themeConfig.colors.green600,
+              fontSize: "20px",
             }}
           />
         </StyledIconCard>
-        <p className="text-lg font-semibold text-gray-900">
+        <p className="text-base font-semibold text-purple-600">
           Select {selectedCategory.label}
         </p>
       </Stack>
 
-      <MenuList disablePadding sx={{ paddingBottom: "7px" }}>
+      <MenuList
+        disablePadding
+        sx={{ paddingBottom: "10px", paddingTop: "4px" }}
+      >
         {selectedCategory?.options?.map((option, i) => (
           <MenuItem
             sx={{
-              marginTop: "7px",
-              padding: "9px 24px",
+              marginTop: "1px",
+              padding: "8px 20px",
               fontSize: "14px",
               lineHeight: "20px",
-              fontWeight: 600,
-              color: themeConfig.colors.gray700,
+              fontWeight: 500,
+              color: themeConfig.colors.gray900,
             }}
             key={i}
             onClick={() => handleOptionToggle(option.value)}
@@ -155,27 +185,60 @@ export const SelectedCategoryOptions = ({
               sx={{ padding: "0px", marginRight: "8px" }}
               checked={!!selectedOptionsSet.has(option.value)}
             />{" "}
-            {selectedCategory.renderOption
-              ? selectedCategory.renderOption(option)
-              : option.label}
+            {option.label}
           </MenuItem>
         ))}
+
+        {!selectedCategory?.options?.length && (
+          <Box
+            sx={{
+              marginY: "10px",
+              padding: "9px 24px",
+              fontSize: "14px",
+              lineHeight: "20px",
+              fontWeight: 500,
+              color: themeConfig.colors.gray900,
+              display: "flex",
+              justifyContent: "center",
+            }}
+          >
+            No options available
+          </Box>
+        )}
       </MenuList>
 
       <Stack
         direction="row"
-        padding="16px"
-        justifyContent="flex-end"
+        justifyContent="space-between"
         alignItems="center"
-        gap="12px"
         borderTop={`1px solid ${themeConfig.colors.gray200}`}
+        padding="16px"
       >
-        <Button variant="outlined" onClick={handleCancel}>
-          Cancel
+        <Button
+          variant="text"
+          fontColor={themeConfig.colors.success600}
+          onClick={handleClearOptions}
+        >
+          Clear
         </Button>
-        <Button variant="contained" onClick={handleApply}>
-          Apply
-        </Button>
+
+        <Stack
+          direction="row"
+          justifyContent="flex-end"
+          alignItems="center"
+          gap="12px"
+        >
+          <Button variant="outlined" onClick={handleCancel}>
+            Cancel
+          </Button>
+          <Button
+            variant="contained"
+            onClick={handleApply}
+            disabled={!selectedCategory?.options?.length}
+          >
+            Apply
+          </Button>
+        </Stack>
       </Stack>
     </>
   );
@@ -195,18 +258,21 @@ const SelectCategory = ({ filterOptionsMap, handleSelectCategory }) => {
         <StyledIconCard>
           <FilterFunnel />
         </StyledIconCard>
-        <p className="text-lg font-semibold text-gray-900">Filter By</p>
+        <p className="text-base font-semibold text-purple-600">Properties</p>
       </Stack>
-      <MenuList disablePadding sx={{ paddingBottom: "7px" }}>
+      <MenuList
+        disablePadding
+        sx={{ paddingBottom: "10px", paddingTop: "4px" }}
+      >
         {Object.keys(filterOptionsMap)?.map((category, i) => (
           <MenuItem
             sx={{
-              marginTop: "7px",
-              padding: "9px 24px",
+              marginTop: "1px",
+              padding: "8px 20px",
               fontSize: "14px",
               lineHeight: "20px",
-              fontWeight: 600,
-              color: themeConfig.colors.gray700,
+              fontWeight: 500,
+              color: themeConfig.colors.gray900,
             }}
             key={i}
             onClick={() => handleSelectCategory(filterOptionsMap[category])}
@@ -222,11 +288,13 @@ const SelectCategory = ({ filterOptionsMap, handleSelectCategory }) => {
 type AddInstanceFiltersProps = {
   filterOptionsMap: Record<string, FilterCategorySchema>;
   setSelectedFilters: SetState<Record<string, FilterCategorySchema>>;
+  selectedFilters: Record<string, FilterCategorySchema>;
 };
 
 const AddInstanceFilters = ({
   setSelectedFilters,
   filterOptionsMap,
+  selectedFilters,
 }: AddInstanceFiltersProps) => {
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
   const [selectedCategory, setSelectedCategory] =
@@ -256,7 +324,7 @@ const AddInstanceFilters = ({
     <>
       <div
         tabIndex={0}
-        className={`px-3 py-2 rounded-lg border-2  border-solid  ${anchorEl ? "border-purple-600" : "border-gray-300"} focus:border-purple-600 outline-none  max-w-[470px]`}
+        className={`px-3 py-2 rounded-full border-2  border-solid  ${anchorEl ? "border-purple-600" : "border-gray-300"} focus:border-purple-600 outline-none  max-w-[470px]`}
         onClick={(e) => handleOpen(e)}
         aria-describedby={id}
       >
@@ -285,11 +353,18 @@ const AddInstanceFilters = ({
                     selectedCategory={selectedCategory}
                     handleRemoveCategory={handleRemoveCategory}
                     setSelectedFilters={setSelectedFilters}
+                    initialSelection={
+                      new Set(
+                        selectedFilters[selectedCategory.name]?.options?.map(
+                          (option) => option.value
+                        )
+                      )
+                    }
                   />
                 )}
                 {selectedCategory.type === "date-range" && (
                   <SelectedCategoryDateTimeRange
-                    selectedCategory={selectedCategory}
+                    selectedCategory={selectedFilters[selectedCategory?.name]}
                     handleRemoveCategory={handleRemoveCategory}
                     setSelectedFilters={setSelectedFilters}
                   />

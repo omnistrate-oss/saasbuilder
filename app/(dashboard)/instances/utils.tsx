@@ -5,7 +5,10 @@ import { MenuItem } from "src/types/common/generalTypes";
 import { ServiceOffering } from "src/types/serviceOffering";
 import { ResourceInstance } from "src/types/resourceInstance";
 import { cloudProviderLogoMap } from "src/constants/cloudProviders";
-import { getResourceInstanceStatusStylesAndLabel } from "src/constants/statusChipStyles/resourceInstanceStatus";
+import {
+  getResourceInstanceStatusStylesAndLabel,
+  resourceInstanceStatusMap,
+} from "src/constants/statusChipStyles/resourceInstanceStatus";
 import StatusChip from "src/components/StatusChip/StatusChip";
 import { Stack } from "@mui/system";
 import { Box } from "@mui/material";
@@ -249,11 +252,11 @@ export type FilterCategorySchema = {
   renderOption?: (...args: any) => React.ReactNode;
 };
 
-export const getInstanceFiltersObject = (
-  instances: ResourceInstance[],
-  subscriptionsObj: Record<string, Subscription>
-) => {
-  const result: Record<string, FilterCategorySchema> = {
+export const getIntialFiltersObject: () => Record<
+  string,
+  FilterCategorySchema
+> = () => {
+  return {
     services: {
       label: "Service Name",
       name: "services",
@@ -342,6 +345,13 @@ export const getInstanceFiltersObject = (
       range: initialRangeState,
     },
   };
+};
+
+export const getInstanceFiltersObject = (
+  instances: ResourceInstance[],
+  subscriptionsObj: Record<string, Subscription>
+) => {
+  const result: Record<string, FilterCategorySchema> = getIntialFiltersObject();
   const servicesSet = new Set();
   const servicePlansSet = new Set();
   const resourcesSet = new Set();
@@ -354,7 +364,10 @@ export const getInstanceFiltersObject = (
     //add lifecylce status options
     const status = instance.status;
     if (!lifecycleStatusSet.has(status) && status) {
-      result.lifecycleStatus.options?.push({ value: status, label: status });
+      result.lifecycleStatus.options?.push({
+        value: status,
+        label: resourceInstanceStatusMap[status]?.label ?? status,
+      });
       lifecycleStatusSet.add(status);
     }
 

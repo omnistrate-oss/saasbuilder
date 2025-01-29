@@ -114,6 +114,7 @@ const Button = styled(
       borderColor: "#EAECF0",
       color: "#D0D5DD",
     },
+
     [`${buttonClasses.outlinedPrimary}`]: {
       background: theme.palette.primary.main,
       fontColor: "white",
@@ -144,7 +145,7 @@ const Button = styled(
       // opacity: 0.38,
     },
     [`&.${buttonClasses.text}`]: {
-      color: theme.palette.primary.main,
+      color: fontColor ? fontColor : theme.palette.primary.main,
     },
     [`&.${buttonClasses.text}:disabled`]: {
       opacity: 0.38,
