@@ -17,14 +17,14 @@ import FullScreenDrawer from "../components/FullScreenDrawer/FullScreenDrawer";
 
 import useSnackbar from "src/hooks/useSnackbar";
 import formatDateUTC from "src/utils/formatDateUTC";
-import { ResourceInstance } from "src/types/resourceInstance";
-import { CLI_MANAGED_RESOURCES } from "src/constants/resource";
+import {
+  ResourceInstance,
+  ResourceInstanceNetworkTopology,
+} from "src/types/resourceInstance";
 import { useGlobalData } from "src/providers/GlobalDataProvider";
 import { getInstanceDetailsRoute } from "src/utils/route/routes";
 import { deleteResourceInstance } from "src/api/resourceInstance";
-import { calculateInstanceHealthPercentage } from "src/utils/instanceHealthPercentage";
 import { getResourceInstanceStatusStylesAndLabel } from "src/constants/statusChipStyles/resourceInstanceStatus";
-
 import RegionIcon from "components/Region/RegionIcon";
 import AwsLogo from "components/Logos/AwsLogo/AwsLogo";
 import GcpLogo from "components/Logos/GcpLogo/GcpLogo";
@@ -35,7 +35,6 @@ import AzureLogo from "components/Logos/AzureLogo/AzureLogo";
 import GridCellExpand from "components/GridCellExpand/GridCellExpand";
 import CapacityDialog from "components/CapacityDialog/CapacityDialog";
 import GenerateTokenDialog from "components/GenerateToken/GenerateTokenDialog";
-import GradientProgressBar from "components/GradientProgessBar/GradientProgressBar";
 import ServiceNameWithLogo from "components/ServiceNameWithLogo/ServiceNameWithLogo";
 import AccessSideRestoreInstance from "components/RestoreInstance/AccessSideRestoreInstance";
 import TextConfirmationDialog from "components/TextConfirmationDialog/TextConfirmationDialog";
@@ -44,6 +43,10 @@ import CreateInstanceModal from "components/ResourceInstance/CreateInstanceModal
 import SpeedoMeterLow from "public/assets/images/dashboard/resource-instance-speedo-meter/idle.png";
 import SpeedoMeterHigh from "public/assets/images/dashboard/resource-instance-speedo-meter/high.png";
 import SpeedoMeterMedium from "public/assets/images/dashboard/resource-instance-speedo-meter/normal.png";
+import { getInitialFilterState } from "src/components/InstanceFilters/InstanceFilters";
+import InstanceHealthStatusChip, {
+  getInstanceHealthStatus,
+} from "src/components/InstanceHealthStatusChip/InstanceHealthStautusChip";
 
 const columnHelper = createColumnHelper<ResourceInstance>();
 type Overlay =
@@ -69,6 +72,9 @@ const InstancesPage = () => {
   }>({});
   const { subscriptionsObj, serviceOfferingsObj, isFetchingSubscriptions } =
     useGlobalData();
+  const [instanceFilterStatus, setInstanceFilterStatus] = useState(
+    getInitialFilterState()
+  );
 
   const dataTableColumns = useMemo(() => {
     return [
@@ -89,8 +95,8 @@ const InstancesPage = () => {
             serviceId,
             servicePlanId: productTierId,
             resourceId: mainResourceId,
-            instanceId,
-            subscriptionId,
+            instanceId: instanceId as string,
+            subscriptionId: subscriptionId as string,
           });
 
           return (
@@ -173,73 +179,55 @@ const InstancesPage = () => {
       columnHelper.accessor(
         (row) => {
           const status = row.status;
-          const mainResource = getMainResourceFromInstance(row);
-
-          if (
-            CLI_MANAGED_RESOURCES.includes(mainResource?.resourceType as string)
-          ) {
-            return "Unknown";
-          }
-
-          if (status === "STOPPED") {
-            return "N/A";
-          }
-
-          const healthPercentage = calculateInstanceHealthPercentage(
-            row.detailedNetworkTopology,
-            status
+          const detailedNetworkTopology = row.detailedNetworkTopology;
+          const healthStatus = getInstanceHealthStatus(
+            detailedNetworkTopology,
+            status as string
           );
-
-          return healthPercentage;
+          return healthStatus;
         },
         {
           id: "healthStatus",
           header: "Health Status",
           cell: (data) => {
             const value = data.cell.getValue();
+            const { id: instanceId, subscriptionId } = data.row.original;
+            const { serviceId, productTierId } =
+              subscriptionsObj[subscriptionId as string] || {};
 
-            if (value === "Unknown")
-              return <StatusChip category="unknown" label="Unknown" />;
+            const mainResourceId = getMainResourceFromInstance(
+              data.row.original
+              // @ts-ignore
+            )?.id;
 
-            if (value === "N/A")
-              return <StatusChip category="unknown" label="N/A" />;
+            const resourceInstanceUrlLink = getInstanceDetailsRoute({
+              serviceId,
+              servicePlanId: productTierId,
+              resourceId: mainResourceId,
+              instanceId: instanceId as string,
+              subscriptionId: subscriptionId as string,
+              viewType: "Nodes",
+            });
 
-            return <GradientProgressBar percentage={value} />;
+            return (
+              <InstanceHealthStatusChip
+                computedHealthStatus={value}
+                detailedNetworkTopology={
+                  data.row.original.detailedNetworkTopology as Record<
+                    string,
+                    ResourceInstanceNetworkTopology
+                  >
+                }
+                viewNodesLink={resourceInstanceUrlLink}
+              />
+            );
           },
           meta: {
             minWidth: 200,
+            disableBrowserTooltip: true,
           },
         }
       ),
-      columnHelper.accessor((row) => formatDateUTC(row.created_at), {
-        id: "created_at",
-        header: "Created On",
-        cell: (data) => {
-          return data.row.original.created_at
-            ? formatDateUTC(data.row.original.created_at)
-            : "-";
-        },
-        meta: {
-          minWidth: 225,
-        },
-      }),
-      columnHelper.accessor("cloud_provider", {
-        id: "cloud_provider",
-        header: "Provider",
-        cell: (data) => {
-          const cloudProvider = data.row.original.cloud_provider;
-
-          return cloudProvider === "aws" ? (
-            <AwsLogo />
-          ) : cloudProvider === "gcp" ? (
-            <GcpLogo />
-          ) : cloudProvider === "azure" ? (
-            <AzureLogo />
-          ) : (
-            "-"
-          );
-        },
-      }),
       columnHelper.accessor("instanceLoadStatus", {
         id: "instanceLoadStatus",
         header: "Load",
@@ -283,6 +271,36 @@ const InstancesPage = () => {
           minWidth: 120,
         },
       }),
+      columnHelper.accessor((row) => formatDateUTC(row.created_at), {
+        id: "created_at",
+        header: "Created On",
+        cell: (data) => {
+          return data.row.original.created_at
+            ? formatDateUTC(data.row.original.created_at)
+            : "-";
+        },
+        meta: {
+          minWidth: 225,
+        },
+      }),
+      columnHelper.accessor("cloud_provider", {
+        id: "cloud_provider",
+        header: "Provider",
+        cell: (data) => {
+          const cloudProvider = data.row.original.cloud_provider;
+
+          return cloudProvider === "aws" ? (
+            <AwsLogo />
+          ) : cloudProvider === "gcp" ? (
+            <GcpLogo />
+          ) : cloudProvider === "azure" ? (
+            <AzureLogo />
+          ) : (
+            "-"
+          );
+        },
+      }),
+
       columnHelper.accessor("region", {
         id: "region",
         header: "Region",
@@ -334,6 +352,51 @@ const InstancesPage = () => {
       (instance) => !instance.result_params?.account_configuration_method
     );
   }, [instances]);
+
+  const failedInstances = useMemo(() => {
+    return nonBYOAInstances.filter((instance) => instance.status === "FAILED");
+  }, [nonBYOAInstances]);
+
+  const overloadedInstances = useMemo(() => {
+    return nonBYOAInstances.filter(
+      (instance) => instance.instanceLoadStatus === "POD_OVERLOAD"
+    );
+  }, [nonBYOAInstances]);
+
+  const unhealthyInstances = useMemo(() => {
+    return nonBYOAInstances.filter((instance) => {
+      const instanceHealthStatus = getInstanceHealthStatus(
+        instance.detailedNetworkTopology,
+        instance.status as string
+      );
+      if (instanceHealthStatus === "UNHEALTHY") return true;
+
+      return false;
+    });
+  }, [nonBYOAInstances]);
+
+  const filteredInstances = useMemo(() => {
+    let filteredInstances = nonBYOAInstances;
+    if (instanceFilterStatus.failed) {
+      filteredInstances = failedInstances;
+    }
+    if (instanceFilterStatus.overloaded) {
+      filteredInstances = overloadedInstances;
+    }
+
+    if (instanceFilterStatus.unhealthy) {
+      filteredInstances = unhealthyInstances;
+    }
+    return filteredInstances;
+  }, [
+    failedInstances,
+    overloadedInstances,
+    unhealthyInstances,
+    instanceFilterStatus,
+    nonBYOAInstances,
+  ]);
+
+  console.log("Instances", filteredInstances);
 
   const selectedInstance = useMemo(() => {
     return nonBYOAInstances.find((instance) => instance.id === selectedRows[0]);
@@ -389,6 +452,12 @@ const InstancesPage = () => {
     }
   );
 
+  const instancesFilterCount = {
+    failed: failedInstances.length,
+    overloaded: overloadedInstances.length,
+    unhealthy: unhealthyInstances.length,
+  };
+
   return (
     <PageContainer>
       <PageTitle icon={InstancesIcon} className="mb-6">
@@ -398,11 +467,11 @@ const InstancesPage = () => {
       <div>
         <DataTable
           columns={dataTableColumns}
-          rows={nonBYOAInstances}
+          rows={filteredInstances}
           noRowsText="No instances"
           HeaderComponent={InstancesTableHeader}
           headerProps={{
-            count: nonBYOAInstances.length,
+            count: filteredInstances.length,
             selectedInstance,
             setSelectedRows,
             setOverlayType,
@@ -411,6 +480,9 @@ const InstancesPage = () => {
             selectedInstanceSubscription,
             refetchInstances,
             isFetchingInstances,
+            instancesFilterCount: instancesFilterCount,
+            instanceFilterStatus: instanceFilterStatus,
+            setInstanceFilterStatus: setInstanceFilterStatus,
           }}
           isLoading={isLoadingInstances || isFetchingSubscriptions}
           selectedRows={selectedRows}

@@ -300,6 +300,9 @@ const DataTable = <TData,>(props: DataTableProps<TData>): ReactNode => {
                         const cellValue: any = cell.getValue();
                         const columnAlignment =
                           cell.column.columnDef.meta?.align || "left";
+                        const isBrowerTooltipDisabled =
+                          cell.column.columnDef.meta?.disableBrowserTooltip ||
+                          false;
                         let title = "";
                         if (
                           ["string", "number", "boolean"].includes(
@@ -312,7 +315,7 @@ const DataTable = <TData,>(props: DataTableProps<TData>): ReactNode => {
                           <TableCell
                             key={cell.id}
                             align={columnAlignment}
-                            title={title}
+                            title={isBrowerTooltipDisabled ? "" : title}
                             sx={{
                               fontSize: "14px",
                               fontWeight: "500",
@@ -385,13 +388,15 @@ const DataTable = <TData,>(props: DataTableProps<TData>): ReactNode => {
 
 export default DataTable;
 
-interface ColumnFlex {
+interface ColumnCustomFeatures {
   flex?: number;
   width?: number;
   minWidth?: number;
   align?: "center" | "left" | "right";
+  disableBrowserTooltip?: boolean;
 }
 declare module "@tanstack/react-table" {
   /*eslint-disable-next-line*/
-  interface ColumnMeta<TData extends RowData, TValue> extends ColumnFlex {}
+  interface ColumnMeta<TData extends RowData, TValue>
+    extends ColumnCustomFeatures {}
 }
