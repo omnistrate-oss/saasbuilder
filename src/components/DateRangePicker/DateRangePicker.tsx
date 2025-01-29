@@ -1,4 +1,4 @@
-import { Box, IconButton, Stack, popoverClasses, styled } from "@mui/material";
+import { Box, IconButton, Stack, styled } from "@mui/material";
 import { addMonths, format, subMonths } from "date-fns";
 import { FC, useMemo, useState } from "react";
 import {
@@ -11,17 +11,7 @@ import "react-date-range/dist/styles.css"; // main css file
 import Button from "../Button/Button";
 import CalendarIcon from "../Icons/Calendar/Calendar";
 import { SetState } from "src/types/common/reactGenerics";
-import MuiPopover from "@mui/material/Popover";
-
-const Popover = styled(MuiPopover)({
-  [`& .${popoverClasses.paper}`]: {
-    border: "1px solid #F2F4F7",
-    borderRadius: "8px",
-    boxShadow: `0px 8px 8px -4px #10182808, 
-  0px 20px 24px -4px #10182814`,
-    display: "inline-block",
-  },
-});
+import Popover from "../Popover/Popover";
 
 const NavigationRenderer = (
   currentFocusedDate: Date,
@@ -33,15 +23,17 @@ const NavigationRenderer = (
         direction="row"
         justifyContent="space-between"
         position="absolute"
-        top="24px"
+        top="8px"
         left="0px"
         right="0px"
+        px="12px"
       >
         <IconButton
           onClick={() => {
             setShownDate(subMonths(currentFocusedDate, 1));
           }}
           sx={{ color: "#667085" }}
+          size="small"
         >
           <ChevronLeftIcon />
         </IconButton>
@@ -50,6 +42,7 @@ const NavigationRenderer = (
             setShownDate(addMonths(currentFocusedDate, 1));
           }}
           sx={{ color: "#667085" }}
+          size="small"
         >
           <ChevronRightIcon />
         </IconButton>
@@ -172,6 +165,13 @@ const DateRangePicker: FC<DateRangePickerProps> = (props) => {
         anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
         transformOrigin={{ vertical: "top", horizontal: "right" }}
         sx={{ marginTop: "8px" }}
+        slotProps={{
+          paper: {
+            sx: {
+              display: "inline-block",
+            },
+          },
+        }}
       >
         <Box>
           {/*@ts-ignore */}

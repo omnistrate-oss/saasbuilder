@@ -4,6 +4,7 @@ export const themeConfig = {
 
     purple50: "var(--purple-50)",
     purple200: "var(--purple-200)",
+    purple500: "var(--purple-500)",
     purple600: "var(--purple-600)",
     purple700: "var(--purple-700)",
     purple900: "var(--purple-900)",

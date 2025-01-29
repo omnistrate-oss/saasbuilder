@@ -1,7 +1,6 @@
 import _ from "lodash";
 import { useEffect, useMemo, useState } from "react";
-import Button from "src/components/Button/Button";
-import { Box, Paper, Popover } from "@mui/material";
+import { Box } from "@mui/material";
 import {
   SelectedCategoryDateTimeRange,
   SelectedCategoryOptions,
@@ -10,6 +9,10 @@ import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import { Close } from "@mui/icons-material";
 import { themeConfig } from "src/themeConfig";
+import { FilterCategorySchema, getIntialFiltersObject } from "../utils";
+import { SetState } from "src/types/common/reactGenerics";
+import { initialRangeState } from "src/components/DateRangePicker/DateTimeRangePickerStatic";
+import Popover from "src/components/Popover/Popover";
 dayjs.extend(utc);
 
 const FilterChip = ({
@@ -23,14 +26,16 @@ const FilterChip = ({
     <Box
       sx={{
         borderRadius: "16px",
-        border: `1px solid ${themeConfig.colors.purple200}`,
+        border: `1px solid ${themeConfig.colors.purple600}`,
         padding: "2px 8px",
         display: "flex",
         justifyContent: "space-between",
         alignItems: "center",
         gap: "8px",
         background: themeConfig.colors.purple50,
-        color: themeConfig.colors.purple700,
+        color: themeConfig.colors.purple600,
+        fontSize: "12px",
+        fontWeight: 500,
       }}
       onClick={(event) => handleEditCategory(event, categoryObj.name)}
       {...(categoryObj.name === categoryToEdit && {
@@ -63,18 +68,24 @@ const FilterChip = ({
         }}
         sx={{
           cursor: "pointer",
-          fontSize: "16px",
+          fontSize: "14px",
         }}
       />
     </Box>
   );
 };
 
+type EditInstanceFiltersProps = {
+  filterOptionsMap: Record<string, FilterCategorySchema>;
+  setSelectedFilters: SetState<Record<string, FilterCategorySchema>>;
+  selectedFilters: Record<string, FilterCategorySchema>;
+};
+
 const EditInstanceFilters = ({
   selectedFilters,
   setSelectedFilters,
   filterOptionsMap,
-}) => {
+}: EditInstanceFiltersProps) => {
   const [categoryToEdit, setCategoryToEdit] = useState(null);
   const [anchorEl, setAnchorEl] = useState(null);
 
@@ -88,15 +99,16 @@ const EditInstanceFilters = ({
   const filtersWithValues = useMemo(() => {
     return Object.keys(selectedFilters)?.filter((category) => {
       const type = selectedFilters[category].type;
-      if (type === "list") return selectedFilters[category].options.length > 0;
+      if (type === "list" && selectedFilters[category].options)
+        return selectedFilters[category].options.length > 0;
       if (type === "date-range")
-        return !!selectedFilters[category].range.startDate;
+        return !!selectedFilters[category].range?.startDate;
       return false;
     });
   }, [selectedFilters]);
 
   const handleResetAll = () => {
-    setSelectedFilters({});
+    setSelectedFilters(getIntialFiltersObject());
   };
 
   const handleEditCategory = (event, category) => {
@@ -104,10 +116,14 @@ const EditInstanceFilters = ({
     setCategoryToEdit(category);
   };
 
-  const handleRemoveCategory = (category) => {
+  const handleRemoveCategory = (category: string) => {
     setSelectedFilters((prev) => {
       const copy = _.clone(prev);
-      delete copy[category];
+      if (copy[category].type === "list") {
+        copy[category].options = [];
+      } else if (copy[category].type === "date-range") {
+        copy[category].range = initialRangeState;
+      }
       return copy;
     });
   };
@@ -138,16 +154,29 @@ const EditInstanceFilters = ({
           />
         );
       })}
-      <Button
-        variant="outlined"
-        startIcon={<Close />}
+      <Box
         onClick={handleResetAll}
         sx={{
-          padding: "8px 16px !important",
+          padding: "6px 14px",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          gap: "4px",
+          cursor: "pointer",
+          border: `1px solid ${themeConfig.colors.purple600}`,
+          color: themeConfig.colors.purple600,
+          borderRadius: "999px",
+          fontSize: "14px",
+          fontWeight: 600,
         }}
       >
-        Reset
-      </Button>
+        <Close
+          sx={{
+            fontSize: "20px",
+          }}
+        />
+        Reset Filters
+      </Box>
 
       <Popover
         id={id}
@@ -159,8 +188,8 @@ const EditInstanceFilters = ({
           horizontal: "left",
         }}
       >
-        <div className="min-w-[470px]">
-          <Paper>
+        {categoryToEdit && (
+          <div className="min-w-[470px]">
             {categoryToEdit &&
               selectedFilters[categoryToEdit].type === "list" && (
                 <SelectedCategoryOptions
@@ -185,8 +214,8 @@ const EditInstanceFilters = ({
                   selectedCategory={selectedFilters[categoryToEdit]}
                 />
               )}
-          </Paper>
-        </div>
+          </div>
+        )}
       </Popover>
     </div>
   );

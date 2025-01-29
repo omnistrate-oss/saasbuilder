@@ -1,13 +1,5 @@
 import { ChevronLeft } from "@mui/icons-material";
-import {
-  Box,
-  MenuItem,
-  MenuList,
-  Paper,
-  Popover,
-  Stack,
-  styled,
-} from "@mui/material";
+import { Box, MenuItem, MenuList, Stack, styled } from "@mui/material";
 import { useState } from "react";
 import SearchLens from "src/components/Icons/SearchLens/SearchLens";
 import { themeConfig } from "src/themeConfig";
@@ -21,6 +13,7 @@ import {
   initialRangeState,
 } from "src/components/DateRangePicker/DateTimeRangePickerStatic";
 import { FilterCategorySchema } from "../utils";
+import Popover from "src/components/Popover/Popover";
 
 const StyledIconCard = styled(Box)({
   padding: "8px",
@@ -44,28 +37,32 @@ export const SelectedCategoryDateTimeRange = ({
   setSelectedFilters,
 }: SelectedCategoryDateTimeRangeProps) => {
   const handleApplyDateRange = (value: DateRange) => {
-    setSelectedFilters((prev) => {
-      return {
-        ...prev,
-        [selectedCategory.name]: {
-          ...selectedCategory,
-          range: value,
-        },
-      };
-    });
+    if (selectedCategory) {
+      setSelectedFilters((prev) => {
+        return {
+          ...prev,
+          [selectedCategory.name]: {
+            ...selectedCategory,
+            range: value,
+          },
+        };
+      });
+    }
     handleRemoveCategory();
   };
 
   const handleClear = () => {
-    setSelectedFilters((prev) => {
-      return {
-        ...prev,
-        [selectedCategory.name]: {
-          ...selectedCategory,
-          range: initialRangeState,
-        },
-      };
-    });
+    if (selectedCategory) {
+      setSelectedFilters((prev) => {
+        return {
+          ...prev,
+          [selectedCategory.name]: {
+            ...selectedCategory,
+            range: initialRangeState,
+          },
+        };
+      });
+    }
     // handleRemoveCategory();
   };
 
@@ -217,6 +214,7 @@ export const SelectedCategoryOptions = ({
         <Button
           variant="text"
           fontColor={themeConfig.colors.success600}
+          bgColor={"#0794550a"}
           onClick={handleClearOptions}
         >
           Clear
@@ -345,38 +343,36 @@ const AddInstanceFilters = ({
         }}
       >
         <div className="min-w-[470px]">
-          <Paper>
-            {selectedCategory ? (
-              <>
-                {selectedCategory.type === "list" && (
-                  <SelectedCategoryOptions
-                    selectedCategory={selectedCategory}
-                    handleRemoveCategory={handleRemoveCategory}
-                    setSelectedFilters={setSelectedFilters}
-                    initialSelection={
-                      new Set(
-                        selectedFilters[selectedCategory.name]?.options?.map(
-                          (option) => option.value
-                        )
+          {selectedCategory ? (
+            <>
+              {selectedCategory.type === "list" && (
+                <SelectedCategoryOptions
+                  selectedCategory={selectedCategory}
+                  handleRemoveCategory={handleRemoveCategory}
+                  setSelectedFilters={setSelectedFilters}
+                  initialSelection={
+                    new Set(
+                      selectedFilters[selectedCategory.name]?.options?.map(
+                        (option) => option.value
                       )
-                    }
-                  />
-                )}
-                {selectedCategory.type === "date-range" && (
-                  <SelectedCategoryDateTimeRange
-                    selectedCategory={selectedFilters[selectedCategory?.name]}
-                    handleRemoveCategory={handleRemoveCategory}
-                    setSelectedFilters={setSelectedFilters}
-                  />
-                )}
-              </>
-            ) : (
-              <SelectCategory
-                filterOptionsMap={filterOptionsMap}
-                handleSelectCategory={handleSelectCategory}
-              />
-            )}
-          </Paper>
+                    )
+                  }
+                />
+              )}
+              {selectedCategory.type === "date-range" && (
+                <SelectedCategoryDateTimeRange
+                  selectedCategory={selectedFilters[selectedCategory?.name]}
+                  handleRemoveCategory={handleRemoveCategory}
+                  setSelectedFilters={setSelectedFilters}
+                />
+              )}
+            </>
+          ) : (
+            <SelectCategory
+              filterOptionsMap={filterOptionsMap}
+              handleSelectCategory={handleSelectCategory}
+            />
+          )}
         </div>
       </Popover>
     </>

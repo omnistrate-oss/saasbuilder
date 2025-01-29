@@ -34,6 +34,16 @@ const StyledIconCard = styled(Box)({
   alignItems: "center",
 });
 
+const StyledInput = styled(TextField)({
+  width: "130px",
+  " .MuiOutlinedInput-root ": {
+    fontSize: "14px",
+    [`& .MuiOutlinedInput-input`]: {
+      padding: "10px",
+    },
+  },
+});
+
 const NavigationRenderer = (
   currentFocusedDate: Date,
   setShownDate: (shownDate: Date) => void
@@ -44,15 +54,17 @@ const NavigationRenderer = (
         direction="row"
         justifyContent="space-between"
         position="absolute"
-        top="24px"
+        top="8px"
         left="0px"
         right="0px"
+        px="12px"
       >
         <IconButton
           onClick={() => {
             setShownDate(subMonths(currentFocusedDate, 1));
           }}
           sx={{ color: "#667085" }}
+          size="small"
         >
           <ChevronLeftIcon />
         </IconButton>
@@ -61,6 +73,7 @@ const NavigationRenderer = (
             setShownDate(addMonths(currentFocusedDate, 1));
           }}
           sx={{ color: "#667085" }}
+          size="small"
         >
           <ChevronRightIcon />
         </IconButton>
@@ -193,6 +206,7 @@ const RelativeRange = ({
           variant="text"
           fontColor={themeConfig.colors.success600}
           onClick={onClear}
+          bgColor={"#0794550a"}
         >
           Clear
         </Button>
@@ -325,16 +339,13 @@ const AbsoulteRange = (props: DateRangePickerStaticProps) => {
         showDateDisplay={false}
       />
 
-      <Stack direction="row" gap="12px" alignItems="center" padding="16px">
+      <Stack direction="row" gap="12px" alignItems="center" padding="12px 16px">
         <Stack direction={"row"} gap="12px" alignItems="center" flex={1}>
           <Box>
             <Text size="small" color={themeConfig.colors.gray600}>
               Start Date
             </Text>
-            <TextField
-              sx={{
-                width: "136px",
-              }}
+            <StyledInput
               value={
                 selectedStartDate ? format(selectedStartDate, "yyyy/MM/dd") : ""
               }
@@ -344,15 +355,12 @@ const AbsoulteRange = (props: DateRangePickerStaticProps) => {
               <FieldError>{touched.startDate && errors.startDate}</FieldError>
             </Box>
           </Box>
-          -
+          {/* - */}
           <Box>
             <Text size="small" color={themeConfig.colors.gray600}>
               Start Time
             </Text>
-            <TextField
-              sx={{
-                width: "136px",
-              }}
+            <StyledInput
               name="startTime"
               placeholder="hh:mm:ss"
               value={values.startTime}
@@ -371,10 +379,7 @@ const AbsoulteRange = (props: DateRangePickerStaticProps) => {
             <Text size="small" color={themeConfig.colors.gray600}>
               End Date
             </Text>
-            <TextField
-              sx={{
-                width: "136px",
-              }}
+            <StyledInput
               value={
                 selectedEndDate ? format(selectedEndDate, "yyyy/MM/dd") : ""
               }
@@ -384,15 +389,12 @@ const AbsoulteRange = (props: DateRangePickerStaticProps) => {
               <FieldError>{touched.endDate && errors.endDate}</FieldError>
             </Box>
           </Box>
-          -
+          {/* - */}
           <Box>
             <Text size="small" color={themeConfig.colors.gray600}>
               End Time
             </Text>
-            <TextField
-              sx={{
-                width: "136px",
-              }}
+            <StyledInput
               name="endTime"
               placeholder="hh:mm:ss"
               value={values.endTime}
@@ -418,6 +420,7 @@ const AbsoulteRange = (props: DateRangePickerStaticProps) => {
           variant="text"
           fontColor={themeConfig.colors.success600}
           onClick={onClear}
+          bgColor={"#0794550a"}
         >
           Clear
         </Button>
