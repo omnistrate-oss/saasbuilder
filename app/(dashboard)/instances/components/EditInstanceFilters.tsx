@@ -98,11 +98,13 @@ const EditInstanceFilters = ({
 
   const filtersWithValues = useMemo(() => {
     return Object.keys(selectedFilters)?.filter((category) => {
-      const type = selectedFilters[category].type;
-      if (type === "list" && selectedFilters[category].options)
-        return selectedFilters[category].options.length > 0;
-      if (type === "date-range")
-        return !!selectedFilters[category].range?.startDate;
+      const filter = selectedFilters[category]; // Safely access the category
+      if (!filter) return false; // Ensure it's defined before accessing properties
+
+      const type = filter.type;
+      if (type === "list")
+        return Array.isArray(filter.options) && filter.options.length > 0;
+      if (type === "date-range") return !!filter.range?.startDate;
       return false;
     });
   }, [selectedFilters]);
