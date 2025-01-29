@@ -383,6 +383,20 @@ const InstanceForm = ({
         ...prev,
         requestParams: defaultValues,
       }));
+
+      const isMultiTenancy =
+        offering?.productTierType === productTierTypes.OMNISTRATE_MULTI_TENANCY;
+
+      const networkTypeFieldExists =
+        inputParameters.find((param) => param.key === "cloud_provider") &&
+        !isMultiTenancy &&
+        offering?.supportsPublicNetwork;
+
+      if (networkTypeFieldExists) {
+        formData.setFieldValue("network_type", "PUBLIC");
+      } else {
+        formData.setFieldValue("network_type", "");
+      }
     }
   }, [resourceSchema, formMode]);
 

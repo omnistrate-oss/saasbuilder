@@ -67,8 +67,12 @@ const InstancesPage = () => {
     instanceId?: string;
     isCustomDNS?: boolean;
   }>({});
-  const { subscriptionsObj, serviceOfferingsObj, isFetchingSubscriptions } =
-    useGlobalData();
+  const {
+    subscriptionsObj,
+    serviceOfferingsObj,
+    isFetchingSubscriptions,
+    isFetchingServiceOfferings,
+  } = useGlobalData();
 
   const dataTableColumns = useMemo(() => {
     return [
@@ -331,7 +335,7 @@ const InstancesPage = () => {
         },
       }),
     ];
-  }, [subscriptionsObj]);
+  }, [subscriptionsObj, serviceOfferingsObj]);
 
   const {
     data: instances = [],
@@ -428,7 +432,11 @@ const InstancesPage = () => {
             refetchInstances,
             isFetchingInstances,
           }}
-          isLoading={isLoadingInstances || isFetchingSubscriptions}
+          isLoading={
+            isLoadingInstances ||
+            isFetchingSubscriptions ||
+            isFetchingServiceOfferings
+          }
           selectedRows={selectedRows}
           onRowSelectionChange={setSelectedRows}
           selectionMode="single"
