@@ -446,7 +446,7 @@ const InstancesTableHeader = ({
         </div>
       </div>
 
-      <div className="px-6 py-3 border-y-[1px]">
+      <div className="px-6 py-4 border-b-[1px]">
         <AddInstanceFilters
           setSelectedFilters={setSelectedFilters}
           filterOptionsMap={filterOptionsMap}
@@ -458,13 +458,13 @@ const InstancesTableHeader = ({
           setSelectedFilters={setSelectedFilters}
           filterOptionsMap={filterOptionsMap}
         />
-        <div className="flex flex-row justify-between gap-4 items-center py-4 px-3 border-b border-[#EAECF0]">
-          <InstanceFilters
-            filterStatus={statusFilters}
-            setFilterStatus={setStatusFilters}
-            filterInstanceCount={instancesFilterCount}
-          />
-        </div>
+      </div>
+      <div className="flex flex-row justify-between gap-4 items-center py-4 px-6 border-b border-[#EAECF0]">
+        <InstanceFilters
+          filterStatus={statusFilters}
+          setFilterStatus={setStatusFilters}
+          filterInstanceCount={instancesFilterCount}
+        />
       </div>
     </div>
   );
