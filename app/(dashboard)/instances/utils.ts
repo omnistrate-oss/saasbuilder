@@ -219,7 +219,6 @@ export const getInitialValues = (
     resourceId: resources[0]?.value || "",
     cloudProvider,
     region: region || "",
-    network_type: "",
     requestParams: {},
   };
 };

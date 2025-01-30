@@ -178,10 +178,19 @@ const ChartTooltipContent = React.forwardRef<
     return (
       <div
         ref={ref}
-        className={cn(
-          "grid min-w-[8rem] items-start gap-1.5 rounded-lg border border-border/50 bg-background px-2.5 py-1.5 text-xs shadow-xl",
-          className
-        )}
+        style={{
+          display: "grid",
+          alignItems: "flex-start",
+          minWidth: "8rem",
+          gap: "0.375rem",
+          border: "1px solid #E5E7EB",
+          borderRadius: "0.375rem",
+          backgroundColor: "#FFF",
+          padding: "0.375rem 0.625rem",
+          fontSize: "0.75rem",
+          boxShadow: "0 0 0.5rem rgba(0, 0, 0, 0.1)",
+        }}
+        className={className}
       >
         {!nestLabel ? tooltipLabel : null}
         <div className="grid gap-1.5">
@@ -207,20 +216,30 @@ const ChartTooltipContent = React.forwardRef<
                     ) : (
                       !hideIndicator && (
                         <div
-                          className={cn(
-                            "shrink-0 rounded-[2px] border-[--color-border] bg-[--color-bg]",
-                            {
-                              "h-2.5 w-2.5": indicator === "dot",
-                              "w-1": indicator === "line",
-                              "w-0 border-[1.5px] border-dashed bg-transparent":
-                                indicator === "dashed",
-                              "my-0.5": nestLabel && indicator === "dashed",
-                            }
-                          )}
                           style={
                             {
                               "--color-bg": indicatorColor,
                               "--color-border": indicatorColor,
+                              flexShrink: 0,
+                              borderRadius: "2px",
+                              border: `1px solid ${indicatorColor}`,
+                              backgroundColor: indicatorColor,
+                              ...(indicator === "dot" && {
+                                height: "0.625rem",
+                                width: "0.625rem",
+                              }),
+                              ...(indicator === "line" && {
+                                width: "0.25rem",
+                              }),
+                              ...(indicator === "dashed" && {
+                                width: "0",
+                                border: "1.5px dashed",
+                                backgroundColor: "transparent",
+                              }),
+                              ...(nestLabel &&
+                                indicator === "dashed" && {
+                                  margin: "0.125rem 0",
+                                }),
                             } as React.CSSProperties
                           }
                         />

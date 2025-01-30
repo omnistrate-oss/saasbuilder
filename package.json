@@ -78,6 +78,7 @@
     "sharp": "0.32.6",
     "swagger-ui-react": "5.17.14",
     "tailwind-merge": "^2.6.0",
+    "tailwindcss-animate": "^1.0.7",
     "uuid": "^10.0.0",
     "yup": "^0.32.11"
   },
