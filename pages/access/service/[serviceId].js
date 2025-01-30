@@ -791,7 +791,18 @@ function MarketplaceService() {
     },
     enableReinitialize: true,
     onSubmit: (values) => {
-      const data = cloneDeep(values);
+      const valuesCopy = cloneDeep(values);
+      const data = {};
+      //add non empty values to the payload
+      for (const key in valuesCopy) {
+        if (valuesCopy[key]) {
+          if (valuesCopy[key] === "requestParams") {
+            data["requestParams"] = cloneDeep(valuesCopy["requestParams"]);
+          } else {
+            data[key] = valuesCopy[key];
+          }
+        }
+      }
 
       async function getSchema() {
         try {
