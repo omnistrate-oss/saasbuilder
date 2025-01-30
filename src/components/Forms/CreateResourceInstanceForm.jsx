@@ -496,7 +496,7 @@ function CreateResourceInstanceForm(props) {
               if (isBYOA && !shouldShowParamField(param.key)) {
                 return null;
               }
-              if (param.type === "Password") {
+              if (param.type?.toLowerCase() === "password") {
                 return (
                   <FieldContainer key={param.key}>
                     {param.required == true ? (
@@ -608,7 +608,7 @@ function CreateResourceInstanceForm(props) {
                     </FieldContainer>
                   );
                 }
-                if (param.custom == true && param.type == "Boolean") {
+                if (param.custom == true && param.type?.toLowerCase() === "boolean") {
                   return (
                     <FieldContainer key={param.key}>
                       <FieldLabel required={param.required}>
@@ -777,7 +777,7 @@ function CreateResourceInstanceForm(props) {
                           <GCPProjectNumberDescription context="access" />
                         )}
                       </FieldDescription>
-                      {param.type === "Float64" ? (
+                      {param.type?.toLowerCase() === "float64" ? (
                         <TextField
                           id={`requestParams.${param.key}`}
                           type="number"

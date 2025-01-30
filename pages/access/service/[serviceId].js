@@ -817,7 +817,7 @@ function MarketplaceService() {
           });
           schemaArray
             .filter(
-              (field) => field.type === "Boolean" && field.custom === true
+              (field) => field.type?.toLowerCase() === "boolean" && field.custom === true
             )
             .forEach((field) => {
               if (!data.requestParams[field.key]) {
@@ -831,13 +831,13 @@ function MarketplaceService() {
               return schemaParam.key === key;
             });
 
-            switch (result.type) {
-              case "Number":
+            switch (result.type?.toLowerCase()) {
+              case "number":
                 {
                   data.requestParams[key] = Number(data.requestParams[key]);
                 }
                 break;
-              case "Float64":
+              case "float64":
                 {
                   const output = Number(data.requestParams[key]);
                   {
@@ -850,7 +850,7 @@ function MarketplaceService() {
                   }
                 }
                 break;
-              case "Boolean":
+              case "boolean":
                 {
                   if (data.requestParams[key] === "true")
                     data.requestParams[key] = true;
@@ -1454,7 +1454,7 @@ function MarketplaceService() {
         });
 
         schemaArray
-          .filter((field) => field.type === "Boolean" && field.custom === true)
+          .filter((field) => field.type.toLowerCase() === "boolean" && field.custom === true)
           .forEach((field) => {
             if (!data.requestParams[field.key]) {
               data.requestParams[field.key] = "false";
@@ -1486,11 +1486,11 @@ function MarketplaceService() {
             return schemaParam.key === key;
           });
 
-          switch (result?.type) {
-            case "Number":
+          switch (result?.type?.toLowerCase()) {
+            case "number":
               data.requestParams[key] = Number(data.requestParams[key]);
               break;
-            case "Float64":
+            case "float64":
               const output = Number(data.requestParams[key]);
               if (!Number.isNaN(output)) {
                 data.requestParams[key] = Number(data.requestParams[key]);
@@ -1499,7 +1499,7 @@ function MarketplaceService() {
                 isTypeError = true;
               }
               break;
-            case "Boolean":
+            case "boolean":
               if (data.requestParams[key] === "true")
                 data.requestParams[key] = true;
               else data.requestParams[key] = false;
