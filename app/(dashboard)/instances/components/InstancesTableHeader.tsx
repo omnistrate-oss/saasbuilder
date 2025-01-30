@@ -26,6 +26,7 @@ import {
 import Tooltip from "src/components/Tooltip/Tooltip";
 import { colors } from "src/themeConfig";
 import { CircularProgress } from "@mui/material";
+import InstanceFilters from "src/components/InstanceFilters/InstanceFilters";
 
 type Action = {
   onClick: () => void;
@@ -45,6 +46,9 @@ const InstancesTableHeader = ({
   selectedInstanceSubscription,
   refetchInstances,
   isFetchingInstances,
+  instancesFilterCount,
+  instanceFilterStatus,
+  setInstanceFilterStatus,
 }) => {
   const snackbar = useSnackbar();
 
@@ -347,88 +351,101 @@ const InstancesTableHeader = ({
   ]);
 
   return (
-    <div className="flex items-center justify-between gap-4 py-4 px-6">
-      <DataGridHeaderTitle
-        title="List of Instances"
-        desc="Details of instances"
-        count={count}
-        units={{ singular: "Instance", plural: "Instances" }}
-      />
-
-      <div className="flex items-center gap-4">
-        <div className="flex items-center">
-          {isFetchingInstances && <CircularProgress size={20} />}
-        </div>
-
-        <RefreshWithToolTip
-          refetch={refetchInstances}
-          disabled={isFetchingInstances}
+    <div>
+      <div className="flex items-center justify-between gap-4 py-4 px-6 border-b border-[#EAECF0]">
+        <DataGridHeaderTitle
+          title="List of Instances"
+          desc="Details of instances"
+          count={count}
+          units={{ singular: "Instance", plural: "Instances" }}
         />
 
-        {mainActions.map((action, index) => {
-          const Icon = icons[action.label];
-          return (
-            <Button
-              key={index}
-              variant={
-                action.actionType === "primary" ? "contained" : "outlined"
+        <div className="flex items-center gap-4">
+          <div className="flex items-center">
+            {isFetchingInstances && <CircularProgress size={20} />}
+          </div>
+
+          <RefreshWithToolTip
+            refetch={refetchInstances}
+            disabled={isFetchingInstances}
+          />
+
+          {mainActions.map((action, index) => {
+            const Icon = icons[action.label];
+            return (
+              <Button
+                key={index}
+                variant={
+                  action.actionType === "primary" ? "contained" : "outlined"
+                }
+                disabled={action.isDisabled}
+                onClick={action.onClick}
+                startIcon={<Icon disabled={action.isDisabled} />}
+                disabledMessage={action.disabledMessage}
+                outlineColor={colors.green300}
+              >
+                {action.label}
+              </Button>
+            );
+          })}
+
+          <Select
+            value=""
+            renderValue={(value: string) => {
+              if (!value) {
+                return "Action";
+              } else {
+                return "";
               }
-              disabled={action.isDisabled}
-              onClick={action.onClick}
-              startIcon={<Icon disabled={action.isDisabled} />}
-              disabledMessage={action.disabledMessage}
-              outlineColor={colors.green300}
-            >
-              {action.label}
-            </Button>
-          );
-        })}
-
-        <Select
-          value=""
-          renderValue={(value: string) => {
-            if (!value) {
-              return "Action";
-            } else {
-              return "";
-            }
-          }}
-          displayEmpty
-          disabled={otherActions.length === 0}
-          sx={{ margin: "0px", height: "40px" }}
-        >
-          {otherActions.map(
-            ({ label, onClick, isDisabled, disabledMessage }) => {
-              const Icon = icons[label];
-              const menuItem = (
-                <MenuItem
-                  value={label}
-                  key={label}
-                  sx={{
-                    gap: "10px",
-                    fontSize: "14px",
-                    color: isDisabled ? "#a3a6ac" : "",
-                  }}
-                  disabled={isDisabled}
-                  onClick={onClick}
-                >
-                  <Icon disabled={isDisabled} />
-                  {label}
-                </MenuItem>
-              );
-
-              if (disabledMessage) {
-                return (
-                  <Tooltip key={label} title={disabledMessage} placement="top">
-                    <span>{menuItem}</span>
-                  </Tooltip>
+            }}
+            displayEmpty
+            disabled={otherActions.length === 0}
+            sx={{ margin: "0px", height: "40px" }}
+          >
+            {otherActions.map(
+              ({ label, onClick, isDisabled, disabledMessage }) => {
+                const Icon = icons[label];
+                const menuItem = (
+                  <MenuItem
+                    value={label}
+                    key={label}
+                    sx={{
+                      gap: "10px",
+                      fontSize: "14px",
+                      color: isDisabled ? "#a3a6ac" : "",
+                    }}
+                    disabled={isDisabled}
+                    onClick={onClick}
+                  >
+                    <Icon disabled={isDisabled} />
+                    {label}
+                  </MenuItem>
                 );
-              }
 
-              return menuItem;
-            }
-          )}
-        </Select>
+                if (disabledMessage) {
+                  return (
+                    <Tooltip
+                      key={label}
+                      title={disabledMessage}
+                      placement="top"
+                    >
+                      <span>{menuItem}</span>
+                    </Tooltip>
+                  );
+                }
+
+                return menuItem;
+              }
+            )}
+          </Select>
+        </div>
+      </div>
+      <div className="flex flex-row justify-between gap-4 items-center py-4 px-3 border-b border-[#EAECF0]">
+        <InstanceFilters
+          filterStatus={instanceFilterStatus}
+          setFilterStatus={setInstanceFilterStatus}
+          filterInstanceCount={instancesFilterCount}
+        />
       </div>
     </div>
   );

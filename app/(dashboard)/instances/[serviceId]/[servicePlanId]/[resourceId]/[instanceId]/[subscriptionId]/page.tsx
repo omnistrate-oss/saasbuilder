@@ -36,8 +36,9 @@ import { checkCustomDNSEndpoint, getTabs } from "./utils";
 import PageContainer from "app/(dashboard)/components/Layout/PageContainer";
 import { colors } from "src/themeConfig";
 import ResourceCustomDNS from "src/components/ResourceInstance/Connectivity/ResourceCustomDNS";
+import { useSearchParams } from "next/navigation";
 
-type CurrentTab =
+export type CurrentTab =
   | "Resource Instance Details"
   | "Connectivity"
   | "Nodes"
@@ -62,6 +63,8 @@ const InstanceDetailsPage = ({
 }) => {
   const { serviceId, servicePlanId, resourceId, instanceId, subscriptionId } =
     params;
+  const searchParams = useSearchParams();
+  const view = searchParams?.get("view");
 
   const [currentTab, setCurrentTab] = useState<CurrentTab>(
     "Resource Instance Details"
@@ -71,6 +74,12 @@ const InstanceDetailsPage = ({
   useEffect(() => {
     document.title = currentTab;
   }, [currentTab]);
+
+  useEffect(() => {
+    if (view) {
+      setCurrentTab(view as CurrentTab);
+    }
+  }, [view]);
 
   const insightsVisible = useSelector(selectInstanceDetailsSummaryVisibility);
   const dispatch = useDispatch();
@@ -246,10 +255,15 @@ const InstanceDetailsPage = ({
           createdAt={resourceInstanceData.createdAt}
           modifiedAt={resourceInstanceData.modifiedAt}
           networkType={resourceInstanceData.networkType}
-          healthStatusPercent={resourceInstanceData.healthStatusPercent}
           isResourceBYOA={isResourceBYOA}
           isCliManagedResource={isCliManagedResource}
           subscriptionOwner={subscription.subscriptionOwnerName}
+          detailedNetworkTopology={
+            resourceInstanceData.detailedNetworkTopology || {}
+          }
+          onViewNodesClick={() => {
+            setCurrentTab("Nodes");
+          }}
         />
       </Collapse>
       <Tabs

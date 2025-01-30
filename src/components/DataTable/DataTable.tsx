@@ -1,7 +1,7 @@
 import React, { FC, ReactNode, useMemo, useState } from "react";
 import Collapse from "@mui/material/Collapse";
 import IconButton from "@mui/material/IconButton";
-import { Box, CircularProgress, Stack } from "@mui/material";
+import { Box, CircularProgress, Stack, SxProps } from "@mui/material";
 import {
   ColumnDef,
   ExpandedState,
@@ -72,12 +72,13 @@ type DataTableProps<TData> = {
   getSubRows?: (orginalRow: TData) => TData[];
   HeaderComponent: FC;
   headerProps: any;
-
   // Row Selection Props
   selectionMode?: SelectionMode;
   selectedRows?: string[];
   onRowSelectionChange?: (selectedRows: string[]) => void;
   rowId?: keyof TData; // Property to use as row identifier
+  tableStyles?: SxProps;
+  getRowClassName?: (rowData: TData) => string;
 };
 
 const DEFAULT_COLUMN_MIN_WIDTH = 150;
@@ -97,6 +98,8 @@ const DataTable = <TData,>(props: DataTableProps<TData>): ReactNode => {
     onRowSelectionChange,
     selectionMode = "none",
     rowId = "id" as keyof TData,
+    tableStyles = {},
+    getRowClassName,
   } = props;
 
   const [expanded, setExpanded] = useState<ExpandedState>({});
@@ -221,7 +224,7 @@ const DataTable = <TData,>(props: DataTableProps<TData>): ReactNode => {
   };
 
   return (
-    <TableContainer sx={{ borderRadius: "8px" }}>
+    <TableContainer sx={{ borderRadius: "8px", ...tableStyles }}>
       <HeaderComponent {...headerProps} />
       <Stack minHeight="605px" justifyContent="space-between">
         <Box sx={{ overflowX: "auto", flexGrow: 1, position: "relative" }}>
@@ -295,11 +298,18 @@ const DataTable = <TData,>(props: DataTableProps<TData>): ReactNode => {
               {!isLoading &&
                 rowData.map((row) => (
                   <React.Fragment key={row.id}>
-                    <TableRow>
+                    <TableRow
+                      className={
+                        getRowClassName ? getRowClassName(row.original) : ""
+                      }
+                    >
                       {row.getVisibleCells().map((cell) => {
                         const cellValue: any = cell.getValue();
                         const columnAlignment =
                           cell.column.columnDef.meta?.align || "left";
+                        const isBrowerTooltipDisabled =
+                          cell.column.columnDef.meta?.disableBrowserTooltip ||
+                          false;
                         let title = "";
                         if (
                           ["string", "number", "boolean"].includes(
@@ -312,7 +322,7 @@ const DataTable = <TData,>(props: DataTableProps<TData>): ReactNode => {
                           <TableCell
                             key={cell.id}
                             align={columnAlignment}
-                            title={title}
+                            title={isBrowerTooltipDisabled ? "" : title}
                             sx={{
                               fontSize: "14px",
                               fontWeight: "500",
@@ -385,13 +395,15 @@ const DataTable = <TData,>(props: DataTableProps<TData>): ReactNode => {
 
 export default DataTable;
 
-interface ColumnFlex {
+interface ColumnCustomFeatures {
   flex?: number;
   width?: number;
   minWidth?: number;
   align?: "center" | "left" | "right";
+  disableBrowserTooltip?: boolean;
 }
 declare module "@tanstack/react-table" {
   /*eslint-disable-next-line*/
-  interface ColumnMeta<TData extends RowData, TValue> extends ColumnFlex {}
+  interface ColumnMeta<TData extends RowData, TValue>
+    extends ColumnCustomFeatures {}
 }

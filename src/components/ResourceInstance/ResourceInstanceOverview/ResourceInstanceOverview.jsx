@@ -2,7 +2,6 @@ import { Box, Stack } from "@mui/material";
 import AwsLogo from "../../Logos/AwsLogo/AwsLogo";
 import GcpLogo from "../../Logos/GcpLogo/GcpLogo";
 import { Text } from "../../Typography/Typography";
-import GradientProgressBar from "src/components/GradientProgessBar/GradientProgressBar";
 import RegionIcon from "../../Region/RegionIcon";
 import { getResourceInstanceStatusStylesAndLabel } from "src/constants/statusChipStyles/resourceInstanceStatus";
 import StatusChip from "src/components/StatusChip/StatusChip";
@@ -14,6 +13,7 @@ import {
   TableContainer,
   TableCellCenterText,
 } from "src/components/TableComponents/TableComponents";
+import InstanceHealthStatusChip, { getInstanceHealthStatus } from "src/components/InstanceHealthStatusChip/InstanceHealthStautusChip";
 
 function ResourceInstanceOverview(props) {
   const {
@@ -22,10 +22,11 @@ function ResourceInstanceOverview(props) {
     cloudProvider,
     status,
     context,
-    healthStatusPercent,
     isResourceBYOA,
     isCliManagedResource,
     subscriptionOwner,
+    detailedNetworkTopology,
+    onViewNodesClick,
   } = props;
 
   let sectionLabel = "Resource";
@@ -37,6 +38,8 @@ function ResourceInstanceOverview(props) {
   if (isResourceBYOA) {
     sectionLabel = "Account";
   }
+
+  const healthStatus = getInstanceHealthStatus(detailedNetworkTopology, status);
 
   const statusStylesAndLabel = getResourceInstanceStatusStylesAndLabel(status);
 
@@ -164,13 +167,12 @@ function ResourceInstanceOverview(props) {
                   alignItems={"flex-end"}
                   justifyContent={"center"}
                 >
-                  {isCliManagedResource ? (
-                    <StatusChip category="unknown" label="Unknown" />
-                  ) : status === "STOPPED" ? (
-                    <StatusChip category="unknown" label="N/A" />
-                  ) : (
-                    <GradientProgressBar percentage={healthStatusPercent} />
-                  )}
+                  <InstanceHealthStatusChip
+                    computedHealthStatus={healthStatus}
+                    detailedNetworkTopology={detailedNetworkTopology}
+                    onViewNodesClick={onViewNodesClick}
+                    openLinkInSameTab={true}
+                  />
                 </Stack>
               </TableCell>
             )}

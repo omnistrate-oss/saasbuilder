@@ -358,6 +358,7 @@ export default function useResourceInstance(
           mainResourceHasCompute: Boolean(topologyDetails?.hasCompute),
           customMetrics: customMetrics,
           customNetworkDetails,
+          detailedNetworkTopology: data.detailedNetworkTopology || {},
         };
 
         return final;
