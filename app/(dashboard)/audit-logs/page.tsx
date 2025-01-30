@@ -24,6 +24,7 @@ import CursorPaginatedDataTable from "components/DataTable/CursorPaginatedDataTa
 import DataGridText from "src/components/DataGrid/DataGridText";
 import { getAccessControlRoute } from "src/utils/route/access/accessRoute";
 import { AuditEvent } from "src/types/auditEvent";
+import dayjs from "dayjs";
 
 const columnHelper = createColumnHelper<AuditEvent>();
 
@@ -31,7 +32,10 @@ const AuditLogsPage = () => {
   const [pageIndex, setPageIndex] = useState(0);
   const [selectedDateRange, setSelectedDateRange] =
     useState<Range>(initialRangeState);
-  const { subscriptionsObj, isFetchingSubscriptions } = useGlobalData();
+  const [selectedServiceId, setSelectedServiceId] = useState<string>("");
+
+  const { subscriptionsObj, serviceOfferings, isFetchingSubscriptions } =
+    useGlobalData();
 
   const {
     data: auditLogs,
@@ -42,17 +46,19 @@ const AuditLogsPage = () => {
     isFetchingNextPage,
   } = useAuditLogs({
     startDate: selectedDateRange.startDate
-      ? new Date(selectedDateRange.startDate).toISOString()
+      ? dayjs(selectedDateRange.startDate).format("YYYY-MM-DD") +
+        "T00:00:00.000Z"
       : undefined,
     endDate: selectedDateRange.endDate
-      ? new Date(selectedDateRange.endDate).toISOString()
+      ? dayjs(selectedDateRange.endDate).format("YYYY-MM-DD") + "T23:59:59.999Z"
       : undefined,
     eventSourceTypes: "Customer",
+    serviceID: selectedServiceId,
   });
 
   useEffect(() => {
     setPageIndex(0);
-  }, [selectedDateRange]);
+  }, [selectedDateRange, selectedServiceId]);
 
   const dataTableColumns = useMemo(() => {
     return [
@@ -217,6 +223,9 @@ const AuditLogsPage = () => {
             selectedDateRange,
             setSelectedDateRange,
             isFetchingAuditLogs,
+            selectedServiceId,
+            setSelectedServiceId,
+            serviceOfferings,
           }}
           isLoading={isFetchingAuditLogs || isFetchingSubscriptions}
           hasNextPage={hasNextPage}

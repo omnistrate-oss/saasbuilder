@@ -1,7 +1,7 @@
 "use client";
 
 import { Range } from "react-date-range";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { IconButton } from "@mui/material";
 import { createColumnHelper } from "@tanstack/react-table";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
@@ -26,6 +26,7 @@ import { AuditEvent } from "src/types/auditEvent";
 import formatDateUTC from "src/utils/formatDateUTC";
 import { useGlobalData } from "src/providers/GlobalDataProvider";
 import { getAccessControlRoute } from "src/utils/route/access/accessRoute";
+import dayjs from "dayjs";
 
 const columnHelper = createColumnHelper<AuditEvent>();
 
@@ -33,7 +34,10 @@ const NotificationsPage = () => {
   const [pageIndex, setPageIndex] = useState(0);
   const [selectedDateRange, setSelectedDateRange] =
     useState<Range>(initialRangeState);
-  const { subscriptionsObj, isFetchingSubscriptions } = useGlobalData();
+  const [selectedEventTypes, setSelectedEventTypes] = useState<EventType[]>([]);
+  const [selectedServiceId, setSelectedServiceId] = useState<string>("");
+  const { subscriptionsObj, serviceOfferings, isFetchingSubscriptions } =
+    useGlobalData();
 
   const {
     data: notifications,
@@ -44,12 +48,16 @@ const NotificationsPage = () => {
     isFetchingNextPage,
   } = useAuditLogs({
     startDate: selectedDateRange.startDate
-      ? new Date(selectedDateRange.startDate).toISOString()
+      ? dayjs(selectedDateRange.startDate).format("YYYY-MM-DD") +
+        "T00:00:00.000Z"
       : undefined,
     endDate: selectedDateRange.endDate
-      ? new Date(selectedDateRange.endDate).toISOString()
+      ? dayjs(selectedDateRange.endDate).format("YYYY-MM-DD") + "T23:59:59.999Z"
       : undefined,
-    eventSourceTypes: ["Infra", "Maintenance"],
+    eventSourceTypes: selectedEventTypes?.length
+      ? selectedEventTypes
+      : ["Infra", "Maintenance"],
+    serviceID: selectedServiceId,
   });
 
   const dataTableColumns = useMemo(() => {
@@ -205,6 +213,10 @@ const NotificationsPage = () => {
     ];
   }, [subscriptionsObj]);
 
+  useEffect(() => {
+    setPageIndex(0);
+  }, [selectedDateRange, selectedEventTypes, selectedServiceId]);
+
   return (
     <PageContainer>
       <PageTitle icon={NotificationsIcon} className="mb-6">
@@ -231,6 +243,11 @@ const NotificationsPage = () => {
             selectedDateRange,
             setSelectedDateRange,
             isFetchingNotifications,
+            selectedEventTypes,
+            setSelectedEventTypes,
+            selectedServiceId,
+            setSelectedServiceId,
+            serviceOfferings,
           }}
           isLoading={isFetchingNotifications || isFetchingSubscriptions}
           hasNextPage={hasNextPage}

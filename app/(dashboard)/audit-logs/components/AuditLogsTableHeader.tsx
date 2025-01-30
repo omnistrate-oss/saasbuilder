@@ -5,12 +5,17 @@ import DataGridHeaderTitle from "components/Headers/DataGridHeaderTitle";
 import RefreshWithToolTip from "components/RefreshWithTooltip/RefreshWithToolTip";
 
 import { SetState } from "src/types/common/reactGenerics";
+import { ServiceOffering } from "src/types/serviceOffering";
+import ServiceFilter from "app/(dashboard)/notifications/components/ServiceFilter";
 
 type AuditLogsTableHeaderProps = {
   refetchAuditLogs: () => void;
   isFetchingAuditLogs: boolean;
   selectedDateRange: Range;
   setSelectedDateRange: SetState<Range>;
+  selectedServiceId: string;
+  setSelectedServiceId: SetState<string>;
+  serviceOfferings: ServiceOffering[];
 };
 
 const AuditLogsTableHeader: React.FC<AuditLogsTableHeaderProps> = ({
@@ -18,6 +23,9 @@ const AuditLogsTableHeader: React.FC<AuditLogsTableHeaderProps> = ({
   isFetchingAuditLogs,
   selectedDateRange,
   setSelectedDateRange,
+  selectedServiceId,
+  setSelectedServiceId,
+  serviceOfferings,
 }) => {
   return (
     <div className="flex items-center justify-between gap-4 py-5 px-6">
@@ -34,6 +42,12 @@ const AuditLogsTableHeader: React.FC<AuditLogsTableHeaderProps> = ({
         <DateRangePicker
           dateRange={selectedDateRange}
           setDateRange={setSelectedDateRange}
+        />
+
+        <ServiceFilter
+          selectedServiceId={selectedServiceId}
+          setSelectedServiceId={setSelectedServiceId}
+          serviceOfferings={serviceOfferings}
         />
       </div>
     </div>
