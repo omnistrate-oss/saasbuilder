@@ -1,6 +1,10 @@
 import useServiceApiDocsData from "src/hooks/useServiceApiDocsData";
 import CardWithTitle from "../Card/CardWithTitle";
-import SwaggerDocs from "../SwaggerDocs/SwaggerDocs";
+// import SwaggerDocs from "../SwaggerDocs/SwaggerDocs";
+import dynamic from "next/dynamic";
+const SwaggerDocs = dynamic(() => import("../SwaggerDocs/SwaggerDocs"), {
+  ssr: false,
+});
 import LoadingSpinner from "../LoadingSpinner/LoadingSpinner";
 import { Text } from "../Typography/Typography";
 

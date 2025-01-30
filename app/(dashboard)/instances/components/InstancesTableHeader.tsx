@@ -25,6 +25,8 @@ import {
 } from "src/utils/isAllowedByRBAC";
 import Tooltip from "src/components/Tooltip/Tooltip";
 import { colors } from "src/themeConfig";
+import AddInstanceFilters from "./AddInstanceFilters";
+import EditInstanceFilters from "./EditInstanceFilters";
 import { CircularProgress } from "@mui/material";
 import InstanceFilters from "src/components/InstanceFilters/InstanceFilters";
 
@@ -46,9 +48,12 @@ const InstancesTableHeader = ({
   selectedInstanceSubscription,
   refetchInstances,
   isFetchingInstances,
+  filterOptionsMap,
+  selectedFilters,
+  setSelectedFilters,
   instancesFilterCount,
-  instanceFilterStatus,
-  setInstanceFilterStatus,
+  statusFilters,
+  setStatusFilters,
 }) => {
   const snackbar = useSnackbar();
 
@@ -440,10 +445,24 @@ const InstancesTableHeader = ({
           </Select>
         </div>
       </div>
-      <div className="flex flex-row justify-between gap-4 items-center py-4 px-3 border-b border-[#EAECF0]">
+
+      <div className="px-6 py-4 border-b-[1px]">
+        <AddInstanceFilters
+          setSelectedFilters={setSelectedFilters}
+          filterOptionsMap={filterOptionsMap}
+          selectedFilters={selectedFilters}
+        />
+
+        <EditInstanceFilters
+          selectedFilters={selectedFilters}
+          setSelectedFilters={setSelectedFilters}
+          filterOptionsMap={filterOptionsMap}
+        />
+      </div>
+      <div className="flex flex-row justify-between gap-4 items-center py-4 px-6 border-b border-[#EAECF0]">
         <InstanceFilters
-          filterStatus={instanceFilterStatus}
-          setFilterStatus={setInstanceFilterStatus}
+          filterStatus={statusFilters}
+          setFilterStatus={setStatusFilters}
           filterInstanceCount={instancesFilterCount}
         />
       </div>
