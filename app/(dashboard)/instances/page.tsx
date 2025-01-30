@@ -7,7 +7,14 @@ import { useMutation } from "@tanstack/react-query";
 import { createColumnHelper } from "@tanstack/react-table";
 import useInstances from "./hooks/useInstances";
 import InstanceForm from "./components/InstanceForm";
-import { getMainResourceFromInstance, getRowBorderStyles } from "./utils";
+import {
+  FilterCategorySchema,
+  getFilteredInstances,
+  getInstanceFiltersObject,
+  getIntialFiltersObject,
+  getMainResourceFromInstance,
+  getRowBorderStyles,
+} from "./utils";
 import PageTitle from "../components/Layout/PageTitle";
 import InstancesIcon from "../components/Icons/InstancesIcon";
 import PageContainer from "../components/Layout/PageContainer";
@@ -69,16 +76,18 @@ const InstancesPage = () => {
     isCustomDNS?: boolean;
   }>({});
 
-  const [instanceFilterStatus, setInstanceFilterStatus] = useState(
-    getInitialFilterState()
-  );
-  
+  const [statusFilters, setStatusFilters] = useState(getInitialFilterState());
+
   const {
     subscriptionsObj,
     serviceOfferingsObj,
     isFetchingSubscriptions,
     isFetchingServiceOfferings,
   } = useGlobalData();
+
+  const [selectedFilters, setSelectedFilters] = useState<
+    Record<string, FilterCategorySchema>
+  >(getIntialFiltersObject());
 
   const dataTableColumns = useMemo(() => {
     return [
@@ -368,18 +377,28 @@ const InstancesPage = () => {
     );
   }, [instances]);
 
+  const filterOptionsMap = useMemo(
+    () => getInstanceFiltersObject(nonBYOAInstances, subscriptionsObj),
+    [nonBYOAInstances, subscriptionsObj]
+  );
+
+  const filteredInstances = useMemo(
+    () =>
+      getFilteredInstances(nonBYOAInstances, selectedFilters, subscriptionsObj),
+    [nonBYOAInstances, selectedFilters, subscriptionsObj]
+  );
   const failedInstances = useMemo(() => {
-    return nonBYOAInstances.filter((instance) => instance.status === "FAILED");
-  }, [nonBYOAInstances]);
+    return filteredInstances.filter((instance) => instance.status === "FAILED");
+  }, [filteredInstances]);
 
   const overloadedInstances = useMemo(() => {
-    return nonBYOAInstances.filter(
+    return filteredInstances.filter(
       (instance) => instance.instanceLoadStatus === "POD_OVERLOAD"
     );
-  }, [nonBYOAInstances]);
+  }, [filteredInstances]);
 
   const unhealthyInstances = useMemo(() => {
-    return nonBYOAInstances.filter((instance) => {
+    return filteredInstances.filter((instance) => {
       const instanceHealthStatus = getInstanceHealthStatus(
         instance.detailedNetworkTopology as Record<
           string,
@@ -392,30 +411,28 @@ const InstancesPage = () => {
 
       return false;
     });
-  }, [nonBYOAInstances]);
+  }, [filteredInstances]);
 
-  const filteredInstances = useMemo(() => {
-    let filteredInstances = nonBYOAInstances;
-    if (instanceFilterStatus.failed) {
-      filteredInstances = failedInstances;
+  const statusFilteredInstances = useMemo(() => {
+    let instances = filteredInstances;
+    if (statusFilters.failed) {
+      instances = failedInstances;
     }
-    if (instanceFilterStatus.overloaded) {
-      filteredInstances = overloadedInstances;
+    if (statusFilters.overloaded) {
+      instances = overloadedInstances;
     }
 
-    if (instanceFilterStatus.unhealthy) {
-      filteredInstances = unhealthyInstances;
+    if (statusFilters.unhealthy) {
+      instances = unhealthyInstances;
     }
-    return filteredInstances;
+    return instances;
   }, [
     failedInstances,
     overloadedInstances,
     unhealthyInstances,
-    instanceFilterStatus,
+    statusFilters,
     nonBYOAInstances,
   ]);
-
-  console.log("Instances", filteredInstances);
 
   const selectedInstance = useMemo(() => {
     return nonBYOAInstances.find((instance) => instance.id === selectedRows[0]);
@@ -485,15 +502,14 @@ const InstancesPage = () => {
       <PageTitle icon={InstancesIcon} className="mb-6">
         Deployment Instances
       </PageTitle>
-
       <div>
         <DataTable
           columns={dataTableColumns}
-          rows={filteredInstances}
+          rows={statusFilteredInstances}
           noRowsText="No instances"
           HeaderComponent={InstancesTableHeader}
           headerProps={{
-            count: filteredInstances.length,
+            count: statusFilteredInstances.length,
             selectedInstance,
             setSelectedRows,
             setOverlayType,
@@ -502,9 +518,12 @@ const InstancesPage = () => {
             selectedInstanceSubscription,
             refetchInstances,
             isFetchingInstances,
+            filterOptionsMap,
+            selectedFilters,
+            setSelectedFilters,
             instancesFilterCount: instancesFilterCount,
-            instanceFilterStatus: instanceFilterStatus,
-            setInstanceFilterStatus: setInstanceFilterStatus,
+            statusFilters: statusFilters,
+            setStatusFilters: setStatusFilters,
           }}
           isLoading={
             isLoadingInstances ||

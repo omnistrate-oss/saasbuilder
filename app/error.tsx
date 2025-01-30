@@ -46,7 +46,7 @@ const ErrorPage = () => {
             ? ` If the issue persists please reach out at ${orgSupportEmail || email}`
             : ""}
         </Description>
-        <Link href="/instances">
+        <Link href="/signin">
           <Button variant="contained" size="xlarge" sx={{ marginTop: "40px" }}>
             Go to Home
           </Button>

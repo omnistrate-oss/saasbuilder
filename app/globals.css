@@ -14,6 +14,7 @@ body,
 
     --purple-50: #f4f3ff;
     --purple-200: #d9d6fe;
+    --purple-500: #7a5af8;
     --purple-600: #6938ef;
     --purple-700: #5925dc;
     --purple-900: #3e1c96;
@@ -24,8 +25,10 @@ body,
     --success-600: #079455;
     --success-700: #067647;
 
+    --green-50: #edf2f2;
     --green-300: #73e2a3;
     --green-600: #099250;
+    --green-700: #087443;
 
     --error-50: #fef3f2;
     --error-200: #fecdca;

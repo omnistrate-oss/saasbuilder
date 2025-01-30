@@ -9,6 +9,7 @@ import useInstances from "../instances/hooks/useInstances";
 // import ChartCard from "./components/ChartCard";
 // import LifecycleStatusChart from "./charts/LifecycleStatusChart";
 // import DeploymentsByLoad from "./charts/DeploymentsByLoadChart";
+// import CloudProvidersChart from "./charts/CloudProvidersChart";
 
 const DashboardPage = () => {
   const { data: instances = [], isLoading: isLoadingInstances } =
@@ -25,7 +26,7 @@ const DashboardPage = () => {
         isFetchingInstances={isLoadingInstances}
       />
 
-      {/* <div className="mt-8 grid lg:grid-cols-3 gap-3">
+      {/* <div className="mt-8 grid lg:grid-cols-3 gap-6">
         <ChartCard title="Lifecycle Status Breakdown" className="lg:col-span-2">
           <LifecycleStatusChart instances={instances} />
         </ChartCard>
@@ -33,9 +34,13 @@ const DashboardPage = () => {
         <ChartCard title="Health Status Breakdown">Hello World!</ChartCard>
       </div>
 
-      <div className="mt-8 grid lg:grid-cols-3 gap-3">
+      <div className="mt-8 grid lg:grid-cols-3 gap-6">
         <ChartCard title="Deployments By Load">
           <DeploymentsByLoad instances={instances} />
+        </ChartCard>
+
+        <ChartCard title="Deployments By Cloud">
+          <CloudProvidersChart instances={instances} />
         </ChartCard>
       </div> */}
     </PageContainer>
