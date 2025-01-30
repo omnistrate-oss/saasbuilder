@@ -795,12 +795,10 @@ function MarketplaceService() {
       const data = {};
       //add non empty values to the payload
       for (const key in valuesCopy) {
-        if (valuesCopy[key]) {
-          if (valuesCopy[key] === "requestParams") {
-            data["requestParams"] = cloneDeep(valuesCopy["requestParams"]);
-          } else {
-            data[key] = valuesCopy[key];
-          }
+        const value = valuesCopy[key];
+        if (value === undefined || value === "" || value === null) continue;
+        else {
+          data[key] = valuesCopy[key];
         }
       }
 
