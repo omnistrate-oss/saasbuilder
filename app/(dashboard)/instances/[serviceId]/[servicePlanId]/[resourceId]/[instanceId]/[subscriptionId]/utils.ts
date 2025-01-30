@@ -24,7 +24,7 @@ export const getTabs = (
     delete tabs.nodes;
   }
 
-  tabs["auditLogs"] = "Events";
+  tabs["auditLogs"] = "Activities";
   if (isBackup) {
     tabs["backups"] = "Backups";
   }
