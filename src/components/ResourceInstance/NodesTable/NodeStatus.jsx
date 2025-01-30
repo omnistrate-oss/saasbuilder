@@ -42,17 +42,17 @@ export const NodeStatus = (props) => {
               width="8px"
               height="8px"
               borderRadius="50%"
-              sx={{
-                animation: "blink 1s infinite",
-                "@keyframes blink": {
-                  "0%, 100%": {
-                    opacity: 0.85,
-                  },
-                  "50%": {
-                    opacity: 0.25,
-                  },
-                },
-              }}
+              // sx={{
+              //   animation: "blink 1s infinite",
+              //   "@keyframes blink": {
+              //     "0%, 100%": {
+              //       opacity: 0.85,
+              //     },
+              //     "50%": {
+              //       opacity: 0.25,
+              //     },
+              //   },
+              // }}
             />
           );
         })}

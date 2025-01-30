@@ -5,7 +5,7 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart";
 import { useMemo } from "react";
-import { Pie, PieChart } from "recharts";
+import { Label, Pie, PieChart } from "recharts";
 import { ResourceInstance } from "src/types/resourceInstance";
 
 type DeploymentsByLoadChartProps = {
@@ -80,7 +80,38 @@ const DeploymentsByLoadChart: React.FC<DeploymentsByLoadChartProps> = ({
           dataKey="instances"
           nameKey="loadStatus"
           innerRadius={60}
-        />
+          strokeWidth={5}
+        >
+          <Label
+            content={({ viewBox }) => {
+              if (viewBox && "cx" in viewBox && "cy" in viewBox) {
+                return (
+                  <text
+                    x={viewBox.cx}
+                    y={viewBox.cy}
+                    textAnchor="middle"
+                    dominantBaseline="middle"
+                  >
+                    <tspan
+                      x={viewBox.cx}
+                      y={viewBox.cy}
+                      className="fill-foreground text-3xl font-bold"
+                    >
+                      {instances?.length.toLocaleString()}
+                    </tspan>
+                    <tspan
+                      x={viewBox.cx}
+                      y={(viewBox.cy || 0) + 24}
+                      className="fill-muted-foreground"
+                    >
+                      Instances
+                    </tspan>
+                  </text>
+                );
+              }
+            }}
+          />
+        </Pie>
       </PieChart>
     </ChartContainer>
   );

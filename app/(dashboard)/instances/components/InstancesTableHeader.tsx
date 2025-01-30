@@ -28,6 +28,7 @@ import { colors } from "src/themeConfig";
 import AddInstanceFilters from "./AddInstanceFilters";
 import EditInstanceFilters from "./EditInstanceFilters";
 import { CircularProgress } from "@mui/material";
+import InstanceFilters from "src/components/InstanceFilters/InstanceFilters";
 
 type Action = {
   onClick: () => void;
@@ -50,6 +51,9 @@ const InstancesTableHeader = ({
   filterOptionsMap,
   selectedFilters,
   setSelectedFilters,
+  instancesFilterCount,
+  statusFilters,
+  setStatusFilters,
 }) => {
   const snackbar = useSnackbar();
 
@@ -353,7 +357,7 @@ const InstancesTableHeader = ({
 
   return (
     <div>
-      <div className="flex items-center justify-between gap-4 py-4 px-6">
+      <div className="flex items-center justify-between gap-4 py-4 px-6 border-b border-[#EAECF0]">
         <DataGridHeaderTitle
           title="List of Instances"
           desc="Details of instances"
@@ -454,6 +458,13 @@ const InstancesTableHeader = ({
           setSelectedFilters={setSelectedFilters}
           filterOptionsMap={filterOptionsMap}
         />
+        <div className="flex flex-row justify-between gap-4 items-center py-4 px-3 border-b border-[#EAECF0]">
+          <InstanceFilters
+            filterStatus={statusFilters}
+            setFilterStatus={setStatusFilters}
+            filterInstanceCount={instancesFilterCount}
+          />
+        </div>
       </div>
     </div>
   );

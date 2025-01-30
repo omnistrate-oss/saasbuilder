@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React, { FC, ReactNode } from "react";
 import {
   Box,
   Stack,
@@ -38,18 +38,17 @@ export const statuses = {
   TERMINATED: "Terminated",
   COMPLETED: "Completed",
   NOT_ENABLED: "Not Enabled",
+  "N/A": "N/A",
 };
 
 export const statusStyles = {
   ACTIVE: {
-    backgroundColor: "#ECFDF3",
-    color: "#067647",
-    borderColor: "#ABEFC6",
+    backgroundColor: "#F8F9FC",
+    color: "#669F2A",
   },
   Active: {
-    backgroundColor: "#ECFDF3",
-    color: "#067647",
-    borderColor: "#ABEFC6",
+    backgroundColor: "#F8F9FC",
+    color: "#669F2A",
   },
   CANCELLED: {
     backgroundColor: "#FEF3F2",
@@ -75,6 +74,7 @@ export const statusStyles = {
     backgroundColor: "#FEF3F2",
     color: "#B42318",
   },
+
   Draft: {
     backgroundColor: "#FCFCFC",
     color: "#6F6F6F",
@@ -176,6 +176,10 @@ export const statusStyles = {
     backgroundColor: "#FEF3F2",
     color: "#C83532",
   },
+  "N/A": {
+    backgroundColor: "#f2f4f7",
+    color: "#667085",
+  },
 };
 
 type StatusChipProps = {
@@ -191,6 +195,7 @@ type StatusChipProps = {
   label?: string;
   category?: Category;
   borderColor?: string;
+  startIcon? : ReactNode;
 };
 
 type ChipProps = Omit<MuiChipProps, "color">;
@@ -209,6 +214,7 @@ const StatusChip: FC<ChipProps & StatusChipProps> = (props) => {
     label = statuses[status as keyof typeof statuses],
     category,
     borderColor,
+    startIcon,
     ...restProps
   } = props;
   let chipStyles = getChipStyles(status);
@@ -230,6 +236,7 @@ const StatusChip: FC<ChipProps & StatusChipProps> = (props) => {
           {pulsateDot && <PulsatingDot color={fontColor} />}
           {dot && <Dot color={fontColor} />}
           {tick && <TickIcon />}
+          {startIcon && startIcon}
           <Box
             component="span"
             sx={{ overflow: "hidden", textOverflow: "ellipsis" }}

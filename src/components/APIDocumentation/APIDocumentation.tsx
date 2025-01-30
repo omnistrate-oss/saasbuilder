@@ -6,6 +6,7 @@ const SwaggerDocs = dynamic(() => import("../SwaggerDocs/SwaggerDocs"), {
   ssr: false,
 });
 import LoadingSpinner from "../LoadingSpinner/LoadingSpinner";
+import { Text } from "../Typography/Typography";
 
 type APIDocumentationProps = {
   serviceId: string;
@@ -25,6 +26,15 @@ const APIDocumentation: React.FC<APIDocumentationProps> = ({
     <CardWithTitle title="API Documentation" style={{ minHeight: "500px" }}>
       {isLoadingServiceAPIDocs ? (
         <LoadingSpinner />
+      ) : !serviceAPIDocs ? (
+        <div
+          className="flex items-center justify-center"
+          style={{ minHeight: "250px" }}
+        >
+          <Text size="medium" weight="semibold" sx={{ textAlign: "center" }}>
+            API Documentation not available
+          </Text>
+        </div>
       ) : (
         <SwaggerDocs data={serviceAPIDocs} />
       )}

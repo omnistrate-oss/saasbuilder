@@ -154,11 +154,11 @@ const InstanceForm = ({
             return schemaParam.key === key;
           });
 
-          switch (result?.type) {
-            case "Number":
+          switch (result?.type?.toLowerCase()) {
+            case "number":
               data.requestParams[key] = Number(data.requestParams[key]);
               break;
-            case "Float64":
+            case "float64":
               const output = Number(data.requestParams[key]);
               if (!Number.isNaN(output)) {
                 data.requestParams[key] = Number(data.requestParams[key]);
@@ -167,7 +167,7 @@ const InstanceForm = ({
                 isTypeError = true;
               }
               break;
-            case "Boolean":
+            case "boolean":
               if (data.requestParams[key] === "true")
                 data.requestParams[key] = true;
               else data.requestParams[key] = false;
@@ -263,11 +263,11 @@ const InstanceForm = ({
             return schemaParam.key === key;
           });
 
-          switch (result?.type) {
-            case "Number":
+          switch (result?.type?.toLowerCase()) {
+            case "number":
               data.requestParams[key] = Number(data.requestParams[key]);
               break;
-            case "Float64":
+            case "float64":
               const output = Number(data.requestParams[key]);
               if (!Number.isNaN(output)) {
                 data.requestParams[key] = Number(data.requestParams[key]);
@@ -276,7 +276,7 @@ const InstanceForm = ({
                 isTypeError = true;
               }
               break;
-            case "Boolean":
+            case "boolean":
               if (data.requestParams[key] === "true")
                 data.requestParams[key] = true;
               else data.requestParams[key] = false;

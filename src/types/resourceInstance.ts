@@ -11,7 +11,20 @@ export type ResourceInstance =
     resourceID?: string;
   };
 
+export type ResourceInstanceNetworkTopology =
+  components["schemas"]["ResourceNetworkTopologyResult"];
+
+export type ResourceInstanceNode =
+  components["schemas"]["NodeNetworkTopologyResult"];
+
 export const RESOURCE_TYPES = {
   OperatorCRD: "OperatorCRD",
   Kustomize: "Kustomize",
 };
+
+export type InstanceComputedHealthStatus =
+  | "HEALTHY"
+  | "UNHEALTHY"
+  | "DEGRADED"
+  | "UNKNOWN"
+  | "NA";
