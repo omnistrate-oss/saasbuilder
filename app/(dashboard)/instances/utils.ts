@@ -232,6 +232,16 @@ export const getInitialValues = (
   };
 };
 
+export const getResourceNameFromInstance = (instance: ResourceInstance) => {
+  const { detailedNetworkTopology = {} } = instance ?? {};
+  const [, mainResource] =
+    Object.entries(detailedNetworkTopology).find(
+      ([, resource]: any) => resource.main
+    ) || [];
+
+  return (mainResource as any)?.resourceName;
+};
+
 export type FilterCategorySchema = {
   label: string;
   name: string;
@@ -347,7 +357,7 @@ export const getInstanceFiltersObject = (
     }
 
     //get resource options
-    const resourceName = getMainResourceFromInstance(instance)?.resourceName;
+    const resourceName = getResourceNameFromInstance(instance);
     if (resourceName && !resourcesSet.has(resourceName)) {
       result.resources.options?.push({
         value: resourceName,
@@ -424,7 +434,7 @@ export const getFilteredInstances = (
       filterOptionsMap.resources?.options?.map((option) => option.value)
     );
     result = result.filter((instance) => {
-      const resourceName = getMainResourceFromInstance(instance)?.resourceName;
+      const resourceName = getResourceNameFromInstance(instance);
       return resourceName && resourceOptions.has(resourceName);
     });
   }
