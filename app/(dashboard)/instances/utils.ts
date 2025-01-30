@@ -4,14 +4,8 @@ import { CustomNetwork } from "src/types/customNetwork";
 import { MenuItem } from "src/types/common/generalTypes";
 import { ServiceOffering } from "src/types/serviceOffering";
 import { ResourceInstance } from "src/types/resourceInstance";
-import { cloudProviderLogoMap } from "src/constants/cloudProviders";
-import {
-  getResourceInstanceStatusStylesAndLabel,
-  resourceInstanceStatusMap,
-} from "src/constants/statusChipStyles/resourceInstanceStatus";
-import StatusChip from "src/components/StatusChip/StatusChip";
-import { Stack } from "@mui/system";
-import { Box } from "@mui/material";
+import { resourceInstanceStatusMap } from "src/constants/statusChipStyles/resourceInstanceStatus";
+
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import {
@@ -257,38 +251,6 @@ export const getIntialFiltersObject: () => Record<
       name: "services",
       options: [],
       type: "list",
-      renderOption: (option) => {
-        return (
-          <Stack
-            direction="row"
-            justifyContent="flex-start"
-            alignItems="center"
-            gap="8px"
-          >
-            <Box
-              borderRadius="50%"
-              border="1px solid rgba(0, 0, 0, 0.08)"
-              overflow="hidden"
-              width="36px"
-              height="36px"
-              flexShrink={0}
-            >
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                width="36"
-                height="36"
-                style={{ objectFit: "cover" }}
-                src={
-                  option.logoURL ||
-                  "/assets/images/dashboard/service/servicePlaceholder.png"
-                }
-                alt={option.value}
-              />
-            </Box>
-            <p>{option.value}</p>
-          </Stack>
-        );
-      },
     },
     servicePlans: {
       label: "Subscription Plan",
@@ -307,7 +269,6 @@ export const getIntialFiltersObject: () => Record<
       name: "cloudProviders",
       options: [],
       type: "list",
-      renderOption: (option) => cloudProviderLogoMap[option.value],
     },
     regions: {
       label: "Region",
@@ -326,12 +287,6 @@ export const getIntialFiltersObject: () => Record<
       name: "lifecycleStatus",
       options: [],
       type: "list",
-      renderOption: (option) => {
-        const statusSytlesAndLabel = getResourceInstanceStatusStylesAndLabel(
-          option.value
-        );
-        return <StatusChip status={option.value} {...statusSytlesAndLabel} />;
-      },
     },
     createdOn: {
       label: "Created On",
