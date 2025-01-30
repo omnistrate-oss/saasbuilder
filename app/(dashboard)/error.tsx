@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
+import { usePathname } from "next/navigation";
 import { Box, Stack, styled } from "@mui/material";
 
 import Button from "components/Button/Button";
@@ -33,6 +34,7 @@ const Description = styled("p")({
 });
 
 const ErrorPage = () => {
+  const pathname = usePathname();
   const { orgSupportEmail, email } = useProviderOrgDetails();
 
   return (
@@ -46,7 +48,7 @@ const ErrorPage = () => {
             ? ` If the issue persists please reach out at ${orgSupportEmail || email}`
             : ""}
         </Description>
-        <Link href="/instances">
+        <Link href={pathname === "/instances" ? "/signin" : "/instances"}>
           <Button variant="contained" size="xlarge" sx={{ marginTop: "40px" }}>
             Go to Home
           </Button>
