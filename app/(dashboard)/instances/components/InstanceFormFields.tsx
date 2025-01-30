@@ -404,7 +404,7 @@ export const getDeploymentConfigurationFields = (
   );
 
   filteredSchema.forEach((param) => {
-    if (param.type === "Password") {
+    if (param.type?.toLowerCase() === "password") {
       fields.push({
         label: param.displayName || param.key,
         subLabel: param.description,
@@ -439,7 +439,7 @@ export const getDeploymentConfigurationFields = (
         emptyMenuText: "No dependent instances available",
         previewValue: values.requestParams[param.key],
       });
-    } else if (param.type === "Boolean") {
+    } else if (param.type?.toLowerCase() === "boolean") {
       fields.push({
         label: param.displayName || param.key,
         subLabel: param.description,

@@ -263,7 +263,7 @@ function ResourceUpdateView(props) {
               if (isCurrentResourceBYOA && !shouldShowParamField(param.key)) {
                 return null;
               }
-              if (param.type === "Password") {
+              if (param.type?.toLowerCase() === "password") {
                 return (
                   <FieldContainer key={param.key}>
                     <FieldLabel>{param.displayName}</FieldLabel>
@@ -282,7 +282,7 @@ function ResourceUpdateView(props) {
                   </FieldContainer>
                 );
               }
-              if (param.type === "Float64") {
+              if (param.type?.toLowerCase() === "float64") {
                 return (
                   <FieldContainer key={param.key}>
                     <FieldLabel required={param.required === true}>
@@ -304,7 +304,7 @@ function ResourceUpdateView(props) {
                   </FieldContainer>
                 );
               }
-              if (param.custom == true && param.type == "Boolean") {
+              if (param.custom == true && param.type?.toLowerCase() == "boolean") {
                 return (
                   <FieldContainer key={param.key}>
                     <FieldLabel>{param.displayName}</FieldLabel>
@@ -473,7 +473,7 @@ function ResourceUpdateView(props) {
                   );
                 }
 
-                if (param.type === "Password") {
+                if (param.type?.toLowerCase() === "password") {
                   return (
                     <FieldContainer key={param.key}>
                       <FieldLabel required={param.required === true}>
@@ -494,7 +494,7 @@ function ResourceUpdateView(props) {
                     </FieldContainer>
                   );
                 }
-                if (param.type === "Float64") {
+                if (param.type?.toLowerCase() === "float64") {
                   return (
                     <FieldContainer key={param.key}>
                       <FieldLabel required={param.required === true}>
@@ -517,7 +517,7 @@ function ResourceUpdateView(props) {
                     </FieldContainer>
                   );
                 }
-                if (param.custom == true && param.type == "Boolean") {
+                if (param.custom == true && param.type?.toLowerCase() == "boolean") {
                   return (
                     <FieldContainer key={param.key}>
                       <FieldLabel required={param.required === true}>
