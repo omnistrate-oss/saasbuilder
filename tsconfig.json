@@ -19,7 +19,9 @@
       "components/*": ["src/components/*"],
       "hooks/*": ["src/hooks/*"],
       "utils/*": ["src/utils/*"],
-      "public/*": ["public/*"]
+      "public/*": ["public/*"],
+      "@/components/*": ["components/*"],
+      "@/lib/*": ["lib/*"]
     },
     "target": "es5",
     "forceConsistentCasingInFileNames": true,

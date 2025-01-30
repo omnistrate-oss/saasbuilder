@@ -6,6 +6,9 @@ import PageContainer from "../components/Layout/PageContainer";
 import ClusterLocations from "src/features/Access/Dashboard/ClusterLocations";
 
 import useInstances from "../instances/hooks/useInstances";
+// import ChartCard from "./components/ChartCard";
+// import LifecycleStatusChart from "./charts/LifecycleStatusChart";
+// import DeploymentsByLoad from "./charts/DeploymentsByLoadChart";
 
 const DashboardPage = () => {
   const { data: instances = [], isLoading: isLoadingInstances } =
@@ -21,6 +24,20 @@ const DashboardPage = () => {
         resourceInstances={instances}
         isFetchingInstances={isLoadingInstances}
       />
+
+      {/* <div className="mt-8 grid lg:grid-cols-3 gap-3">
+        <ChartCard title="Lifecycle Status Breakdown" className="lg:col-span-2">
+          <LifecycleStatusChart instances={instances} />
+        </ChartCard>
+
+        <ChartCard title="Health Status Breakdown">Hello World!</ChartCard>
+      </div>
+
+      <div className="mt-8 grid lg:grid-cols-3 gap-3">
+        <ChartCard title="Deployments By Load">
+          <DeploymentsByLoad instances={instances} />
+        </ChartCard>
+      </div> */}
     </PageContainer>
   );
 };

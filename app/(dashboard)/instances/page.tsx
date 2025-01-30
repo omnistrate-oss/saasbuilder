@@ -68,11 +68,17 @@ const InstancesPage = () => {
     instanceId?: string;
     isCustomDNS?: boolean;
   }>({});
-  const { subscriptionsObj, serviceOfferingsObj, isFetchingSubscriptions } =
-    useGlobalData();
+
   const [instanceFilterStatus, setInstanceFilterStatus] = useState(
     getInitialFilterState()
   );
+  
+  const {
+    subscriptionsObj,
+    serviceOfferingsObj,
+    isFetchingSubscriptions,
+    isFetchingServiceOfferings,
+  } = useGlobalData();
 
   const dataTableColumns = useMemo(() => {
     return [
@@ -345,7 +351,7 @@ const InstancesPage = () => {
         },
       }),
     ];
-  }, [subscriptionsObj]);
+  }, [subscriptionsObj, serviceOfferingsObj]);
 
   const {
     data: instances = [],
@@ -500,7 +506,11 @@ const InstancesPage = () => {
             instanceFilterStatus: instanceFilterStatus,
             setInstanceFilterStatus: setInstanceFilterStatus,
           }}
-          isLoading={isLoadingInstances || isFetchingSubscriptions}
+          isLoading={
+            isLoadingInstances ||
+            isFetchingSubscriptions ||
+            isFetchingServiceOfferings
+          }
           selectedRows={selectedRows}
           onRowSelectionChange={setSelectedRows}
           selectionMode="single"
