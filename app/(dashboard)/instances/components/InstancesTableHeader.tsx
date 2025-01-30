@@ -78,8 +78,11 @@ const InstancesTableHeader = ({
   });
 
   const selectedResource = useMemo(() => {
-    return getMainResourceFromInstance(selectedInstance);
-  }, [selectedInstance]);
+    return getMainResourceFromInstance(
+      selectedInstance,
+      selectedInstanceOffering
+    );
+  }, [selectedInstance, selectedInstanceOffering]);
 
   const isComplexResource = CLI_MANAGED_RESOURCES.includes(
     selectedResource?.resourceType as string
@@ -114,7 +117,7 @@ const InstancesTableHeader = ({
       serviceEnvironmentKey: selectedInstanceOffering?.serviceEnvironmentURLKey,
       serviceModelKey: selectedInstanceOffering?.serviceModelURLKey,
       productTierKey: selectedInstanceOffering?.productTierURLKey,
-      resourceKey: selectedResource?.resourceKey,
+      resourceKey: selectedResource?.urlKey as string,
       id: selectedInstance?.id,
       subscriptionId: selectedInstance?.subscriptionId,
     };

@@ -165,6 +165,7 @@ const ResourceConnectivityCustomDNS: FC<ResourceConnectivityEndpointProps> = (
               const topologyDetails =
                 response.data?.detailedNetworkTopology?.[resourceId];
               //check for dnsName field in the response, absence means dns removal complete
+              // @ts-ignore
               if (!Boolean(topologyDetails?.customDNSEndpoint?.dnsName)) {
                 setIsVerifyingDNSRemoval(false);
                 refetchInstance();

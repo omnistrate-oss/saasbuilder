@@ -2,6 +2,7 @@
 
 import * as yup from "yup";
 import { useFormik } from "formik";
+import { cloneDeep } from "lodash";
 import React, { useEffect, useMemo } from "react";
 import { useMutation } from "@tanstack/react-query";
 
@@ -116,7 +117,7 @@ const InstanceForm = ({
       );
 
       const data: any = {
-        ...values,
+        ...cloneDeep(values),
         serviceProviderId: offering?.serviceProviderId,
         serviceKey: offering?.serviceURLKey,
         serviceAPIVersion: offering?.serviceAPIVersion,
@@ -204,12 +205,26 @@ const InstanceForm = ({
             productTierTypes.OMNISTRATE_MULTI_TENANCY &&
           offering?.supportsPublicNetwork;
 
+        if (!data.network_type) {
+          delete data.network_type;
+        }
+
         if (!data.cloudProvider && inputParametersObj["cloud_provider"]) {
           return snackbar.showError("Cloud Provider is required");
         } else if (!data.region && inputParametersObj["region"]) {
           return snackbar.showError("Region is required");
         } else if (!data.network_type && networkTypeFieldExists) {
           return snackbar.showError("Network Type is required");
+        }
+
+        if (
+          inputParametersObj["custom_dns_configuration"] &&
+          data.requestParams["custom_dns_configuration"]
+        ) {
+          data.requestParams.custom_dns_configuration = {
+            [selectedResource?.urlKey || ""]:
+              data.requestParams.custom_dns_configuration,
+          };
         }
 
         for (const field of requiredFields) {
@@ -286,23 +301,6 @@ const InstanceForm = ({
           .filter((field) => !["cloud_provider", "region"].includes(field.key))
           .filter((schemaParam) => schemaParam.required);
 
-        data.cloud_provider = data.cloudProvider;
-        data.custom_network_id = data.requestParams.custom_network_id;
-
-        const networkTypeFieldExists =
-          inputParametersObj["cloud_provider"] &&
-          offering?.productTierType !==
-            productTierTypes.OMNISTRATE_MULTI_TENANCY &&
-          offering?.supportsPublicNetwork;
-
-        if (!data.cloudProvider && inputParametersObj["cloud_provider"]) {
-          return snackbar.showError("Cloud Provider is required");
-        } else if (!data.region && inputParametersObj["region"]) {
-          return snackbar.showError("Region is required");
-        } else if (!data.network_type && networkTypeFieldExists) {
-          return snackbar.showError("Network Type is required");
-        }
-
         for (const field of requiredFields) {
           if (data.requestParams[field.key] === undefined) {
             snackbar.showError(`${field.displayName || field.key} is required`);
@@ -311,7 +309,9 @@ const InstanceForm = ({
         }
 
         if (!isTypeError) {
-          updateResourceInstanceMutation.mutate(data);
+          updateResourceInstanceMutation.mutate({
+            requestParams: data.requestParams,
+          });
         }
       }
     },
@@ -372,6 +372,20 @@ const InstanceForm = ({
         ...prev,
         requestParams: defaultValues,
       }));
+
+      const isMultiTenancy =
+        offering?.productTierType === productTierTypes.OMNISTRATE_MULTI_TENANCY;
+
+      const networkTypeFieldExists =
+        inputParameters.find((param) => param.key === "cloud_provider") &&
+        !isMultiTenancy &&
+        offering?.supportsPublicNetwork;
+
+      if (networkTypeFieldExists) {
+        formData.setFieldValue("network_type", "PUBLIC");
+      } else {
+        formData.setFieldValue("network_type", "");
+      }
     }
   }, [resourceSchema, formMode]);
 

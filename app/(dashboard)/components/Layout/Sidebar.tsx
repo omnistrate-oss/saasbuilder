@@ -242,7 +242,7 @@ const Sidebar = () => {
         ],
       },
       {
-        name: "Security Controls",
+        name: "Governance Hub",
         icon: ShieldIcon,
         isExpandible: true,
         subItems: [

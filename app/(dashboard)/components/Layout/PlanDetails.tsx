@@ -55,7 +55,7 @@ const PlanDetails = ({ startingTab }) => {
   return (
     <div className="space-y-6">
       <CardWithTitle title="Standard Information">
-        <div className="flex items-center gap-10">
+        <div className="grid grid-cols-2 gap-10">
           <div className="flex items-center gap-8 justify-between flex-1">
             <div className="min-w-[200px]">
               <FieldLabel required sx={{ color: "#414651", fontWeight: "600" }}>

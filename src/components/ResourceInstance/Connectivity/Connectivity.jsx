@@ -188,9 +188,8 @@ function Connectivity(props) {
               {"Connectivity Details Info"}
             </Text>
             <Text size="small" weight="regular" color="#475467">
-              {
-                "Information about the resource instance connectivity options and network settings"
-              }
+              Information about the resource instance connectivity options and
+              network settings
             </Text>
           </Box>
         </Stack>

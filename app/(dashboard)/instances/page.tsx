@@ -73,8 +73,12 @@ const InstancesPage = () => {
     instanceId?: string;
     isCustomDNS?: boolean;
   }>({});
-  const { subscriptionsObj, serviceOfferingsObj, isFetchingSubscriptions } =
-    useGlobalData();
+  const {
+    subscriptionsObj,
+    serviceOfferingsObj,
+    isFetchingSubscriptions,
+    isFetchingServiceOfferings,
+  } = useGlobalData();
 
   const [selectedFilters, setSelectedFilters] = useState<
     Record<string, FilterCategorySchema>
@@ -84,21 +88,20 @@ const InstancesPage = () => {
     return [
       columnHelper.accessor("id", {
         id: "id",
-        header: "Instance ID",
+        header: "Deployment ID",
         cell: (data) => {
-          const { id: instanceId, subscriptionId } = data.row.original;
+          const {
+            id: instanceId,
+            subscriptionId,
+            resourceID,
+          } = data.row.original;
           const { serviceId, productTierId } =
             subscriptionsObj[subscriptionId as string] || {};
-
-          const mainResourceId = getMainResourceFromInstance(
-            data.row.original
-            // @ts-ignore
-          )?.id;
 
           const resourceInstanceUrlLink = getInstanceDetailsRoute({
             serviceId,
             servicePlanId: productTierId,
-            resourceId: mainResourceId,
+            resourceId: resourceID,
             instanceId,
             subscriptionId,
           });
@@ -149,7 +152,16 @@ const InstancesPage = () => {
         }
       ),
       columnHelper.accessor(
-        (row) => getMainResourceFromInstance(row)?.resourceName,
+        (row) => {
+          const subscription = subscriptionsObj[row.subscriptionId as string];
+          const offering =
+            serviceOfferingsObj[subscription?.serviceId as string]?.[
+              subscription?.productTierId as string
+            ];
+
+          const mainResource = getMainResourceFromInstance(row, offering);
+          return mainResource?.name || "-";
+        },
         {
           id: "resourceName",
           header: "Resource Type",
@@ -183,7 +195,12 @@ const InstancesPage = () => {
       columnHelper.accessor(
         (row) => {
           const status = row.status;
-          const mainResource = getMainResourceFromInstance(row);
+          const subscription = subscriptionsObj[row.subscriptionId as string];
+          const offering =
+            serviceOfferingsObj[subscription?.serviceId as string]?.[
+              subscription?.productTierId as string
+            ];
+          const mainResource = getMainResourceFromInstance(row, offering);
 
           if (
             CLI_MANAGED_RESOURCES.includes(mainResource?.resourceType as string)
@@ -328,7 +345,7 @@ const InstancesPage = () => {
         },
       }),
     ];
-  }, [subscriptionsObj]);
+  }, [subscriptionsObj, serviceOfferingsObj]);
 
   const {
     data: instances = [],
@@ -373,8 +390,11 @@ const InstancesPage = () => {
 
   // Resource of the Selected Instance
   const selectedResource = useMemo(() => {
-    return getMainResourceFromInstance(selectedInstance);
-  }, [selectedInstance]);
+    return getMainResourceFromInstance(
+      selectedInstance,
+      selectedInstanceOffering
+    );
+  }, [selectedInstance, selectedInstanceOffering]);
 
   const selectedInstanceData = useMemo(() => {
     return {
@@ -386,7 +406,7 @@ const InstancesPage = () => {
       serviceEnvironmentKey: selectedInstanceOffering?.serviceEnvironmentURLKey,
       serviceModelKey: selectedInstanceOffering?.serviceModelURLKey,
       productTierKey: selectedInstanceOffering?.productTierURLKey,
-      resourceKey: selectedResource?.resourceKey as string,
+      resourceKey: selectedResource?.urlKey as string,
       subscriptionId: selectedInstanceSubscription?.id,
     };
   }, [
@@ -435,7 +455,11 @@ const InstancesPage = () => {
             selectedFilters,
             setSelectedFilters,
           }}
-          isLoading={isLoadingInstances || isFetchingSubscriptions}
+          isLoading={
+            isLoadingInstances ||
+            isFetchingSubscriptions ||
+            isFetchingServiceOfferings
+          }
           selectedRows={selectedRows}
           onRowSelectionChange={setSelectedRows}
           selectionMode="single"

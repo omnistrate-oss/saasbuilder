@@ -98,9 +98,6 @@ function Logs(props) {
       const data = event.data;
       setLogs((prevData) => [...prevData, data]);
     },
-    onClose: () => {
-      // console.log("Socket Connection closed", event);
-    },
     shouldReconnect: () => true,
     reconnectAttempts: 3,
     retryOnError: true,
@@ -132,12 +129,9 @@ function Logs(props) {
     //close the socket on unmount
     return () => {
       window.removeEventListener("offline", handleNetorkDisconnect);
-      //console.log("Running cleanup");
       const socket = getWebSocket();
       if (socket) {
-        //console.log("Socket", socket);
         socket.close();
-        //console.log("Closing logs socket");
       }
     };
   }, [logsSocketEndpoint]);
