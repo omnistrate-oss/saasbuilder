@@ -59,7 +59,7 @@ const DashboardPage = () => {
           pageIndex={0}
           setPageIndex={() => {}}
           showPagination={false}
-          maxHeight={290}
+          minHeight={290}
         />
       </div>
 

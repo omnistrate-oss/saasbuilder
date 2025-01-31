@@ -43,7 +43,7 @@ const EventsTable = ({
   hasNextPage,
   fetchNextPage,
   isFetchingNextPage,
-  maxHeight = "auto",
+  minHeight = "auto",
 }: any) => {
   const { subscriptionsObj } = useGlobalData();
 
@@ -225,7 +225,7 @@ const EventsTable = ({
       pageSize={10}
       rowId="id"
       showPagination={showPagination}
-      maxHeight={maxHeight}
+      minHeight={minHeight}
     />
   );
 };

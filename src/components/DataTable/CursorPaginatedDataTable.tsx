@@ -53,7 +53,7 @@ type CursorPaginatedDataTableProps<TData> = {
   pageSize?: number;
   rowId?: keyof TData;
   showPagination?: boolean;
-  maxHeight?: string | number;
+  minHeight?: string | number;
 };
 
 const DEFAULT_COLUMN_MIN_WIDTH = 150;
@@ -79,7 +79,7 @@ const CursorPaginatedDataTable = <TData,>(
     pageSize = 10,
     rowId = "id" as keyof TData,
     showPagination = true,
-    maxHeight,
+    minHeight,
   } = props;
 
   const [expanded, setExpanded] = useState<ExpandedState>({});
@@ -181,10 +181,8 @@ const CursorPaginatedDataTable = <TData,>(
     <TableContainer sx={{ borderRadius: "8px" }}>
       <HeaderComponent {...headerProps} />
       <Stack
-        maxHeight={maxHeight}
         sx={{
-          maxHeight,
-          minHeight: maxHeight ? maxHeight : showPagination ? "605px" : "540px",
+          minHeight: minHeight ? minHeight : showPagination ? "605px" : "540px",
         }}
         justifyContent="space-between"
       >
