@@ -55,7 +55,7 @@ const CustomLabelDescription: FC<{
 
             <StyledListItem
               text="Can't find AWS Account ID?"
-              link="https://docs.aws.amazon.com/IAM/latest/UserGuide/console_account-alias.html#ViewYourAWSId"
+              link="https://docs.aws.amazon.com/IAM/latest/UserGuide/console-account-id.html"
             />
           </>
         ) : variant === "gcpProjectId" ? (

@@ -250,6 +250,9 @@ const InstanceForm = ({
         }
 
         data.requestParams = requestParams;
+        delete data.requestParams.network_type;
+        delete data.requestParams.custom_network_id;
+        delete data.requestParams.custom_availability_zone;
 
         if (!Object.keys(requestParams).length) {
           return snackbar.showError(
@@ -296,22 +299,8 @@ const InstanceForm = ({
           }
         }
 
-        // Check for Required Fields
-        const requiredFields = schema
-          .filter((field) => !["cloud_provider", "region"].includes(field.key))
-          .filter((schemaParam) => schemaParam.required);
-
-        for (const field of requiredFields) {
-          if (data.requestParams[field.key] === undefined) {
-            snackbar.showError(`${field.displayName || field.key} is required`);
-            return;
-          }
-        }
-
         if (!isTypeError) {
-          updateResourceInstanceMutation.mutate({
-            requestParams: data.requestParams,
-          });
+          updateResourceInstanceMutation.mutate(data);
         }
       }
     },
@@ -326,10 +315,7 @@ const InstanceForm = ({
     isFetching: isFetchingResourceSchema,
   } = useResourceSchema({
     serviceId: values.serviceId,
-    resourceId:
-      offering?.resourceParameters.find(
-        (resource) => resource.resourceId === values.resourceId
-      )?.resourceId && values.resourceId,
+    resourceId: selectedInstance?.resourceID || values.resourceId,
     instanceId: selectedInstance?.id,
   });
 

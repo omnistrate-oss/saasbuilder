@@ -13,7 +13,9 @@ import {
   TableContainer,
   TableCellCenterText,
 } from "src/components/TableComponents/TableComponents";
-import InstanceHealthStatusChip, { getInstanceHealthStatus } from "src/components/InstanceHealthStatusChip/InstanceHealthStautusChip";
+import InstanceHealthStatusChip, {
+  getInstanceHealthStatus,
+} from "src/components/InstanceHealthStatusChip/InstanceHealthStautusChip";
 
 function ResourceInstanceOverview(props) {
   const {
@@ -65,7 +67,7 @@ function ResourceInstanceOverview(props) {
             </TableCellCenterText>
             <TableCellCenterText>
               <Text size="xsmall" weight="medium" color="#475467">
-                Status{" "}
+                Lifecycle Status
               </Text>
             </TableCellCenterText>
             <TableCellCenterText>

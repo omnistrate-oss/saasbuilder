@@ -6,6 +6,10 @@ import PageContainer from "../components/Layout/PageContainer";
 import ClusterLocations from "src/features/Access/Dashboard/ClusterLocations";
 
 import useInstances from "../instances/hooks/useInstances";
+import DashboardLogsTableHeader from "./components/DashboardLogsTableHeader";
+import EventsTable from "../components/EventsTable/EventsTable";
+import useAuditLogs from "../audit-logs/hooks/useAuditLogs";
+import { useGlobalData } from "src/providers/GlobalDataProvider";
 // import ChartCard from "./components/ChartCard";
 // import LifecycleStatusChart from "./charts/LifecycleStatusChart";
 // import DeploymentsByLoad from "./charts/DeploymentsByLoadChart";
@@ -14,6 +18,13 @@ import useInstances from "../instances/hooks/useInstances";
 const DashboardPage = () => {
   const { data: instances = [], isLoading: isLoadingInstances } =
     useInstances();
+  const { isFetchingSubscriptions } = useGlobalData();
+
+  const { data: dashboardLogs, isFetching: isFetchingDashboardLogs } =
+    useAuditLogs({
+      pageSize: 5,
+      eventSourceTypes: "Customer",
+    });
 
   return (
     <PageContainer>
@@ -25,6 +36,32 @@ const DashboardPage = () => {
         resourceInstances={instances}
         isFetchingInstances={isLoadingInstances}
       />
+
+      <div className="mt-8">
+        <EventsTable
+          HeaderComponent={DashboardLogsTableHeader}
+          HeaderProps={{}}
+          columns={[
+            "expand",
+            "serviceName",
+            "deploymentId",
+            "resourceType",
+            "subscriptionPlan",
+            "type",
+            "time",
+            "message",
+          ]}
+          data={dashboardLogs}
+          fetchNextPage={() => {}}
+          hasNextPage={false}
+          isFetchingNextPage={false}
+          isLoading={isFetchingDashboardLogs || isFetchingSubscriptions}
+          pageIndex={0}
+          setPageIndex={() => {}}
+          showPagination={false}
+          maxHeight={290}
+        />
+      </div>
 
       {/* <div className="mt-8 grid lg:grid-cols-3 gap-6">
         <ChartCard title="Lifecycle Status Breakdown" className="lg:col-span-2">

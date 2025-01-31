@@ -345,8 +345,12 @@ export const getNetworkConfigurationFields = (
       required: true,
       disabled: formMode !== "create",
       options: [
-        { label: "Public", value: "PUBLIC" },
-        { label: "Internal", value: "INTERNAL" },
+        { label: "Public", value: "PUBLIC", disabled: formMode !== "create" },
+        {
+          label: "Internal",
+          value: "INTERNAL",
+          disabled: formMode !== "create",
+        },
       ],
       previewValue: values.network_type,
     });
@@ -384,11 +388,11 @@ export const getNetworkConfigurationFields = (
 };
 
 export const getDeploymentConfigurationFields = (
-  formMode,
-  values,
-  resourceSchema,
+  formMode: FormMode,
+  values: any,
+  resourceSchema: APIEntity,
   resourceIdInstancesHashMap,
-  isFetchingResourceInstanceIds,
+  isFetchingResourceInstanceIds: boolean,
   cloudAccountInstances
 ) => {
   const fields: Field[] = [];

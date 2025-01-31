@@ -6,11 +6,12 @@ type QueryParams = {
   startDate?: string;
   endDate?: string;
   eventSourceTypes?: string | string[];
+  pageSize?: number;
 };
 
 const useAuditLogs = (queryParams: QueryParams = {}, queryOptions = {}) => {
   const environmentType = useEnvironmentType();
-  const { startDate, endDate, eventSourceTypes } = queryParams;
+  const { startDate, endDate, eventSourceTypes, pageSize = 10 } = queryParams;
 
   const query = useInfiniteQuery(
     ["audit-logs", startDate, endDate, eventSourceTypes, environmentType],
@@ -34,7 +35,7 @@ const useAuditLogs = (queryParams: QueryParams = {}, queryOptions = {}) => {
       }
 
       const res = await getAllAuditEvents({
-        pageSize: 10,
+        pageSize,
         ...params,
       });
 

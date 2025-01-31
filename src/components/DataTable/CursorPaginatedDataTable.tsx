@@ -52,6 +52,8 @@ type CursorPaginatedDataTableProps<TData> = {
   isFetchingNextPage?: boolean;
   pageSize?: number;
   rowId?: keyof TData;
+  showPagination?: boolean;
+  maxHeight?: string | number;
 };
 
 const DEFAULT_COLUMN_MIN_WIDTH = 150;
@@ -76,6 +78,8 @@ const CursorPaginatedDataTable = <TData,>(
     isFetchingNextPage,
     pageSize = 10,
     rowId = "id" as keyof TData,
+    showPagination = true,
+    maxHeight,
   } = props;
 
   const [expanded, setExpanded] = useState<ExpandedState>({});
@@ -176,7 +180,14 @@ const CursorPaginatedDataTable = <TData,>(
   return (
     <TableContainer sx={{ borderRadius: "8px" }}>
       <HeaderComponent {...headerProps} />
-      <Stack minHeight="605px" justifyContent="space-between">
+      <Stack
+        maxHeight={maxHeight}
+        sx={{
+          maxHeight,
+          minHeight: maxHeight ? maxHeight : showPagination ? "605px" : "540px",
+        }}
+        justifyContent="space-between"
+      >
         <Box sx={{ overflowX: "auto", flexGrow: 1, position: "relative" }}>
           <Table sx={{ tableLayout: "fixed", width: "100%" }}>
             {table.getHeaderGroups().map((headerGroup) => (
@@ -311,35 +322,37 @@ const CursorPaginatedDataTable = <TData,>(
           )}
         </Box>
 
-        <Pagination
-          isPreviousDisabled={!table.getCanPreviousPage() || isLoading}
-          isNextDisabled={
-            (!table.getCanNextPage() && !hasNextPage) || isLoading
-          }
-          handlePrevious={() => {
-            setPageIndex(Math.max(0, pageIndex - 1));
-          }}
-          handleNext={async () => {
-            const nextPageIndex = pageIndex + 1;
-            const totalLoadedItems = rows.length;
-            const nextPageStartIndex = nextPageIndex * pageSize;
-
-            // If we're about to show items we haven't loaded yet and there are more pages
-            if (
-              nextPageStartIndex >= totalLoadedItems &&
-              hasNextPage &&
-              !isFetchingNextPage
-            ) {
-              await fetchNextPage?.();
+        {showPagination && (
+          <Pagination
+            isPreviousDisabled={!table.getCanPreviousPage() || isLoading}
+            isNextDisabled={
+              (!table.getCanNextPage() && !hasNextPage) || isLoading
             }
+            handlePrevious={() => {
+              setPageIndex(Math.max(0, pageIndex - 1));
+            }}
+            handleNext={async () => {
+              const nextPageIndex = pageIndex + 1;
+              const totalLoadedItems = rows.length;
+              const nextPageStartIndex = nextPageIndex * pageSize;
 
-            setPageIndex(nextPageIndex);
-          }}
-          pageCount={table.getPageCount()}
-          pageIndex={pageIndex}
-          setPageIndex={setPageIndex}
-          hidePageNumbers
-        />
+              // If we're about to show items we haven't loaded yet and there are more pages
+              if (
+                nextPageStartIndex >= totalLoadedItems &&
+                hasNextPage &&
+                !isFetchingNextPage
+              ) {
+                await fetchNextPage?.();
+              }
+
+              setPageIndex(nextPageIndex);
+            }}
+            pageCount={table.getPageCount()}
+            pageIndex={pageIndex}
+            setPageIndex={setPageIndex}
+            hidePageNumbers
+          />
+        )}
       </Stack>
     </TableContainer>
   );

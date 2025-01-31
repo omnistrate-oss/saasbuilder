@@ -86,14 +86,28 @@ const CloudAccountsPage = () => {
     }
   }, [serviceId, servicePlanId, subscriptionId]);
 
-  const byoaInstances = useMemo(
-    () =>
-      instances.filter(
-        // @ts-ignore
-        (instance) => instance.result_params?.account_configuration_method
-      ),
-    [instances]
-  );
+  const byoaInstances = useMemo(() => {
+    const res = instances.filter(
+      // @ts-ignore
+      (instance) => instance.resourceID?.startsWith("r-injectedaccountconfig")
+    );
+
+    if (searchText) {
+      return res.filter(
+        (instance) =>
+          // @ts-ignore
+          instance.result_params?.gcp_project_id
+            ?.toLowerCase()
+            .includes(searchText.toLowerCase()) ||
+          // @ts-ignore
+          instance.result_params?.aws_account_id
+            ?.toLowerCase()
+            .includes(searchText.toLowerCase())
+      );
+    }
+
+    return res;
+  }, [instances, searchText]);
 
   const dataTableColumns = useMemo(() => {
     return [
@@ -259,7 +273,7 @@ const CloudAccountsPage = () => {
         },
       }),
     ];
-  }, []);
+  }, [subscriptionsObj]);
 
   const selectedInstance = useMemo(() => {
     return instances.find((instance) => instance.id === selectedRows[0]);
@@ -329,16 +343,25 @@ const CloudAccountsPage = () => {
     validateOnChange: false,
   });
 
+  const clickedInstanceSubscription = useMemo(() => {
+    return subscriptionsObj[clickedInstance?.subscriptionId as string];
+  }, [clickedInstance, subscriptionsObj]);
+
+  const clickedInstanceOffering = useMemo(() => {
+    const { serviceId, productTierId } = clickedInstanceSubscription || {};
+    return serviceOfferingsObj[serviceId]?.[productTierId];
+  }, [clickedInstanceSubscription, serviceOfferingsObj]);
+
   const downloadTerraformKitMutation = useMutation(
     () => {
-      if (selectedInstanceOffering && selectedInstanceSubscription) {
+      if (clickedInstanceOffering && clickedInstanceSubscription) {
         return getTerraformKit(
-          selectedInstanceOffering.serviceProviderId,
-          selectedInstanceOffering.serviceURLKey,
-          selectedInstanceOffering.serviceAPIVersion,
-          selectedInstanceOffering.serviceEnvironmentURLKey,
-          selectedInstanceOffering.serviceModelURLKey,
-          selectedInstanceSubscription.id,
+          clickedInstanceOffering.serviceProviderId,
+          clickedInstanceOffering.serviceURLKey,
+          clickedInstanceOffering.serviceAPIVersion,
+          clickedInstanceOffering.serviceEnvironmentURLKey,
+          clickedInstanceOffering.serviceModelURLKey,
+          clickedInstanceSubscription.id,
           // @ts-ignore
           clickedInstance?.result_params?.gcp_project_id ? "gcp" : "aws"
         );
@@ -450,10 +473,7 @@ const CloudAccountsPage = () => {
           setClickedInstance(undefined);
           setIsAccountCreation(false);
         }}
-        orgId={
-          subscriptionsObj[clickedInstance?.subscriptionId as string]
-            ?.accountConfigIdentityId
-        }
+        orgId={clickedInstanceSubscription?.accountConfigIdentityId}
         downloadTerraformKitMutation={downloadTerraformKitMutation}
         accountConfigId={clickedInstance?.id}
         selectedAccountConfig={clickedInstance}
@@ -462,10 +482,10 @@ const CloudAccountsPage = () => {
           clickedInstance?.result_params?.account_configuration_method
         }
         cloudFormationTemplateUrl={
-          selectedInstanceOffering?.assets?.cloudFormationURL
+          clickedInstanceOffering?.assets?.cloudFormationURL
         }
         cloudFormationTemplateUrlNoLB={
-          selectedInstanceOffering?.assets?.cloudFormationURLNoLB
+          clickedInstanceOffering?.assets?.cloudFormationURLNoLB
         }
         isAccountCreation={isAccountCreation}
       />

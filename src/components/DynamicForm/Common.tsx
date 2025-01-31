@@ -250,7 +250,7 @@ export const SingleSelectAutocomplete = ({ field, formData }) => {
       data-testid={field.dataTestId || ""}
       options={field.menuItems || []}
       name={field.name}
-      value={field.value || ""}
+      value={field.value ?? ""}
       onChange={(e, newValue) => {
         field.onChange?.(e);
         formData.setFieldValue(field.name, newValue);
@@ -260,11 +260,10 @@ export const SingleSelectAutocomplete = ({ field, formData }) => {
         formData.setFieldTouched(field.name, true);
       }}
       disabled={field.disabled}
-      getOptionLabel={(option) => String(option)}
+      getOptionLabel={(option) => option}
       error={Boolean(
         formData.touched[field.name] && formData.errors[field.name]
       )}
-      isOptionEqualToValue={(option, value) => option.value === value.value}
     />
   );
 };
