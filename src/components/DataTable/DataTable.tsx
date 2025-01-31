@@ -271,6 +271,8 @@ const DataTable = <TData,>(props: DataTableProps<TData>): ReactNode => {
                               display: "inline-flex",
                             },
                           },
+                          width: getColumnWidth(header.column.columnDef),
+                          minWidth: getColumnMinWidth(header.column.columnDef),
                         }}
                       >
                         <Stack
