@@ -74,6 +74,7 @@ const EventsTable = ({
         meta: {
           width: 60,
         },
+        enableSorting: false,
       }),
       deploymentId: columnHelper.accessor("resourceInstanceId", {
         id: "resourceInstanceId",
@@ -81,6 +82,7 @@ const EventsTable = ({
         meta: {
           minWidth: 200,
         },
+        enableSorting: false,
       }),
       serviceName: columnHelper.accessor(
         (row) => {
@@ -105,11 +107,13 @@ const EventsTable = ({
           meta: {
             minWidth: 230,
           },
+          enableSorting: false,
         }
       ),
       resourceType: columnHelper.accessor("resourceName", {
         id: "resourceName",
         header: "Resource Type",
+        enableSorting: false,
       }),
       time: columnHelper.accessor((row) => formatDateUTC(row.time), {
         id: "time",
@@ -119,6 +123,7 @@ const EventsTable = ({
         meta: {
           minWidth: 200,
         },
+        enableSorting: false,
       }),
       type: columnHelper.accessor("eventSource", {
         id: "type",
@@ -135,6 +140,7 @@ const EventsTable = ({
         meta: {
           flex: 0.8,
         },
+        enableSorting: false,
       }),
       message: columnHelper.accessor("message", {
         id: "message",
@@ -149,6 +155,7 @@ const EventsTable = ({
         meta: {
           flex: 2,
         },
+        enableSorting: false,
       }),
       user: columnHelper.accessor("userName", {
         id: "userName",
@@ -174,8 +181,9 @@ const EventsTable = ({
             };
           }
 
-          return <DataGridText {...props}>{userName || "-"}</DataGridText>;
+          return <DataGridText {...props}>{userName || "System"}</DataGridText>;
         },
+        enableSorting: false,
       }),
       subscriptionPlan: columnHelper.accessor(
         (row) => {
@@ -184,6 +192,7 @@ const EventsTable = ({
         {
           id: "servicePlanName",
           header: "Subscription Plan",
+          enableSorting: false,
         }
       ),
       subscriptionOwner: columnHelper.accessor(
@@ -195,6 +204,7 @@ const EventsTable = ({
         {
           id: "subscriptionOwnerName",
           header: "Subscription Owner",
+          enableSorting: false,
         }
       ),
     }),

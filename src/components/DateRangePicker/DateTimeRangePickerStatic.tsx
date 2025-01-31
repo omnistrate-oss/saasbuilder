@@ -228,7 +228,7 @@ const RelativeRange = ({
   );
 };
 
-const AbsoulteRange = (props: DateRangePickerStaticProps) => {
+const AbsoluteRange = (props: DateRangePickerStaticProps) => {
   const {
     dateRange = initialRangeState,
     setDateRange,
@@ -526,13 +526,13 @@ export const DateTimeRangePickerStatic = (
             }}
             onClick={() => handleTabChange("absolute")}
           >
-            Absoulte Range
+            Absolute Range
           </Box>
         </Stack>
       </Stack>
 
       {tab === "relative" && <RelativeRange {...props} />}
-      {tab === "absolute" && <AbsoulteRange {...props} />}
+      {tab === "absolute" && <AbsoluteRange {...props} />}
     </>
   );
 };

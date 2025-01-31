@@ -193,13 +193,13 @@ const AccessControlPage = () => {
               }
               disabledMessage={
                 !isDeleteAllowed
-                  ? "You do not have permission to delete this user"
+                  ? "You do not have permission to remove access of this user"
                   : data.row.original.roleType === "root"
-                    ? "Cannot delete root user"
+                    ? "Cannot remove access of the subscription owner"
                     : ""
               }
             >
-              Delete User
+              Remove Access
             </Button>
           );
         },
@@ -281,8 +281,9 @@ const AccessControlPage = () => {
           };
           deleteUserMutation.mutate(payload);
         }}
-        title="Delete User"
+        title="Remove Access"
         isLoading={deleteUserMutation.isLoading}
+        buttonLabel="Remove Access"
         subtitle={`Are you sure you want to delete ${selectedUser?.email}?`}
         message="To confirm deletion, please enter <b> deleteme </b>, in the field below:"
       />

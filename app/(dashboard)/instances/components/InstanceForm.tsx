@@ -386,6 +386,8 @@ const InstanceForm = ({
     });
   }, [customAvailabilityZoneData?.availabilityZones]);
 
+  console.log(formData.errors);
+
   const cloudAccountInstances = useMemo(
     () =>
       instances
@@ -425,7 +427,13 @@ const InstanceForm = ({
       customAvailabilityZones,
       isFetchingCustomAvailabilityZones
     );
-  }, [formMode, formData.values, resourceSchema, customAvailabilityZones]);
+  }, [
+    formMode,
+    formData.values,
+    resourceSchema,
+    customAvailabilityZones,
+    subscriptions,
+  ]);
 
   const networkConfigurationFields = useMemo(() => {
     return getNetworkConfigurationFields(

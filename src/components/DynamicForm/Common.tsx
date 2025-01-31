@@ -22,13 +22,13 @@ export const PasswordInput = ({ field, formData }) => {
   return (
     <TextField
       inputProps={{
-        "data-testid": field.dataTestId || "",
+        "data-testid": field.dataTestId ?? "",
       }}
       autoComplete="new-password"
       type={isPasswordVisible ? "text" : "password"}
       id={field.name}
       name={field.name}
-      value={field.value || formData.values[field.name] || ""}
+      value={field.value ?? formData.values[field.name] ?? ""}
       onChange={(e) => {
         field.onChange?.(e);
         formData.handleChange(e);
@@ -118,12 +118,12 @@ export const TextInput = ({
   return (
     <TextField
       inputProps={{
-        "data-testid": field.dataTestId || "",
+        "data-testid": field.dataTestId ?? "",
       }}
       type={field.type === "number" ? "number" : "text"}
       id={field.name}
       name={field.name}
-      value={field.value || values[field.name] || ""}
+      value={field.value ?? values[field.name] ?? ""}
       onChange={(e) => {
         field.onChange?.(e);
         handleChange(e);
@@ -144,7 +144,7 @@ export const TextInput = ({
         minRows: 1,
         maxRows: 3,
       })}
-      placeholder={field.placeholder || ""}
+      placeholder={field.placeholder ?? ""}
       sx={{ mt: 0 }}
     />
   );
@@ -155,12 +155,12 @@ export const SelectField = ({ field, formData }) => {
   return (
     <Select
       inputProps={{
-        "data-testid": field.dataTestId || "",
+        "data-testid": field.dataTestId ?? "",
       }}
       isLoading={field.isLoading}
       id={field.name}
       name={field.name}
-      value={field.value || values[field.name] || ""}
+      value={field.value ?? values[field.name] ?? ""}
       onBlur={(e) => {
         field.onBlur?.(e);
         handleBlur(e);
@@ -222,7 +222,7 @@ export const RadioField = ({ field, formData }) => {
     >
       {field.options.map((option) => (
         <FormControlLabel
-          data-testid={field.dataTestId || ""}
+          data-testid={field.dataTestId ?? ""}
           control={<Radio />}
           key={option.value}
           value={option.value}
@@ -247,7 +247,7 @@ export const RadioField = ({ field, formData }) => {
 export const SingleSelectAutocomplete = ({ field, formData }) => {
   return (
     <Autocomplete
-      data-testid={field.dataTestId || ""}
+      data-testid={field.dataTestId ?? ""}
       options={field.menuItems || []}
       name={field.name}
       value={field.value ?? ""}
@@ -275,7 +275,7 @@ export const MultiSelectAutocomplete = ({ field, formData }) => {
       multiple
       options={field.menuItems || []}
       name={field.name}
-      value={field.value || field.values[field.name] || ""}
+      value={field.value ?? field.values[field.name] ?? ""}
       onChange={(e, newValue) => {
         field.onChange?.(e);
         formData.setFieldValue(field.name, newValue);

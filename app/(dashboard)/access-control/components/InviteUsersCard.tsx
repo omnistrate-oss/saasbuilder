@@ -145,7 +145,7 @@ const InviteUsersCard: React.FC<InviteUsersCardProps> = ({
           <div className="flex items-center justify-between gap-4 pt-4 px-6">
             <DataGridHeaderTitle
               title="Invite Users"
-              desc="Get your projects up and running faster by inviting your users to collaborate"
+              desc="Invite team members with specific roles to manage your services/subscriptions"
             />
 
             <Button

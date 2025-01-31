@@ -43,13 +43,14 @@ const DashboardPage = () => {
           HeaderProps={{}}
           columns={[
             "expand",
-            "serviceName",
             "deploymentId",
+            "serviceName",
             "resourceType",
-            "subscriptionPlan",
-            "type",
             "time",
             "message",
+            "user",
+            "subscriptionPlan",
+            "subscriptionOwner",
           ]}
           data={dashboardLogs}
           fetchNextPage={() => {}}
