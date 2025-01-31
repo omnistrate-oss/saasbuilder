@@ -228,7 +228,7 @@ const DataTable = <TData,>(props: DataTableProps<TData>): ReactNode => {
       <HeaderComponent {...headerProps} />
       <Stack minHeight="605px" justifyContent="space-between">
         <Box sx={{ overflowX: "auto", flexGrow: 1, position: "relative" }}>
-          <Table sx={{ tableLayout: "fixed", width: "100%" }}>
+          <Table sx={{ width: "100%" }}>
             {table.getHeaderGroups().map((headerGroup) => (
               <colgroup key={headerGroup.id}>
                 {headerGroup.headers.map((header) => (
@@ -271,8 +271,6 @@ const DataTable = <TData,>(props: DataTableProps<TData>): ReactNode => {
                               display: "inline-flex",
                             },
                           },
-                          width: getColumnWidth(header.column.columnDef),
-                          minWidth: getColumnMinWidth(header.column.columnDef),
                         }}
                       >
                         <Stack

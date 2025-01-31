@@ -21,8 +21,7 @@ const useResourceSchema = (
       ...queryOptions,
       enabled: isEnabled && queryOptions.enabled,
       select: (response) => {
-        // Get the CREATE API
-        return response.data?.apis?.find((api) => api.verb === "CREATE");
+        return response.data;
       },
     }
   );

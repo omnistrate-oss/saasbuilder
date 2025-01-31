@@ -45,7 +45,7 @@ const AccessControlPage = () => {
   const [selectedUser, setSelectedUser] = useState<SubscriptionUser | null>(
     null
   );
-  const { subscriptions, isFetchingSubscriptions } = useGlobalData();
+  const { subscriptions, isLoadingSubscriptions } = useGlobalData();
 
   useEffect(() => {
     if (searchUserId) {
@@ -264,7 +264,7 @@ const AccessControlPage = () => {
             count: users.length,
             isFetchingUsers,
           }}
-          isLoading={isFetchingUsers || isFetchingSubscriptions}
+          isLoading={isFetchingUsers || isLoadingSubscriptions}
         />
       </div>
 

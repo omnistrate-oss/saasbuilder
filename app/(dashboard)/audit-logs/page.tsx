@@ -18,7 +18,7 @@ const AuditLogsPage = () => {
   const [pageIndex, setPageIndex] = useState(0);
   const [selectedDateRange, setSelectedDateRange] =
     useState<Range>(initialRangeState);
-  const { isFetchingSubscriptions } = useGlobalData();
+  const { isLoadingSubscriptions } = useGlobalData();
 
   const {
     data: auditLogs,
@@ -65,7 +65,6 @@ const AuditLogsPage = () => {
             "serviceName",
             "resourceType",
             "time",
-            "type",
             "message",
             "user",
             "subscriptionPlan",
@@ -75,7 +74,7 @@ const AuditLogsPage = () => {
           fetchNextPage={fetchNextPage}
           hasNextPage={hasNextPage}
           isFetchingNextPage={isFetchingNextPage}
-          isLoading={isFetchingAuditLogs || isFetchingSubscriptions}
+          isLoading={isFetchingAuditLogs || isLoadingSubscriptions}
           pageIndex={pageIndex}
           setPageIndex={setPageIndex}
           showPagination={true}

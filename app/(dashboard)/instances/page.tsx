@@ -215,19 +215,18 @@ const InstancesPage = () => {
           header: "Health Status",
           cell: (data) => {
             const value = data.cell.getValue();
-            const { id: instanceId, subscriptionId } = data.row.original;
+            const {
+              id: instanceId,
+              subscriptionId,
+              resourceID,
+            } = data.row.original;
             const { serviceId, productTierId } =
               subscriptionsObj[subscriptionId as string] || {};
-
-            const mainResourceId = getMainResourceFromInstance(
-              data.row.original
-              // @ts-ignore
-            )?.id;
 
             const resourceInstanceUrlLink = getInstanceDetailsRoute({
               serviceId,
               servicePlanId: productTierId,
-              resourceId: mainResourceId,
+              resourceId: resourceID as string,
               instanceId: instanceId as string,
               subscriptionId: subscriptionId as string,
               viewType: "Nodes",

@@ -49,7 +49,7 @@ const CloudAccountForm = ({
     serviceOfferingsObj,
     subscriptions,
     subscriptionsObj,
-    isFetchingSubscriptions,
+    isLoadingSubscriptions,
   } = useGlobalData();
 
   const byoaServiceOfferings = useMemo(() => {
@@ -312,7 +312,7 @@ const CloudAccountForm = ({
                   field={{
                     name: "subscriptionId",
                     value: values.subscriptionId,
-                    isLoading: isFetchingSubscriptions,
+                    isLoading: isLoadingSubscriptions,
                     disabled: formMode !== "create",
                     emptyMenuText: !serviceId
                       ? "Select a service"

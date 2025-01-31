@@ -79,7 +79,7 @@ const InviteUsersCard: React.FC<InviteUsersCardProps> = ({
   isFetchingUsers,
 }) => {
   const snackbar = useSnackbar();
-  const { subscriptions, isFetchingSubscriptions } = useGlobalData();
+  const { subscriptions, isLoadingSubscriptions } = useGlobalData();
 
   const createUserInvitesMutation = useMutation(async (data: any) => {
     try {
@@ -210,7 +210,7 @@ const InviteUsersCard: React.FC<InviteUsersCardProps> = ({
 
                             <Select
                               required
-                              isLoading={isFetchingSubscriptions}
+                              isLoading={isLoadingSubscriptions}
                               name={`userInvite[${index}].serviceId`}
                               value={invite.serviceId}
                               onBlur={handleBlur}
@@ -251,7 +251,7 @@ const InviteUsersCard: React.FC<InviteUsersCardProps> = ({
                             </Select>
                             <Select
                               required
-                              isLoading={isFetchingSubscriptions}
+                              isLoading={isLoadingSubscriptions}
                               name={`userInvite[${index}].servicePlanId`}
                               value={invite.servicePlanId}
                               onBlur={handleBlur}

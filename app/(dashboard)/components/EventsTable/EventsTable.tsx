@@ -43,7 +43,7 @@ const EventsTable = ({
   hasNextPage,
   fetchNextPage,
   isFetchingNextPage,
-  minHeight = "auto",
+  minHeight,
 }: any) => {
   const { subscriptionsObj } = useGlobalData();
 

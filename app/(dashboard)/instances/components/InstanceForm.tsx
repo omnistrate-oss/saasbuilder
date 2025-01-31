@@ -12,7 +12,6 @@ import { APIEntity } from "src/types/serviceOffering";
 import { useGlobalData } from "src/providers/GlobalDataProvider";
 import useAvailabilityZone from "src/hooks/query/useAvailabilityZone";
 import useResourcesInstanceIds from "src/hooks/useResourcesInstanceIds";
-import { describeServiceOfferingResource } from "src/api/serviceOffering";
 import {
   createResourceInstance,
   updateResourceInstance,
@@ -127,18 +126,14 @@ const InstanceForm = ({
         resourceKey: selectedResource?.urlKey,
       };
 
-      const schemaData = await describeServiceOfferingResource(
-        values.serviceId,
-        values.resourceId,
-        selectedInstance?.id || "none"
-      );
-
       const createSchema =
-        schemaData.data?.apis?.find((api) => api.verb === "CREATE")
+        // eslint-disable-next-line no-use-before-define
+        resourceSchemaData?.apis?.find((api) => api.verb === "CREATE")
           ?.inputParameters || [];
 
       const updateSchema =
-        schemaData.data?.apis?.find((api) => api.verb === "UPDATE")
+        // eslint-disable-next-line no-use-before-define
+        resourceSchemaData?.apis?.find((api) => api.verb === "UPDATE")
           ?.inputParameters || [];
 
       const schema = formMode === "create" ? createSchema : updateSchema;
@@ -310,14 +305,16 @@ const InstanceForm = ({
   const offering =
     serviceOfferingsObj[values.serviceId]?.[values.servicePlanId];
 
-  const {
-    data: resourceSchema = {} as APIEntity,
-    isFetching: isFetchingResourceSchema,
-  } = useResourceSchema({
-    serviceId: values.serviceId,
-    resourceId: selectedInstance?.resourceID || values.resourceId,
-    instanceId: selectedInstance?.id,
-  });
+  const { data: resourceSchemaData, isFetching: isFetchingResourceSchema } =
+    useResourceSchema({
+      serviceId: values.serviceId,
+      resourceId: selectedInstance?.resourceID || values.resourceId,
+      instanceId: selectedInstance?.id,
+    });
+
+  const resourceSchema = resourceSchemaData?.apis?.find(
+    (api) => api.verb === "CREATE"
+  ) as APIEntity;
 
   const {
     data: customAvailabilityZoneData,
@@ -353,6 +350,8 @@ const InstanceForm = ({
       return acc;
     }, {});
 
+    console.log(inputParameters);
+
     if (inputParameters.length && formMode === "create") {
       formData.setValues((prev) => ({
         ...prev,
@@ -373,7 +372,7 @@ const InstanceForm = ({
         formData.setFieldValue("network_type", "");
       }
     }
-  }, [resourceSchema, formMode]);
+  }, [resourceSchema, formMode, offering]);
 
   const customAvailabilityZones = useMemo(() => {
     const availabilityZones =
