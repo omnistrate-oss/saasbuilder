@@ -205,7 +205,7 @@ export default function NodesTable(props) {
       },
       {
         field: "resourceName",
-        headerName: `${sectionLabel} Name`,
+        headerName: `${sectionLabel} Type`,
         flex: 0.9,
         minWidth: 100,
       },
