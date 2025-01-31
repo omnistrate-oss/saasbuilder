@@ -817,7 +817,8 @@ function MarketplaceService() {
           });
           schemaArray
             .filter(
-              (field) => field.type?.toLowerCase() === "boolean" && field.custom === true
+              (field) =>
+                field.type?.toLowerCase() === "boolean" && field.custom === true
             )
             .forEach((field) => {
               if (!data.requestParams[field.key]) {
@@ -1454,7 +1455,10 @@ function MarketplaceService() {
         });
 
         schemaArray
-          .filter((field) => field.type.toLowerCase() === "boolean" && field.custom === true)
+          .filter(
+            (field) =>
+              field.type.toLowerCase() === "boolean" && field.custom === true
+          )
           .forEach((field) => {
             if (!data.requestParams[field.key]) {
               data.requestParams[field.key] = "false";
@@ -1903,6 +1907,7 @@ function MarketplaceService() {
                 checkboxSelection
                 selectionModel={selectionModel}
                 disableSelectionOnClick
+                keepNonExistentRowsSelected
                 sx={{
                   "& .MuiDataGrid-columnHeaderCheckbox .MuiDataGrid-columnHeaderTitleContainer":
                     {
