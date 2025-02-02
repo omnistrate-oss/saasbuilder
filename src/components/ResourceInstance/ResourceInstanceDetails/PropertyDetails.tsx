@@ -77,7 +77,6 @@ const PropertyDetails: FC<PropertyTableProps> = ({ rows, ...otherProps }) => {
     <Box
       borderRadius="8px"
       border="1px solid #EAECF0"
-      padding="12px 12px 0px 12px"
       boxShadow="inset 0px 1px 2px 0px rgba(16, 24, 40, 0.06), 0px 1px 3px 0px rgba(16, 24, 40, 0.1)"
       {...otherProps}
     >
@@ -86,14 +85,14 @@ const PropertyDetails: FC<PropertyTableProps> = ({ rows, ...otherProps }) => {
           flexDirection: "column",
           justifyContent: "space-between",
           borderBottom: "1px solid #E4E7EC",
-          paddingBottom: "12px",
         }}
         alignItems="left"
+        padding="20px 24px"
       >
-        <Text size="small" weight="semibold" color="#6941C6">
+        <Text size="small" weight="bold" color="#7F56D9">
           {rows.title}
         </Text>
-        <Text size="small" weight="regular" color="#475467">
+        <Text size="small" weight="regular" color="#535862" marginTop="2px">
           {rows.desc}
         </Text>
       </Stack>
@@ -101,8 +100,8 @@ const PropertyDetails: FC<PropertyTableProps> = ({ rows, ...otherProps }) => {
         display="grid"
         gridTemplateColumns="repeat(auto-fit, minmax(220px, 1fr))"
         position={"relative"}
-        gap="12px"
         padding="12px 0"
+        rowGap="12px"
       >
         <Box
           position={"absolute"}
@@ -181,8 +180,8 @@ const PropertyDetails: FC<PropertyTableProps> = ({ rows, ...otherProps }) => {
                     <Text
                       ellipsis
                       size="small"
-                      weight="regular"
-                      color="#475467"
+                      weight="medium"
+                      color="#535862"
                     >
                       {row.value}
                     </Text>
@@ -290,18 +289,23 @@ const PropertyDetails: FC<PropertyTableProps> = ({ rows, ...otherProps }) => {
           return (
             <Box
               key={index}
-              p="20px"
-              paddingLeft={"8px"}
+              p="4px 24px 14px 24px"
               display="flex"
               flexDirection="column"
               alignItems="flex-start"
               borderRight="1px solid #EAECF0"
               boxSizing="border-box"
               minHeight="80px"
+              // border="1px solid blue"
             >
               <Tooltip title={row.label} placement="top">
                 <Box maxWidth="100%">
-                  <Text ellipsis size="small" weight="medium" color="#101828">
+                  <Text
+                    ellipsis
+                    size="xsmall"
+                    weight="semibold"
+                    color="#414651"
+                  >
                     {row.label}
                   </Text>
                 </Box>

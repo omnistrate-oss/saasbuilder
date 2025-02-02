@@ -326,14 +326,7 @@ function ResourceInstanceDetails(props) {
   }
 
   return (
-    <Box
-      marginTop={"32px"}
-      borderRadius="8px"
-      border="1px solid  rgba(228, 231, 236, 1)"
-      padding={"12px"}
-      gap="12px"
-      boxShadow="inset 0px 1px 2px 0px rgba(16, 24, 40, 0.06), 0px 1px 3px 0px rgba(16, 24, 40, 0.1)"
-    >
+    <Box marginTop={"20px"}>
       <PropertyDetails
         data-testid="resource-instance-details-table"
         rows={{
@@ -356,7 +349,7 @@ function ResourceInstanceDetails(props) {
             rows: outputParameterData,
             flexWrap: true,
           }}
-          mt="12px"
+          mt="20px"
         />
       )}
       {customNetworkDetails && (
