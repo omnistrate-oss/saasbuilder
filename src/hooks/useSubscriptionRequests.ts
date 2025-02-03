@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import useEnvironmentType from "src/hooks/useEnvironmentType";
 import { listSubscriptionRequests } from "src/api/subscriptionRequests";
 
-function useSubscriptionRequests(queryOptions = {}) {
+const useSubscriptionRequests = (queryOptions = {}) => {
   const environmentType = useEnvironmentType();
   const query = useQuery(
     ["subscription-requests"],
@@ -19,6 +19,6 @@ function useSubscriptionRequests(queryOptions = {}) {
   );
 
   return query;
-}
+};
 
 export default useSubscriptionRequests;

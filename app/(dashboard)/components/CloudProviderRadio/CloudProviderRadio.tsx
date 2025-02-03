@@ -1,7 +1,6 @@
 "use client";
 
-import clsx from "clsx";
-
+import { cn } from "lib/utils";
 import { Text } from "components/Typography/Typography";
 
 import { colors } from "src/themeConfig";
@@ -18,7 +17,7 @@ const CloudProviderCard = ({
 }) => {
   return (
     <div
-      className={clsx(
+      className={cn(
         "px-4 py-4 rounded-xl text-center flex flex-col justify-between items-center min-h-28",
         disabled ? "cursor-default bg-gray-50" : "cursor-pointer"
       )}
@@ -71,7 +70,7 @@ const CloudProviderRadio: React.FC<CloudProviderRadioProps> = ({
   }
 
   return (
-    <div className={clsx("grid gap-8", `grid-cols-${cloudProviders.length}`)}>
+    <div className={cn("grid gap-8", `grid-cols-${cloudProviders.length}`)}>
       {cloudProviders.map((cloudProvider, index) => {
         return (
           <CloudProviderCard

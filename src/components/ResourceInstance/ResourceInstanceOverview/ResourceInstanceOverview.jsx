@@ -58,7 +58,7 @@ const ServiceLogoImg = styled("img")({
   height: "40px",
   width: "40px",
   objectFit: "cover",
-  borderRadius : "50%"
+  borderRadius: "50%",
 });
 
 function ResourceInstanceOverview(props) {
@@ -141,7 +141,7 @@ function ResourceInstanceOverview(props) {
               <CellContentText>{subscriptionOwner}</CellContentText>
             </TableCell>
 
-            <TableCell>
+            <TableCell sx={{ py: "4px" }}>
               <Stack
                 direction={"row"}
                 justifyContent={"center"}
@@ -156,7 +156,7 @@ function ResourceInstanceOverview(props) {
               </Stack>
             </TableCell>
 
-            <TableCell>
+            <TableCell sx={{ py: "4px" }}>
               <Stack
                 direction="row"
                 justifyContent={"center"}
@@ -176,7 +176,7 @@ function ResourceInstanceOverview(props) {
               </Stack>
             </TableCell>
 
-            <TableCell>
+            <TableCell sx={{ py: "4px" }}>
               <Stack
                 direction={"row"}
                 justifyContent={"center"}

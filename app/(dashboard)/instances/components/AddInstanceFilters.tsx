@@ -13,7 +13,7 @@ import {
   initialRangeState,
 } from "src/components/DateRangePicker/DateTimeRangePickerStatic";
 import { FilterCategorySchema } from "../utils";
-import Popover from "src/components/Popover/Popover";
+import { PopoverDynamicHeight } from "src/components/Popover/Popover";
 
 const StyledIconCard = styled(Box)({
   padding: "8px",
@@ -332,7 +332,7 @@ const AddInstanceFilters = ({
         </div>
       </div>
 
-      <Popover
+      <PopoverDynamicHeight
         id={id}
         open={open}
         anchorEl={anchorEl}
@@ -341,6 +341,7 @@ const AddInstanceFilters = ({
           vertical: "bottom",
           horizontal: "left",
         }}
+        sx={{ marginTop: "8px" }}
       >
         <div className="min-w-[470px]">
           {selectedCategory ? (
@@ -374,7 +375,7 @@ const AddInstanceFilters = ({
             />
           )}
         </div>
-      </Popover>
+      </PopoverDynamicHeight>
     </>
   );
 };

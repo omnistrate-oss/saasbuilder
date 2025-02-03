@@ -542,13 +542,13 @@ const InstanceForm = ({
           top: "104px",
           flex: 2,
           minHeight: "660px",
-          border: `1px solid ${colors.purple600}`,
+          border: `1px solid ${colors.gray300}`,
           boxShadow: "0px 2px 2px -1px #0A0D120A, 0px 4px 6px -2px #0A0D1208",
         }}
         className="bg-white rounded-xl flex flex-col"
       >
         <div className="py-4 px-6 border-b border-gray-200">
-          <Text size="large" weight="semibold" color={colors.purple700}>
+          <Text size="large" weight="semibold" color={colors.purple600}>
             Deployment Instance Summary
           </Text>
         </div>

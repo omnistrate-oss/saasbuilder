@@ -27,7 +27,7 @@ import {
   ResourceInstanceNetworkTopology,
 } from "src/types/resourceInstance";
 import { useGlobalData } from "src/providers/GlobalDataProvider";
-import { getInstanceDetailsRoute } from "src/utils/route/routes";
+
 import { deleteResourceInstance } from "src/api/resourceInstance";
 import { getResourceInstanceStatusStylesAndLabel } from "src/constants/statusChipStyles/resourceInstanceStatus";
 import RegionIcon from "components/Region/RegionIcon";
@@ -52,6 +52,7 @@ import { getInitialFilterState } from "src/components/InstanceFilters/InstanceFi
 import InstanceHealthStatusChip, {
   getInstanceHealthStatus,
 } from "src/components/InstanceHealthStatusChip/InstanceHealthStautusChip";
+import { getInstanceDetailsRoute } from "src/utils/routes";
 
 const columnHelper = createColumnHelper<ResourceInstance>();
 type Overlay =
@@ -119,6 +120,8 @@ const InstancesPage = () => {
                 href: resourceInstanceUrlLink,
               }}
               style={{
+                display: "block",
+                minWidth: "140px",
                 fontWeight: 600,
               }}
             >
@@ -127,7 +130,7 @@ const InstancesPage = () => {
           );
         },
         meta: {
-          minWidth: 250,
+          minWidth: 220,
         },
       }),
       columnHelper.accessor(
@@ -246,7 +249,7 @@ const InstancesPage = () => {
             );
           },
           meta: {
-            minWidth: 200,
+            minWidth: 160,
             disableBrowserTooltip: true,
           },
         }
@@ -321,6 +324,9 @@ const InstancesPage = () => {
           ) : (
             "-"
           );
+        },
+        meta: {
+          minWidth: 100,
         },
       }),
 

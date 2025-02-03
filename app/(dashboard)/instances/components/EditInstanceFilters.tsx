@@ -12,7 +12,7 @@ import { themeConfig } from "src/themeConfig";
 import { FilterCategorySchema, getIntialFiltersObject } from "../utils";
 import { SetState } from "src/types/common/reactGenerics";
 import { initialRangeState } from "src/components/DateRangePicker/DateTimeRangePickerStatic";
-import Popover from "src/components/Popover/Popover";
+import { PopoverDynamicHeight } from "src/components/Popover/Popover";
 dayjs.extend(utc);
 
 const FilterChip = ({
@@ -180,7 +180,7 @@ const EditInstanceFilters = ({
         Reset Filters
       </Box>
 
-      <Popover
+      <PopoverDynamicHeight
         id={id}
         open={open}
         anchorEl={anchorEl}
@@ -189,6 +189,7 @@ const EditInstanceFilters = ({
           vertical: "bottom",
           horizontal: "left",
         }}
+        sx={{ marginTop: "8px" }}
       >
         {categoryToEdit && (
           <div className="min-w-[470px]">
@@ -218,7 +219,7 @@ const EditInstanceFilters = ({
               )}
           </div>
         )}
-      </Popover>
+      </PopoverDynamicHeight>
     </div>
   );
 };

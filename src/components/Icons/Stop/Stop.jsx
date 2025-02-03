@@ -1,7 +1,7 @@
 import { colors } from "src/themeConfig";
 
 const StopIcon = (props) => {
-  const { color = colors.green600, disabled } = props;
+  const { color = colors.gray700, disabled } = props;
 
   return (
     <svg
@@ -13,7 +13,7 @@ const StopIcon = (props) => {
     >
       <path
         style={{ transition: "stroke 0.3s ease" }}
-        stroke={disabled ? "#a3a6ac" : color}
+        stroke={disabled ? colors.gray400 : color}
         strokeLinecap="round"
         strokeLinejoin="round"
         strokeWidth={1.667}

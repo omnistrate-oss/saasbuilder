@@ -22,6 +22,8 @@ import {
 } from "./utils";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
+import { PopoverDynamicHeight } from "../Popover/Popover";
+import CalendarIcon from "../Icons/Calendar/Calendar";
 dayjs.extend(utc);
 
 const StyledIconCard = styled(Box)({
@@ -87,11 +89,12 @@ export type DateRange = {
   endDate?: string;
 };
 
-type DateRangePickerStaticProps = {
+type RelativeRangeProps = {
   dateRange: DateRange;
   setDateRange: SetState<DateRange>;
   handleCancel: () => void;
   handleClear: () => void;
+  handleTabChange: (tab: string) => void;
 };
 
 export const initialRangeState: DateRange = {
@@ -136,7 +139,8 @@ const RelativeRange = ({
   setDateRange,
   handleCancel,
   handleClear,
-}: DateRangePickerStaticProps) => {
+  handleTabChange,
+}: RelativeRangeProps) => {
   const [selectedValue, setSelectedValue] = useState<number | null>(null);
 
   const handleApply = () => {
@@ -164,7 +168,7 @@ const RelativeRange = ({
   return (
     <Box
       sx={{
-        width: "664px",
+        width: "609px",
       }}
     >
       <Stack
@@ -194,6 +198,36 @@ const RelativeRange = ({
             {option.label}
           </Stack>
         ))}
+
+        <Stack
+          direction="row"
+          alignItems={"flex-start"}
+          sx={{
+            marginTop: "1px",
+            padding: "8px 20px",
+            fontSize: "14px",
+            lineHeight: "20px",
+            fontWeight: 500,
+            color: themeConfig.colors.gray900,
+            cursor: "pointer",
+          }}
+          key={"custom"}
+          onClick={() => handleTabChange("absolute")}
+        >
+          <Radio
+            sx={{ padding: "0px", marginRight: "8px", paddingTop: "2px" }}
+          />
+          <Box>
+            Custom
+            <Text
+              size="xsmall"
+              weight="regular"
+              color={themeConfig.colors.gray600}
+            >
+              Set a custom range in the past
+            </Text>
+          </Box>
+        </Stack>
       </Stack>
       <Stack
         direction="row"
@@ -228,7 +262,14 @@ const RelativeRange = ({
   );
 };
 
-const AbsoluteRange = (props: DateRangePickerStaticProps) => {
+type AbsoluteRangeProps = {
+  dateRange: DateRange;
+  setDateRange: SetState<DateRange>;
+  handleCancel: () => void;
+  handleClear: () => void;
+};
+
+const AbsoluteRange = (props: AbsoluteRangeProps) => {
   const {
     dateRange = initialRangeState,
     setDateRange,
@@ -237,13 +278,11 @@ const AbsoluteRange = (props: DateRangePickerStaticProps) => {
   } = props;
 
   const [selectedStartDate, setSelectedStartDate] = useState(
-    // dateRange.startDate ? startOfDay(new Date(dateRange.startDate)) : undefined
     dateRange.startDate
       ? getLocalStartOfDayfromISODateString(dateRange.startDate)
       : undefined
   );
   const [selectedEndDate, setSelectedEndDate] = useState(
-    // dateRange.endDate ? startOfDay(new Date(dateRange.endDate)) : undefined
     dateRange.endDate
       ? getLocalStartOfDayfromISODateString(dateRange.endDate)
       : undefined
@@ -262,7 +301,7 @@ const AbsoluteRange = (props: DateRangePickerStaticProps) => {
         : "00:00:00",
       endTime: dateRange.endDate
         ? dayjs(new Date(dateRange.endDate)).utc().format("HH:mm:ss")
-        : "00:00:00",
+        : "23:59:59",
     },
     enableReinitialize: true,
     onSubmit: (values) => {
@@ -444,10 +483,18 @@ const AbsoluteRange = (props: DateRangePickerStaticProps) => {
 
 type TabType = "relative" | "absolute";
 
+type DateRangePickerStaticProps = {
+  dateRange: DateRange;
+  setDateRange: SetState<DateRange>;
+  handleCancel: () => void;
+  handleClear: () => void;
+  hideBackArrow?: boolean;
+};
+
 export const DateTimeRangePickerStatic = (
   props: DateRangePickerStaticProps
 ) => {
-  const { handleCancel, dateRange } = props;
+  const { handleCancel, dateRange, hideBackArrow = false } = props;
   const [tab, setTab] = useState<TabType>(
     dateRange?.startDate ? "absolute" : "relative"
   );
@@ -466,14 +513,16 @@ export const DateTimeRangePickerStatic = (
         gap="12px"
         borderBottom={`1px solid ${themeConfig.colors.gray200}`}
       >
-        <StyledIconCard sx={{ cursor: "pointer" }} onClick={handleCancel}>
-          <ChevronLeft
-            sx={{
-              color: themeConfig.colors.green600,
-              fontSize: "20px",
-            }}
-          />
-        </StyledIconCard>
+        {!hideBackArrow && (
+          <StyledIconCard sx={{ cursor: "pointer" }} onClick={handleCancel}>
+            <ChevronLeft
+              sx={{
+                color: themeConfig.colors.green600,
+                fontSize: "20px",
+              }}
+            />
+          </StyledIconCard>
+        )}
 
         <Stack
           direction="row"
@@ -531,8 +580,111 @@ export const DateTimeRangePickerStatic = (
         </Stack>
       </Stack>
 
-      {tab === "relative" && <RelativeRange {...props} />}
+      {tab === "relative" && (
+        <RelativeRange {...props} handleTabChange={handleTabChange} />
+      )}
       {tab === "absolute" && <AbsoluteRange {...props} />}
+    </>
+  );
+};
+
+type DateTimePickerPopoverProps = {
+  dateRange: DateRange;
+  setDateRange: SetState<DateRange>;
+};
+
+export const DateTimePickerPopover = (props: DateTimePickerPopoverProps) => {
+  const { dateRange, setDateRange } = props;
+
+  const [anchorElem, setAnchorElem] = useState<HTMLElement | null>(null);
+
+  const open = Boolean(anchorElem);
+  const id = open ? "date-time-picker-popover" : undefined;
+
+  //meant to be used on the button
+  let formattedStartDate = "Select Start Date";
+  if (dateRange?.startDate) {
+    formattedStartDate = dayjs(dateRange.startDate)
+      .utc()
+      .format("YYYY-MM-DD HH:mm:ss");
+  }
+
+  //meant to be used on the button
+  let formattedEndDate = "Select End Date";
+  if (dateRange?.endDate) {
+    formattedEndDate = dayjs(dateRange.endDate)
+      .utc()
+      .format("YYYY-MM-DD HH:mm:ss");
+  }
+
+  let buttonText = "Filter by Date";
+
+  if (dateRange?.startDate && dateRange?.endDate) {
+    buttonText = `${formattedStartDate} - ${formattedEndDate}`;
+  }
+
+  function handleButtonClick(event: React.MouseEvent<HTMLButtonElement>) {
+    setAnchorElem((prev) => {
+      if (prev) return null;
+      else return event.currentTarget;
+    });
+  }
+
+  function handleAppply(value) {
+    setDateRange(value);
+    setAnchorElem(null);
+  }
+
+  function handleCancel() {
+    setDateRange(initialRangeState);
+    setAnchorElem(null);
+  }
+
+  function handleClear() {
+    setDateRange(initialRangeState);
+  }
+
+  return (
+    <>
+      <Button
+        variant="outlined"
+        startIcon={
+          <CalendarIcon color="#414651" style={{ marginLeft: "4px" }} />
+        }
+        onClick={handleButtonClick}
+        sx={{
+          fontWeight: "500 !important",
+          color: "#414651 !important",
+          height: "40px !important",
+          padding: "10px 14px !important",
+          borderColor: "#D5D7DA !important",
+          minWidth: "150px",
+        }}
+      >
+        {buttonText}
+      </Button>
+
+      <PopoverDynamicHeight
+        id={id}
+        open={open}
+        anchorEl={anchorElem}
+        onClose={() => {
+          setAnchorElem(null);
+        }}
+        anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
+        transformOrigin={{ vertical: "top", horizontal: "right" }}
+        sx={{ marginTop: "8px" }}
+      >
+        <Box>
+          <DateTimeRangePickerStatic
+            dateRange={dateRange}
+            setDateRange={handleAppply}
+            handleClear={handleClear}
+            handleCancel={handleCancel}
+            hideBackArrow={true}
+          />
+        </Box>
+      </PopoverDynamicHeight>
     </>
   );
 };

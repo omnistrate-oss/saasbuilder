@@ -24,12 +24,12 @@ import {
   viewEnum,
 } from "src/utils/isAllowedByRBAC";
 import Tooltip from "src/components/Tooltip/Tooltip";
-import { colors } from "src/themeConfig";
 import AddInstanceFilters from "./AddInstanceFilters";
 import EditInstanceFilters from "./EditInstanceFilters";
 import { CircularProgress } from "@mui/material";
 import InstanceFilters from "src/components/InstanceFilters/InstanceFilters";
 import LoadingSpinnerSmall from "src/components/CircularProgress/CircularProgress";
+import { colors } from "src/themeConfig";
 
 type Action = {
   onClick: () => void;
@@ -395,7 +395,6 @@ const InstancesTableHeader = ({
                   <Icon disabled={action.isDisabled || action.isLoading} />
                 }
                 disabledMessage={action.disabledMessage}
-                outlineColor={colors.green300}
               >
                 {action.label}
                 {action.isLoading && <LoadingSpinnerSmall />}
@@ -407,14 +406,19 @@ const InstancesTableHeader = ({
             value=""
             renderValue={(value: string) => {
               if (!value) {
-                return "Action";
+                return "Actions";
               } else {
                 return "";
               }
             }}
             displayEmpty
             disabled={otherActions.length === 0}
-            sx={{ margin: "0px", height: "40px" }}
+            MenuProps={{
+              anchorOrigin: { vertical: "bottom", horizontal: "right" },
+              transformOrigin: { vertical: "top", horizontal: "right" },
+              sx: { marginTop: "8px" },
+            }}
+            sx={{ margin: "0px", height: "40px", minWidth: "110px" }}
           >
             {otherActions.map(
               ({ label, onClick, isDisabled, disabledMessage }) => {
@@ -426,7 +430,9 @@ const InstancesTableHeader = ({
                     sx={{
                       gap: "10px",
                       fontSize: "14px",
-                      color: isDisabled ? "#a3a6ac" : "",
+                      color: isDisabled ? colors.gray400 : "",
+                      minWidth: "220px",
+                      padding: "8px 16px",
                     }}
                     disabled={isDisabled}
                     onClick={onClick}

@@ -91,17 +91,6 @@ const BillingPage = () => {
           </Stack>
         ) : (
           <>
-            {/* @ts-ignore */}
-            <DisplayText size="small">Billing</DisplayText>
-            <Text
-              size="medium"
-              color="#475467"
-              weight="regular"
-              sx={{ mt: "4px" }}
-            >
-              Manage your billing and payment details
-            </Text>
-
             <Card sx={{ mt: 3 }}>
               <Stack
                 direction="row"
