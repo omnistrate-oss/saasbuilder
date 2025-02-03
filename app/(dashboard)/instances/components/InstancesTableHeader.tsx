@@ -413,7 +413,11 @@ const InstancesTableHeader = ({
             }}
             displayEmpty
             disabled={otherActions.length === 0}
-            sx={{ margin: "0px", height: "40px" }}
+            MenuProps={{
+              anchorOrigin: { vertical: "bottom", horizontal: "right" },
+              transformOrigin: { vertical: "top", horizontal: "right" },
+            }}
+            sx={{ margin: "0px", height: "40px", minWidth: "110px" }}
           >
             {otherActions.map(
               ({ label, onClick, isDisabled, disabledMessage }) => {
@@ -426,6 +430,8 @@ const InstancesTableHeader = ({
                       gap: "10px",
                       fontSize: "14px",
                       color: isDisabled ? colors.gray400 : "",
+                      minWidth: "240px",
+                      padding: "8px 16px",
                     }}
                     disabled={isDisabled}
                     onClick={onClick}

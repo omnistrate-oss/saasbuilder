@@ -1,5 +1,5 @@
-import clsx from "clsx";
 import { FC } from "react";
+import { cn } from "lib/utils";
 
 const PageContainer: FC<React.HTMLAttributes<HTMLDivElement>> = ({
   children,
@@ -7,7 +7,7 @@ const PageContainer: FC<React.HTMLAttributes<HTMLDivElement>> = ({
   ...otherProps
 }) => {
   return (
-    <div className={clsx("px-8 py-6 pb-12", className)} {...otherProps}>
+    <div className={cn("px-8 py-6 pb-12", className)} {...otherProps}>
       {children}
     </div>
   );

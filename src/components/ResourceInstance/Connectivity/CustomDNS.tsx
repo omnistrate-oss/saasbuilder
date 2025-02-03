@@ -284,7 +284,7 @@ const CustomDNS: FC<EndpointProps> = (props) => {
                           setShowDeleteConfirmationDialog(true);
                         }}
                       >
-                        <DeleteIcon color={colors.error300} />
+                        <DeleteIcon color={colors.error700} />
                       </IconButtonSquare>
                     </>
                   ) : (

@@ -1,6 +1,5 @@
 "use client";
 
-import clsx from "clsx";
 import { Add } from "@mui/icons-material";
 import { InputAdornment } from "@mui/material";
 import { useMutation } from "@tanstack/react-query";
@@ -22,6 +21,8 @@ import useSnackbar from "src/hooks/useSnackbar";
 import { Subscription } from "src/types/subscription";
 import { inviteSubscriptionUser } from "src/api/users";
 import { useGlobalData } from "src/providers/GlobalDataProvider";
+
+import { cn } from "lib/utils";
 
 const getNewEnvVariable = () => {
   return {
@@ -314,7 +315,7 @@ const InviteUsersCard: React.FC<InviteUsersCardProps> = ({
                               onClick={() => {
                                 remove(index);
                               }}
-                              className={clsx(
+                              className={cn(
                                 "cursor-pointer border border-error-700 h-10 w-10 rounded-md flex items-center justify-center",
                                 index === 0 ? "invisible" : "visible"
                               )}

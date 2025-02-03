@@ -21,7 +21,6 @@ import Connectivity from "components/ResourceInstance/Connectivity/Connectivity"
 import ResourceInstanceDetails from "components/ResourceInstance/ResourceInstanceDetails/ResourceInstanceDetails";
 import ResourceInstanceOverview from "components/ResourceInstance/ResourceInstanceOverview/ResourceInstanceOverview";
 
-import { styleConfig } from "src/providerConfig";
 import { NetworkType } from "src/types/common/enums";
 import { CLI_MANAGED_RESOURCES } from "src/constants/resource";
 import useResourceInstance from "src/hooks/useResourceInstance";
@@ -218,9 +217,9 @@ const InstanceDetailsPage = ({
           <Button
             startIcon={<RiArrowGoBackFill />}
             sx={{
-              color: `${styleConfig.secondaryColor} !important`,
+              color: `${colors.green600} !important`,
               "&:hover": {
-                background: styleConfig.secondaryHoverLight,
+                background: "transparent",
               },
             }}
           >
@@ -236,9 +235,9 @@ const InstanceDetailsPage = ({
             )
           }
           sx={{
-            color: `${styleConfig.secondaryColor} !important`,
+            color: `${colors.green600} !important`,
             "&:hover": {
-              background: styleConfig.secondaryHoverLight,
+              background: "transparent",
             },
           }}
           onClick={() => dispatch(toggleInstanceDetailsSummaryVisibility())}

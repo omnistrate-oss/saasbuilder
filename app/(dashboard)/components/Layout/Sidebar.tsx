@@ -132,7 +132,7 @@ const ExpandibleNavItem = ({
               key={item.name}
               className={clsx(
                 "flex items-center gap-2.5 py-2.5 px-3 pl-10 rounded-md group cursor-pointer hover:bg-gray-50 transition-colors mb- select-none",
-                currentPath === item.href && "bg-gray-50"
+                currentPath?.startsWith(item.href) && "bg-gray-50"
               )}
             >
               <div className="w-2 h-2 rounded-full bg-success-500" />
@@ -140,7 +140,9 @@ const ExpandibleNavItem = ({
                 size="medium"
                 weight="semibold"
                 color={
-                  currentPath === item.href ? colors.success500 : colors.gray700
+                  currentPath?.startsWith(item.href)
+                    ? colors.success500
+                    : colors.gray700
                 }
                 className="group-hover:text-success-500 transition-colors"
               >
@@ -176,11 +178,10 @@ const Sidebar = () => {
     if (currentPath) {
       setExpandedMenus((prev) => ({
         ...prev,
-        Deployments: [
-          getInstancesRoute(),
-          getCustomNetworksRoute(),
-          getCloudAccountsRoute({}),
-        ].includes(currentPath),
+        Deployments:
+          [getCustomNetworksRoute(), getCloudAccountsRoute({})].includes(
+            currentPath
+          ) || currentPath.startsWith("/instances"),
         "Governance Hub": [
           getAccessControlRoute(),
           getAuditLogsRoute(),
