@@ -145,10 +145,11 @@ const Button = styled(
       // opacity: 0.38,
     },
     [`&.${buttonClasses.text}`]: {
-      color: fontColor ? fontColor : theme.palette.primary.main,
+      color: fontColor ? fontColor : styleConfig.secondaryButtonText,
 
       "&:hover": {
-        background: bgColor,
+        background: "none",
+        color: "#087443",
       },
     },
     [`&.${buttonClasses.text}:disabled`]: {

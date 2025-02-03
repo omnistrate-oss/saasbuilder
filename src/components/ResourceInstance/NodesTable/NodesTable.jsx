@@ -1,7 +1,6 @@
 import { Box } from "@mui/material";
 import DataGrid from "../../DataGrid/DataGrid";
 import { useEffect, useMemo, useState } from "react";
-import nodeIcon from "public/assets/images/dashboard/resource-instance-nodes/node.svg";
 import zoneIcon from "public/assets/images/dashboard/resource-instance-nodes/zone.svg";
 import Image from "next/image";
 import StatusChip from "../../StatusChip/StatusChip";
@@ -30,6 +29,7 @@ import {
 import { productTierTypes } from "src/constants/servicePlan";
 import GenerateTokenDialog from "src/components/GenerateToken/GenerateTokenDialog";
 import _ from "lodash";
+import NodeIcon from "src/components/Icons/Node/NodeIcon";
 
 const getRowBorderStyles = () => {
   const styles = {};
@@ -47,6 +47,8 @@ const getRowBorderStyles = () => {
       background: color,
       transform: "translateY(5px)",
       position: "absolute",
+      borderTopRightRadius: "4px",
+      borderBottomRightRadius: "4px",
     };
   }
 
@@ -115,13 +117,7 @@ export default function NodesTable(props) {
           const nodeId = params.row.nodeId;
           return (
             <GridCellExpand
-              startIcon={
-                <Image
-                  src={nodeIcon}
-                  alt="node"
-                  style={{ width: "24px", height: "24px" }}
-                />
-              }
+              startIcon={<NodeIcon />}
               value={nodeId}
               textStyles={{
                 color: "#475467",
@@ -187,13 +183,7 @@ export default function NodesTable(props) {
           const nodeId = params.row.nodeId;
           return (
             <GridCellExpand
-              startIcon={
-                <Image
-                  src={nodeIcon}
-                  alt="node"
-                  style={{ width: "24px", height: "24px" }}
-                />
-              }
+              startIcon={<NodeIcon />}
               value={nodeId}
               textStyles={{
                 color: "#475467",

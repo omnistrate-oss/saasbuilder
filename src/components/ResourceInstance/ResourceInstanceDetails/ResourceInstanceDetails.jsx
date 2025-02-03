@@ -374,7 +374,7 @@ function ResourceInstanceDetails(props) {
             rows: backupData,
             flexWrap: true,
           }}
-          mt="12px"
+          mt="20px"
         />
       )}
       {autoscalingEnabled && (
@@ -386,7 +386,7 @@ function ResourceInstanceDetails(props) {
             rows: autoscalingData,
             flexWrap: true,
           }}
-          mt="12px"
+          mt="20px"
         />
       )}
     </Box>

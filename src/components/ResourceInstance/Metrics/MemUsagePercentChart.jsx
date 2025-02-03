@@ -1,5 +1,4 @@
 import React from "react";
-import { Text } from "../../Typography/Typography";
 import {
   Area,
   AreaChart,
@@ -10,19 +9,13 @@ import {
   YAxis,
 } from "recharts";
 import ReChartContainer from "../../ReChartContainer/ReChartContainer";
-import { Box } from "@mui/material";
 
 function MemUsagePercentChart(props) {
   const { data } = props;
 
   return (
-    <Box>
-      <Box sx={{ padding: "10px 20px", borderBottom: "1px solid #EAECF0" }}>
-        <Text size="medium" color="#344054" weight="semibold">
-          Memory Usage
-        </Text>
-      </Box>
-      <ReChartContainer mt={3}>
+
+      <ReChartContainer mt={2}>
         <ResponsiveContainer debounce={100}>
           <AreaChart
             height={300}
@@ -59,7 +52,7 @@ function MemUsagePercentChart(props) {
           </AreaChart>
         </ResponsiveContainer>
       </ReChartContainer>
-    </Box>
+
   );
 }
 

@@ -1,6 +1,6 @@
-import { Box, BoxProps, Stack } from "@mui/material";
+import { Box, BoxProps, Stack, styled } from "@mui/material";
 import { FC, useState } from "react";
-import Link from "next/link";
+import NextLink from "next/link";
 import { Text } from "src/components/Typography/Typography";
 import CopyButton from "src/components/Button/CopyButton";
 import StatusChip from "src/components/StatusChip/StatusChip";
@@ -62,6 +62,22 @@ type PropertyTableProps = {
 interface JsonDataType {
   [key: string]: unknown;
 }
+
+const Link = styled(NextLink)({
+  color: "#535862",
+  fontWeight: 500,
+  fontSize: "14px",
+  lineHeight: "20px",
+  whiteSpace: "nowrap",
+  overflow: "hidden",
+  textOverflow: "ellipsis",
+  display: "inline-block",
+  textDecoration: "underline",
+  textUnderlineOffset: "3px",
+  "&:hover": {
+    color: "#099250",
+  },
+});
 
 const PropertyDetails: FC<PropertyTableProps> = ({ rows, ...otherProps }) => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -154,12 +170,13 @@ const PropertyDetails: FC<PropertyTableProps> = ({ rows, ...otherProps }) => {
                 {valueType === "array" ? <ArrayIcon /> : <JsonIcon />}
 
                 <Box
-                  style={{
+                  sx={{
                     fontWeight: 600,
                     fontSize: "14px",
                     lineHeight: "20px",
                     color: "#6941C6",
                     cursor: "pointer",
+                    marginLeft: "3px",
                   }}
                   onClick={(event) => {
                     event.preventDefault();
@@ -177,12 +194,7 @@ const PropertyDetails: FC<PropertyTableProps> = ({ rows, ...otherProps }) => {
               <>
                 <Tooltip title={row.value} placement="top">
                   <Box maxWidth="calc(100% - 36px)">
-                    <Text
-                      ellipsis
-                      size="small"
-                      weight="medium"
-                      color="#535862"
-                    >
+                    <Text ellipsis size="small" weight="medium" color="#535862">
                       {row.value}
                     </Text>
                   </Box>
@@ -200,16 +212,6 @@ const PropertyDetails: FC<PropertyTableProps> = ({ rows, ...otherProps }) => {
                 <Link
                   href={row.linkProps?.href || "#"}
                   target={row.linkProps?.target || "_self"}
-                  style={{
-                    fontWeight: 600,
-                    fontSize: "14px",
-                    lineHeight: "20px",
-                    color: "#7F56D9",
-                    whiteSpace: "nowrap",
-                    overflow: "hidden",
-                    textOverflow: "ellipsis",
-                    display: "inline-block",
-                  }}
                 >
                   {row.value}
                 </Link>
