@@ -132,11 +132,16 @@ const relativeRangeOptions: RelativeRangeOption[] = [
   },
 ];
 
+type RelativeDateOptionsProps = DateRangePickerStaticProps & {
+  handleTabChange: (tab: string) => void;
+};
+
 const RelativeRange = ({
   setDateRange,
   handleCancel,
   handleClear,
-}: DateRangePickerStaticProps) => {
+  handleTabChange,
+}: RelativeDateOptionsProps) => {
   const [selectedValue, setSelectedValue] = useState<number | null>(null);
 
   const handleApply = () => {
@@ -194,6 +199,36 @@ const RelativeRange = ({
             {option.label}
           </Stack>
         ))}
+
+        <Stack
+          direction="row"
+          alignItems={"flex-start"}
+          sx={{
+            marginTop: "1px",
+            padding: "8px 20px",
+            fontSize: "14px",
+            lineHeight: "20px",
+            fontWeight: 500,
+            color: themeConfig.colors.gray900,
+            cursor: "pointer",
+          }}
+          key={"custom"}
+          onClick={() => handleTabChange("absolute")}
+        >
+          <Radio
+            sx={{ padding: "0px", marginRight: "8px", paddingTop: "2px" }}
+          />
+          <Box>
+            Custom
+            <Text
+              size="xsmall"
+              weight="regular"
+              color={themeConfig.colors.gray600}
+            >
+              Set a custom range in the past
+            </Text>
+          </Box>
+        </Stack>
       </Stack>
       <Stack
         direction="row"
@@ -531,7 +566,9 @@ export const DateTimeRangePickerStatic = (
         </Stack>
       </Stack>
 
-      {tab === "relative" && <RelativeRange {...props} />}
+      {tab === "relative" && (
+        <RelativeRange {...props} handleTabChange={handleTabChange} />
+      )}
       {tab === "absolute" && <AbsoluteRange {...props} />}
     </>
   );

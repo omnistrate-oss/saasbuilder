@@ -265,6 +265,11 @@ const AccessControlPage = () => {
             isFetchingUsers,
           }}
           isLoading={isFetchingUsers || isLoadingSubscriptions}
+          tableStyles={{
+            "& thead th:first-of-type, & tbody td:first-of-type": {
+              paddingLeft: "24px",
+            },
+          }}
         />
       </div>
 
