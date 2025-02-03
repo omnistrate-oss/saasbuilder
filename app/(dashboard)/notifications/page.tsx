@@ -1,7 +1,6 @@
 "use client";
 
-import { Range } from "react-date-range";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import PageTitle from "../components/Layout/PageTitle";
 import useAuditLogs from "../audit-logs/hooks/useAuditLogs";
@@ -9,16 +8,21 @@ import PageContainer from "../components/Layout/PageContainer";
 import NotificationsIcon from "../components/Icons/NotificationsIcon";
 import NotificationsTableHeader from "./components/NotificationsTableHeader";
 
-import { initialRangeState } from "components/DateRangePicker/DateRangePicker";
-
 import { useGlobalData } from "src/providers/GlobalDataProvider";
+import {
+  DateRange,
+  initialRangeState,
+} from "src/components/DateRangePicker/DateTimeRangePickerStatic";
 import EventsTable from "../components/EventsTable/EventsTable";
+import { EventType } from "src/types/event";
 
 const NotificationsPage = () => {
   const [pageIndex, setPageIndex] = useState(0);
   const [selectedDateRange, setSelectedDateRange] =
-    useState<Range>(initialRangeState);
-  const { isFetchingSubscriptions } = useGlobalData();
+    useState<DateRange>(initialRangeState);
+  const [selectedEventTypes, setSelectedEventTypes] = useState<EventType[]>([]);
+  const [selectedServiceId, setSelectedServiceId] = useState<string>("");
+  const { serviceOfferings, isFetchingSubscriptions } = useGlobalData();
 
   const {
     data: notifications,
@@ -28,14 +32,17 @@ const NotificationsPage = () => {
     fetchNextPage,
     isFetchingNextPage,
   } = useAuditLogs({
-    startDate: selectedDateRange.startDate
-      ? new Date(selectedDateRange.startDate).toISOString()
-      : undefined,
-    endDate: selectedDateRange.endDate
-      ? new Date(selectedDateRange.endDate).toISOString()
-      : undefined,
-    eventSourceTypes: ["Infra", "Maintenance"],
+    startDate: selectedDateRange.startDate ?? undefined,
+    endDate: selectedDateRange.endDate ?? undefined,
+    eventSourceTypes: selectedEventTypes?.length
+      ? selectedEventTypes
+      : ["Infra", "Maintenance"],
+    serviceID: selectedServiceId,
   });
+
+  useEffect(() => {
+    setPageIndex(0);
+  }, [selectedDateRange, selectedEventTypes, selectedServiceId]);
 
   return (
     <PageContainer>
@@ -54,6 +61,11 @@ const NotificationsPage = () => {
             selectedDateRange,
             setSelectedDateRange,
             isFetchingNotifications,
+            selectedEventTypes,
+            setSelectedEventTypes,
+            selectedServiceId,
+            setSelectedServiceId,
+            serviceOfferings,
           }}
           columns={[
             "expand",
