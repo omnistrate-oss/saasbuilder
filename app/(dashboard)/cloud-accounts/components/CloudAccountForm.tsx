@@ -49,7 +49,7 @@ const CloudAccountForm = ({
     serviceOfferingsObj,
     subscriptions,
     subscriptionsObj,
-    isFetchingSubscriptions,
+    isLoadingSubscriptions,
   } = useGlobalData();
 
   const byoaServiceOfferings = useMemo(() => {
@@ -99,10 +99,17 @@ const CloudAccountForm = ({
       );
 
       const resourceInstance = resourceInstanceResponse.data;
-
       refetchInstances();
+
       setIsAccountCreation(true);
-      setClickedInstance(resourceInstance);
+      setClickedInstance({
+        ...resourceInstance,
+        result_params: {
+          ...(resourceInstance.result_params || {}),
+          account_configuration_method: values.accountConfigurationMethod,
+          cloud_provider: values.cloudProvider,
+        },
+      });
       setOverlayType("view-instructions-dialog");
       snackbar.showSuccess("Cloud Account created successfully");
     },
@@ -194,7 +201,8 @@ const CloudAccountForm = ({
           fields: [
             {
               label: "Service Name",
-              subLabel: "Select the service you want to deploy",
+              subLabel:
+                "Select the service you want to deploy in this cloud account",
               name: "serviceId",
               type: "select",
               required: true,
@@ -304,7 +312,7 @@ const CloudAccountForm = ({
                   field={{
                     name: "subscriptionId",
                     value: values.subscriptionId,
-                    isLoading: isFetchingSubscriptions,
+                    isLoading: isLoadingSubscriptions,
                     disabled: formMode !== "create",
                     emptyMenuText: !serviceId
                       ? "Select a service"

@@ -26,6 +26,8 @@ import { passwordRegex, passwordText } from "src/utils/passwordRegex";
 import GoogleLogin from "../Signin/components/GoogleLogin";
 import GithubLogin from "../Signin/components/GitHubLogin";
 import { IDENTITY_PROVIDER_STATUS_TYPES } from "../Signin/constants";
+import { useProviderOrgDetails } from "src/providers/ProviderOrgDetailsProvider";
+import Logo from "src/components/NonDashboardComponents/Logo";
 
 const FormGrid = styled(Box)(() => ({
   display: "grid",
@@ -60,6 +62,7 @@ const SignupPage = (props) => {
     googleReCaptchaSiteKey,
     isReCaptchaSetup,
   } = props;
+  const { orgName, orgLogoURL } = useProviderOrgDetails();
 
   const searchParams = useSearchParams();
   const org = searchParams?.get("org");
@@ -227,6 +230,9 @@ const SignupPage = (props) => {
 
   return (
     <>
+      <Box textAlign="center">
+        {orgLogoURL ? <Logo src={orgLogoURL} alt={orgName} /> : ""}
+      </Box>
       <DisplayHeading mt="24px">Get Started Today</DisplayHeading>
 
       <Box component="form" mt="44px" autoComplete="off">

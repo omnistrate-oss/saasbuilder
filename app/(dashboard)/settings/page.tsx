@@ -73,7 +73,9 @@ const SettingsPage = () => {
               minWidth: "0px",
               textTransform: "none",
               fontWeight: "600",
-              color: colors.purple700,
+              "&.Mui-selected": {
+                color: colors.purple700,
+              },
             }}
           />
           <Tab
@@ -86,7 +88,9 @@ const SettingsPage = () => {
               minWidth: "0px",
               textTransform: "none",
               fontWeight: "600",
-              color: colors.purple700,
+              "&.Mui-selected": {
+                color: colors.purple700,
+              },
             }}
           />
         </Tabs>

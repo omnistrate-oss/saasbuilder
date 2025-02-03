@@ -29,6 +29,7 @@ import {
 } from "src/constants/statusChipStyles";
 import { productTierTypes } from "src/constants/servicePlan";
 import GenerateTokenDialog from "src/components/GenerateToken/GenerateTokenDialog";
+import _ from "lodash";
 
 const getRowBorderStyles = () => {
   const styles = {};
@@ -58,7 +59,7 @@ export default function NodesTable(props) {
     isManagedProxy,
     isAccessSide,
     subscriptionData,
-    nodes,
+    nodes = [],
     refetchData,
     isRefetching,
     resourceName,
@@ -98,6 +99,8 @@ export default function NodesTable(props) {
     list = list?.filter((item) =>
       item?.nodeId?.toLowerCase()?.includes(searchText?.toLowerCase())
     );
+
+    list = _.uniqBy(list, "id");
 
     return list ?? [];
   }, [searchText, nodes]);
@@ -202,7 +205,7 @@ export default function NodesTable(props) {
       },
       {
         field: "resourceName",
-        headerName: `${sectionLabel} Name`,
+        headerName: `${sectionLabel} Type`,
         flex: 0.9,
         minWidth: 100,
       },

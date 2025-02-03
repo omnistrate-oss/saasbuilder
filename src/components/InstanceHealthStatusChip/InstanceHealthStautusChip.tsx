@@ -15,11 +15,12 @@ import { Text } from "../Typography/Typography";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import Link from "next/link";
 import { CLI_MANAGED_RESOURCES } from "src/constants/resource";
+import _ from "lodash";
 
 function getInstanceNodes(
   detailedNetworkTopology: Record<string, ResourceInstanceNetworkTopology> = {}
 ) {
-  const nodes: ResourceInstanceNode[] = [];
+  let nodes: ResourceInstanceNode[] = [];
 
   Object.entries(detailedNetworkTopology).forEach(([, topologyDetails]) => {
     if (topologyDetails.hasCompute) {
@@ -28,7 +29,11 @@ function getInstanceNodes(
     }
   });
   //@ts-ignore
-  return nodes.filter((node) => !node.isServerless);
+  nodes = nodes.filter((node) => !node.isServerless);
+
+  nodes = _.uniqBy(nodes, "id");
+
+  return nodes;
 }
 
 export function getInstanceHealthStatus(

@@ -4,15 +4,12 @@ import Image from "next/image";
 import { Box } from "@mui/material";
 import { usePathname } from "next/navigation";
 
-import Logo from "src/components/NonDashboardComponents/Logo";
 import Footer from "src/components/NonDashboardComponents/Footer";
-import { useProviderOrgDetails } from "src/providers/ProviderOrgDetailsProvider";
 
 import MainImg from "public/assets/images/non-dashboard/signin-main.svg";
 
 const MainImageLayout = ({ children }: { children: React.ReactNode }) => {
   const pathname = usePathname();
-  const { orgName, orgLogoURL } = useProviderOrgDetails();
   const contentMaxWidth = pathname === "/signin" ? 480 : 650;
 
   return (
@@ -44,10 +41,6 @@ const MainImageLayout = ({ children }: { children: React.ReactNode }) => {
         }}
       >
         <Box maxWidth={contentMaxWidth} width="100%" mx="auto">
-          {/* Logo */}
-          <Box textAlign="center">
-            {orgLogoURL ? <Logo src={orgLogoURL} alt={orgName} /> : ""}
-          </Box>
           {children}
         </Box>
         <Footer />

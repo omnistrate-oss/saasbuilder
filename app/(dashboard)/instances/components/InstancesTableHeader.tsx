@@ -29,9 +29,11 @@ import AddInstanceFilters from "./AddInstanceFilters";
 import EditInstanceFilters from "./EditInstanceFilters";
 import { CircularProgress } from "@mui/material";
 import InstanceFilters from "src/components/InstanceFilters/InstanceFilters";
+import LoadingSpinnerSmall from "src/components/CircularProgress/CircularProgress";
 
 type Action = {
   onClick: () => void;
+  isLoading?: boolean;
   isDisabled?: boolean;
   actionType?: "primary" | "secondary";
   label: string;
@@ -129,6 +131,7 @@ const InstancesTableHeader = ({
     actions.push({
       label: "Stop",
       actionType: "secondary",
+      isLoading: stopInstanceMutation.isLoading,
       isDisabled:
         !selectedInstance ||
         status !== "RUNNING" ||
@@ -154,6 +157,7 @@ const InstancesTableHeader = ({
     actions.push({
       label: "Start",
       actionType: "secondary",
+      isLoading: startInstanceMutation.isLoading,
       isDisabled:
         !selectedInstance ||
         status !== "STOPPED" ||
@@ -243,6 +247,7 @@ const InstancesTableHeader = ({
     if (!isComplexResource && !isProxyResource) {
       other.push({
         label: "Reboot",
+        isLoading: restartInstanceMutation.isLoading,
         isDisabled:
           !selectedInstance ||
           (status !== "RUNNING" && status !== "FAILED") ||
@@ -344,6 +349,7 @@ const InstancesTableHeader = ({
     snackbar,
     setOverlayType,
     setIsOverlayOpen,
+    setSelectedRows,
     selectedInstance,
     stopInstanceMutation,
     startInstanceMutation,
@@ -383,13 +389,16 @@ const InstancesTableHeader = ({
                 variant={
                   action.actionType === "primary" ? "contained" : "outlined"
                 }
-                disabled={action.isDisabled}
+                disabled={action.isDisabled || action.isLoading}
                 onClick={action.onClick}
-                startIcon={<Icon disabled={action.isDisabled} />}
+                startIcon={
+                  <Icon disabled={action.isDisabled || action.isLoading} />
+                }
                 disabledMessage={action.disabledMessage}
                 outlineColor={colors.green300}
               >
                 {action.label}
+                {action.isLoading && <LoadingSpinnerSmall />}
               </Button>
             );
           })}

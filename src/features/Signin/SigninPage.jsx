@@ -30,6 +30,8 @@ import { ENVIRONMENT_TYPES } from "src/constants/environmentTypes";
 import GoogleLogin from "./components/GoogleLogin";
 import GithubLogin from "./components/GitHubLogin";
 import { IDENTITY_PROVIDER_STATUS_TYPES } from "./constants";
+import Logo from "src/components/NonDashboardComponents/Logo";
+import { useProviderOrgDetails } from "src/providers/ProviderOrgDetailsProvider";
 
 const createSigninValidationSchema = Yup.object({
   email: Yup.string()
@@ -49,6 +51,7 @@ const SigninPage = (props) => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const environmentType = useEnvironmentType();
+  const { orgName, orgLogoURL } = useProviderOrgDetails();
   const redirect_reason = searchParams?.get("redirect_reason");
   const destination = searchParams?.get("destination");
 
@@ -173,6 +176,9 @@ const SigninPage = (props) => {
 
   return (
     <>
+      <Box textAlign="center">
+        {orgLogoURL ? <Logo src={orgLogoURL} alt={orgName} /> : ""}
+      </Box>
       <DisplayHeading mt="24px">Login to your account</DisplayHeading>
 
       <Stack component="form" gap="32px" mt="44px">

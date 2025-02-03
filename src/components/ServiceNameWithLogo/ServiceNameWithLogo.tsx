@@ -24,6 +24,9 @@ const ServiceNameWithLogo: React.FC<ServiceNameWithLogoProps> = ({
       onClick={onClick}
       startIcon={
         <Box
+          display="flex"
+          alignItems="center"
+          justifyContent="center"
           boxShadow="0px 1px 2px 0px #1018280D"
           borderRadius="50%"
           border="1px solid rgba(0, 0, 0, 0.08)"
@@ -34,9 +37,7 @@ const ServiceNameWithLogo: React.FC<ServiceNameWithLogoProps> = ({
         >
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            width="38"
-            height="38"
-            style={{ objectFit: "cover" }}
+            style={{ objectFit: "cover", objectPosition: "center" }}
             src={
               serviceLogoURL ||
               "/assets/images/dashboard/service/servicePlaceholder.png"

@@ -79,7 +79,7 @@ const InviteUsersCard: React.FC<InviteUsersCardProps> = ({
   isFetchingUsers,
 }) => {
   const snackbar = useSnackbar();
-  const { subscriptions, isFetchingSubscriptions } = useGlobalData();
+  const { subscriptions, isLoadingSubscriptions } = useGlobalData();
 
   const createUserInvitesMutation = useMutation(async (data: any) => {
     try {
@@ -145,7 +145,7 @@ const InviteUsersCard: React.FC<InviteUsersCardProps> = ({
           <div className="flex items-center justify-between gap-4 pt-4 px-6">
             <DataGridHeaderTitle
               title="Invite Users"
-              desc="Get your projects up and running faster by inviting your users to collaborate"
+              desc="Invite team members with specific roles to manage your services/subscriptions"
             />
 
             <Button
@@ -210,7 +210,7 @@ const InviteUsersCard: React.FC<InviteUsersCardProps> = ({
 
                             <Select
                               required
-                              isLoading={isFetchingSubscriptions}
+                              isLoading={isLoadingSubscriptions}
                               name={`userInvite[${index}].serviceId`}
                               value={invite.serviceId}
                               onBlur={handleBlur}
@@ -251,7 +251,7 @@ const InviteUsersCard: React.FC<InviteUsersCardProps> = ({
                             </Select>
                             <Select
                               required
-                              isLoading={isFetchingSubscriptions}
+                              isLoading={isLoadingSubscriptions}
                               name={`userInvite[${index}].servicePlanId`}
                               value={invite.servicePlanId}
                               onBlur={handleBlur}

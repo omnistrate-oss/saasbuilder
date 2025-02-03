@@ -2,7 +2,7 @@ import { FormMode } from "src/types/common/enums";
 
 export type Field = {
   label: string;
-  subLabel: string;
+  subLabel: string | React.ReactNode;
   name: string;
   type?: string;
   description?: React.ReactNode;

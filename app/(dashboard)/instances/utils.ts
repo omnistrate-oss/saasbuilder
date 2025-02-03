@@ -182,11 +182,12 @@ export const getInitialValues = (
     }
 
     return {
+      id: instance.id,
       serviceId: subscription?.serviceId || "",
       servicePlanId: subscription?.productTierId || "",
       subscriptionId: instance.subscriptionId || "",
       // @ts-ignore
-      resourceId: getMainResourceFromInstance(instance)?.id || "",
+      resourceId: instance.resourceID || "",
       cloudProvider: instance.cloud_provider,
       region: instance.region,
       network_type: instance.network_type || "",
@@ -230,7 +231,7 @@ export const getInitialValues = (
     serviceId,
     servicePlanId,
     subscriptionId: rootSubscription?.id || filteredSubscriptions[0]?.id || "",
-    resourceId: resources[0]?.value || "",
+    resourceId: (resources[0]?.value as string) || "",
     cloudProvider,
     region: region || "",
     requestParams: {},

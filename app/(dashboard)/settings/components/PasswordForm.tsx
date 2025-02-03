@@ -25,13 +25,11 @@ const PasswordForm = () => {
   const updatePasswordMutation = useMutation(
     (data: any) =>
       updatePassword({
-        password: data.currentPassword,
-        newPassword: data.newPassword,
+        currentPassword: data.currentPassword,
+        password: data.newPassword,
       }),
     {
       onSuccess: () => {
-        // eslint-disable-next-line no-use-before-define
-        formData.resetForm();
         logout();
         snackbar.showSuccess("Password updated successfully");
       },

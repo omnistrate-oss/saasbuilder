@@ -12,7 +12,6 @@ import { APIEntity } from "src/types/serviceOffering";
 import { useGlobalData } from "src/providers/GlobalDataProvider";
 import useAvailabilityZone from "src/hooks/query/useAvailabilityZone";
 import useResourcesInstanceIds from "src/hooks/useResourcesInstanceIds";
-import { describeServiceOfferingResource } from "src/api/serviceOffering";
 import {
   createResourceInstance,
   updateResourceInstance,
@@ -127,18 +126,14 @@ const InstanceForm = ({
         resourceKey: selectedResource?.urlKey,
       };
 
-      const schemaData = await describeServiceOfferingResource(
-        values.serviceId,
-        values.resourceId,
-        selectedInstance?.id || "none"
-      );
-
       const createSchema =
-        schemaData.data?.apis?.find((api) => api.verb === "CREATE")
+        // eslint-disable-next-line no-use-before-define
+        resourceSchemaData?.apis?.find((api) => api.verb === "CREATE")
           ?.inputParameters || [];
 
       const updateSchema =
-        schemaData.data?.apis?.find((api) => api.verb === "UPDATE")
+        // eslint-disable-next-line no-use-before-define
+        resourceSchemaData?.apis?.find((api) => api.verb === "UPDATE")
           ?.inputParameters || [];
 
       const schema = formMode === "create" ? createSchema : updateSchema;
@@ -250,6 +245,9 @@ const InstanceForm = ({
         }
 
         data.requestParams = requestParams;
+        delete data.requestParams.network_type;
+        delete data.requestParams.custom_network_id;
+        delete data.requestParams.custom_availability_zone;
 
         if (!Object.keys(requestParams).length) {
           return snackbar.showError(
@@ -296,22 +294,8 @@ const InstanceForm = ({
           }
         }
 
-        // Check for Required Fields
-        const requiredFields = schema
-          .filter((field) => !["cloud_provider", "region"].includes(field.key))
-          .filter((schemaParam) => schemaParam.required);
-
-        for (const field of requiredFields) {
-          if (data.requestParams[field.key] === undefined) {
-            snackbar.showError(`${field.displayName || field.key} is required`);
-            return;
-          }
-        }
-
         if (!isTypeError) {
-          updateResourceInstanceMutation.mutate({
-            requestParams: data.requestParams,
-          });
+          updateResourceInstanceMutation.mutate(data);
         }
       }
     },
@@ -321,17 +305,16 @@ const InstanceForm = ({
   const offering =
     serviceOfferingsObj[values.serviceId]?.[values.servicePlanId];
 
-  const {
-    data: resourceSchema = {} as APIEntity,
-    isFetching: isFetchingResourceSchema,
-  } = useResourceSchema({
-    serviceId: values.serviceId,
-    resourceId:
-      offering?.resourceParameters.find(
-        (resource) => resource.resourceId === values.resourceId
-      )?.resourceId && values.resourceId,
-    instanceId: selectedInstance?.id,
-  });
+  const { data: resourceSchemaData, isFetching: isFetchingResourceSchema } =
+    useResourceSchema({
+      serviceId: values.serviceId,
+      resourceId: selectedInstance?.resourceID || values.resourceId,
+      instanceId: selectedInstance?.id,
+    });
+
+  const resourceSchema = resourceSchemaData?.apis?.find(
+    (api) => api.verb === "CREATE"
+  ) as APIEntity;
 
   const {
     data: customAvailabilityZoneData,
@@ -367,6 +350,8 @@ const InstanceForm = ({
       return acc;
     }, {});
 
+    console.log(inputParameters);
+
     if (inputParameters.length && formMode === "create") {
       formData.setValues((prev) => ({
         ...prev,
@@ -387,7 +372,7 @@ const InstanceForm = ({
         formData.setFieldValue("network_type", "");
       }
     }
-  }, [resourceSchema, formMode]);
+  }, [resourceSchema, formMode, offering]);
 
   const customAvailabilityZones = useMemo(() => {
     const availabilityZones =
@@ -400,6 +385,8 @@ const InstanceForm = ({
       return -1;
     });
   }, [customAvailabilityZoneData?.availabilityZones]);
+
+  console.log(formData.errors);
 
   const cloudAccountInstances = useMemo(
     () =>
@@ -440,7 +427,13 @@ const InstanceForm = ({
       customAvailabilityZones,
       isFetchingCustomAvailabilityZones
     );
-  }, [formMode, formData.values, resourceSchema, customAvailabilityZones]);
+  }, [
+    formMode,
+    formData.values,
+    resourceSchema,
+    customAvailabilityZones,
+    subscriptions,
+  ]);
 
   const networkConfigurationFields = useMemo(() => {
     return getNetworkConfigurationFields(
