@@ -6,7 +6,6 @@ import Checkbox from "src/components/Checkbox/Checkbox";
 import EventTypeChip from "src/components/EventsTable/EventTypeChip";
 import { SelectChangeEvent, Stack, styled } from "@mui/material";
 import { SetState } from "src/types/common/reactGenerics";
-import Chip from "src/components/Chip/Chip";
 import { Text } from "src/components/Typography/Typography";
 
 const MenuItem = styled(MuiMenuItem)({
