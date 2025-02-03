@@ -22,6 +22,7 @@ export const themeConfig = {
 
     error50: "var(--error-50)",
     error200: "var(--error-200)",
+    error300: "var(--error-300)",
     error700: "var(--error-700)",
 
     warning50: "var(--warning-50)",

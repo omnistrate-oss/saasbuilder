@@ -27,6 +27,7 @@ import AlertTrianglePITR from "src/components/Icons/AlertTrianglePITR/AlertTrian
 import CircleCheckWithBorderIcon from "src/components/Icons/CircleCheck/CircleCheckWithBorderIcon";
 import CustomStatusChips from "src/components/CustomStatusChips/CustomStatusChips";
 import PlayIcon from "src/components/Icons/Play/Play";
+import { colors } from "src/themeConfig";
 
 type EndpointProps = {
   resourceName: string;
@@ -283,7 +284,7 @@ const CustomDNS: FC<EndpointProps> = (props) => {
                           setShowDeleteConfirmationDialog(true);
                         }}
                       >
-                        <DeleteIcon />
+                        <DeleteIcon color={colors.error300} />
                       </IconButtonSquare>
                     </>
                   ) : (

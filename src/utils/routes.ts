@@ -1,9 +1,35 @@
+import { CurrentTab } from "app/(dashboard)/instances/[serviceId]/[servicePlanId]/[resourceId]/[instanceId]/[subscriptionId]/page";
+
 export const getDashboardRoute = () => {
   return "/dashboard";
 };
 
 export const getInstancesRoute = () => {
   return "/instances";
+};
+
+type InstanceDetailsRouteParams = {
+  serviceId: string;
+  servicePlanId: string;
+  resourceId: string;
+  instanceId: string;
+  subscriptionId: string;
+  viewType?: CurrentTab;
+};
+
+export const getInstanceDetailsRoute = ({
+  serviceId,
+  servicePlanId,
+  resourceId,
+  instanceId,
+  subscriptionId,
+  viewType,
+}: InstanceDetailsRouteParams): string => {
+  let url = `/instances/${serviceId}/${servicePlanId}/${resourceId}/${instanceId}/${subscriptionId}`;
+  if (viewType) {
+    url = url + `?view=${viewType}`;
+  }
+  return url;
 };
 
 export const getCustomNetworksRoute = () => {
