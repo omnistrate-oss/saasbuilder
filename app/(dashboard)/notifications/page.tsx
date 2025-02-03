@@ -1,6 +1,5 @@
 "use client";
 
-import { Range } from "react-date-range";
 import { useEffect, useMemo, useState } from "react";
 import { IconButton } from "@mui/material";
 import { createColumnHelper } from "@tanstack/react-table";
@@ -17,7 +16,6 @@ import DataGridText from "components/DataGrid/DataGridText";
 import EventTypeChip from "components/EventsTable/EventTypeChip";
 import EventDetailsView from "components/EventsTable/EventDetailsView";
 import EventMessageChip from "components/EventsTable/EventMessageChip";
-import { initialRangeState } from "components/DateRangePicker/DateRangePicker";
 import ServiceNameWithLogo from "components/ServiceNameWithLogo/ServiceNameWithLogo";
 import CursorPaginatedDataTable from "components/DataTable/CursorPaginatedDataTable";
 
@@ -26,14 +24,17 @@ import { AuditEvent } from "src/types/auditEvent";
 import formatDateUTC from "src/utils/formatDateUTC";
 import { useGlobalData } from "src/providers/GlobalDataProvider";
 import { getAccessControlRoute } from "src/utils/route/access/accessRoute";
-import dayjs from "dayjs";
+import {
+  DateRange,
+  initialRangeState,
+} from "src/components/DateRangePicker/DateTimeRangePickerStatic";
 
 const columnHelper = createColumnHelper<AuditEvent>();
 
 const NotificationsPage = () => {
   const [pageIndex, setPageIndex] = useState(0);
   const [selectedDateRange, setSelectedDateRange] =
-    useState<Range>(initialRangeState);
+    useState<DateRange>(initialRangeState);
   const [selectedEventTypes, setSelectedEventTypes] = useState<EventType[]>([]);
   const [selectedServiceId, setSelectedServiceId] = useState<string>("");
   const { subscriptionsObj, serviceOfferings, isFetchingSubscriptions } =
@@ -47,13 +48,8 @@ const NotificationsPage = () => {
     fetchNextPage,
     isFetchingNextPage,
   } = useAuditLogs({
-    startDate: selectedDateRange.startDate
-      ? dayjs(selectedDateRange.startDate).format("YYYY-MM-DD") +
-        "T00:00:00.000Z"
-      : undefined,
-    endDate: selectedDateRange.endDate
-      ? dayjs(selectedDateRange.endDate).format("YYYY-MM-DD") + "T23:59:59.999Z"
-      : undefined,
+    startDate: selectedDateRange.startDate ?? undefined,
+    endDate: selectedDateRange.endDate ?? undefined,
     eventSourceTypes: selectedEventTypes?.length
       ? selectedEventTypes
       : ["Infra", "Maintenance"],

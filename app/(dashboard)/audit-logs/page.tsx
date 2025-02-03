@@ -1,6 +1,5 @@
 "use client";
 
-import { Range } from "react-date-range";
 import { IconButton } from "@mui/material";
 import { useEffect, useMemo, useState } from "react";
 import { createColumnHelper } from "@tanstack/react-table";
@@ -18,20 +17,20 @@ import { useGlobalData } from "src/providers/GlobalDataProvider";
 
 import EventMessageChip from "components/EventsTable/EventMessageChip";
 import EventDetailsView from "components/EventsTable/EventDetailsView";
-import { initialRangeState } from "components/DateRangePicker/DateRangePicker";
+import { initialRangeState } from "components/DateRangePicker/DateTimeRangePickerStatic";
 import ServiceNameWithLogo from "components/ServiceNameWithLogo/ServiceNameWithLogo";
 import CursorPaginatedDataTable from "components/DataTable/CursorPaginatedDataTable";
 import DataGridText from "src/components/DataGrid/DataGridText";
 import { getAccessControlRoute } from "src/utils/route/access/accessRoute";
 import { AuditEvent } from "src/types/auditEvent";
-import dayjs from "dayjs";
+import { DateRange } from "src/components/DateRangePicker/DateTimeRangePickerStatic";
 
 const columnHelper = createColumnHelper<AuditEvent>();
 
 const AuditLogsPage = () => {
   const [pageIndex, setPageIndex] = useState(0);
   const [selectedDateRange, setSelectedDateRange] =
-    useState<Range>(initialRangeState);
+    useState<DateRange>(initialRangeState);
   const [selectedServiceId, setSelectedServiceId] = useState<string>("");
 
   const { subscriptionsObj, serviceOfferings, isFetchingSubscriptions } =
@@ -45,13 +44,8 @@ const AuditLogsPage = () => {
     fetchNextPage,
     isFetchingNextPage,
   } = useAuditLogs({
-    startDate: selectedDateRange.startDate
-      ? dayjs(selectedDateRange.startDate).format("YYYY-MM-DD") +
-        "T00:00:00.000Z"
-      : undefined,
-    endDate: selectedDateRange.endDate
-      ? dayjs(selectedDateRange.endDate).format("YYYY-MM-DD") + "T23:59:59.999Z"
-      : undefined,
+    startDate: selectedDateRange.startDate ?? undefined,
+    endDate: selectedDateRange.endDate ?? undefined,
     eventSourceTypes: "Customer",
     serviceID: selectedServiceId,
   });

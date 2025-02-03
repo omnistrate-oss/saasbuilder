@@ -32,7 +32,7 @@ const ServiceFilter = ({
         );
       }}
       sx={{
-        minWidth: "200px",
+        minWidth: "100px",
         maxWidth: "200px",
         height: "40px !important",
         marginTop: 0,
@@ -42,7 +42,7 @@ const ServiceFilter = ({
       MenuProps={{
         PaperProps: {
           sx: {
-            maxWidth: 300, // Set dropdown width correctly
+            maxWidth: 300, // Set dropdown max width
           },
         },
       }}
