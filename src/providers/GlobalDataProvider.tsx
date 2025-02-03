@@ -3,9 +3,9 @@
 import { createContext, useContext, useMemo } from "react";
 import NoServiceFoundUI from "app/(dashboard)/components/NoServiceFoundUI/NoServiceFoundUI";
 
+import useOrgServiceOfferings from "src/hooks/useOrgServiceOfferings";
 import useSubscriptions from "src/hooks/query/useSubscriptions";
-import useOrgServiceOfferings from "src/features/Marketplace/PublicServices/hooks/useOrgServiceOfferings";
-import useSubscriptionRequests from "src/features/Marketplace/MarketplaceProductTier/hooks/useSubscriptionRequests";
+import useSubscriptionRequests from "src/hooks/useSubscriptionRequests";
 
 import { Subscription } from "src/types/subscription";
 import { SubscriptionRequest } from "src/types/subscriptionRequest";

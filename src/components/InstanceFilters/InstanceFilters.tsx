@@ -2,6 +2,7 @@ import { FC } from "react";
 import { Box, Stack, styled } from "@mui/material";
 import { SetState } from "src/types/common/reactGenerics";
 import _ from "lodash";
+import { colors } from "src/themeConfig";
 
 const Button = styled("button")<{ enabled: boolean }>(({ enabled }) => ({
   fontSize: "14px",
@@ -23,7 +24,7 @@ const Button = styled("button")<{ enabled: boolean }>(({ enabled }) => ({
     left: "-5px",
     right: "-5px",
     bottom: "-5px",
-    border: `2px solid ${enabled ? "#9E77ED" : "transparent"}` /* Hidden by default */,
+    border: `2px solid ${enabled ? colors.success500 : "transparent"}` /* Hidden by default */,
     pointerEvents: "none" /* Prevent interactions with the pseudo-element */,
     borderRadius: "12px" /* Match the button's border-radius, if any */,
   },

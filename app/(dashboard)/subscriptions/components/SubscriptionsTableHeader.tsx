@@ -4,7 +4,6 @@ import Button from "components/Button/Button";
 import SearchInput from "components/DataGrid/SearchInput";
 import DataGridHeaderTitle from "components/Headers/DataGridHeaderTitle";
 import RefreshWithToolTip from "src/components/RefreshWithTooltip/RefreshWithToolTip";
-import { colors } from "src/themeConfig";
 
 const SubscriptionsTableHeader = ({
   selectedRows,
@@ -42,8 +41,7 @@ const SubscriptionsTableHeader = ({
           disabled={isFetchingSubscriptions}
         />
         <Button
-          bgColor={colors.error700}
-          variant="contained"
+          variant="outlined"
           onClick={onUnsubscribe}
           disabled={
             selectedRows.length !== 1 ||

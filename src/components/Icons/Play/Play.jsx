@@ -1,19 +1,13 @@
 import { colors } from "src/themeConfig";
 
 const PlayIcon = (props) => {
-  const { color = colors.green600, disabled } = props;
+  const { color = colors.gray700, disabled } = props;
 
   return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      width={20}
-      height={20}
-      fill="none"
-      {...props}
-    >
+    <svg xmlns="http://www.w3.org/2000/svg" width={20} height={20} fill="none">
       <path
         style={{ transition: "stroke 0.3s ease" }}
-        stroke={disabled ? "#a3a6ac" : color}
+        stroke={disabled ? colors.gray400 : color}
         strokeLinecap="round"
         strokeLinejoin="round"
         strokeWidth={1.667}

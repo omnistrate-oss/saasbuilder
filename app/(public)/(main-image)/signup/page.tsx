@@ -1,7 +1,7 @@
 import { Metadata } from "next";
 
-import SignupPage from "src/features/Signup/SignupPage";
-import { IDENTITY_PROVIDER_TYPES } from "src/features/Signin/constants";
+import SignupPage from "./components/SignupPage";
+import { IDENTITY_PROVIDER_TYPES } from "../signin/constants";
 
 import { getSaaSDomainURL } from "src/server/utils/getSaaSDomainURL";
 import { checkReCaptchaSetup } from "src/server/utils/checkReCaptchaSetup";

@@ -19,27 +19,17 @@ import InstanceHealthStatusChip, {
 
 function ResourceInstanceOverview(props) {
   const {
-    resourceInstanceId,
+    serviceName,
+    serviceLogoURL,
+    subscriptionPlan,
     region,
     cloudProvider,
     status,
-    context,
-    isResourceBYOA,
     isCliManagedResource,
     subscriptionOwner,
     detailedNetworkTopology,
     onViewNodesClick,
   } = props;
-
-  let sectionLabel = "Resource";
-
-  if (context === "inventory") {
-    sectionLabel = "Service Component ";
-  }
-
-  if (isResourceBYOA) {
-    sectionLabel = "Account";
-  }
 
   const healthStatus = getInstanceHealthStatus(detailedNetworkTopology, status);
 
@@ -57,7 +47,12 @@ function ResourceInstanceOverview(props) {
           <TableHead>
             <TableCellCenterText>
               <Text size="xsmall" weight="medium" color="#475467">
-                {`${sectionLabel} Instance ID`}{" "}
+                Service Name
+              </Text>
+            </TableCellCenterText>
+            <TableCellCenterText>
+              <Text size="xsmall" weight="medium" color="#475467">
+                Subscription Plan
               </Text>
             </TableCellCenterText>
             <TableCellCenterText>
@@ -77,7 +72,7 @@ function ResourceInstanceOverview(props) {
             </TableCellCenterText>
             <TableCellCenterText>
               <Text size="xsmall" weight="medium" color="#475467">
-                Cloud Provider
+                Provider
               </Text>
             </TableCellCenterText>
             {!isCliManagedResource && (
@@ -90,18 +85,52 @@ function ResourceInstanceOverview(props) {
           </TableHead>
 
           <TableRow>
-            <TableCell>
+            <TableCell sx={{ py: "4px" }}>
+              <Box
+                display={"flex"}
+                justifyContent={"center"}
+                alignItems={"center"}
+                gap="8px"
+              >
+                <Box
+                  display="flex"
+                  alignItems="center"
+                  justifyContent="center"
+                  boxShadow="0px 1px 2px 0px #1018280D"
+                  borderRadius="50%"
+                  border="1px solid rgba(0, 0, 0, 0.08)"
+                  overflow="hidden"
+                  width="40px"
+                  height="40px"
+                  flexShrink={0}
+                >
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    style={{ objectFit: "cover", objectPosition: "center" }}
+                    src={
+                      serviceLogoURL ||
+                      "/assets/images/dashboard/service/servicePlaceholder.png"
+                    }
+                    alt={serviceName}
+                  />
+                </Box>
+                <Text size="small" weight="medium" color="#101828">
+                  {serviceName}
+                </Text>
+              </Box>
+            </TableCell>
+            <TableCell sx={{ py: "4px" }}>
               <Box
                 display={"flex"}
                 justifyContent={"center"}
                 alignItems={"center"}
               >
                 <Text size="small" weight="medium" color="#101828">
-                  {resourceInstanceId}
+                  {subscriptionPlan}
                 </Text>
               </Box>
             </TableCell>
-            <TableCell>
+            <TableCell sx={{ py: "4px" }}>
               <Box
                 display={"flex"}
                 justifyContent={"center"}
@@ -113,7 +142,7 @@ function ResourceInstanceOverview(props) {
               </Box>
             </TableCell>
 
-            <TableCell>
+            <TableCell sx={{ py: "4px" }}>
               <Stack
                 direction={"row"}
                 justifyContent={"center"}
@@ -128,7 +157,7 @@ function ResourceInstanceOverview(props) {
               </Stack>
             </TableCell>
 
-            <TableCell>
+            <TableCell sx={{ py: "4px" }}>
               <Stack
                 direction="row"
                 justifyContent={"center"}
@@ -148,7 +177,7 @@ function ResourceInstanceOverview(props) {
               </Stack>
             </TableCell>
 
-            <TableCell>
+            <TableCell sx={{ py: "4px" }}>
               <Stack
                 direction={"row"}
                 justifyContent={"center"}

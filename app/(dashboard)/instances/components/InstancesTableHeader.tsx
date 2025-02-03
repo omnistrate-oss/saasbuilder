@@ -24,12 +24,12 @@ import {
   viewEnum,
 } from "src/utils/isAllowedByRBAC";
 import Tooltip from "src/components/Tooltip/Tooltip";
-import { colors } from "src/themeConfig";
 import AddInstanceFilters from "./AddInstanceFilters";
 import EditInstanceFilters from "./EditInstanceFilters";
 import { CircularProgress } from "@mui/material";
 import InstanceFilters from "src/components/InstanceFilters/InstanceFilters";
 import LoadingSpinnerSmall from "src/components/CircularProgress/CircularProgress";
+import { colors } from "src/themeConfig";
 
 type Action = {
   onClick: () => void;
@@ -395,7 +395,6 @@ const InstancesTableHeader = ({
                   <Icon disabled={action.isDisabled || action.isLoading} />
                 }
                 disabledMessage={action.disabledMessage}
-                outlineColor={colors.green300}
               >
                 {action.label}
                 {action.isLoading && <LoadingSpinnerSmall />}
@@ -407,7 +406,7 @@ const InstancesTableHeader = ({
             value=""
             renderValue={(value: string) => {
               if (!value) {
-                return "Action";
+                return "Actions";
               } else {
                 return "";
               }
@@ -426,7 +425,7 @@ const InstancesTableHeader = ({
                     sx={{
                       gap: "10px",
                       fontSize: "14px",
-                      color: isDisabled ? "#a3a6ac" : "",
+                      color: isDisabled ? colors.gray400 : "",
                     }}
                     disabled={isDisabled}
                     onClick={onClick}

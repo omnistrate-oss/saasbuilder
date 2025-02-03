@@ -48,7 +48,6 @@ const ServicePlanDetails: React.FC<ServicePlanDetailsProps> = ({
     <Button
       variant="outlined"
       startIcon={<DownloadCLIIcon disabled={isDownloading} />}
-      outlineColor={colors.green300}
       disabled={isDownloading}
       onClick={() => {
         downloadCLI(serviceOffering.serviceId, serviceOffering.serviceAPIID);
