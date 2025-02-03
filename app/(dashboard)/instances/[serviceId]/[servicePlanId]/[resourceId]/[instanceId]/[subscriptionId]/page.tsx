@@ -248,14 +248,14 @@ const InstanceDetailsPage = ({
       </Stack>
       <Collapse in={insightsVisible}>
         <ResourceInstanceOverview
-          resourceInstanceId={instanceId}
+          serviceName={offering.serviceName}
+          serviceLogoURL={offering.serviceLogoURL}
+          subscriptionPlan={offering.productTierName}
           region={resourceInstanceData.region}
           cloudProvider={cloudProvider}
           status={resourceInstanceData.status}
           createdAt={resourceInstanceData.createdAt}
           modifiedAt={resourceInstanceData.modifiedAt}
-          networkType={resourceInstanceData.networkType}
-          isResourceBYOA={isResourceBYOA}
           isCliManagedResource={isCliManagedResource}
           subscriptionOwner={subscription.subscriptionOwnerName}
           detailedNetworkTopology={

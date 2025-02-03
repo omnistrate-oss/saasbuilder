@@ -4,6 +4,14 @@ import Stack from "@mui/material/Stack";
 import LoadingSpinnerSmall from "../../CircularProgress/CircularProgress";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 
+const LoadingUI = () => {
+  return (
+    <Stack alignItems="center" padding={1}>
+      <LoadingSpinnerSmall sx={{ color: () => "black" }} />
+    </Stack>
+  );
+};
+
 const Select = styled(({ isLoading = false, children, ...props }) => (
   <MuiSelect fullWidth {...props} IconComponent={KeyboardArrowDownIcon}>
     {isLoading ? <LoadingUI /> : children}
@@ -30,11 +38,3 @@ const Select = styled(({ isLoading = false, children, ...props }) => (
 }));
 
 export default Select;
-
-const LoadingUI = () => {
-  return (
-    <Stack alignItems="center" padding={1}>
-      <LoadingSpinnerSmall sx={{ color: () => "black" }} />
-    </Stack>
-  );
-};

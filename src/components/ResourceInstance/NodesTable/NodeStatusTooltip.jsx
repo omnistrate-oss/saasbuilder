@@ -5,6 +5,20 @@ import { Text } from "components/Typography/Typography";
 import CircleCheckIcon from "components/Icons/CircleCheck/CircleCheckIcon";
 import CircleCrossIcon from "components/Icons/CircleCross/CircleCrossIcon";
 
+const CustomTooltip = styled(({ className, ...props }) => (
+  <Tooltip {...props} classes={{ popper: className }} />
+))({
+  [`& .${tooltipClasses.tooltip}`]: {
+    backgroundColor: "#FFFFFF",
+    padding: "12px",
+    borderRadius: "8px",
+    minWidth: "180px",
+    boxShadow:
+      "0px 4px 6px -2px rgba(16, 24, 40, 0.03), 0px 12px 16px -4px rgba(16, 24, 40, 0.08)",
+    border: "1px solid var(--Colors-Border-border-primary, #D0D5DD)",
+  },
+});
+
 const NodeStatusTooltip = ({ detailedHealth, children }) => {
   const {
     ConnectivityStatus,
@@ -100,19 +114,5 @@ const NodeStatusTooltip = ({ detailedHealth, children }) => {
     </CustomTooltip>
   );
 };
-
-const CustomTooltip = styled(({ className, ...props }) => (
-  <Tooltip {...props} classes={{ popper: className }} />
-))({
-  [`& .${tooltipClasses.tooltip}`]: {
-    backgroundColor: "#FFFFFF",
-    padding: "12px",
-    borderRadius: "8px",
-    minWidth: "180px",
-    boxShadow:
-      "0px 4px 6px -2px rgba(16, 24, 40, 0.03), 0px 12px 16px -4px rgba(16, 24, 40, 0.08)",
-    border: "1px solid var(--Colors-Border-border-primary, #D0D5DD)",
-  },
-});
 
 export default NodeStatusTooltip;

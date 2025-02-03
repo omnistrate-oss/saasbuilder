@@ -5,7 +5,6 @@ import DeleteIcon from "src/components/Icons/Delete/Delete";
 import EditIcon from "src/components/Icons/Edit/Edit";
 import SearchInput from "src/components/DataGrid/SearchInput";
 import RefreshWithToolTip from "src/components/RefreshWithTooltip/RefreshWithToolTip";
-import { colors } from "src/themeConfig";
 import PeeringInfoIcon from "app/(dashboard)/components/Icons/PeeringInfoIcon";
 
 const CustomNetworksTableHeader = ({
@@ -48,7 +47,6 @@ const CustomNetworksTableHeader = ({
           disabled={selectedRows.length !== 1}
           onClick={onModifyClick}
           startIcon={<EditIcon disabled={selectedRows.length !== 1} />}
-          outlineColor={colors.green300}
           disabledMessage="Please select a custom network"
         >
           Modify
@@ -58,7 +56,6 @@ const CustomNetworksTableHeader = ({
           disabled={selectedRows.length !== 1}
           onClick={onDeleteClick}
           startIcon={<DeleteIcon disabled={selectedRows.length !== 1} />}
-          outlineColor={colors.green300}
           disabledMessage="Please select a custom network"
         >
           Delete
@@ -68,7 +65,6 @@ const CustomNetworksTableHeader = ({
           disabled={selectedRows.length !== 1}
           onClick={onPeeringInfoClick}
           startIcon={<PeeringInfoIcon disabled={selectedRows.length !== 1} />}
-          outlineColor={colors.green300}
           disabledMessage="Please select a custom network"
         >
           Peering Info

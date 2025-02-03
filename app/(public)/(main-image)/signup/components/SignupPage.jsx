@@ -23,9 +23,9 @@ import useSnackbar from "src/hooks/useSnackbar";
 import { customerUserSignup } from "src/api/customer-user";
 import { passwordRegex, passwordText } from "src/utils/passwordRegex";
 
-import GoogleLogin from "../Signin/components/GoogleLogin";
-import GithubLogin from "../Signin/components/GitHubLogin";
-import { IDENTITY_PROVIDER_STATUS_TYPES } from "../Signin/constants";
+import GoogleLogin from "../../signin/components/GoogleLogin";
+import GithubLogin from "../../signin/components/GitHubLogin";
+import { IDENTITY_PROVIDER_STATUS_TYPES } from "app/(public)/(main-image)/signin/constants";
 import { useProviderOrgDetails } from "src/providers/ProviderOrgDetailsProvider";
 import Logo from "src/components/NonDashboardComponents/Logo";
 

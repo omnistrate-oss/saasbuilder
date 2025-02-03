@@ -96,6 +96,8 @@ const SubscriptionsPage = () => {
                 setOverlayType("subscription-details");
               }}
               style={{
+                display: "block",
+                minWidth: "130px",
                 fontWeight: 600,
               }}
               showCopyButton

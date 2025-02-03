@@ -11,9 +11,10 @@ import ServicePlanCardIcon from "../Icons/ServicePlanCard/ServicePlanCardIcon";
 import { colors } from "src/themeConfig";
 import { SetState } from "src/types/common/reactGenerics";
 
-import CardCircleBg from "./CardCircleBg.svg";
+import CardCircleBg from "./CardCircleBg.png";
 import { Subscription } from "src/types/subscription";
 import { SubscriptionRequest } from "src/types/subscriptionRequest";
+import { Box } from "@mui/material";
 
 type ServicePlanCardProps = {
   isSelected?: boolean;
@@ -46,11 +47,19 @@ const ServicePlanCard: React.FC<ServicePlanCardProps> = ({
     rootSubscription?.roleType === "root";
 
   return (
-    <div
+    <Box
       onClick={() => setSelectedPlanId(servicePlan.productTierID)}
       className="overflow-hidden relative flex flex-col gap-3 items-center border border-[#E9EAEB] rounded-xl px-4 py-4 cursor-pointer"
-      style={{
+      sx={{
         outline: isSelected ? `2px solid ${colors.purple700}` : "none",
+        "& img": {
+          opacity: isSelected ? "1" : "0",
+        },
+        "&:hover": {
+          "& img": {
+            opacity: "1",
+          },
+        },
       }}
     >
       <StatusChip
@@ -60,21 +69,26 @@ const ServicePlanCard: React.FC<ServicePlanCardProps> = ({
           right: "12px",
         }}
         capitalize={false}
-        color={isAutoApprove ? "#175CD3" : "#B93815"}
-        bgColor={isAutoApprove ? "#EFF8FF" : "#FEF6EE"}
+        color={isAutoApprove ? colors.lightBlue700 : colors.error700}
+        bgColor={isAutoApprove ? colors.lightBlue50 : colors.error50}
         borderColor={isAutoApprove ? "#B2DDFF" : "#F9DBAF"}
         status={isAutoApprove ? "Auto Approval" : "Approval Required"}
       />
+
       <Image
         src={CardCircleBg}
         alt=""
         className="absolute"
-        style={{ top: "-50px", left: "-50px" }}
+        style={{
+          top: "0px",
+          left: "0px",
+          transition: "opacity 0.3s ease-in-out",
+        }}
       />
 
       <ServicePlanCardIcon />
 
-      <div style={{ maxWidth: "100%" }}>
+      <div style={{ maxWidth: "100%", zIndex: 10 }}>
         <Text
           size="large"
           weight="semibold"
@@ -121,9 +135,7 @@ const ServicePlanCard: React.FC<ServicePlanCardProps> = ({
 
       {rootSubscription && isUnsubscribeAllowed && (
         <Button
-          variant="contained"
-          bgColor={colors.error700}
-          fontColor={colors.white}
+          variant="outlined"
           disabled={isFetchingData || isSubscribing || isUnsubscribing}
           onClick={onUnsubscribeClick}
         >
@@ -153,7 +165,7 @@ const ServicePlanCard: React.FC<ServicePlanCardProps> = ({
           Pending Approval
         </Button>
       )}
-    </div>
+    </Box>
   );
 };
 

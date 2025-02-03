@@ -60,7 +60,15 @@ const CustomNetworksPage = () => {
         header: "Network ID",
         cell: (data) => {
           return (
-            <DataGridText showCopyButton>{data.row.original.id}</DataGridText>
+            <DataGridText
+              showCopyButton
+              style={{
+                minWidth: "120px",
+                fontWeight: 600,
+              }}
+            >
+              {data.row.original.id}
+            </DataGridText>
           );
         },
       }),

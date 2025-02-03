@@ -27,9 +27,9 @@ import { PAGE_TITLE_MAP } from "src/constants/pageTitleMap";
 import useEnvironmentType from "src/hooks/useEnvironmentType";
 import { ENVIRONMENT_TYPES } from "src/constants/environmentTypes";
 
-import GoogleLogin from "./components/GoogleLogin";
-import GithubLogin from "./components/GitHubLogin";
-import { IDENTITY_PROVIDER_STATUS_TYPES } from "./constants";
+import GoogleLogin from "./GoogleLogin";
+import GithubLogin from "./GitHubLogin";
+import { IDENTITY_PROVIDER_STATUS_TYPES } from "../constants";
 import Logo from "src/components/NonDashboardComponents/Logo";
 import { useProviderOrgDetails } from "src/providers/ProviderOrgDetailsProvider";
 
@@ -57,7 +57,7 @@ const SigninPage = (props) => {
 
   const [isScriptLoaded, setIsScriptLoaded] = useState(false);
   const [hasCaptchaErrored, setHasCaptchaErrored] = useState(false);
-  const reCaptchaRef = useRef(null);
+  const reCaptchaRef = useRef<any>(null);
   const snackbar = useSnackbar();
 
   useEffect(() => {
@@ -106,7 +106,7 @@ const SigninPage = (props) => {
         const jwtToken = data.data.jwtToken;
         handleSignInSuccess(jwtToken);
       },
-      onError: (error) => {
+      onError: (error: any) => {
         if (error.response.data && error.response.data.message) {
           const errorMessage = error.response.data.message;
           snackbar.showError(errorMessage);
@@ -186,6 +186,7 @@ const SigninPage = (props) => {
         <Stack gap="30px">
           <FieldContainer>
             <FieldLabel required>Email Address</FieldLabel>
+            {/* @ts-ignore */}
             <TextField
               name="email"
               id="email"
@@ -237,6 +238,7 @@ const SigninPage = (props) => {
             Login
           </SubmitButton>
           {isReCaptchaSetup && (
+            // @ts-ignore
             <ReCAPTCHA
               size="invisible"
               sitekey={googleReCaptchaSiteKey}
@@ -282,6 +284,7 @@ const SigninPage = (props) => {
           <Stack direction="row" justifyContent="center" mt="20px" gap="16px">
             {showGoogleLoginButton && (
               <GoogleOAuthProvider
+                // @ts-ignore
                 clientId={googleIDPClientID}
                 onScriptLoadError={() => {}}
                 onScriptLoadSuccess={() => {}}

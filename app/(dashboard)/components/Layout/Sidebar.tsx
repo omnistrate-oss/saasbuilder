@@ -2,7 +2,7 @@
 
 import clsx from "clsx";
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Collapse } from "@mui/material";
 import { usePathname } from "next/navigation";
 
@@ -24,6 +24,17 @@ import { useGlobalData } from "src/providers/GlobalDataProvider";
 import useBillingDetails from "src/hooks/query/useBillingDetails";
 import FullScreenDrawer from "../FullScreenDrawer/FullScreenDrawer";
 import PlanDetails from "./PlanDetails";
+import {
+  getCloudAccountsRoute,
+  getCustomNetworksRoute,
+  getInstancesRoute,
+  getAccessControlRoute,
+  getSubscriptionsRoute,
+  getAuditLogsRoute,
+  getNotificationsRoute,
+  getBillingRoute,
+  getSettingsRoute,
+} from "src/utils/routes";
 
 const SingleNavItem = ({
   name,
@@ -76,16 +87,24 @@ const SingleNavItem = ({
   );
 };
 
-const ExpandibleNavItem = ({ name, icon: Icon, subItems, currentPath }) => {
-  const [isExpanded, setIsExpanded] = useState(
-    subItems.some((item) => currentPath.includes(item.href))
-  );
-
+const ExpandibleNavItem = ({
+  name,
+  icon: Icon,
+  subItems,
+  isExpanded,
+  setExpandedMenus,
+  currentPath,
+}) => {
   return (
     <div>
       <div
         className="flex items-center gap-2.5 py-2.5 px-3 rounded-md group cursor-pointer hover:bg-gray-50 transition-colors mb-1"
-        onClick={() => setIsExpanded((prev) => !prev)}
+        onClick={() =>
+          setExpandedMenus((prev) => ({
+            ...prev,
+            [name]: !prev[name],
+          }))
+        }
       >
         <Icon />
 
@@ -147,6 +166,34 @@ const Sidebar = () => {
   const { serviceOfferings } = useGlobalData();
   const [isOverlayOpen, setIsOverlayOpen] = useState(false);
   const [overlayType, setOverlayType] = useState<Overlay>("plan-details");
+  const [expandedMenus, setExpandedMenus] = useState({
+    Deployments: false,
+    "Governance Hub": false,
+    "Account Management": false,
+  });
+
+  useEffect(() => {
+    if (currentPath) {
+      setExpandedMenus((prev) => ({
+        ...prev,
+        Deployments: [
+          getInstancesRoute(),
+          getCustomNetworksRoute(),
+          getCloudAccountsRoute({}),
+        ].includes(currentPath),
+        "Governance Hub": [
+          getAccessControlRoute(),
+          getAuditLogsRoute(),
+          getNotificationsRoute(),
+        ].includes(currentPath),
+        "Account Management": [
+          getSettingsRoute(),
+          getBillingRoute(),
+          getSubscriptionsRoute({}),
+        ].includes(currentPath),
+      }));
+    }
+  }, [currentPath]);
 
   const showCloudProvidersPage = useMemo(() => {
     return Boolean(
@@ -228,15 +275,15 @@ const Sidebar = () => {
         icon: ResourcesIcon,
         isExpandible: true,
         subItems: [
-          { name: "Instances", href: "/instances" },
+          { name: "Instances", href: getInstancesRoute() },
           {
             name: "Custom Networks",
-            href: "/custom-networks",
+            href: getCustomNetworksRoute(),
             isHidden: !showCustomNetworksPage,
           },
           {
             name: "Cloud Accounts",
-            href: "/cloud-accounts",
+            href: getCloudAccountsRoute({}),
             isHidden: !showCloudProvidersPage,
           },
         ],
@@ -246,9 +293,9 @@ const Sidebar = () => {
         icon: ShieldIcon,
         isExpandible: true,
         subItems: [
-          { name: "Access Control", href: "/access-control" },
-          { name: "Audit Logs", href: "/audit-logs" },
-          { name: "Notifications", href: "/notifications" },
+          { name: "Access Control", href: getAccessControlRoute() },
+          { name: "Audit Logs", href: getAuditLogsRoute() },
+          { name: "Notifications", href: getNotificationsRoute() },
         ],
       },
       {
@@ -256,9 +303,13 @@ const Sidebar = () => {
         icon: FileLockIcon,
         isExpandible: true,
         subItems: [
-          { name: "Settings", href: "/settings" },
-          { name: "Billing", href: "/billing", isHidden: !isBillingEnabled },
-          { name: "Subscriptions", href: "/subscriptions" },
+          { name: "Settings", href: getSettingsRoute() },
+          {
+            name: "Billing",
+            href: getBillingRoute(),
+            isHidden: !isBillingEnabled,
+          },
+          { name: "Subscriptions", href: getSubscriptionsRoute({}) },
         ],
       },
     ];
@@ -278,6 +329,8 @@ const Sidebar = () => {
             <ExpandibleNavItem
               key={item.name}
               currentPath={currentPath}
+              isExpanded={expandedMenus[item.name]}
+              setExpandedMenus={setExpandedMenus}
               {...item}
             />
           ) : (

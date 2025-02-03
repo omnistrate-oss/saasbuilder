@@ -31,6 +31,7 @@ body,
     --green-700: #087443;
 
     --error-50: #fef3f2;
+    --error-300: #fda29b;
     --error-200: #fecdca;
     --error-700: #b42318;
 
@@ -48,6 +49,9 @@ body,
     --gray-700: #414651;
     --gray-800: #252b37;
     --gray-900: #181d27;
+
+    --light-blue-50: #f0f9ff;
+    --light-blue-700: #026aa2;
 
     --blue-600: #1570ef;
     --blue-700: #175cd3;

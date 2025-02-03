@@ -107,12 +107,12 @@ const Button = styled(
       borderWidth: "1px",
       borderStyle: "solid",
       borderColor: outlineColor ? outlineColor : colors.gray300,
-      boxShadow: "0px 1px 2px 0px rgba(16, 24, 40, 0.05)",
+      boxShadow: "0px 1px 2px 0px #0A0D120D, 0px -2px 0px 0px #0A0D120D inset",
     },
     [`&.${buttonClasses.outlined}.Mui-disabled`]: {
       background: "white",
       borderColor: "#EAECF0",
-      color: "#D0D5DD",
+      color: colors.gray400,
     },
 
     [`${buttonClasses.outlinedPrimary}`]: {

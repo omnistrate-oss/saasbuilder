@@ -32,13 +32,13 @@ const ResetPasswordPage = (props) => {
   const { googleReCaptchaSiteKey, isReCaptchaSetup } = props;
 
   const snackbar = useSnackbar();
-  const reCaptchaRef = useRef(null);
+  const reCaptchaRef = useRef<any>(null);
   const [isScriptLoaded, setIsScriptLoaded] = useState(false);
   const [hasCaptchaErrored, setHasCaptchaErrored] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
 
   const resetPasswordMutation = useMutation(
-    (payload) => {
+    (payload: any) => {
       setShowSuccess(false);
       return customerUserResetPassword(payload);
     },
@@ -48,7 +48,7 @@ const ResetPasswordPage = (props) => {
         formik.resetForm();
         setShowSuccess(true);
       },
-      onError: (error) => {
+      onError: (error: any) => {
         if (error.response.data && error.response.data.message) {
           const errorMessage = error.response.data.message;
           snackbar.showError(errorMessage);
@@ -106,6 +106,7 @@ const ResetPasswordPage = (props) => {
             your password.
           </PageDescription>
         </Stack>
+        {/* @ts-ignore */}
         <SubmitButton href="/signin">Go to Login</SubmitButton>
 
         <Text
@@ -137,6 +138,7 @@ const ResetPasswordPage = (props) => {
       </Stack>
       <FieldContainer>
         <FieldLabel required>Registered Email</FieldLabel>
+        {/* @ts-ignore */}
         <TextField
           name="email"
           id="email"
@@ -157,6 +159,7 @@ const ResetPasswordPage = (props) => {
         Submit
       </SubmitButton>
       {isReCaptchaSetup && (
+        // @ts-ignore
         <ReCAPTCHA
           size="invisible"
           sitekey={googleReCaptchaSiteKey}

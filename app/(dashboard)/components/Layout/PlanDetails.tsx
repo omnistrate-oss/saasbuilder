@@ -46,7 +46,12 @@ const PlanDetails = ({ startingTab }) => {
     if (planIds.length && !planIds.includes(selectedPlanId)) {
       setSelectedPlanId(planIds[0]);
     }
-  }, [selectedServiceId, serviceOfferingsObj, selectedPlanId]);
+  }, [
+    serviceOfferings,
+    selectedServiceId,
+    serviceOfferingsObj,
+    selectedPlanId,
+  ]);
 
   const selectedPlan = serviceOfferingsObj[selectedServiceId]?.[selectedPlanId];
 

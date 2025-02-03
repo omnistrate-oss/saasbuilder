@@ -40,6 +40,7 @@ const getRowBorderStyles = () => {
     if (!color) {
       color = defaultChipStyles.color;
     }
+
     styles[`& .${status}::before`] = {
       content: '""',
       height: "36px",

@@ -331,11 +331,11 @@ const InviteUsersCard: React.FC<InviteUsersCardProps> = ({
                           push(getNewEnvVariable());
                         }}
                       >
-                        <Add sx={{ color: colors.green600 }} />
+                        <Add sx={{ color: colors.gray700 }} />
                         <Text
                           size="small"
                           weight="semibold"
-                          color={colors.green600}
+                          color={colors.gray700}
                         >
                           Add Another
                         </Text>

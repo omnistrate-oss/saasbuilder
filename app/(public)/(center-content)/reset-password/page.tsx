@@ -1,7 +1,7 @@
 import { FC } from "react";
 import { Metadata } from "next";
 import { checkReCaptchaSetup } from "src/server/utils/checkReCaptchaSetup";
-import ResetPasswordPage from "src/features/ResetPassword/ResetPasswordPage";
+import ResetPasswordPage from "./components/ResetPasswordPage";
 
 export const metadata: Metadata = {
   title: "Reset Password",

@@ -6,7 +6,6 @@ import SearchInput from "components/DataGrid/SearchInput";
 import DataGridHeaderTitle from "components/Headers/DataGridHeaderTitle";
 import RefreshWithToolTip from "components/RefreshWithTooltip/RefreshWithToolTip";
 
-import { colors } from "src/themeConfig";
 import { CircularProgress } from "@mui/material";
 
 const CloudAccountsTableHeader = ({
@@ -56,7 +55,6 @@ const CloudAccountsTableHeader = ({
               }
             />
           }
-          outlineColor={colors.green300}
         >
           Delete
         </Button>
