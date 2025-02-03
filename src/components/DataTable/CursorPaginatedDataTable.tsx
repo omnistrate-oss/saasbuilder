@@ -1,6 +1,6 @@
 import React, { FC, ReactNode, useState } from "react";
 import Collapse from "@mui/material/Collapse";
-import { Box, CircularProgress, Stack } from "@mui/material";
+import { Box, CircularProgress, Stack, SxProps } from "@mui/material";
 import {
   ColumnDef,
   ExpandedState,
@@ -54,6 +54,7 @@ type CursorPaginatedDataTableProps<TData> = {
   rowId?: keyof TData;
   showPagination?: boolean;
   minHeight?: string | number;
+  tableStyles?: SxProps;
 };
 
 const DEFAULT_COLUMN_MIN_WIDTH = 150;
@@ -80,6 +81,7 @@ const CursorPaginatedDataTable = <TData,>(
     rowId = "id" as keyof TData,
     showPagination = true,
     minHeight,
+    tableStyles = {},
   } = props;
 
   const [expanded, setExpanded] = useState<ExpandedState>({});
@@ -178,7 +180,7 @@ const CursorPaginatedDataTable = <TData,>(
   };
 
   return (
-    <TableContainer sx={{ borderRadius: "8px" }}>
+    <TableContainer sx={{ borderRadius: "8px", ...tableStyles }}>
       <HeaderComponent {...headerProps} />
       <Stack
         minHeight={minHeight ? minHeight : showPagination ? "605px" : "540px"}
