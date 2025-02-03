@@ -301,7 +301,7 @@ const AbsoluteRange = (props: AbsoluteRangeProps) => {
         : "00:00:00",
       endTime: dateRange.endDate
         ? dayjs(new Date(dateRange.endDate)).utc().format("HH:mm:ss")
-        : "00:00:00",
+        : "23:59:59",
     },
     enableReinitialize: true,
     onSubmit: (values) => {

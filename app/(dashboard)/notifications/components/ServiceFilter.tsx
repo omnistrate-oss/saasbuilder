@@ -32,11 +32,13 @@ const ServiceFilter = ({
         );
       }}
       sx={{
-        minWidth: "100px",
+        // minWidth: "100px",
+        minWidth: "auto",
         maxWidth: "200px",
         height: "40px !important",
         marginTop: 0,
       }}
+      fullWidth={false}
       onChange={handleChange}
       displayEmpty
       MenuProps={{

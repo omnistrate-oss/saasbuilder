@@ -51,7 +51,6 @@ const AuditLogsEventFilterDropdown: FC<DropdownProps> = (props) => {
     );
   };
 
-
   return (
     <Select
       multiple
@@ -59,24 +58,28 @@ const AuditLogsEventFilterDropdown: FC<DropdownProps> = (props) => {
       renderValue={() => {
         return (
           <Stack direction="row" gap="8px" alignItems="center">
-            {selectedEventTypes.length > 0 && (
-              <Chip size="small" label={selectedEventTypes.length} />
+            {selectedEventTypes.length > 0 ? (
+              selectedEventTypes.map((eventType: EventType, index) => {
+                return <EventTypeChip key={index} eventType={eventType} />;
+              })
+            ) : (
+              <Text size="small" weight="medium" color="#344054">
+                Filter by Type
+              </Text>
             )}
-            <Text size="small" weight="medium" color="#344054">
-              Filter by Type
-            </Text>
           </Stack>
         );
       }}
       sx={{
         width: "auto",
         marginTop: 0,
-        minWidth: "169px",
+        minWidth: "auto",
         minHeight: "40px",
         height: "40px !important",
       }}
       onChange={handleChange}
       displayEmpty
+      fullWidth={false}
     >
       {filterEventTypes.map((eventType) => {
         return (
