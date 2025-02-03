@@ -58,6 +58,7 @@ const ServiceLogoImg = styled("img")({
   height: "40px",
   width: "40px",
   objectFit: "cover",
+  borderRadius : "50%"
 });
 
 function ResourceInstanceOverview(props) {
