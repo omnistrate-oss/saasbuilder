@@ -416,6 +416,7 @@ const InstancesTableHeader = ({
             MenuProps={{
               anchorOrigin: { vertical: "bottom", horizontal: "right" },
               transformOrigin: { vertical: "top", horizontal: "right" },
+              sx: { marginTop: "8px" },
             }}
             sx={{ margin: "0px", height: "40px", minWidth: "110px" }}
           >
@@ -430,7 +431,7 @@ const InstancesTableHeader = ({
                       gap: "10px",
                       fontSize: "14px",
                       color: isDisabled ? colors.gray400 : "",
-                      minWidth: "240px",
+                      minWidth: "220px",
                       padding: "8px 16px",
                     }}
                     disabled={isDisabled}
