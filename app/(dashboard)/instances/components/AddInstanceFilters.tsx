@@ -341,6 +341,7 @@ const AddInstanceFilters = ({
           vertical: "bottom",
           horizontal: "left",
         }}
+        sx={{ marginTop: "8px" }}
       >
         <div className="min-w-[470px]">
           {selectedCategory ? (

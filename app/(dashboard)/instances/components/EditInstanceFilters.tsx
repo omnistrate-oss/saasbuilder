@@ -189,6 +189,7 @@ const EditInstanceFilters = ({
           vertical: "bottom",
           horizontal: "left",
         }}
+        sx={{ marginTop: "8px" }}
       >
         {categoryToEdit && (
           <div className="min-w-[470px]">
