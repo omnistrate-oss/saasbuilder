@@ -22,7 +22,7 @@ import {
 } from "./utils";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
-import Popover from "../Popover/Popover";
+import { PopoverDynamicHeight } from "../Popover/Popover";
 import CalendarIcon from "../Icons/Calendar/Calendar";
 dayjs.extend(utc);
 
@@ -168,7 +168,7 @@ const RelativeRange = ({
   return (
     <Box
       sx={{
-        width: "664px",
+        width: "609px",
       }}
     >
       <Stack
@@ -598,6 +598,9 @@ export const DateTimePickerPopover = (props: DateTimePickerPopoverProps) => {
 
   const [anchorElem, setAnchorElem] = useState<HTMLElement | null>(null);
 
+  const open = Boolean(anchorElem);
+  const id = open ? "date-time-picker-popover" : undefined;
+
   //meant to be used on the button
   let formattedStartDate = "Select Start Date";
   if (dateRange?.startDate) {
@@ -661,8 +664,9 @@ export const DateTimePickerPopover = (props: DateTimePickerPopoverProps) => {
         {buttonText}
       </Button>
 
-      <Popover
-        open={Boolean(anchorElem)}
+      <PopoverDynamicHeight
+        id={id}
+        open={open}
         anchorEl={anchorElem}
         onClose={() => {
           setAnchorElem(null);
@@ -670,13 +674,6 @@ export const DateTimePickerPopover = (props: DateTimePickerPopoverProps) => {
         anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
         transformOrigin={{ vertical: "top", horizontal: "right" }}
         sx={{ marginTop: "8px" }}
-        slotProps={{
-          paper: {
-            sx: {
-              display: "inline-block",
-            },
-          },
-        }}
       >
         <Box>
           <DateTimeRangePickerStatic
@@ -687,7 +684,7 @@ export const DateTimePickerPopover = (props: DateTimePickerPopoverProps) => {
             hideBackArrow={true}
           />
         </Box>
-      </Popover>
+      </PopoverDynamicHeight>
     </>
   );
 };
