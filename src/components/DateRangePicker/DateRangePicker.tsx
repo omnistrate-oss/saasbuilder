@@ -151,6 +151,7 @@ const DateRangePicker: FC<DateRangePickerProps> = (props) => {
           height: "40px !important",
           padding: "10px 14px !important",
           borderColor: "#D5D7DA !important",
+          minWidth: "150px",
         }}
       >
         {buttonText}
