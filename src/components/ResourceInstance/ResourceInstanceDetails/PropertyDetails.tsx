@@ -106,7 +106,7 @@ const PropertyDetails: FC<PropertyTableProps> = ({ rows, ...otherProps }) => {
         padding="20px 24px"
       >
         <Text size="small" weight="bold" color="#7F56D9">
-          {rows.title}
+          {rows.title} 
         </Text>
         <Text size="small" weight="regular" color="#535862" marginTop="2px">
           {rows.desc}

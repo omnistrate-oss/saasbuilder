@@ -89,7 +89,7 @@ const PropertyTable: FC<PropertyTableProps> = ({ rows }) => {
           );
         } else {
           // Custom value type
-          value = <Box paddingTop="12px">{row.value}</Box>;
+          value = <Box paddingTop="20px">{row.value}</Box>;
         }
 
         // If valueType is text or link, add a copy button
