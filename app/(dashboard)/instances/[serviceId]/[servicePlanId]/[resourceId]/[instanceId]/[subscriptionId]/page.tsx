@@ -4,10 +4,9 @@ import Link from "next/link";
 import { RiArrowGoBackFill } from "react-icons/ri";
 import { useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Stack, Collapse, Tabs, Tab } from "@mui/material";
+import { Stack, Collapse } from "@mui/material";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-
 import Button from "components/Button/Button";
 import Logs from "components/ResourceInstance/Logs/Logs";
 import Backup from "components/ResourceInstance/Backup/Backup";
@@ -20,7 +19,6 @@ import SubscriptionNotFoundUI from "components/Access/SubscriptionNotFoundUI";
 import Connectivity from "components/ResourceInstance/Connectivity/Connectivity";
 import ResourceInstanceDetails from "components/ResourceInstance/ResourceInstanceDetails/ResourceInstanceDetails";
 import ResourceInstanceOverview from "components/ResourceInstance/ResourceInstanceOverview/ResourceInstanceOverview";
-
 import { NetworkType } from "src/types/common/enums";
 import { CLI_MANAGED_RESOURCES } from "src/constants/resource";
 import useResourceInstance from "src/hooks/useResourceInstance";
@@ -30,12 +28,11 @@ import {
   selectInstanceDetailsSummaryVisibility,
   toggleInstanceDetailsSummaryVisibility,
 } from "src/slices/genericSlice";
-
 import { checkCustomDNSEndpoint, getTabs } from "./utils";
 import PageContainer from "app/(dashboard)/components/Layout/PageContainer";
-import { colors } from "src/themeConfig";
 import ResourceCustomDNS from "src/components/ResourceInstance/Connectivity/ResourceCustomDNS";
 import { useSearchParams } from "next/navigation";
+import { Tab, Tabs } from "src/components/Tab/Tab";
 
 export type CurrentTab =
   | "Resource Instance Details"
@@ -214,15 +211,7 @@ const InstanceDetailsPage = ({
     <PageContainer>
       <Stack direction="row" alignItems="center" justifyContent="space-between">
         <Link href="/instances">
-          <Button
-            startIcon={<RiArrowGoBackFill />}
-            sx={{
-              color: `${colors.green600} !important`,
-              "&:hover": {
-                background: "transparent",
-              },
-            }}
-          >
+          <Button startIcon={<RiArrowGoBackFill />}>
             Back to list of Resource Instances
           </Button>
         </Link>
@@ -234,12 +223,6 @@ const InstanceDetailsPage = ({
               <KeyboardArrowDownIcon />
             )
           }
-          sx={{
-            color: `${colors.green600} !important`,
-            "&:hover": {
-              background: "transparent",
-            },
-          }}
           onClick={() => dispatch(toggleInstanceDetailsSummaryVisibility())}
         >
           {insightsVisible ? "Hide Insights" : "View Insights"}
@@ -247,9 +230,10 @@ const InstanceDetailsPage = ({
       </Stack>
       <Collapse in={insightsVisible}>
         <ResourceInstanceOverview
-          serviceName={offering.serviceName}
-          serviceLogoURL={offering.serviceLogoURL}
-          subscriptionPlan={offering.productTierName}
+          serviceName={subscription?.serviceName}
+          productTierName={subscription?.productTierName}
+          serviceLogoURL={subscription?.serviceLogoURL}
+          resourceInstanceId={instanceId}
           region={resourceInstanceData.region}
           cloudProvider={cloudProvider}
           status={resourceInstanceData.status}
@@ -267,13 +251,14 @@ const InstanceDetailsPage = ({
       </Collapse>
       <Tabs
         value={currentTab}
-        sx={{
-          marginTop: "24px",
-          borderBottom: "1px solid #E9EAEB",
-          "& .MuiTabs-indicator": {
-            backgroundColor: colors.purple700,
-          },
-        }}
+        sx={{ marginTop: "20px" }}
+        // sx={{
+        //   marginTop: "24px",
+        //   borderBottom: "1px solid #E9EAEB",
+        //   "& .MuiTabs-indicator": {
+        //     backgroundColor: colors.purple700,
+        //   },
+        // }}
       >
         {Object.entries(tabs).map(([key, value]) => {
           return (
@@ -284,17 +269,16 @@ const InstanceDetailsPage = ({
               onClick={() => {
                 setCurrentTab(value as CurrentTab);
               }}
-              sx={{
-                paddingY: "12px !important",
-                paddingX: "16px !important",
-                minWidth: "0px",
-                textTransform: "none",
-                fontWeight: "600",
-                color: "#717680",
-                "&.Mui-selected": {
-                  color: colors.purple700,
-                },
-              }}
+              disableRipple
+              // sx={{
+              //   minWidth: "0px",
+              //   textTransform: "none",
+              //   fontWeight: "600",
+              //   color: "#717680",
+              //   "&.Mui-selected": {
+              //     color: colors.purple800,
+              //   },
+              // }}
             />
           );
         })}

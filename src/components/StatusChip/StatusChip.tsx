@@ -89,7 +89,7 @@ export const statusStyles = {
   },
   HEALTHY: {
     backgroundColor: "#ECFDF3",
-    color: "#027A48",
+    color: "#17B26A",
   },
   IN_PROGRESS: {
     backgroundColor: "#F8F9FC",

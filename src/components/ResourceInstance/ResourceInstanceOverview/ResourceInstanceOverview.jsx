@@ -1,4 +1,4 @@
-import { Box, Stack } from "@mui/material";
+import { Box, Stack, styled } from "@mui/material";
 import AwsLogo from "../../Logos/AwsLogo/AwsLogo";
 import GcpLogo from "../../Logos/GcpLogo/GcpLogo";
 import { Text } from "../../Typography/Typography";
@@ -8,7 +8,7 @@ import StatusChip from "src/components/StatusChip/StatusChip";
 import {
   Table,
   TableHead,
-  TableCell,
+  TableCell as UnstyledTableCell,
   TableRow,
   TableContainer,
   TableCellCenterText,
@@ -16,20 +16,71 @@ import {
 import InstanceHealthStatusChip, {
   getInstanceHealthStatus,
 } from "src/components/InstanceHealthStatusChip/InstanceHealthStautusChip";
+import { colors } from "src/themeConfig";
+
+const TableHeading = (props) => {
+  return (
+    <Text size="xsmall" weight="semibold" color="#717680">
+      {props.children}
+    </Text>
+  );
+};
+
+const StyledTableCell = styled(UnstyledTableCell)({
+  padding: "14px 24px",
+});
+
+const TableCell = (props) => {
+  const { children, containerStyles = {} } = props;
+  return (
+    <StyledTableCell>
+      <Stack
+        direction="row"
+        justifyContent="center"
+        alignItems="center"
+        sx={{ ...containerStyles }}
+      >
+        {children}
+      </Stack>
+    </StyledTableCell>
+  );
+};
+const CellContentText = (props) => {
+  const { children, ...restProps } = props;
+  return (
+    <Text size="small" weight="regular" color={colors.gray600} {...restProps}>
+      {children}
+    </Text>
+  );
+};
+
+const ServiceLogoImg = styled("img")({
+  height: "40px",
+  width: "40px",
+  objectFit: "cover",
+  borderRadius: "50%",
+});
 
 function ResourceInstanceOverview(props) {
   const {
-    serviceName,
-    serviceLogoURL,
-    subscriptionPlan,
+    // resourceInstanceId,
     region,
     cloudProvider,
     status,
+    // isResourceBYOA,
     isCliManagedResource,
     subscriptionOwner,
     detailedNetworkTopology,
     onViewNodesClick,
+    serviceName,
+    productTierName,
+    serviceLogoURL,
   } = props;
+
+  //let sectionLabel = "Resource";
+  // if (isResourceBYOA) {
+  //   sectionLabel = "Account";
+  // }
 
   const healthStatus = getInstanceHealthStatus(detailedNetworkTopology, status);
 
@@ -45,101 +96,49 @@ function ResourceInstanceOverview(props) {
       >
         <Table>
           <TableHead>
+            {/* <TableCellCenterText>
+              <TableHeading>{`${sectionLabel} Instance ID`} </TableHeading>
+            </TableCellCenterText> */}
             <TableCellCenterText>
-              <Text size="xsmall" weight="medium" color="#475467">
-                Service Name
-              </Text>
+              <TableHeading>Service Name</TableHeading>
             </TableCellCenterText>
             <TableCellCenterText>
-              <Text size="xsmall" weight="medium" color="#475467">
-                Subscription Plan
-              </Text>
+              <TableHeading>Subscription Plan</TableHeading>
             </TableCellCenterText>
             <TableCellCenterText>
-              <Text size="xsmall" weight="medium" color="#475467">
-                Subscription Owner
-              </Text>
+              <TableHeading>Subscription Owner</TableHeading>
             </TableCellCenterText>
             <TableCellCenterText>
-              <Text size="xsmall" weight="medium" color="#475467">
-                Lifecycle Status
-              </Text>
+              <TableHeading>Lifecycle Status</TableHeading>
             </TableCellCenterText>
             <TableCellCenterText>
-              <Text size="xsmall" weight="medium" color="#475467">
-                Region
-              </Text>
+              <TableHeading>Region</TableHeading>
             </TableCellCenterText>
             <TableCellCenterText>
-              <Text size="xsmall" weight="medium" color="#475467">
-                Provider
-              </Text>
+              <TableHeading>Cloud Provider</TableHeading>
             </TableCellCenterText>
             {!isCliManagedResource && (
               <TableCellCenterText>
-                <Text size="xsmall" weight="medium" color="#475467">
-                  Health Status
-                </Text>
+                <TableHeading>Health Status</TableHeading>
               </TableCellCenterText>
             )}
           </TableHead>
 
           <TableRow>
-            <TableCell sx={{ py: "4px" }}>
-              <Box
-                display={"flex"}
-                justifyContent={"center"}
-                alignItems={"center"}
-                gap="8px"
-              >
-                <Box
-                  display="flex"
-                  alignItems="center"
-                  justifyContent="center"
-                  boxShadow="0px 1px 2px 0px #1018280D"
-                  borderRadius="50%"
-                  border="1px solid rgba(0, 0, 0, 0.08)"
-                  overflow="hidden"
-                  width="40px"
-                  height="40px"
-                  flexShrink={0}
-                >
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    style={{ objectFit: "cover", objectPosition: "center" }}
-                    src={
-                      serviceLogoURL ||
-                      "/assets/images/dashboard/service/servicePlaceholder.png"
-                    }
-                    alt={serviceName}
-                  />
-                </Box>
-                <Text size="small" weight="medium" color="#101828">
-                  {serviceName}
-                </Text>
-              </Box>
+            <TableCell containerStyles={{ gap: "12px" }}>
+              {serviceLogoURL && (
+                <ServiceLogoImg
+                  src={serviceLogoURL}
+                  alt={`${serviceName}-logo`}
+                />
+              )}
+              <CellContentText>{serviceName}</CellContentText>
             </TableCell>
-            <TableCell sx={{ py: "4px" }}>
-              <Box
-                display={"flex"}
-                justifyContent={"center"}
-                alignItems={"center"}
-              >
-                <Text size="small" weight="medium" color="#101828">
-                  {subscriptionPlan}
-                </Text>
-              </Box>
+            <TableCell>
+              <CellContentText>{productTierName}</CellContentText>
             </TableCell>
-            <TableCell sx={{ py: "4px" }}>
-              <Box
-                display={"flex"}
-                justifyContent={"center"}
-                alignItems={"center"}
-              >
-                <Text size="small" weight="medium" color="#101828">
-                  {subscriptionOwner}
-                </Text>
-              </Box>
+            <TableCell>
+              <CellContentText>{subscriptionOwner}</CellContentText>
             </TableCell>
 
             <TableCell sx={{ py: "4px" }}>
