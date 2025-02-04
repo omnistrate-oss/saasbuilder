@@ -270,7 +270,7 @@ const ResourceConnectivityEndpoint: FC<ResourceConnectivityEndpointProps> = (
             isPrimaryResource={isPrimaryResource}
             endpointURL={customDNSData?.dnsName}
             endpointName={
-              customDNSData?.name ? customDNSData?.name : "Endpoint"
+              customDNSData?.name ? customDNSData?.name : "Custom DNS Endpoint"
             }
           />
         </Box>
