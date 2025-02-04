@@ -452,7 +452,6 @@ const CloudAccountsPage = () => {
               setIsOverlayOpen(false);
             }}
             formMode={overlayType === "view-instance-form" ? "view" : "create"}
-            refetchInstances={refetchInstances}
             setIsAccountCreation={setIsAccountCreation}
             setOverlayType={setOverlayType}
             setClickedInstance={setClickedInstance}

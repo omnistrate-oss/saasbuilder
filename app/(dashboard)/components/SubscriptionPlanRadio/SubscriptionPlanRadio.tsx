@@ -171,6 +171,8 @@ const SubscriptionPlanRadio: React.FC<SubscriptionPlanRadioProps> = ({
     subscriptionRequests,
     refetchSubscriptions,
     refetchSubscriptionRequests,
+    isFetchingSubscriptions,
+    isFetchingSubscriptionRequests,
   } = useGlobalData();
 
   const servicePlanId = formData.values[name];
@@ -183,33 +185,19 @@ const SubscriptionPlanRadio: React.FC<SubscriptionPlanRadioProps> = ({
       }, {});
     }, [subscriptionRequests]);
 
-  const subscribeMutation = useMutation(
-    (payload: any) => {
-      if (payload.AutoApproveSubscription) {
-        return createSubscriptions({
-          productTierId: payload.productTierId,
-          serviceId: payload.serviceId,
-        });
-      } else {
-        return createSubscriptionRequest({
-          productTierId: payload.productTierId,
-          serviceId: payload.serviceId,
-        });
-      }
-    },
-    {
-      onSuccess: (res: any) => {
-        const id = Object.values(res.data || {}).join("");
-        refetchSubscriptions();
-        refetchSubscriptionRequests();
-        if (id.startsWith("subr")) {
-          snackbar.showSuccess("Subscription Request sent successfully");
-        } else {
-          snackbar.showSuccess("Subscribed successfully");
-        }
-      },
+  const subscribeMutation = useMutation((payload: any) => {
+    if (payload.AutoApproveSubscription) {
+      return createSubscriptions({
+        productTierId: payload.productTierId,
+        serviceId: payload.serviceId,
+      });
+    } else {
+      return createSubscriptionRequest({
+        productTierId: payload.productTierId,
+        serviceId: payload.serviceId,
+      });
     }
-  );
+  });
 
   if (!servicePlans.length) {
     return (
@@ -233,13 +221,27 @@ const SubscriptionPlanRadio: React.FC<SubscriptionPlanRadioProps> = ({
               ["root", "editor"].includes(sub.roleType)
           )}
           subscriptionRequest={subscriptionRequestsObj[plan.productTierID]}
-          onSubscribeClick={() =>
-            subscribeMutation.mutate({
+          onSubscribeClick={async () => {
+            const res = await subscribeMutation.mutateAsync({
               productTierId: plan.productTierID,
               serviceId: plan.serviceId,
               AutoApproveSubscription: plan.AutoApproveSubscription,
-            })
-          }
+            });
+
+            // @ts-ignore
+            const id = Object.values(res?.data || {}).join("");
+
+            if (id.startsWith("subr")) {
+              snackbar.showSuccess("Subscription Request sent successfully");
+            } else if (id.startsWith("sub")) {
+              formData.setFieldValue(name, plan.productTierID);
+              onChange(plan.productTierID);
+              snackbar.showSuccess("Subscribed successfully");
+            }
+
+            refetchSubscriptions();
+            refetchSubscriptionRequests();
+          }}
           onClick={() => {
             if (servicePlanId !== plan.productTierID) {
               onChange(plan.productTierID);
@@ -248,7 +250,9 @@ const SubscriptionPlanRadio: React.FC<SubscriptionPlanRadioProps> = ({
           }}
           isSubscribing={subscribeMutation.isLoading}
           isSelected={servicePlanId === plan.productTierID}
-          isFetchingData={false}
+          isFetchingData={
+            isFetchingSubscriptions || isFetchingSubscriptionRequests
+          }
           disabled={disabled || plan.serviceModelStatus !== "READY"}
           disabledMessage={
             plan.serviceModelStatus !== "READY"

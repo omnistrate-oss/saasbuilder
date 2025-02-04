@@ -181,31 +181,6 @@ const InstancesTableHeader = ({
     });
 
     actions.push({
-      label: "Delete",
-      actionType: "secondary",
-      isDisabled:
-        !selectedInstance ||
-        status === "DELETING" ||
-        isProxyResource ||
-        !isDeleteAllowedByRBAC,
-      onClick: () => {
-        if (!selectedInstance)
-          return snackbar.showError("Please select an instance");
-        setOverlayType("delete-dialog");
-        setIsOverlayOpen(true);
-      },
-      disabledMessage: !selectedInstance
-        ? "Please select an instance"
-        : status === "DELETING"
-          ? "Instance deletion is already in progress"
-          : isProxyResource
-            ? "System managed instances cannot be deleted"
-            : !isDeleteAllowedByRBAC
-              ? "Unauthorized to delete instances"
-              : "",
-    });
-
-    actions.push({
       label: "Modify",
       actionType: "secondary",
       isDisabled:
@@ -228,6 +203,31 @@ const InstancesTableHeader = ({
             ? "System managed instances cannot be modified"
             : !isUpdateAllowedByRBAC
               ? "Unauthorized to modify instances"
+              : "",
+    });
+
+    actions.push({
+      label: "Delete",
+      actionType: "secondary",
+      isDisabled:
+        !selectedInstance ||
+        status === "DELETING" ||
+        isProxyResource ||
+        !isDeleteAllowedByRBAC,
+      onClick: () => {
+        if (!selectedInstance)
+          return snackbar.showError("Please select an instance");
+        setOverlayType("delete-dialog");
+        setIsOverlayOpen(true);
+      },
+      disabledMessage: !selectedInstance
+        ? "Please select an instance"
+        : status === "DELETING"
+          ? "Instance deletion is already in progress"
+          : isProxyResource
+            ? "System managed instances cannot be deleted"
+            : !isDeleteAllowedByRBAC
+              ? "Unauthorized to delete instances"
               : "",
     });
 

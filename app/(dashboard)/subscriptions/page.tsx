@@ -2,7 +2,7 @@
 
 import { useSelector } from "react-redux";
 import { useSearchParams } from "next/navigation";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useMemo, useState } from "react";
 import { createColumnHelper } from "@tanstack/react-table";
 
@@ -38,6 +38,7 @@ type Overlay =
   | "subscription-details";
 
 const SubscriptionsPage = () => {
+  const queryClient = useQueryClient();
   const snackbar = useSnackbar();
   const searchParams = useSearchParams();
 
@@ -189,7 +190,19 @@ const SubscriptionsPage = () => {
 
   const unSubscribeMutation = useMutation(deleteSubscription, {
     onSuccess: () => {
-      refetchSubscriptions();
+      queryClient.setQueryData(["user-subscriptions"], (oldData: any) => {
+        return {
+          ...oldData,
+          data: {
+            ids: oldData.data.ids.filter(
+              (id: string) => id !== selectedSubscription?.id
+            ),
+            subscriptions: oldData.data.subscriptions.filter(
+              (sub: Subscription) => sub.id !== selectedSubscription?.id
+            ),
+          },
+        };
+      });
       setIsOverlayOpen(false);
       snackbar.showSuccess("Unsubscribed successfully");
     },
@@ -231,7 +244,7 @@ const SubscriptionsPage = () => {
                 setOverlayType("unsubscribe-dialog");
               },
               isUnsubscribing: unSubscribeMutation.isLoading,
-              count: existingSubscriptions?.length,
+              count: filteredSubscriptions?.length,
               isFetchingSubscriptions,
               refetchSubscriptions,
               selectedSubscription,

@@ -3,7 +3,7 @@
 import { useMemo } from "react";
 import { useFormik } from "formik";
 import { useSelector } from "react-redux";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 import { CloudAccountValidationSchema } from "../constants";
 import { FormConfiguration } from "components/DynamicForm/types";
@@ -35,11 +35,11 @@ const CloudAccountForm = ({
   onClose,
   formMode,
   selectedInstance,
-  refetchInstances,
   setIsAccountCreation,
   setOverlayType,
   setClickedInstance,
 }) => {
+  const queryClient = useQueryClient();
   const snackbar = useSnackbar();
   const selectUser = useSelector(selectUserrootData);
   const {
@@ -99,7 +99,44 @@ const CloudAccountForm = ({
       );
 
       const resourceInstance = resourceInstanceResponse.data;
-      refetchInstances();
+
+      // Sometimes, we don't get the result_params in the response
+      // So, we need to update the query data manually
+      queryClient.setQueryData(["instances"], (oldData: any) => {
+        const result_params = {
+          // @ts-ignore
+          ...resourceInstance.result_params,
+          cloud_provider: values.cloudProvider,
+          account_configuration_method: values.accountConfigurationMethod,
+        };
+
+        if (values.cloudProvider === "aws") {
+          result_params.aws_account_id = values.awsAccountId;
+          result_params.aws_bootstrap_role_arn = getAwsBootstrapArn(
+            values.awsAccountId
+          );
+        } else if (values.cloudProvider === "gcp") {
+          result_params.gcp_project_id = values.gcpProjectId;
+          result_params.gcp_project_number = values.gcpProjectNumber;
+          result_params.gcp_service_account_email = getGcpServiceEmail(
+            values.gcpProjectId,
+            selectUser?.orgId.toLowerCase()
+          );
+        }
+
+        return {
+          ...oldData,
+          data: {
+            resourceInstances: [
+              ...(oldData?.data?.resourceInstances || []),
+              {
+                ...(resourceInstance || {}),
+                result_params: result_params,
+              },
+            ],
+          },
+        };
+      });
 
       setIsAccountCreation(true);
       setClickedInstance({
@@ -306,7 +343,7 @@ const CloudAccountForm = ({
               subLabel: "Select the subscription",
               name: "subscriptionId",
               required: true,
-              isHidden: subscriptionMenuItems.length === 1,
+              isHidden: subscriptionMenuItems.length <= 1,
               customComponent: (
                 <SubscriptionMenu
                   field={{
@@ -331,6 +368,7 @@ const CloudAccountForm = ({
               subLabel: "Select the cloud provider",
               name: "cloudProvider",
               required: true,
+              isHidden: !serviceId || !servicePlanId,
               customComponent: (
                 <CloudProviderRadio
                   cloudProviders={
@@ -364,6 +402,7 @@ const CloudAccountForm = ({
               type: "select",
               required: true,
               disabled: formMode !== "create",
+              isHidden: !cloudProvider,
               menuItems: accountConfigurationMethods.map((option) => ({
                 value: option,
                 label:

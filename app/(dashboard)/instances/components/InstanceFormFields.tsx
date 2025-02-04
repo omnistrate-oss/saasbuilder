@@ -183,7 +183,7 @@ export const getStandardInformationFields = (
       subLabel: "Select the subscription",
       name: "subscriptionId",
       required: true,
-      isHidden: subscriptionMenuItems.length === 1,
+      isHidden: subscriptionMenuItems.length <= 1,
       customComponent: (
         <SubscriptionMenu
           field={{
@@ -222,7 +222,7 @@ export const getStandardInformationFields = (
       onChange: () => {
         setFieldValue("requestParams", {});
       },
-      isHidden: resourceMenuItems.length === 1,
+      isHidden: resourceMenuItems.length <= 1,
     },
   ];
 
@@ -329,6 +329,9 @@ export const getNetworkConfigurationFields = (
 
   const cloudProviderFieldExists = inputParametersObj["cloud_provider"];
   const customNetworkFieldExists = inputParametersObj["custom_network_id"];
+  const cloudProviderNativeNetworkIdFieldExists =
+    inputParametersObj["cloud_provider_native_network_id"];
+  const customDNSFieldExists = inputParametersObj["custom_dns_configuration"];
 
   const networkTypeFieldExists =
     cloudProviderFieldExists &&
@@ -337,7 +340,7 @@ export const getNetworkConfigurationFields = (
 
   if (networkTypeFieldExists) {
     fields.push({
-      label: "Network",
+      label: "Network Type",
       subLabel: "Type of Network",
       name: "network_type",
       value: values.network_type || "",
@@ -347,7 +350,7 @@ export const getNetworkConfigurationFields = (
       options: [
         { label: "Public", value: "PUBLIC", disabled: formMode !== "create" },
         {
-          label: "Internal",
+          label: "Private",
           value: "INTERNAL",
           disabled: formMode !== "create",
         },
@@ -384,6 +387,56 @@ export const getNetworkConfigurationFields = (
     });
   }
 
+  if (
+    cloudProviderNativeNetworkIdFieldExists &&
+    cloudProviderFieldExists &&
+    values.cloudProvider !== "gcp"
+  ) {
+    const param = inputParametersObj["cloud_provider_native_network_id"];
+    fields.push({
+      label: param.displayName || param.key,
+      subLabel: (
+        <>
+          {param.description && <br />}
+          If you&apos;d like to deploy within your VPC, enter its ID. Please
+          ensure your VPC meets the{" "}
+          <Link
+            style={{
+              textDecoration: "underline",
+              color: "blue",
+            }}
+            href="https://docs.omnistrate.com/usecases/byoa/?#bring-your-own-vpc-byo-vpc"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            prerequisites
+          </Link>
+          .
+        </>
+      ),
+      disabled: formMode !== "create",
+      name: `requestParams.${param.key}`,
+      value: values.requestParams[param.key] || "",
+      type: "text-multiline",
+      required: formMode !== "modify" && param.required,
+      previewValue: values.requestParams[param.key],
+    });
+  }
+
+  if (customDNSFieldExists) {
+    const param = inputParametersObj["custom_dns_configuration"];
+    fields.push({
+      label: param.displayName || param.key,
+      subLabel: param.description,
+      disabled: formMode !== "create",
+      name: `requestParams.${param.key}`,
+      value: values.requestParams[param.key] || "",
+      type: "text-multiline",
+      required: formMode !== "modify" && param.required,
+      previewValue: values.requestParams[param.key],
+    });
+  }
+
   return fields;
 };
 
@@ -404,7 +457,9 @@ export const getDeploymentConfigurationFields = (
       param.key !== "region" &&
       param.key !== "custom_network_id" &&
       param.key !== "custom_availability_zone" &&
-      param.key !== "subscriptionId"
+      param.key !== "subscriptionId" &&
+      param.key !== "cloud_provider_native_network_id" &&
+      param.key !== "custom_dns_configuration"
   );
 
   filteredSchema.forEach((param) => {
@@ -509,51 +564,20 @@ export const getDeploymentConfigurationFields = (
         emptyMenuText: "No cloud accounts available",
       });
     } else {
-      if (
-        param.key !== "cloud_provider_native_network_id" ||
-        values.cloudProvider !== "gcp"
-      ) {
-        if (
-          param.key === "cloud_provider_account_config_id" ||
-          (param.key === "cloud_provider_native_network_id" &&
-            values.cloudProvider === "gcp")
-        ) {
-          return;
-        }
-
-        fields.push({
-          label: param.displayName || param.key,
-          subLabel:
-            param.key === "cloud_provider_native_network_id" ? (
-              <>
-                {param.description && <br />}
-                If you&apos;d like to deploy within your VPC, enter its ID.
-                Please ensure your VPC meets the{" "}
-                <Link
-                  style={{
-                    textDecoration: "underline",
-                    color: "blue",
-                  }}
-                  href="https://docs.omnistrate.com/usecases/byoa/?#bring-your-own-vpc-byo-vpc"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  prerequisites
-                </Link>
-                .
-              </>
-            ) : (
-              param.description
-            ),
-          disabled:
-            param.key === "custom_dns_configuration" && formMode !== "create", // Special case for custom DNS configuration
-          name: `requestParams.${param.key}`,
-          value: values.requestParams[param.key] || "",
-          type: "text-multiline",
-          required: formMode !== "modify" && param.required,
-          previewValue: values.requestParams[param.key],
-        });
+      if (param.key === "cloud_provider_account_config_id") {
+        return;
       }
+
+      fields.push({
+        label: param.displayName || param.key,
+        subLabel: param.description,
+        disabled: false,
+        name: `requestParams.${param.key}`,
+        value: values.requestParams[param.key] || "",
+        type: "text-multiline",
+        required: formMode !== "modify" && param.required,
+        previewValue: values.requestParams[param.key],
+      });
     }
   });
 

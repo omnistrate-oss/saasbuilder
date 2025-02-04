@@ -103,8 +103,8 @@ const DeleteInstructions = () => {
           </ListItemIcon>
 
           <Text size="medium" weight="regular" color="#374151">
-            Delete Account Config: Start by deleting the account configuration
-            below to remove all artifacts created by Omnistrate.
+            <b>Delete Account Config:</b> Start by deleting the account
+            configuration below to remove all artifacts created by Omnistrate.
           </Text>
         </ListItem>
         <ListItem>
@@ -147,7 +147,7 @@ function DeleteAccountConfigConfirmationDialog(props) {
     handleClose,
     formData,
     title = "Delete",
-    message = "To confirm deletion, please enter <i><b> deleteme</b></i>, in the field below:",
+    message = "To confirm deletion, please enter <i><b>deleteme</b></i>, in the field below:",
     buttonLabel = "Delete",
     buttonColor = "#D92D20",
     isLoading,
