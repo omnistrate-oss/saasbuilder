@@ -38,7 +38,7 @@ const Page = async () => {
     <SignupPage
       googleIdentityProvider={googleIdentityProvider}
       githubIdentityProvider={githubIdentityProvider}
-      reCaptchaSetup={checkReCaptchaSetup()}
+      isReCaptchaSetup={checkReCaptchaSetup()}
       saasBuilderBaseURL={getSaaSDomainURL()}
       googleReCaptchaSiteKey={process.env.GOOGLE_RECAPTCHA_SITE_KEY || null}
     />
