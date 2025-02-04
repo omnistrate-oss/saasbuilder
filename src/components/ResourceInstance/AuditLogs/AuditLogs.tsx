@@ -9,10 +9,6 @@ import { createColumnHelper } from "@tanstack/react-table";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
 import DataTable from "src/components/DataTable/DataTable";
-import { Range } from "react-date-range";
-import DateRangePicker, {
-  initialRangeState,
-} from "src/components/DateRangePicker/DateRangePicker";
 import RefreshWithToolTip from "src/components/RefreshWithTooltip/RefreshWithToolTip";
 import AuditLogsEventFilterDropdown from "./components/AuditLogsEventFilterDropdown";
 import GridCellExpand from "src/components/GridCellExpand/GridCellExpand";
@@ -26,6 +22,11 @@ import { getAccessControlRoute } from "src/utils/route/access/accessRoute";
 import EventTypeChip from "../../EventsTable/EventTypeChip";
 import JSONView from "src/components/JSONView/JSONView";
 import { OnCopyProps } from "react-json-view";
+import {
+  DateRange,
+  DateTimePickerPopover,
+  initialRangeState,
+} from "src/components/DateRangePicker/DateTimeRangePickerStatic";
 
 dayjs.extend(isSameOrBefore);
 dayjs.extend(isSameOrAfter);
@@ -36,8 +37,8 @@ type AuditLogsTableHeaderProps = {
   setSearchText: SetState<string>;
   refetchLogs: () => void;
   isRefetching: boolean;
-  selectedDateRange: Range;
-  setSelectedDateRange: SetState<Range>;
+  selectedDateRange: DateRange;
+  setSelectedDateRange: SetState<DateRange>;
   selectedEventTypes: EventType[];
   setSelectedEventTypes: SetState<EventType[]>;
 };
@@ -74,7 +75,14 @@ const AuditLogsTableHeader: FC<AuditLogsTableHeaderProps> = (props) => {
           plural: "Activities",
         }}
       />
-      <Stack direction="row" alignItems="center" gap="12px">
+      <Stack
+        direction="row"
+        justifyContent="flex-end"
+        flexGrow={1}
+        flexWrap={"wrap"}
+        alignItems="center"
+        gap="12px"
+      >
         <SearchInput
           searchText={searchText}
           setSearchText={setSearchText}
@@ -82,7 +90,7 @@ const AuditLogsTableHeader: FC<AuditLogsTableHeaderProps> = (props) => {
           width="250px"
         />
         <RefreshWithToolTip refetch={refetchLogs} disabled={isRefetching} />
-        <DateRangePicker
+        <DateTimePickerPopover
           dateRange={selectedDateRange}
           setDateRange={setSelectedDateRange}
         />
@@ -128,7 +136,7 @@ function DetailTableRowView(props: { rowData: AccessEvent }) {
 const AuditLogs: FC<AuditLogsTabProps> = ({ instanceId, subscriptionId }) => {
   const [searchText, setSearchText] = useState("");
   const [selectedDateRange, setSelectedDateRange] =
-    useState<Range>(initialRangeState);
+    useState<DateRange>(initialRangeState);
   const [selectedEventTypes, setSelectedEventTypes] = useState<EventType[]>([]);
   const data = useUserData();
   const currentUserOrgId = data.userData?.orgId;
@@ -264,11 +272,11 @@ const AuditLogs: FC<AuditLogsTabProps> = ({ instanceId, subscriptionId }) => {
       selectedDateRange.startDate &&
       selectedDateRange.endDate
     ) {
-      const startDate = dayjs(selectedDateRange.startDate).format("YYYY-MM-DD");
-      const endDate = dayjs(selectedDateRange.endDate).format("YYYY-MM-DD");
+      const startDate = dayjs(selectedDateRange.startDate);
+      const endDate = dayjs(selectedDateRange.endDate);
 
       filtered = filtered.filter((event) => {
-        const eventDate = dayjs(event.time).format("YYYY-MM-DD");
+        const eventDate = dayjs(event.time);
 
         return (
           dayjs(eventDate).isSameOrAfter(startDate) &&

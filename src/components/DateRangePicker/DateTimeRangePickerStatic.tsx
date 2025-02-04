@@ -356,7 +356,7 @@ const AbsoluteRange = (props: AbsoluteRangeProps) => {
     setFieldValue("startDate", "");
     setFieldValue("endDate", "");
     setFieldValue("startTime", "00:00:00");
-    setFieldValue("endTime", "00:00:00");
+    setFieldValue("endTime", "23:59:59");
     handleClear();
   };
 

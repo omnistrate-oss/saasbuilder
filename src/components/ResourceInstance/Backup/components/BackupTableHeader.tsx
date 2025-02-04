@@ -6,11 +6,13 @@ import SearchInput from "src/components/DataGrid/SearchInput";
 import DataGridHeaderTitle from "src/components/Headers/DataGridHeaderTitle";
 import RefreshWithToolTip from "src/components/RefreshWithTooltip/RefreshWithToolTip";
 import RefreshIcon from "@mui/icons-material/Refresh";
-import DateRangePicker from "src/components/DateRangePicker/DateRangePicker";
 import { FC } from "react";
 import { SetState } from "src/types/common/reactGenerics";
-import { Range } from "react-date-range";
 import { UseMutationResult } from "@tanstack/react-query";
+import {
+  DateRange,
+  DateTimePickerPopover,
+} from "src/components/DateRangePicker/DateTimeRangePickerStatic";
 
 type BackupsTableHeaderProps = {
   resourceName: string;
@@ -20,8 +22,8 @@ type BackupsTableHeaderProps = {
   refetch: () => void;
   restoreMutation: UseMutationResult<void, Error, void, unknown>;
   isRefetching: boolean;
-  selectedDateRange: Range;
-  setSelectedDateRange: SetState<Range>;
+  selectedDateRange: DateRange;
+  setSelectedDateRange: SetState<DateRange>;
   isRestoreDisabled: boolean;
 };
 
@@ -55,7 +57,14 @@ const BackupsTableHeader: FC<BackupsTableHeaderProps> = ({
             plural: "Backups",
           }}
         />
-        <Stack direction="row" alignItems="center" gap="12px">
+        <Stack
+          direction="row"
+          alignItems="center"
+          gap="12px"
+          justifyContent="flex-end"
+          flexGrow={1}
+          flexWrap={"wrap"}
+        >
           <SearchInput
             placeholder="Search by Name"
             searchText={searchText}
@@ -63,7 +72,7 @@ const BackupsTableHeader: FC<BackupsTableHeaderProps> = ({
             width="250px"
           />
           <RefreshWithToolTip refetch={refetch} disabled={isRefetching} />
-          <DateRangePicker
+          <DateTimePickerPopover
             dateRange={selectedDateRange}
             setDateRange={setSelectedDateRange}
           />
