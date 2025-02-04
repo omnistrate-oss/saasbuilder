@@ -187,7 +187,15 @@ const CursorPaginatedDataTable = <TData,>(
         justifyContent="space-between"
       >
         <Box sx={{ overflowX: "auto", flexGrow: 1, position: "relative" }}>
-          <Table sx={{ tableLayout: "fixed" }}>
+          <Table
+            sx={{
+              tableLayout: "fixed",
+              minWidth:
+                columns.reduce((acc, curr) => {
+                  return acc + Number(getColumnMinWidth(curr));
+                }, 0) || "100%",
+            }}
+          >
             {table.getHeaderGroups().map((headerGroup) => (
               <colgroup key={headerGroup.id}>
                 {headerGroup.headers.map((header) => (
