@@ -81,8 +81,6 @@ const CloudProvidersChart: React.FC<CloudProvidersChartProps> = ({
     } satisfies ChartConfig;
   }, [awsRegionsObj, gcpRegionsObj]);
 
-  console.log(chartConfig);
-
   return (
     <ResponsiveContainer width="100%" height={300}>
       <ChartContainer config={chartConfig}>

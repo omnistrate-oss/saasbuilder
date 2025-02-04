@@ -43,8 +43,9 @@ export const statuses = {
 
 export const statusStyles = {
   ACTIVE: {
-    backgroundColor: "#F8F9FC",
-    color: "#669F2A",
+    backgroundColor: "#ECFDF3",
+    color: "#067647",
+    borderColor: "#ABEFC6",
   },
   Active: {
     backgroundColor: "#F8F9FC",
@@ -195,7 +196,7 @@ type StatusChipProps = {
   label?: string;
   category?: Category;
   borderColor?: string;
-  startIcon? : ReactNode;
+  startIcon?: ReactNode;
 };
 
 type ChipProps = Omit<MuiChipProps, "color">;
@@ -223,7 +224,7 @@ const StatusChip: FC<ChipProps & StatusChipProps> = (props) => {
     chipStyles = {
       color: chipCategoryColors[category].color,
       backgroundColor: chipCategoryColors[category].bgColor,
-      borderColor : chipCategoryColors[category].borderColor
+      borderColor: chipCategoryColors[category].borderColor,
     };
   }
 

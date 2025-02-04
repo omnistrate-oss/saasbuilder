@@ -7,6 +7,7 @@ import { Box, Stack, styled } from "@mui/material";
 import Button from "components/Button/Button";
 import errorImage from "public/assets/images/error.png";
 import { useProviderOrgDetails } from "src/providers/ProviderOrgDetailsProvider";
+import { usePathname } from "next/navigation";
 
 const ErrorImage = styled(Image)({
   width: "100%",
@@ -33,6 +34,7 @@ const Description = styled("p")({
 });
 
 const ErrorPage = () => {
+  const pathname = usePathname();
   const { orgSupportEmail, email } = useProviderOrgDetails();
 
   return (
@@ -46,11 +48,26 @@ const ErrorPage = () => {
             ? ` If the issue persists please reach out at ${orgSupportEmail || email}`
             : ""}
         </Description>
-        <Link href="/signin">
-          <Button variant="contained" size="xlarge" sx={{ marginTop: "40px" }}>
-            Go to Home
+        {pathname === "/instances" ? (
+          <Button
+            variant="contained"
+            size="xlarge"
+            sx={{ marginTop: "40px" }}
+            onClick={() => window.location.reload()}
+          >
+            Reload
           </Button>
-        </Link>
+        ) : (
+          <Link href="/instances">
+            <Button
+              variant="contained"
+              size="xlarge"
+              sx={{ marginTop: "40px" }}
+            >
+              Go to Home
+            </Button>
+          </Link>
+        )}
       </Box>
     </Stack>
   );

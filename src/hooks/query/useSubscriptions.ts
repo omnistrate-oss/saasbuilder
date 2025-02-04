@@ -3,10 +3,11 @@ import useEnvironmentType from "../useEnvironmentType";
 
 import { getSubscriptions } from "src/api/subscriptions";
 
+// Before Making any Changes, Please Be Careful because we use the QueryClient to Update the Data when Unsubscribing
 const useSubscriptions = (queryOptions = {}) => {
   const environmentType = useEnvironmentType();
   const subscriptionData = useQuery(
-    ["user-subscriptions", environmentType],
+    ["user-subscriptions"],
     () => {
       return getSubscriptions({
         environmentType,

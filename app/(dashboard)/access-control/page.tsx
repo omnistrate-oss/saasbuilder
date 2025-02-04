@@ -217,7 +217,7 @@ const AccessControlPage = () => {
         // TODO Later: Set the Query Data Directly without Refetching
         refetchUsers();
         setIsOverlayOpen(false);
-        snackbar.showSuccess("User deleted successfully");
+        snackbar.showSuccess("User access removed successfully");
       },
     }
   );
@@ -261,7 +261,7 @@ const AccessControlPage = () => {
             searchText,
             setSearchText,
             refetchUsers,
-            count: users.length,
+            count: filteredUsers.length,
             isFetchingUsers,
           }}
           isLoading={isFetchingUsers || isLoadingSubscriptions}
@@ -286,11 +286,17 @@ const AccessControlPage = () => {
           };
           deleteUserMutation.mutate(payload);
         }}
+        confirmationText="remove"
         title="Remove Access"
         isLoading={deleteUserMutation.isLoading}
         buttonLabel="Remove Access"
-        subtitle={`Are you sure you want to delete ${selectedUser?.email}?`}
-        message="To confirm deletion, please enter <b> deleteme </b>, in the field below:"
+        subtitle={`Are you sure you want remove the ${
+          selectedUser?.roleType
+            ? selectedUser?.roleType.charAt(0).toUpperCase() +
+              selectedUser?.roleType.slice(1)
+            : null
+        } access for the user ${selectedUser?.email}?`}
+        message="To confirm deletion, please enter <b>remove</b>, in the field below:"
       />
     </PageContainer>
   );

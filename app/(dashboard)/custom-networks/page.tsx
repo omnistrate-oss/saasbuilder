@@ -51,6 +51,14 @@ const CustomNetworksPage = () => {
     refetch: refetchCustomNetworks,
   } = useCustomNetworks();
 
+  const filteredCustomNetworks = useMemo(() => {
+    return customNetworks.filter((customNetwork) => {
+      return customNetwork.name
+        ?.toLowerCase()
+        .includes(searchText.toLowerCase());
+    });
+  }, [customNetworks, searchText]);
+
   const { data: regions = [], isFetching: isFetchingRegions } = useRegions();
 
   const dataTableColumns = useMemo(() => {
@@ -163,11 +171,11 @@ const CustomNetworksPage = () => {
       <div>
         <DataTable
           columns={dataTableColumns}
-          rows={customNetworks}
+          rows={filteredCustomNetworks}
           noRowsText="No custom networks"
           HeaderComponent={CustomNetworksTableHeader}
           headerProps={{
-            count: customNetworks.length,
+            count: filteredCustomNetworks.length,
             searchText,
             setSearchText,
             onPeeringInfoClick: () => {
@@ -182,6 +190,7 @@ const CustomNetworksPage = () => {
             isFetchingCustomNetworks,
             selectedRows,
             onCreateClick: () => {
+              setSelectedRows([]);
               setOverlayType("create-custom-network");
               setIsOverlayOpen(true);
             },
@@ -231,7 +240,7 @@ const CustomNetworksPage = () => {
           await deleteCustomNetworkMutation.mutateAsync(selectedRows[0]);
         }}
         title="Delete Custom Network"
-        subtitle="Are you sure you want to delete this custom network?"
+        subtitle={`Are you sure you want to delete - ${selectedRows[0]}?`}
         message="To confirm deletion, please enter <b>deleteme</b>, in the field below:"
         isLoading={deleteCustomNetworkMutation.isLoading}
       />

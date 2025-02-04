@@ -350,8 +350,6 @@ const InstanceForm = ({
       return acc;
     }, {});
 
-    console.log(inputParameters);
-
     if (inputParameters.length && formMode === "create") {
       formData.setValues((prev) => ({
         ...prev,
@@ -385,8 +383,6 @@ const InstanceForm = ({
       return -1;
     });
   }, [customAvailabilityZoneData?.availabilityZones]);
-
-  console.log(formData.errors);
 
   const cloudAccountInstances = useMemo(
     () =>
@@ -502,7 +498,8 @@ const InstanceForm = ({
             })}
           </div>
         </CardWithTitle>
-        {!networkConfigurationFields.length ? null : (
+        {isFetchingResourceSchema ||
+        !networkConfigurationFields.length ? null : (
           <CardWithTitle title="Network Configuration">
             <div className="space-y-6">
               {networkConfigurationFields.map((field, index) => {
