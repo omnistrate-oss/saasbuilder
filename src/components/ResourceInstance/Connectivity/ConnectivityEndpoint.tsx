@@ -6,13 +6,16 @@ import TableRow from "@mui/material/TableRow";
 import MuiTableCell from "@mui/material/TableCell";
 import { Text } from "src/components/Typography/Typography";
 import resourcePortsIcon from "../../../../public/assets/images/dashboard/resource-instance-nodes/ports.svg";
-import resourceEndpointIcon from "../../../../public/assets/images/dashboard/resource-instance-nodes/resource-endpoint.svg";
 import { FC, useMemo, useState } from "react";
 import CopyButton from "src/components/Button/CopyButton";
 import Button from "src/components/Button/Button";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
 import CustomDNSEndPoint from "./CustomDNSEndPoint";
+import PublicResourceIcon from "src/components/Icons/PublicResource/PublicResource";
+import PrivateResourceIcon from "src/components/Icons/PrivateResource/PrivateResource";
+import StatusChip from "src/components/StatusChip/StatusChip";
+import { ContainerCard } from "../ResourceInstanceDetails/PropertyDetails";
 const TableCell = styled(MuiTableCell)({
   borderBottom: "none",
 });
@@ -34,6 +37,7 @@ type ResourceConnectivityEndpointProps = {
     aRecordTarget?: string;
     name?: string;
   };
+  publiclyAccessible?: boolean;
 };
 
 // Define the expected type for each port item
@@ -54,6 +58,7 @@ const ResourceConnectivityEndpoint: FC<ResourceConnectivityEndpointProps> = (
     isPrimaryResource = false,
     ResourceConnectivityCustomDNS,
     customDNSData,
+    publiclyAccessible,
   } = props;
   const [isEndpointsExpanded, setIsEndpointsExpanded] = useState(false);
   const toggleExpanded = () => setIsEndpointsExpanded((prev) => !prev);
@@ -122,145 +127,155 @@ const ResourceConnectivityEndpoint: FC<ResourceConnectivityEndpointProps> = (
   };
 
   return (
-    <>
-      <Box borderRadius="8px" border="1px solid #EAECF0" padding={"12px"}>
-        <Stack
-          sx={{
-            flexDirection: "column",
-            justifyContent: "space-between",
-            borderBottom: "1px solid #E4E7EC",
-            paddingBottom: "12px",
-            marginBottom: "12px",
-          }}
-          alignItems="left"
-        >
-          <Text size="small" weight="semibold" color="rgba(105, 65, 198, 1)">
-            {resourceName}
-          </Text>
-        </Stack>
-        <Box
-          sx={{
-            border: isPrimaryResource
-              ? "2px solid #7F56D9"
-              : "1px solid #EAECF0",
-            background: isPrimaryResource ? "#F9F5FF" : "white",
-            borderRadius: "12px",
-            ...containerStyles,
-          }}
-        >
-          <Table>
-            <TableBody>
-              <TableRow>
-                <TableCell
-                  sx={{
-                    paddingRight: "8px",
-                    paddingTop: "16px",
-                    verticalAlign: "top",
-                  }}
-                >
-                  {viewType === "endpoint" ? (
-                    <Image src={resourceEndpointIcon} alt="resource-endpoint" />
+    <ContainerCard
+      title={resourceName}
+      contentBoxProps={{ padding: "12px 16px" }}
+      marginTop="20px"
+    >
+      <Box
+        sx={{
+          border: isPrimaryResource ? "1px solid #7F56D9" : "1px solid #EAECF0",
+          background: isPrimaryResource ? "#F9F5FF" : "white",
+          borderRadius: "12px",
+          boxShadow: "box-shadow: 0px 1px 2px 0px #0A0D120D",
+          ...containerStyles,
+        }}
+      >
+        <Table>
+          <TableBody>
+            <TableRow>
+              <TableCell
+                sx={{
+                  paddingRight: "8px",
+                  paddingTop: "16px",
+                  verticalAlign: "top",
+                }}
+              >
+                {viewType === "endpoint" ? (
+                  publiclyAccessible ? (
+                    <PublicResourceIcon />
                   ) : (
-                    <Image src={resourcePortsIcon} alt="resource-ports" />
-                  )}
-                </TableCell>
-                <TableCell
-                  width="100%"
-                  sx={{
-                    paddingLeft: "8px",
-                    paddingRight: "8px",
-                    marginBottom: "10px",
-                  }}
-                >
+                    <PrivateResourceIcon />
+                  )
+                ) : (
+                  <Image
+                    src={resourcePortsIcon}
+                    alt="resource-ports"
+                    style={{ minWidth: "36px" }}
+                  />
+                )}
+              </TableCell>
+              <TableCell
+                width="100%"
+                sx={{
+                  paddingLeft: "8px",
+                  paddingRight: "8px",
+                  marginBottom: "10px",
+                }}
+              >
+                <Stack direction="row" alignItems="center" gap="8px">
                   <Text size="small" weight="medium" color="#53389E">
                     {"Endpoint"}
                   </Text>
-
-                  {portsArray.length === 0 ? (
-                    <CopyButton
-                      text={`${endpointURL}`}
-                      iconProps={{
-                        color: "#6941C6",
-                        width: 20,
-                        height: 20,
-                        marginTop: 0,
-                      }}
-                      iconButtonProps={{ padding: "0px" }}
+                  <StatusChip
+                    label={publiclyAccessible ? "Public" : "Private"}
+                    category={publiclyAccessible ? "success" : "unknown"}
+                  />
+                  {isPrimaryResource && (
+                    <StatusChip
+                      label="Primary"
+                      color="#7F56D9"
+                      borderColor="#7F56D9"
+                      bgColor="#F9F5FF"
                     />
-                  ) : (
-                    Array.isArray(sortedPortsArray) &&
-                    sortedPortsArray.map((port, index) => {
-                      if (
-                        (index === 0 && !isEndpointsExpanded) ||
-                        isEndpointsExpanded
-                      ) {
-                        return (
-                          <Box
-                            alignSelf="start"
-                            key={index}
-                            marginBottom="8px"
-                            display="flex"
-                            gap="12px"
+                  )}
+                </Stack>
+
+                {portsArray.length === 0 ? (
+                  <CopyButton
+                    text={`${endpointURL}`}
+                    iconProps={{
+                      color: "#6941C6",
+                      width: 20,
+                      height: 20,
+                      marginTop: 0,
+                    }}
+                    iconButtonProps={{ padding: "0px" }}
+                  />
+                ) : (
+                  Array.isArray(sortedPortsArray) &&
+                  sortedPortsArray.map((port, index) => {
+                    if (
+                      (index === 0 && !isEndpointsExpanded) ||
+                      isEndpointsExpanded
+                    ) {
+                      return (
+                        <Box
+                          alignSelf="start"
+                          key={index}
+                          marginTop="8px"
+                          marginBottom="8px"
+                          display="flex"
+                          gap="12px"
+                        >
+                          <Text
+                            size="small"
+                            weight="regular"
+                            color={isPrimaryResource ? "#6941C6" : ""}
                           >
-                            <Text
-                              size="small"
-                              weight="regular"
-                              color={isPrimaryResource ? "#6941C6" : ""}
-                            >
-                              {endpointPort(endpointURL, port)}
-                            </Text>
-                            <CopyButton
-                              text={endpointPort(endpointURL, port)}
-                              iconProps={{
-                                color: "#6941C6",
-                                width: 20,
-                                height: 20,
-                                marginTop: 0,
-                              }}
-                              iconButtonProps={{ padding: "0px" }}
-                            />
-                          </Box>
-                        );
+                            {endpointPort(endpointURL, port)}
+                          </Text>
+                          <CopyButton
+                            text={endpointPort(endpointURL, port)}
+                            iconProps={{
+                              color: "#6941C6",
+                              width: 20,
+                              height: 20,
+                              marginTop: 0,
+                            }}
+                            iconButtonProps={{ padding: "0px" }}
+                          />
+                        </Box>
+                      );
+                    }
+                    return null; // Return null for cases that should not be rendered
+                  })
+                )}
+                {portsArray.length > 1 && (
+                  <Stack direction="row">
+                    <Button
+                      sx={{ color: "#6941C6" }}
+                      startIcon={
+                        isEndpointsExpanded ? (
+                          <RemoveCircleOutlineIcon />
+                        ) : (
+                          <AddCircleOutlineIcon />
+                        )
                       }
-                      return null; // Return null for cases that should not be rendered
-                    })
-                  )}
-                  {portsArray.length > 1 && (
-                    <Stack direction="row">
-                      <Button
-                        sx={{ color: "#6941C6" }}
-                        startIcon={
-                          isEndpointsExpanded ? (
-                            <RemoveCircleOutlineIcon />
-                          ) : (
-                            <AddCircleOutlineIcon />
-                          )
-                        }
-                        onClick={toggleExpanded}
-                      >
-                        {isEndpointsExpanded ? "View Less" : "View More"}
-                      </Button>
-                    </Stack>
-                  )}
-                </TableCell>
-              </TableRow>
-              {ResourceConnectivityCustomDNS}
-            </TableBody>
-          </Table>
-        </Box>
-        {customDNSData?.dnsName && customDNSData && (
-          <Box marginTop={"16px"}>
-            <CustomDNSEndPoint
-              isPrimaryResource={isPrimaryResource}
-              endpointURL={customDNSData?.dnsName}
-              endpointName={
-                customDNSData?.name ? customDNSData?.name : "Endpoint"
-              }
-            />
-          </Box>
-        )}
+                      onClick={toggleExpanded}
+                    >
+                      {isEndpointsExpanded ? "View Less" : "View More"}
+                    </Button>
+                  </Stack>
+                )}
+              </TableCell>
+            </TableRow>
+            {ResourceConnectivityCustomDNS}
+          </TableBody>
+        </Table>
       </Box>
-    </>
+      {customDNSData?.dnsName && customDNSData && (
+        <Box marginTop={"16px"}>
+          <CustomDNSEndPoint
+            isPrimaryResource={isPrimaryResource}
+            endpointURL={customDNSData?.dnsName}
+            endpointName={
+              customDNSData?.name ? customDNSData?.name : "Endpoint"
+            }
+          />
+        </Box>
+      )}
+    </ContainerCard>
   );
 };
 

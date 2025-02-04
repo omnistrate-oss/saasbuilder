@@ -1,5 +1,5 @@
 import { Box, BoxProps, Stack, styled } from "@mui/material";
-import { FC, useState } from "react";
+import { FC, ReactNode, useState } from "react";
 import NextLink from "next/link";
 import { Text } from "src/components/Typography/Typography";
 import CopyButton from "src/components/Button/CopyButton";
@@ -79,22 +79,28 @@ const Link = styled(NextLink)({
   },
 });
 
-const PropertyDetails: FC<PropertyTableProps> = ({ rows, ...otherProps }) => {
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [data, setData] = useState<Row | null>(null);
-  const [jsonViewModalOpen, setJsonViewModalOpen] = useState(false);
-  const [jsonData, setJsonData] = useState<object | null>(null);
+type ConatainerCardProps = {
+  title: string;
+  description?: string;
+  children?: ReactNode;
+  contentBoxProps?: BoxProps;
+};
 
-  function handleDialogClose() {
-    setIsDialogOpen(false);
-  }
+export const ContainerCard: FC<ConatainerCardProps & BoxProps> = (props) => {
+  const {
+    title,
+    description,
+    children,
+    contentBoxProps = {},
+    ...restProps
+  } = props;
 
   return (
     <Box
       borderRadius="8px"
       border="1px solid #EAECF0"
       boxShadow="inset 0px 1px 2px 0px rgba(16, 24, 40, 0.06), 0px 1px 3px 0px rgba(16, 24, 40, 0.1)"
-      {...otherProps}
+      {...restProps}
     >
       <Stack
         sx={{
@@ -106,12 +112,29 @@ const PropertyDetails: FC<PropertyTableProps> = ({ rows, ...otherProps }) => {
         padding="20px 24px"
       >
         <Text size="small" weight="bold" color="#7F56D9">
-          {rows.title} 
+          {title}
         </Text>
         <Text size="small" weight="regular" color="#535862" marginTop="2px">
-          {rows.desc}
+          {description}
         </Text>
       </Stack>
+      <Box {...contentBoxProps}>{children}</Box>
+    </Box>
+  );
+};
+
+const PropertyDetails: FC<PropertyTableProps> = ({ rows, ...otherProps }) => {
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [data, setData] = useState<Row | null>(null);
+  const [jsonViewModalOpen, setJsonViewModalOpen] = useState(false);
+  const [jsonData, setJsonData] = useState<object | null>(null);
+
+  function handleDialogClose() {
+    setIsDialogOpen(false);
+  }
+
+  return (
+    <ContainerCard title={rows.title} description={rows.desc} {...otherProps}>
       <Box
         display="grid"
         gridTemplateColumns="repeat(auto-fit, minmax(220px, 1fr))"
@@ -125,6 +148,7 @@ const PropertyDetails: FC<PropertyTableProps> = ({ rows, ...otherProps }) => {
           height={"100%"}
           width={"2px"}
           bgcolor={"white"}
+          bottom={3}
         />
 
         {rows?.rows?.map((row, index) => {
@@ -342,7 +366,7 @@ const PropertyDetails: FC<PropertyTableProps> = ({ rows, ...otherProps }) => {
         parameterDescription={data?.description}
         jsonData={jsonData}
       />
-    </Box>
+    </ContainerCard>
   );
 };
 

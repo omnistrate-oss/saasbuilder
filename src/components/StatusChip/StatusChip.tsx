@@ -223,6 +223,7 @@ const StatusChip: FC<ChipProps & StatusChipProps> = (props) => {
     chipStyles = {
       color: chipCategoryColors[category].color,
       backgroundColor: chipCategoryColors[category].bgColor,
+      borderColor : chipCategoryColors[category].borderColor
     };
   }
 
