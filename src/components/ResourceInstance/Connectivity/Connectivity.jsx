@@ -17,6 +17,7 @@ function Connectivity(props) {
     context,
     nodes,
     additionalEndpoints,
+    refetchInstance,
   } = props;
 
   const [availabilityZones, setAvailabilityZones] = useState("");
@@ -183,6 +184,10 @@ function Connectivity(props) {
     privateNetworkId,
   ]);
 
+  useEffect(() => {
+    refetchInstance();
+  }, []);
+
   if (additionalEndpoints.some((el) => el.additionalEndpoints)) {
     return (
       <Card
@@ -213,10 +218,7 @@ function Connectivity(props) {
       <>
         {rows.length > 0 && (
           <Box>
-            <PropertyTable
-              data-testid="connectivity-table"
-              rows={rows}
-            />
+            <PropertyTable data-testid="connectivity-table" rows={rows} />
           </Box>
         )}
       </>
@@ -225,4 +227,3 @@ function Connectivity(props) {
 }
 
 export default Connectivity;
-
