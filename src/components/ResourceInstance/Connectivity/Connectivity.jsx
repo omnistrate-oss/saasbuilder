@@ -14,8 +14,8 @@ function Connectivity(props) {
     context,
     nodes,
     additionalEndpoints,
+    refetchInstance,
   } = props;
-
 
   const [availabilityZones, setAvailabilityZones] = useState("");
   const primaryResourceName = globalEndpoints?.primary?.resourceName;
@@ -166,6 +166,10 @@ function Connectivity(props) {
     privateNetworkId,
   ]);
 
+  useEffect(() => {
+    refetchInstance();
+  }, []);
+
   if (additionalEndpoints.some((el) => el.additionalEndpoints)) {
     return (
       <CLIManagedConnectivityDetails
@@ -185,9 +189,7 @@ function Connectivity(props) {
         }}
         mt="20px"
       />
-      <>
-        {rows}
-      </>
+      <>{rows}</>
     </>
   );
 }

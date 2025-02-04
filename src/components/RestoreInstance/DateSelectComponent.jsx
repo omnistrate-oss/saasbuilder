@@ -8,21 +8,22 @@ import { DateCalendar, PickersDay } from "@mui/x-date-pickers";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import { shouldDisableDate } from "src/utils/restore";
+import { themeConfig } from "src/themeConfig";
 dayjs.extend(utc);
 
 const HighlightedDay = styled(PickersDay)(({ theme }) => ({
   "&.Mui-highlighted": {
-    backgroundColor: "#F4EBFF",
+    backgroundColor: "#ecfdf3c4",
   },
   "&.Mui-highlighted.Mui-selected": {
-    backgroundColor: "#9E77ED",
+    backgroundColor: themeConfig.colors.success600,
     color: theme.palette.primary.contrastText,
   },
   "&.Mui-today": {
-    border: `1px solid #9E77ED`,
+    border: `1px solid ${themeConfig.colors.success600}`,
   },
   "&.MuiPickersDay-root.Mui-disabled:not(.Mui-selected)": {
-    color: "rgba(0, 0, 0, 0.22)",
+    color: "#d5dce0",
   },
 }));
 
@@ -156,6 +157,7 @@ function DateSelectComponent({ formData }) {
               shouldDisableDate={(date) =>
                 shouldDisableDate(date, earliestRestoreTime)
               }
+              dayOfWeekFormatter={(date) => dayjs(date).format("ddd")}
             />
           </LocalizationProvider>
           <Box
@@ -172,7 +174,7 @@ function DateSelectComponent({ formData }) {
                 width: "18px",
                 height: "18px",
                 borderRadius: "4px",
-                background: "#F4EBFF",
+                background: "#ecfdf3c4",
               }}
             />
 
