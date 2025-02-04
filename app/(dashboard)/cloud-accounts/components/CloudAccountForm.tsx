@@ -304,7 +304,10 @@ const CloudAccountForm = ({
                   name="servicePlanId"
                   formData={formData}
                   // @ts-ignore
-                  onChange={(servicePlanId: string) => {
+                  onChange={(
+                    servicePlanId: string,
+                    subscriptionId?: string // This is very specific to when we subscribe to the plan for the first time
+                  ) => {
                     const offering =
                       byoaServiceOfferingsObj[serviceId]?.[servicePlanId];
 
@@ -325,7 +328,10 @@ const CloudAccountForm = ({
 
                     setFieldValue(
                       "subscriptionId",
-                      rootSubscription?.id || filteredSubscriptions[0]?.id || ""
+                      subscriptionId ||
+                        rootSubscription?.id ||
+                        filteredSubscriptions[0]?.id ||
+                        ""
                     );
 
                     // Set Field Touched to False

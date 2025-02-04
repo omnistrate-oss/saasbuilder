@@ -213,7 +213,7 @@ const DataTable = <TData,>(props: DataTableProps<TData>): ReactNode => {
     return width;
   };
 
-  const getColumnMinWidth = (colDef: ColumnDef<TData>): string | number => {
+  const getColumnMinWidth = (colDef: ColumnDef<TData>): number => {
     let minWidth = DEFAULT_COLUMN_MIN_WIDTH;
     if (colDef.meta?.minWidth) {
       minWidth = colDef.meta?.minWidth;
@@ -228,7 +228,15 @@ const DataTable = <TData,>(props: DataTableProps<TData>): ReactNode => {
       <HeaderComponent {...headerProps} />
       <Stack minHeight="605px" justifyContent="space-between">
         <Box sx={{ overflowX: "auto", flexGrow: 1, position: "relative" }}>
-          <Table sx={{ tableLayout: "fixed" }}>
+          <Table
+            sx={{
+              tableLayout: "fixed",
+              minWidth:
+                columns.reduce((acc, curr) => {
+                  return acc + Number(getColumnMinWidth(curr));
+                }, 0) || "100%",
+            }}
+          >
             {table.getHeaderGroups().map((headerGroup) => (
               <colgroup key={headerGroup.id}>
                 {headerGroup.headers.map((header) => (

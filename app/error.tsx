@@ -8,6 +8,7 @@ import Button from "components/Button/Button";
 import errorImage from "public/assets/images/error.png";
 import { useProviderOrgDetails } from "src/providers/ProviderOrgDetailsProvider";
 import { usePathname } from "next/navigation";
+import { getInstancesRoute } from "src/utils/routes";
 
 const ErrorImage = styled(Image)({
   width: "100%",
@@ -48,7 +49,7 @@ const ErrorPage = () => {
             ? ` If the issue persists please reach out at ${orgSupportEmail || email}`
             : ""}
         </Description>
-        {pathname === "/instances" ? (
+        {pathname === getInstancesRoute() ? (
           <Button
             variant="contained"
             size="xlarge"
@@ -58,7 +59,7 @@ const ErrorPage = () => {
             Reload
           </Button>
         ) : (
-          <Link href="/instances">
+          <Link href={getInstancesRoute()}>
             <Button
               variant="contained"
               size="xlarge"

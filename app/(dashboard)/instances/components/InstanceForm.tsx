@@ -483,8 +483,8 @@ const InstanceForm = ({
 
   return (
     // @ts-ignore
-    <Form className="flex items-start gap-8" onSubmit={formData.handleSubmit}>
-      <div style={{ flex: 5 }} className="space-y-6">
+    <Form className="grid grid-cols-7 gap-8" onSubmit={formData.handleSubmit}>
+      <div className="space-y-6 col-span-5">
         <CardWithTitle title="Standard Information">
           <div className="space-y-6">
             {standardInformationFields.map((field, index) => {
@@ -537,12 +537,11 @@ const InstanceForm = ({
         style={{
           position: "sticky",
           top: "104px",
-          flex: 2,
           minHeight: "660px",
           border: `1px solid ${colors.gray300}`,
           boxShadow: "0px 2px 2px -1px #0A0D120A, 0px 4px 6px -2px #0A0D1208",
         }}
-        className="bg-white rounded-xl flex flex-col"
+        className="col-span-2 bg-white rounded-xl flex flex-col"
       >
         <div className="py-4 px-6 border-b border-gray-200">
           <Text size="large" weight="semibold" color={colors.purple600}>

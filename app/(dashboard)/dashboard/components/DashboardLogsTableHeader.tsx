@@ -1,5 +1,6 @@
 import Button from "src/components/Button/Button";
 import DataGridHeaderTitle from "src/components/Headers/DataGridHeaderTitle";
+import { getAuditLogsRoute } from "src/utils/routes";
 
 const DashboardLogsTableHeader = () => {
   return (
@@ -9,7 +10,7 @@ const DashboardLogsTableHeader = () => {
         desc="Detail audit trail of users actions performed on deployment instances"
       />
 
-      <Button variant="outlined" href="/audit-logs" target="_blank">
+      <Button variant="outlined" href={getAuditLogsRoute()} target="_blank">
         View all events
       </Button>
     </div>

@@ -38,10 +38,10 @@ const GridDynamicForm: React.FC<GridDynamicFormProps> = ({
     // @ts-ignore
     <Form
       data-testid={formConfiguration.dataTestId || "dynamic-form"}
-      className="flex items-start gap-8"
+      className="grid grid-cols-7 items-start gap-8"
       onSubmit={formData.handleSubmit}
     >
-      <div style={{ flex: 5 }}>
+      <div className="col-span-5">
         {sections.map((section, index) => {
           return (
             <CardWithTitle key={index} title={section.title}>
@@ -65,12 +65,11 @@ const GridDynamicForm: React.FC<GridDynamicFormProps> = ({
         style={{
           position: "sticky",
           top: "104px",
-          flex: 2,
           minHeight: "660px",
           border: `1px solid ${colors.gray300}`,
           boxShadow: "0px 2px 2px -1px #0A0D120A, 0px 4px 6px -2px #0A0D1208",
         }}
-        className="bg-white rounded-xl flex flex-col"
+        className="col-span-2 bg-white rounded-xl flex flex-col"
       >
         <div className="py-4 px-6 border-b border-gray-200">
           <Text size="large" weight="semibold" color={colors.purple600}>

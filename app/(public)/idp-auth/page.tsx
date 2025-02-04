@@ -13,6 +13,7 @@ import axios from "src/axios";
 import useSnackbar from "src/hooks/useSnackbar";
 import { customerSignInWithIdentityProvider } from "src/api/customer-user";
 import { PAGE_TITLE_MAP } from "src/constants/pageTitleMap";
+import { getInstancesRoute } from "src/utils/routes";
 
 const IDPAuthPage = () => {
   const router = useRouter();
@@ -35,7 +36,7 @@ const IDPAuthPage = () => {
           if (destination && PAGE_TITLE_MAP[destination]) {
             router.replace(decodeURIComponent(destination));
           } else {
-            router.replace("/instances");
+            router.replace(getInstancesRoute());
           }
         }
       } catch (error) {

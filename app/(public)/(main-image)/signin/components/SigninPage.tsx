@@ -32,6 +32,7 @@ import GithubLogin from "./GitHubLogin";
 import { IDENTITY_PROVIDER_STATUS_TYPES } from "../constants";
 import Logo from "src/components/NonDashboardComponents/Logo";
 import { useProviderOrgDetails } from "src/providers/ProviderOrgDetailsProvider";
+import { getInstancesRoute } from "src/utils/routes";
 
 const createSigninValidationSchema = Yup.object({
   email: Yup.string()
@@ -89,7 +90,7 @@ const SigninPage = (props) => {
         const decodedDestination = decodeURIComponent(destination);
         router.replace(decodedDestination, {}, { showProgressBar: true });
       } else {
-        router.replace("/instances", {}, { showProgressBar: true });
+        router.replace(getInstancesRoute(), {}, { showProgressBar: true });
       }
     }
   }

@@ -65,7 +65,7 @@ const RootProviders = ({
       PAGE_TITLE_MAP[pathname as keyof typeof PAGE_TITLE_MAP] ||
       providerOrgDetails?.orgName ||
       "Dashboard";
-  }, [pathname]);
+  }, [pathname, providerOrgDetails?.orgName]);
 
   return (
     <AppRouterCacheProvider>
