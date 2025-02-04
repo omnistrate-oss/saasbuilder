@@ -251,7 +251,7 @@ const InstanceHealthStatusChip: FC<InstanceHealthStatusChipProps> = (props) => {
       title={tooltipContent}
       visible={computedHealthStatus !== "NA"}
     >
-      <Box>
+      <Box display="inline-block">
         <StatusChip {...chipStylesAndLabel} startIcon={startIcon} />
       </Box>
     </BlackTooltip>

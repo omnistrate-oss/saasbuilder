@@ -35,7 +35,7 @@ import { useSearchParams } from "next/navigation";
 import { Tab, Tabs } from "src/components/Tab/Tab";
 
 export type CurrentTab =
-  | "Resource Instance Details"
+  | "Instance Details"
   | "Connectivity"
   | "Nodes"
   | "Metrics"
@@ -62,9 +62,7 @@ const InstanceDetailsPage = ({
   const searchParams = useSearchParams();
   const view = searchParams?.get("view");
 
-  const [currentTab, setCurrentTab] = useState<CurrentTab>(
-    "Resource Instance Details"
-  );
+  const [currentTab, setCurrentTab] = useState<CurrentTab>("Instance Details");
 
   // Set Page Title
   useEffect(() => {
@@ -212,11 +210,11 @@ const InstanceDetailsPage = ({
       <Stack direction="row" alignItems="center" justifyContent="space-between">
         <Link href="/instances">
           <Button startIcon={<RiArrowGoBackFill />}>
-            Back to list of Resource Instances
+            Back to list of Deployment Instances
           </Button>
         </Link>
         <Button
-          startIcon={
+          endIcon={
             insightsVisible ? (
               <KeyboardArrowUpIcon />
             ) : (
@@ -225,7 +223,7 @@ const InstanceDetailsPage = ({
           }
           onClick={() => dispatch(toggleInstanceDetailsSummaryVisibility())}
         >
-          {insightsVisible ? "Hide Insights" : "View Insights"}
+          {insightsVisible ? "Hide Summary" : "Show Summary"}
         </Button>
       </Stack>
       <Collapse in={insightsVisible}>
