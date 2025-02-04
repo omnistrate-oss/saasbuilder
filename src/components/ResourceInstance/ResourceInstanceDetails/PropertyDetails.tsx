@@ -98,8 +98,8 @@ export const ContainerCard: FC<ConatainerCardProps & BoxProps> = (props) => {
   return (
     <Box
       borderRadius="8px"
-      border="1px solid #EAECF0"
-      boxShadow="inset 0px 1px 2px 0px rgba(16, 24, 40, 0.06), 0px 1px 3px 0px rgba(16, 24, 40, 0.1)"
+      border="1px solid #E9EAEB"
+      boxShadow="0px 1px 2px 0px #0A0D120D"
       {...restProps}
     >
       <Stack
