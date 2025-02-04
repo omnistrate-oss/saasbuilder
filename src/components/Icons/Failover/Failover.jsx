@@ -1,7 +1,7 @@
 import * as React from "react";
 
 const FailoverIcon = (props) => {
-  let { color = "#D92D20" } = props;
+  let { color = "#414651" } = props;
   const { disabled } = props;
 
   if (disabled) {

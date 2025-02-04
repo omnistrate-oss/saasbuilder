@@ -11,13 +11,13 @@ export const getTabs = (
   isCustomDNS
 ) => {
   const tabs: Record<string, string | undefined> = {
-    resourceInstanceDetails: "Resource Instance Details",
+    resourceInstanceDetails: "Instance Details",
     connectivity: "Connectivity",
     nodes: "Nodes",
   };
   if (isMetricsEnabled && !isResourceBYOA && !isCliManagedResource)
     tabs["metrics"] = "Metrics";
-  if (isLogsEnabled && !isResourceBYOA) tabs["logs"] = "Logs";
+  if (isLogsEnabled && !isResourceBYOA) tabs["logs"] = "Live Logs";
 
   if (!isActive || resourceType === RESOURCE_TYPES.Terraform) {
     delete tabs.connectivity;

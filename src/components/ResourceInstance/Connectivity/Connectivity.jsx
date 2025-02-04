@@ -1,8 +1,5 @@
-import { Box } from "@mui/material";
 import { useEffect, useMemo, useState } from "react";
-import Card from "components/Card/Card";
 import ResourceConnectivityEndpoint from "./ConnectivityEndpoint";
-import PropertyTable from "./PropertyTable";
 import CLIManagedConnectivityDetails from "./CLIManagedConnectivityDetails";
 import PropertyDetails from "../ResourceInstanceDetails/PropertyDetails";
 
@@ -69,65 +66,48 @@ function Connectivity(props) {
   }, [nodes]);
 
   const rows = useMemo(() => {
-    let sectionLabel = "Resource";
-
-    if (context === "inventory") {
-      sectionLabel = "Service Component";
-    }
-
     const res = [];
 
     if (
       (primaryResourceName && primaryResourceEndpoint) ||
       otherResourceFilteredEndpoints?.length > 0
     ) {
-      res.push({
-        label: primaryResourceName,
-        description: `The global endpoint of the ${sectionLabel.toLowerCase()}`,
-        valueType: "custom",
-        value: (
-          <>
-            {primaryResourceName &&
-              primaryResourceEndpoint &&
-              primaryResourcePorts && (
-                <ResourceConnectivityEndpoint
-                  isPrimaryResource={true}
-                  endpointURL={primaryResourceEndpoint}
-                  resourceName={primaryResourceName}
-                  viewType="endpoint"
-                  ports={primaryResourcePorts?.ports}
-                  resourceHasCompute={
-                    globalEndpoints?.primary?.resourceHasCompute
-                  }
-                  customDNSData={globalEndpoints?.primary?.customDNSEndpoint}
-                />
-              )}
-          </>
-        ),
-      });
+      res.push(
+        <ResourceConnectivityEndpoint
+          isPrimaryResource={true}
+          endpointURL={primaryResourceEndpoint}
+          resourceName={primaryResourceName}
+          viewType="endpoint"
+          ports={primaryResourcePorts?.ports}
+          resourceHasCompute={globalEndpoints?.primary?.resourceHasCompute}
+          customDNSData={globalEndpoints?.primary?.customDNSEndpoint}
+          publiclyAccessible={globalEndpoints?.primary?.publiclyAccessible}
+        />
+      );
     }
 
     if (otherResourceFilteredEndpoints?.length > 0) {
       otherResourceFilteredEndpoints.forEach(
-        ({ resourceName, endpoint, resourceId, customDNSEndpoint }) => {
+        ({
+          resourceName,
+          endpoint,
+          resourceId,
+          customDNSEndpoint,
+          publiclyAccessible,
+        }) => {
           if (resourceName && endpoint && otherResourceFilteredPorts) {
-            res.push({
-              label: resourceName,
-              description: `The global endpoint of the ${sectionLabel.toLowerCase()}`,
-              valueType: "custom",
-              value: (
-                <ResourceConnectivityEndpoint
-                  key={resourceId}
-                  isPrimaryResource={false}
-                  resourceName={resourceName}
-                  ports={otherResourceFilteredPorts}
-                  viewType="endpoint"
-                  endpointURL={endpoint}
-                  containerStyles={{ marginTop: "16px" }}
-                  customDNSData={customDNSEndpoint}
-                />
-              ),
-            });
+            res.push(
+              <ResourceConnectivityEndpoint
+                key={resourceId}
+                isPrimaryResource={false}
+                resourceName={resourceName}
+                ports={otherResourceFilteredPorts}
+                viewType="endpoint"
+                endpointURL={endpoint}
+                customDNSData={customDNSEndpoint}
+                publiclyAccessible={publiclyAccessible}
+              />
+            );
           }
         }
       );
@@ -142,6 +122,8 @@ function Connectivity(props) {
     primaryResourcePorts,
     otherResourceFilteredPorts,
     globalEndpoints?.primary?.customDNSEndpoint,
+    globalEndpoints?.primary?.publiclyAccessible,
+    globalEndpoints?.primary?.resourceHasCompute,
   ]);
 
   const connectivitySummaryData = useMemo(() => {
@@ -190,17 +172,9 @@ function Connectivity(props) {
 
   if (additionalEndpoints.some((el) => el.additionalEndpoints)) {
     return (
-      <Card
-        sx={{
-          marginTop: "32px",
-          padding: "12px",
-          borderRadius: "8px",
-        }}
-      >
-        <CLIManagedConnectivityDetails
-          additionalEndpoints={additionalEndpoints}
-        />
-      </Card>
+      <CLIManagedConnectivityDetails
+        additionalEndpoints={additionalEndpoints}
+      />
     );
   }
 
@@ -215,13 +189,7 @@ function Connectivity(props) {
         }}
         mt="20px"
       />
-      <>
-        {rows.length > 0 && (
-          <Box>
-            <PropertyTable data-testid="connectivity-table" rows={rows} />
-          </Box>
-        )}
-      </>
+      <>{rows}</>
     </>
   );
 }
