@@ -120,8 +120,6 @@ const InstancesPage = () => {
                 href: resourceInstanceUrlLink,
               }}
               style={{
-                display: "block",
-                minWidth: "140px",
                 fontWeight: 600,
               }}
             >

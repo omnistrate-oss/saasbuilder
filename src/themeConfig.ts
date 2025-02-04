@@ -41,6 +41,8 @@ export const themeConfig = {
     gray800: "var(--gray-800)",
     gray900: "var(--gray-900)",
 
+    neutral50: "var(--neutral-50)",
+
     lightBlue50: "var(--light-blue-50)",
     lightBlue700: "var(--light-blue-700)",
 

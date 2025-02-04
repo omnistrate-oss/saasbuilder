@@ -133,13 +133,15 @@ const CloudAccountsPage = () => {
               <DataGridText
                 showCopyButton={value !== "-"}
                 style={{
-                  minWidth: "110px",
                   fontWeight: 600,
                 }}
               >
                 {value}
               </DataGridText>
             );
+          },
+          meta: {
+            minWidth: 200,
           },
         }
       ),

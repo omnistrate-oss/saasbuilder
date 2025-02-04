@@ -71,13 +71,15 @@ const CustomNetworksPage = () => {
             <DataGridText
               showCopyButton
               style={{
-                minWidth: "120px",
                 fontWeight: 600,
               }}
             >
               {data.row.original.id}
             </DataGridText>
           );
+        },
+        meta: {
+          minWidth: 200,
         },
       }),
       columnHelper.accessor("name", {
