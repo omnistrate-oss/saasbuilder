@@ -154,7 +154,7 @@ type SubscriptionPlanRadioProps = {
   servicePlans: ServiceOffering[];
   formData: any;
   name: string;
-  onChange?: (value?: string) => void;
+  onChange?: (servicePlanId?: string, subscriptionId?: string) => void;
   disabled?: boolean;
 };
 
@@ -235,7 +235,7 @@ const SubscriptionPlanRadio: React.FC<SubscriptionPlanRadioProps> = ({
               snackbar.showSuccess("Subscription Request sent successfully");
             } else if (id.startsWith("sub")) {
               formData.setFieldValue(name, plan.productTierID);
-              onChange(plan.productTierID);
+              onChange(plan.productTierID, id);
               snackbar.showSuccess("Subscribed successfully");
             }
 

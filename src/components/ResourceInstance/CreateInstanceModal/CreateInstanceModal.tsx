@@ -137,8 +137,8 @@ function CreateInstanceModal(props: CreateInstanceModalProps) {
         <Content>
           <BodyText>
             Your instance is being set up and will be ready shortly (usually
-            within a few minutes). You can track its status in the dashboard.
-            Below is the Deployment ID for your reference.
+            within a few minutes). You can track its status in Deployment
+            Instances. Below is the Deployment ID for your reference
           </BodyText>
           <InstanceIdContainer instanceId={instanceId} />
           <List>

@@ -139,7 +139,10 @@ export const getStandardInformationFields = (
           formData={formData}
           disabled={formMode !== "create"}
           // @ts-ignore
-          onChange={(servicePlanId: string) => {
+          onChange={(
+            servicePlanId: string,
+            subscriptionId?: string // This is very specific to when we subscribe to the plan for the first time
+          ) => {
             const offering = serviceOfferingsObj[serviceId]?.[servicePlanId];
             const cloudProvider = offering?.cloudProviders?.[0] || "";
 
@@ -168,7 +171,10 @@ export const getStandardInformationFields = (
 
             setFieldValue(
               "subscriptionId",
-              rootSubscription?.id || filteredSubscriptions[0]?.id || ""
+              subscriptionId ||
+                rootSubscription?.id ||
+                filteredSubscriptions[0]?.id ||
+                ""
             );
 
             setFieldTouched("subscriptionId", false);

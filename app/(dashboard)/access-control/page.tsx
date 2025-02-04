@@ -29,13 +29,15 @@ import {
   operationEnum,
   viewEnum,
 } from "src/utils/isAllowedByRBAC";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { SubscriptionUser } from "src/types/consumptionUser";
+import { getAccessControlRoute } from "src/utils/routes";
 
 const columnHelper = createColumnHelper<SubscriptionUser>();
 type Overlay = "delete-dialog";
 
 const AccessControlPage = () => {
+  const router = useRouter();
   const snackbar = useSnackbar();
   const searchParams = useSearchParams();
   const searchUserId = searchParams?.get("searchUserId");
@@ -49,6 +51,7 @@ const AccessControlPage = () => {
 
   useEffect(() => {
     if (searchUserId) {
+      router.replace(getAccessControlRoute());
       setSearchText(searchUserId);
     }
   }, [searchUserId]);

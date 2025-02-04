@@ -64,7 +64,7 @@ const GridDynamicField: React.FC<GridDynamicFieldProps> = ({
         </FieldDescription>
       </div>
 
-      <div className="flex-1">
+      <div className="flex-1" style={{ maxWidth: "596px" }}>
         {Field}
         {field.description && field.description}
         <FieldError>

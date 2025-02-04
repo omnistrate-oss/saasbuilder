@@ -13,6 +13,7 @@ import {
 } from "components/NonDashboardComponents/FormElements/FormElements";
 
 import fourZeroFourImg from "public/assets/images/404.png";
+import { getInstancesRoute } from "src/utils/routes";
 
 const Description = styled("p")({
   color: "#475467",
@@ -80,7 +81,7 @@ const NotFoundPage = () => {
               Please visit our homepage to get where you need to go. <br />
             </Description>
 
-            <Link href="/instances">
+            <Link href={getInstancesRoute()}>
               <Button
                 variant="contained"
                 size="xlarge"
