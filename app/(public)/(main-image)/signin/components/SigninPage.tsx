@@ -178,7 +178,15 @@ const SigninPage = (props) => {
   return (
     <>
       <Box textAlign="center">
-        {orgLogoURL ? <Logo src={orgLogoURL} alt={orgName} /> : ""}
+        {orgLogoURL ? (
+          <Logo
+            src={orgLogoURL}
+            alt={orgName}
+            style={{ width: "120px", height: "auto", maxHeight: "unset" }}
+          />
+        ) : (
+          ""
+        )}
       </Box>
       <DisplayHeading mt="24px">Login to your account</DisplayHeading>
 

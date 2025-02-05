@@ -30,7 +30,15 @@ const CenterContentLayout = ({ children }) => {
       <Stack gap="32px" maxWidth="480px">
         {showLogo && (
           <Box textAlign="center">
-            {orgLogoURL ? <Logo src={orgLogoURL} alt={orgName} /> : ""}
+            {orgLogoURL ? (
+              <Logo
+                src={orgLogoURL}
+                alt={orgName}
+                style={{ width: "120px", height: "auto", maxHeight: "unset" }}
+              />
+            ) : (
+              ""
+            )}
           </Box>
         )}
         {children}

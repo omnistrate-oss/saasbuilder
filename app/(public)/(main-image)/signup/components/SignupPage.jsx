@@ -231,7 +231,15 @@ const SignupPage = (props) => {
   return (
     <>
       <Box textAlign="center">
-        {orgLogoURL ? <Logo src={orgLogoURL} alt={orgName} /> : ""}
+        {orgLogoURL ? (
+          <Logo
+            src={orgLogoURL}
+            alt={orgName}
+            style={{ width: "120px", height: "auto", maxHeight: "unset" }}
+          />
+        ) : (
+          ""
+        )}
       </Box>
       <DisplayHeading mt="24px">Get Started Today</DisplayHeading>
 
