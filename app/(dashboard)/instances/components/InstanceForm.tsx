@@ -487,7 +487,7 @@ const InstanceForm = ({
         fields: deploymentConfigurationFields,
       },
     ],
-    [formData.values]
+    [formData.values, deploymentConfigurationFields]
   );
 
   if (isFetchingServiceOfferings) {

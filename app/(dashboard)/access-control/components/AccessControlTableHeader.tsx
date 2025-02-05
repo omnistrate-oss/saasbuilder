@@ -16,8 +16,8 @@ const AccessControlTableHeader = ({
         desc="Manage user roles and permissions for your services/subscriptions"
         count={count}
         units={{
-          singular: "User",
-          plural: "Users",
+          singular: "Access Permission",
+          plural: "Access Permissions",
         }}
       />
 

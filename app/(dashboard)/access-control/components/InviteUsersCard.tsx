@@ -49,7 +49,9 @@ const getServiceMenuItems = (subscriptions: Subscription[]) => {
       return null;
     });
 
-  return serviceMenuItems.filter((item) => item !== null) as {
+  return serviceMenuItems
+    .filter((item) => item !== null)
+    .sort((a, b) => a.label.localeCompare(b.label)) as {
     label: string;
     value: string;
   }[];
@@ -66,7 +68,8 @@ const getServicePlanMenuItems = (
         label: sub.productTierName,
         value: sub.productTierId,
       };
-    });
+    })
+    .sort((a, b) => a.label.localeCompare(b.label));
   return servicePlanMenuItems;
 };
 
