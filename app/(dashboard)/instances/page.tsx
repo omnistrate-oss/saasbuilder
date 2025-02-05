@@ -53,6 +53,7 @@ import InstanceHealthStatusChip, {
   getInstanceHealthStatus,
 } from "src/components/InstanceHealthStatusChip/InstanceHealthStautusChip";
 import { getInstanceDetailsRoute } from "src/utils/routes";
+import { loadStatusMap } from "./constants";
 
 const columnHelper = createColumnHelper<ResourceInstance>();
 type Overlay =
@@ -252,49 +253,53 @@ const InstancesPage = () => {
           },
         }
       ),
-      columnHelper.accessor("instanceLoadStatus", {
-        id: "instanceLoadStatus",
-        header: "Load",
-        cell: (data) => {
-          const instanceLoadStatus = data.row.original.instanceLoadStatus;
+      columnHelper.accessor(
+        (row) =>
+          loadStatusMap[row.instanceLoadStatus || "UNKNOWN"] || "Unknown",
+        {
+          id: "instanceLoadStatus",
+          header: "Load",
+          cell: (data) => {
+            const instanceLoadStatus = data.row.original.instanceLoadStatus;
 
-          return (
-            <Stack direction="row" alignItems="center" gap="4px">
-              {instanceLoadStatus === "UNKNOWN" && "-"}
-              {instanceLoadStatus === "POD_IDLE" && (
-                <Image
-                  src={SpeedoMeterLow}
-                  width={54}
-                  height={54}
-                  alt="Low"
-                  style={{ marginBottom: "-25px" }}
-                />
-              )}
-              {instanceLoadStatus === "POD_NORMAL" && (
-                <Image
-                  src={SpeedoMeterMedium}
-                  width={54}
-                  height={54}
-                  alt="Medium"
-                  style={{ marginBottom: "-25px" }}
-                />
-              )}
-              {instanceLoadStatus === "POD_OVERLOAD" && (
-                <Image
-                  src={SpeedoMeterHigh}
-                  width={54}
-                  height={54}
-                  alt="High"
-                  style={{ marginBottom: "-25px" }}
-                />
-              )}
-            </Stack>
-          );
-        },
-        meta: {
-          minWidth: 120,
-        },
-      }),
+            return (
+              <Stack direction="row" alignItems="center" gap="4px">
+                {instanceLoadStatus === "UNKNOWN" && "-"}
+                {instanceLoadStatus === "POD_IDLE" && (
+                  <Image
+                    src={SpeedoMeterLow}
+                    width={54}
+                    height={54}
+                    alt="Low"
+                    style={{ marginBottom: "-25px" }}
+                  />
+                )}
+                {instanceLoadStatus === "POD_NORMAL" && (
+                  <Image
+                    src={SpeedoMeterMedium}
+                    width={54}
+                    height={54}
+                    alt="Medium"
+                    style={{ marginBottom: "-25px" }}
+                  />
+                )}
+                {instanceLoadStatus === "POD_OVERLOAD" && (
+                  <Image
+                    src={SpeedoMeterHigh}
+                    width={54}
+                    height={54}
+                    alt="High"
+                    style={{ marginBottom: "-25px" }}
+                  />
+                )}
+              </Stack>
+            );
+          },
+          meta: {
+            minWidth: 120,
+          },
+        }
+      ),
       columnHelper.accessor((row) => formatDateUTC(row.created_at), {
         id: "created_at",
         header: "Created On",
