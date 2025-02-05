@@ -187,7 +187,7 @@ const ManageSubscriptionsForm = ({
         handleClose={() => setIsUnsubscribeDialogOpen(false)}
         onConfirm={async () => {
           if (!subscriptionsObj[selectedPlanId]) {
-            return snackbar.showError("Please select a subscription");
+            return snackbar.showError("Please select a plan");
           }
           await unSubscribeMutation.mutateAsync(
             subscriptionsObj[selectedPlanId].id
