@@ -79,6 +79,7 @@ const AuditLogsPage = () => {
           pageIndex={pageIndex}
           setPageIndex={setPageIndex}
           showPagination={true}
+          noRowsText="No audit logs"
         />
       </div>
     </PageContainer>

@@ -55,6 +55,13 @@ const CloudAccountsTableHeader = ({
               }
             />
           }
+          disabledMessage={
+            !selectedInstance
+              ? "Please select a cloud account"
+              : selectedInstance.status === "DELETING"
+                ? "Cloud account deletion is already in progress"
+                : ""
+          }
         >
           Delete
         </Button>

@@ -416,6 +416,7 @@ const CloudAccountsPage = () => {
             searchText,
             setSearchText,
             onCreateClick: () => {
+              setSelectedRows([]);
               setIsOverlayOpen(true);
               setOverlayType("create-instance-form");
             },

@@ -129,7 +129,7 @@ const InstancesPage = () => {
           );
         },
         meta: {
-          minWidth: 220,
+          minWidth: 240,
         },
       }),
       columnHelper.accessor(

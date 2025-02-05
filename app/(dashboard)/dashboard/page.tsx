@@ -61,6 +61,7 @@ const DashboardPage = () => {
           setPageIndex={() => {}}
           showPagination={false}
           minHeight={290}
+          noRowsText="No events"
         />
       </div>
 
