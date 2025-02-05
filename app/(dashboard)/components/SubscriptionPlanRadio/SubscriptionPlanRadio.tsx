@@ -82,7 +82,7 @@ const SubscriptionPlanCard = ({
       {!rootSubscription && !subscriptionRequest && (
         <Button
           variant="contained"
-          disabled={isFetchingData || isSubscribing}
+          disabled={isFetchingData || isSubscribing || disabled}
           startIcon={
             <CirclePlusIcon disabled={isFetchingData || isSubscribing} />
           }
@@ -222,6 +222,8 @@ const SubscriptionPlanRadio: React.FC<SubscriptionPlanRadioProps> = ({
           )}
           subscriptionRequest={subscriptionRequestsObj[plan.productTierID]}
           onSubscribeClick={async () => {
+            if (disabled) return;
+
             const res = await subscribeMutation.mutateAsync({
               productTierId: plan.productTierID,
               serviceId: plan.serviceId,
@@ -243,6 +245,8 @@ const SubscriptionPlanRadio: React.FC<SubscriptionPlanRadioProps> = ({
             refetchSubscriptionRequests();
           }}
           onClick={() => {
+            if (disabled) return;
+
             if (servicePlanId !== plan.productTierID) {
               onChange(plan.productTierID);
             }
