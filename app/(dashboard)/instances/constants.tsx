@@ -21,3 +21,10 @@ export const icons = {
   "Remove Capacity": RemoveCapacityIcon,
   "Generate Token": GenerateTokenIcon,
 };
+
+export const loadStatusMap = {
+  POD_IDLE: "Low",
+  POD_NORMAL: "Medium",
+  POD_OVERLOAD: "High",
+  UNKNOWN: "Unknown",
+};
