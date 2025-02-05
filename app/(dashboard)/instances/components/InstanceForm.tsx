@@ -97,7 +97,8 @@ const InstanceForm = ({
     initialValues: getInitialValues(
       selectedInstance,
       subscriptions,
-      serviceOfferingsObj
+      serviceOfferingsObj,
+      serviceOfferings
     ),
     enableReinitialize: true,
     validationSchema: yup.object({
@@ -151,9 +152,11 @@ const InstanceForm = ({
 
           switch (result?.type?.toLowerCase()) {
             case "number":
+              if (data.requestParams[key] === "") break;
               data.requestParams[key] = Number(data.requestParams[key]);
               break;
             case "float64":
+              if (data.requestParams[key] === "") break;
               const output = Number(data.requestParams[key]);
               if (!Number.isNaN(output)) {
                 data.requestParams[key] = Number(data.requestParams[key]);
@@ -263,9 +266,11 @@ const InstanceForm = ({
 
           switch (result?.type?.toLowerCase()) {
             case "number":
+              if (data.requestParams[key] === "") break;
               data.requestParams[key] = Number(data.requestParams[key]);
               break;
             case "float64":
+              if (data.requestParams[key] === "") break;
               const output = Number(data.requestParams[key]);
               if (!Number.isNaN(output)) {
                 data.requestParams[key] = Number(data.requestParams[key]);

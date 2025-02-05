@@ -10,7 +10,8 @@ export const getInitialValues = (
   },
   selectedInstance: ResourceInstance | undefined,
   byoaSubscriptions: Subscription[],
-  byoaServiceOfferingsObj: Record<string, Record<string, ServiceOffering>>
+  byoaServiceOfferingsObj: Record<string, Record<string, ServiceOffering>>,
+  byoaServiceOfferings: ServiceOffering[]
 ) => {
   if (selectedInstance) {
     const subscription = byoaSubscriptions.find(
@@ -69,7 +70,11 @@ export const getInitialValues = (
   );
 
   const serviceId =
-    rootSubscription?.serviceId || filteredSubscriptions[0]?.serviceId || "";
+    rootSubscription?.serviceId ||
+    filteredSubscriptions[0]?.serviceId ||
+    byoaServiceOfferings[0]?.serviceId ||
+    "";
+
   const servicePlanId =
     rootSubscription?.productTierId ||
     filteredSubscriptions[0]?.productTierId ||

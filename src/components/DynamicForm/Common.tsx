@@ -71,7 +71,7 @@ export const PasswordInput = ({ field, formData }) => {
               <Tooltip title="Password Generator" placement="top-end" arrow>
                 <Box
                   sx={{
-                    cursor: "pointer",
+                    cursor: field.disabled ? "not-allowed" : "pointer",
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
@@ -82,6 +82,8 @@ export const PasswordInput = ({ field, formData }) => {
                     borderLeft: "1px solid #D0D5DD",
                   }}
                   onClick={() => {
+                    if (field.disabled) return;
+
                     const password = Generator.generate({
                       length: 12,
                       numbers: true,

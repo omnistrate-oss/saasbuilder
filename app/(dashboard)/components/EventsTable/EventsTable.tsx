@@ -168,9 +168,18 @@ const EventsTable = ({
           const isUserOmnistrateSystem =
             userName === "System" && orgName === "System";
 
+          // Special Case for Disabling the Link
+          // When the Logged in User Doesn't Have "root" Role for a Subscription, They Don't Have Read Access for Access Control Page.
+          const subscription =
+            subscriptionsObj[data.row.original.subscriptionId];
+
           let pageLink = "",
             props = {};
-          if (!isUserOmnistrateSystem && userId) {
+          if (
+            !isUserOmnistrateSystem &&
+            userId &&
+            subscription?.roleType === "root"
+          ) {
             pageLink = getAccessControlRoute(userId);
             props = {
               color: "primary",

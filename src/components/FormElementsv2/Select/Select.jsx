@@ -21,7 +21,6 @@ const Select = styled(({ isLoading = false, children, ...props }) => (
     MenuProps={{
       ...props.MenuProps,
       sx: {
-        ...(props.MenuProps?.sx || {}),
         [`& .${menuClasses.paper}`]: {
           marginTop: "4px",
           border: "1px solid #EAECF0",
@@ -32,6 +31,7 @@ const Select = styled(({ isLoading = false, children, ...props }) => (
         [`& .${menuClasses.list}`]: {
           padding: "4px",
         },
+        ...(props.MenuProps?.sx || {}),
       },
     }}
   >

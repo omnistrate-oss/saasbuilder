@@ -3,6 +3,10 @@ export const PAGE_TITLE_MAP = {
   "/signup": "Sign Up",
   "/change-password": "Change Password",
   "/reset-password": "Reset Password",
+  "/validate-token": "Validate Token",
+
+  "/terms-of-use": "Terms of Use",
+  "/privacy-policy": "Privacy Policy",
 
   "/dashboard": "Dashboard",
   "/instances": "Instances",

@@ -31,7 +31,7 @@ import CustomLabelDescription from "./CustomLabelDescription";
 import { getInitialValues } from "../utils";
 
 const CloudAccountForm = ({
-  initialFormValues,
+  initialFormValues, // These are from URL Params
   onClose,
   formMode,
   selectedInstance,
@@ -157,7 +157,8 @@ const CloudAccountForm = ({
       initialFormValues,
       selectedInstance,
       byoaSubscriptions,
-      byoaServiceOfferingsObj
+      byoaServiceOfferingsObj,
+      byoaServiceOfferings
     ),
     enableReinitialize: true,
     validationSchema: CloudAccountValidationSchema,

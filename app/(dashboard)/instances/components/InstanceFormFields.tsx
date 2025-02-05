@@ -479,6 +479,7 @@ export const getDeploymentConfigurationFields = (
         required: formMode !== "modify" && param.required,
         showPasswordGenerator: true,
         previewValue: values.requestParams[param.key] ? "********" : "",
+        disabled: formMode !== "create" && param.custom && !param.modifiable,
       });
     } else if (
       param.dependentResourceID &&
@@ -503,6 +504,7 @@ export const getDeploymentConfigurationFields = (
         isLoading: isFetchingResourceInstanceIds,
         emptyMenuText: "No dependent instances available",
         previewValue: values.requestParams[param.key],
+        disabled: formMode !== "create" && param.custom && !param.modifiable,
       });
     } else if (param.type?.toLowerCase() === "boolean") {
       fields.push({
@@ -512,12 +514,23 @@ export const getDeploymentConfigurationFields = (
         value: values.requestParams[param.key] || "",
         type: "radio",
         options: [
-          { label: "True", value: "true" },
-          { label: "False", value: "false" },
+          {
+            label: "True",
+            value: "true",
+            disabled:
+              formMode !== "create" && param.custom && !param.modifiable,
+          },
+          {
+            label: "False",
+            value: "false",
+            disabled:
+              formMode !== "create" && param.custom && !param.modifiable,
+          },
         ],
         required: formMode !== "modify" && param.required,
         previewValue:
           values.requestParams[param.key] === "true" ? "true" : "false",
+        disabled: formMode !== "create" && param.custom && !param.modifiable,
       });
     } else if (param.options !== undefined && param.isList === true) {
       fields.push({
@@ -532,6 +545,7 @@ export const getDeploymentConfigurationFields = (
         })),
         required: formMode !== "modify" && param.required,
         previewValue: values.requestParams[param.key]?.join(", "),
+        disabled: formMode !== "create" && param.custom && !param.modifiable,
       });
     } else if (param.options !== undefined && param.isList === false) {
       fields.push({
@@ -543,6 +557,7 @@ export const getDeploymentConfigurationFields = (
         menuItems: param.options.map((option) => option),
         required: formMode !== "modify" && param.required,
         previewValue: values.requestParams[param.key],
+        disabled: formMode !== "create" && param.custom && !param.modifiable,
       });
     } else if (param.key === "cloud_provider_account_config_id") {
       fields.push({
@@ -574,16 +589,31 @@ export const getDeploymentConfigurationFields = (
         return;
       }
 
-      fields.push({
-        label: param.displayName || param.key,
-        subLabel: param.description,
-        disabled: false,
-        name: `requestParams.${param.key}`,
-        value: values.requestParams[param.key] || "",
-        type: "text-multiline",
-        required: formMode !== "modify" && param.required,
-        previewValue: values.requestParams[param.key],
-      });
+      if (
+        param.type?.toLowerCase() === "float64" ||
+        param.type?.toLowerCase() === "number"
+      ) {
+        fields.push({
+          label: param.displayName || param.key,
+          subLabel: param.description,
+          name: `requestParams.${param.key}`,
+          value: values.requestParams[param.key] || "",
+          type: "number",
+          required: formMode !== "modify" && param.required,
+          previewValue: values.requestParams[param.key],
+        });
+      } else {
+        fields.push({
+          label: param.displayName || param.key,
+          subLabel: param.description,
+          disabled: formMode !== "create" && param.custom && !param.modifiable,
+          name: `requestParams.${param.key}`,
+          value: values.requestParams[param.key] || "",
+          type: "text-multiline",
+          required: formMode !== "modify" && param.required,
+          previewValue: values.requestParams[param.key],
+        });
+      }
     }
   });
 

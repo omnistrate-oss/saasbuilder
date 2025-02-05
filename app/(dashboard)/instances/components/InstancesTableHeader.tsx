@@ -26,7 +26,7 @@ import {
 import Tooltip from "src/components/Tooltip/Tooltip";
 import AddInstanceFilters from "./AddInstanceFilters";
 import EditInstanceFilters from "./EditInstanceFilters";
-import { CircularProgress } from "@mui/material";
+import { CircularProgress, menuClasses } from "@mui/material";
 import InstanceFilters from "src/components/InstanceFilters/InstanceFilters";
 import LoadingSpinnerSmall from "src/components/CircularProgress/CircularProgress";
 import { colors } from "src/themeConfig";
@@ -186,7 +186,6 @@ const InstancesTableHeader = ({
       isDisabled:
         !selectedInstance ||
         (status !== "RUNNING" && status !== "FAILED") ||
-        isComplexResource ||
         isProxyResource ||
         !isUpdateAllowedByRBAC,
       onClick: () => {
@@ -199,7 +198,7 @@ const InstancesTableHeader = ({
         ? "Please select an instance"
         : status !== "RUNNING" && status !== "FAILED"
           ? "Instance must be running or failed to modify"
-          : isComplexResource || isProxyResource
+          : isProxyResource
             ? "System managed instances cannot be modified"
             : !isUpdateAllowedByRBAC
               ? "Unauthorized to modify instances"
@@ -416,9 +415,32 @@ const InstancesTableHeader = ({
             MenuProps={{
               anchorOrigin: { vertical: "bottom", horizontal: "right" },
               transformOrigin: { vertical: "top", horizontal: "right" },
-              sx: { marginTop: "8px" },
+              sx: {
+                marginTop: "8px",
+                [`& .${menuClasses.list}`]: {
+                  padding: "4px 0px",
+                },
+                [`& .${menuClasses.paper}`]: {
+                  marginTop: "4px",
+                  border: `1px solid ${colors.gray200}`,
+                  boxShadow:
+                    "0px 2px 2px -1px #0A0D120A, 0px 4px 6px -2px #0A0D1208, 0px 12px 16px -4px #0A0D1214",
+                  borderRadius: "8px",
+                },
+              },
             }}
-            sx={{ margin: "0px", height: "40px", minWidth: "110px" }}
+            sx={{
+              margin: "0px",
+              height: "40px",
+              minWidth: "110px",
+              "&.Mui-focused": {
+                outline: `2px solid ${colors.success500}`,
+                outlineOffset: "2px",
+              },
+              "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                border: "1px solid #D0D5DD",
+              },
+            }}
           >
             {otherActions.map(
               ({ label, onClick, isDisabled, disabledMessage }) => {
@@ -431,7 +453,7 @@ const InstancesTableHeader = ({
                       gap: "10px",
                       fontSize: "14px",
                       color: isDisabled ? colors.gray400 : "",
-                      minWidth: "220px",
+                      minWidth: otherActions?.length > 2 ? "220px" : "180px",
                       padding: "8px 16px",
                     }}
                     disabled={isDisabled}

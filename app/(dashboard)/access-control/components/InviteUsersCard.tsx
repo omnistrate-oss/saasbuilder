@@ -246,7 +246,7 @@ const InviteUsersCard: React.FC<InviteUsersCardProps> = ({
                                 ))
                               ) : (
                                 <MenuItem value="" disabled>
-                                  <i>No Services</i>
+                                  <i>No Services With Root Access</i>
                                 </MenuItem>
                               )}
                             </Select>

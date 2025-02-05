@@ -165,7 +165,8 @@ export const getMainResourceFromInstance = (
 export const getInitialValues = (
   instance: ResourceInstance | undefined,
   subscriptions: Subscription[],
-  serviceOfferingsObj: Record<string, Record<string, ServiceOffering>>
+  serviceOfferingsObj: Record<string, Record<string, ServiceOffering>>,
+  serviceOfferings: ServiceOffering[]
 ) => {
   if (instance) {
     const subscription = subscriptions.find(
@@ -206,7 +207,10 @@ export const getInitialValues = (
   );
 
   const serviceId =
-    rootSubscription?.serviceId || filteredSubscriptions[0]?.serviceId || "";
+    rootSubscription?.serviceId ||
+    filteredSubscriptions[0]?.serviceId ||
+    serviceOfferings[0]?.serviceId ||
+    "";
   const servicePlanId =
     rootSubscription?.productTierId ||
     filteredSubscriptions[0]?.productTierId ||
