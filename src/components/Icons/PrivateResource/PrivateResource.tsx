@@ -1,103 +1,35 @@
 const PrivateResourceIcon = (props) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    width={36}
-    height={36}
+    width={42}
+    height={42}
     fill="none"
     {...props}
   >
-    <g filter="url(#a)">
-      <path
-        fill="#535862"
-        d="M2 7a6 6 0 0 1 6-6h20a6 6 0 0 1 6 6v20a6 6 0 0 1-6 6H8a6 6 0 0 1-6-6V7Z"
-      />
-      <path
-        stroke="url(#b)"
-        strokeWidth={2}
-        d="M3 7a5 5 0 0 1 5-5h20a5 5 0 0 1 5 5v20a5 5 0 0 1-5 5H8a5 5 0 0 1-5-5V7Z"
-      />
-      <path
-        fill="#fff"
-        d="M25.297 22.325h-2.782a.324.324 0 1 1 0-.648h2.782a3.406 3.406 0 0 0 .487-6.775.323.323 0 0 1-.263-.422 4.866 4.866 0 0 0-4.602-6.425 4.83 4.83 0 0 0-4.54 3.088.325.325 0 0 1-.442.175 3.508 3.508 0 0 0-1.505-.344 3.567 3.567 0 0 0-3.567 3.568.324.324 0 0 1-.325.324 3.406 3.406 0 1 0 .15 6.81h2.782a.324.324 0 1 1 0 .65h-2.77a4.05 4.05 0 0 1-.486-8.076 4.216 4.216 0 0 1 4.216-3.925c.509 0 1.014.092 1.489.273a5.513 5.513 0 0 1 10.326 3.733 4.054 4.054 0 0 1-.95 7.994Z"
-      />
-      <path
-        fill="#fff"
-        d="M22.064 26.593h-8.128a.775.775 0 0 1-.775-.775V20.63a.775.775 0 0 1 .775-.775h8.128a.775.775 0 0 1 .775.775v5.19a.775.775 0 0 1-.775.774Zm-8.128-6.09a.126.126 0 0 0-.126.126v5.19a.126.126 0 0 0 .126.126h8.128a.126.126 0 0 0 .117-.078.126.126 0 0 0 .01-.049V20.63a.125.125 0 0 0-.079-.117.127.127 0 0 0-.048-.01h-8.128Z"
-      />
-      <path
-        fill="#fff"
-        d="M20.968 20.503h-5.936a.324.324 0 0 1-.324-.325V17.72a3.292 3.292 0 1 1 6.584 0v2.458a.324.324 0 0 1-.325.325Zm-5.611-.649h5.286V17.72a2.643 2.643 0 1 0-5.286 0v2.134ZM18 23.866a1.083 1.083 0 1 1 0-2.167 1.083 1.083 0 0 1 0 2.167Zm0-1.515a.434.434 0 1 0 0 .869.434.434 0 0 0 0-.869Z"
-      />
-      <path
-        fill="#fff"
-        d="M18 24.745a.324.324 0 0 1-.324-.325v-.878a.324.324 0 0 1 .648 0v.878a.324.324 0 0 1-.324.325Z"
-      />
-    </g>
-    <defs>
-      <linearGradient
-        id="b"
-        x1={18}
-        x2={18}
-        y1={1}
-        y2={33}
-        gradientUnits="userSpaceOnUse"
-      >
-        <stop stopColor="#fff" stopOpacity={0.12} />
-        <stop offset={1} stopColor="#fff" stopOpacity={0} />
-      </linearGradient>
-      <filter
-        id="a"
-        width={36}
-        height={36}
-        x={0}
-        y={0}
-        colorInterpolationFilters="sRGB"
-        filterUnits="userSpaceOnUse"
-      >
-        <feFlood floodOpacity={0} result="BackgroundImageFix" />
-        <feColorMatrix
-          in="SourceAlpha"
-          result="hardAlpha"
-          values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
-        />
-        <feOffset dy={1} />
-        <feGaussianBlur stdDeviation={1} />
-        <feComposite in2="hardAlpha" operator="out" />
-        <feColorMatrix values="0 0 0 0 0.0392157 0 0 0 0 0.0496732 0 0 0 0 0.0705882 0 0 0 0.05 0" />
-        <feBlend in2="BackgroundImageFix" result="effect1_dropShadow_39_7439" />
-        <feBlend
-          in="SourceGraphic"
-          in2="effect1_dropShadow_39_7439"
-          result="shape"
-        />
-        <feColorMatrix
-          in="SourceAlpha"
-          result="hardAlpha"
-          values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
-        />
-        <feOffset dy={-2} />
-        <feComposite in2="hardAlpha" k2={-1} k3={1} operator="arithmetic" />
-        <feColorMatrix values="0 0 0 0 0.0392157 0 0 0 0 0.0496732 0 0 0 0 0.0705882 0 0 0 0.05 0" />
-        <feBlend in2="shape" result="effect2_innerShadow_39_7439" />
-        <feColorMatrix
-          in="SourceAlpha"
-          result="hardAlpha"
-          values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
-        />
-        <feMorphology
-          in="SourceAlpha"
-          radius={1}
-          result="effect3_innerShadow_39_7439"
-        />
-        <feOffset />
-        <feComposite in2="hardAlpha" k2={-1} k3={1} operator="arithmetic" />
-        <feColorMatrix values="0 0 0 0 0.0392157 0 0 0 0 0.0496732 0 0 0 0 0.0705882 0 0 0 0.18 0" />
-        <feBlend
-          in2="effect2_innerShadow_39_7439"
-          result="effect3_innerShadow_39_7439"
-        />
-      </filter>
-    </defs>
+    <path
+      fill="#fff"
+      d="M10 .5h22a9.5 9.5 0 0 1 9.5 9.5v22a9.5 9.5 0 0 1-9.5 9.5H10A9.5 9.5 0 0 1 .5 32V10A9.5 9.5 0 0 1 10 .5Z"
+    />
+    <path
+      stroke="#D5D7DA"
+      d="M10 .5h22a9.5 9.5 0 0 1 9.5 9.5v22a9.5 9.5 0 0 1-9.5 9.5H10A9.5 9.5 0 0 1 .5 32V10A9.5 9.5 0 0 1 10 .5Z"
+    />
+    <path
+      fill="#535862"
+      d="M30.122 27.657h-3.479a.405.405 0 0 1 0-.811h3.479a4.256 4.256 0 0 0 .608-8.469.405.405 0 0 1-.329-.527 6.083 6.083 0 0 0-5.752-8.031 6.037 6.037 0 0 0-5.676 3.86.406.406 0 0 1-.551.218 4.385 4.385 0 0 0-1.881-.43 4.46 4.46 0 0 0-4.46 4.46.405.405 0 0 1-.405.405 4.258 4.258 0 0 0 .186 8.514h3.479a.405.405 0 0 1 0 .81h-3.462a5.064 5.064 0 0 1-.609-10.094 5.27 5.27 0 0 1 5.27-4.905 5.204 5.204 0 0 1 1.861.34 6.892 6.892 0 0 1 12.909 4.666 5.068 5.068 0 0 1-1.188 9.994Z"
+    />
+    <path
+      fill="#535862"
+      d="M26.08 32.992H15.92a.969.969 0 0 1-.969-.969v-6.487a.969.969 0 0 1 .97-.968H26.08a.969.969 0 0 1 .969.968v6.487a.969.969 0 0 1-.97.969Zm-10.16-7.614a.158.158 0 0 0-.158.159v6.486a.158.158 0 0 0 .158.158h10.16a.157.157 0 0 0 .158-.158v-6.487a.157.157 0 0 0-.098-.146.16.16 0 0 0-.06-.012H15.92Z"
+    />
+    <path
+      fill="#535862"
+      d="M24.71 25.378h-7.42a.405.405 0 0 1-.405-.405V21.9a4.115 4.115 0 1 1 8.23 0v3.073a.405.405 0 0 1-.405.405Zm-7.014-.81h6.608V21.9a3.304 3.304 0 1 0-6.608 0v2.668ZM21 29.582a1.354 1.354 0 1 1 0-2.708 1.354 1.354 0 0 1 0 2.708Zm0-1.893a.544.544 0 1 0 0 1.089.544.544 0 0 0 0-1.089Z"
+    />
+    <path
+      fill="#535862"
+      d="M21 30.681a.405.405 0 0 1-.405-.405v-1.099a.405.405 0 0 1 .81 0v1.099a.405.405 0 0 1-.405.405Z"
+    />
   </svg>
 );
 export default PrivateResourceIcon;

@@ -11,7 +11,6 @@ function Connectivity(props) {
     privateNetworkCIDR,
     privateNetworkId,
     globalEndpoints,
-    context,
     nodes,
     additionalEndpoints,
     refetchInstance,
@@ -68,10 +67,7 @@ function Connectivity(props) {
   const rows = useMemo(() => {
     const res = [];
 
-    if (
-      (primaryResourceName && primaryResourceEndpoint) ||
-      otherResourceFilteredEndpoints?.length > 0
-    ) {
+    if (primaryResourceName && primaryResourceEndpoint) {
       res.push(
         <ResourceConnectivityEndpoint
           isPrimaryResource={true}
@@ -115,7 +111,6 @@ function Connectivity(props) {
 
     return res;
   }, [
-    context,
     primaryResourceName,
     primaryResourceEndpoint,
     otherResourceFilteredEndpoints,

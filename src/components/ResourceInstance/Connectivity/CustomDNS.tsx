@@ -20,7 +20,6 @@ import TextConfirmationDialog from "src/components/TextConfirmationDialog/TextCo
 import LoadingSpinnerSmall from "src/components/CircularProgress/CircularProgress";
 import { useMutation } from "@tanstack/react-query";
 import Card from "src/components/Card/Card";
-import PublicIcon from "src/components/Icons/DNSIcon/PublicIcon";
 import { AddCustomDNSToResourceInstancePayload } from "./ConnectivityCustomDNS";
 import CustomDNSDetails from "./CustomDNSDetails";
 import AlertTrianglePITR from "src/components/Icons/AlertTrianglePITR/AlertTrianglePITR";
@@ -28,6 +27,7 @@ import CircleCheckWithBorderIcon from "src/components/Icons/CircleCheck/CircleCh
 import CustomStatusChips from "src/components/CustomStatusChips/CustomStatusChips";
 import PlayIcon from "src/components/Icons/Play/Play";
 import { colors } from "src/themeConfig";
+import PublicResourceIcon from "src/components/Icons/PublicResource/PublicResource";
 
 type EndpointProps = {
   resourceName: string;
@@ -221,7 +221,7 @@ const CustomDNS: FC<EndpointProps> = (props) => {
             borderBottom={"1px solid rgba(213, 215, 218, 1)"}
           >
             <Box>
-              <PublicIcon />
+              <PublicResourceIcon />
             </Box>
             <Text
               size="medium"
