@@ -538,60 +538,62 @@ const InstanceForm = ({
         )}
       </div>
 
-      <div
-        style={{
-          position: "sticky",
-          top: "104px",
-          minHeight: "660px",
-          border: `1px solid ${colors.gray300}`,
-          boxShadow: "0px 2px 2px -1px #0A0D120A, 0px 4px 6px -2px #0A0D1208",
-        }}
-        className="col-span-2 bg-white rounded-xl flex flex-col"
-      >
-        <div className="py-4 px-6 border-b border-gray-200">
-          <Text size="large" weight="semibold" color={colors.purple600}>
-            Deployment Instance Summary
-          </Text>
-        </div>
-
-        <PreviewCard formData={formData} sections={sections} />
-
+      <div className="col-span-2">
         <div
           style={{
-            margin: "0px 16px 20px",
-            paddingTop: "20px",
-            borderTop: "1px solid #E9EAEB",
+            position: "sticky",
+            top: "104px",
+            minHeight: "660px",
+            border: `1px solid ${colors.gray300}`,
+            boxShadow: "0px 2px 2px -1px #0A0D120A, 0px 4px 6px -2px #0A0D1208",
           }}
-          className="flex items-center gap-3"
+          className="bg-white rounded-xl flex flex-col"
         >
-          <Button
-            data-testid="cancel-button"
-            variant="outlined"
-            onClick={() => setIsOverlayOpen(false)}
-            disabled={
-              createInstanceMutation.isLoading ||
-              updateResourceInstanceMutation.isLoading
-            }
-            sx={{ marginLeft: "auto" }} // Pushes the 2 buttons to the end
-          >
-            Cancel
-          </Button>
+          <div className="py-4 px-6 border-b border-gray-200">
+            <Text size="large" weight="semibold" color={colors.purple600}>
+              Deployment Instance Summary
+            </Text>
+          </div>
 
-          <Button
-            data-testid="submit-button"
-            variant="contained"
-            disabled={
-              createInstanceMutation.isLoading ||
-              updateResourceInstanceMutation.isLoading
-            }
-            type="submit"
+          <PreviewCard formData={formData} sections={sections} />
+
+          <div
+            style={{
+              margin: "0px 16px 20px",
+              paddingTop: "20px",
+              borderTop: "1px solid #E9EAEB",
+            }}
+            className="flex items-center gap-3"
           >
-            {formMode === "create" ? "Create" : "Update"}
-            {(createInstanceMutation.isLoading ||
-              updateResourceInstanceMutation.isLoading) && (
-              <LoadingSpinnerSmall />
-            )}
-          </Button>
+            <Button
+              data-testid="cancel-button"
+              variant="outlined"
+              onClick={() => setIsOverlayOpen(false)}
+              disabled={
+                createInstanceMutation.isLoading ||
+                updateResourceInstanceMutation.isLoading
+              }
+              sx={{ marginLeft: "auto" }} // Pushes the 2 buttons to the end
+            >
+              Cancel
+            </Button>
+
+            <Button
+              data-testid="submit-button"
+              variant="contained"
+              disabled={
+                createInstanceMutation.isLoading ||
+                updateResourceInstanceMutation.isLoading
+              }
+              type="submit"
+            >
+              {formMode === "create" ? "Create" : "Update"}
+              {(createInstanceMutation.isLoading ||
+                updateResourceInstanceMutation.isLoading) && (
+                <LoadingSpinnerSmall />
+              )}
+            </Button>
+          </div>
         </div>
       </div>
     </Form>

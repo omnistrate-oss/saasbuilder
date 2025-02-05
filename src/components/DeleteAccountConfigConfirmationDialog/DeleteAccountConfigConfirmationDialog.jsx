@@ -147,7 +147,7 @@ function DeleteAccountConfigConfirmationDialog(props) {
     handleClose,
     formData,
     title = "Delete",
-    message = "To confirm deletion, please enter <i><b>deleteme</b></i>, in the field below:",
+    message = "To confirm deletion, please enter <b>deleteme</b>, in the field below:",
     buttonLabel = "Delete",
     buttonColor = "#D92D20",
     isLoading,

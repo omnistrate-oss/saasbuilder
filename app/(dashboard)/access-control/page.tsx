@@ -299,7 +299,7 @@ const AccessControlPage = () => {
               selectedUser?.roleType.slice(1)
             : null
         } access for the user ${selectedUser?.email}?`}
-        message="To confirm deletion, please enter <b>remove</b>, in the field below:"
+        message="To confirm access removal, please enter <b>remove</b>, in the field below:"
       />
     </PageContainer>
   );
