@@ -386,7 +386,6 @@ const DataTable = <TData,>(props: DataTableProps<TData>): ReactNode => {
             </Stack>
           )}
         </Box>
-
         <Pagination
           isPreviousDisabled={!table.getCanPreviousPage()}
           isNextDisabled={!table.getCanNextPage()}
