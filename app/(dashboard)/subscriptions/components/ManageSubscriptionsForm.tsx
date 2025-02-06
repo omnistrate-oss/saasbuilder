@@ -76,7 +76,7 @@ const ManageSubscriptionsForm = ({
 
   const subscriptionRequestsObj = useMemo(() => {
     return subscriptionRequests
-      ?.filter((el) => el.status !== "APPROVED")
+      ?.filter((el) => el.status === "PENDING")
       .reduce((acc, request) => {
         acc[request.productTierId] = request;
         return acc;

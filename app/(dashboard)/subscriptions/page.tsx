@@ -53,6 +53,8 @@ const SubscriptionsPage = () => {
   const [isOverlayOpen, setIsOverlayOpen] = useState<boolean>(false);
   const [clickedSubscription, setClickedSubscription] =
     useState<Subscription | null>(null);
+  const [subscriptionIdToDelete, setSubscriptionIdToDelete] =
+    useState<string>();
 
   const selectUser = useSelector(selectUserrootData);
   const {
@@ -193,16 +195,20 @@ const SubscriptionsPage = () => {
           ...oldData,
           data: {
             ids: oldData.data.ids.filter(
-              (id: string) => id !== selectedSubscription?.id
+              (id: string) => id !== subscriptionIdToDelete
             ),
             subscriptions: oldData.data.subscriptions.filter(
-              (sub: Subscription) => sub.id !== selectedSubscription?.id
+              (sub: Subscription) => sub.id !== subscriptionIdToDelete
             ),
           },
         };
       });
       setIsOverlayOpen(false);
+
       snackbar.showSuccess("Unsubscribed successfully");
+    },
+    onSettled: () => {
+      setSubscriptionIdToDelete(undefined);
     },
   });
 
@@ -295,6 +301,7 @@ const SubscriptionsPage = () => {
             if (!selectedSubscription) {
               return snackbar.showError("Please select a subscription");
             }
+            setSubscriptionIdToDelete(selectedSubscription.id);
             await unSubscribeMutation.mutateAsync(selectedSubscription.id);
           }}
           confirmationText="unsubscribe"

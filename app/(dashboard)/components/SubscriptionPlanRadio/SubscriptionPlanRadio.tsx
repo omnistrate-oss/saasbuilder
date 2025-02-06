@@ -4,7 +4,7 @@ import clsx from "clsx";
 import Link from "next/link";
 import { useMemo, useState } from "react";
 import { ArrowOutward } from "@mui/icons-material";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 import Button from "components/Button/Button";
 import Tooltip from "components/Tooltip/Tooltip";
@@ -22,6 +22,8 @@ import { createSubscriptionRequest } from "src/api/subscriptionRequests";
 import { getSubscriptionsRoute } from "src/utils/routes";
 import { ServiceOffering } from "src/types/serviceOffering";
 import LoadingSpinnerSmall from "src/components/CircularProgress/CircularProgress";
+import { useSelector } from "react-redux";
+import { selectUserrootData } from "src/slices/userDataSlice";
 
 const SubscriptionPlanCard = ({
   plan,
@@ -31,10 +33,11 @@ const SubscriptionPlanCard = ({
   isSelected,
   onClick,
   disabled,
-  isSubscribing,
   disabledMessage,
 }) => {
   const rootSubscription = subscriptions.find((sub) => sub.roleType === "root");
+  const [isSubscribing, setIsSubscribing] = useState(false);
+
   const card = (
     <div
       className={clsx(
@@ -84,7 +87,16 @@ const SubscriptionPlanCard = ({
           variant="contained"
           disabled={disabled || isSubscribing}
           startIcon={<CirclePlusIcon disabled={disabled || isSubscribing} />}
-          onClick={onSubscribeClick}
+          onClick={async () => {
+            try {
+              setIsSubscribing(true);
+              await onSubscribeClick();
+            } catch (error) {
+              console.error(error);
+            } finally {
+              setIsSubscribing(false);
+            }
+          }}
         >
           Subscribe
           {isSubscribing && <LoadingSpinnerSmall />}
@@ -165,20 +177,16 @@ const SubscriptionPlanRadio: React.FC<SubscriptionPlanRadioProps> = ({
   disabled,
 }) => {
   const snackbar = useSnackbar();
-  const {
-    subscriptions,
-    subscriptionRequests,
-    refetchSubscriptions,
-    refetchSubscriptionRequests,
-  } = useGlobalData();
+  const queryClient = useQueryClient();
+  const selectUser = useSelector(selectUserrootData);
+  const { subscriptions, subscriptionRequests } = useGlobalData();
 
-  const [subscribingPlanId, setSubscribingPlanId] = useState<string>();
   const servicePlanId = formData.values[name];
 
   const subscriptionRequestsObj: Record<string, SubscriptionRequest> =
     useMemo(() => {
       return subscriptionRequests
-        ?.filter((el) => el.status !== "APPROVED")
+        ?.filter((el) => el.status === "PENDING")
         .reduce((acc, request) => {
           acc[request.productTierId] = request;
           return acc;
@@ -225,9 +233,6 @@ const SubscriptionPlanRadio: React.FC<SubscriptionPlanRadioProps> = ({
             )}
             subscriptionRequest={subscriptionRequestsObj[plan.productTierID]}
             onSubscribeClick={async () => {
-              if (subscribeMutation.isLoading) return;
-              setSubscribingPlanId(plan.productTierID);
-
               try {
                 const res = await subscribeMutation.mutateAsync({
                   productTierId: plan.productTierID,
@@ -242,21 +247,77 @@ const SubscriptionPlanRadio: React.FC<SubscriptionPlanRadioProps> = ({
                   snackbar.showSuccess(
                     "Subscription Request sent successfully"
                   );
+
+                  queryClient.setQueryData(
+                    ["subscription-requests"],
+                    (oldData: any) => {
+                      return {
+                        ...oldData,
+                        data: {
+                          ids: [...(oldData.data.ids || []), id],
+                          subscriptionRequests: [
+                            ...(oldData.data.subscriptionRequests || []),
+                            {
+                              id,
+                              serviceId: plan.serviceId,
+                              serviceName: plan.serviceName,
+                              productTierId: plan.productTierID,
+                              productTierName: plan.productTierName,
+                              rootUserId: selectUser.id,
+                              rootUserEmail: selectUser.email,
+                              rootUserName: selectUser.name,
+                              status: "PENDING",
+                              createdAt: new Date().toISOString(),
+                              updatedAt: new Date().toISOString(),
+                              updatedByUserId: "",
+                              updatedByUserName: "",
+                            },
+                          ],
+                        },
+                      };
+                    }
+                  );
                 } else if (id.startsWith("sub")) {
                   formData.setFieldValue(name, plan.productTierID);
                   onChange(plan.productTierID, id);
                   snackbar.showSuccess("Subscribed successfully");
-                }
 
-                await Promise.all([
-                  refetchSubscriptions(),
-                  refetchSubscriptionRequests(),
-                ]);
+                  queryClient.setQueryData(
+                    ["user-subscriptions"],
+                    (oldData: any) => {
+                      return {
+                        ...oldData,
+                        data: {
+                          ids: [...(oldData.data.ids || []), id],
+                          subscriptions: [
+                            ...(oldData.data.subscriptions || []),
+                            {
+                              id,
+                              rootUserId: selectUser.id,
+                              serviceId: plan.serviceId,
+                              productTierId: plan.productTierID,
+                              serviceOrgId: plan.serviceOrgId,
+                              serviceOrgName: plan.serviceProviderName,
+                              roleType: "root",
+                              createdAt: new Date().toISOString(),
+                              subscriptionOwnerName: selectUser.name,
+                              serviceName: plan.serviceName,
+                              serviceLogoURL: plan.serviceLogoURL,
+                              cloudProviderNames: plan.cloudProviders,
+                              defaultSubscription: false,
+                              productTierName: plan.productTierName,
+                              accountConfigIdentityId: selectUser.orgId,
+                              status: "ACTIVE",
+                            },
+                          ],
+                        },
+                      };
+                    }
+                  );
+                }
               } catch (error) {
                 console.error(error);
                 snackbar.showError("Failed to subscribe. Please try again");
-              } finally {
-                setSubscribingPlanId(undefined);
               }
             }}
             onClick={() => {
@@ -265,7 +326,6 @@ const SubscriptionPlanRadio: React.FC<SubscriptionPlanRadioProps> = ({
               }
               formData.setFieldValue(name, plan.productTierID);
             }}
-            isSubscribing={subscribingPlanId === plan.productTierID}
             isSelected={servicePlanId === plan.productTierID}
             disabled={disabled || plan.serviceModelStatus !== "READY"}
             disabledMessage={
