@@ -445,7 +445,14 @@ const InstanceForm = ({
       customNetworks,
       isFetchingCustomNetworks
     );
-  }, [formMode, formData.values, resourceSchema, serviceOfferingsObj]);
+  }, [
+    formMode,
+    formData.values,
+    resourceSchema,
+    serviceOfferingsObj,
+    customNetworks,
+    isFetchingCustomNetworks,
+  ]);
 
   const deploymentConfigurationFields = useMemo(() => {
     return getDeploymentConfigurationFields(
@@ -461,6 +468,7 @@ const InstanceForm = ({
     formData.values,
     resourceSchema,
     resourceIdInstancesHashMap,
+    isFetchingResourceInstanceIds,
     cloudAccountInstances,
   ]);
 
@@ -479,7 +487,7 @@ const InstanceForm = ({
         fields: deploymentConfigurationFields,
       },
     ],
-    [formData.values]
+    [formData.values, deploymentConfigurationFields]
   );
 
   if (isFetchingServiceOfferings) {

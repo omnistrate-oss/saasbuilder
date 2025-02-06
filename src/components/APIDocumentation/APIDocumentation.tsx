@@ -17,14 +17,14 @@ const APIDocumentation: React.FC<APIDocumentationProps> = ({
   serviceId,
   serviceAPIID,
 }) => {
-  const { data: serviceAPIDocs, isLoading: isLoadingServiceAPIDocs } =
+  const { data: serviceAPIDocs, isFetching: isFetchingAPIDocs } =
     useServiceApiDocsData(serviceId, serviceAPIID);
 
   if (!serviceAPIID) return null;
 
   return (
     <CardWithTitle title="API Documentation" style={{ minHeight: "500px" }}>
-      {isLoadingServiceAPIDocs ? (
+      {isFetchingAPIDocs ? (
         <LoadingSpinner />
       ) : !serviceAPIDocs ? (
         <div

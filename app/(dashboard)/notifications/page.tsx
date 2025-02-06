@@ -87,6 +87,7 @@ const NotificationsPage = () => {
           pageIndex={pageIndex}
           setPageIndex={setPageIndex}
           showPagination={true}
+          noRowsText="No notifications"
         />
       </div>
     </PageContainer>

@@ -43,7 +43,10 @@ const ManageSubscriptionsForm = ({
       return acc;
     }, {});
 
-    return Object.values(servicesObj || {});
+    return Object.values(servicesObj || {}).sort((a, b) =>
+      // @ts-ignore
+      a?.serviceName.localeCompare(b?.serviceName)
+    );
   }, [serviceOfferings]);
 
   const [selectedServiceId, setSelectedServiceId] = useState<any>(
@@ -52,7 +55,9 @@ const ManageSubscriptionsForm = ({
 
   // Plans for the Selected Service
   const servicePlans = useMemo(() => {
-    return Object.values(serviceOfferingsObj[selectedServiceId] || {});
+    return Object.values(serviceOfferingsObj[selectedServiceId] || {}).sort(
+      (a, b) => a?.productTierName.localeCompare(b?.productTierName)
+    );
   }, [selectedServiceId, serviceOfferingsObj]);
 
   const [selectedPlanId, setSelectedPlanId] = useState<any>(
@@ -187,7 +192,7 @@ const ManageSubscriptionsForm = ({
         handleClose={() => setIsUnsubscribeDialogOpen(false)}
         onConfirm={async () => {
           if (!subscriptionsObj[selectedPlanId]) {
-            return snackbar.showError("Please select a subscription");
+            return snackbar.showError("Please select a plan");
           }
           await unSubscribeMutation.mutateAsync(
             subscriptionsObj[selectedPlanId].id

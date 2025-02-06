@@ -46,6 +46,7 @@ const EventsTable = ({
   fetchNextPage,
   isFetchingNextPage,
   minHeight = "667px",
+  noRowsText,
 }: any) => {
   const { subscriptionsObj } = useGlobalData();
   // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
@@ -235,7 +236,7 @@ const EventsTable = ({
       columns={selectedColumns}
       data={data}
       renderDetailsComponent={EventDetailsView}
-      noRowsText="No events"
+      noRowsText={noRowsText || "No events"}
       getRowCanExpand={(rowData) =>
         Number(rowData.original.workflowFailures?.length) > 0
       }

@@ -600,7 +600,7 @@ export const getDeploymentConfigurationFields = (
           value: values.requestParams[param.key] || "",
           type: "number",
           required: formMode !== "modify" && param.required,
-          previewValue: values.requestParams[param.key],
+          previewValue: String(values.requestParams[param.key]) || "",
         });
       } else {
         fields.push({
