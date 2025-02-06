@@ -597,10 +597,10 @@ export const getDeploymentConfigurationFields = (
           label: param.displayName || param.key,
           subLabel: param.description,
           name: `requestParams.${param.key}`,
-          value: values.requestParams[param.key] || "",
+          value: values.requestParams[param.key],
           type: "number",
           required: formMode !== "modify" && param.required,
-          previewValue: String(values.requestParams[param.key]) || "",
+          previewValue: values.requestParams[param.key],
         });
       } else {
         fields.push({

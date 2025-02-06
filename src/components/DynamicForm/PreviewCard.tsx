@@ -20,7 +20,7 @@ const FieldValue = ({ field, formData }: { field: Field; formData: any }) => {
   }
 
   const renderPreviewValue = () => {
-    if (typeof previewValue === "string") {
+    if (typeof previewValue === "string" || typeof previewValue === "number") {
       return (
         <Text
           title={previewValue}
@@ -37,6 +37,7 @@ const FieldValue = ({ field, formData }: { field: Field; formData: any }) => {
         </Text>
       );
     }
+
     if (typeof previewValue === "function") {
       return previewValue({ field, formData });
     }
