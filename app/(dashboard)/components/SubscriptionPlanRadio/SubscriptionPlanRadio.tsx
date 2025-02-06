@@ -2,7 +2,7 @@
 
 import clsx from "clsx";
 import Link from "next/link";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { ArrowOutward } from "@mui/icons-material";
 import { useMutation } from "@tanstack/react-query";
 
@@ -21,6 +21,7 @@ import { SubscriptionRequest } from "src/types/subscriptionRequest";
 import { createSubscriptionRequest } from "src/api/subscriptionRequests";
 import { getSubscriptionsRoute } from "src/utils/routes";
 import { ServiceOffering } from "src/types/serviceOffering";
+import LoadingSpinnerSmall from "src/components/CircularProgress/CircularProgress";
 
 const SubscriptionPlanCard = ({
   plan,
@@ -30,6 +31,7 @@ const SubscriptionPlanCard = ({
   isSelected,
   onClick,
   disabled,
+  isSubscribing,
   disabledMessage,
 }) => {
   const rootSubscription = subscriptions.find((sub) => sub.roleType === "root");
@@ -80,11 +82,12 @@ const SubscriptionPlanCard = ({
       {!rootSubscription && !subscriptionRequest && (
         <Button
           variant="contained"
-          disabled={disabled}
-          startIcon={<CirclePlusIcon disabled={disabled} />}
+          disabled={disabled || isSubscribing}
+          startIcon={<CirclePlusIcon disabled={disabled || isSubscribing} />}
           onClick={onSubscribeClick}
         >
           Subscribe
+          {isSubscribing && <LoadingSpinnerSmall />}
         </Button>
       )}
 
@@ -169,6 +172,7 @@ const SubscriptionPlanRadio: React.FC<SubscriptionPlanRadioProps> = ({
     refetchSubscriptionRequests,
   } = useGlobalData();
 
+  const [subscribingPlanId, setSubscribingPlanId] = useState<string>();
   const servicePlanId = formData.values[name];
 
   const subscriptionRequestsObj: Record<string, SubscriptionRequest> =
@@ -221,6 +225,9 @@ const SubscriptionPlanRadio: React.FC<SubscriptionPlanRadioProps> = ({
             )}
             subscriptionRequest={subscriptionRequestsObj[plan.productTierID]}
             onSubscribeClick={async () => {
+              if (subscribeMutation.isLoading) return;
+              setSubscribingPlanId(plan.productTierID);
+
               try {
                 const res = await subscribeMutation.mutateAsync({
                   productTierId: plan.productTierID,
@@ -241,11 +248,15 @@ const SubscriptionPlanRadio: React.FC<SubscriptionPlanRadioProps> = ({
                   snackbar.showSuccess("Subscribed successfully");
                 }
 
-                refetchSubscriptions();
-                refetchSubscriptionRequests();
+                await Promise.all([
+                  refetchSubscriptions(),
+                  refetchSubscriptionRequests(),
+                ]);
               } catch (error) {
                 console.error(error);
                 snackbar.showError("Failed to subscribe. Please try again");
+              } finally {
+                setSubscribingPlanId(undefined);
               }
             }}
             onClick={() => {
@@ -254,6 +265,7 @@ const SubscriptionPlanRadio: React.FC<SubscriptionPlanRadioProps> = ({
               }
               formData.setFieldValue(name, plan.productTierID);
             }}
+            isSubscribing={subscribingPlanId === plan.productTierID}
             isSelected={servicePlanId === plan.productTierID}
             disabled={disabled || plan.serviceModelStatus !== "READY"}
             disabledMessage={
