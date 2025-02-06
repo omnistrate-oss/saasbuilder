@@ -221,25 +221,32 @@ const SubscriptionPlanRadio: React.FC<SubscriptionPlanRadioProps> = ({
             )}
             subscriptionRequest={subscriptionRequestsObj[plan.productTierID]}
             onSubscribeClick={async () => {
-              const res = await subscribeMutation.mutateAsync({
-                productTierId: plan.productTierID,
-                serviceId: plan.serviceId,
-                AutoApproveSubscription: plan.AutoApproveSubscription,
-              });
+              try {
+                const res = await subscribeMutation.mutateAsync({
+                  productTierId: plan.productTierID,
+                  serviceId: plan.serviceId,
+                  AutoApproveSubscription: plan.AutoApproveSubscription,
+                });
 
-              // @ts-ignore
-              const id = Object.values(res?.data || {}).join("");
+                // @ts-ignore
+                const id = Object.values(res?.data || {}).join("");
 
-              if (id.startsWith("subr")) {
-                snackbar.showSuccess("Subscription Request sent successfully");
-              } else if (id.startsWith("sub")) {
-                formData.setFieldValue(name, plan.productTierID);
-                onChange(plan.productTierID, id);
-                snackbar.showSuccess("Subscribed successfully");
+                if (id.startsWith("subr")) {
+                  snackbar.showSuccess(
+                    "Subscription Request sent successfully"
+                  );
+                } else if (id.startsWith("sub")) {
+                  formData.setFieldValue(name, plan.productTierID);
+                  onChange(plan.productTierID, id);
+                  snackbar.showSuccess("Subscribed successfully");
+                }
+
+                refetchSubscriptions();
+                refetchSubscriptionRequests();
+              } catch (error) {
+                console.error(error);
+                snackbar.showError("Failed to subscribe. Please try again");
               }
-
-              refetchSubscriptions();
-              refetchSubscriptionRequests();
             }}
             onClick={() => {
               if (servicePlanId !== plan.productTierID) {
