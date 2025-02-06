@@ -17,10 +17,8 @@ import {
 
 type CookieConsentContextType = {
   consentState: CookieConsent;
-  // eslint-disable-next-line no-unused-vars
   updateConsent: (updatedCategories: CategoryWithoutServices[]) => void;
   isConsentModalOpen: boolean;
-  // eslint-disable-next-line no-unused-vars
   setIsConsentModalOpen: (isOpen: boolean) => void;
 };
 

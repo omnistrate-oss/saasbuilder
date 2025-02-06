@@ -1,6 +1,6 @@
-import { Box, BoxProps, Stack } from "@mui/material";
-import { FC, useState } from "react";
-import Link from "next/link";
+import { Box, BoxProps, Stack, styled } from "@mui/material";
+import { FC, ReactNode, useState } from "react";
+import NextLink from "next/link";
 import { Text } from "src/components/Typography/Typography";
 import CopyButton from "src/components/Button/CopyButton";
 import StatusChip from "src/components/StatusChip/StatusChip";
@@ -63,6 +63,66 @@ interface JsonDataType {
   [key: string]: unknown;
 }
 
+const Link = styled(NextLink)({
+  color: "#535862",
+  fontWeight: 500,
+  fontSize: "14px",
+  lineHeight: "20px",
+  whiteSpace: "nowrap",
+  overflow: "hidden",
+  textOverflow: "ellipsis",
+  display: "inline-block",
+  textDecoration: "underline",
+  textUnderlineOffset: "3px",
+  "&:hover": {
+    color: "#099250",
+  },
+});
+
+type ConatainerCardProps = {
+  title: string;
+  description?: string;
+  children?: ReactNode;
+  contentBoxProps?: BoxProps;
+};
+
+export const ContainerCard: FC<ConatainerCardProps & BoxProps> = (props) => {
+  const {
+    title,
+    description,
+    children,
+    contentBoxProps = {},
+    ...restProps
+  } = props;
+
+  return (
+    <Box
+      borderRadius="8px"
+      border="1px solid #E9EAEB"
+      boxShadow="0px 1px 2px 0px #0A0D120D"
+      {...restProps}
+    >
+      <Stack
+        sx={{
+          flexDirection: "column",
+          justifyContent: "space-between",
+          borderBottom: "1px solid #E4E7EC",
+        }}
+        alignItems="left"
+        padding="20px 24px"
+      >
+        <Text size="small" weight="bold" color="#7F56D9">
+          {title}
+        </Text>
+        <Text size="small" weight="regular" color="#535862" marginTop="2px">
+          {description}
+        </Text>
+      </Stack>
+      <Box {...contentBoxProps}>{children}</Box>
+    </Box>
+  );
+};
+
 const PropertyDetails: FC<PropertyTableProps> = ({ rows, ...otherProps }) => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [data, setData] = useState<Row | null>(null);
@@ -74,35 +134,13 @@ const PropertyDetails: FC<PropertyTableProps> = ({ rows, ...otherProps }) => {
   }
 
   return (
-    <Box
-      borderRadius="8px"
-      border="1px solid #EAECF0"
-      padding="12px 12px 0px 12px"
-      boxShadow="inset 0px 1px 2px 0px rgba(16, 24, 40, 0.06), 0px 1px 3px 0px rgba(16, 24, 40, 0.1)"
-      {...otherProps}
-    >
-      <Stack
-        sx={{
-          flexDirection: "column",
-          justifyContent: "space-between",
-          borderBottom: "1px solid #E4E7EC",
-          paddingBottom: "12px",
-        }}
-        alignItems="left"
-      >
-        <Text size="small" weight="semibold" color="#6941C6">
-          {rows.title}
-        </Text>
-        <Text size="small" weight="regular" color="#475467">
-          {rows.desc}
-        </Text>
-      </Stack>
+    <ContainerCard title={rows.title} description={rows.desc} {...otherProps}>
       <Box
         display="grid"
         gridTemplateColumns="repeat(auto-fit, minmax(220px, 1fr))"
         position={"relative"}
-        gap="12px"
         padding="12px 0"
+        rowGap="12px"
       >
         <Box
           position={"absolute"}
@@ -110,6 +148,7 @@ const PropertyDetails: FC<PropertyTableProps> = ({ rows, ...otherProps }) => {
           height={"100%"}
           width={"2px"}
           bgcolor={"white"}
+          bottom={5}
         />
 
         {rows?.rows?.map((row, index) => {
@@ -155,12 +194,13 @@ const PropertyDetails: FC<PropertyTableProps> = ({ rows, ...otherProps }) => {
                 {valueType === "array" ? <ArrayIcon /> : <JsonIcon />}
 
                 <Box
-                  style={{
+                  sx={{
                     fontWeight: 600,
                     fontSize: "14px",
                     lineHeight: "20px",
                     color: "#6941C6",
                     cursor: "pointer",
+                    marginLeft: "3px",
                   }}
                   onClick={(event) => {
                     event.preventDefault();
@@ -178,12 +218,7 @@ const PropertyDetails: FC<PropertyTableProps> = ({ rows, ...otherProps }) => {
               <>
                 <Tooltip title={row.value} placement="top">
                   <Box maxWidth="calc(100% - 36px)">
-                    <Text
-                      ellipsis
-                      size="small"
-                      weight="regular"
-                      color="#475467"
-                    >
+                    <Text ellipsis size="small" weight="medium" color="#535862">
                       {row.value}
                     </Text>
                   </Box>
@@ -199,18 +234,8 @@ const PropertyDetails: FC<PropertyTableProps> = ({ rows, ...otherProps }) => {
             value = (
               <>
                 <Link
-                  href={row.linkProps?.href}
+                  href={row.linkProps?.href || "#"}
                   target={row.linkProps?.target || "_self"}
-                  style={{
-                    fontWeight: 600,
-                    fontSize: "14px",
-                    lineHeight: "20px",
-                    color: "#7F56D9",
-                    whiteSpace: "nowrap",
-                    overflow: "hidden",
-                    textOverflow: "ellipsis",
-                    display: "inline-block",
-                  }}
                 >
                   {row.value}
                 </Link>
@@ -290,18 +315,23 @@ const PropertyDetails: FC<PropertyTableProps> = ({ rows, ...otherProps }) => {
           return (
             <Box
               key={index}
-              p="20px"
-              paddingLeft={"8px"}
+              p="4px 24px 14px 24px"
               display="flex"
               flexDirection="column"
               alignItems="flex-start"
               borderRight="1px solid #EAECF0"
               boxSizing="border-box"
               minHeight="80px"
+              // border="1px solid blue"
             >
               <Tooltip title={row.label} placement="top">
                 <Box maxWidth="100%">
-                  <Text ellipsis size="small" weight="medium" color="#101828">
+                  <Text
+                    ellipsis
+                    size="xsmall"
+                    weight="semibold"
+                    color="#414651"
+                  >
                     {row.label}
                   </Text>
                 </Box>
@@ -336,7 +366,7 @@ const PropertyDetails: FC<PropertyTableProps> = ({ rows, ...otherProps }) => {
         parameterDescription={data?.description}
         jsonData={jsonData}
       />
-    </Box>
+    </ContainerCard>
   );
 };
 

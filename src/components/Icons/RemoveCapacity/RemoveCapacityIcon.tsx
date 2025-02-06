@@ -1,32 +1,28 @@
+import { colors } from "src/themeConfig";
+
 const RemoveCapacityIcon = (props) => {
-  let { color = "#D92D20" } = props;
-  const { disabled, ...restProps } = props;
-  
-  if (disabled) {
-    color = "#a3a6ac";
-  }
+  const { color = colors.gray500, disabled } = props;
 
   return (
     <svg
-      width="20"
-      height="20"
-      viewBox="0 0 20 20"
+      width="16"
+      height="16"
+      viewBox="0 0 16 16"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      {...restProps}
     >
-      <g clip-path="url(#clip0_344_520)">
+      <g clip-path="url(#clip0_715_75989)">
         <path
-          d="M6.66675 9.99999H13.3334M18.3334 9.99999C18.3334 14.6024 14.6025 18.3333 10.0001 18.3333C5.39771 18.3333 1.66675 14.6024 1.66675 9.99999C1.66675 5.39762 5.39771 1.66666 10.0001 1.66666C14.6025 1.66666 18.3334 5.39762 18.3334 9.99999Z"
-          stroke={color}
-          strokeWidth="1.66667"
+          d="M5.33325 7.99998H10.6666M14.6666 7.99998C14.6666 11.6819 11.6818 14.6666 7.99992 14.6666C4.31802 14.6666 1.33325 11.6819 1.33325 7.99998C1.33325 4.31808 4.31802 1.33331 7.99992 1.33331C11.6818 1.33331 14.6666 4.31808 14.6666 7.99998Z"
+          stroke={disabled ? colors.gray400 : color}
+          strokeWidth="1.5"
           strokeLinecap="round"
           strokeLinejoin="round"
         />
       </g>
       <defs>
-        <clipPath id="clip0_344_520">
-          <rect width="20" height="20" fill="white" />
+        <clipPath id="clip0_715_75989">
+          <rect width="16" height="16" fill="white" />
         </clipPath>
       </defs>
     </svg>

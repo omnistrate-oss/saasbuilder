@@ -2,6 +2,7 @@ import React from "react";
 import MuiTextField from "@mui/material/TextField";
 import { InputAdornment, styled } from "@mui/material";
 import CopyButton from "src/components/Button/CopyButton";
+import { colors } from "src/themeConfig";
 
 const StyledTextField = styled(MuiTextField, {
   shouldForwardProp: (prop) => {
@@ -12,7 +13,7 @@ const StyledTextField = styled(MuiTextField, {
 
   [`.MuiOutlinedInput-root`]: {
     padding: 0,
-    color: theme.palette.gray["900"],
+    color: colors.gray900,
     fontSize: "16px",
     fontWeight: 400,
     [`& .MuiOutlinedInput-input`]: {
@@ -31,9 +32,7 @@ const StyledTextField = styled(MuiTextField, {
   },
   ".MuiOutlinedInput-root.Mui-focused": {
     [`& .MuiOutlinedInput-notchedOutline`]: {
-      border: `2px solid  ${theme.palette.primary["main"]}`,
-      // boxShadow:
-      //   "0px 0px 0px 4px #F4EBFF, 0px 1px 2px 0px rgba(16, 24, 40, 0.05)",
+      border: `2px solid ${colors.success500}`,
     },
   },
   ".MuiOutlinedInput-root.Mui-error": {

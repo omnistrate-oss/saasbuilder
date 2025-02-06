@@ -1,8 +1,10 @@
 import { ElementType, FC, ReactNode } from "react";
 import { Box, Stack, SxProps, Theme } from "@mui/material";
-import styled from "@emotion/styled";
 
 import Chip from "components/Chip/Chip";
+import { Text } from "components/Typography/Typography";
+
+import { colors } from "src/themeConfig";
 
 type DataGridHeaderTitleProps = {
   icon?: ElementType;
@@ -16,23 +18,8 @@ type DataGridHeaderTitleProps = {
   };
 };
 
-const Title = styled("p")({
-  color: "#6941C6",
-  fontWeight: 600,
-  fontSize: "16px",
-  lineHeight: "24px",
-});
-
-const Description = styled("p")({
-  color: "#475467",
-  fontSize: "14px",
-  lineHeight: "20px",
-  marginTop: "4px",
-  fontWeight: 400,
-});
-
 const getLabel = (
-  count: number | string,
+  count?: number | string,
   units?: {
     singular: string;
     plural: string;
@@ -62,19 +49,29 @@ const DataGridHeaderTitle: FC<DataGridHeaderTitleProps> = ({
     <Stack direction="row" gap="8px" alignItems="flex-start">
       {Icon && <Icon />}
       <Box sx={sx}>
-        <Stack direction="row" gap="8px">
-          <Title>{title}</Title>
+        <Text
+          size="large"
+          weight="semibold"
+          color={colors.purple700}
+          sx={{ mb: "2px" }}
+        >
+          <span style={{ marginRight: "8px" }}>{title}</span>
           {label && (
             <Chip
+              component="span"
               size="small"
               label={label}
-              fontColor="#067647"
-              bgColor="#ECFDF3"
-              borderColor="#ABEFC6"
+              fontColor={colors.success700}
+              bgColor={colors.success50}
+              borderColor={colors.success200}
             />
           )}
-        </Stack>
-        {desc && <Description>{desc}</Description>}
+        </Text>
+        {desc && (
+          <Text size="small" weight="regular" color={colors.gray600}>
+            {desc}
+          </Text>
+        )}
       </Box>
     </Stack>
   );

@@ -1,10 +1,9 @@
 const Axios = require("axios");
-
 //get backend base url
 const { baseURL } = require("../axios");
 const { getProviderToken } = require("./providerToken");
 
-//The server uses a separate axios instance 
+//The server uses a separate axios instance
 //This instance will use service provider's JWT token for auth
 const axios = Axios.create({
   baseURL,

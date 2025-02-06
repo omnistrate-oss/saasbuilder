@@ -1,37 +1,29 @@
-import { Box, Stack } from "@mui/material";
-import { Text } from "src/components/Typography/Typography";
 import EndpointCard from "./EndpointCard";
+import { ContainerCard } from "../ResourceInstanceDetails/PropertyDetails";
+import { Box } from "@mui/material";
 
 const CLIManagedConnectivityDetails = ({ additionalEndpoints }) => {
   return additionalEndpoints.map(
     ({ resourceName, additionalEndpoints: endpoints }) =>
       endpoints ? (
-        <Stack
+        <ContainerCard
+          title={resourceName}
           key={resourceName}
-          my="16px"
-          borderRadius="8px"
-          border="1px solid #E4E7EC"
-          gap="12px"
-          p="12px"
-          pt="0px"
+          marginTop="32px"
+          contentBoxProps={{ padding: "12px 16px" }}
         >
-          <Box py="12px" borderBottom="1px solid #E4E7EC">
-            <Text size="small" weight="semibold" color="#6941C6">
-              {resourceName}
-            </Text>
-          </Box>
-
           {Object.entries(endpoints).map(([name, endpoint]: any, index) => (
-            <EndpointCard
-              key={index}
-              isPrimary={endpoint.primary}
-              endpointName={name}
-              endpointURL={endpoint.endpoint}
-              isPublic={endpoint.networkingType === "PUBLIC"}
-              openPorts={endpoint.openPorts}
-            />
+            <Box key={index} marginTop={index > 0 ? "16px" : "0px"}>
+              <EndpointCard
+                isPrimary={endpoint.primary}
+                endpointName={name}
+                endpointURL={endpoint.endpoint}
+                isPublic={endpoint.networkingType === "PUBLIC"}
+                openPorts={endpoint.openPorts}
+              />
+            </Box>
           ))}
-        </Stack>
+        </ContainerCard>
       ) : null
   );
 };

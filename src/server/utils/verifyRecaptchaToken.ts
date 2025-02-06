@@ -22,7 +22,7 @@ async function verifyRecaptchaToken(token: string) {
     // console.log("Google Response", googleAPIResponse.data);
     if (googleAPIResponse?.data?.success === true) isVerified = true;
     else isVerified = false;
-  } catch (error) {
+  } catch {
     isVerified = false;
   }
 

@@ -12,9 +12,7 @@ import { getResourceInstanceStatusStylesAndLabel } from "src/constants/statusChi
 import { getResourceInstanceBackupStatusStylesAndLabel } from "src/constants/statusChipStyles/resourceInstanceBackupStatus";
 import { roundNumberToTwoDecimals } from "src/utils/formatNumber";
 import LinearProgress from "src/components/LinearProgress/LinearProgress";
-import { initialRangeState } from "src/components/DateRangePicker/DateRangePicker";
 import BackupsTableHeader from "./components/BackupTableHeader";
-import { Range } from "react-date-range";
 import dayjs from "dayjs";
 import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
 import isSameOrAfter from "dayjs/plugin/isSameOrAfter";
@@ -22,6 +20,10 @@ import RestoreInstanceSuccessStep from "src/components/RestoreInstance/RestoreIn
 import InformationDialogTopCenter from "src/components/Dialog/InformationDialogTopCenter";
 import { GridSelectionModel } from "@mui/x-data-grid";
 import { NetworkType } from "src/types/common/enums";
+import {
+  DateRange,
+  initialRangeState,
+} from "src/components/DateRangePicker/DateTimeRangePickerStatic";
 dayjs.extend(isSameOrBefore);
 dayjs.extend(isSameOrAfter);
 
@@ -46,8 +48,6 @@ export type accessQueryParams = {
 const Backup: FC<{
   instanceId: string;
   backupStatus: BackupStatus;
-  serviceId: string;
-  environmentId: string;
   accessQueryParams?: accessQueryParams;
   resourceName?: string;
   networkType: NetworkType;
@@ -78,7 +78,7 @@ const Backup: FC<{
   });
   const { data: restoreData = [], isRefetching, refetch } = restoreQuery;
   const [selectedDateRange, setSelectedDateRange] =
-    useState<Range>(initialRangeState);
+    useState<DateRange>(initialRangeState);
 
   const handleClose = () => {
     setRestoreInstanceSuccess(false);
@@ -96,11 +96,11 @@ const Backup: FC<{
       selectedDateRange.startDate &&
       selectedDateRange.endDate
     ) {
-      const startDate = dayjs(selectedDateRange.startDate).format("YYYY-MM-DD");
-      const endDate = dayjs(selectedDateRange.endDate).format("YYYY-MM-DD");
+      const startDate = dayjs(selectedDateRange.startDate);
+      const endDate = dayjs(selectedDateRange.endDate);
 
       filtered = filtered.filter((backup) => {
-        const backupDate = dayjs(backup.createdTime).format("YYYY-MM-DD");
+        const backupDate = dayjs(backup.createdTime);
 
         return (
           dayjs(backupDate).isSameOrAfter(startDate) &&

@@ -1,10 +1,7 @@
-import { Box, Stack } from "@mui/material";
 import { useEffect, useMemo, useState } from "react";
-import Card from "components/Card/Card";
-import { Text } from "components/Typography/Typography";
 import ResourceConnectivityEndpoint from "./ConnectivityEndpoint";
-import PropertyTable from "./PropertyTable";
 import CLIManagedConnectivityDetails from "./CLIManagedConnectivityDetails";
+import PropertyDetails from "../ResourceInstanceDetails/PropertyDetails";
 
 function Connectivity(props) {
   const {
@@ -14,9 +11,9 @@ function Connectivity(props) {
     privateNetworkCIDR,
     privateNetworkId,
     globalEndpoints,
-    context,
     nodes,
     additionalEndpoints,
+    refetchInstance,
   } = props;
 
   const [availabilityZones, setAvailabilityZones] = useState("");
@@ -68,65 +65,45 @@ function Connectivity(props) {
   }, [nodes]);
 
   const rows = useMemo(() => {
-    let sectionLabel = "Resource";
-
-    if (context === "inventory") {
-      sectionLabel = "Service Component";
-    }
-
     const res = [];
 
-    if (
-      (primaryResourceName && primaryResourceEndpoint) ||
-      otherResourceFilteredEndpoints?.length > 0
-    ) {
-      res.push({
-        label: primaryResourceName,
-        description: `The global endpoint of the ${sectionLabel.toLowerCase()}`,
-        valueType: "custom",
-        value: (
-          <>
-            {primaryResourceName &&
-              primaryResourceEndpoint &&
-              primaryResourcePorts && (
-                <ResourceConnectivityEndpoint
-                  isPrimaryResource={true}
-                  endpointURL={primaryResourceEndpoint}
-                  resourceName={primaryResourceName}
-                  viewType="endpoint"
-                  ports={primaryResourcePorts?.ports}
-                  resourceHasCompute={
-                    globalEndpoints?.primary?.resourceHasCompute
-                  }
-                  customDNSData={globalEndpoints?.primary?.customDNSEndpoint}
-                />
-              )}
-          </>
-        ),
-      });
+    if (primaryResourceName && primaryResourceEndpoint) {
+      res.push(
+        <ResourceConnectivityEndpoint
+          isPrimaryResource={true}
+          endpointURL={primaryResourceEndpoint}
+          resourceName={primaryResourceName}
+          viewType="endpoint"
+          ports={primaryResourcePorts?.ports}
+          resourceHasCompute={globalEndpoints?.primary?.resourceHasCompute}
+          customDNSData={globalEndpoints?.primary?.customDNSEndpoint}
+          publiclyAccessible={globalEndpoints?.primary?.publiclyAccessible}
+        />
+      );
     }
 
     if (otherResourceFilteredEndpoints?.length > 0) {
       otherResourceFilteredEndpoints.forEach(
-        ({ resourceName, endpoint, resourceId, customDNSEndpoint }) => {
+        ({
+          resourceName,
+          endpoint,
+          resourceId,
+          customDNSEndpoint,
+          publiclyAccessible,
+        }) => {
           if (resourceName && endpoint && otherResourceFilteredPorts) {
-            res.push({
-              label: resourceName,
-              description: `The global endpoint of the ${sectionLabel.toLowerCase()}`,
-              valueType: "custom",
-              value: (
-                <ResourceConnectivityEndpoint
-                  key={resourceId}
-                  isPrimaryResource={false}
-                  resourceName={resourceName}
-                  ports={otherResourceFilteredPorts}
-                  viewType="endpoint"
-                  endpointURL={endpoint}
-                  containerStyles={{ marginTop: "16px" }}
-                  customDNSData={customDNSEndpoint}
-                />
-              ),
-            });
+            res.push(
+              <ResourceConnectivityEndpoint
+                key={resourceId}
+                isPrimaryResource={false}
+                resourceName={resourceName}
+                ports={otherResourceFilteredPorts}
+                viewType="endpoint"
+                endpointURL={endpoint}
+                customDNSData={customDNSEndpoint}
+                publiclyAccessible={publiclyAccessible}
+              />
+            );
           }
         }
       );
@@ -134,157 +111,81 @@ function Connectivity(props) {
 
     return res;
   }, [
-    context,
     primaryResourceName,
     primaryResourceEndpoint,
     otherResourceFilteredEndpoints,
     primaryResourcePorts,
     otherResourceFilteredPorts,
     globalEndpoints?.primary?.customDNSEndpoint,
+    globalEndpoints?.primary?.publiclyAccessible,
+    globalEndpoints?.primary?.resourceHasCompute,
   ]);
+
+  const connectivitySummaryData = useMemo(() => {
+    const dataFields = [];
+    if (networkType) {
+      dataFields.push({ label: "Network Type", value: networkType });
+    }
+    if (availabilityZones) {
+      dataFields.push({
+        label: "Availability zones",
+        value: availabilityZones,
+      });
+    }
+
+    dataFields.push({
+      label: "Publicly Accessible",
+      value: publiclyAccessible ? "Yes" : "No",
+    });
+
+    if (privateNetworkCIDR) {
+      dataFields.push({
+        label: "Private network CIDR",
+        value: privateNetworkCIDR,
+      });
+    }
+
+    if (privateNetworkId) {
+      dataFields.push({
+        label: "Private network ID",
+        value: privateNetworkId,
+      });
+    }
+
+    return dataFields;
+  }, [
+    networkType,
+    availabilityZones,
+    publiclyAccessible,
+    privateNetworkCIDR,
+    privateNetworkId,
+  ]);
+
+  useEffect(() => {
+    refetchInstance();
+  }, []);
 
   if (additionalEndpoints.some((el) => el.additionalEndpoints)) {
     return (
-      <Card
-        sx={{
-          marginTop: "32px",
-          padding: "12px",
-          borderRadius: "8px",
-        }}
-      >
-        <CLIManagedConnectivityDetails
-          additionalEndpoints={additionalEndpoints}
-        />
-      </Card>
+      <CLIManagedConnectivityDetails
+        additionalEndpoints={additionalEndpoints}
+      />
     );
   }
 
   return (
-    <Card
-      sx={{
-        marginTop: "32px",
-        padding: "12px",
-        borderRadius: "8px",
-      }}
-    >
-      <Card
-        sx={{
-          padding: "12px",
-          borderRadius: "8px",
+    <>
+      <PropertyDetails
+        rows={{
+          title: "Connectivity Details",
+          desc: "Information about the resource instance connectivity options and network settings",
+          rows: connectivitySummaryData,
+          flexWrap: true,
         }}
-      >
-        <Stack
-          sx={{
-            flexDirection: "row",
-            justifyContent: "space-between",
-            borderBottom: "1px solid #E4E7EC",
-            padding: "12px 0px",
-            marginBottom: "12px",
-          }}
-          alignItems="center"
-        >
-          <Box>
-            <Text size="small" weight="semibold" color="rgba(105, 65, 198, 1)">
-              {"Connectivity Details Info"}
-            </Text>
-            <Text size="small" weight="regular" color="#475467">
-              {
-                "Information about the resource instance connectivity options and network settings"
-              }
-            </Text>
-          </Box>
-        </Stack>
-        <Box display="flex" flexDirection="row" justifyContent="center">
-          <Box
-            flex="1"
-            p="16px 24px"
-            display="flex"
-            flexDirection="column"
-            justifyContent="center"
-          >
-            <Text size="small" weight="semibold" color="#101828">
-              {"Network type"}
-            </Text>
-            <Text size="small" weight="regular" color="#475467">
-              {networkType}
-            </Text>
-          </Box>
-          {availabilityZones && (
-            <Box
-              flex="1"
-              borderLeft="1px solid #EAECF0"
-              p="16px 24px"
-              display="flex"
-              flexDirection="column"
-              justifyContent="center"
-            >
-              <Text size="small" weight="semibold" color="#101828">
-                {"Availability zones"}
-              </Text>
-              <Text size="small" weight="regular" color="#475467">
-                {availabilityZones}
-              </Text>
-            </Box>
-          )}
-          <Box
-            flex="1"
-            borderLeft="1px solid #EAECF0"
-            p="16px 24px"
-            display="flex"
-            flexDirection="column"
-            justifyContent="center"
-          >
-            <Text size="small" weight="semibold" color="#101828">
-              {"Publicly accessible"}
-            </Text>
-            <Text size="small" weight="regular" color="#475467">
-              {publiclyAccessible ? "Yes" : "No"}
-            </Text>
-          </Box>
-          {privateNetworkCIDR && (
-            <Box
-              flex="1"
-              borderLeft="1px solid #EAECF0"
-              p="16px 24px"
-              display="flex"
-              flexDirection="column"
-              justifyContent="center"
-            >
-              <Text size="small" weight="semibold" color="#101828">
-                {"Private network CIDR"}
-              </Text>
-              <Text size="small" weight="regular" color="#475467">
-                {privateNetworkCIDR}
-              </Text>
-            </Box>
-          )}
-          {privateNetworkId && (
-            <Box
-              flex="1"
-              borderLeft="1px solid #EAECF0"
-              p="16px 24px"
-              display="flex"
-              flexDirection="column"
-              justifyContent="center"
-            >
-              <Text size="small" weight="semibold" color="#101828">
-                {"Private network ID"}
-              </Text>
-              <Text size="small" weight="regular" color="#475467">
-                {privateNetworkId}
-              </Text>
-            </Box>
-          )}
-        </Box>
-      </Card>
-      <>
-        {rows.length > 0 && (
-          <Box>
-            <PropertyTable data-testid="connectivity-table" rows={rows} />
-          </Box>
-        )}
-      </>
-    </Card>
+        mt="20px"
+      />
+      <>{rows}</>
+    </>
   );
 }
 

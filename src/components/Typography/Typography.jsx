@@ -1,3 +1,5 @@
+"use client";
+
 import { Typography, styled } from "@mui/material";
 
 const variantTypes = {
@@ -27,7 +29,7 @@ const shouldForwardProp = (prop) => {
 
 export const H3 = styled("h3", {
   shouldForwardProp,
-})(({  variant = variantTypes.desktop, weight = weightTypes.bold }) => ({
+})(({ variant = variantTypes.desktop, weight = weightTypes.bold }) => ({
   fontSize: variant === variantTypes.desktop ? 32 : 28,
   lineHeight: variant === variantTypes.desktop ? 40 : 36,
   fontWeight: weights[weight],
@@ -35,7 +37,7 @@ export const H3 = styled("h3", {
 
 export const H5 = styled("h5", {
   shouldForwardProp,
-})(({  variant = variantTypes.desktop, weight = weightTypes.bold }) => ({
+})(({ variant = variantTypes.desktop, weight = weightTypes.bold }) => ({
   fontSize: variant === variantTypes.desktop ? 24 : 20,
   lineHeight: variant === variantTypes.desktop ? "32px" : "28px",
   fontWeight: weights[weight],
@@ -43,7 +45,7 @@ export const H5 = styled("h5", {
 
 export const H6 = styled("h6", {
   shouldForwardProp,
-})(({  variant = variantTypes.desktop, weight = weightTypes.bold }) => ({
+})(({ variant = variantTypes.desktop, weight = weightTypes.bold }) => ({
   fontSize: variant === variantTypes.desktop ? 20 : 18,
   lineHeight: variant === variantTypes.desktop ? "28px" : "24px",
   fontWeight: weights[weight],
@@ -140,15 +142,10 @@ const displayTextSizes = {
 export const DisplayText = styled("h2", {
   shouldForwardProp: (prop) =>
     !["size", "weight", "sx", "color", "mt", "mb", "pt", "pb"].includes(prop),
-})(
-  ({
-    size = displayTextSizeTypes.small,
-    weight = weightTypes.semibold,
-  }) => ({
-    ...displayTextSizes[size],
-    fontWeight: weights[weight],
-  })
-);
+})(({ size = displayTextSizeTypes.small, weight = weightTypes.semibold }) => ({
+  ...displayTextSizes[size],
+  fontWeight: weights[weight],
+}));
 
 export const textSizeTypes = {
   xlarge: "xlarge",

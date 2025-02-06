@@ -1,6 +1,8 @@
 import { Typography } from "@mui/material";
 
-const PageHeading = ({ children, color, ...restProps }) => {
+const PageHeading = (props) => {
+  const { children, color, ...restProps } = props;
+
   return (
     <Typography
       variant="h4"

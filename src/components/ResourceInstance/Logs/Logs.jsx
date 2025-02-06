@@ -30,6 +30,62 @@ const connectionStatuses = {
   disconnected: "disconnected",
 };
 
+const Log = styled("pre")({
+  fontWeight: 500,
+  fontSize: "12px",
+  lineHeight: "16px",
+  color: "#FFFFFF",
+  "&+&": {
+    marginTop: 30,
+  },
+  wordBreak: "break-word",
+  whiteSpace: "pre-wrap",
+});
+
+const LogsContainer = styled(Box)(() => ({
+  height: 500,
+  overflowY: "auto",
+  marginTop: 24,
+  borderRadius: "8px",
+  backgroundColor: "#101828",
+  padding: "0px 60px 24px 24px",
+  fontFamily: "Monaco, monospace",
+  color: "#FFFFFF",
+}));
+
+const IconButton = ({ direction, divRef, titleText }) => {
+  const position = direction === "up" ? { top: "20px" } : { bottom: "20px" };
+
+  return (
+    <MuiIconButton
+      onClick={() => divRef.current.scrollIntoView({ behavior: "smooth" })}
+      sx={{
+        position: "absolute",
+        border: "1px solid #2B3E6B",
+        right: "28px",
+        backgroundColor: "#1D273F",
+        boxShadow: "0px 1px 2px 0px #1018280D",
+
+        "&:hover": {
+          backgroundColor: "#1D273F",
+        },
+        ...position,
+      }}
+    >
+      <Tooltip
+        title={<Text sx={{ padding: "4px", color: "white" }}>{titleText}</Text>}
+        placement={direction === "up" ? "bottom-start" : "top-start"}
+      >
+        {direction === "up" ? (
+          <KeyboardArrowUpIcon sx={{ color: "#DCE1E8" }} />
+        ) : (
+          <KeyboardArrowDownIcon sx={{ color: "#DCE1E8" }} />
+        )}
+      </Tooltip>
+    </MuiIconButton>
+  );
+};
+
 function Logs(props) {
   const {
     nodes = [],
@@ -98,9 +154,6 @@ function Logs(props) {
       const data = event.data;
       setLogs((prevData) => [...prevData, data]);
     },
-    onClose: () => {
-      // console.log("Socket Connection closed", event);
-    },
     shouldReconnect: () => true,
     reconnectAttempts: 3,
     retryOnError: true,
@@ -132,12 +185,9 @@ function Logs(props) {
     //close the socket on unmount
     return () => {
       window.removeEventListener("offline", handleNetorkDisconnect);
-      //console.log("Running cleanup");
       const socket = getWebSocket();
       if (socket) {
-        //console.log("Socket", socket);
         socket.close();
-        //console.log("Closing logs socket");
       }
     };
   }, [logsSocketEndpoint]);
@@ -216,9 +266,6 @@ function Logs(props) {
               value={selectedNodeId}
               sx={{
                 width: "auto",
-                height: "40px !important",
-                padding: "10px 14px !important",
-                minHeight: "40px",
                 maxWidth: "250px",
               }}
               onChange={handleNodeChange}
@@ -288,59 +335,3 @@ function Logs(props) {
 }
 
 export default Logs;
-
-const Log = styled("pre")({
-  fontWeight: 500,
-  fontSize: "12px",
-  lineHeight: "16px",
-  color: "#FFFFFF",
-  "&+&": {
-    marginTop: 30,
-  },
-  wordBreak: "break-word",
-  whiteSpace: "pre-wrap",
-});
-
-const LogsContainer = styled(Box)(() => ({
-  height: 500,
-  overflowY: "auto",
-  marginTop: 24,
-  borderRadius: "8px",
-  backgroundColor: "#101828",
-  padding: "0px 60px 24px 24px",
-  fontFamily: "Monaco, monospace",
-  color: "#FFFFFF",
-}));
-
-const IconButton = ({ direction, divRef, titleText }) => {
-  const position = direction === "up" ? { top: "20px" } : { bottom: "20px" };
-
-  return (
-    <MuiIconButton
-      onClick={() => divRef.current.scrollIntoView({ behavior: "smooth" })}
-      sx={{
-        position: "absolute",
-        border: "1px solid #2B3E6B",
-        right: "28px",
-        backgroundColor: "#1D273F",
-        boxShadow: "0px 1px 2px 0px #1018280D",
-
-        "&:hover": {
-          backgroundColor: "#1D273F",
-        },
-        ...position,
-      }}
-    >
-      <Tooltip
-        title={<Text sx={{ padding: "4px", color: "white" }}>{titleText}</Text>}
-        placement={direction === "up" ? "bottom-start" : "top-start"}
-      >
-        {direction === "up" ? (
-          <KeyboardArrowUpIcon sx={{ color: "#DCE1E8" }} />
-        ) : (
-          <KeyboardArrowDownIcon sx={{ color: "#DCE1E8" }} />
-        )}
-      </Tooltip>
-    </MuiIconButton>
-  );
-};

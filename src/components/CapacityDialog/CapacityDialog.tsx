@@ -70,9 +70,9 @@ const CapacityDialog: FC<CapacityDialogProps> = ({
   autoscaling,
 }) => {
   const snackbar = useSnackbar();
-  const currentReplicas = Number(autoscaling.currentReplicas);
-  const maxReplicas = Number(autoscaling.maxReplicas);
-  const minReplicas = Number(autoscaling.minReplicas);
+  const currentReplicas = Number(autoscaling?.currentReplicas);
+  const maxReplicas = Number(autoscaling?.maxReplicas);
+  const minReplicas = Number(autoscaling?.minReplicas);
 
   const capacityMutation = useMutation(
     async (payload: { count: number }) => {

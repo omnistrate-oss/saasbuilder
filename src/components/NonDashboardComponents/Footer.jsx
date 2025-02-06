@@ -1,12 +1,12 @@
-import { Box, Typography } from "@mui/material";
 import Link from "next/link";
-import { useOrgDetails } from "src/context/OrgDetailsProvider";
+import { Box, Typography } from "@mui/material";
 import { useCookieConsentContext } from "src/context/cookieConsentContext";
+import { useProviderOrgDetails } from "src/providers/ProviderOrgDetailsProvider";
 
 const Footer = (props) => {
   const { nonFloatingBottomPosition = false } = props;
   const { setIsConsentModalOpen } = useCookieConsentContext();
-  const { orgName } = useOrgDetails();
+  const { orgName } = useProviderOrgDetails();
   return (
     <Box
       position={nonFloatingBottomPosition ? "static" : "absolute"}

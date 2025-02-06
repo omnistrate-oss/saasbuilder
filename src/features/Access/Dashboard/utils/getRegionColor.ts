@@ -36,8 +36,9 @@ export function getRegionHexColor(
   if (region && cloudProvider && inUseProviderRegionsList.length > 0) {
     const key = `${cloudProvider}-${region}`;
 
-    const regionColorHashString: LocalStorageRegionColorHash =
-      localStorage.getItem("regionColorHash");
+    const regionColorHashString = localStorage.getItem(
+      "regionColorHash"
+    ) as LocalStorageRegionColorHash;
     try {
       if (
         regionColorHashString &&
@@ -92,12 +93,8 @@ export function getRegionHexColor(
     if (resultColor) {
       regionColorHash[key] = resultColor;
     }
-    // console.log("Key", key);
-    // console.log("Color", resultColor);
-    // console.log("hash", regionColorHash);
-    // console.log("Stringified", JSON.stringify(regionColorHash))
+
     localStorage.setItem("regionColorHash", JSON.stringify(regionColorHash));
-    // console.log("Local storage value", localStorage.getItem("regionColorHash"))
   }
   return resultColor;
 }

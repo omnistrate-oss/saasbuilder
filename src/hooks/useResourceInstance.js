@@ -90,6 +90,7 @@ export default function useResourceInstance(
             resourceId: resourceId,
             resourceKey: topologyDetails.resourceKey,
             resourceHasCompute: topologyDetails.hasCompute,
+            publiclyAccessible: topologyDetails.publiclyAccessible,
           };
           globalEndpoints.others = [];
         }
@@ -211,6 +212,7 @@ export default function useResourceInstance(
                 customDNSEndpoint: topologyDetails.customDNSEndpoint,
                 resourceId: resourceId,
                 resourceKey: topologyDetails.resourceKey,
+                publiclyAccessible: topologyDetails.publiclyAccessible,
               });
             } else {
               if (topologyDetails?.hasCompute === true) {
@@ -266,6 +268,7 @@ export default function useResourceInstance(
                 resourceId: resourceId,
                 resourceKey: topologyDetails.resourceKey,
                 resourceHasCompute: topologyDetails.hasCompute,
+                publiclyAccessible: topologyDetails.publiclyAccessible,
               });
             }
           }
@@ -358,6 +361,7 @@ export default function useResourceInstance(
           mainResourceHasCompute: Boolean(topologyDetails?.hasCompute),
           customMetrics: customMetrics,
           customNetworkDetails,
+          detailedNetworkTopology: data.detailedNetworkTopology || {},
         };
 
         return final;

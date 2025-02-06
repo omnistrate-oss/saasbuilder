@@ -50,7 +50,7 @@ const CustomDNSDetails: React.FC<CustomDNSDetailsProps> = ({
   domainName,
   resourceInstanceId,
 }) => {
-  const records = [];
+  const records: any[] = [];
   if (aRecordTarget) {
     records.push({
       recordLabel: "A",
@@ -70,7 +70,7 @@ const CustomDNSDetails: React.FC<CustomDNSDetailsProps> = ({
     recordLabel: "TXT",
     domainValue: domainName,
     recordValue: `target-${domainName}=${resourceInstanceId}`,
-    recordValueDetails: `The TXT record is a name-value pair, where the name must start with the prefix "target-", and the value should is the instance ID.`,
+    recordValueDetails: `The TXT record is a name-value pair, where the name must start with the prefix "target-", and the value should be the deployment ID.`,
   });
 
   return (

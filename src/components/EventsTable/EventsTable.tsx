@@ -120,7 +120,7 @@ function DetailTableRowView(props: { rowData: AccessEvent }) {
   return (
     <Box sx={{ margin: "10px 12px" }}>
       <JSONView
-        src={workflowFailures}
+        src={workflowFailures || {}}
         theme="isotope"
         enableClipboard={(copy: OnCopyProps) => {
           navigator.clipboard.writeText(JSON.stringify(copy.src));
@@ -252,19 +252,14 @@ const EventsTable: FC<EventsTableProps> = (props) => {
           const isUserOmnistrateSystem =
             userName === "System" && orgName === "System";
 
-          let pageLink = null;
+          let pageLink: string;
           if (!isUserOmnistrateSystem && userId) {
-            pageLink = getAccessControlRoute(
-              serviceId,
-              environmentId,
-              productTierId,
-              subscriptionId,
-              userId
-            );
+            pageLink = getAccessControlRoute(userId);
           }
 
           return (
             <GridCellExpand
+              // @ts-ignore
               href={isRootSubscription ? pageLink : ""}
               target="_blank"
               value={userName || "-"}
@@ -308,7 +303,7 @@ const EventsTable: FC<EventsTableProps> = (props) => {
 
     if (selectedEventTypes.length > 0) {
       filtered = filtered.filter((event) => {
-        return selectedEventTypes.includes(event.eventSource);
+        return selectedEventTypes.includes(event.eventSource as EventType);
       });
     }
 
@@ -341,7 +336,7 @@ const EventsTable: FC<EventsTableProps> = (props) => {
         renderDetailsComponent={DetailTableRowView}
         noRowsText={`No ${entityName?.toLowerCase()}s`}
         getRowCanExpand={(rowData) =>
-          Boolean(rowData.original.workflowFailures?.length > 0)
+          Boolean(Number(rowData.original.workflowFailures?.length) > 0)
         }
         HeaderComponent={EventsTableHeader}
         headerProps={{

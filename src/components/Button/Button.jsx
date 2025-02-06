@@ -4,6 +4,7 @@ import { textStyles, weights } from "../Typography/Typography";
 import LoadingSpinnerSmall from "../CircularProgress/CircularProgress";
 import { styleConfig } from "src/providerConfig";
 import Tooltip from "../Tooltip/Tooltip";
+import { colors } from "src/themeConfig";
 
 const Button = styled(
   ({ children, isLoading, disabledMessage, ...restProps }) => {
@@ -16,7 +17,7 @@ const Button = styled(
 
     if (disabledMessage && restProps.disabled) {
       return (
-        <Tooltip title={disabledMessage} placement="top-end" arrow>
+        <Tooltip title={disabledMessage} placement="top" arrow>
           {/* Wrapper Necessary for Tooltip */}
           <span>{button}</span>
         </Tooltip>
@@ -80,19 +81,19 @@ const Button = styled(
 
   return {
     ...buttonStyles,
-    borderRadius: 8,
+    borderRadius: "8px",
     textTransform: "none",
     minWidth: "auto",
     [`&.${buttonClasses.contained}`]: {
       color: "#FFF",
-      background: bgColor ? bgColor : theme.palette.primary.main,
+      background: bgColor ? bgColor : colors.success600,
       color: fontColor ? fontColor : styleConfig.primaryTextColor,
       boxShadow: "none",
       "&:hover": {
-        background: bgColor ? bgColor : theme.palette.primary.hover,
+        background: bgColor ? bgColor : colors.success600,
       },
     },
-    [`&.${buttonClasses.contained}:disabled`]: {
+    [`&.${buttonClasses.contained}.Mui-disabled`]: {
       background: "white",
       color: "#D0D5DD",
       outlineWidth: "1px",
@@ -101,18 +102,19 @@ const Button = styled(
       boxShadow: "0px 1px 2px rgba(16, 24, 40, 0.05)",
     },
     [`&.${buttonClasses.outlined}`]: {
-      color: fontColor ? fontColor : "#374151",
+      color: fontColor ? fontColor : colors.gray700,
       background: outlineBg ? outlineBg : "white",
       borderWidth: "1px",
       borderStyle: "solid",
-      borderColor: outlineColor ? outlineColor : "#D0D5DD",
-      boxShadow: "0px 1px 2px 0px rgba(16, 24, 40, 0.05)",
+      borderColor: outlineColor ? outlineColor : colors.gray300,
+      boxShadow: "0px 1px 2px 0px #0A0D120D, 0px -2px 0px 0px #0A0D120D inset",
     },
-    [`&.${buttonClasses.outlined}:disabled`]: {
+    [`&.${buttonClasses.outlined}.Mui-disabled`]: {
       background: "white",
       borderColor: "#EAECF0",
-      color: "#D0D5DD",
+      color: colors.gray400,
     },
+
     [`${buttonClasses.outlinedPrimary}`]: {
       background: theme.palette.primary.main,
       fontColor: "white",
@@ -143,7 +145,12 @@ const Button = styled(
       // opacity: 0.38,
     },
     [`&.${buttonClasses.text}`]: {
-      color: "#6941C6",
+      color: fontColor ? fontColor : styleConfig.secondaryButtonText,
+
+      "&:hover": {
+        background: "none",
+        color: "#087443",
+      },
     },
     [`&.${buttonClasses.text}:disabled`]: {
       opacity: 0.38,

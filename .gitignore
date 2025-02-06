@@ -38,3 +38,5 @@ package-lock.json
 fly.deploy.toml
 fly.dev.toml
 fly.toml
+
+tsconfig.tsbuildinfo

@@ -8,7 +8,6 @@ import Tooltip from "../Tooltip/Tooltip";
 type SearchInputProps = {
   placeholder?: string;
   searchText: string;
-  /* eslint-disable-next-line no-unused-vars*/
   setSearchText: (text: string) => void;
   width?: string;
 };
@@ -17,7 +16,7 @@ const SearchInput: FC<SearchInputProps> = ({
   placeholder,
   searchText,
   setSearchText,
-  width = "320px",
+  width = "250px",
 }) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);

@@ -18,6 +18,64 @@ export const ACCORDION_ICON_VARIANTS = {
   error: "error",
 };
 
+export const AccordionContainer = styled(MuiAccordion, {
+  shouldForwardProp: (prop) => {
+    return !["disableToggle"].includes(prop);
+  },
+})(
+  (
+    {
+      // theme,
+      // disableToggle
+    }
+  ) => ({
+    boxShadow: "0px 4px 30px 0px rgba(46, 45, 116, 0.05)",
+    border: "1px solid #EAECF0",
+    background: "#FAFAFD",
+    margin: "16px 0px",
+    "&.Mui-disabled": {
+      background: "#FAFAFD",
+    },
+    "&::before": {
+      height: 0,
+    },
+    "&.MuiAccordion-root:first-of-type": {
+      marginTop: "0",
+    },
+    //pointerEvents: disableToggle ? "none" : "auto",
+  })
+);
+
+export const AccordionSummary = styled(MuiAccordionSummary)(() => ({
+  borderBottom: "1px solid #EAECF0",
+  padding: "10px 20px",
+  userSelect: "text",
+
+  "&.Mui-disabled": {
+    opacity: 1,
+  },
+  ["& .MuiAccordionSummary-expandIconWrapper.Mui-expanded"]: {
+    transform: "none",
+  },
+  [`&.${accordionSummaryClasses.expanded}`]: {
+    minHeight: "0px",
+  },
+  [`&.${accordionSummaryClasses.root}:hover:not(.Mui-disabled)`]: {
+    cursor: "auto",
+  },
+  [`& .${accordionSummaryClasses.content}`]: {
+    margin: "0px",
+  },
+  [`& .${accordionSummaryClasses.content}.${accordionSummaryClasses.expanded}`]:
+    {
+      margin: "0px",
+    },
+}));
+
+export const AccordionDetails = styled(MuiAccordionDetails)(() => ({
+  padding: "20px",
+}));
+
 export default function Accordion(props) {
   //disableToggle will disable the expand and collapse feature, also hides the expand icon
   const {
@@ -107,61 +165,3 @@ export default function Accordion(props) {
     </AccordionContainer>
   );
 }
-
-export const AccordionContainer = styled(MuiAccordion, {
-  shouldForwardProp: (prop) => {
-    return !["disableToggle"].includes(prop);
-  },
-})(
-  (
-    {
-      // theme,
-      // disableToggle
-    }
-  ) => ({
-    boxShadow: "0px 4px 30px 0px rgba(46, 45, 116, 0.05)",
-    border: "1px solid #EAECF0",
-    background: "#FAFAFD",
-    margin: "16px 0px",
-    "&.Mui-disabled": {
-      background: "#FAFAFD",
-    },
-    "&::before": {
-      height: 0,
-    },
-    "&.MuiAccordion-root:first-of-type": {
-      marginTop: "0",
-    },
-    //pointerEvents: disableToggle ? "none" : "auto",
-  })
-);
-
-export const AccordionSummary = styled(MuiAccordionSummary)(() => ({
-  borderBottom: "1px solid #EAECF0",
-  padding: "10px 20px",
-  userSelect: "text",
-
-  "&.Mui-disabled": {
-    opacity: 1,
-  },
-  ["& .MuiAccordionSummary-expandIconWrapper.Mui-expanded"]: {
-    transform: "none",
-  },
-  [`&.${accordionSummaryClasses.expanded}`]: {
-    minHeight: "0px",
-  },
-  [`&.${accordionSummaryClasses.root}:hover:not(.Mui-disabled)`]: {
-    cursor: "auto",
-  },
-  [`& .${accordionSummaryClasses.content}`]: {
-    margin: "0px",
-  },
-  [`& .${accordionSummaryClasses.content}.${accordionSummaryClasses.expanded}`]:
-    {
-      margin: "0px",
-    },
-}));
-
-export const AccordionDetails = styled(MuiAccordionDetails)(() => ({
-  padding: "20px",
-}));

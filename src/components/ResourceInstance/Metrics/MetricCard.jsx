@@ -10,13 +10,15 @@ function MetricCard(props) {
       flex="1"
       sx={{
         padding: "18px",
-        boxShadow: "0px 1px 2px 0px #1018280F, 0px 1px 3px 0px #1018281A",
+        boxShadow: "0px 1px 2px 0px #0A0D120D",
+        borderRadius: "12px",
+        border: "2px solid #E9EAEB",
       }}
     >
       <Text
         size="small"
-        color="#475467"
-        weight="medium"
+        color="#535862"
+        weight="semibold"
         sx={{ textAlign: "center" }}
       >
         {title}
@@ -28,8 +30,8 @@ function MetricCard(props) {
         alignItems="baseline"
       >
         <Text
-          size="medium"
-          color="#6941C6"
+          size="large"
+          color="#7F56D9"
           weight="semibold"
           sx={{ textAlign: "center" }}
         >
@@ -37,8 +39,8 @@ function MetricCard(props) {
         </Text>
         {value !== "" && unit && (
           <Text
-            size="medium"
-            color="#6941C6"
+            size="large"
+            color="#7F56D9"
             weight="semibold"
             sx={{ ml: "4px" }}
           >

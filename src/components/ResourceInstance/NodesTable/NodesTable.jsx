@@ -1,7 +1,6 @@
 import { Box } from "@mui/material";
 import DataGrid from "../../DataGrid/DataGrid";
 import { useEffect, useMemo, useState } from "react";
-import nodeIcon from "public/assets/images/dashboard/resource-instance-nodes/node.svg";
 import zoneIcon from "public/assets/images/dashboard/resource-instance-nodes/zone.svg";
 import Image from "next/image";
 import StatusChip from "../../StatusChip/StatusChip";
@@ -19,34 +18,36 @@ import { selectUserrootData } from "../../../slices/userDataSlice";
 import { NodeStatus } from "./NodeStatus";
 import DataGridText from "src/components/DataGrid/DataGridText";
 import NodesTableHeader from "./NodesTableHeader";
-import {
-  getResourceInstanceStatusStylesAndLabel,
-  resourceInstanceStatusMap,
-} from "src/constants/statusChipStyles/resourceInstanceStatus";
-import {
-  chipCategoryColors,
-  defaultChipStyles,
-} from "src/constants/statusChipStyles";
+import { getResourceInstanceStatusStylesAndLabel } from "src/constants/statusChipStyles/resourceInstanceStatus";
+
 import { productTierTypes } from "src/constants/servicePlan";
 import GenerateTokenDialog from "src/components/GenerateToken/GenerateTokenDialog";
 import _ from "lodash";
+import NodeIcon from "src/components/Icons/Node/NodeIcon";
 
-const getRowBorderStyles = () => {
+export const getRowBorderStyles = () => {
   const styles = {};
 
-  for (const status in resourceInstanceStatusMap) {
-    const category = resourceInstanceStatusMap[status]?.category;
-    let color = chipCategoryColors[category]?.color;
-    if (!color) {
-      color = defaultChipStyles.color;
-    }
+  for (const status of ["DEGRADED", "HEALTHY", "UNHEALTHY", "UNKNOWN", "NA"]) {
+    const colorMap = {
+      DEGRADED: "#F79009",
+      HEALTHY: "#17B26A",
+      UNHEALTHY: "#F04438",
+      UNKNOWN: "#363F72",
+      NA: "#676b83",
+    };
+
+    const color = colorMap[status];
+
     styles[`& .${status}::before`] = {
       content: '""',
-      height: "36px",
+      height: "38px",
       width: "4px",
       background: color,
-      transform: "translateY(5px)",
+      transform: "translateY(4px)",
       position: "absolute",
+      borderTopRightRadius: "3px",
+      borderBottomRightRadius: "3px",
     };
   }
 
@@ -99,10 +100,12 @@ export default function NodesTable(props) {
     list = list?.filter((item) =>
       item?.nodeId?.toLowerCase()?.includes(searchText?.toLowerCase())
     );
+
     list = _.uniqBy(list, "id");
 
     return list ?? [];
   }, [searchText, nodes]);
+
   const customTenancyColumns = useMemo(() => {
     const res = [
       {
@@ -112,15 +115,10 @@ export default function NodesTable(props) {
         minWidth: 190,
         renderCell: (params) => {
           const nodeId = params.row.nodeId;
+
           return (
             <GridCellExpand
-              startIcon={
-                <Image
-                  src={nodeIcon}
-                  alt="node"
-                  style={{ width: "24px", height: "24px" }}
-                />
-              }
+              startIcon={<NodeIcon />}
               value={nodeId}
               textStyles={{
                 color: "#475467",
@@ -186,13 +184,7 @@ export default function NodesTable(props) {
           const nodeId = params.row.nodeId;
           return (
             <GridCellExpand
-              startIcon={
-                <Image
-                  src={nodeIcon}
-                  alt="node"
-                  style={{ width: "24px", height: "24px" }}
-                />
-              }
+              startIcon={<NodeIcon />}
               value={nodeId}
               textStyles={{
                 color: "#475467",
@@ -204,7 +196,7 @@ export default function NodesTable(props) {
       },
       {
         field: "resourceName",
-        headerName: `${sectionLabel} Name`,
+        headerName: `${sectionLabel} Type`,
         flex: 0.9,
         minWidth: 100,
       },
@@ -378,7 +370,7 @@ export default function NodesTable(props) {
             setSearchText,
           },
         }}
-        getRowClassName={(params) => `${params.row.status}`}
+        getRowClassName={(params) => `${params.row.healthStatus}`}
         sx={{
           "& .node-ports": {
             color: "#101828",
