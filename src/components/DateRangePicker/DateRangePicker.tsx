@@ -1,4 +1,4 @@
-import { Box, IconButton, Stack, popoverClasses, styled } from "@mui/material";
+import { Box, IconButton, Stack, styled } from "@mui/material";
 import { addMonths, format, subMonths } from "date-fns";
 import { FC, useMemo, useState } from "react";
 import {
@@ -11,21 +11,10 @@ import "react-date-range/dist/styles.css"; // main css file
 import Button from "../Button/Button";
 import CalendarIcon from "../Icons/Calendar/Calendar";
 import { SetState } from "src/types/common/reactGenerics";
-import MuiPopover from "@mui/material/Popover";
-
-const Popover = styled(MuiPopover)({
-  [`& .${popoverClasses.paper}`]: {
-    border: "1px solid #F2F4F7",
-    borderRadius: "8px",
-    boxShadow: `0px 8px 8px -4px #10182808, 
-  0px 20px 24px -4px #10182814`,
-    display: "inline-block",
-  },
-});
+import Popover from "../Popover/Popover";
 
 const NavigationRenderer = (
   currentFocusedDate: Date,
-  // eslint-disable-next-line no-unused-vars
   setShownDate: (shownDate: Date) => void
 ) => {
   return (
@@ -34,15 +23,17 @@ const NavigationRenderer = (
         direction="row"
         justifyContent="space-between"
         position="absolute"
-        top="24px"
+        top="8px"
         left="0px"
         right="0px"
+        px="12px"
       >
         <IconButton
           onClick={() => {
             setShownDate(subMonths(currentFocusedDate, 1));
           }}
           sx={{ color: "#667085" }}
+          size="small"
         >
           <ChevronLeftIcon />
         </IconButton>
@@ -51,6 +42,7 @@ const NavigationRenderer = (
             setShownDate(addMonths(currentFocusedDate, 1));
           }}
           sx={{ color: "#667085" }}
+          size="small"
         >
           <ChevronRightIcon />
         </IconButton>
@@ -75,13 +67,13 @@ const SelectedDate = styled(Box)({
 });
 
 type DateRangePickerProps = {
-  dateRange: Range | null;
+  dateRange: Range;
   setDateRange: SetState<Range>;
 };
 
 export const initialRangeState: Range = {
-  startDate: null,
-  endDate: null,
+  startDate: undefined,
+  endDate: undefined,
   key: "selection",
 };
 
@@ -149,13 +141,17 @@ const DateRangePicker: FC<DateRangePickerProps> = (props) => {
     <>
       <Button
         variant="outlined"
-        startIcon={<CalendarIcon color="#344054" />}
+        startIcon={
+          <CalendarIcon color="#414651" style={{ marginLeft: "4px" }} />
+        }
         onClick={handleButtonClick}
         sx={{
           fontWeight: "500 !important",
-          color: "#344054 !important",
+          color: "#414651 !important",
           height: "40px !important",
           padding: "10px 14px !important",
+          borderColor: "#D5D7DA !important",
+          minWidth: "150px",
         }}
       >
         {buttonText}
@@ -170,6 +166,13 @@ const DateRangePicker: FC<DateRangePickerProps> = (props) => {
         anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
         transformOrigin={{ vertical: "top", horizontal: "right" }}
         sx={{ marginTop: "8px" }}
+        slotProps={{
+          paper: {
+            sx: {
+              display: "inline-block",
+            },
+          },
+        }}
       >
         <Box>
           {/*@ts-ignore */}

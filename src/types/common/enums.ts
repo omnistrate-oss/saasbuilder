@@ -1,6 +1,6 @@
 export type CloudProvider = "aws" | "gcp" | "azure";
 
-export type FormMode = "view" | "edit" | "create" | "delete";
+export type FormMode = "view" | "modify" | "create" | "delete";
 
 export type ResourceType =
   | "OperatorCRD"
@@ -29,3 +29,11 @@ export type InstanceStatus =
   | "STOPPED"
   | "DELETING"
   | "UNKNOWN";
+
+export type EnvironmentType =
+  | "DEV"
+  | "PROD"
+  | "CANARY"
+  | "QA"
+  | "STAGING"
+  | "PRIVATE";

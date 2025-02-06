@@ -1,7 +1,5 @@
 import { Box, CircularProgress, Stack, styled } from "@mui/material";
 import { Text } from "../../Typography/Typography";
-
-import Divider from "../../Divider/Divider";
 import Card from "../../Card/Card";
 import { useCallback, useEffect, useRef, useState } from "react";
 import useWebSocket from "react-use-websocket";
@@ -49,6 +47,45 @@ const maxStorageTime = 3600 * 4;
 //websocket reveives a new message every 60 seconds
 const dataIncomeFrequency = 60;
 const maxDataPoints = maxStorageTime / dataIncomeFrequency;
+
+const ContainerCard = ({ children }) => {
+  return (
+    <Card
+      mt={"32px"}
+      sx={{
+        paddingTop: "12.5px",
+        paddingLeft: "20px",
+        paddingRight: "20px",
+        minHeight: "500px",
+        borderRadius: "8px",
+      }}
+    >
+      {children}
+    </Card>
+  );
+};
+
+const MetricsContainerCard = ({ children, title = "Chart" }) => {
+  return (
+    <Card
+      mt="20px"
+      sx={{
+        border: "1px solid #E9EAEB",
+        boxShadow: "box-shadow: 0px 1px 2px 0px #0A0D120D",
+        borderRadius: "12px",
+        padding: "0px",
+        background: "#FFF",
+      }}
+    >
+      <Box sx={{ borderBottom: "1px solid #E9EAEB", padding: "12px 24px" }}>
+        <Text size="small" weight="semibold" color="#6941C6">
+          {title}
+        </Text>
+      </Box>
+      <Box padding="12px 16px">{children}</Box>
+    </Card>
+  );
+};
 
 function Metrics(props) {
   const snackbar = useSnackbar();
@@ -760,8 +797,9 @@ function Metrics(props) {
   //console.log("Is metrics data loaded", isMetricsDataLoaded);
 
   return (
-    <ContainerCard>
+    <>
       <Stack
+        marginTop="16px"
         sx={{
           //marginTop: "46px",
           flexDirection: "row",
@@ -787,13 +825,9 @@ function Metrics(props) {
               value={selectedNode}
               sx={{
                 width: "auto",
-                height: "40px !important",
-                padding: "10px 14px !important",
-                minHeight: "40px",
                 maxWidth: "250px",
               }}
               onChange={handleNodeChange}
-              MenuProps={{ disableScrollLock: true }}
             >
               {nodes.map((node) => (
                 <MenuItem
@@ -812,9 +846,7 @@ function Metrics(props) {
           </Box>
         )}
       </Stack>
-      <Divider sx={{ marginTop: "12px" }} />
-
-      <Box display="flex" alignItems="stretch" gap={"12px"} mt={3}>
+      <Box display="flex" alignItems="stretch" gap={"12px"} mt={2.5}>
         <MetricCard title="CPU Usage" value={cpuUsageData.current} unit="%" />
         {productTierType !== "OMNISTRATE_MULTI_TENANCY" && (
           <MetricCard title="Load average" value={loadAverage.current} />
@@ -835,58 +867,54 @@ function Metrics(props) {
           unit="hrs"
         />
       </Box>
-      <MetricsContainerCard>
+      <MetricsContainerCard title="CPU Usage">
         <CpuUsageChart data={cpuUsageData.data} />
       </MetricsContainerCard>
-      <MetricsContainerCard>
+      <MetricsContainerCard title="Memory Usage">
         <MemUsagePercentChart data={memUsagePercentData.data} />
       </MetricsContainerCard>
 
       {productTierType !== "OMNISTRATE_MULTI_TENANCY" && (
-        <MetricsContainerCard>
+        <MetricsContainerCard title="Load Average">
           <LoadAverageChart data={loadAverage.data} />
         </MetricsContainerCard>
       )}
 
-      <MetricsContainerCard>
+      <MetricsContainerCard title="Disk Usage">
         <DiskUsageChart data={diskUsage} labels={diskPathLabels} />
       </MetricsContainerCard>
 
-      <MetricsContainerCard>
+      <MetricsContainerCard title="Disk IOPS (Read)">
         <DiskIOPSReadChart data={diskIOPSRead} labels={diskIOPSReadLabels} />
       </MetricsContainerCard>
 
-      <MetricsContainerCard>
+      <MetricsContainerCard title="Disk IOPS (Write)">
         <DiskIOPSWriteChart data={diskIOPSWrite} labels={diskIOPSWriteLabels} />
       </MetricsContainerCard>
 
-      <MetricsContainerCard>
+      <MetricsContainerCard title="Disk Throughput (Read)">
         <DiskThroughputChart
-          chartName="Disk Throughput (Read)"
           data={diskThroughputRead}
           labels={diskThroughputReadLabels}
         />
       </MetricsContainerCard>
 
-      <MetricsContainerCard>
+      <MetricsContainerCard title="Disk Throughput (Write)">
         <DiskThroughputChart
-          chartName="Disk Throughput (Write)"
           data={diskThroughputWrite}
           labels={diskThroughputWriteLabels}
         />
       </MetricsContainerCard>
       {productTierType !== "OMNISTRATE_MULTI_TENANCY" && (
         <>
-          <MetricsContainerCard>
+          <MetricsContainerCard title="Network Throughput (Receive)">
             <NetworkThroughputChart
-              chartName="Network Throughput (Receive)"
               data={netThroughputReceive}
               labels={netThroughputReceiveLabels}
             />
           </MetricsContainerCard>
-          <MetricsContainerCard>
+          <MetricsContainerCard title="Network Throughput (Send)">
             <NetworkThroughputChart
-              chartName="Network Throughput (Send)"
               data={netThroughputSend}
               labels={netThroughputSendLabels}
             />
@@ -904,9 +932,8 @@ function Metrics(props) {
           const { metricName, labels } = metricInfo;
           if (labels.length > 0)
             return (
-              <MetricsContainerCard key={metricName}>
+              <MetricsContainerCard key={metricName} title={metricName}>
                 <MultiLineChart
-                  chartName={metricName}
                   data={customMetricsChartData[metricName]}
                   labels={labels}
                   key={metricName}
@@ -915,16 +942,15 @@ function Metrics(props) {
             );
           else
             return (
-              <MetricsContainerCard key={metricName}>
+              <MetricsContainerCard key={metricName} title={metricName}>
                 <SingleLineChart
-                  chartName={metricName}
                   data={customMetricsChartData[metricName]}
                   key={metricName}
                 />
               </MetricsContainerCard>
             );
         })}
-    </ContainerCard>
+    </>
   );
 }
 
@@ -962,37 +988,3 @@ export const MetricsCardsContainer = styled(Box)({
 //     </Card>
 //   );
 // };
-
-const ContainerCard = ({ children }) => {
-  return (
-    <Card
-      mt={"32px"}
-      sx={{
-        paddingTop: "12.5px",
-        paddingLeft: "20px",
-        paddingRight: "20px",
-        minHeight: "500px",
-        borderRadius: "8px",
-      }}
-    >
-      {children}
-    </Card>
-  );
-};
-
-const MetricsContainerCard = ({ children }) => {
-  return (
-    <Card
-      mt={8}
-      sx={{
-        boxShadow: "0px 4px 30px 0px #2E2D740D",
-        borderRadius: "0px",
-        padding: "0px",
-        marginTop: "12px",
-        background: "#F9FAFB",
-      }}
-    >
-      {children}
-    </Card>
-  );
-};

@@ -1,15 +1,7 @@
-import * as React from "react";
+import { colors } from "src/themeConfig";
 
 const DeleteIcon = (props) => {
-  let { color = "" } = props;
-  if (!color) {
-    color = "#D92D20";
-  }
-  const { disabled = false } = props;
-  
-  if (disabled) {
-    color = "#a3a6ac";
-  }
+  const { color = colors.gray700, disabled } = props;
 
   return (
     <svg
@@ -20,7 +12,8 @@ const DeleteIcon = (props) => {
       {...props}
     >
       <path
-        stroke={color}
+        style={{ transition: "stroke 0.3s ease" }}
+        stroke={disabled ? "#A4A7AE" : color}
         strokeLinecap="round"
         strokeLinejoin="round"
         strokeWidth={1.667}

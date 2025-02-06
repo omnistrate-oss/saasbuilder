@@ -16,6 +16,10 @@ export function getRegionIdsByCloudProviderWithParams(
   });
 }
 
+export const getRegions = (cloudProvider) => {
+  return axios.get(`/region/cloudprovider/${cloudProvider}`);
+};
+
 export function getRegionById(regionId) {
   return axios.get(`/region/${regionId}`);
 }

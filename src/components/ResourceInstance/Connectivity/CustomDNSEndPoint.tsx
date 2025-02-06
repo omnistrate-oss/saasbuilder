@@ -1,12 +1,11 @@
 import { Box, styled, SxProps, Theme } from "@mui/material";
-import Image from "next/image";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableRow from "@mui/material/TableRow";
 import MuiTableCell from "@mui/material/TableCell";
 import { Text } from "src/components/Typography/Typography";
-import resourceEndpointIcon from "../../../../public/assets/images/dashboard/resource-instance-nodes/resource-endpoint.svg";
 import CopyButton from "src/components/Button/CopyButton";
+import PublicResourceIcon from "src/components/Icons/PublicResource/PublicResource";
 const TableCell = styled(MuiTableCell)({
   borderBottom: "none",
 });
@@ -26,7 +25,7 @@ const CustomDNSEndPoint: React.FC<CustomDNSEndPointProps> = ({
   return (
     <Box
       sx={{
-        border: isPrimaryResource ? "2px solid #7F56D9" : "1px solid #EAECF0",
+        border: isPrimaryResource ? "1px solid #7F56D9" : "1px solid #EAECF0",
         background: isPrimaryResource ? "#F9F5FF" : "white",
         borderRadius: "12px",
         ...containerStyles,
@@ -42,7 +41,7 @@ const CustomDNSEndPoint: React.FC<CustomDNSEndPointProps> = ({
                 verticalAlign: "top",
               }}
             >
-              <Image src={resourceEndpointIcon} alt="resource-endpoint" />
+              <PublicResourceIcon />
             </TableCell>
             <TableCell
               width="100%"
@@ -61,6 +60,7 @@ const CustomDNSEndPoint: React.FC<CustomDNSEndPointProps> = ({
                 marginBottom="8px"
                 display="flex"
                 gap="12px"
+                marginTop="8px"
               >
                 <Text
                   size="small"

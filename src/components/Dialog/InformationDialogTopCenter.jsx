@@ -17,9 +17,9 @@ export default InformationDialogTopCenter;
 
 const StyledContainer = styled(Box)(({ maxWidth }) => ({
   position: "fixed",
-  top: "0",
+  top: "50%",
   right: "50%",
-  transform: "translateX(50%)",
+  transform: "translateX(50%) translateY(-50%)",
   background: "white",
   borderRadius: "12px",
   boxShadow:

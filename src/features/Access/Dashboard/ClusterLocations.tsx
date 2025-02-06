@@ -2,7 +2,7 @@ import { Box, Stack, styled } from "@mui/material";
 import { FC } from "react";
 import ClusterLocationsIcon from "src/components/Icons/Dashboard/ClusterLocations";
 import { Text } from "src/components/Typography/Typography";
-import { AccessResourceInstance } from "src/types/resourceInstance";
+import { ResourceInstance } from "src/types/resourceInstance";
 import dynamic from "next/dynamic";
 const DottedWorldMap = dynamic(() => import("./components/DottedWorldMap"), {
   ssr: false,
@@ -18,14 +18,14 @@ const ContainerCard = styled(Box)({
 });
 
 type ClusterLocationsProps = {
-  resourceInstances: AccessResourceInstance[];
+  resourceInstances: ResourceInstance[];
   isFetchingInstances: boolean;
 };
-
 
 const ClusterLocations: FC<ClusterLocationsProps> = (props) => {
   const { resourceInstances = [] } = props;
 
+  // @ts-ignore
   const regionProviderInstancesHash: Record<
     string,
     {
@@ -39,8 +39,8 @@ const ClusterLocations: FC<ClusterLocationsProps> = (props) => {
         string,
         {
           instanceCount: number;
-          cloudProvider: CloudProvider;
-          region: string;
+          cloudProvider?: CloudProvider;
+          region?: string;
         }
       >,
       curr
@@ -48,7 +48,7 @@ const ClusterLocations: FC<ClusterLocationsProps> = (props) => {
       const region = curr.region;
       let cloudProvider = curr.cloud_provider;
 
-      const resultParams = curr.result_params;
+      const resultParams: any = curr.result_params;
 
       //check if instance of type cloud provider account and set cloud provider
       if (
@@ -67,13 +67,13 @@ const ClusterLocations: FC<ClusterLocationsProps> = (props) => {
 
       if (acc[key]) {
         acc[key] = {
-          cloudProvider: cloudProvider,
+          cloudProvider: cloudProvider as CloudProvider,
           instanceCount: acc[key].instanceCount + 1,
           region: region,
         };
       } else {
         acc[key] = {
-          cloudProvider: cloudProvider,
+          cloudProvider: cloudProvider as CloudProvider,
           instanceCount: 1,
           region: region,
         };

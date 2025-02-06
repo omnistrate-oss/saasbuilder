@@ -1,11 +1,12 @@
 import * as React from "react";
+import { colors } from "src/themeConfig";
 
 const FailoverIcon = (props) => {
-  let { color = "#D92D20" } = props;
+  let { color = "#414651" } = props;
   const { disabled } = props;
 
   if (disabled) {
-    color = "#D0D5DD";
+    color = colors.gray400 ;
   }
 
   return (

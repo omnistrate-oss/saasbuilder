@@ -76,7 +76,6 @@ export const selectOrgUsersLoadingStatus = (state) => {
   return data;
 };
 
-
 const serviceConsumptionUserRoles = [
   "editor",
   "reader",
@@ -91,7 +90,7 @@ const serviceCreationUserRoles = [
   "admin",
   "service_operator",
 ];
-``;
+
 export const selectServiceCreationOrgUsers = createSelector(
   (state) => state.user.orgUsers,
   (orgUsers) => {

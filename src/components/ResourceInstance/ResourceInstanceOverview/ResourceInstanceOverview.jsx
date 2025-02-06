@@ -1,183 +1,166 @@
-import { Box, Stack } from "@mui/material";
+import { Box, styled } from "@mui/material";
 import AwsLogo from "../../Logos/AwsLogo/AwsLogo";
 import GcpLogo from "../../Logos/GcpLogo/GcpLogo";
 import { Text } from "../../Typography/Typography";
-import GradientProgressBar from "src/components/GradientProgessBar/GradientProgressBar";
 import RegionIcon from "../../Region/RegionIcon";
 import { getResourceInstanceStatusStylesAndLabel } from "src/constants/statusChipStyles/resourceInstanceStatus";
 import StatusChip from "src/components/StatusChip/StatusChip";
-import {
-  Table,
-  TableHead,
-  TableCell,
-  TableRow,
-  TableContainer,
-  TableCellCenterText,
-} from "src/components/TableComponents/TableComponents";
+import InstanceHealthStatusChip, {
+  getInstanceHealthStatus,
+} from "src/components/InstanceHealthStatusChip/InstanceHealthStautusChip";
+import { colors } from "src/themeConfig";
+
+const ServiceLogoImg = styled("img")({
+  height: "40px",
+  width: "40px",
+  objectFit: "cover",
+  borderRadius: "50%",
+  flexShrink: 0,
+});
 
 function ResourceInstanceOverview(props) {
   const {
-    resourceInstanceId,
     region,
     cloudProvider,
     status,
-    context,
-    healthStatusPercent,
-    isResourceBYOA,
     isCliManagedResource,
     subscriptionOwner,
+    detailedNetworkTopology,
+    onViewNodesClick,
+    serviceName,
+    productTierName,
+    serviceLogoURL,
   } = props;
 
-  let sectionLabel = "Resource";
-
-  if (context === "inventory") {
-    sectionLabel = "Service Component ";
-  }
-
-  if (isResourceBYOA) {
-    sectionLabel = "Account";
-  }
+  const healthStatus = getInstanceHealthStatus(detailedNetworkTopology, status);
 
   const statusStylesAndLabel = getResourceInstanceStatusStylesAndLabel(status);
 
   return (
-    <>
-      <TableContainer
-        sx={{
-          mt: "10px",
-          padding: "0px 0px",
-        }}
+    <div
+      className="grid rounded-xl overflow-hidden border border-[#E4E7EC]"
+      style={{
+        gridTemplateColumns: `repeat(${isCliManagedResource ? 6 : 7}, minmax(0, 1fr))`,
+        marginTop: "10px",
+      }}
+    >
+      {[
+        "Service Name",
+        "Subscription Plan",
+        "Subscription Owner",
+        "Lifecycle Status",
+        "Region",
+        "Cloud Provider",
+        !isCliManagedResource && "Health Status",
+      ]
+        .filter((el) => el)
+        .map((label, index) => (
+          <div
+            style={{
+              padding: "12px 10px",
+              backgroundColor: "#F9FAFB",
+            }}
+            className="flex items-center justify-center border-b border-[#E4E7EC]"
+            key={index}
+          >
+            <Text size="xsmall" weight="semibold" color="#717680">
+              {label}
+            </Text>
+          </div>
+        ))}
+      <div
+        style={{ padding: "14px 24px" }}
+        className="flex items-center justify-center gap-2"
       >
-        <Table>
-          <TableHead>
-            <TableCellCenterText>
-              <Text size="xsmall" weight="medium" color="#475467">
-                {`${sectionLabel} Instance ID`}{" "}
-              </Text>
-            </TableCellCenterText>
-            <TableCellCenterText>
-              <Text size="xsmall" weight="medium" color="#475467">
-                Subscription Owner
-              </Text>
-            </TableCellCenterText>
-            <TableCellCenterText>
-              <Text size="xsmall" weight="medium" color="#475467">
-                Status{" "}
-              </Text>
-            </TableCellCenterText>
-            <TableCellCenterText>
-              <Text size="xsmall" weight="medium" color="#475467">
-                Region
-              </Text>
-            </TableCellCenterText>
-            <TableCellCenterText>
-              <Text size="xsmall" weight="medium" color="#475467">
-                Cloud Provider
-              </Text>
-            </TableCellCenterText>
-            {!isCliManagedResource && (
-              <TableCellCenterText>
-                <Text size="xsmall" weight="medium" color="#475467">
-                  Health Status
-                </Text>
-              </TableCellCenterText>
-            )}
-          </TableHead>
+        {serviceLogoURL && (
+          <ServiceLogoImg src={serviceLogoURL} alt={serviceName} />
+        )}
+        <Text
+          size="small"
+          weight="regular"
+          color={colors.gray600}
+          ellipsis
+          title={serviceName}
+        >
+          {serviceName}
+        </Text>
+      </div>
+      <div
+        style={{ padding: "14px 24px" }}
+        className="flex items-center justify-center"
+      >
+        <Text
+          size="small"
+          weight="regular"
+          color={colors.gray600}
+          ellipsis
+          title={productTierName}
+        >
+          {productTierName}
+        </Text>
+      </div>
 
-          <TableRow>
-            <TableCell>
-              <Box
-                display={"flex"}
-                justifyContent={"center"}
-                alignItems={"center"}
-              >
-                <Text size="small" weight="medium" color="#101828">
-                  {resourceInstanceId}
-                </Text>
-              </Box>
-            </TableCell>
-            <TableCell>
-              <Box
-                display={"flex"}
-                justifyContent={"center"}
-                alignItems={"center"}
-              >
-                <Text size="small" weight="medium" color="#101828">
-                  {subscriptionOwner}
-                </Text>
-              </Box>
-            </TableCell>
+      <div
+        style={{ padding: "14px 24px" }}
+        className="flex items-center justify-center"
+      >
+        <Text
+          size="small"
+          weight="regular"
+          color={colors.gray600}
+          ellipsis
+          title={subscriptionOwner}
+        >
+          {subscriptionOwner}
+        </Text>
+      </div>
 
-            <TableCell>
-              <Stack
-                direction={"row"}
-                justifyContent={"center"}
-                alignItems={"center"}
-                gap={"10px"}
-              >
-                {status ? (
-                  <StatusChip status={status} {...statusStylesAndLabel} />
-                ) : (
-                  <Box sx={{ color: "#475467" }}>NA</Box>
-                )}
-              </Stack>
-            </TableCell>
+      <div
+        style={{ padding: "14px 24px" }}
+        className="flex items-center justify-center"
+      >
+        {status ? (
+          <StatusChip status={status} {...statusStylesAndLabel} />
+        ) : (
+          <Text size="small" weight="regular" color={colors.gray600}>
+            NA
+          </Text>
+        )}
+      </div>
 
-            <TableCell>
-              <Stack
-                direction="row"
-                justifyContent={"center"}
-                alignItems="center"
-              >
-                <RegionIcon />
-                <Box
-                  component="span"
-                  ml="5.5px"
-                  fontWeight={500}
-                  color="#101828"
-                >
-                  <Text size="small" weight="regular" color="#475467">
-                    {region ?? "Global"}{" "}
-                  </Text>
-                </Box>
-              </Stack>
-            </TableCell>
+      <div
+        style={{ padding: "14px 24px" }}
+        className="flex items-center justify-center gap-1.5"
+      >
+        <RegionIcon />
+        <Text size="small" weight="regular" color="#475467">
+          {region ?? "Global"}
+        </Text>
+      </div>
 
-            <TableCell>
-              <Stack
-                direction={"row"}
-                justifyContent={"center"}
-                alignItems={"center"}
-                gap={"10px"}
-              >
-                {cloudProvider === "aws" && <AwsLogo />}
-                {cloudProvider === "gcp" && <GcpLogo />}
-                {!cloudProvider && (
-                  <Box sx={{ color: "#475467" }}>Everywhere</Box>
-                )}
-              </Stack>
-            </TableCell>
-            {!isCliManagedResource && (
-              <TableCell>
-                <Stack
-                  direction={"row"}
-                  alignItems={"flex-end"}
-                  justifyContent={"center"}
-                >
-                  {isCliManagedResource ? (
-                    <StatusChip category="unknown" label="Unknown" />
-                  ) : status === "STOPPED" ? (
-                    <StatusChip category="unknown" label="N/A" />
-                  ) : (
-                    <GradientProgressBar percentage={healthStatusPercent} />
-                  )}
-                </Stack>
-              </TableCell>
-            )}
-          </TableRow>
-        </Table>
-      </TableContainer>
-    </>
+      <div
+        style={{ padding: "14px 24px" }}
+        className="flex items-center justify-center"
+      >
+        {cloudProvider === "aws" && <AwsLogo />}
+        {cloudProvider === "gcp" && <GcpLogo />}
+        {!cloudProvider && <Box sx={{ color: "#475467" }}>Everywhere</Box>}
+      </div>
+
+      {!isCliManagedResource && (
+        <div
+          style={{ padding: "14px 24px" }}
+          className="flex items-center justify-center"
+        >
+          <InstanceHealthStatusChip
+            computedHealthStatus={healthStatus}
+            detailedNetworkTopology={detailedNetworkTopology}
+            onViewNodesClick={onViewNodesClick}
+            openLinkInSameTab={true}
+          />
+        </div>
+      )}
+    </div>
   );
 }
 

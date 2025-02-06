@@ -9,10 +9,6 @@ import { createColumnHelper } from "@tanstack/react-table";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
 import DataTable from "src/components/DataTable/DataTable";
-import { Range } from "react-date-range";
-import DateRangePicker, {
-  initialRangeState,
-} from "src/components/DateRangePicker/DateRangePicker";
 import RefreshWithToolTip from "src/components/RefreshWithTooltip/RefreshWithToolTip";
 import AuditLogsEventFilterDropdown from "./components/AuditLogsEventFilterDropdown";
 import GridCellExpand from "src/components/GridCellExpand/GridCellExpand";
@@ -26,6 +22,11 @@ import { getAccessControlRoute } from "src/utils/route/access/accessRoute";
 import EventTypeChip from "../../EventsTable/EventTypeChip";
 import JSONView from "src/components/JSONView/JSONView";
 import { OnCopyProps } from "react-json-view";
+import {
+  DateRange,
+  DateTimePickerPopover,
+  initialRangeState,
+} from "src/components/DateRangePicker/DateTimeRangePickerStatic";
 
 dayjs.extend(isSameOrBefore);
 dayjs.extend(isSameOrAfter);
@@ -36,8 +37,8 @@ type AuditLogsTableHeaderProps = {
   setSearchText: SetState<string>;
   refetchLogs: () => void;
   isRefetching: boolean;
-  selectedDateRange: Range;
-  setSelectedDateRange: SetState<Range>;
+  selectedDateRange: DateRange;
+  setSelectedDateRange: SetState<DateRange>;
   selectedEventTypes: EventType[];
   setSelectedEventTypes: SetState<EventType[]>;
 };
@@ -66,15 +67,22 @@ const AuditLogsTableHeader: FC<AuditLogsTableHeaderProps> = (props) => {
       borderBottom="1px solid #EAECF0"
     >
       <DataGridHeaderTitle
-        title="List of Events"
+        title="List of Activities"
         desc="Detailed audit trail of user actions performed on resource instances"
         count={count}
         units={{
-          singular: "Event",
-          plural: "Events",
+          singular: "Activity",
+          plural: "Activities",
         }}
       />
-      <Stack direction="row" alignItems="center" gap="12px">
+      <Stack
+        direction="row"
+        justifyContent="flex-end"
+        flexGrow={1}
+        flexWrap={"wrap"}
+        alignItems="center"
+        gap="12px"
+      >
         <SearchInput
           searchText={searchText}
           setSearchText={setSearchText}
@@ -82,7 +90,7 @@ const AuditLogsTableHeader: FC<AuditLogsTableHeaderProps> = (props) => {
           width="250px"
         />
         <RefreshWithToolTip refetch={refetchLogs} disabled={isRefetching} />
-        <DateRangePicker
+        <DateTimePickerPopover
           dateRange={selectedDateRange}
           setDateRange={setSelectedDateRange}
         />
@@ -98,9 +106,6 @@ const AuditLogsTableHeader: FC<AuditLogsTableHeaderProps> = (props) => {
 type AuditLogsTabProps = {
   instanceId: string;
   subscriptionId: string;
-  serviceId: string;
-  environmentId: string;
-  productTierId: string;
 };
 
 function DetailTableRowView(props: { rowData: AccessEvent }) {
@@ -109,7 +114,7 @@ function DetailTableRowView(props: { rowData: AccessEvent }) {
   return (
     <Box sx={{ margin: "10px 12px" }}>
       <JSONView
-        src={workflowFailures}
+        src={workflowFailures || {}}
         theme="isotope"
         enableClipboard={(copy: OnCopyProps) => {
           navigator.clipboard.writeText(JSON.stringify(copy.src));
@@ -128,16 +133,10 @@ function DetailTableRowView(props: { rowData: AccessEvent }) {
   );
 }
 
-const AuditLogs: FC<AuditLogsTabProps> = ({
-  instanceId,
-  subscriptionId,
-  serviceId,
-  environmentId,
-  productTierId,
-}) => {
+const AuditLogs: FC<AuditLogsTabProps> = ({ instanceId, subscriptionId }) => {
   const [searchText, setSearchText] = useState("");
   const [selectedDateRange, setSelectedDateRange] =
-    useState<Range>(initialRangeState);
+    useState<DateRange>(initialRangeState);
   const [selectedEventTypes, setSelectedEventTypes] = useState<EventType[]>([]);
   const data = useUserData();
   const currentUserOrgId = data.userData?.orgId;
@@ -213,15 +212,9 @@ const AuditLogs: FC<AuditLogsTabProps> = ({
             currentUserOrgId !== data.row.original.orgId &&
             !isUserOmnistrateSystem;
 
-          let pageLink = null;
+          let pageLink: string | undefined;
           if (!isUserServiceProvider && !isUserOmnistrateSystem && userId) {
-            pageLink = getAccessControlRoute(
-              serviceId,
-              environmentId,
-              productTierId,
-              subscriptionId,
-              userId
-            );
+            pageLink = getAccessControlRoute(userId);
           }
 
           let userDisplayLabel = userName;
@@ -254,13 +247,7 @@ const AuditLogs: FC<AuditLogsTabProps> = ({
         },
       }),
     ];
-  }, [
-    currentUserOrgId,
-    serviceId,
-    environmentId,
-    productTierId,
-    subscriptionId,
-  ]);
+  }, [currentUserOrgId]);
 
   const filteredEvents = useMemo(() => {
     let filtered = events;
@@ -276,7 +263,7 @@ const AuditLogs: FC<AuditLogsTabProps> = ({
 
     if (selectedEventTypes.length > 0) {
       filtered = filtered.filter((event) => {
-        return selectedEventTypes.includes(event.eventSource);
+        return selectedEventTypes.includes(event.eventSource as EventType);
       });
     }
 
@@ -285,11 +272,11 @@ const AuditLogs: FC<AuditLogsTabProps> = ({
       selectedDateRange.startDate &&
       selectedDateRange.endDate
     ) {
-      const startDate = dayjs(selectedDateRange.startDate).format("YYYY-MM-DD");
-      const endDate = dayjs(selectedDateRange.endDate).format("YYYY-MM-DD");
+      const startDate = dayjs(selectedDateRange.startDate);
+      const endDate = dayjs(selectedDateRange.endDate);
 
       filtered = filtered.filter((event) => {
-        const eventDate = dayjs(event.time).format("YYYY-MM-DD");
+        const eventDate = dayjs(event.time);
 
         return (
           dayjs(eventDate).isSameOrAfter(startDate) &&
@@ -307,9 +294,9 @@ const AuditLogs: FC<AuditLogsTabProps> = ({
         columns={dataTableColumns}
         rows={filteredEvents}
         renderDetailsComponent={DetailTableRowView}
-        noRowsText="No events"
+        noRowsText="No activities"
         getRowCanExpand={(rowData) =>
-          Boolean(rowData.original.workflowFailures?.length > 0)
+          Boolean(Number(rowData.original.workflowFailures?.length) > 0)
         }
         HeaderComponent={AuditLogsTableHeader}
         headerProps={{

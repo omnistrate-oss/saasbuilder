@@ -1,15 +1,8 @@
-import * as React from "react";
+import { colors } from "src/themeConfig";
 
 const EditIcon = (props) => {
-  let { color } = props;
-  const { disabled = false } = props;
-  
-  if (!color) {
-    color = "#9F1AB1";
-  }
-  if (disabled) {
-    color = "#a3a6ac";
-  }
+  const { color = colors.gray700, disabled } = props;
+
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -19,7 +12,8 @@ const EditIcon = (props) => {
       {...props}
     >
       <path
-        stroke={color}
+        style={{ transition: "stroke 0.3s ease" }}
+        stroke={disabled ? colors.gray400 : color}
         strokeLinecap="round"
         strokeLinejoin="round"
         strokeWidth={1.667}

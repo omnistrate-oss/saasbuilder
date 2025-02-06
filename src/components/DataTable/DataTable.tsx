@@ -1,7 +1,7 @@
-import React, { FC, ReactNode, useState } from "react";
+import React, { FC, ReactNode, useMemo, useState } from "react";
 import Collapse from "@mui/material/Collapse";
 import IconButton from "@mui/material/IconButton";
-import { Box, Stack } from "@mui/material";
+import { Box, CircularProgress, Stack, SxProps } from "@mui/material";
 import {
   ColumnDef,
   ExpandedState,
@@ -27,7 +27,7 @@ import {
 import Pagination from "./components/Pagination";
 import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
-import LoadingSpinner from "../LoadingSpinner/LoadingSpinner";
+import CustomCheckbox from "../Checkbox/Checkbox";
 
 const sortIcon = {
   asc: ArrowUpwardIcon,
@@ -60,19 +60,25 @@ const SortIcon: React.FC<SortIconProps> = (props) => {
   );
 };
 
+type SelectionMode = "single" | "multiple" | "none";
+
 type DataTableProps<TData> = {
   rows: TData[];
   columns: ColumnDef<TData>[];
-  /*eslint-disable-next-line no-unused-vars */
   renderDetailsComponent?: (props: { rowData: TData }) => ReactNode;
   noRowsText: string;
   isLoading?: boolean;
-  /*eslint-disable-next-line no-unused-vars */
   getRowCanExpand?: (rowData: Row<TData>) => boolean;
-  /*eslint-disable-next-line no-unused-vars */
   getSubRows?: (orginalRow: TData) => TData[];
   HeaderComponent: FC;
   headerProps: any;
+  // Row Selection Props
+  selectionMode?: SelectionMode;
+  selectedRows?: string[];
+  onRowSelectionChange?: (selectedRows: string[]) => void;
+  rowId?: keyof TData; // Property to use as row identifier
+  tableStyles?: SxProps;
+  getRowClassName?: (rowData: TData) => string;
 };
 
 const DEFAULT_COLUMN_MIN_WIDTH = 150;
@@ -88,8 +94,54 @@ const DataTable = <TData,>(props: DataTableProps<TData>): ReactNode => {
     HeaderComponent,
     headerProps = {},
     getSubRows,
+    selectedRows = [],
+    onRowSelectionChange,
+    selectionMode = "none",
+    rowId = "id" as keyof TData,
+    tableStyles = {},
+    getRowClassName,
   } = props;
+
   const [expanded, setExpanded] = useState<ExpandedState>({});
+
+  const allColumns = useMemo(() => {
+    if (selectionMode === "none") return columns;
+
+    const handleSelectionChange = (rowIdValue: string) => {
+      if (!onRowSelectionChange) return;
+
+      if (selectionMode === "single") {
+        if (selectedRows.includes(rowIdValue)) {
+          onRowSelectionChange([]);
+        } else {
+          onRowSelectionChange([rowIdValue]);
+        }
+      } else if (selectionMode === "multiple") {
+        if (selectedRows.includes(rowIdValue)) {
+          onRowSelectionChange(selectedRows.filter((id) => id !== rowIdValue));
+        } else {
+          onRowSelectionChange([...selectedRows, rowIdValue]);
+        }
+      }
+    };
+
+    const selectionColumn: ColumnDef<TData> = {
+      id: "selection",
+      header: "",
+      cell: ({ row }) => (
+        <CustomCheckbox
+          // @ts-ignore
+          checked={selectedRows.includes(String(row.original[rowId]))}
+          onChange={() => handleSelectionChange(String(row.original[rowId]))}
+        />
+      ),
+      meta: {
+        width: 50,
+      },
+    };
+
+    return [selectionColumn, ...columns];
+  }, [columns, selectionMode, onRowSelectionChange, selectedRows, rowId]);
 
   const table = useReactTable({
     data: rows,
@@ -97,7 +149,7 @@ const DataTable = <TData,>(props: DataTableProps<TData>): ReactNode => {
     getExpandedRowModel: getExpandedRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
     getSortedRowModel: getSortedRowModel(),
-    columns: columns,
+    columns: allColumns,
     initialState: {
       pagination: {
         pageIndex: 0,
@@ -124,8 +176,6 @@ const DataTable = <TData,>(props: DataTableProps<TData>): ReactNode => {
       return acc;
     }
   }, 0);
-
-  // const width = 100 / columns.length;
 
   //returns the flex values set on the meta in coldef.
   //if flex is not set, checks if size is set. If so returns 0 else 1
@@ -163,7 +213,7 @@ const DataTable = <TData,>(props: DataTableProps<TData>): ReactNode => {
     return width;
   };
 
-  const getColumnMinWIdth = (colDef: ColumnDef<TData>): string | number => {
+  const getColumnMinWidth = (colDef: ColumnDef<TData>): number => {
     let minWidth = DEFAULT_COLUMN_MIN_WIDTH;
     if (colDef.meta?.minWidth) {
       minWidth = colDef.meta?.minWidth;
@@ -174,156 +224,169 @@ const DataTable = <TData,>(props: DataTableProps<TData>): ReactNode => {
   };
 
   return (
-    <TableContainer sx={{ borderRadius: "8px" }}>
+    <TableContainer sx={{ borderRadius: "8px", ...tableStyles }}>
       <HeaderComponent {...headerProps} />
       <Stack minHeight="605px" justifyContent="space-between">
-        <Box sx={{ overflowX: "auto", flexGrow: 1 }}>
-          <Table sx={{ tableLayout: "fixed", width: "100%" }}>
-            {table.getHeaderGroups().map((headerGroup) => {
-              return (
-                <colgroup key={headerGroup.id}>
-                  {headerGroup.headers.map((header) => {
-                    return (
-                      <col
-                        key={header.id}
-                        style={{
-                          width: getColumnWidth(header.column.columnDef),
-                          minWidth: getColumnMinWIdth(header.column.columnDef),
-                        }}
-                      />
-                    );
-                  })}
-                </colgroup>
-              );
-            })}
+        <Box sx={{ overflowX: "auto", flexGrow: 1, position: "relative" }}>
+          <Table
+            sx={{
+              tableLayout: "fixed",
+              minWidth:
+                columns.reduce((acc, curr) => {
+                  return acc + Number(getColumnMinWidth(curr));
+                }, 0) || "100%",
+            }}
+          >
+            {table.getHeaderGroups().map((headerGroup) => (
+              <colgroup key={headerGroup.id}>
+                {headerGroup.headers.map((header) => (
+                  <col
+                    key={header.id}
+                    style={{
+                      width: getColumnWidth(header.column.columnDef),
+                      minWidth: getColumnMinWidth(header.column.columnDef),
+                    }}
+                  />
+                ))}
+              </colgroup>
+            ))}
             <TableHead>
-              {table.getHeaderGroups().map((headerGroup) => {
-                return (
-                  <TableRow key={headerGroup.id}>
-                    {headerGroup.headers.map((header) => {
-                      const sortDirection = header.column.getIsSorted();
-                      const columnAlignment =
-                        header.column.columnDef.meta?.align || "left";
-                      return (
-                        <TableCell
-                          align={columnAlignment}
-                          key={header.id}
-                          onClick={header.column.getToggleSortingHandler()}
-                          sx={{
-                            cursor: "pointer",
+              {table.getHeaderGroups().map((headerGroup) => (
+                <TableRow key={headerGroup.id}>
+                  {headerGroup.headers.map((header) => {
+                    const sortDirection = header.column.getIsSorted();
+                    const columnAlignment =
+                      header.column.columnDef.meta?.align || "left";
+                    return (
+                      <TableCell
+                        align={columnAlignment}
+                        key={header.id}
+                        onClick={
+                          header.column.id === "selection"
+                            ? undefined
+                            : header.column.getToggleSortingHandler()
+                        }
+                        sx={{
+                          cursor:
+                            header.column.id === "selection" ||
+                            !header.column.getCanSort()
+                              ? "auto"
+                              : "pointer",
+                          "& .MuiIconButton-root": {
+                            display: sortDirection ? "inline-flex" : "none",
+                          },
+                          "&:hover": {
                             "& .MuiIconButton-root": {
-                              display: sortDirection ? "inline-flex" : "none",
+                              display: "inline-flex",
                             },
-                            // "& svg": {
-                            //   display: sortDirection ? "inline-block" : "none",
-                            // },
-                            "&:hover": {
-                              "& .MuiIconButton-root": {
-                                display: "inline-flex",
-                              },
-                              // "& svg": {
-                              //   display: "inline-block",
-                              // },
-                            },
-                          }}
+                          },
+                        }}
+                      >
+                        <Stack
+                          display="inline-flex"
+                          direction="row"
+                          gap="8px"
+                          alignItems="center"
                         >
-                          <Stack
-                            display="inline-flex"
-                            direction="row"
-                            gap="8px"
-                            alignItems="center"
-                          >
-                            {flexRender(
-                              header.column.columnDef.header,
-                              header.getContext()
-                            )}
-                            {header.column.getCanSort() && (
+                          {flexRender(
+                            header.column.columnDef.header,
+                            header.getContext()
+                          )}
+                          {header.column.getCanSort() &&
+                            header.column.id !== "selection" && (
                               <SortIcon sortDirection={sortDirection} />
                             )}
-                          </Stack>
-                        </TableCell>
-                      );
-                    })}
-                  </TableRow>
-                );
-              })}
+                        </Stack>
+                      </TableCell>
+                    );
+                  })}
+                </TableRow>
+              ))}
             </TableHead>
             <TableBody>
               {!isLoading &&
-                rowData.map((row) => {
-                  return (
-                    <React.Fragment key={row.id}>
-                      <TableRow>
-                        {row.getVisibleCells().map((cell) => {
-                          const cellValue = cell.getValue();
-                          const columnAlignment =
-                            cell.column.columnDef.meta?.align || "left";
-                          let title = "";
-                          if (
-                            ["string", "number", "boolean"].includes(
-                              typeof cellValue
-                            )
-                          ) {
-                            title = cellValue.toString();
-                          }
-                          return (
-                            <TableCell
-                              key={cell.id}
-                              align={columnAlignment}
-                              title={title}
-                              sx={{
-                                fontSize: "14px",
-                                fontWeight: "500",
-                              }}
-                            >
-                              {flexRender(
-                                cell.column.columnDef.cell,
-                                cell.getContext()
-                              )}
-                            </TableCell>
-                          );
-                        })}
-                      </TableRow>
-                      {row.getIsExpanded() && renderDetailsComponent && (
-                        <DetailViewTableRow>
+                rowData.map((row) => (
+                  <React.Fragment key={row.id}>
+                    <TableRow
+                      className={
+                        getRowClassName ? getRowClassName(row.original) : ""
+                      }
+                    >
+                      {row.getVisibleCells().map((cell) => {
+                        const cellValue: any = cell.getValue();
+                        const columnAlignment =
+                          cell.column.columnDef.meta?.align || "left";
+                        const isBrowerTooltipDisabled =
+                          cell.column.columnDef.meta?.disableBrowserTooltip ||
+                          false;
+                        let title = "";
+                        if (
+                          ["string", "number", "boolean"].includes(
+                            typeof cellValue
+                          )
+                        ) {
+                          title = cellValue.toString();
+                        }
+                        return (
                           <TableCell
+                            key={cell.id}
+                            align={columnAlignment}
+                            title={isBrowerTooltipDisabled ? "" : title}
                             sx={{
-                              paddingBottom: 0,
-                              paddingTop: 0,
-                              whiteSpace: "normal",
+                              fontSize: "14px",
+                              fontWeight: "500",
                             }}
-                            colSpan={numsColumns}
                           >
-                            <Collapse
-                              in={row.getIsExpanded()}
-                              timeout="auto"
-                              unmountOnExit
-                            >
-                              {renderDetailsComponent({
-                                rowData: row.original,
-                              })}
-                            </Collapse>
+                            {flexRender(
+                              cell.column.columnDef.cell,
+                              cell.getContext()
+                            )}
                           </TableCell>
-                        </DetailViewTableRow>
-                      )}
-                    </React.Fragment>
-                  );
-                })}
+                        );
+                      })}
+                    </TableRow>
+                    {row.getIsExpanded() && renderDetailsComponent && (
+                      <DetailViewTableRow>
+                        <TableCell
+                          sx={{
+                            paddingBottom: 0,
+                            paddingTop: 0,
+                            whiteSpace: "normal",
+                          }}
+                          colSpan={numsColumns}
+                        >
+                          <Collapse
+                            in={row.getIsExpanded()}
+                            timeout="auto"
+                            unmountOnExit
+                          >
+                            {renderDetailsComponent({
+                              rowData: row.original,
+                            })}
+                          </Collapse>
+                        </TableCell>
+                      </DetailViewTableRow>
+                    )}
+                  </React.Fragment>
+                ))}
             </TableBody>
           </Table>
-        </Box>
 
-        {(rows.length === 0 || isLoading) && (
-          <Stack
-            justifyContent="center"
-            alignItems="center"
-            fontSize="14px "
-            flexGrow={1}
-            height="480px"
-          >
-            {isLoading ? <LoadingSpinner /> : noRowsText}
-          </Stack>
-        )}
+          {(rows.length === 0 || isLoading) && (
+            <Stack
+              position="sticky"
+              top="50%"
+              left="50%"
+              fontSize="14px"
+              display="inline-block"
+              sx={{
+                transform: "translateX(-50%) translateY(-50%)",
+              }}
+            >
+              {isLoading ? <CircularProgress /> : noRowsText}
+            </Stack>
+          )}
+        </Box>
         <Pagination
           isPreviousDisabled={!table.getCanPreviousPage()}
           isNextDisabled={!table.getCanNextPage()}
@@ -340,13 +403,15 @@ const DataTable = <TData,>(props: DataTableProps<TData>): ReactNode => {
 
 export default DataTable;
 
-interface ColumnFlex {
+interface ColumnCustomFeatures {
   flex?: number;
   width?: number;
   minWidth?: number;
   align?: "center" | "left" | "right";
+  disableBrowserTooltip?: boolean;
 }
 declare module "@tanstack/react-table" {
   /*eslint-disable-next-line*/
-  interface ColumnMeta<TData extends RowData, TValue> extends ColumnFlex {}
+  interface ColumnMeta<TData extends RowData, TValue>
+    extends ColumnCustomFeatures {}
 }

@@ -6,7 +6,7 @@ const nextConfig = {
     return [
       {
         source: "/",
-        destination: "/redirect",
+        destination: "/instances",
         permanent: true,
       },
     ];

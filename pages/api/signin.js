@@ -5,7 +5,6 @@ import { verifyRecaptchaToken } from "src/server/utils/verifyRecaptchaToken";
 import { checkReCaptchaSetup } from "src/server/utils/checkReCaptchaSetup";
 import CaptchaVerificationError from "src/server/errors/CaptchaVerificationError";
 
-
 export default async function handleSignIn(nextRequest, nextResponse) {
   if (nextRequest.method === "POST") {
     try {
@@ -16,7 +15,7 @@ export default async function handleSignIn(nextRequest, nextResponse) {
         const isVerified = await verifyRecaptchaToken(reCaptchaToken);
         if (!isVerified) throw new CaptchaVerificationError();
       }
-      
+
       const environmentType = getEnvironmentType();
       const payload = {
         ...nextRequest.body,
@@ -44,6 +43,7 @@ export default async function handleSignIn(nextRequest, nextResponse) {
       const responseData = response?.data || {};
       nextResponse.status(200).send({ ...responseData });
     } catch (error) {
+      console.error("Error in sign in", error);
       const defaultErrorMessage =
         "Failed to sign in. Either the credentials are incorrect or the user does not exist";
 

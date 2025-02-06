@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React, { FC, ReactNode } from "react";
 import {
   Box,
   Stack,
@@ -38,12 +38,14 @@ export const statuses = {
   TERMINATED: "Terminated",
   COMPLETED: "Completed",
   NOT_ENABLED: "Not Enabled",
+  "N/A": "N/A",
 };
 
 export const statusStyles = {
   ACTIVE: {
-    backgroundColor: "#F8F9FC",
-    color: "#669F2A",
+    backgroundColor: "#ECFDF3",
+    color: "#067647",
+    borderColor: "#ABEFC6",
   },
   Active: {
     backgroundColor: "#F8F9FC",
@@ -73,6 +75,7 @@ export const statusStyles = {
     backgroundColor: "#FEF3F2",
     color: "#B42318",
   },
+
   Draft: {
     backgroundColor: "#FCFCFC",
     color: "#6F6F6F",
@@ -87,7 +90,7 @@ export const statusStyles = {
   },
   HEALTHY: {
     backgroundColor: "#ECFDF3",
-    color: "#027A48",
+    color: "#17B26A",
   },
   IN_PROGRESS: {
     backgroundColor: "#F8F9FC",
@@ -174,6 +177,10 @@ export const statusStyles = {
     backgroundColor: "#FEF3F2",
     color: "#C83532",
   },
+  "N/A": {
+    backgroundColor: "#f2f4f7",
+    color: "#667085",
+  },
 };
 
 type StatusChipProps = {
@@ -189,6 +196,7 @@ type StatusChipProps = {
   label?: string;
   category?: Category;
   borderColor?: string;
+  startIcon?: ReactNode;
 };
 
 type ChipProps = Omit<MuiChipProps, "color">;
@@ -204,19 +212,19 @@ const StatusChip: FC<ChipProps & StatusChipProps> = (props) => {
     color,
     bgColor,
     capitalize = true,
-    label = statuses[status],
+    label = statuses[status as keyof typeof statuses],
     category,
     borderColor,
+    startIcon,
     ...restProps
   } = props;
-  let chipStyles = null;
-
-  chipStyles = getChipStyles(status);
+  let chipStyles = getChipStyles(status);
 
   if (category) {
     chipStyles = {
       color: chipCategoryColors[category].color,
       backgroundColor: chipCategoryColors[category].bgColor,
+      borderColor: chipCategoryColors[category].borderColor,
     };
   }
 
@@ -230,6 +238,7 @@ const StatusChip: FC<ChipProps & StatusChipProps> = (props) => {
           {pulsateDot && <PulsatingDot color={fontColor} />}
           {dot && <Dot color={fontColor} />}
           {tick && <TickIcon />}
+          {startIcon && startIcon}
           <Box
             component="span"
             sx={{ overflow: "hidden", textOverflow: "ellipsis" }}

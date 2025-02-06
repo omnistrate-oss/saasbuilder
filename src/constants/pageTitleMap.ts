@@ -1,19 +1,21 @@
 export const PAGE_TITLE_MAP = {
-  "/access/[serviceId]/[environmentId]/events": "Events",
-  "/access/[serviceId]/[environmentId]/access-control": "Access Control",
-  "/access/[serviceId]/[environmentId]/dashboard": "Dashboard",
-  "/access/service/[serviceId]": "Resources",
-  "/access/[serviceId]/[environmentId]/[resourceId]/[resourceInstanceId]":
-    "Resource",
-  "/access/api-document": "API Documentation",
-  "/marketplace/mysubsc": "My Subscriptions",
-  "/settings": "Profile Settings",
   "/signin": "Sign In",
   "/signup": "Sign Up",
+  "/change-password": "Change Password",
   "/reset-password": "Reset Password",
+  "/validate-token": "Validate Token",
+
+  "/terms-of-use": "Terms of Use",
+  "/privacy-policy": "Privacy Policy",
+
+  "/dashboard": "Dashboard",
+  "/instances": "Instances",
+  "/cloud-accounts": "Cloud Accounts",
+  "/custom-networks": "Custom Networks",
+  "/access-control": "Access Control",
+  "/audit-logs": "Audit Logs",
+  "/notifications": "Notifications",
+  "/settings": "Profile Settings",
   "/billing": "Billing",
   "/subscriptions": "Subscriptions",
-  "/service-plans": "Billing Plans",
-  "/access/[serviceId]/[environmentId]/audit-logs": "Audit Logs",
-  "/access/[serviceId]/[environmentId]/notifications": "Notifications",
 };

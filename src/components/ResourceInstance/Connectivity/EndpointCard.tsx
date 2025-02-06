@@ -1,13 +1,14 @@
 import { FC, useState } from "react";
 import { Box, Stack } from "@mui/material";
-import EndpointIcon from "./EndpointIcon";
 import { Text } from "src/components/Typography/Typography";
 import CopyButton from "src/components/Button/CopyButton";
-import Chip from "components/Chip/Chip";
 import Button from "src/components/Button/Button";
 
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
+import StatusChip from "src/components/StatusChip/StatusChip";
+import PublicResourceIcon from "src/components/Icons/PublicResource/PublicResource";
+import PrivateResourceIcon from "src/components/Icons/PrivateResource/PrivateResource";
 
 type EndpointCardProps = {
   isPrimary?: boolean;
@@ -56,43 +57,29 @@ const EndpointCard: FC<EndpointCardProps> = ({
   return (
     <Box
       borderRadius="12px"
-      p="16px"
+      p="12px 16px"
       display="flex"
       gap="16px"
-      border={isPrimary ? "2px solid #7F56D9" : "1px solid #D0D5DD"}
+      border={isPrimary ? "1px solid #7F56D9" : "1px solid #EAECF0"}
       bgcolor={isPrimary ? "#F9F5FF" : "#FFFFFF"}
     >
-      <EndpointIcon />
+      {isPublic ? <PublicResourceIcon /> : <PrivateResourceIcon />}
 
       <Box>
         <Stack direction="row" flexWrap="wrap" gap="8px" mb="6px">
           <Text size="small" weight="medium" color="#53389E">
             {endpointName}
           </Text>
-          {isPublic ? (
-            <Chip
-              size="small"
-              label="Public"
-              fontColor="#067647"
-              bgColor="#ECFDF3"
-              borderColor="#ABEFC6"
-            />
-          ) : (
-            <Chip
-              size="small"
-              label="Private"
-              fontColor="#363F72"
-              bgColor="transparent"
-              borderColor="#3E4784"
-            />
-          )}
+          <StatusChip
+            label={isPublic ? "Public" : "Private"}
+            category={isPublic ? "success" : "unknown"}
+          />
           {isPrimary && (
-            <Chip
-              size="small"
+            <StatusChip
               label="Primary"
-              fontColor="#175CD3"
-              bgColor="#EFF8FF"
-              borderColor="#B2DDFF"
+              color="#7F56D9"
+              borderColor="#7F56D9"
+              bgColor="#F9F5FF"
             />
           )}
         </Stack>
@@ -100,11 +87,12 @@ const EndpointCard: FC<EndpointCardProps> = ({
         <EndpointLine
           endpointURL={endpointURL}
           isPrimary={isPrimary}
-          openPort={openPorts[0]}
+          openPort={openPorts?.[0]}
+          mt="8px"
         />
 
         {isExpanded &&
-          openPorts.map((port, index) =>
+          openPorts?.map((port, index) =>
             index >= 1 ? (
               <EndpointLine
                 key={index}

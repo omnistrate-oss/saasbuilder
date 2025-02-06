@@ -42,3 +42,26 @@ export const WhiteTooltip = styled(({ className, ...props }) => (
     color: "#fff",
   },
 }));
+
+export const BlackTooltip = styled(
+  ({ className, ...props }) => (
+    <MuiTooltip {...props} arrow classes={{ popper: className }} />
+  ),
+  {
+    shouldForwardProp: (prop) => prop !== "isVisible",
+  }
+)(({ isVisible = true }) => ({
+  display: isVisible ? "block" : "none",
+  [`& .${tooltipClasses.arrow}`]: {
+    color: "#0C111D",
+  },
+  [`& .${tooltipClasses.tooltip}`]: {
+    backgroundColor: "#0C111D",
+    fontSize: "12px",
+    lineHeight: "18px",
+    fontWeight: 600,
+    padding: "12px",
+    borderRadius: "8px",
+    color: "#FFF",
+  },
+}));
