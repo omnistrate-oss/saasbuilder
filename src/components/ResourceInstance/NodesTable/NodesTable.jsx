@@ -18,38 +18,36 @@ import { selectUserrootData } from "../../../slices/userDataSlice";
 import { NodeStatus } from "./NodeStatus";
 import DataGridText from "src/components/DataGrid/DataGridText";
 import NodesTableHeader from "./NodesTableHeader";
-import {
-  getResourceInstanceStatusStylesAndLabel,
-  resourceInstanceStatusMap,
-} from "src/constants/statusChipStyles/resourceInstanceStatus";
-import {
-  chipCategoryColors,
-  defaultChipStyles,
-} from "src/constants/statusChipStyles";
+import { getResourceInstanceStatusStylesAndLabel } from "src/constants/statusChipStyles/resourceInstanceStatus";
+
 import { productTierTypes } from "src/constants/servicePlan";
 import GenerateTokenDialog from "src/components/GenerateToken/GenerateTokenDialog";
 import _ from "lodash";
 import NodeIcon from "src/components/Icons/Node/NodeIcon";
 
-const getRowBorderStyles = () => {
+export const getRowBorderStyles = () => {
   const styles = {};
 
-  for (const status in resourceInstanceStatusMap) {
-    const category = resourceInstanceStatusMap[status]?.category;
-    let color = chipCategoryColors[category]?.color;
-    if (!color) {
-      color = defaultChipStyles.color;
-    }
+  for (const status of ["DEGRADED", "HEALTHY", "UNHEALTHY", "UNKNOWN", "NA"]) {
+    const colorMap = {
+      DEGRADED: "#F79009",
+      HEALTHY: "#17B26A",
+      UNHEALTHY: "#F04438",
+      UNKNOWN: "#363F72",
+      NA: "#676b83",
+    };
+
+    const color = colorMap[status];
 
     styles[`& .${status}::before`] = {
       content: '""',
-      height: "36px",
+      height: "38px",
       width: "4px",
       background: color,
-      transform: "translateY(5px)",
+      transform: "translateY(4px)",
       position: "absolute",
-      borderTopRightRadius: "4px",
-      borderBottomRightRadius: "4px",
+      borderTopRightRadius: "3px",
+      borderBottomRightRadius: "3px",
     };
   }
 
@@ -107,6 +105,7 @@ export default function NodesTable(props) {
 
     return list ?? [];
   }, [searchText, nodes]);
+
   const customTenancyColumns = useMemo(() => {
     const res = [
       {
@@ -116,6 +115,7 @@ export default function NodesTable(props) {
         minWidth: 190,
         renderCell: (params) => {
           const nodeId = params.row.nodeId;
+
           return (
             <GridCellExpand
               startIcon={<NodeIcon />}
@@ -370,7 +370,7 @@ export default function NodesTable(props) {
             setSearchText,
           },
         }}
-        getRowClassName={(params) => `${params.row.status}`}
+        getRowClassName={(params) => `${params.row.healthStatus}`}
         sx={{
           "& .node-ports": {
             color: "#101828",
