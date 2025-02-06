@@ -26,10 +26,8 @@ const SubscriptionPlanCard = ({
   plan,
   subscriptions,
   subscriptionRequest,
-  isSubscribing,
   onSubscribeClick,
   isSelected,
-  isFetchingData,
   onClick,
   disabled,
   disabledMessage,
@@ -82,10 +80,8 @@ const SubscriptionPlanCard = ({
       {!rootSubscription && !subscriptionRequest && (
         <Button
           variant="contained"
-          disabled={isFetchingData || isSubscribing || disabled}
-          startIcon={
-            <CirclePlusIcon disabled={isFetchingData || isSubscribing} />
-          }
+          disabled={disabled}
+          startIcon={<CirclePlusIcon disabled={disabled} />}
           onClick={onSubscribeClick}
         >
           Subscribe
@@ -171,18 +167,18 @@ const SubscriptionPlanRadio: React.FC<SubscriptionPlanRadioProps> = ({
     subscriptionRequests,
     refetchSubscriptions,
     refetchSubscriptionRequests,
-    isFetchingSubscriptions,
-    isFetchingSubscriptionRequests,
   } = useGlobalData();
 
   const servicePlanId = formData.values[name];
 
   const subscriptionRequestsObj: Record<string, SubscriptionRequest> =
     useMemo(() => {
-      return subscriptionRequests?.reduce((acc, request) => {
-        acc[request.productTierId] = request;
-        return acc;
-      }, {});
+      return subscriptionRequests
+        ?.filter((el) => el.status !== "APPROVED")
+        .reduce((acc, request) => {
+          acc[request.productTierId] = request;
+          return acc;
+        }, {});
     }, [subscriptionRequests]);
 
   const subscribeMutation = useMutation((payload: any) => {
@@ -211,60 +207,55 @@ const SubscriptionPlanRadio: React.FC<SubscriptionPlanRadioProps> = ({
 
   return (
     <div className="space-y-4">
-      {servicePlans.map((plan) => (
-        <SubscriptionPlanCard
-          key={plan.productTierID}
-          plan={plan}
-          subscriptions={subscriptions.filter(
-            (sub) =>
-              sub.productTierId === plan.productTierID &&
-              ["root", "editor"].includes(sub.roleType)
-          )}
-          subscriptionRequest={subscriptionRequestsObj[plan.productTierID]}
-          onSubscribeClick={async () => {
-            if (disabled) return;
+      {servicePlans
+        // When disabled, show only the Selected Service Plan. This is in case of Modify Instance
+        .filter((el) => (disabled ? el.productTierID === servicePlanId : true))
+        .map((plan) => (
+          <SubscriptionPlanCard
+            key={plan.productTierID}
+            plan={plan}
+            subscriptions={subscriptions.filter(
+              (sub) =>
+                sub.productTierId === plan.productTierID &&
+                ["root", "editor"].includes(sub.roleType)
+            )}
+            subscriptionRequest={subscriptionRequestsObj[plan.productTierID]}
+            onSubscribeClick={async () => {
+              const res = await subscribeMutation.mutateAsync({
+                productTierId: plan.productTierID,
+                serviceId: plan.serviceId,
+                AutoApproveSubscription: plan.AutoApproveSubscription,
+              });
 
-            const res = await subscribeMutation.mutateAsync({
-              productTierId: plan.productTierID,
-              serviceId: plan.serviceId,
-              AutoApproveSubscription: plan.AutoApproveSubscription,
-            });
+              // @ts-ignore
+              const id = Object.values(res?.data || {}).join("");
 
-            // @ts-ignore
-            const id = Object.values(res?.data || {}).join("");
+              if (id.startsWith("subr")) {
+                snackbar.showSuccess("Subscription Request sent successfully");
+              } else if (id.startsWith("sub")) {
+                formData.setFieldValue(name, plan.productTierID);
+                onChange(plan.productTierID, id);
+                snackbar.showSuccess("Subscribed successfully");
+              }
 
-            if (id.startsWith("subr")) {
-              snackbar.showSuccess("Subscription Request sent successfully");
-            } else if (id.startsWith("sub")) {
+              refetchSubscriptions();
+              refetchSubscriptionRequests();
+            }}
+            onClick={() => {
+              if (servicePlanId !== plan.productTierID) {
+                onChange(plan.productTierID);
+              }
               formData.setFieldValue(name, plan.productTierID);
-              onChange(plan.productTierID, id);
-              snackbar.showSuccess("Subscribed successfully");
+            }}
+            isSelected={servicePlanId === plan.productTierID}
+            disabled={disabled || plan.serviceModelStatus !== "READY"}
+            disabledMessage={
+              plan.serviceModelStatus !== "READY"
+                ? "Service model is not active"
+                : ""
             }
-
-            refetchSubscriptions();
-            refetchSubscriptionRequests();
-          }}
-          onClick={() => {
-            if (disabled) return;
-
-            if (servicePlanId !== plan.productTierID) {
-              onChange(plan.productTierID);
-            }
-            formData.setFieldValue(name, plan.productTierID);
-          }}
-          isSubscribing={subscribeMutation.isLoading}
-          isSelected={servicePlanId === plan.productTierID}
-          isFetchingData={
-            isFetchingSubscriptions || isFetchingSubscriptionRequests
-          }
-          disabled={disabled || plan.serviceModelStatus !== "READY"}
-          disabledMessage={
-            plan.serviceModelStatus !== "READY"
-              ? "Service model is not active"
-              : ""
-          }
-        />
-      ))}
+          />
+        ))}
     </div>
   );
 };

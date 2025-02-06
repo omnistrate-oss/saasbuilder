@@ -16,8 +16,6 @@ import { AuditEvent } from "src/types/auditEvent";
 import formatDateUTC from "src/utils/formatDateUTC";
 import { useGlobalData } from "src/providers/GlobalDataProvider";
 import { getAccessControlRoute } from "src/utils/route/access/accessRoute";
-import { useSelector } from "react-redux";
-import { selectUserrootData } from "src/slices/userDataSlice";
 
 const columnHelper = createColumnHelper<AuditEvent>();
 
@@ -49,8 +47,6 @@ const EventsTable = ({
   noRowsText,
 }: any) => {
   const { subscriptionsObj } = useGlobalData();
-  // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
-  const selectUser = useSelector(selectUserrootData);
 
   const columnsConfig: Record<ColumnType, any> = useMemo(
     () => ({

@@ -222,7 +222,9 @@ const CursorPaginatedDataTable = <TData,>(
                         key={header.id}
                         onClick={header.column.getToggleSortingHandler()}
                         sx={{
-                          cursor: "pointer",
+                          cursor: header.column.getCanSort()
+                            ? "pointer"
+                            : "auto",
                           "& .MuiIconButton-root": {
                             display: sortDirection ? "inline-flex" : "none",
                           },

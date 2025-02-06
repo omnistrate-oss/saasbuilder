@@ -42,8 +42,12 @@ const PlanDetails = ({ startingTab }) => {
       setSelectedServiceId(serviceOfferings?.[0]?.serviceId || "");
     }
 
-    const planIds = Object.keys(serviceOfferingsObj?.[selectedServiceId] || {});
-    if (planIds.length && !planIds.includes(selectedPlanId)) {
+    const planIds = getServicePlanMenuItems(
+      serviceOfferings,
+      selectedServiceId || serviceOfferings?.[0]?.serviceId || ""
+    )?.map((el) => el.value as string);
+
+    if (planIds?.length && !planIds?.includes(selectedPlanId)) {
       setSelectedPlanId(planIds[0]);
     }
   }, [

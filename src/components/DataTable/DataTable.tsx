@@ -268,8 +268,9 @@ const DataTable = <TData,>(props: DataTableProps<TData>): ReactNode => {
                         }
                         sx={{
                           cursor:
-                            header.column.id === "selection"
-                              ? "default"
+                            header.column.id === "selection" ||
+                            !header.column.getCanSort()
+                              ? "auto"
                               : "pointer",
                           "& .MuiIconButton-root": {
                             display: sortDirection ? "inline-flex" : "none",

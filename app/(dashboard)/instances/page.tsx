@@ -260,12 +260,17 @@ const InstancesPage = () => {
           id: "instanceLoadStatus",
           header: "Load",
           cell: (data) => {
-            const instanceLoadStatus = data.row.original.instanceLoadStatus;
+            const instanceLoadStatus =
+              loadStatusMap[
+                data.row.original.instanceLoadStatus || "UNKNOWN"
+              ] || "Unknown";
 
             return (
               <Stack direction="row" alignItems="center" gap="4px">
-                {instanceLoadStatus === "UNKNOWN" && "-"}
-                {instanceLoadStatus === "POD_IDLE" && (
+                {instanceLoadStatus === "Unknown" && (
+                  <StatusChip status="Unknown" category="unknown" />
+                )}
+                {instanceLoadStatus === "Low" && (
                   <Image
                     src={SpeedoMeterLow}
                     width={54}
@@ -274,7 +279,7 @@ const InstancesPage = () => {
                     style={{ marginBottom: "-25px" }}
                   />
                 )}
-                {instanceLoadStatus === "POD_NORMAL" && (
+                {instanceLoadStatus === "Medium" && (
                   <Image
                     src={SpeedoMeterMedium}
                     width={54}
@@ -283,7 +288,7 @@ const InstancesPage = () => {
                     style={{ marginBottom: "-25px" }}
                   />
                 )}
-                {instanceLoadStatus === "POD_OVERLOAD" && (
+                {instanceLoadStatus === "High" && (
                   <Image
                     src={SpeedoMeterHigh}
                     width={54}
@@ -291,6 +296,9 @@ const InstancesPage = () => {
                     alt="High"
                     style={{ marginBottom: "-25px" }}
                   />
+                )}
+                {instanceLoadStatus === "N/A" && (
+                  <StatusChip status="N/A" category="unknown" />
                 )}
               </Stack>
             );

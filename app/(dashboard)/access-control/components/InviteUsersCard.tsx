@@ -49,12 +49,15 @@ const getServiceMenuItems = (subscriptions: Subscription[]) => {
       return null;
     });
 
-  return serviceMenuItems
-    .filter((item) => item !== null)
-    .sort((a, b) => a.label.localeCompare(b.label)) as {
-    label: string;
-    value: string;
-  }[];
+  return (
+    serviceMenuItems
+      .filter((item) => item !== null)
+      // @ts-ignore
+      .sort((a, b) => a?.label.localeCompare(b?.label)) as {
+      label: string;
+      value: string;
+    }[]
+  );
 };
 
 const getServicePlanMenuItems = (

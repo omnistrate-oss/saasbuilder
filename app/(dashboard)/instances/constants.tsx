@@ -26,5 +26,12 @@ export const loadStatusMap = {
   POD_IDLE: "Low",
   POD_NORMAL: "Medium",
   POD_OVERLOAD: "High",
+
+  LOAD_IDLE: "Low",
+  LOAD_NORMAL: "Medium",
+  LOAD_OVERLOADED: "High",
+
+  STOPPED: "N/A",
   UNKNOWN: "Unknown",
+  "N/A": "N/A",
 };

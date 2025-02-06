@@ -75,10 +75,12 @@ const ManageSubscriptionsForm = ({
   }, [subscriptions]);
 
   const subscriptionRequestsObj = useMemo(() => {
-    return subscriptionRequests?.reduce((acc, request) => {
-      acc[request.productTierId] = request;
-      return acc;
-    }, {});
+    return subscriptionRequests
+      ?.filter((el) => el.status !== "APPROVED")
+      .reduce((acc, request) => {
+        acc[request.productTierId] = request;
+        return acc;
+      }, {});
   }, [subscriptionRequests]);
 
   const subscribeMutation = useMutation(
