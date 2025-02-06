@@ -148,7 +148,7 @@ const PropertyDetails: FC<PropertyTableProps> = ({ rows, ...otherProps }) => {
           height={"100%"}
           width={"2px"}
           bgcolor={"white"}
-          bottom={3}
+          bottom={5}
         />
 
         {rows?.rows?.map((row, index) => {
