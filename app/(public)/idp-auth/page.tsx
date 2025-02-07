@@ -31,7 +31,12 @@ const IDPAuthPage = () => {
         if (jwtToken) {
           Cookies.set("token", jwtToken, { sameSite: "Lax", secure: true });
           axios.defaults.headers["Authorization"] = "Bearer " + jwtToken;
-          localStorage.setItem("loggedInUsingSSO", "true");
+
+          try {
+            localStorage.setItem("loggedInUsingSSO", "true");
+          } catch (error) {
+            console.warn("Failed to set SSO state:", error);
+          }
 
           // Redirect to the Destination URL
           if (destination && PAGE_TITLE_MAP[destination]) {
