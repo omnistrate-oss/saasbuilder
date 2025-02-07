@@ -55,6 +55,11 @@ const useAuditLogs = (queryParams: QueryParams = {}, queryOptions = {}) => {
         ...params,
       });
 
+      res.data.events = res.data.events.map((event, index) => ({
+        ...event,
+        id: `${event.id}-${index}`,
+      }));
+
       return res.data;
     },
     {

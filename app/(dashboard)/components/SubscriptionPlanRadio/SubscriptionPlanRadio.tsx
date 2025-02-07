@@ -131,6 +131,14 @@ const SubscriptionPlanCard = ({
     </div>
   );
 
+  if (disabled && disabledMessage) {
+    return (
+      <Tooltip placement="top" title={disabledMessage}>
+        {card}
+      </Tooltip>
+    );
+  }
+
   if (!subscriptions.length && !subscriptionRequest) {
     return (
       <Tooltip
@@ -145,14 +153,6 @@ const SubscriptionPlanCard = ({
   if (!subscriptions.length && subscriptionRequest) {
     return (
       <Tooltip placement="top" title="Subscription request is pending approval">
-        {card}
-      </Tooltip>
-    );
-  }
-
-  if (disabled && disabledMessage) {
-    return (
-      <Tooltip placement="top" title={disabledMessage}>
         {card}
       </Tooltip>
     );
@@ -330,7 +330,7 @@ const SubscriptionPlanRadio: React.FC<SubscriptionPlanRadioProps> = ({
             disabled={disabled || plan.serviceModelStatus !== "READY"}
             disabledMessage={
               plan.serviceModelStatus !== "READY"
-                ? "Service model is not active"
+                ? "Service not available at the moment"
                 : ""
             }
           />
