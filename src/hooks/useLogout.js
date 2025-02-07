@@ -17,6 +17,7 @@ function useLogout() {
   function handleLogout() {
     Cookies.remove("token");
     localStorage.removeItem("paymentNotificationHidden");
+    localStorage.removeItem("loggedInUsingSSO");
     router.replace("/signin");
   }
 
