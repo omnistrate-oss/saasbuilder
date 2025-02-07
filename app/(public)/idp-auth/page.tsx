@@ -31,6 +31,7 @@ const IDPAuthPage = () => {
         if (jwtToken) {
           Cookies.set("token", jwtToken, { sameSite: "Lax", secure: true });
           axios.defaults.headers["Authorization"] = "Bearer " + jwtToken;
+          localStorage.setItem("loggedInUsingSSO", "true");
 
           // Redirect to the Destination URL
           if (destination && PAGE_TITLE_MAP[destination]) {
