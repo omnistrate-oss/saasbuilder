@@ -29,6 +29,10 @@ import CloudProviderRadio from "app/(dashboard)/components/CloudProviderRadio/Cl
 import SubscriptionPlanRadio from "app/(dashboard)/components/SubscriptionPlanRadio/SubscriptionPlanRadio";
 import CustomLabelDescription from "./CustomLabelDescription";
 import { getInitialValues } from "../utils";
+import {
+  ACCOUNT_CREATION_METHOD_LABELS,
+  ACCOUNT_CREATION_METHODS,
+} from "src/utils/constants/accountConfig";
 
 const CloudAccountForm = ({
   initialFormValues, // These are from URL Params
@@ -224,8 +228,8 @@ const CloudAccountForm = ({
 
     const accountConfigurationMethods =
       values.cloudProvider === "aws"
-        ? ["CloudFormation", "Terraform"]
-        : ["Terraform"];
+        ? [ACCOUNT_CREATION_METHODS.CLOUDFORMATION]
+        : [ACCOUNT_CREATION_METHODS.GCP_SCRIPT];
 
     return {
       footer: {
@@ -388,7 +392,9 @@ const CloudAccountForm = ({
                   onChange={(cloudProvider: string) => {
                     setFieldValue(
                       "accountConfigurationMethod",
-                      cloudProvider === "aws" ? "CloudFormation" : "Terraform"
+                      cloudProvider === "aws"
+                        ? ACCOUNT_CREATION_METHODS.CLOUDFORMATION
+                        : ACCOUNT_CREATION_METHODS.GCP_SCRIPT
                     );
                   }}
                   disabled={formMode !== "create"}
@@ -412,11 +418,12 @@ const CloudAccountForm = ({
               isHidden: !cloudProvider,
               menuItems: accountConfigurationMethods.map((option) => ({
                 value: option,
-                label:
-                  option === "CloudFormation"
-                    ? "CloudFormation (recommended)"
-                    : "Terraform",
+                label: ACCOUNT_CREATION_METHOD_LABELS[option],
               })),
+              previewValue:
+                ACCOUNT_CREATION_METHOD_LABELS[
+                  values.accountConfigurationMethod
+                ],
             },
             {
               label: "AWS Account ID",

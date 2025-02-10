@@ -1,6 +1,7 @@
 import { Subscription } from "src/types/subscription";
 import { ServiceOffering } from "src/types/serviceOffering";
 import { ResourceInstance } from "src/types/resourceInstance";
+import { ACCOUNT_CREATION_METHODS } from "src/utils/constants/accountConfig";
 
 export const getInitialValues = (
   initialFormValues: {
@@ -57,7 +58,9 @@ export const getInitialValues = (
       ...initialFormValues,
       cloudProvider,
       accountConfigurationMethod:
-        cloudProvider === "aws" ? "CloudFormation" : "Terraform",
+        cloudProvider === "aws"
+          ? ACCOUNT_CREATION_METHODS.CLOUDFORMATION
+          : ACCOUNT_CREATION_METHODS.GCP_SCRIPT,
     };
   }
 
@@ -90,7 +93,9 @@ export const getInitialValues = (
     subscriptionId: rootSubscription?.id || filteredSubscriptions[0]?.id || "",
     cloudProvider,
     accountConfigurationMethod:
-      cloudProvider === "aws" ? "CloudFormation" : "Terraform",
+      cloudProvider === "aws"
+        ? ACCOUNT_CREATION_METHODS.CLOUDFORMATION
+        : ACCOUNT_CREATION_METHODS.GCP_SCRIPT,
     awsAccountId: "",
     gcpProjectId: "",
     gcpProjectNumber: "",
