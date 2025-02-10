@@ -70,8 +70,7 @@ const PasswordForm: React.FC<PasswordFormProps> = ({ email }) => {
   const { values, handleChange, handleBlur, touched, errors } = formData;
 
   const setPasswordMutation = useMutation(
-    () => {
-      const payload = { email: email };
+    (payload: any) => {
       return customerUserResetPassword(payload);
     },
     {
@@ -83,9 +82,16 @@ const PasswordForm: React.FC<PasswordFormProps> = ({ email }) => {
     }
   );
 
-  const handleSetPassword = () => {
-    setPasswordMutation.mutate();
-  };
+  async function handleSetPassword() {
+    const data = { email: email };
+
+    for (const key in values) {
+      if (values[key]) {
+        data[key] = values[key];
+      }
+    }
+    setPasswordMutation.mutate(data);
+  }
   if (!isLoggedInUsingSSO) {
     return (
       <div>
@@ -182,58 +188,60 @@ const PasswordForm: React.FC<PasswordFormProps> = ({ email }) => {
 
   if (isLoggedInUsingSSO) {
     return (
-      <Box sx={{ Padding: "100px" }} display="flex" flexDirection={"column"}>
-        <Box display="flex" justifyContent={"center"}>
-          <Box
-            display="flex"
-            gap={1}
-            mt="2px"
-            textAlign={"center"}
-            alignItems={"center"}
-          >
-            <BrokenCircleCheckIcon color="#079455" />
-
-            <Text size="xlarge" weight="regular" color="rgba(83, 88, 98, 1)">
-              You are currently logged in via Google/Github SSO.
-            </Text>
-          </Box>
-        </Box>
-        <Box display="flex" justifyContent={"center"}>
-          <Box display="flex" gap={1} mt="2px">
-            <Text size="xlarge" weight="regular" color="rgba(83, 88, 98, 1)">
-              To setup password-based access, please
-            </Text>
-            <Button
-              onClick={handleSetPassword}
-              sx={{
-                color: "#7F56D9 !important",
-                fontSize: "20px !important",
-                lineHeight: "30px !important",
-                fontWeight: 700,
-                textDecoration: "underline !important",
-                textUnderlineOffset: "2px",
-                cursor: "pointer",
-                background: "none",
-                border: "none",
-                padding: "0 !important",
-              }}
-              disabled={setPasswordMutation.isLoading}
+      <>
+        <Box sx={{ Padding: "100px" }} display="flex" flexDirection={"column"}>
+          <Box display="flex" justifyContent={"center"}>
+            <Box
+              display="flex"
+              gap={1}
+              mt="2px"
+              textAlign={"center"}
+              alignItems={"center"}
             >
-              click here
-            </Button>
+              <BrokenCircleCheckIcon color="#079455" />
 
-            <Text size="xlarge" weight="regular" color="rgba(83, 88, 98, 1)">
-              to send a setup link
-            </Text>
+              <Text size="xlarge" weight="regular" color="rgba(83, 88, 98, 1)">
+                You are currently logged in via Google/Github SSO.
+              </Text>
+            </Box>
           </Box>
+          <Box display="flex" justifyContent={"center"}>
+            <Box display="flex" gap={1} mt="2px">
+              <Text size="xlarge" weight="regular" color="rgba(83, 88, 98, 1)">
+                To setup password-based access, please
+              </Text>
+              <Button
+                onClick={handleSetPassword}
+                sx={{
+                  color: "#7F56D9 !important",
+                  fontSize: "20px !important",
+                  lineHeight: "30px !important",
+                  fontWeight: 700,
+                  textDecoration: "underline !important",
+                  textUnderlineOffset: "2px",
+                  cursor: "pointer",
+                  background: "none",
+                  border: "none",
+                  padding: "0 !important",
+                }}
+                disabled={setPasswordMutation.isLoading}
+              >
+                click here
+              </Button>
+
+              <Text size="xlarge" weight="regular" color="rgba(83, 88, 98, 1)">
+                to send a setup link
+              </Text>
+            </Box>
+          </Box>
+          <Box display="flex" justifyContent={"center"}>
+            {setPasswordMutation.isLoading && (
+              <CircularProgress size={16} sx={{ marginLeft: "8px" }} />
+            )}
+          </Box>
+          <Divider sx={{ mt: 3, mb: 3 }} />
         </Box>
-        <Box display="flex" justifyContent={"center"}>
-          {setPasswordMutation.isLoading && (
-            <CircularProgress size={16} sx={{ marginLeft: "8px" }} />
-          )}
-        </Box>
-        <Divider sx={{ mt: 3, mb: 3 }} />
-      </Box>
+      </>
     );
   }
 };
