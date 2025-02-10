@@ -26,3 +26,13 @@ export const getGcpBootstrapShellCommand = (accountId) => {
     accountId
   );
 };
+
+export const GCP_SHELL_SCRIPT_OFFBOARD_COMMAND =
+  'bash -c "$(curl -fsSL <BASE_URL>/account-setup/gcp-offboard.sh?account_config_id=<ACCOUNT_CONFIG_ID>)"';
+
+export const getGcpShellScriptOffboardCommand = (accountId) => {
+  return GCP_BOOTSTRAP_SHELL_COMMAND.replace("<BASE_URL>", baseURL).replace(
+    "<ACCOUNT_CONFIG_ID>",
+    accountId
+  );
+};

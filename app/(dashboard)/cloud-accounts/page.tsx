@@ -35,7 +35,10 @@ import { deleteResourceInstance } from "src/api/resourceInstance";
 import { getResourceInstanceStatusStylesAndLabel } from "src/constants/statusChipStyles/resourceInstanceStatus";
 import { getCloudAccountsRoute } from "src/utils/routes";
 import { ACCOUNT_CREATION_METHODS } from "src/utils/constants/accountConfig";
-import { getGcpBootstrapShellCommand } from "src/utils/accountConfig/accountConfig";
+import {
+  getGcpBootstrapShellCommand,
+  getGcpShellScriptOffboardCommand,
+} from "src/utils/accountConfig/accountConfig";
 
 const columnHelper = createColumnHelper<ResourceInstance>();
 
@@ -317,7 +320,7 @@ const CloudAccountsPage = () => {
 
   const deleteAccountInstructionDetails = useMemo(() => {
     const result_params: any = selectedInstance?.result_params;
-    let details = {};
+    let details: any = {};
     if (result_params?.aws_account_id) {
       details = {
         awsAccountID: result_params?.aws_account_id,
@@ -327,6 +330,11 @@ const CloudAccountsPage = () => {
         gcpProjectID: result_params?.gcp_project_id,
         gcpProjectNumber: result_params?.gcp_project_number,
       };
+      if (result_params?.cloud_provider_account_config_id) {
+        details.gcpOffboardCommand = getGcpShellScriptOffboardCommand(
+          result_params?.cloud_provider_account_config_id
+        );
+      }
     }
     return details;
   }, [selectedInstance]);

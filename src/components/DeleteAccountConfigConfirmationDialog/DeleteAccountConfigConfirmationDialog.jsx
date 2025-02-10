@@ -51,7 +51,7 @@ const StyledLink = styled(Link)({
   textDecoration: "underline",
   color: "#7F56D9",
   fontWeight: 700,
-  fontStyle: "italic",
+  // fontStyle: "italic",
 });
 
 const List = styled(Box)({
@@ -148,35 +148,54 @@ const DeleteInstructions = ({ accountInstructionDetails }) => {
             configuration below to remove all artifacts created by Omnistrate.
           </Text>
         </ListItem>
-        {/* <ListItem>
-          <ListItemIcon>
-            <ArrowBullet />
-          </ListItemIcon>
+        {accountInstructionDetails?.awsAccountID && (
+          <ListItem>
+            <ListItemIcon>
+              <ArrowBullet />
+            </ListItemIcon>
 
-          <Text size="medium" weight="regular" color="#374151">
-            <b>Terraform Users:</b> If you set up your account using Terraform,
-            execute terraform destroy to revoke our access.{" "}
-          </Text>
-        </ListItem> */}
+            <Text size="medium" weight="regular" color="#374151">
+              Follow the provided steps{" "}
+              <StyledLink
+                target="_blank"
+                rel="noopener noreferrer"
+                href="https://docs.omnistrate.com/getting-started/account-offboarding/"
+              >
+                here
+              </StyledLink>{" "}
+              to complete the off-boarding process and revoke our access.
+            </Text>
+          </ListItem>
+        )}
 
-        <ListItem>
-          <ListItemIcon>
-            <ArrowBullet />
-          </ListItemIcon>
+        {accountInstructionDetails?.gcpProjectID && (
+          <ListItem>
+            <ListItemIcon>
+              <ArrowBullet />
+            </ListItemIcon>
 
-          <Text size="medium" weight="regular" color="#374151">
-            Follow the provided steps{" "}
-            <StyledLink
-              target="_blank"
-              rel="noopener noreferrer"
-              href="https://docs.omnistrate.com/getting-started/account-offboarding/"
-            >
-              here
-            </StyledLink>{" "}
-            to complete the off-boarding process and revoke our access.
-          </Text>
-        </ListItem>
+            <Text size="medium" weight="regular" color="#374151">
+              Open the Google Cloud Shell environment using the following link{" "}
+              <StyledLink
+                target="_blank"
+                rel="noopener noreferrer"
+                href="https://shell.cloud.google.com/?cloudshell_ephemeral=true&show=terminal"
+              >
+                Google Cloud Shell
+              </StyledLink>{" "}
+              .Once the terminal is open, execute the following command to
+              complete the off-boarding process and revoke our access.
+            </Text>
+          </ListItem>
+        )}
       </List>
+
+      {accountInstructionDetails?.gcpProjectID &&
+        accountInstructionDetails?.gcpOffboardCommand && (
+          <TextContainerToCopy
+            text={accountInstructionDetails?.gcpOffboardCommand}
+          />
+        )}
     </Box>
   );
 };
