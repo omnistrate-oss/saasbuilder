@@ -31,12 +31,11 @@ import useSnackbar from "src/hooks/useSnackbar";
 import formatDateUTC from "src/utils/formatDateUTC";
 import { ResourceInstance } from "src/types/resourceInstance";
 import { useGlobalData } from "src/providers/GlobalDataProvider";
-import {
-  deleteResourceInstance,
-  getTerraformKit,
-} from "src/api/resourceInstance";
+import { deleteResourceInstance } from "src/api/resourceInstance";
 import { getResourceInstanceStatusStylesAndLabel } from "src/constants/statusChipStyles/resourceInstanceStatus";
 import { getCloudAccountsRoute } from "src/utils/routes";
+import { ACCOUNT_CREATION_METHODS } from "src/utils/constants/accountConfig";
+import { getGcpBootstrapShellCommand } from "src/utils/accountConfig/accountConfig";
 
 const columnHelper = createColumnHelper<ResourceInstance>();
 
@@ -64,6 +63,35 @@ const CloudAccountsPage = () => {
   const [isOverlayOpen, setIsOverlayOpen] = useState(false);
   const [isAccountCreation, setIsAccountCreation] = useState(false);
   const [clickedInstance, setClickedInstance] = useState<ResourceInstance>();
+
+  const gcpBootstrapShellCommand = useMemo(() => {
+    const result_params: any = clickedInstance?.result_params;
+    if (
+      result_params?.account_configuration_method ===
+        ACCOUNT_CREATION_METHODS.GCP_SCRIPT &&
+      result_params?.cloud_provider_account_config_id
+    ) {
+      return getGcpBootstrapShellCommand(
+        result_params?.cloud_provider_account_config_id
+      );
+    }
+  }, [clickedInstance]);
+
+  const accountInstructionDetails = useMemo(() => {
+    const result_params: any = clickedInstance?.result_params;
+    let details = {};
+    if (result_params?.aws_account_id) {
+      details = {
+        awsAccountID: result_params?.aws_account_id,
+      };
+    } else if (result_params?.gcp_project_id) {
+      details = {
+        gcpProjectID: result_params?.gcp_project_id,
+        gcpProjectNumber: result_params?.gcp_project_number,
+      };
+    }
+    return details;
+  }, [clickedInstance]);
 
   const {
     data: instances = [],
@@ -287,6 +315,22 @@ const CloudAccountsPage = () => {
     return instances.find((instance) => instance.id === selectedRows[0]);
   }, [selectedRows, instances]);
 
+  const deleteAccountInstructionDetails = useMemo(() => {
+    const result_params: any = selectedInstance?.result_params;
+    let details = {};
+    if (result_params?.aws_account_id) {
+      details = {
+        awsAccountID: result_params?.aws_account_id,
+      };
+    } else if (result_params?.gcp_project_id) {
+      details = {
+        gcpProjectID: result_params?.gcp_project_id,
+        gcpProjectNumber: result_params?.gcp_project_number,
+      };
+    }
+    return details;
+  }, [selectedInstance]);
+
   // Subscription of the Selected Instance
   const selectedInstanceSubscription = useMemo(() => {
     return subscriptionsObj[selectedInstance?.subscriptionId as string];
@@ -359,38 +403,6 @@ const CloudAccountsPage = () => {
     const { serviceId, productTierId } = clickedInstanceSubscription || {};
     return serviceOfferingsObj[serviceId]?.[productTierId];
   }, [clickedInstanceSubscription, serviceOfferingsObj]);
-
-  const downloadTerraformKitMutation = useMutation(
-    () => {
-      if (clickedInstanceOffering && clickedInstanceSubscription) {
-        return getTerraformKit(
-          clickedInstanceOffering.serviceProviderId,
-          clickedInstanceOffering.serviceURLKey,
-          clickedInstanceOffering.serviceAPIVersion,
-          clickedInstanceOffering.serviceEnvironmentURLKey,
-          clickedInstanceOffering.serviceModelURLKey,
-          clickedInstanceSubscription.id,
-          // @ts-ignore
-          clickedInstance?.result_params?.gcp_project_id ? "gcp" : "aws"
-        );
-      }
-    },
-    {
-      onSuccess: (response: any) => {
-        if (!response?.data) {
-          return snackbar.showError("Failed to download terraform kit");
-        }
-        const href = URL.createObjectURL(response.data);
-        const link = document.createElement("a");
-        link.href = href;
-        link.setAttribute("download", "terraformkit.tar");
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        URL.revokeObjectURL(href);
-      },
-    }
-  );
 
   useEffect(() => {
     if (isAccountCreation) {
@@ -471,6 +483,7 @@ const CloudAccountsPage = () => {
         formData={deleteformik}
         title="Delete Account Config"
         isLoading={deleteAccountConfigMutation.isLoading}
+        accountInstructionDetails={deleteAccountInstructionDetails}
       />
 
       <CloudProviderAccountOrgIdModal
@@ -481,8 +494,6 @@ const CloudAccountsPage = () => {
           setClickedInstance(undefined);
           setIsAccountCreation(false);
         }}
-        orgId={clickedInstanceSubscription?.accountConfigIdentityId}
-        downloadTerraformKitMutation={downloadTerraformKitMutation}
         accountConfigId={clickedInstance?.id}
         selectedAccountConfig={clickedInstance}
         accountConfigMethod={
@@ -492,10 +503,9 @@ const CloudAccountsPage = () => {
         cloudFormationTemplateUrl={
           clickedInstanceOffering?.assets?.cloudFormationURL
         }
-        cloudFormationTemplateUrlNoLB={
-          clickedInstanceOffering?.assets?.cloudFormationURLNoLB
-        }
         isAccountCreation={isAccountCreation}
+        gcpBootstrapShellCommand={gcpBootstrapShellCommand}
+        accountInstructionDetails={accountInstructionDetails}
       />
     </PageContainer>
   );
