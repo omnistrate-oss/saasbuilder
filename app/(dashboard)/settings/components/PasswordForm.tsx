@@ -185,7 +185,7 @@ const PasswordForm: React.FC<PasswordFormProps> = ({ email }) => {
   if (isLoggedInUsingSSO) {
     return (
       <>
-        <Box sx={{ Padding: "100px" }} display="flex" flexDirection={"column"}>
+        <Box display="flex" flexDirection={"column"}>
           <Box display="flex" justifyContent={"center"}>
             <Box
               display="flex"
