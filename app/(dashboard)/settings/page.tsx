@@ -109,7 +109,7 @@ const SettingsPage = () => {
             isLoadingUserData={isLoadingUserData}
           />
         )}
-        {currentTab === "password" && <PasswordForm email={selectUser.email} />}
+        {currentTab === "password" && <PasswordForm />}
       </PageContainer>
     </div>
   );

@@ -202,6 +202,16 @@ export const getStandardInformationFields = (
               : !servicePlanId
                 ? "Select a subscription plan"
                 : "No subscriptions available",
+            onChange: () => {
+              // We filter the cloud accounts based on the selected subscription
+              // So we need to reset the selected cloud account
+              if (values.requestParams?.cloud_provider_account_config_id) {
+                setFieldValue(
+                  "requestParams.cloud_provider_account_config_id",
+                  ""
+                );
+              }
+            },
           }}
           formData={formData}
           subscriptions={subscriptionMenuItems}
@@ -573,10 +583,13 @@ export const getDeploymentConfigurationFields = (
         ),
         value: values.requestParams[param.key] || "",
         type: "select",
-        menuItems: cloudAccountInstances.map((config) => ({
-          label: config.label,
-          value: config.id,
-        })),
+        menuItems: cloudAccountInstances
+          // Filter cloud accounts based on the selected subscription
+          ?.filter((el) => el.subscriptionId === values.subscriptionId)
+          .map((config) => ({
+            label: config.label,
+            value: config.id,
+          })),
         required: formMode !== "modify" && param.required,
         disabled: formMode !== "create",
         previewValue: cloudAccountInstances.find(

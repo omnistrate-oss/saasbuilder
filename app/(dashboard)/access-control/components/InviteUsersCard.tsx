@@ -65,7 +65,7 @@ const getServicePlanMenuItems = (
   serviceId: string
 ) => {
   const servicePlanMenuItems = subscriptions
-    .filter((sub) => sub.serviceId === serviceId)
+    ?.filter((sub) => sub.serviceId === serviceId && sub.roleType === "root")
     .map((sub) => {
       return {
         label: sub.productTierName,

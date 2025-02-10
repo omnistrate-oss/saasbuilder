@@ -21,18 +21,14 @@ import { customerUserResetPassword } from "src/api/customer-user";
 import { Box, CircularProgress } from "@mui/material";
 import Divider from "src/components/Divider/Divider";
 import BrokenCircleCheckIcon from "app/(dashboard)/components/Icons/BrokenCircleCheckIcon";
-
 type PasswordFormProps = {
   email: string;
 };
-
 const PasswordForm: React.FC<PasswordFormProps> = ({ email }) => {
   const snackbar = useSnackbar();
   const { logout } = useLogout();
   const loggedInUsingSSO = localStorage.getItem("loggedInUsingSSO");
-
   const isLoggedInUsingSSO = loggedInUsingSSO === "true";
-
   const updatePasswordMutation = useMutation(
     (data: any) =>
       updatePassword({

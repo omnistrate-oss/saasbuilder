@@ -83,11 +83,6 @@ const SigninPage = (props) => {
 
     if (jwtToken) {
       Cookies.set("token", jwtToken, { sameSite: "Lax", secure: true });
-      try {
-        localStorage.removeItem("loggedInUsingSSO");
-      } catch (error) {
-        console.warn("Failed to clear SSO state:", error);
-      }
       axios.defaults.headers["Authorization"] = "Bearer " + jwtToken;
 
       // Redirect to the Destination URL

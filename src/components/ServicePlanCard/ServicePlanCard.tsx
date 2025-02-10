@@ -121,13 +121,28 @@ const ServicePlanCard: React.FC<ServicePlanCardProps> = ({
       {!rootSubscription && !subscriptionRequest && (
         <Button
           variant="contained"
-          disabled={isFetchingData || isSubscribing || isUnsubscribing}
+          disabled={
+            isFetchingData ||
+            isSubscribing ||
+            isUnsubscribing ||
+            servicePlan.serviceModelStatus !== "READY"
+          }
           startIcon={
             <CirclePlusIcon
-              disabled={isFetchingData || isSubscribing || isUnsubscribing}
+              disabled={
+                isFetchingData ||
+                isSubscribing ||
+                isUnsubscribing ||
+                servicePlan.serviceModelStatus !== "READY"
+              }
             />
           }
           onClick={onSubscribeClick}
+          disabledMessage={
+            servicePlan.serviceModelStatus !== "READY"
+              ? "Service not available at the moment"
+              : ""
+          }
         >
           Subscribe
         </Button>

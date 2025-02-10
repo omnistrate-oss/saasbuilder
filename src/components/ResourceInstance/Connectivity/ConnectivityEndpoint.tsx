@@ -123,7 +123,8 @@ const ResourceConnectivityEndpoint: FC<ResourceConnectivityEndpointProps> = (
   const endpointPort = (endpoint, port) => {
     const endpointURL = portEndpoint[Number(String(port).trim())];
     if (endpointURL) return `${endpointURL}${endpoint}`;
-    else return `${endpoint}:${port}`;
+    else if (port) return `${endpoint}:${port}`;
+    else return `${endpoint}`;
   };
 
   return (
