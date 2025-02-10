@@ -15,8 +15,10 @@ export default async function handleResetPassword(nextRequest, nextResponse) {
       const requestBody = nextRequest.body || {};
       const isReCaptchaSetup = checkReCaptchaSetup();
       const token = nextRequest.cookies?.token;
-      const tokenValidate = await getUser(token);
-
+      let tokenValidate = false;
+      if (token) {
+        tokenValidate = await getUser(token);
+      }
       if (!tokenValidate && isReCaptchaSetup) {
         const { reCaptchaToken } = requestBody;
         const isVerified = await verifyRecaptchaToken(reCaptchaToken);
