@@ -232,7 +232,7 @@ const PasswordForm: React.FC<PasswordFormProps> = ({ email }) => {
           </Box>
           <Box display="flex" justifyContent={"center"}>
             {setPasswordMutation.isLoading && (
-              <CircularProgress size={16} sx={{ marginLeft: "8px" }} />
+              <CircularProgress size={16} sx={{ marginTop: "8px" }} />
             )}
           </Box>
           <Divider sx={{ mt: 3, mb: 3 }} />
