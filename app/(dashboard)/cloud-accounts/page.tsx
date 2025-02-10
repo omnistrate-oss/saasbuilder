@@ -37,6 +37,7 @@ import {
 } from "src/api/resourceInstance";
 import { getResourceInstanceStatusStylesAndLabel } from "src/constants/statusChipStyles/resourceInstanceStatus";
 import { getCloudAccountsRoute } from "src/utils/routes";
+import { isCloudAccountInstance } from "src/utils/access/byoaResource";
 
 const columnHelper = createColumnHelper<ResourceInstance>();
 
@@ -87,9 +88,8 @@ const CloudAccountsPage = () => {
   }, [serviceId, servicePlanId, subscriptionId]);
 
   const byoaInstances = useMemo(() => {
-    const res = instances.filter(
-      // @ts-ignore
-      (instance) => instance.resourceID?.startsWith("r-injectedaccountconfig")
+    const res = instances.filter((instance) =>
+      isCloudAccountInstance(instance)
     );
 
     if (searchText) {

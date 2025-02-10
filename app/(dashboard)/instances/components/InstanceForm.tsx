@@ -36,6 +36,7 @@ import {
 import useCustomNetworks from "app/(dashboard)/custom-networks/hooks/useCustomNetworks";
 import { CloudProvider } from "src/types/common/enums";
 import { productTierTypes } from "src/constants/servicePlan";
+import { isCloudAccountInstance } from "src/utils/access/byoaResource";
 
 const InstanceForm = ({
   formMode,
@@ -392,10 +393,7 @@ const InstanceForm = ({
   const cloudAccountInstances = useMemo(
     () =>
       instances
-        .filter(
-          // @ts-ignore
-          (instance) => instance.result_params?.account_configuration_method
-        )
+        .filter((instance) => isCloudAccountInstance(instance))
         .filter((instance) => {
           if (instance.result_params?.gcp_project_id) {
             return values.cloudProvider === "gcp";

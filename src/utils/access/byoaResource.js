@@ -4,3 +4,7 @@ export function checkIfResouceIsBYOA(id) {
   }
   return id?.includes("r-injectedaccountconfig");
 }
+
+export function isCloudAccountInstance(instance) {
+  return instance?.resourceID?.includes("r-injectedaccountconfig");
+}
