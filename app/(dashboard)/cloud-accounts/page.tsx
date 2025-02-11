@@ -35,7 +35,6 @@ import { deleteResourceInstance } from "src/api/resourceInstance";
 import { getResourceInstanceStatusStylesAndLabel } from "src/constants/statusChipStyles/resourceInstanceStatus";
 import { getCloudAccountsRoute } from "src/utils/routes";
 import { isCloudAccountInstance } from "src/utils/access/byoaResource";
-import { ACCOUNT_CREATION_METHODS } from "src/utils/constants/accountConfig";
 import {
   getGcpBootstrapShellCommand,
   getGcpShellScriptOffboardCommand,
@@ -70,11 +69,7 @@ const CloudAccountsPage = () => {
 
   const gcpBootstrapShellCommand = useMemo(() => {
     const result_params: any = clickedInstance?.result_params;
-    if (
-      result_params?.account_configuration_method ===
-        ACCOUNT_CREATION_METHODS.GCP_SCRIPT &&
-      result_params?.cloud_provider_account_config_id
-    ) {
+    if (result_params?.cloud_provider_account_config_id) {
       return getGcpBootstrapShellCommand(
         result_params?.cloud_provider_account_config_id
       );
@@ -504,10 +499,6 @@ const CloudAccountsPage = () => {
         }}
         accountConfigId={clickedInstance?.id}
         selectedAccountConfig={clickedInstance}
-        accountConfigMethod={
-          // @ts-ignore
-          clickedInstance?.result_params?.account_configuration_method
-        }
         cloudFormationTemplateUrl={
           clickedInstanceOffering?.assets?.cloudFormationURL
         }

@@ -130,7 +130,6 @@ export const TextContainerToCopy = (props) => {
 
 const CreationTimeInstructions = (props) => {
   const {
-    accountConfigMethod,
     accountConfigStatus,
     cloudformationlink,
     cloudFormationGuide,
@@ -151,16 +150,7 @@ const CreationTimeInstructions = (props) => {
     );
   }
 
-  if (accountConfigMethod === ACCOUNT_CREATION_METHODS.CLOUDFORMATION) {
-    if (!cloudFormationTemplateUrl) {
-      return (
-        <BodyText>
-          Your CloudFormation Stack is being configured. Please check back
-          shortly for detailed setup instructions.
-        </BodyText>
-      );
-    }
-
+  if (accountInstructionDetails?.awsAccountID) {
     return (
       <>
         <BodyText weight="medium">AWS Account ID</BodyText>
@@ -169,34 +159,34 @@ const CreationTimeInstructions = (props) => {
           marginTop="6px"
         />
 
-        <BodyText sx={{ marginTop: "20px" }}>
-          Your account details have been saved. To complete the setup please
-          create your CloudFormation Stack using the provided template{" "}
-          {cloudformationlink}.
-        </BodyText>
+        {cloudFormationTemplateUrl ? (
+          <>
+            <BodyText sx={{ marginTop: "20px" }}>
+              Your account details have been saved. To complete the setup please
+              create your CloudFormation Stack using the provided template{" "}
+              {cloudformationlink}.
+            </BodyText>
 
-        <BodyText sx={{ marginTop: "20px" }}>
-          If an existing AWSLoadBalancerControllerIAMPolicy policy causes an
-          error while creating the CloudFormation stack, set the parameter
-          CreateLoadBalancerPolicy to &quot;false&quot;.
-        </BodyText>
+            <BodyText sx={{ marginTop: "20px" }}>
+              If an existing AWSLoadBalancerControllerIAMPolicy policy causes an
+              error while creating the CloudFormation stack, set the parameter
+              CreateLoadBalancerPolicy to &quot;false&quot;.
+            </BodyText>
 
-        <BodyText sx={{ marginTop: "20px" }}>
-          For guidance, our instructional video is available{" "}
-          {cloudFormationGuide}.
-        </BodyText>
+            <BodyText sx={{ marginTop: "20px" }}>
+              For guidance, our instructional video is available{" "}
+              {cloudFormationGuide}.
+            </BodyText>
+          </>
+        ) : (
+          <BodyText sx={{ marginTop: "20px" }}>
+            Your CloudFormation Stack is being configured. Please check back
+            shortly for detailed setup instructions.
+          </BodyText>
+        )}
       </>
     );
-  } else if (accountConfigMethod === ACCOUNT_CREATION_METHODS.GCP_SCRIPT) {
-    if (!gcpBootstrapShellCommand) {
-      return (
-        <BodyText>
-          Your GCP shell script is being configured. Please check back shortly
-          for detailed setup instructions.
-        </BodyText>
-      );
-    }
-
+  } else if (accountInstructionDetails?.gcpProjectID) {
     return (
       <>
         <Stack direction={"row"} alignItems={"flex-start"} gap="12px">
@@ -216,16 +206,26 @@ const CreationTimeInstructions = (props) => {
           </Box>
         </Stack>
 
-        <BodyText sx={{ marginTop: "20px" }}>
-          Please open the Google Cloud Shell environment using the following
-          link {gcpCloudShellLink} . Once the terminal is open, execute the
-          following command:
-        </BodyText>
-        <TextContainerToCopy text={gcpBootstrapShellCommand} />
+        {gcpBootstrapShellCommand ? (
+          <>
+            <BodyText sx={{ marginTop: "20px" }}>
+              Please open the Google Cloud Shell environment using the following
+              link {gcpCloudShellLink} . Once the terminal is open, execute the
+              following command:
+            </BodyText>
+            <TextContainerToCopy text={gcpBootstrapShellCommand} />
 
-        <BodyText sx={{ marginTop: "20px" }}>
-          For guidance, our instructional video is available {shellScriptGuide}.
-        </BodyText>
+            <BodyText sx={{ marginTop: "20px" }}>
+              For guidance, our instructional video is available{" "}
+              {shellScriptGuide}.
+            </BodyText>
+          </>
+        ) : (
+          <BodyText sx={{ marginTop: "20px" }}>
+            Your GCP shell script is being configured. Please check back shortly
+            for detailed setup instructions.
+          </BodyText>
+        )}
       </>
     );
   } else {
@@ -322,7 +322,7 @@ const NonCreationTimeInstructions = (props) => {
                   </Box>
                 </>
               ) : (
-                <BodyText sx={{ marginTop: "20px" }}>
+                <BodyText>
                   Your CloudFormation Stack is being configured. Please check
                   back shortly for detailed setup instructions.
                 </BodyText>
@@ -363,7 +363,6 @@ function CloudProviderAccountOrgIdModal({
   open,
   handleClose,
   isAccountCreation,
-  accountConfigMethod,
   cloudFormationTemplateUrl,
   isAccessPage = false,
   accountConfigId,
@@ -461,7 +460,6 @@ function CloudProviderAccountOrgIdModal({
         <Content>
           {isAccountCreation ? (
             <CreationTimeInstructions
-              accountConfigMethod={accountConfigMethod}
               cloudformationlink={cloudformationlink}
               cloudFormationGuide={cloudFormationGuide}
               accountConfigStatus={selectedAccountConfig?.status}
