@@ -85,7 +85,7 @@ const SigninPage = (props) => {
       Cookies.set("token", jwtToken, { sameSite: "Lax", secure: true });
 
       try {
-        localStorage.setItem("loggedInUsingSSO", "true");
+        localStorage.removeItem("loggedInUsingSSO");
       } catch (error) {
         console.warn("Failed to set SSO state:", error);
       }
