@@ -54,6 +54,7 @@ import InstanceHealthStatusChip, {
 } from "src/components/InstanceHealthStatusChip/InstanceHealthStautusChip";
 import { getInstanceDetailsRoute } from "src/utils/routes";
 import { loadStatusMap } from "./constants";
+import { isCloudAccountInstance } from "src/utils/access/byoaResource";
 
 const columnHelper = createColumnHelper<ResourceInstance>();
 type Overlay =
@@ -387,10 +388,7 @@ const InstancesPage = () => {
 
   // Filter BYOA Account Instances
   const nonBYOAInstances = useMemo(() => {
-    return instances.filter(
-      // @ts-ignore
-      (instance) => !instance.result_params?.account_configuration_method
-    );
+    return instances.filter((instance) => !isCloudAccountInstance(instance));
   }, [instances]);
 
   const filterOptionsMap = useMemo(

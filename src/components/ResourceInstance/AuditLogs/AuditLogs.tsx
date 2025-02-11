@@ -67,12 +67,12 @@ const AuditLogsTableHeader: FC<AuditLogsTableHeaderProps> = (props) => {
       borderBottom="1px solid #EAECF0"
     >
       <DataGridHeaderTitle
-        title="List of Activities"
+        title="List of Events"
         desc="Detailed audit trail of user actions performed on resource instances"
         count={count}
         units={{
-          singular: "Activity",
-          plural: "Activities",
+          singular: "Event",
+          plural: "Events",
         }}
       />
       <Stack
@@ -294,7 +294,7 @@ const AuditLogs: FC<AuditLogsTabProps> = ({ instanceId, subscriptionId }) => {
         columns={dataTableColumns}
         rows={filteredEvents}
         renderDetailsComponent={DetailTableRowView}
-        noRowsText="No activities"
+        noRowsText="No events"
         getRowCanExpand={(rowData) =>
           Boolean(Number(rowData.original.workflowFailures?.length) > 0)
         }

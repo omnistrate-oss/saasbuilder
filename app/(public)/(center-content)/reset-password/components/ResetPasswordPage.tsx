@@ -3,7 +3,7 @@
 import * as Yup from "yup";
 import Image from "next/image";
 import { useFormik } from "formik";
-import { Stack } from "@mui/material";
+import { Box, Stack } from "@mui/material";
 import { useRef, useState } from "react";
 import ReCAPTCHA from "react-google-recaptcha";
 import { useMutation } from "@tanstack/react-query";
@@ -11,7 +11,9 @@ import { useMutation } from "@tanstack/react-query";
 import useSnackbar from "src/hooks/useSnackbar";
 import { styleConfig } from "src/providerConfig";
 import { customerUserResetPassword } from "src/api/customer-user";
+import { useProviderOrgDetails } from "src/providers/ProviderOrgDetailsProvider";
 
+import Logo from "components/NonDashboardComponents/Logo";
 import { Text } from "components/Typography/Typography";
 import DisplayHeading from "components/NonDashboardComponents/DisplayHeading";
 import PageDescription from "components/NonDashboardComponents/PageDescription";
@@ -30,6 +32,7 @@ const resetPasswordValidationSchema = Yup.object({
 
 const ResetPasswordPage = (props) => {
   const { googleReCaptchaSiteKey, isReCaptchaSetup } = props;
+  const { orgLogoURL, orgName } = useProviderOrgDetails();
 
   const snackbar = useSnackbar();
   const reCaptchaRef = useRef<any>(null);
@@ -129,35 +132,48 @@ const ResetPasswordPage = (props) => {
 
   return (
     <>
-      <Stack gap="16px">
-        <DisplayHeading>Reset your password</DisplayHeading>
-        <PageDescription>
-          Enter your email address and we&apos;ll send you password reset
-          instructions.
-        </PageDescription>
+      <Box textAlign="center">
+        {orgLogoURL ? (
+          <Logo
+            src={orgLogoURL}
+            alt={orgName}
+            style={{ width: "120px", height: "auto", maxHeight: "unset" }}
+          />
+        ) : (
+          ""
+        )}
+      </Box>
+      <Stack component="form" gap="32px">
+        <Stack gap="16px">
+          <DisplayHeading>Reset your password</DisplayHeading>
+          <PageDescription>
+            Enter your email address and we&apos;ll send you password reset
+            instructions.
+          </PageDescription>
+        </Stack>
+        <FieldContainer>
+          <FieldLabel required>Registered Email</FieldLabel>
+          {/* @ts-ignore */}
+          <TextField
+            name="email"
+            id="email"
+            placeholder="Input your registered email"
+            value={values.email}
+            onChange={handleChange}
+            onBlur={handleBlur}
+            error={touched.email && errors.email}
+            helperText={touched.email && errors.email}
+          />
+        </FieldContainer>
+        <SubmitButton
+          type="submit"
+          onClick={formik.handleSubmit}
+          disabled={!formik.isValid || (isReCaptchaSetup && !isScriptLoaded)}
+          loading={resetPasswordMutation.isLoading}
+        >
+          Submit
+        </SubmitButton>
       </Stack>
-      <FieldContainer>
-        <FieldLabel required>Registered Email</FieldLabel>
-        {/* @ts-ignore */}
-        <TextField
-          name="email"
-          id="email"
-          placeholder="Input your registered email"
-          value={values.email}
-          onChange={handleChange}
-          onBlur={handleBlur}
-          error={touched.email && errors.email}
-          helperText={touched.email && errors.email}
-        />
-      </FieldContainer>
-      <SubmitButton
-        type="submit"
-        onClick={formik.handleSubmit}
-        disabled={!formik.isValid || (isReCaptchaSetup && !isScriptLoaded)}
-        loading={resetPasswordMutation.isLoading}
-      >
-        Submit
-      </SubmitButton>
       {isReCaptchaSetup && (
         // @ts-ignore
         <ReCAPTCHA
