@@ -7,6 +7,7 @@ import DeleteCirleIcon from "components/Icons/DeleteCircle/DeleteCirleIcon";
 import { Text } from "components/Typography/Typography";
 import CloseIcon from "@mui/icons-material/Close";
 import Link from "next/link";
+import { TextContainerToCopy } from "../CloudProviderAccountOrgIdModal/CloudProviderAccountOrgIdModal";
 
 const StyledForm = styled(Form)({
   position: "fixed",
@@ -50,7 +51,7 @@ const StyledLink = styled(Link)({
   textDecoration: "underline",
   color: "#7F56D9",
   fontWeight: 700,
-  fontStyle: "italic",
+  // fontStyle: "italic",
 });
 
 const List = styled(Box)({
@@ -89,9 +90,49 @@ const ArrowBullet = (props) => (
   </svg>
 );
 
-const DeleteInstructions = () => {
+const DeleteInstructions = ({ accountInstructionDetails }) => {
   return (
     <Box width={"100%"} mb="30px">
+      {accountInstructionDetails?.awsAccountID && (
+        <Box marginBottom={"20px"}>
+          <Text size="small" weight="semibold" color="#374151">
+            AWS Account ID
+          </Text>
+          <TextContainerToCopy
+            text={accountInstructionDetails?.awsAccountID}
+            marginTop="6px"
+          />
+        </Box>
+      )}
+
+      {accountInstructionDetails?.gcpProjectID && (
+        <Stack
+          direction={"row"}
+          alignItems={"flex-start"}
+          gap="12px"
+          marginBottom={"20px"}
+        >
+          <Box flex={1} maxWidth={"50%"}>
+            <Text size="small" weight="semibold" color="#374151">
+              GCP Project ID
+            </Text>
+            <TextContainerToCopy
+              text={accountInstructionDetails?.gcpProjectID}
+              marginTop="6px"
+            />
+          </Box>
+          <Box flex={1} maxWidth={"50%"}>
+            <Text size="small" weight="semibold" color="#374151">
+              GCP Project Number
+            </Text>
+            <TextContainerToCopy
+              text={accountInstructionDetails?.gcpProjectNumber}
+              marginTop="6px"
+            />
+          </Box>
+        </Stack>
+      )}
+
       <Text size="medium" weight="semibold" color="#374151">
         To off-board your account:
       </Text>
@@ -107,36 +148,54 @@ const DeleteInstructions = () => {
             configuration below to remove all artifacts created by Omnistrate.
           </Text>
         </ListItem>
-        <ListItem>
-          <ListItemIcon>
-            <ArrowBullet />
-          </ListItemIcon>
+        {accountInstructionDetails?.awsAccountID && (
+          <ListItem>
+            <ListItemIcon>
+              <ArrowBullet />
+            </ListItemIcon>
 
-          <Text size="medium" weight="regular" color="#374151">
-            <b>Terraform Users:</b> If you set up your account using Terraform,
-            execute terraform destroy to revoke our access.{" "}
-          </Text>
-        </ListItem>
+            <Text size="medium" weight="regular" color="#374151">
+              Follow the provided steps{" "}
+              <StyledLink
+                target="_blank"
+                rel="noopener noreferrer"
+                href="https://docs.omnistrate.com/getting-started/account-offboarding/"
+              >
+                here
+              </StyledLink>{" "}
+              to complete the off-boarding process and revoke our access.
+            </Text>
+          </ListItem>
+        )}
 
-        <ListItem>
-          <ListItemIcon>
-            <ArrowBullet />
-          </ListItemIcon>
+        {accountInstructionDetails?.gcpProjectID && (
+          <ListItem>
+            <ListItemIcon>
+              <ArrowBullet />
+            </ListItemIcon>
 
-          <Text size="medium" weight="regular" color="#374151">
-            <b>CloudFormation Users (AWS):</b> If you used CloudFormation,
-            follow the provided steps{" "}
-            <StyledLink
-              target="_blank"
-              rel="noopener noreferrer"
-              href="https://docs.omnistrate.com/getting-started/account-offboarding/"
-            >
-              here
-            </StyledLink>{" "}
-            to complete the off-boarding process and revoke our access.
-          </Text>
-        </ListItem>
+            <Text size="medium" weight="regular" color="#374151">
+              Open the Google Cloud Shell environment using the following link{" "}
+              <StyledLink
+                target="_blank"
+                rel="noopener noreferrer"
+                href="https://shell.cloud.google.com/?cloudshell_ephemeral=true&show=terminal"
+              >
+                Google Cloud Shell
+              </StyledLink>{" "}
+              .Once the terminal is open, execute the following command to
+              complete the off-boarding process and revoke our access.
+            </Text>
+          </ListItem>
+        )}
       </List>
+
+      {accountInstructionDetails?.gcpProjectID &&
+        accountInstructionDetails?.gcpOffboardCommand && (
+          <TextContainerToCopy
+            text={accountInstructionDetails?.gcpOffboardCommand}
+          />
+        )}
     </Box>
   );
 };
@@ -152,6 +211,7 @@ function DeleteAccountConfigConfirmationDialog(props) {
     buttonColor = "#D92D20",
     isLoading,
     IconComponent = DeleteCirleIcon,
+    accountInstructionDetails,
   } = props;
 
   return (
@@ -169,7 +229,9 @@ function DeleteAccountConfigConfirmationDialog(props) {
           </IconButton>
         </Header>
         <Content>
-          <DeleteInstructions />
+          <DeleteInstructions
+            accountInstructionDetails={accountInstructionDetails}
+          />
 
           <Text
             size="small"
