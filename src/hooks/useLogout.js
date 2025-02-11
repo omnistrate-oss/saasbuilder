@@ -17,6 +17,12 @@ function useLogout() {
   function handleLogout() {
     Cookies.remove("token");
     localStorage.removeItem("paymentNotificationHidden");
+    try {
+      localStorage.removeItem("loggedInUsingSSO");
+    } catch (error) {
+      console.warn("Failed to clear SSO state:", error);
+    }
+
     router.replace("/signin");
   }
 
