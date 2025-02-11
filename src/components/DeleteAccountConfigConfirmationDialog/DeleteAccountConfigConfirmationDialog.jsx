@@ -155,7 +155,7 @@ const DeleteInstructions = ({ accountInstructionDetails }) => {
             </ListItemIcon>
 
             <Text size="medium" weight="regular" color="#374151">
-              Follow the provided steps{" "}
+              For CloudFormation, follow the provided steps{" "}
               <StyledLink
                 target="_blank"
                 rel="noopener noreferrer"
@@ -182,8 +182,8 @@ const DeleteInstructions = ({ accountInstructionDetails }) => {
                 href="https://shell.cloud.google.com/?cloudshell_ephemeral=true&show=terminal"
               >
                 Google Cloud Shell
-              </StyledLink>{" "}
-              .Once the terminal is open, execute the following command to
+              </StyledLink>
+              . Once the terminal is open, execute the following command to
               complete the off-boarding process and revoke our access.
             </Text>
           </ListItem>
@@ -194,8 +194,28 @@ const DeleteInstructions = ({ accountInstructionDetails }) => {
         accountInstructionDetails?.gcpOffboardCommand && (
           <TextContainerToCopy
             text={accountInstructionDetails?.gcpOffboardCommand}
+            marginTop="12px"
           />
         )}
+
+      <List sx={{ marginTop: "12px" }}>
+        <ListItem>
+          <ListItemIcon>
+            <ArrowBullet />
+          </ListItemIcon>
+
+          <Text size="medium" weight="regular" color="#374151">
+            For more details, refer to the documentation{" "}
+            <StyledLink
+              target="_blank"
+              rel="noopener noreferrer"
+              href="https://docs.omnistrate.com/getting-started/account-offboarding/"
+            >
+              here
+            </StyledLink>{" "}
+          </Text>
+        </ListItem>
+      </List>
     </Box>
   );
 };
