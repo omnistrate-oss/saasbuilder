@@ -40,3 +40,6 @@ fly.dev.toml
 fly.toml
 
 tsconfig.tsbuildinfo
+
+
+variables.json
