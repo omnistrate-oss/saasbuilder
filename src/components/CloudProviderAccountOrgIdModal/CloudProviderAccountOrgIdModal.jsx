@@ -5,7 +5,6 @@ import CloseIcon from "@mui/icons-material/Close";
 import Link from "next/link";
 import InstructionsModalIcon from "../Icons/AccountConfig/InstructionsModalIcon";
 import CopyToClipboardButton from "../CopyClipboardButton/CopyClipboardButton";
-import { ACCOUNT_CREATION_METHODS } from "src/utils/constants/accountConfig";
 
 const STATUS_TITLE_MAP = {
   VERIFYING: "Account Configuration Instructions",
@@ -210,7 +209,7 @@ const CreationTimeInstructions = (props) => {
           <>
             <BodyText sx={{ marginTop: "20px" }}>
               Please open the Google Cloud Shell environment using the following
-              link {gcpCloudShellLink} . Once the terminal is open, execute the
+              link {gcpCloudShellLink}. Once the terminal is open, execute the
               following command:
             </BodyText>
             <TextContainerToCopy text={gcpBootstrapShellCommand} />
@@ -335,7 +334,7 @@ const NonCreationTimeInstructions = (props) => {
                 <Box>
                   <BodyText>
                     Please open the Google Cloud Shell environment using the
-                    following link {gcpCloudShellLink} . Once the terminal is
+                    following link {gcpCloudShellLink}. Once the terminal is
                     open, execute the following command:
                   </BodyText>
 
