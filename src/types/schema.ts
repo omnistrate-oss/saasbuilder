@@ -16140,6 +16140,11 @@ export interface components {
        */
       orgName: string;
       /**
+       * @description The cookie policy for the org that this user owns
+       * @example Tempore quis.
+       */
+      orgCookiePolicy: string;
+      /**
        * @description The privacy policy for the org that this user owns
        * @example Tempore quis.
        */
