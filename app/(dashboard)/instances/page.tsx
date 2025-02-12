@@ -44,10 +44,6 @@ import ServiceNameWithLogo from "components/ServiceNameWithLogo/ServiceNameWithL
 import AccessSideRestoreInstance from "components/RestoreInstance/AccessSideRestoreInstance";
 import TextConfirmationDialog from "components/TextConfirmationDialog/TextConfirmationDialog";
 import CreateInstanceModal from "components/ResourceInstance/CreateInstanceModal/CreateInstanceModal";
-
-import SpeedoMeterLow from "public/assets/images/dashboard/resource-instance-speedo-meter/idle.png";
-import SpeedoMeterHigh from "public/assets/images/dashboard/resource-instance-speedo-meter/high.png";
-import SpeedoMeterMedium from "public/assets/images/dashboard/resource-instance-speedo-meter/normal.png";
 import { getInitialFilterState } from "src/components/InstanceFilters/InstanceFilters";
 import InstanceHealthStatusChip, {
   getInstanceHealthStatus,
@@ -55,6 +51,10 @@ import InstanceHealthStatusChip, {
 import { getInstanceDetailsRoute } from "src/utils/routes";
 import { loadStatusMap } from "./constants";
 import { isCloudAccountInstance } from "src/utils/access/byoaResource";
+import Tooltip from "src/components/Tooltip/Tooltip";
+import LoadIndicatorIdle from "src/components/Icons/LoadIndicator/LoadIndicatorIdle";
+import LoadIndicatorNormal from "src/components/Icons/LoadIndicator/LoadIndicatorNormal";
+import LoadIndicatorHigh from "src/components/Icons/LoadIndicator/LoadIndicatorHigh";
 
 const columnHelper = createColumnHelper<ResourceInstance>();
 type Overlay =
@@ -268,38 +268,49 @@ const InstancesPage = () => {
 
             return (
               <Stack direction="row" alignItems="center" gap="4px">
-                {instanceLoadStatus === "Unknown" && (
-                  <StatusChip status="Unknown" category="unknown" />
+                {(instanceLoadStatus === "STOPPED" ||
+                  instanceLoadStatus === "N/A") && (
+                  <StatusChip status="UNKNOWN" label="N/A" />
                 )}
-                {instanceLoadStatus === "Low" && (
-                  <Image
-                    src={SpeedoMeterLow}
-                    width={54}
-                    height={54}
-                    alt="Low"
-                    style={{ marginBottom: "-25px" }}
-                  />
+                {instanceLoadStatus === "UNKNOWN" && (
+                  <StatusChip status={instanceLoadStatus} />
                 )}
-                {instanceLoadStatus === "Medium" && (
-                  <Image
-                    src={SpeedoMeterMedium}
-                    width={54}
-                    height={54}
-                    alt="Medium"
-                    style={{ marginBottom: "-25px" }}
-                  />
+
+                {(instanceLoadStatus === "POD_IDLE" ||
+                  instanceLoadStatus === "LOAD_IDLE") && (
+                  <Tooltip
+                    title="Idle"
+                    placement="top"
+                    sx={{ padding: "0px !important" }}
+                  >
+                    <span style={{ display: "flex", alignItems: "center" }}>
+                      <LoadIndicatorIdle />
+                    </span>
+                  </Tooltip>
                 )}
-                {instanceLoadStatus === "High" && (
-                  <Image
-                    src={SpeedoMeterHigh}
-                    width={54}
-                    height={54}
-                    alt="High"
-                    style={{ marginBottom: "-25px" }}
-                  />
+                {(instanceLoadStatus === "POD_NORMAL" ||
+                  instanceLoadStatus === "LOAD_NORMAL") && (
+                  <Tooltip
+                    title="Normal"
+                    placement="top"
+                    sx={{ padding: "0px !important" }}
+                  >
+                    <span style={{ display: "flex", alignItems: "center" }}>
+                      <LoadIndicatorNormal />
+                    </span>
+                  </Tooltip>
                 )}
-                {instanceLoadStatus === "N/A" && (
-                  <StatusChip status="N/A" category="unknown" />
+                {(instanceLoadStatus === "POD_OVERLOAD" ||
+                  instanceLoadStatus === "LOAD_OVERLOADED") && (
+                  <Tooltip
+                    title="High"
+                    placement="top"
+                    sx={{ padding: "0px !important" }}
+                  >
+                    <span style={{ display: "flex", alignItems: "center" }}>
+                      <LoadIndicatorHigh />
+                    </span>
+                  </Tooltip>
                 )}
               </Stack>
             );
