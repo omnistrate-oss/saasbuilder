@@ -59,3 +59,40 @@ export const styleConfig = {
 //   primaryTextColor: "#FFFFFF", // Outlined Button Text
 //   primaryHoverColor: "#7F56D9", // Outlined Button Hover
 // };
+
+//Fg - Foreground
+//Bg - Background
+export const styleConfig2 = {
+  //Layout-sidebar
+  sidebarFg: "var(--gray-700)",
+  sidebarBgActive: "var(--gray-50)",
+  sidebarFgActive: "var(--success-500)",
+  //Layout-navbar
+  navbarAvatarActive: "var(--success-500)",
+
+  //datagrid- header
+  datagridHeaderTitle: "var(--purple-700)",
+  dategridHeaderChipBg: "var(--success-50)",
+  dategridHeaderChipFg: "var(--success-700)",
+  dategridHeaderChipBorder: "var(--success-200)",
+
+  //datagrid - content
+
+  //Button-primary
+  buttonPrimaryBg: "var(--success-600)",
+  buttonPrimaryFg: "var(--success-600)",
+  buttonPrimaryHoverBg: "var(--success-700)",
+  buttonPrimaryBgDisabled: "var(--gray-100)",
+  buttonPrimaryShadow:
+    "0px 1px 2px 0px rgba(10, 13, 18, 0.05), 0px -2px 0px 0px rgba(10, 13, 18, 0.05) inset, 0px 0px 0px 1px rgba(10, 13, 18, 0.18) inset",
+
+  //Button-seconday
+
+  //Button-link
+
+  //Button-destructive
+
+  //common
+  pageTitle: "var(--gray-900)",
+  loadingspinner: "var(--success-600)",
+};
