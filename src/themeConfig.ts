@@ -30,6 +30,7 @@ export const themeConfig = {
     warning200: "var(--warning-200)",
     warning700: "var(--warning-700)",
 
+    gray25: "var(--gray-25)",
     gray50: "var(--gray-50)",
     gray100: "var(--gray-100)",
     gray200: "var(--gray-200)",
