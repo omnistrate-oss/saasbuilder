@@ -8,6 +8,13 @@ import SpeedometerIcon from "app/(dashboard)/components/Icons/SpeedometerIcon";
 import WalletIcon from "app/(dashboard)/components/Icons/WalletIcon";
 
 const SampleBilling = () => {
+  // Number of hours from the start of the month
+  const usageHours = Math.floor(
+    (new Date().getTime() -
+      new Date(new Date().getFullYear(), new Date().getMonth(), 1).getTime()) /
+      (1000 * 3600)
+  );
+
   return (
     <div className="max-w-7xl mx-auto">
       <div className="flex justify-between gap-3 p-5 rounded-xl shadow-[0_1px_2px_0_#1018280D] border border-[#E4E7EC] bg-white mb-8">
@@ -133,16 +140,7 @@ const SampleBilling = () => {
               sx={{ mt: "12px" }}
             >
               <span style={{ color: "#6941C6" }}>
-                {/* Number of hours from the start of the month */}
-                {Math.floor(
-                  (new Date().getTime() -
-                    new Date(
-                      new Date().getFullYear(),
-                      new Date().getMonth(),
-                      1
-                    ).getTime()) /
-                    (1000 * 3600)
-                ) * 8}
+                {usageHours * 8}
                 {/* Assume that customer is using 2, 4 GB machines */}
               </span>{" "}
               Memory GB Hours
@@ -160,16 +158,7 @@ const SampleBilling = () => {
               sx={{ mt: "12px" }}
             >
               <span style={{ color: "#6941C6" }}>
-                {/* Number of hours from the start of the month */}
-                {Math.floor(
-                  (new Date().getTime() -
-                    new Date(
-                      new Date().getFullYear(),
-                      new Date().getMonth(),
-                      1
-                    ).getTime()) /
-                    (1000 * 3600)
-                ) * 4}{" "}
+                {usageHours * 4}
                 {/* Assume that customer is using 2, 2 core machines */}
               </span>{" "}
               CPU Core Hours
