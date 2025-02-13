@@ -18,7 +18,7 @@ const Navbar = () => {
   useUserData();
 
   return (
-    <div className="py-4 px-8 flex items-center justify-between gap-2 border-b border-[#E9EAEB]">
+    <div className="py-4 px-8 flex items-center justify-between gap-2 border-b border-[#E9EAEB] z-30">
       <div className="flex items-center gap-4">
         {orgLogoURL ? <Logo src={orgLogoURL} alt={orgName} /> : ""}
         {environmentType && environmentType !== ENVIRONMENT_TYPES.PROD && (
