@@ -1,6 +1,4 @@
-const LoadIndicatorHigh = (props) => {
-  const { color = "#175CD3", disabled, ...restProps } = props;
-
+const LoadIndicatorHigh = () => {
   return (
     <svg
       width="74"

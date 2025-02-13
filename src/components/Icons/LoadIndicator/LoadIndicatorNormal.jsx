@@ -1,6 +1,4 @@
-const LoadIndicatorNormal = (props) => {
-  const { color = "#175CD3", disabled, ...restProps } = props;
-
+const LoadIndicatorNormal = () => {
   return (
     <svg
       width="71"

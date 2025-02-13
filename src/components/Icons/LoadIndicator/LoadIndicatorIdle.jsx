@@ -1,7 +1,4 @@
-
-const LoadIndicatorIdle = (props) => {
-  const { color = "#175CD3", disabled, ...restProps } = props;
-
+const LoadIndicatorIdle = () => {
   return (
     <svg
       width="74"
