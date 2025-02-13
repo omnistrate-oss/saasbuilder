@@ -7,7 +7,11 @@ import InstructionsModalIcon from "../Icons/AccountConfig/InstructionsModalIcon"
 import CopyToClipboardButton from "../CopyClipboardButton/CopyClipboardButton";
 import ArrowBulletIcon from "../Icons/ArrowIcon/ArrowBulletIcon";
 import LoadingSpinnerSmall from "../CircularProgress/CircularProgress";
-import { ACCOUNT_CREATION_METHODS } from "src/utils/constants/accountConfig";
+import {
+  ACCOUNT_CREATION_METHODS,
+  getAccountConfigStatusBasedHeader,
+} from "src/utils/constants/accountConfig";
+import { CLOUD_PROVIDERS } from "src/constants/cloudProviders";
 
 const ArrowBulletSmall = () => <ArrowBulletIcon width={20} height={20} />;
 
@@ -16,15 +20,6 @@ const STATUS_TITLE_MAP = {
   PENDING: "Account Configuration Instructions",
   READY: "Account Configuration Ready",
   FAILED: "Account Config Verification Failed",
-};
-
-const STATUS_DESCRIPTION_MAP = {
-  VERIFYING: "To complete the account configuration setup -",
-  PENDING: "To complete the account configuration setup -",
-  READY:
-    "This account has already been configured successfully. However if you need to reconfigure for any reason, the instructions are provided below -",
-  FAILED:
-    "The account configuration verification failed. Please review the instructions below to retry the setup and resolve any issues -",
 };
 
 const StyledContainer = styled(Box)({
@@ -200,6 +195,15 @@ const CreationTimeInstructions = (props) => {
       </>
     );
   } else if (accountInstructionDetails?.gcpProjectID) {
+    if (!accountConfigMethod) {
+      return (
+        <BodyText>
+          Your account details are being configured. Please check back shortly
+          for detailed setup instructions.
+        </BodyText>
+      );
+    }
+
     return (
       <>
         <Stack direction={"row"} alignItems={"flex-start"} gap="12px">
@@ -219,47 +223,42 @@ const CreationTimeInstructions = (props) => {
           </Box>
         </Stack>
 
-        {(!accountConfigMethod ||
-          accountConfigMethod === ACCOUNT_CREATION_METHODS.GCP_SCRIPT) && (
+        {accountConfigMethod === ACCOUNT_CREATION_METHODS.GCP_SCRIPT && (
           <>
             {gcpBootstrapShellCommand ? (
               <>
                 <BodyText sx={{ marginTop: "20px" }}>
-                  <b>For GCP shell script:</b> Please open the Google Cloud
-                  Shell environment using the following link {gcpCloudShellLink}{" "}
-                  and execute the below command. For guidance, our instructional
-                  video is available {shellScriptGuide}.
+                  Please open the Google Cloud Shell environment using the
+                  following link {gcpCloudShellLink} and execute the below
+                  command. For guidance, our instructional video is available{" "}
+                  {shellScriptGuide}.
                 </BodyText>
                 <TextContainerToCopy text={gcpBootstrapShellCommand} />
               </>
             ) : (
               <BodyText sx={{ marginTop: "20px" }}>
-                <b>For GCP Shell Script:</b> Your GCP shell script is being
-                configured. Please check back shortly for detailed setup
-                instructions.
+                Your GCP shell script is being configured. Please check back
+                shortly for detailed setup instructions.
               </BodyText>
             )}
           </>
         )}
 
-        {(!accountConfigMethod ||
-          accountConfigMethod === ACCOUNT_CREATION_METHODS.TERRAFORM) && (
+        {accountConfigMethod === ACCOUNT_CREATION_METHODS.TERRAFORM && (
           <>
             {terraformlink ? (
               <>
                 <BodyText sx={{ marginTop: "20px" }}>
-                  <b>For GCP Terraform:</b> Execute the Terraform scripts
-                  available {terraformlink}, by using the Account Config
-                  Identity ID below. For guidance our Terraform instructional
-                  video is {terraformGuide}.
+                  Execute the Terraform scripts available {terraformlink}, by
+                  using the Account Config Identity ID below. For guidance our
+                  Terraform instructional video is {terraformGuide}.
                 </BodyText>
                 <TextContainerToCopy text={orgId} />
               </>
             ) : (
               <BodyText sx={{ marginTop: "20px" }}>
-                <b>For GCP Terraform:</b> You Terraform details are being
-                configured. Please check back shortly for detailed setup
-                instructions.
+                You Terraform details are being configured. Please check back
+                shortly for detailed setup instructions.
               </BodyText>
             )}
           </>
@@ -337,8 +336,13 @@ const NonCreationTimeInstructions = (props) => {
         )}
 
         <BodyText sx={{ marginTop: "20px", fontWeight: 600 }}>
-          {STATUS_DESCRIPTION_MAP[selectedAccountConfig?.status] ??
-            "To complete the account configuration setup -"}{" "}
+          {getAccountConfigStatusBasedHeader(
+            selectedAccountConfig?.status,
+            accountConfigMethod,
+            accountInstructionDetails?.gcpProjectID
+              ? CLOUD_PROVIDERS.gcp
+              : CLOUD_PROVIDERS.aws
+          )}
         </BodyText>
 
         <List>
@@ -387,7 +391,7 @@ const NonCreationTimeInstructions = (props) => {
                   {gcpBootstrapShellCommand ? (
                     <Box flex={1} overflow={"hidden"}>
                       <BodyText>
-                        <b>For GCP Shell Script:</b> Please open the Google
+                        <b>Using GCP Cloud Shell:</b> Please open the Google
                         Cloud Shell environment using the following link{" "}
                         {gcpCloudShellLink} and execute the command below. For
                         guidance our instructional video is {shellScriptGuide}.
@@ -400,7 +404,7 @@ const NonCreationTimeInstructions = (props) => {
                     </Box>
                   ) : (
                     <BodyText flex={1} overflow={"hidden"}>
-                      <b>For GCP Shell Script:</b> Your Google cloud script is
+                      <b>Using GCP Cloud Shell:</b> Your Google cloud script is
                       being configured. Please check back shortly for detailed
                       setup instructions.
                     </BodyText>
@@ -418,7 +422,7 @@ const NonCreationTimeInstructions = (props) => {
                   {terraformlink ? (
                     <Box flex={1} overflow={"hidden"}>
                       <BodyText>
-                        <b>For GCP Terraform:</b> Execute the Terraform scripts
+                        <b>Using Terraform:</b> Execute the Terraform scripts
                         available {terraformlink}, by using the Account Config
                         Identity ID below. For guidance our Terraform
                         instructional video is {terraformGuide}.
@@ -428,7 +432,7 @@ const NonCreationTimeInstructions = (props) => {
                     </Box>
                   ) : (
                     <BodyText flex={1} overflow={"hidden"}>
-                      <b>For GCP Terraform:</b> You Terraform details are being
+                      <b>Using Terraform:</b> You Terraform details are being
                       configured. Please check back shortly for detailed setup
                       instructions.
                     </BodyText>
