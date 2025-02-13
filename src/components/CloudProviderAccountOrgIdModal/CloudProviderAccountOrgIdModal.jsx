@@ -5,6 +5,11 @@ import CloseIcon from "@mui/icons-material/Close";
 import Link from "next/link";
 import InstructionsModalIcon from "../Icons/AccountConfig/InstructionsModalIcon";
 import CopyToClipboardButton from "../CopyClipboardButton/CopyClipboardButton";
+import ArrowBulletIcon from "../Icons/ArrowIcon/ArrowBulletIcon";
+import LoadingSpinnerSmall from "../CircularProgress/CircularProgress";
+import { ACCOUNT_CREATION_METHODS } from "src/utils/constants/accountConfig";
+
+const ArrowBulletSmall = () => <ArrowBulletIcon width={20} height={20} />;
 
 const STATUS_TITLE_MAP = {
   VERIFYING: "Account Configuration Instructions",
@@ -33,7 +38,7 @@ const StyledContainer = styled(Box)({
     "0px 8px 8px -4px rgba(16, 24, 40, 0.03), 0px 20px 24px -4px rgba(16, 24, 40, 0.08)",
   padding: "24px",
   width: "100%",
-  maxWidth: "530px",
+  maxWidth: "550px",
   display: "flex",
   flexDirection: "column",
   justifyContent: "flex-start",
@@ -69,7 +74,7 @@ const StyledLink = styled(Link)({
 const List = styled(Box)({
   display: "flex",
   flexDirection: "column",
-  gap: "12px",
+  gap: "20px",
   marginTop: "12px",
 });
 
@@ -77,7 +82,11 @@ const ListItem = styled(Box)({
   display: "flex",
   justifyContent: "flex-start",
   alignItems: "flex-start",
-  gap: "12px",
+  gap: "6px",
+});
+
+const ListItemIcon = styled(Box)({
+  flexShrink: 0,
 });
 
 const BodyText = ({ children, ...restProps }) => {
@@ -87,6 +96,7 @@ const BodyText = ({ children, ...restProps }) => {
     </Text>
   );
 };
+
 export const TextContainerToCopy = (props) => {
   const { text, marginTop = "20px" } = props;
   return (
@@ -137,6 +147,10 @@ const CreationTimeInstructions = (props) => {
     gcpCloudShellLink,
     shellScriptGuide,
     accountInstructionDetails,
+    orgId,
+    accountConfigMethod,
+    terraformlink,
+    terraformGuide,
   } = props;
 
   if (accountConfigStatus === "FAILED") {
@@ -205,25 +219,50 @@ const CreationTimeInstructions = (props) => {
           </Box>
         </Stack>
 
-        {gcpBootstrapShellCommand ? (
+        {(!accountConfigMethod ||
+          accountConfigMethod === ACCOUNT_CREATION_METHODS.GCP_SCRIPT) && (
           <>
-            <BodyText sx={{ marginTop: "20px" }}>
-              Please open the Google Cloud Shell environment using the following
-              link {gcpCloudShellLink}. Once the terminal is open, execute the
-              following command:
-            </BodyText>
-            <TextContainerToCopy text={gcpBootstrapShellCommand} />
-
-            <BodyText sx={{ marginTop: "20px" }}>
-              For guidance, our instructional video is available{" "}
-              {shellScriptGuide}.
-            </BodyText>
+            {gcpBootstrapShellCommand ? (
+              <>
+                <BodyText sx={{ marginTop: "20px" }}>
+                  <b>For GCP shell script:</b> Please open the Google Cloud
+                  Shell environment using the following link {gcpCloudShellLink}{" "}
+                  and execute the below command. For guidance, our instructional
+                  video is available {shellScriptGuide}.
+                </BodyText>
+                <TextContainerToCopy text={gcpBootstrapShellCommand} />
+              </>
+            ) : (
+              <BodyText sx={{ marginTop: "20px" }}>
+                <b>For GCP Shell Script:</b> Your GCP shell script is being
+                configured. Please check back shortly for detailed setup
+                instructions.
+              </BodyText>
+            )}
           </>
-        ) : (
-          <BodyText sx={{ marginTop: "20px" }}>
-            Your GCP shell script is being configured. Please check back shortly
-            for detailed setup instructions.
-          </BodyText>
+        )}
+
+        {(!accountConfigMethod ||
+          accountConfigMethod === ACCOUNT_CREATION_METHODS.TERRAFORM) && (
+          <>
+            {terraformlink ? (
+              <>
+                <BodyText sx={{ marginTop: "20px" }}>
+                  <b>For GCP Terraform:</b> Execute the Terraform scripts
+                  available {terraformlink}, by using the Account Config
+                  Identity ID below. For guidance our Terraform instructional
+                  video is {terraformGuide}.
+                </BodyText>
+                <TextContainerToCopy text={orgId} />
+              </>
+            ) : (
+              <BodyText sx={{ marginTop: "20px" }}>
+                <b>For GCP Terraform:</b> You Terraform details are being
+                configured. Please check back shortly for detailed setup
+                instructions.
+              </BodyText>
+            )}
+          </>
         )}
       </>
     );
@@ -247,6 +286,10 @@ const NonCreationTimeInstructions = (props) => {
     gcpCloudShellLink,
     shellScriptGuide,
     accountInstructionDetails,
+    orgId,
+    accountConfigMethod,
+    terraformlink,
+    terraformGuide,
   } = props;
 
   if (
@@ -301,6 +344,9 @@ const NonCreationTimeInstructions = (props) => {
         <List>
           {accountInstructionDetails?.awsAccountID && (
             <ListItem>
+              <ListItemIcon>
+                <ArrowBulletSmall />
+              </ListItemIcon>
               {cloudFormationTemplateUrl ? (
                 <>
                   <Box display={"flex"} flexDirection={"column"} gap={"10px"}>
@@ -330,25 +376,64 @@ const NonCreationTimeInstructions = (props) => {
           )}
           {accountInstructionDetails?.gcpProjectID && (
             <>
-              {gcpBootstrapShellCommand ? (
-                <Box>
-                  <BodyText>
-                    Please open the Google Cloud Shell environment using the
-                    following link {gcpCloudShellLink}. Once the terminal is
-                    open, execute the following command:
-                  </BodyText>
+              {(!accountConfigMethod ||
+                accountConfigMethod ===
+                  ACCOUNT_CREATION_METHODS.GCP_SCRIPT) && (
+                <ListItem>
+                  <ListItemIcon>
+                    <ArrowBulletSmall />
+                  </ListItemIcon>
 
-                  <TextContainerToCopy text={gcpBootstrapShellCommand} />
+                  {gcpBootstrapShellCommand ? (
+                    <Box flex={1} overflow={"hidden"}>
+                      <BodyText>
+                        <b>For GCP Shell Script:</b> Please open the Google
+                        Cloud Shell environment using the following link{" "}
+                        {gcpCloudShellLink} and execute the command below. For
+                        guidance our instructional video is {shellScriptGuide}.
+                      </BodyText>
 
-                  <BodyText sx={{ marginTop: "20px" }}>
-                    For guidance our instructional video is {shellScriptGuide}.
-                  </BodyText>
-                </Box>
-              ) : (
-                <BodyText>
-                  Your Google cloud script is being configured. Please check
-                  back shortly for detailed setup instructions.
-                </BodyText>
+                      <TextContainerToCopy
+                        text={gcpBootstrapShellCommand}
+                        marginTop="12px"
+                      />
+                    </Box>
+                  ) : (
+                    <BodyText flex={1} overflow={"hidden"}>
+                      <b>For GCP Shell Script:</b> Your Google cloud script is
+                      being configured. Please check back shortly for detailed
+                      setup instructions.
+                    </BodyText>
+                  )}
+                </ListItem>
+              )}
+
+              {(!accountConfigMethod ||
+                accountConfigMethod === ACCOUNT_CREATION_METHODS.TERRAFORM) && (
+                <ListItem>
+                  <ListItemIcon>
+                    <ArrowBulletSmall />
+                  </ListItemIcon>
+
+                  {terraformlink ? (
+                    <Box flex={1} overflow={"hidden"}>
+                      <BodyText>
+                        <b>For GCP Terraform:</b> Execute the Terraform scripts
+                        available {terraformlink}, by using the Account Config
+                        Identity ID below. For guidance our Terraform
+                        instructional video is {terraformGuide}.
+                      </BodyText>
+
+                      <TextContainerToCopy text={orgId} marginTop="12px" />
+                    </Box>
+                  ) : (
+                    <BodyText flex={1} overflow={"hidden"}>
+                      <b>For GCP Terraform:</b> You Terraform details are being
+                      configured. Please check back shortly for detailed setup
+                      instructions.
+                    </BodyText>
+                  )}
+                </ListItem>
               )}
             </>
           )}
@@ -358,17 +443,22 @@ const NonCreationTimeInstructions = (props) => {
   );
 };
 
-function CloudProviderAccountOrgIdModal({
-  open,
-  handleClose,
-  isAccountCreation,
-  cloudFormationTemplateUrl,
-  isAccessPage = false,
-  accountConfigId,
-  selectedAccountConfig,
-  gcpBootstrapShellCommand,
-  accountInstructionDetails,
-}) {
+function CloudProviderAccountOrgIdModal(props) {
+  const {
+    orgId,
+    open,
+    handleClose,
+    isAccountCreation,
+    cloudFormationTemplateUrl,
+    isAccessPage = false,
+    accountConfigId,
+    selectedAccountConfig,
+    gcpBootstrapShellCommand,
+    accountInstructionDetails,
+    accountConfigMethod,
+    downloadTerraformKitMutation,
+  } = props;
+
   const gcpCloudShellLink = (
     <StyledLink
       href="https://shell.cloud.google.com/?cloudshell_ephemeral=true&show=terminal"
@@ -388,6 +478,38 @@ function CloudProviderAccountOrgIdModal({
       here
     </StyledLink>
   );
+
+  const terraformlink = isAccessPage ? (
+    <>
+      <Box
+        sx={{
+          cursor: "pointer",
+          textDecoration: "underline",
+          color: "#7F56D9",
+          fontWeight: 600,
+        }}
+        component="span"
+        onClick={() => {
+          downloadTerraformKitMutation.mutate();
+        }}
+      >
+        here
+      </Box>
+      {downloadTerraformKitMutation.isLoading && (
+        <LoadingSpinnerSmall sx={{ color: "black", ml: "16px" }} size={12} />
+      )}
+    </>
+  ) : (
+    <StyledLink
+      href="https://github.com/omnistrate-oss/account-setup"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      here
+    </StyledLink>
+  );
+
+  // links pointing to guides for different methods
 
   const shellScriptGuide = isAccessPage ? (
     <StyledLink
@@ -425,6 +547,24 @@ function CloudProviderAccountOrgIdModal({
     </StyledLink>
   );
 
+  const terraformGuide = isAccessPage ? (
+    <StyledLink
+      href="https://youtu.be/l6lMEZdMMxs"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      here
+    </StyledLink>
+  ) : (
+    <StyledLink
+      href="https://youtu.be/eKktc4QKgaA"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      here
+    </StyledLink>
+  );
+
   return (
     <Dialog open={open} onClose={handleClose} fullWidth maxWidth={"tablet"}>
       <StyledContainer>
@@ -459,6 +599,7 @@ function CloudProviderAccountOrgIdModal({
         <Content>
           {isAccountCreation ? (
             <CreationTimeInstructions
+              orgId={orgId}
               cloudformationlink={cloudformationlink}
               cloudFormationGuide={cloudFormationGuide}
               accountConfigStatus={selectedAccountConfig?.status}
@@ -468,9 +609,13 @@ function CloudProviderAccountOrgIdModal({
               gcpCloudShellLink={gcpCloudShellLink}
               shellScriptGuide={shellScriptGuide}
               accountInstructionDetails={accountInstructionDetails}
+              accountConfigMethod={accountConfigMethod}
+              terraformlink={terraformlink}
+              terraformGuide={terraformGuide}
             />
           ) : (
             <NonCreationTimeInstructions
+              orgId={orgId}
               selectedAccountConfig={selectedAccountConfig}
               cloudformationlink={cloudformationlink}
               cloudFormationGuide={cloudFormationGuide}
@@ -479,6 +624,9 @@ function CloudProviderAccountOrgIdModal({
               gcpCloudShellLink={gcpCloudShellLink}
               shellScriptGuide={shellScriptGuide}
               accountInstructionDetails={accountInstructionDetails}
+              accountConfigMethod={accountConfigMethod}
+              terraformlink={terraformlink}
+              terraformGuide={terraformGuide}
             />
           )}
         </Content>
