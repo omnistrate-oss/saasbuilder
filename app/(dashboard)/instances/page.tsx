@@ -281,7 +281,7 @@ const InstancesPage = () => {
                   <Tooltip
                     title="Idle"
                     placement="top"
-                    sx={{ padding: "0px !important" }}
+                    sx={{ marginBottom: "-20px !important" }}
                   >
                     <span style={{ display: "flex", alignItems: "center" }}>
                       <LoadIndicatorIdle />
@@ -293,7 +293,7 @@ const InstancesPage = () => {
                   <Tooltip
                     title="Normal"
                     placement="top"
-                    sx={{ padding: "0px !important" }}
+                    sx={{ marginBottom: "-20px !important" }}
                   >
                     <span style={{ display: "flex", alignItems: "center" }}>
                       <LoadIndicatorNormal />
@@ -305,7 +305,7 @@ const InstancesPage = () => {
                   <Tooltip
                     title="High"
                     placement="top"
-                    sx={{ padding: "0px !important" }}
+                    sx={{ marginBottom: "-20px !important" }}
                   >
                     <span style={{ display: "flex", alignItems: "center" }}>
                       <LoadIndicatorHigh />
