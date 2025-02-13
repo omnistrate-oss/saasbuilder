@@ -50,7 +50,7 @@ import InstanceHealthStatusChip, {
 import { getInstanceDetailsRoute } from "src/utils/routes";
 import { loadStatusMap } from "./constants";
 import { isCloudAccountInstance } from "src/utils/access/byoaResource";
-import Tooltip from "src/components/Tooltip/Tooltip";
+import { BlackTooltip } from "src/components/Tooltip/Tooltip";
 import LoadIndicatorIdle from "src/components/Icons/LoadIndicator/LoadIndicatorIdle";
 import LoadIndicatorNormal from "src/components/Icons/LoadIndicator/LoadIndicatorNormal";
 import LoadIndicatorHigh from "src/components/Icons/LoadIndicator/LoadIndicatorHigh";
@@ -277,7 +277,7 @@ const InstancesPage = () => {
 
                 {(instanceLoadStatus === "POD_IDLE" ||
                   instanceLoadStatus === "LOAD_IDLE") && (
-                  <Tooltip
+                  <BlackTooltip
                     title="Idle"
                     placement="top"
                     sx={{ marginBottom: "-20px !important" }}
@@ -285,11 +285,11 @@ const InstancesPage = () => {
                     <span style={{ display: "flex", alignItems: "center" }}>
                       <LoadIndicatorIdle />
                     </span>
-                  </Tooltip>
+                  </BlackTooltip>
                 )}
                 {(instanceLoadStatus === "POD_NORMAL" ||
                   instanceLoadStatus === "LOAD_NORMAL") && (
-                  <Tooltip
+                  <BlackTooltip
                     title="Normal"
                     placement="top"
                     sx={{ marginBottom: "-20px !important" }}
@@ -297,11 +297,11 @@ const InstancesPage = () => {
                     <span style={{ display: "flex", alignItems: "center" }}>
                       <LoadIndicatorNormal />
                     </span>
-                  </Tooltip>
+                  </BlackTooltip>
                 )}
                 {(instanceLoadStatus === "POD_OVERLOAD" ||
                   instanceLoadStatus === "LOAD_OVERLOADED") && (
-                  <Tooltip
+                  <BlackTooltip
                     title="High"
                     placement="top"
                     sx={{ marginBottom: "-20px !important" }}
@@ -309,7 +309,7 @@ const InstancesPage = () => {
                     <span style={{ display: "flex", alignItems: "center" }}>
                       <LoadIndicatorHigh />
                     </span>
-                  </Tooltip>
+                  </BlackTooltip>
                 )}
               </Stack>
             );
