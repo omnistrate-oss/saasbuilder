@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import { Stack } from "@mui/material";
 import { useMemo, useState } from "react";
 import { useMutation } from "@tanstack/react-query";
