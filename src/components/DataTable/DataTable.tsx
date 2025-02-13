@@ -78,6 +78,7 @@ type DataTableProps<TData> = {
   onRowSelectionChange?: (selectedRows: string[]) => void;
   rowId?: keyof TData; // Property to use as row identifier
   tableStyles?: SxProps;
+  minHeight?: string | number;
   getRowClassName?: (rowData: TData) => string;
 };
 
@@ -99,6 +100,7 @@ const DataTable = <TData,>(props: DataTableProps<TData>): ReactNode => {
     selectionMode = "none",
     rowId = "id" as keyof TData,
     tableStyles = {},
+    minHeight,
     getRowClassName,
   } = props;
 
@@ -226,7 +228,7 @@ const DataTable = <TData,>(props: DataTableProps<TData>): ReactNode => {
   return (
     <TableContainer sx={{ borderRadius: "8px", ...tableStyles }}>
       <HeaderComponent {...headerProps} />
-      <Stack minHeight="605px" justifyContent="space-between">
+      <Stack minHeight={minHeight || "605px"} justifyContent="space-between">
         <Box sx={{ overflowX: "auto", flexGrow: 1, position: "relative" }}>
           <Table
             sx={{
@@ -387,6 +389,7 @@ const DataTable = <TData,>(props: DataTableProps<TData>): ReactNode => {
             </Stack>
           )}
         </Box>
+
         <Pagination
           isPreviousDisabled={!table.getCanPreviousPage()}
           isNextDisabled={!table.getCanNextPage()}

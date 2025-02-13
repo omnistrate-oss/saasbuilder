@@ -17,6 +17,7 @@ const Button = styled("button")<{ enabled: boolean }>(({ enabled }) => ({
   position: "relative",
   cursor: "pointer",
   fontFamily: "Inter",
+  maxWidth: "320px",
   "&:after": {
     content: '""' /* Required to create the pseudo-element */,
     position: "absolute",
@@ -91,10 +92,16 @@ const InstanceFilterToggle: FC<InstanceFilterToggleProps> = (props) => {
   return (
     <Button
       enabled={enabled}
-      sx={{ display: "inline-flex", gap: "8px" }}
+      sx={{
+        flex: 1,
+        display: "inline-flex",
+        alignItems: "center",
+        justifyContent: "center",
+        gap: "8px",
+      }}
       onClick={handleFilterToggle}
     >
-      {title}{" "}
+      {title}
       <Box component="span" color={instanceCount > 0 ? "#D92D20" : "#717680"}>
         {instanceCount}
       </Box>
@@ -119,12 +126,11 @@ const InstanceFilters: FC<InstanceFiltersProps> = (props) => {
   return (
     <Stack
       direction="row"
-      justifyContent="space-between"
-      display="inline-flex"
+      justifyContent="center"
+      display="flex"
       gap="20px"
-      marginLeft="auto"
-      marginRight="auto"
       alignItems="stretch"
+      width="100%"
     >
       {filters.map((filter) => {
         return (

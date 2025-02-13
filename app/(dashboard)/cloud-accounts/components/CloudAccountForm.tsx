@@ -21,7 +21,10 @@ import {
 } from "src/utils/accountConfig/accountConfig";
 import { ServiceOffering } from "src/types/serviceOffering";
 import { selectUserrootData } from "src/slices/userDataSlice";
-import { cloudProviderLogoMap } from "src/constants/cloudProviders";
+import {
+  CLOUD_PROVIDERS,
+  cloudProviderLogoMap,
+} from "src/constants/cloudProviders";
 
 import { getServiceMenuItems } from "app/(dashboard)/instances/utils";
 import SubscriptionMenu from "app/(dashboard)/components/SubscriptionMenu/SubscriptionMenu";
@@ -149,6 +152,14 @@ const CloudAccountForm = ({
           ...(resourceInstance.result_params || {}),
           account_configuration_method: values.accountConfigurationMethod,
           cloud_provider: values.cloudProvider,
+          ...(values.cloudProvider === CLOUD_PROVIDERS.aws
+            ? {
+                aws_account_id: values.awsAccountId,
+              }
+            : {
+                gcp_project_id: values.gcpProjectId,
+                gcp_project_number: values.gcpProjectNumber,
+              }),
         },
       });
       setOverlayType("view-instructions-dialog");

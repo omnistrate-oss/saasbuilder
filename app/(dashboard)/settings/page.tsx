@@ -57,7 +57,6 @@ const SettingsPage = () => {
               minWidth: "0px",
               textTransform: "none",
               fontWeight: "600",
-              color: "#717680",
               "&.Mui-selected": {
                 color: colors.purple700,
               },

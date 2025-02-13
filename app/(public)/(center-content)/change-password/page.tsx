@@ -2,14 +2,16 @@
 
 import * as Yup from "yup";
 import { useFormik } from "formik";
-import { Stack } from "@mui/material";
+import { Box, Stack } from "@mui/material";
 import { useMutation } from "@tanstack/react-query";
 import { useRouter, useSearchParams } from "next/navigation";
 
 import axios from "src/axios";
 import useSnackbar from "src/hooks/useSnackbar";
 import { passwordRegex, passwordText } from "src/utils/passwordRegex";
+import { useProviderOrgDetails } from "src/providers/ProviderOrgDetailsProvider";
 
+import Logo from "components/NonDashboardComponents/Logo";
 import FieldError from "components/FormElementsv2/FieldError/FieldError";
 import DisplayHeading from "components/NonDashboardComponents/DisplayHeading";
 import PageDescription from "components/NonDashboardComponents/PageDescription";
@@ -33,6 +35,7 @@ const ChangePasswordPage = () => {
   const searchParams = useSearchParams();
   const email = searchParams?.get("email");
   const token = searchParams?.get("token");
+  const { orgLogoURL, orgName } = useProviderOrgDetails();
 
   const changePasswordMutation = useMutation(
     (payload) => {
@@ -68,6 +71,17 @@ const ChangePasswordPage = () => {
 
   return (
     <>
+      <Box textAlign="center">
+        {orgLogoURL ? (
+          <Logo
+            src={orgLogoURL}
+            alt={orgName}
+            style={{ width: "120px", height: "auto", maxHeight: "unset" }}
+          />
+        ) : (
+          ""
+        )}
+      </Box>
       <Stack gap="16px">
         <DisplayHeading>Update your password</DisplayHeading>
         <PageDescription>
