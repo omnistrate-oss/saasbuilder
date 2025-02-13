@@ -76,7 +76,8 @@ const BillingPage = () => {
 
         {isLoading ? (
           <LoadingSpinner />
-        ) : selectUser?.id === "user-qXYUKrVFnH" ? (
+        ) : selectUser?.id === "user-qXYUKrVFnH" &&
+          selectUser?.orgId === "org-ojg2ul7of0" ? (
           <StaticBilling />
         ) : error ? (
           <Stack p={3} pt="200px" alignItems="center" justifyContent="center">

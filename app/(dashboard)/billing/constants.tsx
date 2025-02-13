@@ -1,3 +1,9 @@
+const options: any = {
+  month: "short",
+  day: "numeric",
+  year: "numeric",
+};
+
 export const sampleInvoices = [
   {
     pastDue: "No",
@@ -8,11 +14,11 @@ export const sampleInvoices = [
       new Date().getMonth() - 1,
       1
     )
-      .toLocaleDateString()
+      .toLocaleDateString("en-US", options)
       .replace(/\//g, "-"),
     // Current Month
     dueDate: new Date(new Date().getFullYear(), new Date().getMonth(), 1)
-      .toLocaleDateString()
+      .toLocaleDateString("en-US", options)
       .replace(/\//g, "-"),
     amount: "$58.09",
     amountPaid: "$58.09",
@@ -27,11 +33,11 @@ export const sampleInvoices = [
       new Date().getMonth() - 2,
       1
     )
-      .toLocaleDateString()
+      .toLocaleDateString("en-US", options)
       .replace(/\//g, "-"),
     // 1 Month ago
     dueDate: new Date(new Date().getFullYear(), new Date().getMonth() - 1, 1)
-      .toLocaleDateString()
+      .toLocaleDateString("en-US", options)
       .replace(/\//g, "-"),
     amount: "$82.63",
     amountPaid: "$82.63",
@@ -46,11 +52,11 @@ export const sampleInvoices = [
       new Date().getMonth() - 3,
       1
     )
-      .toLocaleDateString()
+      .toLocaleDateString("en-US", options)
       .replace(/\//g, "-"),
     // 2 Months ago
     dueDate: new Date(new Date().getFullYear(), new Date().getMonth() - 2, 1)
-      .toLocaleDateString()
+      .toLocaleDateString("en-US", options)
       .replace(/\//g, "-"),
     amount: "$64.24",
     amountPaid: "$64.24",
