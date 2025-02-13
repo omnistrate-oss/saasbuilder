@@ -277,11 +277,7 @@ const InstancesPage = () => {
 
                 {(instanceLoadStatus === "POD_IDLE" ||
                   instanceLoadStatus === "LOAD_IDLE") && (
-                  <BlackTooltip
-                    title="Idle"
-                    placement="top"
-                    sx={{ marginBottom: "-20px !important" }}
-                  >
+                  <BlackTooltip title="Idle" placement="top">
                     <span style={{ display: "flex", alignItems: "center" }}>
                       <LoadIndicatorIdle />
                     </span>
@@ -289,24 +285,28 @@ const InstancesPage = () => {
                 )}
                 {(instanceLoadStatus === "POD_NORMAL" ||
                   instanceLoadStatus === "LOAD_NORMAL") && (
-                  <BlackTooltip
-                    title="Normal"
-                    placement="top"
-                    sx={{ marginBottom: "-20px !important" }}
-                  >
-                    <span style={{ display: "flex", alignItems: "center" }}>
+                  <BlackTooltip title="Normal" placement="top">
+                    <span
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        marginBottom: "-2px",
+                      }}
+                    >
                       <LoadIndicatorNormal />
                     </span>
                   </BlackTooltip>
                 )}
                 {(instanceLoadStatus === "POD_OVERLOAD" ||
                   instanceLoadStatus === "LOAD_OVERLOADED") && (
-                  <BlackTooltip
-                    title="High"
-                    placement="top"
-                    sx={{ marginBottom: "-20px !important" }}
-                  >
-                    <span style={{ display: "flex", alignItems: "center" }}>
+                  <BlackTooltip title="High" placement="top">
+                    <span
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        marginBottom: "-4px",
+                      }}
+                    >
                       <LoadIndicatorHigh />
                     </span>
                   </BlackTooltip>
