@@ -30,7 +30,6 @@ import { CircularProgress, menuClasses } from "@mui/material";
 import InstanceFilters from "src/components/InstanceFilters/InstanceFilters";
 import LoadingSpinnerSmall from "src/components/CircularProgress/CircularProgress";
 import { colors } from "src/themeConfig";
-import LoadIndicator from "src/components/LoadIndicator/LoadIndicator";
 
 type Action = {
   onClick: () => void;
@@ -514,7 +513,6 @@ const InstancesTableHeader = ({
           setFilterStatus={setStatusFilters}
           filterInstanceCount={instancesFilterCount}
         />
-        <LoadIndicator />
       </div>
     </div>
   );
