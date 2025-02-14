@@ -20,19 +20,23 @@ const AxiosGlobalErrorHandler = () => {
 
   useEffect(() => {
     // listen to logout event from one tab and log out from all other tabs
-    logoutBroadcastChannel.onmessage = (event) => {
-      if (event.data === "logout") {
-        const regex =
-          /^\/(signin|signup|reset-password|validate-token|change-password|privacy-policy|cookie-policy|terms-of-use)$/;
-        if (regex.test(pathname as string)) {
-          return;
+    if (logoutBroadcastChannel) {
+      logoutBroadcastChannel.onmessage = (event) => {
+        if (event.data === "logout") {
+          const regex =
+            /^\/(signin|signup|reset-password|validate-token|change-password|privacy-policy|cookie-policy|terms-of-use)$/;
+          if (regex.test(pathname as string)) {
+            return;
+          }
+          handleLogout();
         }
-        handleLogout();
-      }
-    };
+      };
+    }
 
     return () => {
-      logoutBroadcastChannel.onmessage = null;
+      if (logoutBroadcastChannel) {
+        logoutBroadcastChannel.onmessage = null;
+      }
     };
   }, [pathname, handleLogout]);
 

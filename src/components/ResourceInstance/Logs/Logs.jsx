@@ -107,9 +107,9 @@ function Logs(props) {
   if (socketBaseURL && selectedNodeId) {
     logsSocketEndpoint = `${socketBaseURL}&podName=${selectedNodeId}&instanceId=${resourceInstanceId}`;
   }
-  //  else if (socketBaseURL && resourceKey && mainResourceHasCompute) {
-  //   logsSocketEndpoint = `${socketBaseURL}&podName=${resourceKey}-0&instanceId=${resourceInstanceId}`;
-  // }
+  if (instanceStatus === "STOPPED") {
+    logsSocketEndpoint = null;
+  }
 
   const [isLogsDataLoaded, setIsLogsDataLoaded] = useState(false);
   const [socketConnectionStatus, setConnectionStatus] = useState(

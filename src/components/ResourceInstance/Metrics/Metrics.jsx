@@ -110,9 +110,9 @@ function Metrics(props) {
   if (socketBaseURL && selectedNode) {
     metricsSocketEndpoint = `${socketBaseURL}&podName=${selectedNode.id}&instanceId=${resourceInstanceId}`;
   }
-  // else if (socketBaseURL && resourceKey && mainResourceHasCompute) {
-  //   metricsSocketEndpoint = `${socketBaseURL}&podName=${resourceKey}-0&instanceId=${resourceInstanceId}`;
-  // }
+  if (instanceStatus === "STOPPED") {
+    metricsSocketEndpoint = null;
+  }
 
   const socketOpenTime = useRef(null);
   const [isMetricsDataLoaded, setIsMetricsDataLoaded] = useState(false);
@@ -625,9 +625,6 @@ function Metrics(props) {
     onMessage: (event) => {
       const data = JSON.parse(event.data);
       handleIncomingMetricEvent(data);
-    },
-    onClose: () => {
-      //console.log("Socket connection closed");
     },
     shouldReconnect: () => true,
     reconnectAttempts: 3,

@@ -1,1 +1,4 @@
-export const logoutBroadcastChannel = new BroadcastChannel("logout-channel");
+export const logoutBroadcastChannel =
+  typeof BroadcastChannel !== "undefined"
+    ? new BroadcastChannel("logout-channel")
+    : null;
