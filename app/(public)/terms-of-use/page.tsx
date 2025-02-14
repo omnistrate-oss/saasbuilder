@@ -297,25 +297,27 @@ const TermsPage = () => {
         <Title>Terms and Conditions</Title>
         <StyledImage src={termsImg} alt="privacy-policy" />
         {orgTermsOfUse && orgTermsOfUse !== "<p><br></p>" ? (
-          <Box
-            className="ql-editor"
-            sx={{
-              marginTop: "30px",
-              "& a": {
-                color: styleConfig.primaryColor,
-                textDecoration: "underline",
-              },
+          <article className="prose">
+            <Box
+              // className="ql-editor"
+              sx={{
+                marginTop: "30px",
+                "& a": {
+                  color: styleConfig.primaryColor,
+                  textDecoration: "underline",
+                },
 
-              "& blockquote": {
-                borderLeft: "4px solid #ccc",
-                paddingLeft: "16px !important",
-                paddingY: "5px !important",
-              },
-            }}
-            dangerouslySetInnerHTML={{
-              __html: DOMPurify.sanitize(orgTermsOfUse),
-            }}
-          />
+                "& blockquote": {
+                  borderLeft: "4px solid #ccc",
+                  paddingLeft: "16px !important",
+                  paddingY: "5px !important",
+                },
+              }}
+              dangerouslySetInnerHTML={{
+                __html: DOMPurify.sanitize(orgTermsOfUse),
+              }}
+            />
+          </article>
         ) : (
           <DefaultTermsOfUse orgName={orgName} />
         )}

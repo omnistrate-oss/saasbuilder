@@ -136,25 +136,27 @@ const CookiePolicyPage = () => {
       >
         <Title>Cookie Policy</Title>
         {orgCookiePolicy && orgCookiePolicy !== "<p><br></p>" ? (
-          <Box
-            className="ql-editor"
-            sx={{
-              marginTop: "30px",
-              "& a": {
-                color: styleConfig.primaryColor,
-                textDecoration: "underline",
-              },
+          <article className="prose">
+            <Box
+              // className="ql-editor"
+              sx={{
+                marginTop: "30px",
+                "& a": {
+                  color: styleConfig.primaryColor,
+                  textDecoration: "underline",
+                },
 
-              "& blockquote": {
-                borderLeft: "4px solid #ccc",
-                paddingLeft: "16px !important",
-                paddingY: "5px !important",
-              },
-            }}
-            dangerouslySetInnerHTML={{
-              __html: DOMPurify.sanitize(orgCookiePolicy),
-            }}
-          />
+                "& blockquote": {
+                  borderLeft: "4px solid #ccc",
+                  paddingLeft: "16px !important",
+                  paddingY: "5px !important",
+                },
+              }}
+              dangerouslySetInnerHTML={{
+                __html: DOMPurify.sanitize(orgCookiePolicy),
+              }}
+            />
+          </article>
         ) : (
           <DefaultCookiePolicy
             orgName={orgName}
