@@ -685,7 +685,7 @@ function Metrics(props) {
     initialiseCustomMetricsData();
   }, [initialiseCustomMetricsData]);
 
-  if (!metricsSocketEndpoint || errorMessage) {
+  if (!metricsSocketEndpoint || errorMessage || instanceStatus === "STOPPED") {
     return (
       <ContainerCard>
         <Stack direction="row" justifyContent="center" marginTop="200px">

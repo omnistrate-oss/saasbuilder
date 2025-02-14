@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { Box } from "@mui/material";
 
 import Button from "../Button/Button";
 import { Text } from "../Typography/Typography";
@@ -14,7 +15,7 @@ import { SetState } from "src/types/common/reactGenerics";
 import CardCircleBg from "./CardCircleBg.png";
 import { Subscription } from "src/types/subscription";
 import { SubscriptionRequest } from "src/types/subscriptionRequest";
-import { Box } from "@mui/material";
+import { useState } from "react";
 
 type ServicePlanCardProps = {
   isSelected?: boolean;
@@ -24,9 +25,6 @@ type ServicePlanCardProps = {
   setSelectedPlanId: SetState<string>;
   onSubscribeClick: () => void;
   onUnsubscribeClick: () => void;
-  isSubscribing?: boolean;
-  isUnsubscribing?: boolean;
-  isFetchingData?: boolean;
 };
 
 const ServicePlanCard: React.FC<ServicePlanCardProps> = ({
@@ -37,14 +35,12 @@ const ServicePlanCard: React.FC<ServicePlanCardProps> = ({
   setSelectedPlanId,
   onSubscribeClick,
   onUnsubscribeClick,
-  isSubscribing,
-  isUnsubscribing,
-  isFetchingData,
 }) => {
   const isAutoApprove = servicePlan.AutoApproveSubscription;
   const isUnsubscribeAllowed =
     !rootSubscription?.defaultSubscription &&
     rootSubscription?.roleType === "root";
+  const [isSubscribing, setIsSubscribing] = useState(false);
 
   return (
     <Box
@@ -69,10 +65,30 @@ const ServicePlanCard: React.FC<ServicePlanCardProps> = ({
           right: "12px",
         }}
         capitalize={false}
-        color={isAutoApprove ? colors.lightBlue700 : colors.error700}
-        bgColor={isAutoApprove ? colors.lightBlue50 : colors.error50}
-        borderColor={isAutoApprove ? "#B2DDFF" : "#F9DBAF"}
-        status={isAutoApprove ? "Auto Approval" : "Approval Required"}
+        color={
+          isAutoApprove
+            ? colors.lightBlue700
+            : rootSubscription
+              ? colors.success700
+              : colors.error700
+        }
+        bgColor={
+          isAutoApprove
+            ? colors.lightBlue50
+            : rootSubscription
+              ? colors.success50
+              : colors.error50
+        }
+        borderColor={
+          isAutoApprove ? "#B2DDFF" : rootSubscription ? "#ABEFC6" : "#F9DBAF"
+        }
+        status={
+          isAutoApprove
+            ? "Auto Approval"
+            : rootSubscription
+              ? "Approved"
+              : "Approval Required"
+        }
       />
 
       <Image
@@ -121,23 +137,24 @@ const ServicePlanCard: React.FC<ServicePlanCardProps> = ({
       {!rootSubscription && !subscriptionRequest && (
         <Button
           variant="contained"
-          disabled={
-            isFetchingData ||
-            isSubscribing ||
-            isUnsubscribing ||
-            servicePlan.serviceModelStatus !== "READY"
-          }
+          disabled={isSubscribing || servicePlan.serviceModelStatus !== "READY"}
           startIcon={
             <CirclePlusIcon
               disabled={
-                isFetchingData ||
-                isSubscribing ||
-                isUnsubscribing ||
-                servicePlan.serviceModelStatus !== "READY"
+                isSubscribing || servicePlan.serviceModelStatus !== "READY"
               }
             />
           }
-          onClick={onSubscribeClick}
+          onClick={async () => {
+            try {
+              setIsSubscribing(true);
+              await onSubscribeClick();
+            } catch (error) {
+              console.error(error);
+            } finally {
+              setIsSubscribing(false);
+            }
+          }}
           disabledMessage={
             servicePlan.serviceModelStatus !== "READY"
               ? "Service not available at the moment"
@@ -149,11 +166,7 @@ const ServicePlanCard: React.FC<ServicePlanCardProps> = ({
       )}
 
       {rootSubscription && isUnsubscribeAllowed && (
-        <Button
-          variant="outlined"
-          disabled={isFetchingData || isSubscribing || isUnsubscribing}
-          onClick={onUnsubscribeClick}
-        >
+        <Button variant="outlined" onClick={onUnsubscribeClick}>
           Unsubscribe
         </Button>
       )}

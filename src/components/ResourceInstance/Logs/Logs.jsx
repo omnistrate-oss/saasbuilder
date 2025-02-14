@@ -192,10 +192,10 @@ function Logs(props) {
     };
   }, [logsSocketEndpoint]);
 
-  if (!logsSocketEndpoint || errorMessage) {
+  if (!logsSocketEndpoint || errorMessage || instanceStatus === "STOPPED") {
     return (
       <Card
-        mt={3}
+        mt={4}
         sx={{
           paddingTop: "12.5px",
           paddingLeft: "20px",

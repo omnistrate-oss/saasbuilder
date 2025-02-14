@@ -1,7 +1,8 @@
 "use client";
 
-import { useMutation } from "@tanstack/react-query";
+import { useSelector } from "react-redux";
 import { useEffect, useMemo, useState } from "react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 import CardWithTitle from "components/Card/CardWithTitle";
 import Select from "components/FormElementsv2/Select/Select";
@@ -17,6 +18,8 @@ import useSnackbar from "src/hooks/useSnackbar";
 import { createSubscriptions, deleteSubscription } from "src/api/subscriptions";
 import { useGlobalData } from "src/providers/GlobalDataProvider";
 import { createSubscriptionRequest } from "src/api/subscriptionRequests";
+import { Subscription } from "src/types/subscription";
+import { selectUserrootData } from "src/slices/userDataSlice";
 
 const ManageSubscriptionsForm = ({
   defaultServiceId,
@@ -28,14 +31,17 @@ const ManageSubscriptionsForm = ({
     serviceOfferingsObj,
     subscriptions,
     subscriptionRequests,
-    refetchSubscriptions,
-    refetchSubscriptionRequests,
     isFetchingSubscriptions,
     isFetchingSubscriptionRequests,
   } = useGlobalData();
 
   const snackbar = useSnackbar();
+  const queryClient = useQueryClient();
+  const selectUser = useSelector(selectUserrootData);
   const [isUnsubscribeDialogOpen, setIsUnsubscribeDialogOpen] = useState(false);
+  const [subscriptionIdToDelete, setSubscriptionIdToDelete] = useState<
+    string | undefined
+  >("");
 
   const services = useMemo(() => {
     const servicesObj = serviceOfferings?.reduce((acc, offering) => {
@@ -83,40 +89,40 @@ const ManageSubscriptionsForm = ({
       }, {});
   }, [subscriptionRequests]);
 
-  const subscribeMutation = useMutation(
-    (payload: any) => {
-      if (payload.AutoApproveSubscription) {
-        return createSubscriptions({
-          productTierId: payload.productTierId,
-          serviceId: payload.serviceId,
-        });
-      } else {
-        return createSubscriptionRequest({
-          productTierId: payload.productTierId,
-          serviceId: payload.serviceId,
-        });
-      }
-    },
-    {
-      onSuccess: (res: any) => {
-        const id = Object.values(res.data || {}).join("");
-
-        refetchSubscriptions();
-        refetchSubscriptionRequests();
-        if (id.startsWith("subr")) {
-          snackbar.showSuccess("Subscription Request sent successfully");
-        } else {
-          snackbar.showSuccess("Subscribed successfully");
-        }
-      },
+  const subscribeMutation = useMutation((payload: any) => {
+    if (payload.AutoApproveSubscription) {
+      return createSubscriptions({
+        productTierId: payload.productTierId,
+        serviceId: payload.serviceId,
+      });
+    } else {
+      return createSubscriptionRequest({
+        productTierId: payload.productTierId,
+        serviceId: payload.serviceId,
+      });
     }
-  );
+  });
 
   const unSubscribeMutation = useMutation(deleteSubscription, {
     onSuccess: () => {
-      refetchSubscriptions();
+      queryClient.setQueryData(["user-subscriptions"], (oldData: any) => {
+        return {
+          ...oldData,
+          data: {
+            ids: oldData.data.ids.filter(
+              (id: string) => id !== subscriptionIdToDelete
+            ),
+            subscriptions: oldData.data.subscriptions.filter(
+              (sub: Subscription) => sub.id !== subscriptionIdToDelete
+            ),
+          },
+        };
+      });
       setIsUnsubscribeDialogOpen(false);
       snackbar.showSuccess("Unsubscribed successfully");
+    },
+    onSettled: () => {
+      setSubscriptionIdToDelete(undefined);
     },
   });
 
@@ -129,7 +135,11 @@ const ManageSubscriptionsForm = ({
 
   const selectedPlan = serviceOfferingsObj[selectedServiceId]?.[selectedPlanId];
 
-  if (isFetchingServiceOfferings) {
+  if (
+    isFetchingServiceOfferings ||
+    isFetchingSubscriptions ||
+    isFetchingSubscriptionRequests
+  ) {
     return <LoadingSpinner />;
   }
 
@@ -167,21 +177,95 @@ const ManageSubscriptionsForm = ({
               setSelectedPlanId={setSelectedPlanId}
               rootSubscription={subscriptionsObj[plan.productTierID]}
               subscriptionRequest={subscriptionRequestsObj[plan.productTierID]}
-              onSubscribeClick={() => {
-                subscribeMutation.mutate({
-                  productTierId: plan.productTierID,
-                  serviceId: plan.serviceId,
-                  AutoApproveSubscription: plan.AutoApproveSubscription,
-                });
+              onSubscribeClick={async () => {
+                try {
+                  const res = await subscribeMutation.mutateAsync({
+                    productTierId: plan.productTierID,
+                    serviceId: plan.serviceId,
+                    AutoApproveSubscription: plan.AutoApproveSubscription,
+                  });
+
+                  // @ts-ignore
+                  const id = Object.values(res?.data || {}).join("");
+
+                  if (id.startsWith("subr")) {
+                    snackbar.showSuccess(
+                      "Subscription Request sent successfully"
+                    );
+
+                    queryClient.setQueryData(
+                      ["subscription-requests"],
+                      (oldData: any) => {
+                        return {
+                          ...oldData,
+                          data: {
+                            ids: [...(oldData.data.ids || []), id],
+                            subscriptionRequests: [
+                              ...(oldData.data.subscriptionRequests || []),
+                              {
+                                id,
+                                serviceId: plan.serviceId,
+                                serviceName: plan.serviceName,
+                                productTierId: plan.productTierID,
+                                productTierName: plan.productTierName,
+                                rootUserId: selectUser.id,
+                                rootUserEmail: selectUser.email,
+                                rootUserName: selectUser.name,
+                                status: "PENDING",
+                                createdAt: new Date().toISOString(),
+                                updatedAt: new Date().toISOString(),
+                                updatedByUserId: "",
+                                updatedByUserName: "",
+                              },
+                            ],
+                          },
+                        };
+                      }
+                    );
+                  } else if (id.startsWith("sub")) {
+                    snackbar.showSuccess("Subscribed successfully");
+
+                    queryClient.setQueryData(
+                      ["user-subscriptions"],
+                      (oldData: any) => {
+                        return {
+                          ...oldData,
+                          data: {
+                            ids: [...(oldData.data.ids || []), id],
+                            subscriptions: [
+                              ...(oldData.data.subscriptions || []),
+                              {
+                                id,
+                                rootUserId: selectUser.id,
+                                serviceId: plan.serviceId,
+                                productTierId: plan.productTierID,
+                                serviceOrgId: plan.serviceOrgId,
+                                serviceOrgName: plan.serviceProviderName,
+                                roleType: "root",
+                                createdAt: new Date().toISOString(),
+                                subscriptionOwnerName: selectUser.name,
+                                serviceName: plan.serviceName,
+                                serviceLogoURL: plan.serviceLogoURL,
+                                cloudProviderNames: plan.cloudProviders,
+                                defaultSubscription: false,
+                                productTierName: plan.productTierName,
+                                accountConfigIdentityId: selectUser.orgId,
+                                status: "ACTIVE",
+                              },
+                            ],
+                          },
+                        };
+                      }
+                    );
+                  }
+                } catch (error) {
+                  console.error(error);
+                  snackbar.showError("Failed to subscribe. Please try again");
+                }
               }}
               onUnsubscribeClick={() => {
                 setIsUnsubscribeDialogOpen(true);
               }}
-              isSubscribing={subscribeMutation.isLoading}
-              isFetchingData={
-                isFetchingSubscriptions || isFetchingSubscriptionRequests
-              }
-              isUnsubscribing={unSubscribeMutation.isLoading}
             />
           ))}
         </div>
@@ -196,6 +280,7 @@ const ManageSubscriptionsForm = ({
           if (!subscriptionsObj[selectedPlanId]) {
             return snackbar.showError("Please select a plan");
           }
+          setSubscriptionIdToDelete(subscriptionsObj[selectedPlanId].id);
           await unSubscribeMutation.mutateAsync(
             subscriptionsObj[selectedPlanId].id
           );

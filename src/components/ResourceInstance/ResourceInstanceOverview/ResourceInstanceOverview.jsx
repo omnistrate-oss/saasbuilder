@@ -1,4 +1,4 @@
-import { Box, styled } from "@mui/material";
+import { styled } from "@mui/material";
 import AwsLogo from "../../Logos/AwsLogo/AwsLogo";
 import GcpLogo from "../../Logos/GcpLogo/GcpLogo";
 import { Text } from "../../Typography/Typography";
@@ -69,7 +69,7 @@ function ResourceInstanceOverview(props) {
           </div>
         ))}
       <div
-        style={{ padding: "14px 24px" }}
+        style={{ padding: "14px" }}
         className="flex items-center justify-center gap-2"
       >
         {serviceLogoURL && (
@@ -86,7 +86,7 @@ function ResourceInstanceOverview(props) {
         </Text>
       </div>
       <div
-        style={{ padding: "14px 24px" }}
+        style={{ padding: "14px" }}
         className="flex items-center justify-center"
       >
         <Text
@@ -101,7 +101,7 @@ function ResourceInstanceOverview(props) {
       </div>
 
       <div
-        style={{ padding: "14px 24px" }}
+        style={{ padding: "14px" }}
         className="flex items-center justify-center"
       >
         <Text
@@ -116,7 +116,7 @@ function ResourceInstanceOverview(props) {
       </div>
 
       <div
-        style={{ padding: "14px 24px" }}
+        style={{ padding: "14px" }}
         className="flex items-center justify-center"
       >
         {status ? (
@@ -129,27 +129,37 @@ function ResourceInstanceOverview(props) {
       </div>
 
       <div
-        style={{ padding: "14px 24px" }}
+        style={{ padding: "14px" }}
         className="flex items-center justify-center gap-1.5"
       >
-        <RegionIcon />
+        <RegionIcon style={{ flexShrink: "0" }} />
         <Text size="small" weight="regular" color="#475467">
           {region ?? "Global"}
         </Text>
       </div>
 
       <div
-        style={{ padding: "14px 24px" }}
+        style={{ padding: "14px" }}
         className="flex items-center justify-center"
       >
         {cloudProvider === "aws" && <AwsLogo />}
         {cloudProvider === "gcp" && <GcpLogo />}
-        {!cloudProvider && <Box sx={{ color: "#475467" }}>Everywhere</Box>}
+        {!cloudProvider && (
+          <Text
+            size="small"
+            weight="regular"
+            color={colors.gray600}
+            ellipsis
+            title="Everywhere"
+          >
+            Everywhere
+          </Text>
+        )}
       </div>
 
       {!isCliManagedResource && (
         <div
-          style={{ padding: "14px 24px" }}
+          style={{ padding: "14px" }}
           className="flex items-center justify-center"
         >
           <InstanceHealthStatusChip
