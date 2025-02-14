@@ -120,6 +120,7 @@ function ResourceInstanceDetails(props) {
     resultParameters,
     highAvailability,
     backupStatus,
+    isCliManagedResource
   ]);
 
   const backupData = useMemo(() => {
