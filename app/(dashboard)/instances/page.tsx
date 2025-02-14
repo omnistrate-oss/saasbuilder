@@ -265,8 +265,6 @@ const InstancesPage = () => {
                 data.row.original.instanceLoadStatus || "UNKNOWN"
               ] || "Unknown";
 
-            console.log("check instance load", instanceLoadStatus);
-
             return (
               <Stack direction="row" alignItems="center" gap="4px">
                 {(instanceLoadStatus === "STOPPED" ||
