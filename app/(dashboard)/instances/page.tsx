@@ -275,16 +275,14 @@ const InstancesPage = () => {
                   <StatusChip status={instanceLoadStatus} />
                 )}
 
-                {(instanceLoadStatus === "POD_IDLE" ||
-                  instanceLoadStatus === "LOAD_IDLE") && (
+                {instanceLoadStatus === "Low" && (
                   <BlackTooltip title="Idle" placement="top">
                     <span style={{ display: "flex", alignItems: "center" }}>
                       <LoadIndicatorIdle />
                     </span>
                   </BlackTooltip>
                 )}
-                {(instanceLoadStatus === "POD_NORMAL" ||
-                  instanceLoadStatus === "LOAD_NORMAL") && (
+                {instanceLoadStatus === "Medium" && (
                   <BlackTooltip title="Normal" placement="top">
                     <span
                       style={{
@@ -297,8 +295,7 @@ const InstancesPage = () => {
                     </span>
                   </BlackTooltip>
                 )}
-                {(instanceLoadStatus === "POD_OVERLOAD" ||
-                  instanceLoadStatus === "LOAD_OVERLOADED") && (
+                {instanceLoadStatus === "High" && (
                   <BlackTooltip title="High" placement="top">
                     <span
                       style={{
