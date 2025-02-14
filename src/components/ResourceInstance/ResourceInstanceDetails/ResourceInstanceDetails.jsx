@@ -28,6 +28,7 @@ function ResourceInstanceDetails(props) {
     backupStatus,
     autoscaling,
     serverlessEnabled,
+    isCliManagedResource,
   } = props;
 
   const isResourceBYOA =
@@ -94,18 +95,21 @@ function ResourceInstanceDetails(props) {
         value: highAvailability ? "Enabled" : "Disabled",
         valueType: "boolean",
       },
-      {
-        label: "Backups",
-        value: backupStatus?.backupPeriodInHours ? "Enabled" : "Disabled",
-        valueType: "boolean",
-      },
-      {
-        label: "Autoscaling",
-        value: autoscalingEnabled ? "Enabled" : "Disabled",
-        valueType: "boolean",
-      },
     ];
-
+    if (!isCliManagedResource) {
+      res.push(
+        {
+          label: "Backups",
+          value: backupStatus?.backupPeriodInHours ? "Enabled" : "Disabled",
+          valueType: "boolean",
+        },
+        {
+          label: "Autoscaling",
+          value: autoscalingEnabled ? "Enabled" : "Disabled",
+          valueType: "boolean",
+        }
+      );
+    }
     return res;
   }, [
     resourceInstanceId,

@@ -307,6 +307,7 @@ const InstanceDetailsPage = ({
           backupStatus={resourceInstanceData.backupStatus}
           autoscaling={resourceInstanceData.autoscaling}
           serverlessEnabled={resourceInstanceData.serverlessEnabled}
+          isCliManagedResource={isCliManagedResource}
         />
       )}
       {currentTab === tabs.connectivity && (
