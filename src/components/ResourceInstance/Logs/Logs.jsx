@@ -110,9 +110,9 @@ function Logs(props) {
   if (socketBaseURL && selectedNodeId) {
     logsSocketEndpoint = `${socketBaseURL}&podName=${selectedNodeId}&instanceId=${resourceInstanceId}`;
   }
-  //  else if (socketBaseURL && resourceKey && mainResourceHasCompute) {
-  //   logsSocketEndpoint = `${socketBaseURL}&podName=${resourceKey}-0&instanceId=${resourceInstanceId}`;
-  // }
+  if (instanceStatus === "STOPPED") {
+    logsSocketEndpoint = null;
+  }
 
   const [isLogsDataLoaded, setIsLogsDataLoaded] = useState(false);
   const [socketConnectionStatus, setConnectionStatus] = useState(
@@ -195,10 +195,10 @@ function Logs(props) {
     };
   }, [logsSocketEndpoint]);
 
-  if (!logsSocketEndpoint || errorMessage) {
+  if (!logsSocketEndpoint || errorMessage || instanceStatus === "STOPPED") {
     return (
       <Card
-        mt={3}
+        mt={4}
         sx={{
           paddingTop: "12.5px",
           paddingLeft: "20px",

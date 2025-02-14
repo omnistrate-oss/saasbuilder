@@ -65,7 +65,7 @@ const ListItem = styled(Box)({
   display: "flex",
   justifyContent: "flex-start",
   alignItems: "flex-start",
-  gap: "12px",
+  gap: "4px",
 });
 
 const ListItemIcon = styled(Box)({
@@ -90,7 +90,18 @@ const ArrowBullet = (props) => (
   </svg>
 );
 
+const getCloudOptions = (cloudprovider) => {
+  if (cloudprovider === "aws") {
+    return "(CloudFormation or Terraform)";
+  }
+  if (cloudprovider === "gcp") {
+    return "(GCP Cloud Shell or Terraform)";
+  }
+  return "";
+};
+
 const DeleteInstructions = ({ accountInstructionDetails }) => {
+  const cloudProvider = accountInstructionDetails?.awsAccountID ? "aws" : "gcp";
   return (
     <Box width={"100%"} mb="30px">
       {accountInstructionDetails?.awsAccountID && (
@@ -144,8 +155,10 @@ const DeleteInstructions = ({ accountInstructionDetails }) => {
           </ListItemIcon>
 
           <Text size="medium" weight="regular" color="#374151">
-            <b>Delete Account Config:</b> Start by deleting the account
-            configuration below to remove all artifacts created by Omnistrate.
+            <b>Delete Account Config:</b> Start by deleting this account
+            configuration to remove all artifacts created by Omnistrate and
+            choose one of the options below {getCloudOptions(cloudProvider)} to
+            complete the offboarding process
           </Text>
         </ListItem>
         {accountInstructionDetails?.awsAccountID && (
@@ -155,7 +168,7 @@ const DeleteInstructions = ({ accountInstructionDetails }) => {
             </ListItemIcon>
 
             <Text size="medium" weight="regular" color="#374151">
-              For CloudFormation, follow the provided steps{" "}
+              <b>Using CloudFormation:</b> Follow the provided steps{" "}
               <StyledLink
                 target="_blank"
                 rel="noopener noreferrer"
@@ -173,30 +186,30 @@ const DeleteInstructions = ({ accountInstructionDetails }) => {
             <ListItemIcon>
               <ArrowBullet />
             </ListItemIcon>
-
-            <Text size="medium" weight="regular" color="#374151">
-              Open the Google Cloud Shell environment using the following link{" "}
-              <StyledLink
-                target="_blank"
-                rel="noopener noreferrer"
-                href="https://shell.cloud.google.com/?cloudshell_ephemeral=true&show=terminal"
-              >
-                Google Cloud Shell
-              </StyledLink>
-              . Once the terminal is open, execute the following command to
-              complete the off-boarding process and revoke our access.
-            </Text>
+            <Box overflow={"hidden"} flex={1}>
+              <Text size="medium" weight="regular" color="#374151">
+                <b>Using GCP Cloud Shell:</b> Open the Google Cloud Shell
+                environment using the following link{" "}
+                <StyledLink
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  href="https://shell.cloud.google.com/?cloudshell_ephemeral=true&show=terminal"
+                >
+                  Google Cloud Shell
+                </StyledLink>
+                . Once the terminal is open, execute the following command to
+                complete the off-boarding process and revoke our access.
+              </Text>
+              {accountInstructionDetails?.gcpOffboardCommand && (
+                <TextContainerToCopy
+                  text={accountInstructionDetails?.gcpOffboardCommand}
+                  marginTop="12px"
+                />
+              )}
+            </Box>
           </ListItem>
         )}
       </List>
-
-      {accountInstructionDetails?.gcpProjectID &&
-        accountInstructionDetails?.gcpOffboardCommand && (
-          <TextContainerToCopy
-            text={accountInstructionDetails?.gcpOffboardCommand}
-            marginTop="12px"
-          />
-        )}
 
       <List sx={{ marginTop: "12px" }}>
         <ListItem>
@@ -205,14 +218,16 @@ const DeleteInstructions = ({ accountInstructionDetails }) => {
           </ListItemIcon>
 
           <Text size="medium" weight="regular" color="#374151">
-            For more details, refer to the documentation{" "}
+            <b>Using Terraform:</b> Execute terraform destroy to revoke our
+            access. For more details, refer to the documentation{" "}
             <StyledLink
               target="_blank"
               rel="noopener noreferrer"
               href="https://docs.omnistrate.com/getting-started/account-offboarding/"
             >
               here
-            </StyledLink>{" "}
+            </StyledLink>
+            .
           </Text>
         </ListItem>
       </List>

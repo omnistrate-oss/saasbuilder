@@ -19,6 +19,8 @@ import Chip from "components/Chip/Chip";
 import Button from "components/Button/Button";
 import { DisplayText, Text } from "components/Typography/Typography";
 import LoadingSpinner from "components/LoadingSpinner/LoadingSpinner";
+import StaticBilling from "./components/StaticBilling";
+import { isStaticBillingEnabled } from "./utils";
 
 const BillingPage = () => {
   const selectUser = useSelector(selectUserrootData);
@@ -75,6 +77,8 @@ const BillingPage = () => {
 
         {isLoading ? (
           <LoadingSpinner />
+        ) : isStaticBillingEnabled(selectUser) ? (
+          <StaticBilling />
         ) : error ? (
           <Stack p={3} pt="200px" alignItems="center" justifyContent="center">
             <DisplayText

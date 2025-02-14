@@ -240,7 +240,10 @@ const CloudAccountForm = ({
     const accountConfigurationMethods =
       values.cloudProvider === "aws"
         ? [ACCOUNT_CREATION_METHODS.CLOUDFORMATION]
-        : [ACCOUNT_CREATION_METHODS.GCP_SCRIPT];
+        : [
+            ACCOUNT_CREATION_METHODS.GCP_SCRIPT,
+            ACCOUNT_CREATION_METHODS.TERRAFORM,
+          ];
 
     return {
       footer: {
@@ -332,7 +335,9 @@ const CloudAccountForm = ({
                     setFieldValue("cloudProvider", cloudProvider);
                     setFieldValue(
                       "accountConfigurationMethod",
-                      cloudProvider === "aws" ? "CloudFormation" : "Terraform"
+                      cloudProvider === "aws"
+                        ? ACCOUNT_CREATION_METHODS.CLOUDFORMATION
+                        : ACCOUNT_CREATION_METHODS.GCP_SCRIPT
                     );
 
                     const filteredSubscriptions = byoaSubscriptions.filter(

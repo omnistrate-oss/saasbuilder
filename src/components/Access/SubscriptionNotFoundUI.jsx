@@ -4,7 +4,7 @@ import { Box } from "@mui/material";
 import Image from "next/image";
 import marketplaceIcon from "public/assets/images/dashboard/marketplace.svg";
 
-function SubscriptionNotFoundUI() {
+function SubscriptionNotFoundUI({ isOfferingFound }) {
   return (
     <Card mt={3} style={{ height: "700px", width: "100%" }}>
       <Box>
@@ -23,7 +23,7 @@ function SubscriptionNotFoundUI() {
               fontSize: "30px",
             }}
           >
-            Subscription
+            {isOfferingFound ? "Subscription" : "Service Offering"}
           </div>
           <div
             justifyContent="center"
