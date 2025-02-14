@@ -608,7 +608,10 @@ const InstancesPage = () => {
         onConfirm={async () => {
           if (!selectedInstance)
             return snackbar.showError("No instance selected");
-          if (!selectedInstanceOffering || !selectedInstanceSubscription) {
+          if (!selectedInstanceOffering) {
+            return snackbar.showError("Offering not found");
+          }
+          if (!selectedInstanceSubscription) {
             return snackbar.showError("Subscription not found");
           }
           if (!selectedResource) {

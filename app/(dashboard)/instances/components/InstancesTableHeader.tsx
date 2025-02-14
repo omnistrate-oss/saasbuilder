@@ -141,6 +141,8 @@ const InstancesTableHeader = ({
       onClick: () => {
         if (!selectedInstance)
           return snackbar.showError("Please select an instance");
+        if (!selectedInstanceOffering)
+          return snackbar.showError("Service Offering not found");
         stopInstanceMutation.mutate(requestData);
       },
       disabledMessage: !selectedInstance
@@ -167,6 +169,8 @@ const InstancesTableHeader = ({
       onClick: () => {
         if (!selectedInstance)
           return snackbar.showError("Please select an instance");
+        if (!selectedInstanceOffering)
+          return snackbar.showError("Service Offering not found");
         startInstanceMutation.mutate(requestData);
       },
       disabledMessage: !selectedInstance
@@ -254,6 +258,8 @@ const InstancesTableHeader = ({
         onClick: () => {
           if (!selectedInstance)
             return snackbar.showError("Please select an instance");
+          if (!selectedInstanceOffering)
+            return snackbar.showError("Service Offering not found");
           restartInstanceMutation.mutate(requestData);
         },
         disabledMessage: !selectedInstance

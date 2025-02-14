@@ -146,6 +146,18 @@ const InstanceDetailsPage = ({
   );
 
   if (
+    !isFetchingServiceOfferings &&
+    !isFetchingSubscriptions &&
+    (!subscription || !offering)
+  ) {
+    return (
+      <PageContainer>
+        <SubscriptionNotFoundUI isOfferingFound={!!offering} />
+      </PageContainer>
+    );
+  }
+
+  if (
     isFetchingServiceOfferings ||
     isFetchingSubscriptions ||
     resourceInstanceQuery.isLoading
@@ -153,14 +165,6 @@ const InstanceDetailsPage = ({
     return (
       <PageContainer>
         <LoadingSpinner />
-      </PageContainer>
-    );
-  }
-
-  if (!subscription || !offering) {
-    return (
-      <PageContainer>
-        <SubscriptionNotFoundUI />
       </PageContainer>
     );
   }

@@ -6,6 +6,7 @@ import { useQueryClient } from "@tanstack/react-query";
 
 import axios from "../axios";
 import { initialiseUserData } from "src/slices/userDataSlice";
+import { logoutBroadcastChannel } from "src/broadcastChannel";
 
 function useLogout() {
   const router = useRouter();
@@ -42,6 +43,19 @@ function useLogout() {
       })
       .catch(() => {
         handleLogout();
+      })
+      .finally(() => {
+        //broadcasts the logout event to other windows and tabs to log them out
+        if (logoutBroadcastChannel) {
+          try {
+            logoutBroadcastChannel.postMessage("logout");
+          } catch (error) {
+            console.error(
+              "Failed to post message on broadcast channel:",
+              error
+            );
+          }
+        }
       });
   }
 
