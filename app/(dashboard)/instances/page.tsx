@@ -271,7 +271,7 @@ const InstancesPage = () => {
                   instanceLoadStatus === "N/A") && (
                   <StatusChip status="UNKNOWN" label="N/A" />
                 )}
-                {instanceLoadStatus === "UNKNOWN" && (
+                {instanceLoadStatus === "Unknown" && (
                   <StatusChip status={instanceLoadStatus} />
                 )}
 
