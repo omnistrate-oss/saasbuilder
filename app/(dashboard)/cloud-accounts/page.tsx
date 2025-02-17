@@ -31,11 +31,13 @@ import useSnackbar from "src/hooks/useSnackbar";
 import formatDateUTC from "src/utils/formatDateUTC";
 import { ResourceInstance } from "src/types/resourceInstance";
 import { useGlobalData } from "src/providers/GlobalDataProvider";
-import { deleteResourceInstance } from "src/api/resourceInstance";
+import {
+  deleteResourceInstance,
+  getTerraformKit,
+} from "src/api/resourceInstance";
 import { getResourceInstanceStatusStylesAndLabel } from "src/constants/statusChipStyles/resourceInstanceStatus";
 import { getCloudAccountsRoute } from "src/utils/routes";
 import { isCloudAccountInstance } from "src/utils/access/byoaResource";
-import { ACCOUNT_CREATION_METHODS } from "src/utils/constants/accountConfig";
 import {
   getGcpBootstrapShellCommand,
   getGcpShellScriptOffboardCommand,
@@ -70,11 +72,7 @@ const CloudAccountsPage = () => {
 
   const gcpBootstrapShellCommand = useMemo(() => {
     const result_params: any = clickedInstance?.result_params;
-    if (
-      result_params?.account_configuration_method ===
-        ACCOUNT_CREATION_METHODS.GCP_SCRIPT &&
-      result_params?.cloud_provider_account_config_id
-    ) {
+    if (result_params?.cloud_provider_account_config_id) {
       return getGcpBootstrapShellCommand(
         result_params?.cloud_provider_account_config_id
       );
@@ -412,6 +410,38 @@ const CloudAccountsPage = () => {
     return serviceOfferingsObj[serviceId]?.[productTierId];
   }, [clickedInstanceSubscription, serviceOfferingsObj]);
 
+  const downloadTerraformKitMutation = useMutation(
+    () => {
+      if (clickedInstanceOffering && clickedInstanceSubscription) {
+        return getTerraformKit(
+          clickedInstanceOffering.serviceProviderId,
+          clickedInstanceOffering.serviceURLKey,
+          clickedInstanceOffering.serviceAPIVersion,
+          clickedInstanceOffering.serviceEnvironmentURLKey,
+          clickedInstanceOffering.serviceModelURLKey,
+          clickedInstanceSubscription.id,
+          // @ts-ignore
+          clickedInstance?.result_params?.gcp_project_id ? "gcp" : "aws"
+        );
+      }
+    },
+    {
+      onSuccess: (response: any) => {
+        if (!response?.data) {
+          return snackbar.showError("Failed to download terraform kit");
+        }
+        const href = URL.createObjectURL(response.data);
+        const link = document.createElement("a");
+        link.href = href;
+        link.setAttribute("download", "terraformkit.tar");
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(href);
+      },
+    }
+  );
+
   useEffect(() => {
     if (isAccountCreation) {
       setIsOverlayOpen(true);
@@ -504,16 +534,18 @@ const CloudAccountsPage = () => {
         }}
         accountConfigId={clickedInstance?.id}
         selectedAccountConfig={clickedInstance}
-        accountConfigMethod={
-          // @ts-ignore
-          clickedInstance?.result_params?.account_configuration_method
-        }
         cloudFormationTemplateUrl={
           clickedInstanceOffering?.assets?.cloudFormationURL
         }
         isAccountCreation={isAccountCreation}
         gcpBootstrapShellCommand={gcpBootstrapShellCommand}
         accountInstructionDetails={accountInstructionDetails}
+        downloadTerraformKitMutation={downloadTerraformKitMutation}
+        orgId={clickedInstanceSubscription?.accountConfigIdentityId}
+        accountConfigMethod={
+          // @ts-ignore
+          clickedInstance?.result_params?.account_configuration_method
+        }
       />
     </PageContainer>
   );

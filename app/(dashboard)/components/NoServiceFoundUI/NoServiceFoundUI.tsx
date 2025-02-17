@@ -10,7 +10,15 @@ type NoServiceFoundUIProps = {
 
 const NoServiceFoundUI: FC<NoServiceFoundUIProps> = ({ text }) => {
   return (
-    <Box mt="80px" textAlign="center">
+    <Box
+      textAlign="center"
+      flex="1"
+      display="flex"
+      flexDirection="column"
+      alignItems="center"
+      justifyContent="center"
+      sx={{ transform: "translateY(-50px)" }}
+    >
       <Typography
         fontWeight="800"
         fontSize="36px"

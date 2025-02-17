@@ -20,6 +20,7 @@ import LoadingSpinner from "src/components/LoadingSpinner/LoadingSpinner";
 import DataGridHeaderTitle from "src/components/Headers/DataGridHeaderTitle";
 import Select from "src/components/FormElementsv2/Select/Select";
 import MenuItem from "src/components/FormElementsv2/MenuItem/MenuItem";
+import _ from "lodash";
 
 const logsPerPage = 50;
 
@@ -88,7 +89,7 @@ const IconButton = ({ direction, divRef, titleText }) => {
 
 function Logs(props) {
   const {
-    nodes = [],
+    nodes: nodesList = [],
     socketBaseURL,
     instanceStatus,
     //resourceKey,
@@ -97,6 +98,8 @@ function Logs(props) {
   } = props;
   const [logs, setLogs] = useState([]);
   let selectedId = "";
+
+  const nodes = _.uniqBy(nodesList, "id");
 
   if (nodes.length > 0) {
     selectedId = nodes[0].id;
@@ -107,9 +110,9 @@ function Logs(props) {
   if (socketBaseURL && selectedNodeId) {
     logsSocketEndpoint = `${socketBaseURL}&podName=${selectedNodeId}&instanceId=${resourceInstanceId}`;
   }
-  //  else if (socketBaseURL && resourceKey && mainResourceHasCompute) {
-  //   logsSocketEndpoint = `${socketBaseURL}&podName=${resourceKey}-0&instanceId=${resourceInstanceId}`;
-  // }
+  if (instanceStatus === "STOPPED") {
+    logsSocketEndpoint = null;
+  }
 
   const [isLogsDataLoaded, setIsLogsDataLoaded] = useState(false);
   const [socketConnectionStatus, setConnectionStatus] = useState(
@@ -192,10 +195,10 @@ function Logs(props) {
     };
   }, [logsSocketEndpoint]);
 
-  if (!logsSocketEndpoint || errorMessage) {
+  if (!logsSocketEndpoint || errorMessage || instanceStatus === "STOPPED") {
     return (
       <Card
-        mt={3}
+        mt={4}
         sx={{
           paddingTop: "12.5px",
           paddingLeft: "20px",

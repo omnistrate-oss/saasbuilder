@@ -115,7 +115,6 @@ export default function NodesTable(props) {
         minWidth: 190,
         renderCell: (params) => {
           const nodeId = params.row.nodeId;
-
           return (
             <GridCellExpand
               startIcon={<NodeIcon />}
@@ -143,6 +142,7 @@ export default function NodesTable(props) {
         setDashboardEndpoint(
           row.kubernetesDashboardEndpoint?.dashboardEndpoint
         );
+
         if (!dashboardEndpointRow) {
           return "-";
         }
@@ -157,10 +157,44 @@ export default function NodesTable(props) {
         );
       },
     });
+    res.push(
+      ...[
+        {
+          field: "ports",
+          headerName: "Ports",
+          flex: 0.7,
+          minWidth: 150,
+          valueGetter: (params) => params.row.ports || "-",
+        },
+        {
+          field: "availabilityZone",
+          headerName: "Availability Zone",
+          flex: 1,
+          minWidth: 155,
+          valueGetter: (params) => params.row.availabilityZone,
+          renderCell: (params) => {
+            const availabilityZone = params.row.availabilityZone;
+            return availabilityZone ? (
+              <GridCellExpand
+                startIcon={<Image src={zoneIcon} alt="zone" />}
+                value={availabilityZone}
+                textStyles={{
+                  color: "#475467",
+                  marginLeft: "4px",
+                }}
+              />
+            ) : (
+              "-"
+            );
+          },
+        },
+      ]
+    );
     res.push({
       field: "status",
       headerName: "Lifecycle Status",
       flex: 1,
+      valueGetter: (params) => params.row.status,
       renderCell: (params) => {
         const status = params.row.status;
         const statusStylesAndMap = getResourceInstanceStatusStylesAndLabel(

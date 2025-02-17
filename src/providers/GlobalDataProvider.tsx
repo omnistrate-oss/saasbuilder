@@ -10,6 +10,7 @@ import useSubscriptionRequests from "src/hooks/useSubscriptionRequests";
 import { Subscription } from "src/types/subscription";
 import { SubscriptionRequest } from "src/types/subscriptionRequest";
 import { ServiceOffering } from "src/types/serviceOffering";
+import Navbar from "app/(dashboard)/components/Layout/Navbar";
 
 type Context = {
   subscriptions: Subscription[];
@@ -100,7 +101,12 @@ const GlobalDataProvider = ({ children }: { children: React.ReactNode }) => {
   }, [subscriptions]);
 
   if (!isFetchingServiceOfferings && serviceOfferings.length === 0) {
-    return <NoServiceFoundUI text="No Service Offerings Found" />;
+    return (
+      <div className="flex flex-col" style={{ minHeight: "100vh" }}>
+        <Navbar />
+        <NoServiceFoundUI text="No Service Offerings Found" />
+      </div>
+    );
   }
 
   return (
