@@ -313,6 +313,7 @@ const InstancesPage = () => {
           },
           meta: {
             minWidth: 120,
+            disableBrowserTooltip: true,
           },
         }
       ),
