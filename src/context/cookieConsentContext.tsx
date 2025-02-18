@@ -84,6 +84,9 @@ export default function CookieConsentProvider({
               gtagConfig.gtag = undefined;
               gtagConfig.src =
                 "https://www.googletagmanager.com/gtag/js?id=undefined";
+            } else if (isGTagSet && gtagConfig.gtag !== googleAnalyticsTagID) {
+              gtagConfig.gtag = googleAnalyticsTagID;
+              gtagConfig.src = `https://www.googletagmanager.com/gtag/js?id=${googleAnalyticsTagID}`;
             }
           }
           localStorage.setItem("cookieConsent", JSON.stringify(parsedConsent));
