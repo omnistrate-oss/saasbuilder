@@ -128,35 +128,6 @@ export default function NodesTable(props) {
         },
       },
     ];
-    res.push({
-      field: "kubernetesDashboardEndpoint",
-      headerName: "Dashboard Endpoint",
-      flex: 1,
-      minWidth: 150,
-      valueGetter: (params) =>
-        params.row.kubernetesDashboardEndpoint?.dashboardEndpoint || "-",
-      renderCell: (params) => {
-        const { row } = params;
-        const dashboardEndpointRow =
-          row.kubernetesDashboardEndpoint?.dashboardEndpoint;
-        setDashboardEndpoint(
-          row.kubernetesDashboardEndpoint?.dashboardEndpoint
-        );
-
-        if (!dashboardEndpointRow) {
-          return "-";
-        }
-
-        return (
-          <GridCellExpand
-            value={dashboardEndpointRow}
-            href={"https://" + dashboardEndpointRow}
-            target="_blank"
-            externalLinkArrow
-          />
-        );
-      },
-    });
     res.push(
       ...[
         {
