@@ -61,23 +61,13 @@ const RootLayout = async ({ children }: { children: React.ReactNode }) => {
         />
       </head>
       <body>
-        {process.env.GOOGLE_ANALYTICS_TAG_ID && (
-          <noscript>
-            {/* eslint-disable-next-line react/self-closing-comp */}
-            <iframe
-              src={`https://www.googletagmanager.com/ns.html?id=${process.env.GOOGLE_ANALYTICS_TAG_ID}`}
-              height="0"
-              width="0"
-              style={{ display: "none", visibility: "hidden" }}
-            ></iframe>
-          </noscript>
-        )}
         <RootProviders
           envType={
             (process.env.ENVIRONMENT_TYPE ||
               ENVIRONMENT_TYPES.PROD) as EnvironmentType
           }
           providerOrgDetails={providerOrgDetails.data}
+          googleAnalyticsTagID={process.env.GOOGLE_ANALYTICS_TAG_ID}
         >
           {children}
         </RootProviders>
