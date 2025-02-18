@@ -19,9 +19,7 @@ import { NodeStatus } from "./NodeStatus";
 import DataGridText from "src/components/DataGrid/DataGridText";
 import NodesTableHeader from "./NodesTableHeader";
 import { getResourceInstanceStatusStylesAndLabel } from "src/constants/statusChipStyles/resourceInstanceStatus";
-
 import { productTierTypes } from "src/constants/servicePlan";
-import GenerateTokenDialog from "src/components/GenerateToken/GenerateTokenDialog";
 import _ from "lodash";
 import NodeIcon from "src/components/Icons/Node/NodeIcon";
 
@@ -79,9 +77,6 @@ export default function NodesTable(props) {
   const [searchText, setSearchText] = useState("");
   const [selectionModel, setSelectionModel] = useState([]);
   const [selectedNode, setSelectedNode] = useState(null);
-  const [isGenerateTokenDialogOpen, setIsGenerateTokenDialogOpen] =
-    useState(false);
-  const [dashboardEndpoint, setDashboardEndpoint] = useState("");
 
   const selectUser = useSelector(selectUserrootData);
   const role = getEnumFromUserRoleString(
@@ -368,7 +363,6 @@ export default function NodesTable(props) {
               isCustomTenancy &&
                 nodes.some((node) => node.kubernetesDashboardEndpoint)
             ),
-            onGenerateTokenClick: () => setIsGenerateTokenDialogOpen(true),
             handleFailover,
             failoverMutation,
             searchText,
@@ -400,13 +394,7 @@ export default function NodesTable(props) {
         loading={isRefetching}
         noRowsText="No nodes"
       />
-      <GenerateTokenDialog
-        dashboardEndpoint={dashboardEndpoint}
-        open={isGenerateTokenDialogOpen}
-        onClose={() => setIsGenerateTokenDialogOpen(false)}
-        selectedInstanceId={resourceInstanceId}
-        subscriptionId={subscriptionId}
-      />
+
     </Box>
   );
 }
