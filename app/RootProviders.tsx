@@ -51,10 +51,12 @@ const RootProviders = ({
   children,
   envType,
   providerOrgDetails,
+  googleAnalyticsTagID,
 }: {
   children: React.ReactNode;
   envType: EnvironmentType;
   providerOrgDetails: ProviderUser;
+  googleAnalyticsTagID: string | undefined;
 }) => {
   const pathname = usePathname();
   const isDashboardRoute = !nonDashboardRoutes.includes(pathname as string);
@@ -81,7 +83,9 @@ const RootProviders = ({
                 >
                   <EnvironmentTypeProvider envType={envType}>
                     <ProviderOrgDetailsProvider details={providerOrgDetails}>
-                      <CookieConsentProvider>
+                      <CookieConsentProvider
+                        googleAnalyticsTagID={googleAnalyticsTagID}
+                      >
                         {children}
                         <ProgressBar
                           height="3px"
