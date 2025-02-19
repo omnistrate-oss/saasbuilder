@@ -26,7 +26,7 @@ export const PasswordWithOutBorderField = (props) => {
               <Text
                 size="small"
                 weight="semibold"
-                color="#667085"
+                color="#535862"
                 sx={{
                   wordBreak: "break-word",
                 }}
@@ -41,7 +41,7 @@ export const PasswordWithOutBorderField = (props) => {
           <Text
             size="small"
             weight="semibold"
-            color="#667085"
+            color="#535862"
             sx={{
               wordBreak: "break-word",
             }}

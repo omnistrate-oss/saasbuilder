@@ -110,7 +110,9 @@ const InviteUsersCard: React.FC<InviteUsersCardProps> = ({
       // eslint-disable-next-line no-use-before-define
       formData.resetForm();
     } catch {
-      snackbar.showError("Failed to send invites");
+      snackbar.showError(
+        "Some of the invites failed to send. Please review the access permissions and try again."
+      );
     } finally {
       refetchUsers();
     }
@@ -156,6 +158,7 @@ const InviteUsersCard: React.FC<InviteUsersCardProps> = ({
             />
 
             <Button
+              data-testid="send-invites-button"
               variant="contained"
               startIcon={<EmailOutlinedIcon />}
               type="submit"
@@ -188,6 +191,7 @@ const InviteUsersCard: React.FC<InviteUsersCardProps> = ({
                             key={index}
                           >
                             <TextField
+                              data-testid="email-input"
                               required
                               placeholder="you@example.com"
                               value={invite.email}
@@ -216,6 +220,7 @@ const InviteUsersCard: React.FC<InviteUsersCardProps> = ({
                             />
 
                             <Select
+                              data-testid="service-select"
                               required
                               isLoading={isLoadingSubscriptions}
                               name={`userInvite[${index}].serviceId`}
@@ -257,6 +262,7 @@ const InviteUsersCard: React.FC<InviteUsersCardProps> = ({
                               )}
                             </Select>
                             <Select
+                              data-testid="subscription-plan-select"
                               required
                               isLoading={isLoadingSubscriptions}
                               name={`userInvite[${index}].servicePlanId`}
@@ -296,6 +302,7 @@ const InviteUsersCard: React.FC<InviteUsersCardProps> = ({
                               )}
                             </Select>
                             <Select
+                              data-testid="role-select"
                               required
                               name={`userInvite[${index}].roleType`}
                               value={invite.roleType}
@@ -333,6 +340,7 @@ const InviteUsersCard: React.FC<InviteUsersCardProps> = ({
                       })}
 
                       <div
+                        data-testid="add-another-button"
                         className="inline-flex items-center gap-1.5 mt-4 cursor-pointer"
                         onClick={() => {
                           push(getNewEnvVariable());

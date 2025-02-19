@@ -58,11 +58,6 @@ const InstanceForm = ({
     isFetchingSubscriptions,
   } = useGlobalData();
 
-  const { data: customNetworks = [], isFetching: isFetchingCustomNetworks } =
-    useCustomNetworks({
-      refetchOnMount: false,
-    });
-
   const createInstanceMutation = useMutation(
     async (payload: any) => {
       return createResourceInstance(payload);
@@ -310,6 +305,12 @@ const InstanceForm = ({
   const { values } = formData;
   const offering =
     serviceOfferingsObj[values.serviceId]?.[values.servicePlanId];
+
+  const { data: customNetworks = [], isFetching: isFetchingCustomNetworks } =
+    useCustomNetworks({
+      enabled: values.requestParams?.custom_network_id !== undefined, // Fetch only if custom_network_id is present
+      refetchOnWindowFocus: true, // User can create a custom network and come back to this tab
+    });
 
   const { data: resourceSchemaData, isFetching: isFetchingResourceSchema } =
     useResourceSchema({

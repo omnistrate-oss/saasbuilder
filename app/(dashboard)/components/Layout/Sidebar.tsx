@@ -179,7 +179,7 @@ const Sidebar = () => {
       setExpandedMenus((prev) => ({
         ...prev,
         Deployments:
-          [getCustomNetworksRoute(), getCloudAccountsRoute({})].includes(
+          [getCustomNetworksRoute({}), getCloudAccountsRoute({})].includes(
             currentPath
           ) || currentPath.startsWith("/instances"),
         "Governance Hub": [
@@ -279,7 +279,7 @@ const Sidebar = () => {
           { name: "Instances", href: getInstancesRoute() },
           {
             name: "Custom Networks",
-            href: getCustomNetworksRoute(),
+            href: getCustomNetworksRoute({}),
             isHidden: !showCustomNetworksPage,
           },
           {

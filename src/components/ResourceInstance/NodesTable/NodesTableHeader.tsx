@@ -14,6 +14,7 @@ type NodesTableHeaderProps = {
   refetchData: () => void;
   isRefetching: boolean;
   isFailoverDisabled: boolean;
+  failoverDisabledMessage?: string;
   selectedNode?: { nodeId: string; resourceKey: string };
   showFailoverButton: boolean;
   showGenerateTokenButton: boolean;
@@ -30,6 +31,7 @@ const NodesTableHeader: React.FC<NodesTableHeaderProps> = ({
   refetchData,
   isRefetching,
   isFailoverDisabled,
+  failoverDisabledMessage,
   selectedNode,
   showFailoverButton,
   showGenerateTokenButton,
@@ -75,6 +77,7 @@ const NodesTableHeader: React.FC<NodesTableHeaderProps> = ({
               }}
               startIcon={<FailoverIcon disabled={isFailoverDisabled} />}
               disabled={isFailoverDisabled}
+              disabledMessage={failoverDisabledMessage}
               onClick={() => {
                 if (selectedNode && !isFailoverDisabled) {
                   handleFailover(selectedNode.nodeId, selectedNode.resourceKey);

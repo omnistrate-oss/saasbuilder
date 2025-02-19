@@ -6,7 +6,6 @@ import Checkbox from "src/components/Checkbox/Checkbox";
 import EventTypeChip from "src/components/EventsTable/EventTypeChip";
 import { SelectChangeEvent, Stack, styled } from "@mui/material";
 import { SetState } from "src/types/common/reactGenerics";
-import { Text } from "src/components/Typography/Typography";
 
 const MenuItem = styled(MuiMenuItem)({
   borderRadius: 6,
@@ -57,15 +56,11 @@ const AuditLogsEventFilterDropdown: FC<DropdownProps> = (props) => {
       renderValue={() => {
         return (
           <Stack direction="row" gap="8px" alignItems="center">
-            {selectedEventTypes.length > 0 ? (
-              selectedEventTypes.map((eventType: EventType, index) => {
-                return <EventTypeChip key={index} eventType={eventType} />;
-              })
-            ) : (
-              <Text size="small" weight="medium" color="#344054">
-                Filter by Type
-              </Text>
-            )}
+            {selectedEventTypes.length > 0
+              ? selectedEventTypes.map((eventType: EventType, index) => {
+                  return <EventTypeChip key={index} eventType={eventType} />;
+                })
+              : "Filter by Type"}
           </Stack>
         );
       }}
@@ -75,6 +70,11 @@ const AuditLogsEventFilterDropdown: FC<DropdownProps> = (props) => {
         minWidth: "auto",
         minHeight: "40px",
         height: "40px !important",
+        "& .MuiSelect-select": {
+          fontSize: "14px",
+          fontColor: "#414651",
+          fontWeight: "500",
+        },
       }}
       onChange={handleChange}
       displayEmpty

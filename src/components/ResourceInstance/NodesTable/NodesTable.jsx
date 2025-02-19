@@ -63,6 +63,7 @@ export default function NodesTable(props) {
     nodes = [],
     refetchData,
     isRefetching,
+    isLoading,
     resourceName,
     serviceOffering,
     resourceInstanceId,
@@ -375,7 +376,7 @@ export default function NodesTable(props) {
         checkboxSelection={!isCustomTenancy}
         disableSelectionOnClick
         columns={isCustomTenancy ? customTenancyColumns : columns}
-        rows={isRefetching ? [] : filteredNodes}
+        rows={isLoading ? [] : filteredNodes}
         components={{
           Header: NodesTableHeader,
         }}
@@ -390,6 +391,17 @@ export default function NodesTable(props) {
               failoverMutation.isLoading ||
               !modifyAccessServiceAllowed ||
               (isInventoryManageInstance && isManagedProxy), //can't failover fleet instances of type serverless proxy and managedProxyType==="PortsbasedProxy"
+            failoverDisabledMessage: !selectedNode
+              ? "Please select a node"
+              : !modifyAccessServiceAllowed
+                ? "Unauthorized to failover nodes"
+                : isInventoryManageInstance && isManagedProxy
+                  ? "System managed proxy nodes cannot be failed over"
+                  : selectedNode?.status !== "RUNNING"
+                    ? "Node must be running to failover"
+                    : failoverMutation.isLoading
+                      ? "Failover in progress"
+                      : "",
             selectedNode,
             showFailoverButton:
               !isCustomTenancy && (isAccessSide || isInventoryManageInstance),
@@ -426,7 +438,7 @@ export default function NodesTable(props) {
             setSelectionModel(newRowSelectionModel);
           }
         }}
-        loading={isRefetching}
+        loading={isLoading}
         noRowsText="No nodes"
       />
       <GenerateTokenDialog

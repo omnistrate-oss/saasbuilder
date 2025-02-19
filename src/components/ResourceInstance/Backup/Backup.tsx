@@ -155,7 +155,7 @@ const Backup: FC<{
     () => [
       {
         field: "snapshotId",
-        headerName: "Name",
+        headerName: "ID",
         flex: 1,
         minWidth: 190,
       },
