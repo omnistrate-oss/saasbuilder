@@ -57,8 +57,17 @@ body,
     --light-blue-50: #f0f9ff;
     --light-blue-700: #026aa2;
 
-    --blue-600: #1570ef;
-    --blue-700: #175cd3;
+    --blue-50: #e8f3ff;
+    --blue-200: #93c7ff;
+    --blue-300: #62aeff;
+    --blue-600: #127ae8;
+    --blue-700: #0e5fb5;
+    --blue-900: #08386b;
+
+    --util-blue-50: #eff8ff;
+    --util-blue-200: #b2ddff;
+    --util-blue-700: #175cd3;
+    --util-blue-600: #1570ef;
 
     --pink-600: #dd2590;
     --pink-700: #c11574;

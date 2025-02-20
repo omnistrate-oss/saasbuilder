@@ -75,6 +75,7 @@ const AuditLogsEventFilterDropdown: FC<DropdownProps> = (props) => {
         minWidth: "auto",
         minHeight: "40px",
         height: "40px !important",
+        borderRadius: "9999px",
       }}
       onChange={handleChange}
       displayEmpty

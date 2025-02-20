@@ -1,6 +1,16 @@
 import { FC } from "react";
 import { DisplayText, Text } from "components/Typography/Typography";
 import { cn } from "lib/utils";
+import settingsImg from "public/assets/images/dashboard/settings.jpg";
+import Image from "next/image";
+import { styled } from "@mui/material";
+
+const StyledImage = styled(Image)({
+  width: "100%",
+  height: "100%",
+  objectPosition: "center",
+  objectFit: "cover",
+});
 
 type AccountManagementHeaderProps = {
   userName?: string;
@@ -15,7 +25,9 @@ const AccountManagementHeader: FC<AccountManagementHeaderProps> = ({
 }) => {
   return (
     <div>
-      <div className="h-[140px] w-full bg-gradient-to-b from-[#A5C0EE] to-[#FBC5EC]" />
+      <div className="w-full h-[140px]">
+        <StyledImage src={settingsImg} alt="settings-img" />
+      </div>
 
       <div
         className={cn("flex items-end gap-6 px-8 -mt-6", className)}

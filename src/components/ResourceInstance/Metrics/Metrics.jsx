@@ -21,6 +21,7 @@ import DataGridHeaderTitle from "src/components/Headers/DataGridHeaderTitle";
 import Select from "src/components/FormElementsv2/Select/Select";
 import MenuItem from "src/components/FormElementsv2/MenuItem/MenuItem";
 import _ from "lodash";
+import { colors } from "src/themeConfig";
 
 const initialCpuUsage = {
   current: "",
@@ -79,7 +80,7 @@ const MetricsContainerCard = ({ children, title = "Chart" }) => {
       }}
     >
       <Box sx={{ borderBottom: "1px solid #E9EAEB", padding: "12px 24px" }}>
-        <Text size="small" weight="semibold" color="#6941C6">
+        <Text size="small" weight="semibold" color={colors.blue900}>
           {title}
         </Text>
       </Box>
@@ -827,6 +828,7 @@ function Metrics(props) {
               sx={{
                 width: "auto",
                 maxWidth: "250px",
+                borderRadius: "9999px",
               }}
               onChange={handleNodeChange}
             >

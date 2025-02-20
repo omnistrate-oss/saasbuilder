@@ -3,6 +3,7 @@ import MuiTextField from "@mui/material/TextField";
 import { InputAdornment, styled } from "@mui/material";
 import CopyButton from "src/components/Button/CopyButton";
 import { colors } from "src/themeConfig";
+import { styleConfig } from "src/providerConfig";
 
 const StyledTextField = styled(MuiTextField, {
   shouldForwardProp: (prop) => {
@@ -32,7 +33,7 @@ const StyledTextField = styled(MuiTextField, {
   },
   ".MuiOutlinedInput-root.Mui-focused": {
     [`& .MuiOutlinedInput-notchedOutline`]: {
-      border: `2px solid ${colors.success500}`,
+      border: `2px solid ${styleConfig.primaryBorder}`,
     },
   },
   ".MuiOutlinedInput-root.Mui-error": {

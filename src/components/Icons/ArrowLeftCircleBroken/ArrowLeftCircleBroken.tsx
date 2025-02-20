@@ -1,8 +1,13 @@
 import { FC } from "react";
+import { styleConfig } from "src/providerConfig";
 import { SVGIconProps } from "src/types/common/generalTypes";
 
 const ArrowLeftCircleBrokenIcon: FC<SVGIconProps> = (props) => {
-  const { disabled, color = "#7F56D9", ...restProps } = props;
+  const {
+    disabled,
+    color = styleConfig.primaryIconColor,
+    ...restProps
+  } = props;
 
   return (
     <svg

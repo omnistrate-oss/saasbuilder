@@ -28,6 +28,7 @@ import GithubLogin from "../../signin/components/GitHubLogin";
 import { IDENTITY_PROVIDER_STATUS_TYPES } from "app/(public)/(main-image)/signin/constants";
 import { useProviderOrgDetails } from "src/providers/ProviderOrgDetailsProvider";
 import Logo from "src/components/NonDashboardComponents/Logo";
+import { styleConfig } from "src/providerConfig";
 
 const FormGrid = styled(Box)(() => ({
   display: "grid",
@@ -424,14 +425,18 @@ const SignupPage = (props) => {
         textAlign="center"
       >
         {policyAgreementText}{" "}
-        <Link target="_blank" href="/terms-of-use" style={{ color: "#27A376" }}>
+        <Link
+          target="_blank"
+          href="/terms-of-use"
+          style={{ color: styleConfig.linkColor }}
+        >
           Terms & Conditions
         </Link>{" "}
         and{" "}
         <Link
           target="_blank"
           href="/privacy-policy"
-          style={{ color: "#27A376" }}
+          style={{ color: styleConfig.linkColor }}
         >
           Privacy Policy
         </Link>
@@ -446,7 +451,7 @@ const SignupPage = (props) => {
         textAlign="center"
       >
         Already have an account?{" "}
-        <Link href="/signin" style={{ color: "#27A376" }}>
+        <Link href="/signin" style={{ color: styleConfig.linkColor }}>
           Login here
         </Link>
       </Typography>

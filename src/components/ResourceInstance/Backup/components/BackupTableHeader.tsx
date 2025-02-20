@@ -13,6 +13,7 @@ import {
   DateRange,
   DateTimePickerPopover,
 } from "src/components/DateRangePicker/DateTimeRangePickerStatic";
+import { colors } from "src/themeConfig";
 
 type BackupsTableHeaderProps = {
   resourceName: string;
@@ -93,7 +94,7 @@ const BackupsTableHeader: FC<BackupsTableHeaderProps> = ({
             Restore
             {restoreMutation.isLoading && (
               <LoadingSpinnerSmall
-                sx={{ color: "#7F56D9", marginLeft: "12px" }}
+                sx={{ color: colors.blue700, marginLeft: "12px" }}
               />
             )}
           </Button>

@@ -6,6 +6,7 @@ import TextField from "../TextField/TextField";
 import KeyIcon from "src/components/Icons/Key/KeyIcon";
 import { Text } from "src/components/Typography/Typography";
 import Tooltip from "src/components/Tooltip/Tooltip";
+import { styleConfig } from "src/providerConfig";
 
 export const PasswordField = (props) => {
   const {
@@ -39,7 +40,7 @@ export const PasswordField = (props) => {
               size="xsmall"
               weight="medium"
               style={{
-                color: "#7F56D9",
+                color: styleConfig.secondaryIconColor,
                 cursor: "pointer",
                 userSelect: "none",
                 paddingRight: "14px",

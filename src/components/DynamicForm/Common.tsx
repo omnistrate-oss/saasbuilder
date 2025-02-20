@@ -15,6 +15,7 @@ import Tooltip from "../Tooltip/Tooltip";
 import Radio, { RadioGroup } from "../FormElementsv2/Radio/Radio";
 import FormControlLabel from "../FormElementsv2/FormControlLabel/FormControlLabel";
 import Autocomplete from "../FormElementsv2/AutoComplete/AutoComplete";
+import { styleConfig } from "src/providerConfig";
 
 export const PasswordInput = ({ field, formData }) => {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
@@ -56,7 +57,7 @@ export const PasswordInput = ({ field, formData }) => {
               size="xsmall"
               weight="medium"
               style={{
-                color: "#7F56D9",
+                color: styleConfig.secondaryIconColor,
                 cursor: "pointer",
                 userSelect: "none",
                 paddingRight: "14px",

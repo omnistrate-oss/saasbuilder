@@ -560,7 +560,7 @@ const InstanceForm = ({
           className="bg-white rounded-xl flex flex-col"
         >
           <div className="py-4 px-6 border-b border-gray-200">
-            <Text size="large" weight="semibold" color={colors.purple600}>
+            <Text size="large" weight="semibold" color={colors.blue700}>
               Deployment Instance Summary
             </Text>
           </div>

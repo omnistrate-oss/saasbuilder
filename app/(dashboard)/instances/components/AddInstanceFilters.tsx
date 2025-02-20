@@ -14,11 +14,12 @@ import {
 } from "src/components/DateRangePicker/DateTimeRangePickerStatic";
 import { FilterCategorySchema } from "../utils";
 import { PopoverDynamicHeight } from "src/components/Popover/Popover";
+import { styleConfig } from "src/providerConfig";
 
 const StyledIconCard = styled(Box)({
   padding: "8px",
   borderRadius: "8px",
-  border: `1px solid ${themeConfig.colors.green300}`,
+  border: `1px solid ${themeConfig.colors.blue700}`,
   boxShadow: `box-shadow: 0px 1px 2px 0px #0A0D120D, 0px -2px 0px 0px #0A0D120D inset, 0px 0px 0px 1px #0A0D122E inset`,
   display: "flex",
   justifyContent: "center",
@@ -150,12 +151,12 @@ export const SelectedCategoryOptions = ({
         <StyledIconCard sx={{ cursor: "pointer" }} onClick={handleCancel}>
           <ChevronLeft
             sx={{
-              color: themeConfig.colors.green600,
+              color: styleConfig.primaryIconColor,
               fontSize: "20px",
             }}
           />
         </StyledIconCard>
-        <p className="text-base font-semibold text-purple-600">
+        <p className="text-base font-semibold text-gray-900">
           Select {selectedCategory.label}
         </p>
       </Stack>
@@ -211,12 +212,7 @@ export const SelectedCategoryOptions = ({
         borderTop={`1px solid ${themeConfig.colors.gray200}`}
         padding="16px"
       >
-        <Button
-          variant="text"
-          fontColor={themeConfig.colors.success600}
-          bgColor={"#0794550a"}
-          onClick={handleClearOptions}
-        >
+        <Button variant="text" onClick={handleClearOptions}>
           Clear
         </Button>
 
@@ -256,7 +252,7 @@ const SelectCategory = ({ filterOptionsMap, handleSelectCategory }) => {
         <StyledIconCard>
           <FilterFunnel />
         </StyledIconCard>
-        <p className="text-base font-semibold text-purple-600">Properties</p>
+        <p className="text-base font-semibold text-gray-900">Properties</p>
       </Stack>
       <MenuList
         disablePadding
@@ -322,7 +318,7 @@ const AddInstanceFilters = ({
     <>
       <div
         tabIndex={0}
-        className={`px-3 py-2 rounded-full border-2  border-solid  ${anchorEl ? "border-purple-600" : "border-gray-300"} focus:border-purple-600 outline-none  max-w-[470px]`}
+        className={`px-3 py-2 rounded-full border-2  border-solid  ${anchorEl ? "border-blue-700" : "border-gray-300"} focus:border-blue-700 outline-none  max-w-[470px]`}
         onClick={(e) => handleOpen(e)}
         aria-describedby={id}
       >

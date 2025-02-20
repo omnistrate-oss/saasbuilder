@@ -1,5 +1,6 @@
 import MuiLinearProgress from "@mui/material/LinearProgress";
 import { linearProgressClasses, styled } from "@mui/material";
+import { colors } from "src/themeConfig";
 
 const LinearProgress = styled(MuiLinearProgress, {
   shouldForwardProp: (prop) => !["height"].includes(prop),
@@ -19,7 +20,7 @@ const LinearProgress = styled(MuiLinearProgress, {
     },
     [`& .${linearProgressClasses.bar}`]: {
       borderRadius: 5,
-      backgroundColor: "#7F56D9",
+      backgroundColor: colors.blue600,
     },
   })
 );

@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Stack } from "@mui/material";
 
 import CopyButton from "src/components/Button/CopyButton";
+import { colors } from "src/themeConfig";
 
 type NonOmnistrateIntegrationRowProps = {
   integration: {
@@ -32,7 +33,7 @@ function NonOmnistrateIntegrationRow({
           fontSize: "18px",
           lineHeight: "28px",
           fontWeight: 600,
-          color: "#7F56D9",
+          color: colors.blue600,
           overflow: "hidden",
           textOverflow: "ellipsis",
         }}

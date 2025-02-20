@@ -12,6 +12,7 @@ import {
   getAccountConfigStatusBasedHeader,
 } from "src/utils/constants/accountConfig";
 import { CLOUD_PROVIDERS } from "src/constants/cloudProviders";
+import { colors } from "src/themeConfig";
 
 const ArrowBulletSmall = () => <ArrowBulletIcon width={20} height={20} />;
 
@@ -62,7 +63,7 @@ const Footer = styled(Box)({
 
 const StyledLink = styled(Link)({
   textDecoration: "underline",
-  color: "#7F56D9",
+  color: colors.blue600,
   fontWeight: 600,
 });
 
@@ -489,7 +490,7 @@ function CloudProviderAccountOrgIdModal(props) {
         sx={{
           cursor: "pointer",
           textDecoration: "underline",
-          color: "#7F56D9",
+          color: colors.blue600,
           fontWeight: 600,
         }}
         component="span"

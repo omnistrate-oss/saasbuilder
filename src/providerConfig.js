@@ -1,43 +1,44 @@
 // Light Mode - Sidebar and Navbar
 export const styleConfig = {
-  navbarBg: "#FFFFFF",
+  // navbarBg: "#FFFFFF",
   navbarTextColor: "#101828",
-  navbarBorderColor: "#E4E4E5",
-  nineDotMenuTextColor: "#6E717F",
-  sidebarBg: "#FFFFFF",
-  sidebarBorderColor: "#E4E4E5", // Same as navbarBorderColor
+  // navbarBorderColor: "#E4E4E5",
+  // nineDotMenuTextColor: "#6E717F",
+  // sidebarBg: "#FFFFFF",
+  // sidebarBorderColor: "#E4E4E5", // Same as navbarBorderColor
   //sidebarTextColor: "#182230",
-  sidebarTextColor: "#344054",
-  sidebarTextActiveColor: "#079455",
+  // sidebarTextColor: "#344054",
+  // sidebarTextActiveColor: "#079455",
   sidebarIconColor: "#717680",
-  sidebarIconActiveColor: "#079455",
+  sidebarIconActiveColor: "#127ae8",
   sidebarIconDisabledColor: "#A0AEC0",
-  primaryColor: "#5925DC", // Filled Button Background
+  primaryColor: "#0e5fb5", // Filled Button Background
   primaryTextColor: "#FFFFFF", // Filled Button Text
-  primaryHoverColor: "#0E5FB5", // Filled Button Hover
+  primaryHoverColor: "#127ae8", // Filled Button Hover
   // secondaryColor: "#F5F5FF", // Outlined Button Background
   // primaryTextColor: "#FFFFFF", // Outlined Button Text
   // primaryHoverColor: "#7F56D9", // Outlined Button Hover
-  secondaryColor: "#6941C6",
-  secondaryHoverLight: "#6941C60d",
-  linkColor: "#0E5FB5",
-  headerIconColor: "#17B26A",
+  secondaryColor: "#127ae8",
+  // secondaryHoverLight: "#6941C60d",
+  linkColor: "#127ae8",
+  primaryIconColor: "#0e5fb5",
+  secondaryIconColor: "#127ae8",
 
   // Buttons
-  secondary: "#5925DC",
-  primaryButtonBg: "#079455",
-  secondaryButtonText: "#099250",
-  secondaryButtonBorder: "#73E2A3",
-  disabled: "A0AEC0",
+  // secondary: "#5925DC",
+  // primaryButtonBg: "#079455",
+  secondaryButtonText: "#0e5fb5",
+  // secondaryButtonBorder: "#73E2A3",
+  // disabled: "A0AEC0",
 
   // Layout - Navbar and Sidebar
-  headerIcon: "#17B26A",
-  sidebarText: "#414651",
-  sidebarActiveText: "#17B26A",
-  sidebarActiveBg: "#FAFAFA",
+  // headerIcon: "#17B26A",
+  // sidebarText: "#414651",
+  // sidebarActiveText: "#17B26A",
+  // sidebarActiveBg: "#FAFAFA",
 
   // Borders
-  primaryBorder: "#E9EAEB",
+  primaryBorder: "#0e5fb5",
 };
 
 // Dark Mode - Sidebar and Navbar

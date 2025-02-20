@@ -42,7 +42,7 @@ const SubscriptionPlanCard = ({
     <div
       className={clsx(
         "flex items-start justify-between gap-3 px-4 pt-4 pb-3 rounded-xl outline outline-[2px]",
-        isSelected ? "outline-success-500" : "outline-gray-300",
+        isSelected ? "outline-blue-700" : "outline-gray-300",
         (!subscriptions.length || disabled) && "bg-gray-50"
       )}
       style={{
@@ -77,7 +77,7 @@ const SubscriptionPlanCard = ({
             servicePlanId: plan.productTierID,
           })}
           target="_blank"
-          className="text-purple-700 font-semibold text-sm"
+          className="text-blue-700 font-semibold text-sm"
         >
           Click here to view plan details <ArrowOutward />
         </Link>

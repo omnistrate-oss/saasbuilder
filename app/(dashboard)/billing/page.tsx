@@ -21,6 +21,7 @@ import { DisplayText, Text } from "components/Typography/Typography";
 import LoadingSpinner from "components/LoadingSpinner/LoadingSpinner";
 import StaticBilling from "./components/StaticBilling";
 import { isStaticBillingEnabled } from "./utils";
+import { colors } from "src/themeConfig";
 
 const BillingPage = () => {
   const selectUser = useSelector(selectUserrootData);
@@ -113,9 +114,11 @@ const BillingPage = () => {
                         : "Not Configured"
                     }
                     fontColor={
-                      paymentConfigured === true ? "#6941C6" : "#D92D20"
+                      paymentConfigured === true ? colors.blue700 : "#D92D20"
                     }
-                    bgColor={paymentConfigured === true ? "#F9F5FF" : "#f3f3f1"}
+                    bgColor={
+                      paymentConfigured === true ? colors.blue200 : "#f3f3f1"
+                    }
                   />
                 </Box>
                 <Link

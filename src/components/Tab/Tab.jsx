@@ -29,11 +29,11 @@ export const Tab = styled(MuiTab)({
   marginRight: "16px",
   borderBottom: "2px solid transparent",
   "&:hover": {
-    borderBottom: `2px solid ${colors.purple600}`,
-    color: colors.purple600,
+    borderBottom: `2px solid ${colors.blue600}`,
+    color: colors.blue700,
   },
   [`&.${tabClasses.selected}`]: {
-    borderBottom: `2px solid ${styleConfig.secondaryColor}`,
-    color: colors.purple800,
-  }
+    borderBottom: `2px solid ${colors.blue600}`,
+    color: colors.blue700,
+  },
 });

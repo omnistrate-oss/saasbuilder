@@ -23,7 +23,7 @@ const CloudProviderCard = ({
       )}
       style={{
         outline: isSelected
-          ? `2px solid ${colors.success500}`
+          ? `2px solid ${colors.blue700}`
           : `1px solid ${colors.gray200}`,
       }}
       onClick={() => {

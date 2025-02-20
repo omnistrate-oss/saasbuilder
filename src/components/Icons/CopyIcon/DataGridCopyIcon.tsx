@@ -1,7 +1,7 @@
 import { FC } from "react";
 import type * as CSS from "csstype";
 
-import { colors } from "src/themeConfig";
+import { styleConfig } from "src/providerConfig";
 
 type DataGridTextProps = {
   color?: string;
@@ -10,7 +10,7 @@ type DataGridTextProps = {
 };
 
 const DataGridCopyIcon: FC<DataGridTextProps> = ({
-  color = colors.purple700,
+  color = styleConfig.secondaryIconColor,
   ...otherProps
 }) => {
   return (

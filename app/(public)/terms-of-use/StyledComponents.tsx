@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { styled } from "@mui/material";
+import { styleConfig } from "src/providerConfig";
 
 export const StyledImage = styled(Image)(({}) => ({
   width: "100%",
@@ -29,7 +30,7 @@ export const Title = styled("h1")(({ theme }) => ({
   "&::before": {
     content: '""',
     position: "absolute",
-    borderLeft: "5px solid #38B601",
+    borderLeft: `5px solid ${styleConfig.primaryColor}`,
     height: 64,
     left: -21,
     // @ts-ignore

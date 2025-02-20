@@ -12,6 +12,7 @@ import Button from "../Button/Button";
 import CalendarIcon from "../Icons/Calendar/Calendar";
 import { SetState } from "src/types/common/reactGenerics";
 import Popover from "../Popover/Popover";
+import { colors } from "src/themeConfig";
 
 const NavigationRenderer = (
   currentFocusedDate: Date,
@@ -185,7 +186,7 @@ const DateRangePicker: FC<DateRangePickerProps> = (props) => {
             months={2}
             ranges={dateRanges}
             direction="horizontal"
-            color="#7F56D9"
+            color={colors.blue700}
             showMonthAndYearPickers={false}
             navigatorRenderer={NavigationRenderer}
             showDateDisplay={false}

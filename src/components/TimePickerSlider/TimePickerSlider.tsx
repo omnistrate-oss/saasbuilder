@@ -14,6 +14,7 @@ import {
 import { getPercent } from "src/utils/calculatePercentage";
 import dayjs, { Dayjs } from "dayjs";
 import utc from "dayjs/plugin/utc";
+import { colors } from "src/themeConfig";
 
 dayjs.extend(utc);
 
@@ -26,7 +27,7 @@ function getCustomMarkStyles() {
   customMarksIndexes.forEach((index) => {
     styles[`& .${sliderClasses.mark}[data-index='${index}']`] = {
       height: "7px",
-      backgroundColor: "#7F56D9",
+      backgroundColor: colors.blue700,
       width: "1px",
       opacity: 0.7,
     };
@@ -62,10 +63,10 @@ const TimeSlider = styled(Slider)(() => ({
   },
   "& .MuiSlider-track": {
     height: 2,
-    color: "#B692F6",
+    color: colors.blue600,
   },
   "& .MuiSlider-rail": {
-    color: "#B692F6",
+    color: colors.blue600,
     opacity: 1,
     height: 2,
   },
@@ -79,7 +80,7 @@ const TimeSlider = styled(Slider)(() => ({
   },
   [`& .${sliderClasses.mark}`]: {
     height: "12px",
-    backgroundColor: "#7F56D9",
+    backgroundColor: colors.blue700,
     width: "1px",
   },
 

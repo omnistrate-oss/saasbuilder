@@ -11,7 +11,7 @@ const Button = styled("button")<{ enabled: boolean }>(({ enabled }) => ({
   backgroundColor: "#FFFFFF",
   border: "1px solid #D5D7DA",
   padding: "10px 9px",
-  borderRadius: "8px",
+  borderRadius: "9999px",
   boxShadow: `0px 1px 2px 0px #0A0D120D, 0px -2px 0px 0px #0A0D120D inset`,
   color: "#414651",
   position: "relative",
@@ -25,9 +25,9 @@ const Button = styled("button")<{ enabled: boolean }>(({ enabled }) => ({
     left: "-5px",
     right: "-5px",
     bottom: "-5px",
-    border: `2px solid ${enabled ? colors.success500 : "transparent"}` /* Hidden by default */,
+    border: `2px solid ${enabled ? colors.blue700 : "transparent"}` /* Hidden by default */,
     pointerEvents: "none" /* Prevent interactions with the pseudo-element */,
-    borderRadius: "12px" /* Match the button's border-radius, if any */,
+    borderRadius: "9999px" /* Match the button's border-radius, if any */,
   },
 }));
 

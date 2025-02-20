@@ -3,6 +3,7 @@ import clipboard from "clipboardy";
 import { IconButton } from "@mui/material";
 import CopyIcon from "components/Icons/CopyIcon/DataGridCopyIcon";
 import Tooltip from "../Tooltip/Tooltip";
+import { colors } from "src/themeConfig";
 
 const CopyButton = ({
   text = "",
@@ -25,7 +26,7 @@ const CopyButton = ({
     <Tooltip title={tooltipText} placement="top" {...tooltipProps}>
       <IconButton onClick={handleClick} sx={{ ...iconButtonProps }}>
         <CopyIcon
-          color="#7F56D9"
+          color={colors.blue600}
           sx={{ width: "16px", height: "18px", ...iconStyle }}
           {...iconProps}
         />

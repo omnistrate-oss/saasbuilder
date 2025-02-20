@@ -1,6 +1,7 @@
 import styled from "@emotion/styled";
 import { Button } from "@mui/material";
 import LoadingSpinnerSmall from "src/components/CircularProgress/CircularProgress";
+import { styleConfig } from "src/providerConfig";
 
 const SubmitButton = styled(({ children, loading, ...restProps }) => (
   <Button {...restProps}>
@@ -8,7 +9,7 @@ const SubmitButton = styled(({ children, loading, ...restProps }) => (
     {loading && <LoadingSpinnerSmall sx={{ color: "#FFF" }} />}
   </Button>
 ))(() => ({
-  backgroundColor: "#111827",
+  backgroundColor: styleConfig.primaryColor,
   color: "#FFFFFF",
   fontWeight: "700",
   fontSize: "16px",
@@ -16,10 +17,10 @@ const SubmitButton = styled(({ children, loading, ...restProps }) => (
   letterSpacing: "0.3px",
   padding: "16px",
   textTransform: "none",
-  borderRadius: "10px",
+  borderRadius: "9999px",
 
   "&:hover": {
-    backgroundColor: "#111827",
+    backgroundColor: styleConfig.primaryHoverColor,
     color: "#FFFFFF",
   },
 

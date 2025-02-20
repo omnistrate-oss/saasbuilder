@@ -37,6 +37,7 @@ const ServiceFilter = ({
         maxWidth: "200px",
         height: "40px !important",
         marginTop: 0,
+        borderRadius: "9999px",
       }}
       fullWidth={false}
       onChange={handleChange}

@@ -226,7 +226,7 @@ const CustomDNS: FC<EndpointProps> = (props) => {
             <Text
               size="medium"
               weight="bold"
-              color="#6941C6"
+              color={colors.blue900}
               sx={{ flex: 1, wordBreak: "break-word" }}
             >
               {resourceName}
@@ -273,7 +273,7 @@ const CustomDNS: FC<EndpointProps> = (props) => {
                           //textfieldRef.current.focus();
                         }}
                       >
-                        <EditIcon color="#7F56D9" />
+                        <EditIcon color={colors.blue600} />
                       </IconButtonSquare>
                       <IconButtonSquare
                         sx={{ borderColor: "#FDA29B !important" }}

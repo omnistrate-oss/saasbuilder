@@ -27,7 +27,7 @@ export const StyledListItem: FC<StyledListItemProps> = (props) => {
           rel="noopener noreferrer"
           style={{
             textDecoration: "underline",
-            color: colors.purple700,
+            color: colors.blue700,
             fontWeight: 500,
           }}
           tabIndex={-1}

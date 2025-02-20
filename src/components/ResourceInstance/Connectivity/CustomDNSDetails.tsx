@@ -3,6 +3,7 @@ import { Box, styled } from "@mui/material";
 import CopyButton from "src/components/Button/CopyButton";
 import { Text } from "src/components/Typography/Typography";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+import { colors } from "src/themeConfig";
 
 type CustomDNSDetailsProps = {
   aRecordTarget?: string;
@@ -144,7 +145,7 @@ const CustomDNSDetails: React.FC<CustomDNSDetailsProps> = ({
             </RecordColumn>
 
             <Box px="8px">
-              <ArrowForwardIcon sx={{ color: "#6941C6" }} />
+              <ArrowForwardIcon sx={{ color: colors.blue600 }} />
             </Box>
             <RecordColumn hasBorder>
               <Box

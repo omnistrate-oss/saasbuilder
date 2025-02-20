@@ -81,16 +81,16 @@ const Button = styled(
 
   return {
     ...buttonStyles,
-    borderRadius: "8px",
+    borderRadius: "9999px",
     textTransform: "none",
     minWidth: "auto",
     [`&.${buttonClasses.contained}`]: {
       color: "#FFF",
-      background: bgColor ? bgColor : colors.success600,
+      background: bgColor ? bgColor : colors.blue700,
       color: fontColor ? fontColor : styleConfig.primaryTextColor,
       boxShadow: "none",
       "&:hover": {
-        background: bgColor ? bgColor : colors.success600,
+        background: bgColor ? bgColor : colors.blue600,
       },
     },
     [`&.${buttonClasses.contained}.Mui-disabled`]: {
@@ -149,7 +149,7 @@ const Button = styled(
 
       "&:hover": {
         background: "none",
-        color: "#087443",
+        color: colors.blue900,
       },
     },
     [`&.${buttonClasses.text}:disabled`]: {

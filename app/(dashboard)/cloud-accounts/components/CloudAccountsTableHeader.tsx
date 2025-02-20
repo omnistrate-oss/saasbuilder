@@ -7,6 +7,7 @@ import DataGridHeaderTitle from "components/Headers/DataGridHeaderTitle";
 import RefreshWithToolTip from "components/RefreshWithTooltip/RefreshWithToolTip";
 
 import { CircularProgress } from "@mui/material";
+import { colors } from "src/themeConfig";
 
 const CloudAccountsTableHeader = ({
   count,
@@ -53,6 +54,7 @@ const CloudAccountsTableHeader = ({
               disabled={
                 !selectedInstance || selectedInstance.status === "DELETING"
               }
+              color={colors.blue700}
             />
           }
           disabledMessage={
@@ -62,6 +64,8 @@ const CloudAccountsTableHeader = ({
                 ? "Cloud account deletion is already in progress"
                 : ""
           }
+          fontColor={colors.blue700}
+          outlineColor={colors.blue300}
         >
           Delete
         </Button>

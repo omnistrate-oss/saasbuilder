@@ -5,6 +5,7 @@ import { useState } from "react";
 import clipboard from "clipboardy";
 import { Text } from "../../Typography/Typography";
 import Tooltip from "src/components/Tooltip/Tooltip";
+import { colors } from "src/themeConfig";
 
 const TextCopy = (props) => {
   const { copyButton, ...restProps } = props;
@@ -73,7 +74,7 @@ const CopyButton = (props) => {
         }}
         onClick={handleClick}
       >
-        <ContentCopyIcon sx={{ fontSize: "24px", color: "#7F56D9" }} />
+        <ContentCopyIcon sx={{ fontSize: "24px", color: colors.blue600 }} />
       </ButtonBase>
     </Tooltip>
   );

@@ -9,6 +9,7 @@ import Button from "../Button/Button";
 import CloseIcon from "@mui/icons-material/Close";
 import SuccessIcon from "src/components/Icons/SuccessIcon/SuccessIcon";
 import CopyButton from "../Button/CopyButton";
+import { styleConfig } from "src/providerConfig";
 
 function RestoreInstanceSuccessStep({ handleClose, restoredInstanceID }) {
   return (
@@ -45,7 +46,7 @@ function RestoreInstanceSuccessStep({ handleClose, restoredInstanceID }) {
             The deployment ID is{"  "}
             <Box
               sx={{
-                color: "#7F56D9",
+                color: styleConfig.linkColor,
                 fontWeight: 700,
                 display: "inline",
               }}

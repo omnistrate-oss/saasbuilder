@@ -16,6 +16,7 @@ import PublicResourceIcon from "src/components/Icons/PublicResource/PublicResour
 import PrivateResourceIcon from "src/components/Icons/PrivateResource/PrivateResource";
 import StatusChip from "src/components/StatusChip/StatusChip";
 import { ContainerCard } from "../ResourceInstanceDetails/PropertyDetails";
+import { colors } from "src/themeConfig";
 const TableCell = styled(MuiTableCell)({
   borderBottom: "none",
 });
@@ -135,8 +136,10 @@ const ResourceConnectivityEndpoint: FC<ResourceConnectivityEndpointProps> = (
     >
       <Box
         sx={{
-          border: isPrimaryResource ? "1px solid #7F56D9" : "1px solid #EAECF0",
-          background: isPrimaryResource ? "#F9F5FF" : "white",
+          border: isPrimaryResource
+            ? `1px solid ${colors.utilBlue200}`
+            : "1px solid #EAECF0",
+          background: isPrimaryResource ? colors.utilBlue50 : "white",
           borderRadius: "12px",
           boxShadow: "box-shadow: 0px 1px 2px 0px #0A0D120D",
           ...containerStyles,
@@ -175,7 +178,7 @@ const ResourceConnectivityEndpoint: FC<ResourceConnectivityEndpointProps> = (
                 }}
               >
                 <Stack direction="row" alignItems="center" gap="8px">
-                  <Text size="small" weight="medium" color="#53389E">
+                  <Text size="small" weight="medium" color={colors.utilBlue700}>
                     {"Endpoint"}
                   </Text>
                   <StatusChip
@@ -185,9 +188,9 @@ const ResourceConnectivityEndpoint: FC<ResourceConnectivityEndpointProps> = (
                   {isPrimaryResource && (
                     <StatusChip
                       label="Primary"
-                      color="#7F56D9"
-                      borderColor="#7F56D9"
-                      bgColor="#F9F5FF"
+                      color={colors.blue700}
+                      borderColor={colors.blue200}
+                      bgColor={colors.blue50}
                     />
                   )}
                 </Stack>
@@ -196,7 +199,7 @@ const ResourceConnectivityEndpoint: FC<ResourceConnectivityEndpointProps> = (
                   <CopyButton
                     text={`${endpointURL}`}
                     iconProps={{
-                      color: "#6941C6",
+                      color: colors.blue600,
                       width: 20,
                       height: 20,
                       marginTop: 0,
@@ -222,14 +225,14 @@ const ResourceConnectivityEndpoint: FC<ResourceConnectivityEndpointProps> = (
                           <Text
                             size="small"
                             weight="regular"
-                            color={isPrimaryResource ? "#6941C6" : ""}
+                            color={isPrimaryResource ? colors.utilBlue600 : ""}
                           >
                             {endpointPort(endpointURL, port)}
                           </Text>
                           <CopyButton
                             text={endpointPort(endpointURL, port)}
                             iconProps={{
-                              color: "#6941C6",
+                              color: colors.blue600,
                               width: 20,
                               height: 20,
                               marginTop: 0,
@@ -245,7 +248,7 @@ const ResourceConnectivityEndpoint: FC<ResourceConnectivityEndpointProps> = (
                 {portsArray.length > 1 && (
                   <Stack direction="row">
                     <Button
-                      sx={{ color: "#6941C6" }}
+                      sx={{ color: colors.blue600 }}
                       startIcon={
                         isEndpointsExpanded ? (
                           <RemoveCircleOutlineIcon />

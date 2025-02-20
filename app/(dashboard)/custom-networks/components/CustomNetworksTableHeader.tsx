@@ -6,6 +6,7 @@ import EditIcon from "src/components/Icons/Edit/Edit";
 import SearchInput from "src/components/DataGrid/SearchInput";
 import RefreshWithToolTip from "src/components/RefreshWithTooltip/RefreshWithToolTip";
 import PeeringInfoIcon from "app/(dashboard)/components/Icons/PeeringInfoIcon";
+import { colors } from "src/themeConfig";
 
 const CustomNetworksTableHeader = ({
   count,
@@ -46,8 +47,15 @@ const CustomNetworksTableHeader = ({
           variant={"outlined"}
           disabled={selectedRows.length !== 1}
           onClick={onModifyClick}
-          startIcon={<EditIcon disabled={selectedRows.length !== 1} />}
+          startIcon={
+            <EditIcon
+              disabled={selectedRows.length !== 1}
+              color={colors.blue700}
+            />
+          }
           disabledMessage="Please select a custom network"
+          fontColor={colors.blue700}
+          outlineColor={colors.blue300}
         >
           Modify
         </Button>
@@ -55,8 +63,15 @@ const CustomNetworksTableHeader = ({
           variant="outlined"
           disabled={selectedRows.length !== 1}
           onClick={onDeleteClick}
-          startIcon={<DeleteIcon disabled={selectedRows.length !== 1} />}
+          startIcon={
+            <DeleteIcon
+              disabled={selectedRows.length !== 1}
+              color={colors.blue700}
+            />
+          }
           disabledMessage="Please select a custom network"
+          fontColor={colors.blue700}
+          outlineColor={colors.blue300}
         >
           Delete
         </Button>
@@ -64,8 +79,15 @@ const CustomNetworksTableHeader = ({
           variant="outlined"
           disabled={selectedRows.length !== 1}
           onClick={onPeeringInfoClick}
-          startIcon={<PeeringInfoIcon disabled={selectedRows.length !== 1} />}
+          startIcon={
+            <PeeringInfoIcon
+              disabled={selectedRows.length !== 1}
+              color={colors.blue700}
+            />
+          }
           disabledMessage="Please select a custom network"
+          fontColor={colors.blue700}
+          outlineColor={colors.blue300}
         >
           Peering Info
         </Button>

@@ -1,8 +1,8 @@
-import { themeConfig } from "src/themeConfig";
+import { styleConfig } from "src/providerConfig";
 import { SVGIconProps } from "src/types/common/generalTypes";
 
 const FilterFunnel = (props: SVGIconProps) => {
-  const { color = themeConfig.colors.green600, disabled } = props;
+  const { color = styleConfig.primaryIconColor, disabled } = props;
   return (
     <svg
       width={20}

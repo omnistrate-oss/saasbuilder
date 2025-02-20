@@ -3,6 +3,7 @@ import clipboard from "clipboardy";
 import Tooltip from "../Tooltip/Tooltip";
 import { IconButton } from "@mui/material";
 import DataGridCopyIcon from "../Icons/CopyIcon/DataGridCopyIcon";
+import { colors } from "src/themeConfig";
 
 const CopyToClipboardButton = (props) => {
   const { text = "", iconProps, buttonStyles = {} } = props;
@@ -32,7 +33,7 @@ const CopyToClipboardButton = (props) => {
       placement="top"
     >
       <IconButton onClick={handleClick} sx={buttonStyles}>
-        <DataGridCopyIcon color="#7F56D9" {...iconProps} />
+        <DataGridCopyIcon color={colors.blue600} {...iconProps} />
       </IconButton>
     </Tooltip>
   );

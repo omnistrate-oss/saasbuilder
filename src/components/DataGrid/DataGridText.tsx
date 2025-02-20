@@ -6,7 +6,7 @@ import type * as CSS from "csstype";
 
 import DataGridCopyIcon from "../Icons/CopyIcon/DataGridCopyIcon";
 import Tooltip from "../Tooltip/Tooltip";
-import { colors } from "src/themeConfig";
+import { styleConfig } from "src/providerConfig";
 
 type LinkProps = {
   href: string;
@@ -16,7 +16,7 @@ type LinkProps = {
 
 const colorMap = {
   default: "#475467",
-  primary: colors.purple700,
+  primary: styleConfig.linkColor,
 };
 
 type DataGridTextProps = {

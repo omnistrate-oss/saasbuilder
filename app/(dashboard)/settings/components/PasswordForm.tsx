@@ -21,6 +21,7 @@ import { customerUserResetPassword } from "src/api/customer-user";
 import { Box, CircularProgress } from "@mui/material";
 import Divider from "src/components/Divider/Divider";
 import BrokenCircleCheckIcon from "app/(dashboard)/components/Icons/BrokenCircleCheckIcon";
+import { colors } from "src/themeConfig";
 type PasswordFormProps = {
   email: string;
 };
@@ -209,7 +210,7 @@ const PasswordForm: React.FC<PasswordFormProps> = ({ email }) => {
               <Button
                 onClick={handleSetPassword}
                 sx={{
-                  color: "#7F56D9 !important",
+                  color: `${colors.blue600} !important`,
                   fontSize: "20px !important",
                   lineHeight: "30px !important",
                   fontWeight: 700,

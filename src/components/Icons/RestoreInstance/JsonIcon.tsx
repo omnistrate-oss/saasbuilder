@@ -1,3 +1,5 @@
+import { colors } from "src/themeConfig";
+
 const JsonIcon = (props: any) => (
   <svg
     width="20"
@@ -9,7 +11,7 @@ const JsonIcon = (props: any) => (
   >
     <path
       d="M14.1667 14.1667L18.3333 10L14.1667 5.83333M5.83334 5.83333L1.66667 10L5.83334 14.1667M11.6667 2.5L8.33334 17.5"
-      stroke="#6941C6"
+      stroke={colors.blue600}
       strokeWidth="1.66667"
       strokeLinecap="round"
       strokeLinejoin="round"

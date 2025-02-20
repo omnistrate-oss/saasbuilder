@@ -8,19 +8,20 @@ import { DateCalendar, PickersDay } from "@mui/x-date-pickers";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import { shouldDisableDate } from "src/utils/restore";
-import { themeConfig } from "src/themeConfig";
+import { colors } from "src/themeConfig";
+import { styleConfig } from "src/providerConfig";
 dayjs.extend(utc);
 
 const HighlightedDay = styled(PickersDay)(({ theme }) => ({
   "&.Mui-highlighted": {
-    backgroundColor: "#ecfdf3c4",
+    backgroundColor: colors.blue50,
   },
   "&.Mui-highlighted.Mui-selected": {
-    backgroundColor: themeConfig.colors.success600,
+    backgroundColor: colors.blue700,
     color: theme.palette.primary.contrastText,
   },
   "&.Mui-today": {
-    border: `1px solid ${themeConfig.colors.success600}`,
+    border: `1px solid ${colors.blue700}`,
   },
   "&.MuiPickersDay-root.Mui-disabled:not(.Mui-selected)": {
     color: "#d5dce0",
@@ -37,10 +38,11 @@ const StyledDateInput = styled(Box)(({ theme }) => ({
   justifyContent: "flex-start",
   alignItems: "center",
   gap: "16px",
+  height: "48px",
   "&.Mui-focused": {
-    border: `1px solid  ${theme.palette.primary["300"]}`,
-    boxShadow:
-      "0px 0px 0px 4px #F4EBFF, 0px 1px 2px 0px rgba(16, 24, 40, 0.05)",
+    border: `2px solid  ${styleConfig.primaryBorder}`,
+    // boxShadow:
+    //   "0px 0px 0px 4px #F4EBFF, 0px 1px 2px 0px rgba(16, 24, 40, 0.05)",
   },
 
   "&.Mui-error": {
@@ -158,6 +160,14 @@ function DateSelectComponent({ formData }) {
                 shouldDisableDate(date, earliestRestoreTime)
               }
               dayOfWeekFormatter={(date) => dayjs(date).format("ddd")}
+              sx={{
+                "& .MuiPickersYear-yearButton.Mui-selected": {
+                  backgroundColor: "#0e5fb5",
+                },
+                "& .MuiPickersYear-yearButton.Mui-selected:hover": {
+                  backgroundColor: "#0e5fb5",
+                },
+              }}
             />
           </LocalizationProvider>
           <Box
@@ -174,7 +184,7 @@ function DateSelectComponent({ formData }) {
                 width: "18px",
                 height: "18px",
                 borderRadius: "4px",
-                background: "#ecfdf3c4",
+                background: colors.blue50,
               }}
             />
 

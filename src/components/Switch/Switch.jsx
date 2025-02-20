@@ -1,5 +1,6 @@
 import MuiSwitch from "@mui/material/Switch";
 import { styled } from "@mui/material/styles";
+import { colors } from "src/themeConfig";
 
 const Switch = styled((props) => (
   <MuiSwitch
@@ -19,7 +20,8 @@ const Switch = styled((props) => (
       transform: "translateX(16px)",
       color: "#fff",
       "& + .MuiSwitch-track": {
-        backgroundColor: theme.palette.mode === "dark" ? "#2ECA45" : "#7F56D9",
+        backgroundColor:
+          theme.palette.mode === "dark" ? "#2ECA45" : colors.blue700,
         opacity: 1,
         border: 0,
       },

@@ -8,7 +8,7 @@ import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import Button from "../Button/Button";
 import { DateRange as ReactDateRange, Range } from "react-date-range";
 import "react-date-range/dist/styles.css"; // main css file
-import { themeConfig } from "src/themeConfig";
+import { colors, themeConfig } from "src/themeConfig";
 import { ChevronLeft } from "@mui/icons-material";
 import Radio from "../FormElementsv2/Radio/Radio";
 import TextField from "../FormElementsv2/TextField/TextField";
@@ -29,7 +29,7 @@ dayjs.extend(utc);
 const StyledIconCard = styled(Box)({
   padding: "8px",
   borderRadius: "8px",
-  border: `1px solid ${themeConfig.colors.green300}`,
+  border: `1px solid ${themeConfig.colors.blue700}`,
   boxShadow: `box-shadow: 0px 1px 2px 0px #0A0D120D, 0px -2px 0px 0px #0A0D120D inset, 0px 0px 0px 1px #0A0D122E inset`,
   display: "flex",
   justifyContent: "center",
@@ -236,12 +236,7 @@ const RelativeRange = ({
         borderTop={`1px solid ${themeConfig.colors.gray200}`}
         padding="16px"
       >
-        <Button
-          variant="text"
-          fontColor={themeConfig.colors.success600}
-          onClick={onClear}
-          bgColor={"#0794550a"}
-        >
+        <Button variant="text" onClick={onClear}>
           Clear
         </Button>
         <Stack
@@ -372,7 +367,7 @@ const AbsoluteRange = (props: AbsoluteRangeProps) => {
         months={2}
         ranges={dateRanges}
         direction="horizontal"
-        color="#7F56D9"
+        color={colors.blue700}
         showMonthAndYearPickers={false}
         navigatorRenderer={NavigationRenderer}
         showDateDisplay={false}
@@ -455,12 +450,7 @@ const AbsoluteRange = (props: AbsoluteRangeProps) => {
         borderTop={`1px solid ${themeConfig.colors.gray200}`}
         padding="16px"
       >
-        <Button
-          variant="text"
-          fontColor={themeConfig.colors.success600}
-          onClick={onClear}
-          bgColor={"#0794550a"}
-        >
+        <Button variant="text" onClick={onClear}>
           Clear
         </Button>
         <Stack
@@ -517,7 +507,7 @@ export const DateTimeRangePickerStatic = (
           <StyledIconCard sx={{ cursor: "pointer" }} onClick={handleCancel}>
             <ChevronLeft
               sx={{
-                color: themeConfig.colors.green600,
+                color: themeConfig.colors.blue700,
                 fontSize: "20px",
               }}
             />
@@ -539,13 +529,13 @@ export const DateTimeRangePickerStatic = (
               paddingX: "14px",
               paddingY: "8px",
               borderRight: "none",
-              borderTopLeftRadius: "8px",
-              borderBottomLeftRadius: "8px",
+              borderTopLeftRadius: "9999px",
+              borderBottomLeftRadius: "9999px",
               ...(tab === "relative"
                 ? {
-                    background: themeConfig.colors.green50,
-                    color: themeConfig.colors.green700,
-                    border: `1px solid ${themeConfig.colors.green300}`,
+                    background: themeConfig.colors.blue50,
+                    color: themeConfig.colors.blue900,
+                    border: `1px solid ${themeConfig.colors.blue600}`,
                   }
                 : {
                     border: `1px solid ${themeConfig.colors.gray300}`,
@@ -561,13 +551,13 @@ export const DateTimeRangePickerStatic = (
               paddingX: "14px",
               paddingY: "8px",
               borderLeft: "none",
-              borderTopRightRadius: "8px",
-              borderBottomRightRadius: "8px",
+              borderTopRightRadius: "9999px",
+              borderBottomRightRadius: "9999px",
               ...(tab === "absolute"
                 ? {
-                    background: themeConfig.colors.green50,
-                    color: themeConfig.colors.green700,
-                    border: `1px solid ${themeConfig.colors.green300}`,
+                    background: themeConfig.colors.blue50,
+                    color: themeConfig.colors.blue900,
+                    border: `1px solid ${themeConfig.colors.blue600}`,
                   }
                 : {
                     border: `1px solid ${themeConfig.colors.gray300}`,

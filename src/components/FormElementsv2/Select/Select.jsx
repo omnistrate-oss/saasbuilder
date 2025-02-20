@@ -3,7 +3,7 @@ import MuiSelect from "@mui/material/Select";
 import Stack from "@mui/material/Stack";
 import LoadingSpinnerSmall from "../../CircularProgress/CircularProgress";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-import { colors } from "src/themeConfig";
+import { styleConfig } from "src/providerConfig";
 
 const LoadingUI = () => {
   return (
@@ -70,7 +70,7 @@ const Select = styled(({ isLoading = false, children, ...props }) => (
     border: "1px solid #D0D5DD",
   },
   "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-    border: `2px solid ${colors.success500}`,
+    border: `2px solid ${styleConfig.primaryBorder}`,
   },
   "&.Mui-error .MuiOutlinedInput-notchedOutline": {
     border: "1px solid  #FCA5A5",

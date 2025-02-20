@@ -4,6 +4,7 @@ import { InputAdornment, Tooltip, Box, TextField } from "@mui/material";
 
 import KeyIcon from "src/components/Icons/Key/KeyIcon";
 import { Text } from "src/components/Typography/Typography";
+import { styleConfig } from "src/providerConfig";
 
 const PasswordField = (props) => {
   const {
@@ -53,7 +54,7 @@ const PasswordField = (props) => {
               size="xsmall"
               weight="medium"
               style={{
-                color: "#7F56D9",
+                color: styleConfig.secondaryIconColor,
                 cursor: "pointer",
                 userSelect: "none",
                 paddingRight: "12px",

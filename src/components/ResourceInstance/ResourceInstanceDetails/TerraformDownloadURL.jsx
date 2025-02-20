@@ -6,6 +6,7 @@ import { getTerraformKit } from "src/api/resourceInstance";
 import { Text } from "components/Typography/Typography";
 import LoadingSpinnerSmall from "components/CircularProgress/CircularProgress";
 import ExportIcon from "src/components/Icons/Export/ExportIcon";
+import { colors } from "src/themeConfig";
 
 const TerraformDownloadURL = ({
   serviceOffering,
@@ -41,7 +42,7 @@ const TerraformDownloadURL = ({
     <Stack width="100%" direction="row" justifyContent="flex-end" gap="4px">
       <Text
         size="small"
-        color="#7F56D9"
+        color={colors.blue600}
         sx={{ cursor: "pointer" }}
         onClick={() => downloadTerraformKitMutation.mutate()}
       >

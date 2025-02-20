@@ -3,6 +3,7 @@ import React from "react";
 import CopyToClipboardButton from "../CopyClipboardButton/CopyClipboardButton";
 import Link from "next/link";
 import ArrowOutwardIcon from "@mui/icons-material/ArrowOutward";
+import { colors } from "src/themeConfig";
 
 // function isOverflown(element) {
 //   return (
@@ -112,7 +113,7 @@ const GridCellExpand = React.memo(function GridCellExpand(
         textOverflow="ellipsis"
         overflow="hidden"
         ref={cellValue}
-        sx={{ ...(href ? { color: "#6941C6" } : {}), ...textStyles }}
+        sx={{ ...(href ? { color: colors.blue600 } : {}), ...textStyles }}
         onClick={onClick}
         title={value}
       >
@@ -123,7 +124,7 @@ const GridCellExpand = React.memo(function GridCellExpand(
         <ArrowOutwardIcon
           fontSize="small"
           sx={{
-            color: "#7F56D9",
+            color: colors.blue600,
           }}
         />
       )}

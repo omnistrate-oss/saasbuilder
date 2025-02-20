@@ -6,6 +6,8 @@ import MuiTableCell from "@mui/material/TableCell";
 import { Text } from "src/components/Typography/Typography";
 import CopyButton from "src/components/Button/CopyButton";
 import PublicResourceIcon from "src/components/Icons/PublicResource/PublicResource";
+import { colors } from "src/themeConfig";
+
 const TableCell = styled(MuiTableCell)({
   borderBottom: "none",
 });
@@ -25,8 +27,10 @@ const CustomDNSEndPoint: React.FC<CustomDNSEndPointProps> = ({
   return (
     <Box
       sx={{
-        border: isPrimaryResource ? "1px solid #7F56D9" : "1px solid #EAECF0",
-        background: isPrimaryResource ? "#F9F5FF" : "white",
+        border: isPrimaryResource
+          ? `1px solid ${colors.utilBlue200}`
+          : "1px solid #EAECF0",
+        background: isPrimaryResource ? colors.utilBlue50 : "white",
         borderRadius: "12px",
         ...containerStyles,
       }}
@@ -51,7 +55,7 @@ const CustomDNSEndPoint: React.FC<CustomDNSEndPointProps> = ({
                 marginBottom: "10px",
               }}
             >
-              <Text size="small" weight="medium" color="#53389E">
+              <Text size="small" weight="medium" color={colors.utilBlue700}>
                 {endpointName}
               </Text>
 
@@ -65,14 +69,14 @@ const CustomDNSEndPoint: React.FC<CustomDNSEndPointProps> = ({
                 <Text
                   size="small"
                   weight="regular"
-                  color={isPrimaryResource ? "#6941C6" : ""}
+                  color={isPrimaryResource ? colors.blue600 : ""}
                 >
                   {endpointURL}
                 </Text>
                 <CopyButton
                   text={endpointURL}
                   iconProps={{
-                    color: "#6941C6",
+                    color: colors.blue600,
                     width: 20,
                     height: 20,
                     marginTop: 0,

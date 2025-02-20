@@ -9,6 +9,7 @@ import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
 import StatusChip from "src/components/StatusChip/StatusChip";
 import PublicResourceIcon from "src/components/Icons/PublicResource/PublicResource";
 import PrivateResourceIcon from "src/components/Icons/PrivateResource/PrivateResource";
+import { colors } from "src/themeConfig";
 
 type EndpointCardProps = {
   isPrimary?: boolean;
@@ -24,7 +25,7 @@ const EndpointLine = ({ isPrimary, openPort, endpointURL, mt = "0px" }) => {
       <Text
         size="small"
         weight="regular"
-        color={isPrimary ? "#6941C6" : "#475467"}
+        color={isPrimary ? colors.utilBlue600 : "#475467"}
       >
         <span>{endpointURL}</span>
         {openPort && <span>:{openPort}</span>}
@@ -33,7 +34,7 @@ const EndpointLine = ({ isPrimary, openPort, endpointURL, mt = "0px" }) => {
       <CopyButton
         text={openPort ? `${endpointURL}:${openPort}` : endpointURL}
         iconProps={{
-          color: "#6941C6",
+          color: colors.blue600,
           width: 20,
           height: 20,
           marginTop: 0,
@@ -60,14 +61,16 @@ const EndpointCard: FC<EndpointCardProps> = ({
       p="12px 16px"
       display="flex"
       gap="16px"
-      border={isPrimary ? "1px solid #7F56D9" : "1px solid #EAECF0"}
-      bgcolor={isPrimary ? "#F9F5FF" : "#FFFFFF"}
+      border={
+        isPrimary ? `1px solid ${colors.utilBlue200}` : "1px solid #EAECF0"
+      }
+      bgcolor={isPrimary ? colors.utilBlue50 : "#FFFFFF"}
     >
       {isPublic ? <PublicResourceIcon /> : <PrivateResourceIcon />}
 
       <Box>
         <Stack direction="row" flexWrap="wrap" gap="8px" mb="6px">
-          <Text size="small" weight="medium" color="#53389E">
+          <Text size="small" weight="medium" color={colors.utilBlue700}>
             {endpointName}
           </Text>
           <StatusChip
@@ -77,9 +80,9 @@ const EndpointCard: FC<EndpointCardProps> = ({
           {isPrimary && (
             <StatusChip
               label="Primary"
-              color="#7F56D9"
-              borderColor="#7F56D9"
-              bgColor="#F9F5FF"
+              color={colors.blue700}
+              borderColor={colors.blue200}
+              bgColor={colors.blue50}
             />
           )}
         </Stack>
@@ -106,7 +109,7 @@ const EndpointCard: FC<EndpointCardProps> = ({
 
         {shouldShowViewMoreButton && (
           <Button
-            sx={{ color: "#6941C6", marginTop: "8px" }}
+            sx={{ color: colors.blue600, marginTop: "8px" }}
             endIcon={
               isExpanded ? (
                 <RemoveCircleOutlineIcon />

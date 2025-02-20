@@ -60,8 +60,8 @@ const SingleNavItem = ({
         <Text
           size="medium"
           weight="semibold"
-          color={currentPath === href ? colors.success500 : colors.gray700}
-          className="group-hover:text-success-500 transition-colors"
+          color={currentPath === href ? colors.blue700 : colors.gray700}
+          className="group-hover:text-blue-700 transition-colors"
         >
           {name}
         </Text>
@@ -79,7 +79,7 @@ const SingleNavItem = ({
       <Text
         size="medium"
         weight="semibold"
-        className="group-hover:text-success-500 transition-colors select-none"
+        className="group-hover:text-blue-700 transition-colors select-none"
       >
         {name}
       </Text>
@@ -111,7 +111,7 @@ const ExpandibleNavItem = ({
         <Text
           size="medium"
           weight="semibold"
-          className="group-hover:text-success-500 transition-colors select-none"
+          className={`group-hover:text-blue-700 transition-colors select-none`}
         >
           {name}
         </Text>
@@ -135,16 +135,16 @@ const ExpandibleNavItem = ({
                 currentPath?.startsWith(item.href) && "bg-gray-50"
               )}
             >
-              <div className="w-2 h-2 rounded-full bg-success-500" />
+              <div className="w-2 h-2 rounded-full bg-blue-600" />
               <Text
                 size="medium"
                 weight="semibold"
                 color={
                   currentPath?.startsWith(item.href)
-                    ? colors.success500
+                    ? colors.blue700
                     : colors.gray700
                 }
-                className="group-hover:text-success-500 transition-colors"
+                className="group-hover:text-blue-700 transition-colors"
               >
                 {item.name}
               </Text>

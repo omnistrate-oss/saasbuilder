@@ -104,7 +104,7 @@ const PreviewCard: React.FC<PreviewCardProps> = ({ sections, formData }) => {
             <Text
               size="small"
               weight="semibold"
-              color={colors.purple600}
+              color={colors.blue700}
               sx={{ mb: "10px" }}
             >
               {section.title}

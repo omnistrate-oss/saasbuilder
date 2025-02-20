@@ -2,6 +2,7 @@ import { useState } from "react";
 import { InputAdornment, Stack, Typography } from "@mui/material";
 import { Text } from "src/components/Typography/Typography";
 import Tooltip from "src/components/Tooltip/Tooltip";
+import { colors } from "src/themeConfig";
 
 function convertToAsterisks(str) {
   // Get the length of the input string
@@ -54,7 +55,7 @@ export const PasswordWithOutBorderField = (props) => {
         <InputAdornment position="end">
           <Typography
             fontSize="12px"
-            color="#7F56D9"
+            color={colors.blue600}
             style={{
               cursor: "pointer",
               userSelect: "none",

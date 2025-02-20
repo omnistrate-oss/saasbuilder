@@ -10,6 +10,7 @@ import CopyButton from "src/components/Button/CopyButton";
 import Button from "src/components/Button/Button";
 import { Text } from "src/components/Typography/Typography";
 import CloseIcon from "@mui/icons-material/Close";
+import { colors } from "src/themeConfig";
 
 export default function ResourceInstanceDialog(props) {
   const {
@@ -109,14 +110,18 @@ export default function ResourceInstanceDialog(props) {
                     <Text
                       size="small"
                       weight="regular"
-                      color="#6941C6"
+                      color={colors.blue600}
                       sx={{ flex: 1, wordBreak: "break-word" }}
                     >
                       {value}
                     </Text>
                     <CopyButton
                       text={value}
-                      iconProps={{ color: "#6941C6", width: 20, height: 20 }}
+                      iconProps={{
+                        color: colors.blue600,
+                        width: 20,
+                        height: 20,
+                      }}
                       iconStyle={{ flexShrink: 0 }}
                     />
                   </Box>

@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import DOMPurify from "isomorphic-dompurify";
-import { Tab, Tabs } from "@mui/material";
+import { Tab, Tabs } from "src/components/Tab/Tab";
 
 import CardWithTitle from "../Card/CardWithTitle";
 import APIDocumentation from "../APIDocumentation/APIDocumentation";
@@ -68,10 +68,6 @@ const ServicePlanDetails: React.FC<ServicePlanDetailsProps> = ({
         centered
         sx={{
           mb: "32px",
-          borderBottom: "1px solid #E9EAEB",
-          "& .MuiTabs-indicator": {
-            backgroundColor: colors.purple700,
-          },
         }}
       >
         {Object.keys(tabLabels).map((tab) => (
@@ -82,17 +78,6 @@ const ServicePlanDetails: React.FC<ServicePlanDetailsProps> = ({
             value={tab}
             onClick={() => {
               setCurrentTab(tab as CurrentTab);
-            }}
-            sx={{
-              paddingY: "12px !important",
-              paddingX: "16px !important",
-              minWidth: "0px",
-              textTransform: "none",
-              fontWeight: "600",
-              color: "#717680",
-              "&.Mui-selected": {
-                color: colors.purple700,
-              },
             }}
           />
         ))}

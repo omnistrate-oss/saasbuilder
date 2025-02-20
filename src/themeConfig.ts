@@ -47,8 +47,17 @@ export const themeConfig = {
     lightBlue50: "var(--light-blue-50)",
     lightBlue700: "var(--light-blue-700)",
 
+    blue50: "var(--blue-50)",
+    blue200: "var(--blue-200)",
+    blue300: "var(--blue-300)",
     blue600: "var(--blue-600)",
     blue700: "var(--blue-700)",
+    blue900: "var(--blue-900)",
+
+    utilBlue50: "var(--util-blue-50)",
+    utilBlue200: "var(--util-blue-200)",
+    utilBlue600: "var(--util-blue-600)",
+    utilBlue700: "var(--util-blue-700)",
 
     pink600: "var(--pink-600)",
     pink700: "var(--pink-700)",

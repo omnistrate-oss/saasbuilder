@@ -105,10 +105,10 @@ const StyledListOption = styled("li")(() => ({
   justifyContent: "space-between !important",
   width: "100%",
   '&.MuiAutocomplete-option[aria-selected="true"]': {
-    backgroundColor: "rgba(3, 152, 85, 0.08)",
+    backgroundColor: "rgba(14, 95, 181, 0.08)",
   },
   '&.MuiAutocomplete-option[aria-selected="true"].Mui-focused': {
-    backgroundColor: "rgba(3, 152, 85, 0.12)",
+    backgroundColor: "rgba(14, 95, 181, 0.12)",
   },
 }));
 

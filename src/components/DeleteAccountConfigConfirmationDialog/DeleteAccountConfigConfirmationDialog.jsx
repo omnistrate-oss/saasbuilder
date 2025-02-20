@@ -8,6 +8,7 @@ import { Text } from "components/Typography/Typography";
 import CloseIcon from "@mui/icons-material/Close";
 import Link from "next/link";
 import { TextContainerToCopy } from "../CloudProviderAccountOrgIdModal/CloudProviderAccountOrgIdModal";
+import { colors } from "src/themeConfig";
 
 const StyledForm = styled(Form)({
   position: "fixed",
@@ -49,7 +50,7 @@ const Footer = styled(Box)({
 
 const StyledLink = styled(Link)({
   textDecoration: "underline",
-  color: "#7F56D9",
+  color: colors.blue600,
   fontWeight: 700,
   // fontStyle: "italic",
 });

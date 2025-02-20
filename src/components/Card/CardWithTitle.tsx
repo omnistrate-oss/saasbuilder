@@ -1,5 +1,6 @@
 import clsx from "clsx";
 import { Text } from "../Typography/Typography";
+import { colors } from "src/themeConfig";
 
 type CardWithTitleProps = {
   title: string;
@@ -23,7 +24,7 @@ const CardWithTitle: React.FC<CardWithTitleProps> = ({
       {...otherProps}
     >
       <div className="py-5 px-6 border-b border-gray-200 flex items-center justify-between gap-4">
-        <Text size="large" weight="semibold" color="#6941C6">
+        <Text size="large" weight="semibold" color={colors.blue700}>
           {title}
         </Text>
 

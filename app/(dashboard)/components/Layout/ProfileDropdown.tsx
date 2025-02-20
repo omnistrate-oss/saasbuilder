@@ -55,7 +55,7 @@ const ProfileDropdown = () => {
         alt="avatar"
         sx={{
           cursor: "pointer",
-          outline: open ? `2px solid ${colors.success500}` : "none",
+          outline: open ? `2px solid ${colors.blue700}` : "none",
           outlineOffset: "2px",
           transition: "outline 0.1s",
         }}

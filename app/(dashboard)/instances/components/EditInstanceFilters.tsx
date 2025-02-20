@@ -26,14 +26,14 @@ const FilterChip = ({
     <Box
       sx={{
         borderRadius: "16px",
-        border: `1px solid ${themeConfig.colors.purple600}`,
+        border: `1px solid ${themeConfig.colors.blue600}`,
         padding: "2px 8px",
         display: "flex",
         justifyContent: "space-between",
         alignItems: "center",
         gap: "8px",
-        background: themeConfig.colors.purple50,
-        color: themeConfig.colors.purple600,
+        background: themeConfig.colors.blue50,
+        color: themeConfig.colors.blue900,
         fontSize: "12px",
         fontWeight: 500,
       }}
@@ -165,8 +165,8 @@ const EditInstanceFilters = ({
           justifyContent: "center",
           gap: "4px",
           cursor: "pointer",
-          border: `1px solid ${themeConfig.colors.purple600}`,
-          color: themeConfig.colors.purple600,
+          border: `1px solid ${themeConfig.colors.blue300}`,
+          color: themeConfig.colors.blue700,
           borderRadius: "999px",
           fontSize: "14px",
           fontWeight: 600,

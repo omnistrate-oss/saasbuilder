@@ -52,7 +52,7 @@ const DataGridHeaderTitle: FC<DataGridHeaderTitleProps> = ({
         <Text
           size="large"
           weight="semibold"
-          color={colors.purple700}
+          color={colors.blue900}
           sx={{ mb: "2px" }}
         >
           <span style={{ marginRight: "8px" }}>{title}</span>
@@ -61,9 +61,9 @@ const DataGridHeaderTitle: FC<DataGridHeaderTitleProps> = ({
               component="span"
               size="small"
               label={label}
-              fontColor={colors.success700}
-              bgColor={colors.success50}
-              borderColor={colors.success200}
+              fontColor={colors.blue700}
+              bgColor={colors.blue50}
+              borderColor={colors.blue200}
             />
           )}
         </Text>

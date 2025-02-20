@@ -1,6 +1,7 @@
 import { Stack } from "@mui/material";
 import Card from "components/Card/Card";
 import { Text } from "components/Typography/Typography";
+import { colors } from "src/themeConfig";
 
 function MetricCard(props) {
   const { title = "", value = "", unit = "" } = props;
@@ -31,7 +32,7 @@ function MetricCard(props) {
       >
         <Text
           size="large"
-          color="#7F56D9"
+          color={colors.blue700}
           weight="semibold"
           sx={{ textAlign: "center" }}
         >
@@ -40,7 +41,7 @@ function MetricCard(props) {
         {value !== "" && unit && (
           <Text
             size="large"
-            color="#7F56D9"
+            color={colors.blue700}
             weight="semibold"
             sx={{ ml: "4px" }}
           >

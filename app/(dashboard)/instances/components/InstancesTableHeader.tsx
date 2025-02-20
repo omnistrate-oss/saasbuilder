@@ -30,6 +30,7 @@ import { CircularProgress, menuClasses } from "@mui/material";
 import InstanceFilters from "src/components/InstanceFilters/InstanceFilters";
 import LoadingSpinnerSmall from "src/components/CircularProgress/CircularProgress";
 import { colors } from "src/themeConfig";
+import { styleConfig } from "src/providerConfig";
 
 type Action = {
   onClick: () => void;
@@ -399,8 +400,9 @@ const InstancesTableHeader = ({
         margin: "0px",
         height: "40px",
         minWidth: "110px",
+        borderRadius: "9999px",
         "&.Mui-focused": {
-          outline: `2px solid ${colors.success500}`,
+          outline: `2px solid ${styleConfig.primaryBorder}`,
           outlineOffset: "2px",
         },
         "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
@@ -473,9 +475,18 @@ const InstancesTableHeader = ({
                 disabled={action.isDisabled || action.isLoading}
                 onClick={action.onClick}
                 startIcon={
-                  <Icon disabled={action.isDisabled || action.isLoading} />
+                  <Icon
+                    disabled={action.isDisabled || action.isLoading}
+                    {...(action.actionType === "secondary" && {
+                      color: colors.blue700,
+                    })}
+                  />
                 }
                 disabledMessage={action.disabledMessage}
+                {...(action.actionType === "secondary" && {
+                  fontColor: colors.blue700,
+                  outlineColor: colors.blue300,
+                })}
               >
                 {action.label}
                 {action.isLoading && <LoadingSpinnerSmall />}

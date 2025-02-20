@@ -1,4 +1,7 @@
+import { styleConfig } from "src/providerConfig";
+
 const RegionIcon = (props) => {
+  const { color = styleConfig.secondaryIconColor } = props;
   return (
     <svg
       width={32}
@@ -19,7 +22,7 @@ const RegionIcon = (props) => {
         />
         <path
           d="M16 6.66666C18.0844 8.94862 19.269 11.91 19.3334 15C19.269 18.09 18.0844 21.0514 16 23.3333M16 6.66666C13.9156 8.94862 12.7311 11.91 12.6667 15C12.7311 18.09 13.9156 21.0514 16 23.3333M16 6.66666C11.3976 6.66666 7.66669 10.3976 7.66669 15C7.66669 19.6024 11.3976 23.3333 16 23.3333M16 6.66666C20.6024 6.66666 24.3334 10.3976 24.3334 15C24.3334 19.6024 20.6024 23.3333 16 23.3333M8.08337 12.5H23.9167M8.08335 17.5H23.9167"
-          stroke="#7F56D9"
+          stroke={color}
           strokeLinecap="round"
           strokeLinejoin="round"
         />

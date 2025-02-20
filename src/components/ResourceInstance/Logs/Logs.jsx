@@ -270,6 +270,7 @@ function Logs(props) {
               sx={{
                 width: "auto",
                 maxWidth: "250px",
+                borderRadius: "9999px",
               }}
               onChange={handleNodeChange}
             >

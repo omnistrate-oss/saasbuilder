@@ -33,6 +33,7 @@ import { IDENTITY_PROVIDER_STATUS_TYPES } from "../constants";
 import Logo from "src/components/NonDashboardComponents/Logo";
 import { useProviderOrgDetails } from "src/providers/ProviderOrgDetailsProvider";
 import { getInstancesRoute } from "src/utils/routes";
+import { styleConfig } from "src/providerConfig";
 
 const createSigninValidationSchema = Yup.object({
   email: Yup.string()
@@ -235,7 +236,7 @@ const SigninPage = (props) => {
                 fontWeight: "500",
                 fontSize: "14px",
                 lineHeight: "22px",
-                color: "#687588",
+                color: styleConfig.linkColor,
               }}
             >
               Forgot Password
@@ -333,7 +334,7 @@ const SigninPage = (props) => {
           textAlign="center"
         >
           You&apos;re new in here?{" "}
-          <Link href="/signup" style={{ color: "#27A376" }}>
+          <Link href="/signup" style={{ color: styleConfig.linkColor }}>
             Create Account
           </Link>
         </Typography>

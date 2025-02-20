@@ -28,6 +28,7 @@ import "../styles/quill-editor.css";
 import "../styles/monaco-editor.css";
 import "../src/components/DateRangePicker/date-range-picker-styles.css";
 import { ProviderUser } from "src/types/users";
+import { styleConfig } from "src/providerConfig";
 
 const queryQlient = new QueryClient({
   defaultOptions: {
@@ -89,7 +90,7 @@ const RootProviders = ({
                         {children}
                         <ProgressBar
                           height="3px"
-                          color="#8d67df"
+                          color={styleConfig.primaryColor}
                           options={{ showSpinner: false }}
                         />
                       </CookieConsentProvider>

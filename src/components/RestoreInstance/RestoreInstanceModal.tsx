@@ -72,7 +72,6 @@ function RestoreInstanceModal({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open]);
 
-
   return (
     <InformationDialogTopCenter
       open={open}

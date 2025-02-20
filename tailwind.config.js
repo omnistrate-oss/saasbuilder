@@ -40,6 +40,15 @@ module.exports = {
           200: "var(--error-200)",
           700: "var(--error-700)",
         },
+
+        blue: {
+          50: "var(--blue-50)",
+          200: "var(--blue-200)",
+          300: "var(--blue-300)",
+          600: "var(--blue-600)",
+          700: "var(--blue-700)",
+          900: "var(--blue-900)",
+        },
       },
     },
   },
