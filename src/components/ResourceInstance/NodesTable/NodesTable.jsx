@@ -19,9 +19,7 @@ import { NodeStatus } from "./NodeStatus";
 import DataGridText from "src/components/DataGrid/DataGridText";
 import NodesTableHeader from "./NodesTableHeader";
 import { getResourceInstanceStatusStylesAndLabel } from "src/constants/statusChipStyles/resourceInstanceStatus";
-
 import { productTierTypes } from "src/constants/servicePlan";
-import GenerateTokenDialog from "src/components/GenerateToken/GenerateTokenDialog";
 import _ from "lodash";
 import NodeIcon from "src/components/Icons/Node/NodeIcon";
 
@@ -80,9 +78,6 @@ export default function NodesTable(props) {
   const [searchText, setSearchText] = useState("");
   const [selectionModel, setSelectionModel] = useState([]);
   const [selectedNode, setSelectedNode] = useState(null);
-  const [isGenerateTokenDialogOpen, setIsGenerateTokenDialogOpen] =
-    useState(false);
-  const [dashboardEndpoint, setDashboardEndpoint] = useState("");
 
   const selectUser = useSelector(selectUserrootData);
   const role = getEnumFromUserRoleString(
@@ -129,35 +124,6 @@ export default function NodesTable(props) {
         },
       },
     ];
-    res.push({
-      field: "kubernetesDashboardEndpoint",
-      headerName: "Dashboard Endpoint",
-      flex: 1,
-      minWidth: 150,
-      valueGetter: (params) =>
-        params.row.kubernetesDashboardEndpoint?.dashboardEndpoint || "-",
-      renderCell: (params) => {
-        const { row } = params;
-        const dashboardEndpointRow =
-          row.kubernetesDashboardEndpoint?.dashboardEndpoint;
-        setDashboardEndpoint(
-          row.kubernetesDashboardEndpoint?.dashboardEndpoint
-        );
-
-        if (!dashboardEndpointRow) {
-          return "-";
-        }
-
-        return (
-          <GridCellExpand
-            value={dashboardEndpointRow}
-            href={"https://" + dashboardEndpointRow}
-            target="_blank"
-            externalLinkArrow
-          />
-        );
-      },
-    });
     res.push(
       ...[
         {
@@ -409,7 +375,6 @@ export default function NodesTable(props) {
               isCustomTenancy &&
                 nodes.some((node) => node.kubernetesDashboardEndpoint)
             ),
-            onGenerateTokenClick: () => setIsGenerateTokenDialogOpen(true),
             handleFailover,
             failoverMutation,
             searchText,
@@ -441,13 +406,7 @@ export default function NodesTable(props) {
         loading={isLoading}
         noRowsText="No nodes"
       />
-      <GenerateTokenDialog
-        dashboardEndpoint={dashboardEndpoint}
-        open={isGenerateTokenDialogOpen}
-        onClose={() => setIsGenerateTokenDialogOpen(false)}
-        selectedInstanceId={resourceInstanceId}
-        subscriptionId={subscriptionId}
-      />
+
     </Box>
   );
 }

@@ -1,11 +1,9 @@
 import { CircularProgress, Stack } from "@mui/material";
-
 import Button from "src/components/Button/Button";
 import LoadingSpinnerSmall from "src/components/CircularProgress/CircularProgress";
 import SearchInput from "src/components/DataGrid/SearchInput";
 import DataGridHeaderTitle from "src/components/Headers/DataGridHeaderTitle";
 import FailoverIcon from "src/components/Icons/Failover/Failover";
-import GenerateTokenIcon from "src/components/Icons/GenerateToken/GenerateTokenIcon";
 import RefreshWithToolTip from "src/components/RefreshWithTooltip/RefreshWithToolTip";
 
 type NodesTableHeaderProps = {
@@ -17,8 +15,6 @@ type NodesTableHeaderProps = {
   failoverDisabledMessage?: string;
   selectedNode?: { nodeId: string; resourceKey: string };
   showFailoverButton: boolean;
-  showGenerateTokenButton: boolean;
-  onGenerateTokenClick?: () => void;
   handleFailover: (nodeId: string, resourceKey: string) => void;
   failoverMutation: { isLoading: boolean };
   searchText: string;
@@ -34,8 +30,7 @@ const NodesTableHeader: React.FC<NodesTableHeaderProps> = ({
   failoverDisabledMessage,
   selectedNode,
   showFailoverButton,
-  showGenerateTokenButton,
-  onGenerateTokenClick = () => {},
+
   handleFailover,
   failoverMutation,
   searchText,
@@ -91,20 +86,6 @@ const NodesTableHeader: React.FC<NodesTableHeaderProps> = ({
               {failoverMutation.isLoading && (
                 <LoadingSpinnerSmall sx={{ marginLeft: "12px" }} />
               )}
-            </Button>
-          )}
-
-          {showGenerateTokenButton && (
-            <Button
-              variant="outlined"
-              sx={{
-                height: "40px !important",
-                padding: "10px 14px !important",
-              }}
-              startIcon={<GenerateTokenIcon />}
-              onClick={onGenerateTokenClick}
-            >
-              Generate Token
             </Button>
           )}
         </div>
