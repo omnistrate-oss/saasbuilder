@@ -17,6 +17,7 @@ const CloudProviderCard = ({
 }) => {
   return (
     <div
+      data-testid={`${cloudProvider}-card`}
       className={cn(
         "px-4 py-4 rounded-xl text-center flex flex-col justify-between items-center min-h-28",
         disabled ? "cursor-default bg-gray-50" : "cursor-pointer"

@@ -3,7 +3,6 @@ import { getServiceMenuItems } from "app/(dashboard)/instances/utils";
 import { useMemo } from "react";
 import MenuItem from "src/components/FormElementsv2/MenuItem/MenuItem";
 import Select from "src/components/FormElementsv2/Select/Select";
-import { Text } from "src/components/Typography/Typography";
 
 const ServiceFilter = ({
   selectedServiceId,
@@ -25,18 +24,20 @@ const ServiceFilter = ({
       value={selectedServiceId}
       renderValue={() => {
         return (
-          <Text size="small" weight="medium" color="#344054" ellipsis>
-            {serviceOptions?.find((option) => option.value == selectedServiceId)
-              ?.label ?? "Filter By Service"}
-          </Text>
+          serviceOptions?.find((option) => option.value == selectedServiceId)
+            ?.label ?? "Filter by Service"
         );
       }}
       sx={{
-        // minWidth: "100px",
         minWidth: "auto",
         maxWidth: "200px",
         height: "40px !important",
         marginTop: 0,
+        "& .MuiSelect-select": {
+          fontSize: "14px",
+          color: "#414651",
+          fontWeight: "500",
+        },
       }}
       fullWidth={false}
       onChange={handleChange}

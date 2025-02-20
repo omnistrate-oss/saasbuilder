@@ -40,6 +40,7 @@ const SubscriptionPlanCard = ({
 
   const card = (
     <div
+      data-testid="subscription-plan-card"
       className={clsx(
         "flex items-start justify-between gap-3 px-4 pt-4 pb-3 rounded-xl outline outline-[2px]",
         isSelected ? "outline-success-500" : "outline-gray-300",

@@ -116,6 +116,7 @@ const CustomNetworkForm = ({
           title: "Standard Information",
           fields: [
             {
+              dataTestId: "name-input",
               label: "Name",
               subLabel:
                 "The unique name for the custom network for easy reference",
@@ -148,6 +149,7 @@ const CustomNetworkForm = ({
                 : null,
             },
             {
+              dataTestId: "region-select",
               label: "Region",
               subLabel: "Choose the cloud provider region",
               name: "cloudProviderRegion",
@@ -158,6 +160,7 @@ const CustomNetworkForm = ({
               disabled: formMode === "modify",
             },
             {
+              dataTestId: "cidr-input",
               label: "CIDR",
               subLabel: "CIDR block for the network",
               name: "cidr",

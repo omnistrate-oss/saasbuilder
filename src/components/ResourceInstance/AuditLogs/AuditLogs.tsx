@@ -195,7 +195,20 @@ const AuditLogs: FC<AuditLogsTabProps> = ({ instanceId, subscriptionId }) => {
         cell: (data) =>
           data.row.original.time ? formatDateUTC(data.row.original.time) : "-",
       }),
-
+      columnHelper.accessor("message", {
+        id: "message",
+        header: "Message",
+        cell: (data) => {
+          return data.row.original.message ? (
+            <EventMessageChip message={data.row.original.message} />
+          ) : (
+            "-"
+          );
+        },
+        meta: {
+          flex: 1.5,
+        },
+      }),
       columnHelper.accessor("userName", {
         id: "userName",
         header: "User",
@@ -230,20 +243,6 @@ const AuditLogs: FC<AuditLogsTabProps> = ({ instanceId, subscriptionId }) => {
               value={userDisplayLabel || "-"}
             />
           );
-        },
-      }),
-      columnHelper.accessor("message", {
-        id: "message",
-        header: "Message",
-        cell: (data) => {
-          return data.row.original.message ? (
-            <EventMessageChip message={data.row.original.message} />
-          ) : (
-            "-"
-          );
-        },
-        meta: {
-          flex: 1.5,
         },
       }),
     ];

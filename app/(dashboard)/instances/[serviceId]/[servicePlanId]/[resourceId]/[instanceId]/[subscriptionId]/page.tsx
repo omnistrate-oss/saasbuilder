@@ -342,6 +342,7 @@ const InstanceDetailsPage = ({
           nodes={resourceInstanceData.nodes}
           refetchData={resourceInstanceQuery.refetch}
           isRefetching={resourceInstanceQuery.isRefetching}
+          isLoading={resourceInstanceQuery.isLoading}
           serviceOffering={offering}
           resourceKey={resourceKey}
           resourceInstanceId={instanceId}
