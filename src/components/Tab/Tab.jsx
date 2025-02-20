@@ -1,7 +1,6 @@
 import MuiTabs, { tabsClasses } from "@mui/material/Tabs";
 import MuiTab, { tabClasses } from "@mui/material/Tab";
 import styled from "@emotion/styled";
-import { styleConfig } from "src/providerConfig";
 import { colors } from "src/themeConfig";
 
 export const Tabs = styled(MuiTabs)({

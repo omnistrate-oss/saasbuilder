@@ -12,7 +12,6 @@ import useDownloadCLI from "src/hooks/useDownloadCLI";
 import { ServiceOffering } from "src/types/serviceOffering";
 import Button from "../Button/Button";
 import DownloadCLIIcon from "../Icons/DownloadCLI/DownloadCLIIcon";
-import { colors } from "src/themeConfig";
 
 type CurrentTab =
   | "plan-details"
