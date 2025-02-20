@@ -35,7 +35,7 @@ const ServiceFilter = ({
         marginTop: 0,
         "& .MuiSelect-select": {
           fontSize: "14px",
-          fontColor: "#414651",
+          color: "#414651",
           fontWeight: "500",
         },
       }}

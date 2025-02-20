@@ -1,4 +1,4 @@
-import { Stack } from "@mui/material";
+import { CircularProgress, Stack } from "@mui/material";
 
 import Button from "src/components/Button/Button";
 import LoadingSpinnerSmall from "src/components/CircularProgress/CircularProgress";
@@ -59,7 +59,10 @@ const NodesTableHeader: React.FC<NodesTableHeaderProps> = ({
             plural: "Nodes",
           }}
         />
-        <Stack direction="row" alignItems="center" gap="12px">
+        <div className="flex items-center gap-4">
+          <div className="flex items-center mr-6">
+            {isRefetching && <CircularProgress size={20} />}
+          </div>
           <SearchInput
             searchText={searchText}
             setSearchText={setSearchText}
@@ -104,7 +107,7 @@ const NodesTableHeader: React.FC<NodesTableHeaderProps> = ({
               Generate Token
             </Button>
           )}
-        </Stack>
+        </div>
       </Stack>
     </>
   );
