@@ -1,4 +1,4 @@
-import Button from "src/components/Button/Button";
+import Button, { SecondaryColorButton } from "src/components/Button/Button";
 import DataGridHeaderTitle from "src/components/Headers/DataGridHeaderTitle";
 import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "src/components/Icons/Delete/Delete";
@@ -43,7 +43,7 @@ const CustomNetworksTableHeader = ({
           refetch={refetchCustomNetworks}
           disabled={isFetchingCustomNetworks}
         />
-        <Button
+        <SecondaryColorButton
           variant={"outlined"}
           disabled={selectedRows.length !== 1}
           onClick={onModifyClick}
@@ -54,12 +54,10 @@ const CustomNetworksTableHeader = ({
             />
           }
           disabledMessage="Please select a custom network"
-          fontColor={colors.blue700}
-          outlineColor={colors.blue300}
         >
           Modify
-        </Button>
-        <Button
+        </SecondaryColorButton>
+        <SecondaryColorButton
           variant="outlined"
           disabled={selectedRows.length !== 1}
           onClick={onDeleteClick}
@@ -70,12 +68,10 @@ const CustomNetworksTableHeader = ({
             />
           }
           disabledMessage="Please select a custom network"
-          fontColor={colors.blue700}
-          outlineColor={colors.blue300}
         >
           Delete
-        </Button>
-        <Button
+        </SecondaryColorButton>
+        <SecondaryColorButton
           variant="outlined"
           disabled={selectedRows.length !== 1}
           onClick={onPeeringInfoClick}
@@ -86,11 +82,9 @@ const CustomNetworksTableHeader = ({
             />
           }
           disabledMessage="Please select a custom network"
-          fontColor={colors.blue700}
-          outlineColor={colors.blue300}
         >
           Peering Info
-        </Button>
+        </SecondaryColorButton>
         <Button
           variant="contained"
           onClick={onCreateClick}

@@ -35,6 +35,7 @@ import {
   getBillingRoute,
   getSettingsRoute,
 } from "src/utils/routes";
+import styles from "./sidebarstyles.module.css";
 
 const SingleNavItem = ({
   name,
@@ -53,9 +54,9 @@ const SingleNavItem = ({
     return (
       <Link
         href={href}
-        className="flex items-center gap-2.5 py-2.5 px-3 rounded-md group cursor-pointer hover:bg-gray-50 transition-colors mb-1 select-none"
+        className={`flex items-center gap-2.5 py-2.5 px-3 rounded-md group cursor-pointer hover:bg-gray-50 transition-colors mb-1 select-none ${styles.expandibleNavItem}`}
       >
-        <Icon />
+        <Icon {...(currentPath === href ? { color: colors.blue700 } : {})} />
 
         <Text
           size="medium"
@@ -71,7 +72,7 @@ const SingleNavItem = ({
 
   return (
     <div
-      className="flex items-center gap-2.5 py-2.5 px-3 rounded-md group cursor-pointer hover:bg-gray-50 transition-colors mb-1"
+      className={`flex items-center gap-2.5 py-2.5 px-3 rounded-md group cursor-pointer hover:bg-gray-50 transition-colors mb-1 ${styles.expandibleNavItem}`}
       onClick={onClick}
     >
       <Icon />
@@ -98,7 +99,7 @@ const ExpandibleNavItem = ({
   return (
     <div>
       <div
-        className="flex items-center gap-2.5 py-2.5 px-3 rounded-md group cursor-pointer hover:bg-gray-50 transition-colors mb-1"
+        className={`flex items-center gap-2.5 py-2.5 px-3 rounded-md group cursor-pointer hover:bg-gray-50 transition-colors mb-1 ${styles.expandibleNavItem}`}
         onClick={() =>
           setExpandedMenus((prev) => ({
             ...prev,

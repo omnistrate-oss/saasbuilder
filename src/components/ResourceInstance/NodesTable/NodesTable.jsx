@@ -1,8 +1,6 @@
 import { Box } from "@mui/material";
 import DataGrid from "../../DataGrid/DataGrid";
 import { useEffect, useMemo, useState } from "react";
-import zoneIcon from "public/assets/images/dashboard/resource-instance-nodes/zone.svg";
-import Image from "next/image";
 import StatusChip from "../../StatusChip/StatusChip";
 import { useMutation } from "@tanstack/react-query";
 import { failoverResourceInstanceNode } from "../../../api/resourceInstance";
@@ -24,6 +22,7 @@ import { productTierTypes } from "src/constants/servicePlan";
 import GenerateTokenDialog from "src/components/GenerateToken/GenerateTokenDialog";
 import _ from "lodash";
 import NodeIcon from "src/components/Icons/Node/NodeIcon";
+import ZoneIcon from "src/components/Icons/Zone/ZoneIcon";
 
 export const getRowBorderStyles = () => {
   const styles = {};
@@ -176,7 +175,7 @@ export default function NodesTable(props) {
             const availabilityZone = params.row.availabilityZone;
             return availabilityZone ? (
               <GridCellExpand
-                startIcon={<Image src={zoneIcon} alt="zone" />}
+                startIcon={<ZoneIcon />}
                 value={availabilityZone}
                 textStyles={{
                   color: "#475467",
@@ -265,7 +264,7 @@ export default function NodesTable(props) {
           const availabilityZone = params.row.availabilityZone;
           return (
             <GridCellExpand
-              startIcon={<Image src={zoneIcon} alt="zone" />}
+              startIcon={<ZoneIcon />}
               value={availabilityZone}
               textStyles={{
                 color: "#475467",

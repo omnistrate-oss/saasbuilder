@@ -106,15 +106,19 @@ const ProfileDropdown = () => {
             <Stack sx={{ flex: 1, overflow: "hidden" }}>
               {/* @ts-ignore */}
               <EllipsisTooltipText
-                weight="semibold"
-                color="#344054"
+                sx={{
+                  fontWeight: 600,
+                  color: "#414651",
+                }}
                 text={Object.values(userAllData)[0]?.name}
               />
 
               {/* @ts-ignore */}
               <EllipsisTooltipText
-                weight="regular"
-                color="#475467"
+                sx={{
+                  fontWeight: 400,
+                  color: "#535862",
+                }}
                 text={Object.values(userAllData)[0]?.email}
               />
             </Stack>

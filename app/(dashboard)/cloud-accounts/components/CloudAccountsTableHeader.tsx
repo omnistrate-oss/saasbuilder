@@ -1,6 +1,6 @@
 import AddIcon from "@mui/icons-material/Add";
 
-import Button from "components/Button/Button";
+import Button, { SecondaryColorButton } from "components/Button/Button";
 import DeleteIcon from "components/Icons/Delete/Delete";
 import SearchInput from "components/DataGrid/SearchInput";
 import DataGridHeaderTitle from "components/Headers/DataGridHeaderTitle";
@@ -45,7 +45,7 @@ const CloudAccountsTableHeader = ({
           refetch={refetchInstances}
           disabled={isFetchingInstances}
         />
-        <Button
+        <SecondaryColorButton
           variant="outlined"
           disabled={!selectedInstance || selectedInstance.status === "DELETING"}
           onClick={onDeleteClick}
@@ -64,11 +64,9 @@ const CloudAccountsTableHeader = ({
                 ? "Cloud account deletion is already in progress"
                 : ""
           }
-          fontColor={colors.blue700}
-          outlineColor={colors.blue300}
         >
           Delete
-        </Button>
+        </SecondaryColorButton>
         <Button
           variant="contained"
           onClick={onCreateClick}

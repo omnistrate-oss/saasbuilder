@@ -1,0 +1,3 @@
+.expandibleNavItem:hover > svg path {
+  stroke: var(--blue-700);
+}

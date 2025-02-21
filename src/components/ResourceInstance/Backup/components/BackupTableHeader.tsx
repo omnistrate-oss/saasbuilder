@@ -1,6 +1,6 @@
 import { Stack } from "@mui/material";
 
-import Button from "src/components/Button/Button";
+import { SecondaryColorButton } from "src/components/Button/Button";
 import LoadingSpinnerSmall from "src/components/CircularProgress/CircularProgress";
 import SearchInput from "src/components/DataGrid/SearchInput";
 import DataGridHeaderTitle from "src/components/Headers/DataGridHeaderTitle";
@@ -77,7 +77,7 @@ const BackupsTableHeader: FC<BackupsTableHeaderProps> = ({
             dateRange={selectedDateRange}
             setDateRange={setSelectedDateRange}
           />
-          <Button
+          <SecondaryColorButton
             variant="outlined"
             sx={{
               height: "40px !important",
@@ -97,7 +97,7 @@ const BackupsTableHeader: FC<BackupsTableHeaderProps> = ({
                 sx={{ color: colors.blue700, marginLeft: "12px" }}
               />
             )}
-          </Button>
+          </SecondaryColorButton>
         </Stack>
       </Stack>
     </>

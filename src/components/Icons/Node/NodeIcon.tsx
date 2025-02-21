@@ -11,7 +11,7 @@ const NodeIcon: FC = (props) => {
       {...props}
     >
       <path
-        fill="#F9F5FF"
+        fill="#E9F4FF"
         d="M0 19C0 8.507 8.507 0 19 0s19 8.507 19 19-8.507 19-19 19S0 29.493 0 19Z"
       />
       <path

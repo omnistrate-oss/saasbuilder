@@ -163,3 +163,20 @@ const Button = styled(
 // }
 
 export default Button;
+
+export const SecondaryColorButton = (props) => {
+  const { sx = {}, ...restProps } = props;
+  return (
+    <Button
+      fontColor={colors.blue700}
+      outlineColor={colors.blue300}
+      sx={{
+        "&:hover": {
+          background: colors.blue50,
+        },
+        ...sx,
+      }}
+      {...restProps}
+    />
+  );
+};

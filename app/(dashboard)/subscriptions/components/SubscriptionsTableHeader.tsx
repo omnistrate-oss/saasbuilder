@@ -1,6 +1,6 @@
 import AddIcon from "@mui/icons-material/Add";
 
-import Button from "components/Button/Button";
+import Button, { SecondaryColorButton } from "components/Button/Button";
 import SearchInput from "components/DataGrid/SearchInput";
 import DataGridHeaderTitle from "components/Headers/DataGridHeaderTitle";
 import RefreshWithToolTip from "src/components/RefreshWithTooltip/RefreshWithToolTip";
@@ -40,7 +40,7 @@ const SubscriptionsTableHeader = ({
           refetch={refetchSubscriptions}
           disabled={isFetchingSubscriptions}
         />
-        <Button
+        <SecondaryColorButton
           variant="outlined"
           onClick={onUnsubscribe}
           disabled={
@@ -62,7 +62,7 @@ const SubscriptionsTableHeader = ({
           }
         >
           Unsubscribe
-        </Button>
+        </SecondaryColorButton>
         <Button
           variant="contained"
           onClick={onManageSubscriptions}

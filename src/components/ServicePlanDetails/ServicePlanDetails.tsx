@@ -10,8 +10,9 @@ import LoadingSpinnerSmall from "../CircularProgress/CircularProgress";
 
 import useDownloadCLI from "src/hooks/useDownloadCLI";
 import { ServiceOffering } from "src/types/serviceOffering";
-import Button from "../Button/Button";
+import { SecondaryColorButton } from "../Button/Button";
 import DownloadCLIIcon from "../Icons/DownloadCLI/DownloadCLIIcon";
+import { colors } from "src/themeConfig";
 
 type CurrentTab =
   | "plan-details"
@@ -44,9 +45,11 @@ const ServicePlanDetails: React.FC<ServicePlanDetailsProps> = ({
   if (!serviceOffering) return null;
 
   const actionButton = (
-    <Button
+    <SecondaryColorButton
       variant="outlined"
-      startIcon={<DownloadCLIIcon disabled={isDownloading} />}
+      startIcon={
+        <DownloadCLIIcon disabled={isDownloading} color={colors.blue700} />
+      }
       disabled={isDownloading}
       onClick={() => {
         downloadCLI(serviceOffering.serviceId, serviceOffering.serviceAPIID);
@@ -54,7 +57,7 @@ const ServicePlanDetails: React.FC<ServicePlanDetailsProps> = ({
     >
       Download CLI
       {isDownloading && <LoadingSpinnerSmall />}
-    </Button>
+    </SecondaryColorButton>
   );
 
   return (

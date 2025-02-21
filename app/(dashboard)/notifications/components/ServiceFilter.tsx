@@ -25,10 +25,8 @@ const ServiceFilter = ({
       value={selectedServiceId}
       renderValue={() => {
         return (
-          <Text size="small" weight="medium" color="#344054" ellipsis>
-            {serviceOptions?.find((option) => option.value == selectedServiceId)
-              ?.label ?? "Filter By Service"}
-          </Text>
+          serviceOptions?.find((option) => option.value == selectedServiceId)
+            ?.label ?? "Filter By Service"
         );
       }}
       sx={{
@@ -38,6 +36,11 @@ const ServiceFilter = ({
         height: "40px !important",
         marginTop: 0,
         borderRadius: "9999px",
+        "& .MuiSelect-select": {
+          fontSize: "14px",
+          color: "#414651",
+          fontWeight: "500",
+        },
       }}
       fullWidth={false}
       onChange={handleChange}

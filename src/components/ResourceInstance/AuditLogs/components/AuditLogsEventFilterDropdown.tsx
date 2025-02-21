@@ -55,19 +55,17 @@ const AuditLogsEventFilterDropdown: FC<DropdownProps> = (props) => {
       multiple
       value={selectedEventTypes}
       renderValue={() => {
-        return (
-          <Stack direction="row" gap="8px" alignItems="center">
-            {selectedEventTypes.length > 0 ? (
-              selectedEventTypes.map((eventType: EventType, index) => {
+        if (selectedEventTypes.length > 0) {
+          return (
+            <Stack direction="row" gap="8px" alignItems="center">
+              {selectedEventTypes.map((eventType: EventType, index) => {
                 return <EventTypeChip key={index} eventType={eventType} />;
-              })
-            ) : (
-              <Text size="small" weight="medium" color="#344054">
-                Filter by Type
-              </Text>
-            )}
-          </Stack>
-        );
+              })}
+            </Stack>
+          );
+        }
+
+        return "Filter by Type";
       }}
       sx={{
         width: "auto",
@@ -76,6 +74,11 @@ const AuditLogsEventFilterDropdown: FC<DropdownProps> = (props) => {
         minHeight: "40px",
         height: "40px !important",
         borderRadius: "9999px",
+        "& .MuiSelect-select": {
+          fontSize: "14px",
+          color: "#414651",
+          fontWeight: "500",
+        },
       }}
       onChange={handleChange}
       displayEmpty

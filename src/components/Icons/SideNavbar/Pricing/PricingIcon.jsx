@@ -4,7 +4,6 @@ const PricingIcon = (props) => {
   const { active, disabled, ...restProps } = props;
   let color = props.color || styleConfig.sidebarIconColor;
 
-
   if (active) {
     color = styleConfig.sidebarIconActiveColor;
   }

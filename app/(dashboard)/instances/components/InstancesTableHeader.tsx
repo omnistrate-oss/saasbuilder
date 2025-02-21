@@ -486,6 +486,11 @@ const InstancesTableHeader = ({
                 {...(action.actionType === "secondary" && {
                   fontColor: colors.blue700,
                   outlineColor: colors.blue300,
+                  sx: {
+                    "&:hover": {
+                      background: colors.blue50,
+                    },
+                  },
                 })}
               >
                 {action.label}
