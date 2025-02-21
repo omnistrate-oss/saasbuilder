@@ -20,6 +20,7 @@ import DataGridText from "src/components/DataGrid/DataGridText";
 import NodesTableHeader from "./NodesTableHeader";
 import { getResourceInstanceStatusStylesAndLabel } from "src/constants/statusChipStyles/resourceInstanceStatus";
 import { productTierTypes } from "src/constants/servicePlan";
+import GenerateTokenDialog from "src/components/GenerateToken/GenerateTokenDialog";
 import _ from "lodash";
 import NodeIcon from "src/components/Icons/Node/NodeIcon";
 
@@ -64,19 +65,19 @@ export default function NodesTable(props) {
     resourceName,
     serviceOffering,
     resourceInstanceId,
-    context,
     subscriptionId,
+    isBYOAServicePlan,
   } = props;
-  let sectionLabel = "Resource";
+
   const isCustomTenancy =
     serviceOffering?.productTierType === productTierTypes.CUSTOM_TENANCY;
 
-  if (context === "inventory") {
-    sectionLabel = "Service Component";
-  }
   const [searchText, setSearchText] = useState("");
   const [selectionModel, setSelectionModel] = useState([]);
   const [selectedNode, setSelectedNode] = useState(null);
+  const [isGenerateTokenDialogOpen, setIsGenerateTokenDialogOpen] =
+    useState(false);
+  const [dashboardEndpoint, setDashboardEndpoint] = useState("");
 
   const selectUser = useSelector(selectUserrootData);
   const role = getEnumFromUserRoleString(
@@ -122,7 +123,45 @@ export default function NodesTable(props) {
           );
         },
       },
+      {
+        field: "resourceName",
+        headerName: `Resource Type`,
+        flex: 0.9,
+        minWidth: 150,
+      },
     ];
+    if (isBYOAServicePlan) {
+      res.push({
+        field: "kubernetesDashboardEndpoint",
+        headerName: "K8s Dashboard Endpoint",
+        flex: 1,
+        minWidth: 150,
+        valueGetter: (params) =>
+          params.row.kubernetesDashboardEndpoint?.dashboardEndpoint || "-",
+        renderCell: (params) => {
+          const { row } = params;
+          const dashboardEndpointRow =
+            row.kubernetesDashboardEndpoint?.dashboardEndpoint;
+          setDashboardEndpoint(
+            row.kubernetesDashboardEndpoint?.dashboardEndpoint
+          );
+
+          if (!dashboardEndpointRow) {
+            return "-";
+          }
+
+          return (
+            <GridCellExpand
+              value={dashboardEndpointRow}
+              href={"https://" + dashboardEndpointRow}
+              target="_blank"
+              externalLinkArrow
+            />
+          );
+        },
+      });
+    }
+
     res.push(
       ...[
         {
@@ -196,15 +235,15 @@ export default function NodesTable(props) {
       },
       {
         field: "resourceName",
-        headerName: `${sectionLabel} Type`,
+        headerName: `Resource Type`,
         flex: 0.9,
-        minWidth: 100,
+        minWidth: 150,
       },
       {
         field: "endpoint",
         headerName: "Endpoint",
         flex: 1,
-        minWidth: 100,
+        minWidth: 170,
         renderCell: (params) => {
           const endpoint = params.row.endpoint;
           if (!endpoint || endpoint === "-internal") {
@@ -226,7 +265,7 @@ export default function NodesTable(props) {
         field: "availabilityZone",
         headerName: "Availability Zone",
         flex: 1,
-        minWidth: 140,
+        minWidth: 160,
         renderCell: (params) => {
           const availabilityZone = params.row.availabilityZone;
           return (
@@ -251,7 +290,7 @@ export default function NodesTable(props) {
             getResourceInstanceStatusStylesAndLabel(status);
           return <StatusChip status={status} {...statusStylesAndMap} />;
         },
-        minWidth: 200,
+        minWidth: 170,
       },
       {
         field: "healthStatus",
@@ -282,7 +321,7 @@ export default function NodesTable(props) {
         minWidth: 180,
       },
     ],
-    [sectionLabel]
+    []
   );
 
   const failoverMutation = useMutation(
@@ -363,6 +402,7 @@ export default function NodesTable(props) {
               isCustomTenancy &&
                 nodes.some((node) => node.kubernetesDashboardEndpoint)
             ),
+            onGenerateTokenClick: () => setIsGenerateTokenDialogOpen(true),
             handleFailover,
             failoverMutation,
             searchText,
@@ -394,7 +434,13 @@ export default function NodesTable(props) {
         loading={isRefetching}
         noRowsText="No nodes"
       />
-
+      <GenerateTokenDialog
+        dashboardEndpoint={dashboardEndpoint}
+        open={isGenerateTokenDialogOpen}
+        onClose={() => setIsGenerateTokenDialogOpen(false)}
+        selectedInstanceId={resourceInstanceId}
+        subscriptionId={subscriptionId}
+      />
     </Box>
   );
 }
