@@ -3,7 +3,6 @@ import { getServiceMenuItems } from "app/(dashboard)/instances/utils";
 import { useMemo } from "react";
 import MenuItem from "src/components/FormElementsv2/MenuItem/MenuItem";
 import Select from "src/components/FormElementsv2/Select/Select";
-import { Text } from "src/components/Typography/Typography";
 
 const ServiceFilter = ({
   selectedServiceId,
