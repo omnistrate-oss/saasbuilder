@@ -62,6 +62,7 @@ const SearchInput: FC<SearchInputProps> = ({
       style={{ position: "relative", display: "inline-block" }}
     >
       <TextField
+        data-testid="search-input"
         inputRef={searchRef} // Attach the ref to the TextField
         placeholder={placeholder || "Search"}
         value={searchText}
@@ -104,6 +105,7 @@ const SearchInput: FC<SearchInputProps> = ({
       />
       <Tooltip placement={"top"} title={"Search"} isVisible={!isExpanded}>
         <IconButton
+          data-testid="search-button"
           size="small"
           onClick={handleChange}
           style={{ position: "absolute", right: "0", marginTop: "6px" }}

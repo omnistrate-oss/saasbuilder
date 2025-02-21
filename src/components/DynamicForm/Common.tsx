@@ -156,9 +156,7 @@ export const SelectField = ({ field, formData }) => {
   const { values, touched, errors, handleChange, handleBlur } = formData;
   return (
     <Select
-      inputProps={{
-        "data-testid": field.dataTestId ?? "",
-      }}
+      data-testid={field.dataTestId ?? ""}
       isLoading={field.isLoading}
       id={field.name}
       name={field.name}
@@ -224,7 +222,7 @@ export const RadioField = ({ field, formData }) => {
     >
       {field.options.map((option) => (
         <FormControlLabel
-          data-testid={field.dataTestId ?? ""}
+          data-testid={option.dataTestId ?? ""}
           control={<Radio />}
           key={option.value}
           value={option.value}

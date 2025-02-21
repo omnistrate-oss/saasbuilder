@@ -108,6 +108,7 @@ const BillingAddressForm: React.FC<BillingAddressFormProps> = ({
 
           <FieldCell>
             <TextField
+              data-testid="address-line-1"
               name="address.addressLine1"
               id="address.addressLine1"
               value={values.address.addressLine1}
@@ -126,6 +127,7 @@ const BillingAddressForm: React.FC<BillingAddressFormProps> = ({
           </FieldTitleCell>
           <FieldCell>
             <TextField
+              data-testid="address-line-2"
               name="address.addressLine2"
               id="address.addressLine2"
               value={values.address.addressLine2}
@@ -144,6 +146,7 @@ const BillingAddressForm: React.FC<BillingAddressFormProps> = ({
           </FieldTitleCell>
           <FieldCell>
             <TextField
+              data-testid="city"
               name="address.city"
               id="address.city"
               value={values.address.city}
@@ -162,6 +165,7 @@ const BillingAddressForm: React.FC<BillingAddressFormProps> = ({
           </FieldTitleCell>
           <FieldCell>
             <TextField
+              data-testid="state"
               name="address.state"
               id="address.state"
               value={values.address.state}
@@ -180,6 +184,7 @@ const BillingAddressForm: React.FC<BillingAddressFormProps> = ({
           </FieldTitleCell>
           <FieldCell>
             <Autocomplete
+              data-testid="country"
               options={countriesAlpha3}
               value={currentCountry}
               getOptionLabel={(option) => {
@@ -207,6 +212,7 @@ const BillingAddressForm: React.FC<BillingAddressFormProps> = ({
           </FieldTitleCell>
           <FieldCell>
             <TextField
+              data-testid="zipcode"
               name="address.zip"
               id="address.zip"
               value={values.address.zip}

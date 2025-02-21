@@ -105,6 +105,7 @@ const PasswordForm: React.FC<PasswordFormProps> = ({ email }) => {
             </FieldTitleCell>
             <FieldCell>
               <PasswordField
+                data-testid="current-password"
                 name="currentPassword"
                 id="currentPassword"
                 value={values.currentPassword}
@@ -130,6 +131,7 @@ const PasswordForm: React.FC<PasswordFormProps> = ({ email }) => {
                 Your new password must be more than 8 characters
               </Text>
               <PasswordField
+                data-testid="new-password"
                 name="newPassword"
                 id="newPassword"
                 value={values.newPassword}
@@ -147,6 +149,7 @@ const PasswordForm: React.FC<PasswordFormProps> = ({ email }) => {
             </FieldTitleCell>
             <FieldCell>
               <PasswordField
+                data-testid="confirm-password"
                 name="confirmPassword"
                 id="confirmPassword"
                 value={values.confirmPassword}

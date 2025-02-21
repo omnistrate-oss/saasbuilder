@@ -1,5 +1,4 @@
-import { Stack } from "@mui/material";
-
+import { CircularProgress, Stack } from "@mui/material";
 import Button from "src/components/Button/Button";
 import LoadingSpinnerSmall from "src/components/CircularProgress/CircularProgress";
 import SearchInput from "src/components/DataGrid/SearchInput";
@@ -14,6 +13,7 @@ type NodesTableHeaderProps = {
   refetchData: () => void;
   isRefetching: boolean;
   isFailoverDisabled: boolean;
+  failoverDisabledMessage?: string;
   selectedNode?: { nodeId: string; resourceKey: string };
   showFailoverButton: boolean;
   showGenerateTokenButton: boolean;
@@ -30,6 +30,7 @@ const NodesTableHeader: React.FC<NodesTableHeaderProps> = ({
   refetchData,
   isRefetching,
   isFailoverDisabled,
+  failoverDisabledMessage,
   selectedNode,
   showFailoverButton,
   showGenerateTokenButton,
@@ -57,7 +58,10 @@ const NodesTableHeader: React.FC<NodesTableHeaderProps> = ({
             plural: "Nodes",
           }}
         />
-        <Stack direction="row" alignItems="center" gap="12px">
+        <div className="flex items-center gap-4">
+          <div className="flex items-center mr-6">
+            {isRefetching && <CircularProgress size={20} />}
+          </div>
           <SearchInput
             searchText={searchText}
             setSearchText={setSearchText}
@@ -75,6 +79,7 @@ const NodesTableHeader: React.FC<NodesTableHeaderProps> = ({
               }}
               startIcon={<FailoverIcon disabled={isFailoverDisabled} />}
               disabled={isFailoverDisabled}
+              disabledMessage={failoverDisabledMessage}
               onClick={() => {
                 if (selectedNode && !isFailoverDisabled) {
                   handleFailover(selectedNode.nodeId, selectedNode.resourceKey);
@@ -101,13 +106,10 @@ const NodesTableHeader: React.FC<NodesTableHeaderProps> = ({
               Generate Token
             </Button>
           )}
-        </Stack>
+        </div>
       </Stack>
     </>
   );
 };
 
 export default NodesTableHeader;
-
-
-

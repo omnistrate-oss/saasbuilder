@@ -86,6 +86,11 @@ const BackupsTableHeader: FC<BackupsTableHeaderProps> = ({
             disabled={
               isRefetching || restoreMutation.isLoading || isRestoreDisabled
             }
+            disabledMessage={
+              restoreMutation.isLoading
+                ? "Restoring backup..."
+                : "Please select a backup to restore"
+            }
             onClick={() => {
               restoreMutation.mutate();
             }}

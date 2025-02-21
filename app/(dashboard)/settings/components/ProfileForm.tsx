@@ -80,6 +80,7 @@ const ProfileForm: React.FC<ProfileFormProps> = ({
           </FieldTitleCell>
           <FieldCell>
             <TextField
+              data-testid="name-input"
               name="name"
               id="name"
               value={values.name}
@@ -95,7 +96,13 @@ const ProfileForm: React.FC<ProfileFormProps> = ({
             <FieldTitle required>Organization ID</FieldTitle>
           </FieldTitleCell>
           <FieldCell>
-            <TextField readonly disabled value={values.orgId} sx={{ mt: 0 }} />
+            <TextField
+              data-testid="organization-id-input"
+              readOnly
+              disabled
+              value={values.orgId}
+              sx={{ mt: 0 }}
+            />
           </FieldCell>
 
           <FieldTitleCell>
@@ -103,6 +110,7 @@ const ProfileForm: React.FC<ProfileFormProps> = ({
           </FieldTitleCell>
           <FieldCell>
             <TextField
+              data-testid="organization-name-input"
               name="orgName"
               id="orgName"
               value={values.orgName}
@@ -119,6 +127,7 @@ const ProfileForm: React.FC<ProfileFormProps> = ({
           </FieldTitleCell>
           <FieldCell>
             <TextField
+              data-testid="organization-url-input"
               name="orgURL"
               id="orgURL"
               value={values.orgURL}
