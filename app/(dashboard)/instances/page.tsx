@@ -269,7 +269,7 @@ const InstancesPage = () => {
               <Stack direction="row" alignItems="center" gap="4px">
                 {(instanceLoadStatus === "STOPPED" ||
                   instanceLoadStatus === "N/A") && (
-                  <StatusChip status="UNKNOWN" label="N/A" />
+                  <StatusChip status="UNKNOWN" label="Unknown" />
                 )}
                 {instanceLoadStatus === "Unknown" && <Box>-</Box>}
 

@@ -32,7 +32,9 @@ export const NodeStatus = (props) => {
           const chipStyles = getChipStyles(isStopped ? "UNKNOWN" : status);
 
           if (isStopped) {
-            return <StatusChip key={index} label="N/A" category="unkown" />;
+            return (
+              <StatusChip key={index} label="Unknown" category="unknown" />
+            );
           }
 
           return (
