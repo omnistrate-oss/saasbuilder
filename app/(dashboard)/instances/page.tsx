@@ -1,6 +1,6 @@
 "use client";
 
-import { Stack } from "@mui/material";
+import { Box, Stack } from "@mui/material";
 import { useMemo, useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { createColumnHelper } from "@tanstack/react-table";
@@ -271,9 +271,7 @@ const InstancesPage = () => {
                   instanceLoadStatus === "N/A") && (
                   <StatusChip status="UNKNOWN" label="N/A" />
                 )}
-                {instanceLoadStatus === "Unknown" && (
-                  <StatusChip status={"UNKNOWN"} />
-                )}
+                {instanceLoadStatus === "Unknown" && <Box>-</Box>}
 
                 {instanceLoadStatus === "Low" && (
                   <BlackTooltip title="Idle" placement="top">
