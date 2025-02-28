@@ -33,6 +33,7 @@ import { ResourceInstance } from "src/types/resourceInstance";
 import { useGlobalData } from "src/providers/GlobalDataProvider";
 import {
   deleteResourceInstance,
+  getResourceInstanceDetails,
   getTerraformKit,
 } from "src/api/resourceInstance";
 import { getResourceInstanceStatusStylesAndLabel } from "src/constants/statusChipStyles/resourceInstanceStatus";
@@ -410,6 +411,20 @@ const CloudAccountsPage = () => {
     return serviceOfferingsObj[serviceId]?.[productTierId];
   }, [clickedInstanceSubscription, serviceOfferingsObj]);
 
+  const fetchClickedInstanceDetails = async () => {
+    return await getResourceInstanceDetails(
+      clickedInstanceOffering?.serviceProviderId,
+      clickedInstanceOffering?.serviceURLKey,
+      clickedInstanceOffering?.serviceAPIVersion,
+      clickedInstanceOffering?.serviceEnvironmentURLKey,
+      clickedInstanceOffering?.serviceModelURLKey,
+      clickedInstanceOffering?.productTierURLKey,
+      selectedResource?.urlKey,
+      clickedInstance?.id,
+      clickedInstance?.subscriptionId
+    );
+  };
+
   const downloadTerraformKitMutation = useMutation(
     () => {
       if (clickedInstanceOffering && clickedInstanceSubscription) {
@@ -546,6 +561,8 @@ const CloudAccountsPage = () => {
           // @ts-ignore
           clickedInstance?.result_params?.account_configuration_method
         }
+        fetchClickedInstanceDetails={fetchClickedInstanceDetails}
+        setClickedInstance={setClickedInstance}
       />
     </PageContainer>
   );

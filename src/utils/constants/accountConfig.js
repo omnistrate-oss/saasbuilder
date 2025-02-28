@@ -8,7 +8,7 @@ export const ACCOUNT_CREATION_METHODS = {
 
 export const ACCOUNT_CREATION_METHOD_LABELS = {
   CloudFormation: "CloudFormation",
-  GCPScript: "GCP Shell Script",
+  GCPScript: "GCP Cloud Shell Script",
   Terraform: "Terraform",
 };
 
@@ -24,26 +24,26 @@ export const getAccountConfigStatusBasedHeader = (
 ) => {
   if (cloudprovider === CLOUD_PROVIDERS.gcp && !accountCreationMethod) {
     if (status === "VERIFYING" || status === "PENDING") {
-      return "To complete the account configuration setup, choose one of the options provided below (GCP Cloud Shell or Terraform) -";
+      return "To complete the account configuration setup, choose one of the options provided below (GCP Cloud Shell or Terraform):";
     }
 
     if (status === "FAILED") {
-      return "The account configuration verification failed. Please review the instructions below to retry the setup using one of the options provided below (GCP Cloud Shell or Terraform) and resolve any issues -";
+      return "The account configuration verification failed. Please review the instructions below to retry the setup using one of the options provided below (GCP Cloud Shell or Terraform) and resolve any issues:";
     }
     if (status === "READY") {
-      return "This account has already been configured successfully. However if you need to reconfigure for any reason, choose one of the options provided below (GCP Cloud Shell or Terraform) -";
+      return "This account has already been configured successfully. However if you need to reconfigure for any reason, choose one of the options provided below (GCP Cloud Shell or Terraform):";
     }
   }
 
   if (status === "VERIFYING" || status === "PENDING") {
-    return "To complete the account configuration setup -";
+    return "To complete the account configuration setup:";
   }
 
   if (status === "FAILED") {
-    return "The account configuration verification failed. Please review the instructions below to retry the setup and resolve any issues -";
+    return "The account configuration verification failed. Please review the instructions below to retry the setup and resolve any issues:";
   }
   if (status === "READY") {
-    return "This account has already been configured successfully. However if you need to reconfigure for any reason, the instructions are provided below -";
+    return "This account has already been configured successfully. However if you need to reconfigure for any reason, the instructions are provided below:";
   }
-  return "To complete the account configuration setup -";
+  return "To complete the account configuration setup:";
 };
