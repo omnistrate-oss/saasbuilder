@@ -28,8 +28,18 @@ const EndpointLine = ({ isPrimary, openPort, endpointURL, mt = "0px" }) => {
         weight="regular"
         color={isPrimary ? "#6941C6" : "#475467"}
       >
-        <span>{portEndpoint[openPort]}</span>
-        <span>{endpointURL}</span>
+        {portEndpoint[openPort] ? (
+          <a
+            href={`${portEndpoint[openPort] || ""}${endpointURL}`}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <span>{portEndpoint[openPort]}</span>
+            <span>{endpointURL}</span>
+          </a>
+        ) : (
+          <span>{endpointURL}</span>
+        )}
         {openPort && !portEndpoint[openPort] && <span>:{openPort}</span>}
       </Text>
 
