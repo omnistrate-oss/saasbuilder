@@ -19,6 +19,8 @@ type EndpointCardProps = {
 };
 
 const EndpointLine = ({ isPrimary, openPort, endpointURL, mt = "0px" }) => {
+  const portEndpoint = { 443: "https://", 80: "http://" };
+
   return (
     <Stack direction="row" gap="6px" alignItems="center" mt={mt}>
       <Text
@@ -26,12 +28,29 @@ const EndpointLine = ({ isPrimary, openPort, endpointURL, mt = "0px" }) => {
         weight="regular"
         color={isPrimary ? "#6941C6" : "#475467"}
       >
-        <span>{endpointURL}</span>
-        {openPort && <span>:{openPort}</span>}
+        {portEndpoint[openPort] ? (
+          <a
+            href={`${portEndpoint[openPort] || ""}${endpointURL}`}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <span>{portEndpoint[openPort]}</span>
+            <span>{endpointURL}</span>
+          </a>
+        ) : (
+          <span>{endpointURL}</span>
+        )}
+        {openPort && !portEndpoint[openPort] && <span>:{openPort}</span>}
       </Text>
 
       <CopyButton
-        text={openPort ? `${endpointURL}:${openPort}` : endpointURL}
+        text={
+          openPort
+            ? portEndpoint[openPort]
+              ? `${portEndpoint[openPort]}${endpointURL}`
+              : `${endpointURL}:${openPort}`
+            : endpointURL
+        }
         iconProps={{
           color: "#6941C6",
           width: 20,

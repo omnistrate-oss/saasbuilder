@@ -305,7 +305,7 @@ export default function NodesTable(props) {
           const lifecycleStatus = params.row.status;
 
           if (lifecycleStatus === "STOPPED")
-            return <StatusChip category="unknown" label="N/A" />;
+            return <StatusChip category="unknown" label="Unknown" />;
 
           return params.row?.detailedHealth ? (
             <NodeStatus

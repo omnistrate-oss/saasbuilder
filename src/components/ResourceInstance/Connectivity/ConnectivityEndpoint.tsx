@@ -224,7 +224,17 @@ const ResourceConnectivityEndpoint: FC<ResourceConnectivityEndpointProps> = (
                             weight="regular"
                             color={isPrimaryResource ? "#6941C6" : ""}
                           >
-                            {endpointPort(endpointURL, port)}
+                            {portEndpoint[port] ? (
+                              <a
+                                href={`${endpointPort(endpointURL, port)}`}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                              >
+                                {endpointPort(endpointURL, port)}
+                              </a>
+                            ) : (
+                              endpointPort(endpointURL, port)
+                            )}
                           </Text>
                           <CopyButton
                             text={endpointPort(endpointURL, port)}

@@ -14,7 +14,7 @@ export const instaceHealthStatusMap: Record<
   HEALTHY: { category: "success", label: "Healthy" },
   UNHEALTHY: { category: "failed", label: "Unhealthy" },
   UNKNOWN: { category: "unknown", label: "Unknown" },
-  "NA": { category: "unknown", label: "N/A" },
+  NA: { category: "unknown", label: "Unknown" },
 };
 
 export const getResourceInstanceChipStylesAndLabel = (
