@@ -97,6 +97,7 @@ const ProfileForm: React.FC<ProfileFormProps> = ({
           </FieldTitleCell>
           <FieldCell>
             <TextField
+              copyButton
               data-testid="organization-id-input"
               readOnly
               disabled
