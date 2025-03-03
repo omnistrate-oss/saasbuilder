@@ -33,7 +33,7 @@ export const NodeStatus = (props) => {
 
           if (isStopped) {
             return (
-              <StatusChip key={index} label="Unknown" category="unknown" />
+              <StatusChip key={index} status="UNKNOWN" label={"Unknown"} />
             );
           }
 
