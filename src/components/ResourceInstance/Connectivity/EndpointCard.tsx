@@ -33,9 +33,13 @@ const EndpointLine = ({ isPrimary, openPort, endpointURL, mt = "0px" }) => {
         weight="regular"
         color={isPrimary ? "#6941C6" : "#475467"}
       >
-        <a href={urlWithProtocol} target="_blank" rel="noopener noreferrer">
+        {urlWithProtocol.includes("http") ? (
+          <a href={urlWithProtocol} target="_blank" rel="noopener noreferrer">
+            <span>{urlWithProtocol}</span>
+          </a>
+        ) : (
           <span>{urlWithProtocol}</span>
-        </a>
+        )}
         {openPort && !portEndpoint[openPort] && <span>:{openPort}</span>}
       </Text>
 
