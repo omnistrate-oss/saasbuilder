@@ -46,7 +46,7 @@ import CreateInstanceModal from "components/ResourceInstance/CreateInstanceModal
 import { getInitialFilterState } from "src/components/InstanceFilters/InstanceFilters";
 import InstanceHealthStatusChip, {
   getInstanceHealthStatus,
-} from "src/components/InstanceHealthStatusChip/InstanceHealthStautusChip";
+} from "src/components/InstanceHealthStatusChip/InstanceHealthStatusChip";
 import { getInstanceDetailsRoute } from "src/utils/routes";
 import { loadStatusMap } from "./constants";
 import { isCloudAccountInstance } from "src/utils/access/byoaResource";

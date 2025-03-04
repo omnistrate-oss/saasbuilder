@@ -7,7 +7,7 @@ import { getResourceInstanceStatusStylesAndLabel } from "src/constants/statusChi
 import StatusChip from "src/components/StatusChip/StatusChip";
 import InstanceHealthStatusChip, {
   getInstanceHealthStatus,
-} from "src/components/InstanceHealthStatusChip/InstanceHealthStautusChip";
+} from "src/components/InstanceHealthStatusChip/InstanceHealthStatusChip";
 import { colors } from "src/themeConfig";
 
 const ServiceLogoImg = styled("img")({
