@@ -32,6 +32,7 @@ import LoadingSpinnerSmall from "src/components/CircularProgress/CircularProgres
 import { colors } from "src/themeConfig";
 
 type Action = {
+  dataTestId?: string;
   onClick: () => void;
   isLoading?: boolean;
   isDisabled?: boolean;
@@ -129,6 +130,7 @@ const InstancesTableHeader = ({
     };
 
     actions.push({
+      dataTestId: "stop-button",
       label: "Stop",
       actionType: "secondary",
       isLoading: stopInstanceMutation.isLoading,
@@ -157,6 +159,7 @@ const InstancesTableHeader = ({
     });
 
     actions.push({
+      dataTestId: "start-button",
       label: "Start",
       actionType: "secondary",
       isLoading: startInstanceMutation.isLoading,
@@ -185,6 +188,7 @@ const InstancesTableHeader = ({
     });
 
     actions.push({
+      dataTestId: "modify-button",
       label: "Modify",
       actionType: "secondary",
       isDisabled:
@@ -210,6 +214,7 @@ const InstancesTableHeader = ({
     });
 
     actions.push({
+      dataTestId: "delete-button",
       label: "Delete",
       actionType: "secondary",
       isDisabled:
@@ -235,6 +240,7 @@ const InstancesTableHeader = ({
     });
 
     actions.push({
+      dataTestId: "create-button",
       label: "Create",
       actionType: "primary",
       isDisabled: false,
@@ -249,6 +255,7 @@ const InstancesTableHeader = ({
 
     if (!isComplexResource && !isProxyResource) {
       other.push({
+        dataTestId: "reboot-button",
         label: "Reboot",
         isLoading: restartInstanceMutation.isLoading,
         isDisabled:
@@ -273,6 +280,7 @@ const InstancesTableHeader = ({
 
       if (selectedInstance?.isBackupEnabled || selectedInstance?.backupStatus) {
         other.push({
+          dataTestId: "restore-button",
           label: "Restore",
           isDisabled:
             !selectedInstance ||
@@ -296,6 +304,7 @@ const InstancesTableHeader = ({
 
       if (selectedInstance?.autoscalingEnabled) {
         other.push({
+          dataTestId: "add-capacity-button",
           label: "Add Capacity",
           isDisabled:
             !selectedInstance || status !== "RUNNING" || !isUpdateAllowedByRBAC,
@@ -315,6 +324,7 @@ const InstancesTableHeader = ({
         });
 
         other.push({
+          dataTestId: "remove-capacity-button",
           label: "Remove Capacity",
           isDisabled:
             !selectedInstance || status !== "RUNNING" || !isUpdateAllowedByRBAC,
@@ -337,6 +347,7 @@ const InstancesTableHeader = ({
 
     if (selectedInstance?.kubernetesDashboardEndpoint?.dashboardEndpoint) {
       other.push({
+        dataTestId: "open-dashboard-button",
         label: "Generate Token",
         isDisabled: !selectedInstance,
         disabledMessage: !selectedInstance ? "Please select an instance" : "",
@@ -368,6 +379,7 @@ const InstancesTableHeader = ({
 
   const select = (
     <Select
+      data-testid="actions-select"
       value=""
       renderValue={(value: string) => {
         if (!value) {
@@ -408,37 +420,40 @@ const InstancesTableHeader = ({
         },
       }}
     >
-      {otherActions.map(({ label, onClick, isDisabled, disabledMessage }) => {
-        const Icon = icons[label];
-        const menuItem = (
-          <MenuItem
-            value={label}
-            key={label}
-            sx={{
-              gap: "10px",
-              fontSize: "14px",
-              color: isDisabled ? colors.gray400 : "",
-              minWidth: otherActions?.length > 2 ? "220px" : "180px",
-              padding: "8px 16px",
-            }}
-            disabled={isDisabled}
-            onClick={onClick}
-          >
-            <Icon disabled={isDisabled} />
-            {label}
-          </MenuItem>
-        );
-
-        if (disabledMessage) {
-          return (
-            <Tooltip key={label} title={disabledMessage} placement="top">
-              <span>{menuItem}</span>
-            </Tooltip>
+      {otherActions.map(
+        ({ dataTestId, label, onClick, isDisabled, disabledMessage }) => {
+          const Icon = icons[label];
+          const menuItem = (
+            <MenuItem
+              data-testid={dataTestId}
+              value={label}
+              key={label}
+              sx={{
+                gap: "10px",
+                fontSize: "14px",
+                color: isDisabled ? colors.gray400 : "",
+                minWidth: otherActions?.length > 2 ? "220px" : "180px",
+                padding: "8px 16px",
+              }}
+              disabled={isDisabled}
+              onClick={onClick}
+            >
+              <Icon disabled={isDisabled} />
+              {label}
+            </MenuItem>
           );
-        }
 
-        return menuItem;
-      })}
+          if (disabledMessage) {
+            return (
+              <Tooltip key={label} title={disabledMessage} placement="top">
+                <span>{menuItem}</span>
+              </Tooltip>
+            );
+          }
+
+          return menuItem;
+        }
+      )}
     </Select>
   );
 

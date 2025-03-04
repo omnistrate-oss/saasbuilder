@@ -34,7 +34,9 @@ function ResourceInstanceOverview(props) {
 
   const healthStatus = getInstanceHealthStatus(detailedNetworkTopology, status);
 
-  const statusStylesAndLabel = getResourceInstanceStatusStylesAndLabel(status);
+  const statusStylesAndLabel = getResourceInstanceStatusStylesAndLabel(
+    status || "UNKNOWN"
+  );
 
   return (
     <div
@@ -122,9 +124,7 @@ function ResourceInstanceOverview(props) {
         {status ? (
           <StatusChip status={status} {...statusStylesAndLabel} />
         ) : (
-          <Text size="small" weight="regular" color={colors.gray600}>
-            NA
-          </Text>
+          <StatusChip status={"UNKNOWN"} label={"Unknown"} />
         )}
       </div>
 

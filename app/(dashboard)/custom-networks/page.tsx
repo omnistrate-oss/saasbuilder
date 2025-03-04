@@ -1,6 +1,7 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useMutation } from "@tanstack/react-query";
 import { createColumnHelper } from "@tanstack/react-table";
 
@@ -28,6 +29,7 @@ import { CustomNetwork } from "src/types/customNetwork";
 import { deleteCustomNetwork } from "src/api/customNetworks";
 import useRegions from "./hooks/useRegions";
 import { cloudProviderLogoMap } from "src/constants/cloudProviders";
+import { getCustomNetworksRoute } from "src/utils/routes";
 
 const columnHelper = createColumnHelper<CustomNetwork>();
 type Overlay =
@@ -38,12 +40,26 @@ type Overlay =
 
 const CustomNetworksPage = () => {
   const snackbar = useSnackbar();
+
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const overlay = searchParams?.get("overlay");
+
   const [searchText, setSearchText] = useState<string>("");
   const [selectedRows, setSelectedRows] = useState<string[]>([]);
   const [overlayType, setOverlayType] = useState<Overlay>(
     "peering-info-dialog"
   );
   const [isOverlayOpen, setIsOverlayOpen] = useState<boolean>(false);
+
+  // Open the Create Form Overlay when the overlay query param is set to "create"
+  useEffect(() => {
+    if (overlay === "create") {
+      setOverlayType("create-custom-network");
+      setIsOverlayOpen(true);
+      router.replace(getCustomNetworksRoute({}));
+    }
+  }, [overlay]);
 
   const {
     data: customNetworks = [],

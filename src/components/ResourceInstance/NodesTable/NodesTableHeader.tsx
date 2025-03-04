@@ -1,9 +1,10 @@
-import { Stack } from "@mui/material";
+import { CircularProgress, Stack } from "@mui/material";
 import Button from "src/components/Button/Button";
 import LoadingSpinnerSmall from "src/components/CircularProgress/CircularProgress";
 import SearchInput from "src/components/DataGrid/SearchInput";
 import DataGridHeaderTitle from "src/components/Headers/DataGridHeaderTitle";
 import FailoverIcon from "src/components/Icons/Failover/Failover";
+import GenerateTokenIcon from "src/components/Icons/GenerateToken/GenerateTokenIcon";
 import RefreshWithToolTip from "src/components/RefreshWithTooltip/RefreshWithToolTip";
 
 type NodesTableHeaderProps = {
@@ -12,8 +13,11 @@ type NodesTableHeaderProps = {
   refetchData: () => void;
   isRefetching: boolean;
   isFailoverDisabled: boolean;
+  failoverDisabledMessage?: string;
   selectedNode?: { nodeId: string; resourceKey: string };
   showFailoverButton: boolean;
+  showGenerateTokenButton: boolean;
+  onGenerateTokenClick?: () => void;
   handleFailover: (nodeId: string, resourceKey: string) => void;
   failoverMutation: { isLoading: boolean };
   searchText: string;
@@ -26,9 +30,11 @@ const NodesTableHeader: React.FC<NodesTableHeaderProps> = ({
   refetchData,
   isRefetching,
   isFailoverDisabled,
+  failoverDisabledMessage,
   selectedNode,
   showFailoverButton,
-
+  showGenerateTokenButton,
+  onGenerateTokenClick = () => {},
   handleFailover,
   failoverMutation,
   searchText,
@@ -52,7 +58,10 @@ const NodesTableHeader: React.FC<NodesTableHeaderProps> = ({
             plural: "Nodes",
           }}
         />
-        <Stack direction="row" alignItems="center" gap="12px">
+        <div className="flex items-center gap-4">
+          <div className="flex items-center mr-6">
+            {isRefetching && <CircularProgress size={20} />}
+          </div>
           <SearchInput
             searchText={searchText}
             setSearchText={setSearchText}
@@ -70,6 +79,7 @@ const NodesTableHeader: React.FC<NodesTableHeaderProps> = ({
               }}
               startIcon={<FailoverIcon disabled={isFailoverDisabled} />}
               disabled={isFailoverDisabled}
+              disabledMessage={failoverDisabledMessage}
               onClick={() => {
                 if (selectedNode && !isFailoverDisabled) {
                   handleFailover(selectedNode.nodeId, selectedNode.resourceKey);
@@ -83,7 +93,20 @@ const NodesTableHeader: React.FC<NodesTableHeaderProps> = ({
             </Button>
           )}
 
-        </Stack>
+          {showGenerateTokenButton && (
+            <Button
+              variant="outlined"
+              sx={{
+                height: "40px !important",
+                padding: "10px 14px !important",
+              }}
+              startIcon={<GenerateTokenIcon />}
+              onClick={onGenerateTokenClick}
+            >
+              Generate Token
+            </Button>
+          )}
+        </div>
       </Stack>
     </>
   );

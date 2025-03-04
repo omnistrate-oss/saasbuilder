@@ -43,6 +43,7 @@ const CustomNetworksTableHeader = ({
           disabled={isFetchingCustomNetworks}
         />
         <Button
+          data-testid="modify-button"
           variant={"outlined"}
           disabled={selectedRows.length !== 1}
           onClick={onModifyClick}
@@ -52,6 +53,7 @@ const CustomNetworksTableHeader = ({
           Modify
         </Button>
         <Button
+          data-testid="delete-button"
           variant="outlined"
           disabled={selectedRows.length !== 1}
           onClick={onDeleteClick}
@@ -61,6 +63,7 @@ const CustomNetworksTableHeader = ({
           Delete
         </Button>
         <Button
+          data-testid="peering-info-button"
           variant="outlined"
           disabled={selectedRows.length !== 1}
           onClick={onPeeringInfoClick}
@@ -70,6 +73,7 @@ const CustomNetworksTableHeader = ({
           Peering Info
         </Button>
         <Button
+          data-testid="create-button"
           variant="contained"
           onClick={onCreateClick}
           startIcon={<AddIcon />}

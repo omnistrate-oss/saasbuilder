@@ -32,7 +32,11 @@ export const getInstanceDetailsRoute = ({
   return url;
 };
 
-export const getCustomNetworksRoute = () => {
+export const getCustomNetworksRoute = ({ overlay }: { overlay?: string }) => {
+  if (overlay) {
+    return `/custom-networks?overlay=${overlay}`;
+  }
+
   return "/custom-networks";
 };
 

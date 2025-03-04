@@ -45,6 +45,7 @@ const CloudAccountsTableHeader = ({
           disabled={isFetchingInstances}
         />
         <Button
+          data-testid="delete-button"
           variant="outlined"
           disabled={!selectedInstance || selectedInstance.status === "DELETING"}
           onClick={onDeleteClick}
@@ -66,6 +67,7 @@ const CloudAccountsTableHeader = ({
           Delete
         </Button>
         <Button
+          data-testid="create-button"
           variant="contained"
           onClick={onCreateClick}
           startIcon={<AddIcon />}

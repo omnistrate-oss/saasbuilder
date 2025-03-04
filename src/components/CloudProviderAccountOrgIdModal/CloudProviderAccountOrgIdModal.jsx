@@ -12,6 +12,8 @@ import {
   getAccountConfigStatusBasedHeader,
 } from "src/utils/constants/accountConfig";
 import { CLOUD_PROVIDERS } from "src/constants/cloudProviders";
+import { useEffect, useRef, useState } from "react";
+import { useQueryClient } from "@tanstack/react-query";
 
 const ArrowBulletSmall = () => <ArrowBulletIcon width={20} height={20} />;
 
@@ -146,7 +148,101 @@ const CreationTimeInstructions = (props) => {
     accountConfigMethod,
     terraformlink,
     terraformGuide,
+    fetchClickedInstanceDetails,
+    setClickedInstance,
   } = props;
+
+  const queryClient = useQueryClient();
+  const [isPolling, setIsPolling] = useState(true);
+  const timeoutId = useRef();
+  // poll for three times with an interval of 2 seconds
+  const pollCountRef = useRef(0);
+  const pollInterval = 2000;
+  const isMounted = useRef(true);
+
+  const startPolling = async () => {
+    if (!isMounted.current) return;
+
+    let resourceInstance;
+
+    try {
+      const resourceInstanceResponse = await fetchClickedInstanceDetails();
+      resourceInstance = resourceInstanceResponse.data;
+    } catch {}
+
+    if (!isMounted.current) return;
+
+    const result_params = resourceInstance?.result_params;
+    if (result_params?.cloud_provider_account_config_id) {
+      setClickedInstance((prev) => ({
+        ...prev,
+        result_params: { ...prev?.result_params, ...result_params },
+      }));
+
+      queryClient.setQueryData(["instances"], (oldData) => {
+        const result_params = {
+          // @ts-ignore
+          ...oldData?.data?.resourceInstances?.result_params,
+          ...resourceInstance.result_params,
+        };
+
+        return {
+          ...oldData,
+          data: {
+            resourceInstances: [
+              ...(oldData?.data?.resourceInstances || [])?.map((instance) =>
+                instance?.id === resourceInstance?.id
+                  ? {
+                      ...(resourceInstance || {}),
+                      result_params: result_params,
+                    }
+                  : instance
+              ),
+            ],
+          },
+        };
+      });
+
+      setIsPolling(false);
+    } else if (pollCountRef.current < 3) {
+      pollCountRef.current += 1;
+      timeoutId.current = setTimeout(() => {
+        startPolling();
+      }, pollInterval);
+    } else {
+      setIsPolling(false);
+    }
+  };
+
+  useEffect(() => {
+    if (
+      accountConfigMethod === ACCOUNT_CREATION_METHODS.GCP_SCRIPT &&
+      !gcpBootstrapShellCommand
+    ) {
+      startPolling();
+    } else {
+      setIsPolling(false);
+    }
+
+    return () => {};
+  }, []);
+
+  useEffect(() => {
+    isMounted.current = true;
+    return () => {
+      isMounted.current = false;
+      if (timeoutId.current) clearTimeout(timeoutId.current);
+    };
+  }, []);
+
+  if (isPolling) {
+    return (
+      <Stack direction="column" gap="20px" alignItems={"center"}>
+        <LoadingSpinnerSmall sx={{ marginLeft: 0 }} />
+        <BodyText>Fetching account config setup instructions</BodyText>
+      </Stack>
+    );
+  }
 
   if (accountConfigStatus === "FAILED") {
     return (
@@ -461,6 +557,8 @@ function CloudProviderAccountOrgIdModal(props) {
     accountInstructionDetails,
     accountConfigMethod,
     downloadTerraformKitMutation,
+    fetchClickedInstanceDetails,
+    setClickedInstance,
   } = props;
 
   const gcpCloudShellLink = (
@@ -616,6 +714,8 @@ function CloudProviderAccountOrgIdModal(props) {
               accountConfigMethod={accountConfigMethod}
               terraformlink={terraformlink}
               terraformGuide={terraformGuide}
+              fetchClickedInstanceDetails={fetchClickedInstanceDetails}
+              setClickedInstance={setClickedInstance}
             />
           ) : (
             <NonCreationTimeInstructions

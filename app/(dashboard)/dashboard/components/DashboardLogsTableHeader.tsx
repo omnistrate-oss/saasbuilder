@@ -14,6 +14,7 @@ const DashboardLogsTableHeader = () => {
       />
 
       <Button
+        data-testid="view-all-audit-logs-button"
         variant="outlined"
         href={getAuditLogsRoute()}
         target="_blank"

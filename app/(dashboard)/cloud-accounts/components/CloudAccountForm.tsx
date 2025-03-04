@@ -256,6 +256,7 @@ const CloudAccountForm = ({
           title: "Standard Information",
           fields: [
             {
+              dataTestId: "service-name-select",
               label: "Service Name",
               subLabel:
                 "Select the service you want to deploy in this cloud account",
@@ -366,6 +367,7 @@ const CloudAccountForm = ({
                   ?.productTierName,
             },
             {
+              dataTestId: "subscription-select",
               label: "Subscription",
               subLabel: "Select the subscription",
               name: "subscriptionId",
@@ -424,6 +426,7 @@ const CloudAccountForm = ({
                   },
             },
             {
+              dataTestId: "account-configuration-method-select",
               label: "Account Configuration Method",
               subLabel:
                 "Choose a method from among the options to configure your cloud provider account",
@@ -442,6 +445,7 @@ const CloudAccountForm = ({
                 ],
             },
             {
+              dataTestId: "aws-account-id-input",
               label: "AWS Account ID",
               subLabel: "AWS Account ID to use for the account",
               description: <CustomLabelDescription variant="aws" />,
@@ -454,6 +458,7 @@ const CloudAccountForm = ({
                 cloudProvider === "aws" ? values.awsAccountId : null,
             },
             {
+              dataTestId: "gcp-project-id-input",
               label: "GCP Project ID",
               subLabel: "GCP Project ID to use for the account",
               description: <CustomLabelDescription variant="gcpProjectId" />,
@@ -466,6 +471,7 @@ const CloudAccountForm = ({
                 cloudProvider === "gcp" ? values.gcpProjectId : null,
             },
             {
+              dataTestId: "gcp-project-number-input",
               label: "GCP Project Number",
               subLabel: "GCP Project Number to use for the account",
               description: (

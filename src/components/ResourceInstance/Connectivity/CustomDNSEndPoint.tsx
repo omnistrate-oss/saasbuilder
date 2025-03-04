@@ -67,7 +67,13 @@ const CustomDNSEndPoint: React.FC<CustomDNSEndPointProps> = ({
                   weight="regular"
                   color={isPrimaryResource ? "#6941C6" : ""}
                 >
-                  {endpointURL}
+                  <a
+                    href={`${endpointURL}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    {endpointURL}
+                  </a>
                 </Text>
                 <CopyButton
                   text={endpointURL}
