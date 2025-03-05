@@ -46,6 +46,18 @@ export type Row = {
   };
 };
 
+type License = {
+  ID: string;
+  CreationTime: string;
+  ExpirationTime: string;
+  Description: string;
+  InstanceID: string;
+  SubscriptionID: string;
+  ProductPlanUniqueID: string;
+  OrganizationID: string;
+  Version: number;
+};
+
 const textType = [
   "String",
   "string",
@@ -204,14 +216,36 @@ const PropertyDetails: FC<PropertyTableProps> = ({ rows, ...otherProps }) => {
                     textDecorationThickness: "1px",
                   }}
                   onClick={() => {
-                    console.log("check value", row.value);
+                    const jsonLicenseData = row.value;
+                    let parsedData: Record<string, unknown> = {};
+                    let instanceID = "file";
+
+                    if (typeof jsonLicenseData === "string") {
+                      try {
+                        parsedData = JSON.parse(jsonLicenseData) as Record<
+                          string,
+                          any
+                        >;
+                        const license: License = parsedData?.License as License;
+                        instanceID = license?.InstanceID ?? instanceID;
+                      } catch (error) {
+                        console.error("Invalid JSON:", error);
+                      }
+                    } else if (
+                      jsonLicenseData &&
+                      typeof jsonLicenseData === "object"
+                    ) {
+                      parsedData = jsonLicenseData as Record<string, any>;
+                      const license: License = parsedData?.License as License;
+                      instanceID = license?.InstanceID ?? instanceID;
+                    }
                     const blob = new Blob([row.value], {
                       type: "text/plain",
                     });
                     const url = URL.createObjectURL(blob);
                     const link = document.createElement("a");
                     link.href = url;
-                    link.download = "file.txt";
+                    link.download = `${instanceID}.txt`;
                     document.body.appendChild(link);
                     link.click();
                     document.body.removeChild(link);
