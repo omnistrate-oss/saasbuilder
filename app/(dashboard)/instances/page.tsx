@@ -54,6 +54,7 @@ import { BlackTooltip } from "src/components/Tooltip/Tooltip";
 import LoadIndicatorIdle from "src/components/Icons/LoadIndicator/LoadIndicatorIdle";
 import LoadIndicatorNormal from "src/components/Icons/LoadIndicator/LoadIndicatorNormal";
 import LoadIndicatorHigh from "src/components/Icons/LoadIndicator/LoadIndicatorHigh";
+import { getResourceInstanceDetailsStatusStylesAndLabel } from "src/constants/statusChipStyles/resourceInstanceDetailsStatus";
 
 const columnHelper = createColumnHelper<ResourceInstance>();
 type Overlay =
@@ -315,6 +316,50 @@ const InstancesPage = () => {
           },
         }
       ),
+      columnHelper.accessor("licence", {
+        id: "licence",
+        header: "License Status",
+        cell: (params) => {
+          const licenceDetails = params.row.subscriptionLicense;
+
+          const isExpired = licenceDetails?.expirationDate
+            ? new Date(licenceDetails.expirationDate).getTime() <
+              new Date().getTime()
+            : false;
+
+          const licenceStatus = isExpired ? "Expired" : "Active";
+
+          const statusSytlesAndLabel =
+            getResourceInstanceDetailsStatusStylesAndLabel(licenceStatus);
+
+          if (!licenceDetails?.expirationDate) {
+            return (
+              <Stack
+                direction="row"
+                alignItems="center"
+                gap="6px"
+                minWidth="94px"
+                justifyContent="space-between"
+              >
+                {"-"}
+              </Stack>
+            );
+          }
+
+          return (
+            <Stack
+              direction="row"
+              alignItems="center"
+              gap="6px"
+              minWidth="94px"
+              justifyContent="space-between"
+            >
+              <StatusChip status={licenceStatus} {...statusSytlesAndLabel} />
+            </Stack>
+          );
+        },
+      }),
+
       columnHelper.accessor((row) => formatDateUTC(row.created_at), {
         id: "created_at",
         header: "Created On",
