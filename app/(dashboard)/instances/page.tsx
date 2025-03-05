@@ -316,11 +316,11 @@ const InstancesPage = () => {
           },
         }
       ),
-      columnHelper.accessor("licence", {
-        id: "licence",
+      columnHelper.accessor("subscriptionLicense", {
+        id: "subscriptionLicense",
         header: "License Status",
-        cell: (params) => {
-          const licenceDetails = params.row.subscriptionLicense;
+        cell: (data) => {
+          const licenceDetails = data.cell.getValue();
 
           const isExpired = licenceDetails?.expirationDate
             ? new Date(licenceDetails.expirationDate).getTime() <
