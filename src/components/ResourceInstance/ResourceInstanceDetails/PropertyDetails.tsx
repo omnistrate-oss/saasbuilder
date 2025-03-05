@@ -38,6 +38,7 @@ export type Row = {
     | "json"
     | "cloudProvider"
     | "JSON"
+    | "download"
     | "Any";
   linkProps?: {
     href: string;
@@ -188,6 +189,39 @@ const PropertyDetails: FC<PropertyTableProps> = ({ rows, ...otherProps }) => {
 
           if (!row.value) {
             value = null;
+          } else if (valueType === "download") {
+            value = (
+              <>
+                <Box
+                  sx={{
+                    fontWeight: 600,
+                    fontSize: "14px",
+                    lineHeight: "20px",
+                    color: "#6941C6",
+                    cursor: "pointer",
+                    textDecoration: "underline",
+                    textUnderlineOffset: "2px",
+                    textDecorationThickness: "1px",
+                  }}
+                  onClick={() => {
+                    console.log("check value", row.value);
+                    const blob = new Blob([row.value], {
+                      type: "text/plain",
+                    });
+                    const url = URL.createObjectURL(blob);
+                    const link = document.createElement("a");
+                    link.href = url;
+                    link.download = "file.txt";
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                    URL.revokeObjectURL(url);
+                  }}
+                >
+                  {"Click Here to download"}
+                </Box>
+              </>
+            );
           } else if (isJSONData) {
             value = (
               <>
