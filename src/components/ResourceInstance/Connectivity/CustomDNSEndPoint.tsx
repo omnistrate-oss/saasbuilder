@@ -22,7 +22,7 @@ const CustomDNSEndPoint: React.FC<CustomDNSEndPointProps> = ({
   containerStyles,
   endpointName,
 }) => {
-  const endpointURLProtoType = endpointURL.includes("http")
+  const endpointURLWithProtocol = endpointURL.includes("http")
     ? endpointURL
     : `https://${endpointURL}`;
 
@@ -72,15 +72,15 @@ const CustomDNSEndPoint: React.FC<CustomDNSEndPointProps> = ({
                   color={isPrimaryResource ? "#6941C6" : ""}
                 >
                   <a
-                    href={`${endpointURLProtoType}`}
+                    href={`${endpointURLWithProtocol}`}
                     target="_blank"
                     rel="noopener noreferrer"
                   >
-                    {endpointURLProtoType}
+                    {endpointURLWithProtocol}
                   </a>
                 </Text>
                 <CopyButton
-                  text={endpointURLProtoType}
+                  text={endpointURLWithProtocol}
                   iconProps={{
                     color: "#6941C6",
                     width: 20,
