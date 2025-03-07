@@ -216,13 +216,13 @@ const PropertyDetails: FC<PropertyTableProps> = ({ rows, ...otherProps }) => {
                     textDecorationThickness: "1px",
                   }}
                   onClick={() => {
-                    const jsonLicenseData = row.value;
+                    const licenseData = row.value;
                     let parsedData: Record<string, unknown> = {};
                     let instanceID = "file";
 
-                    if (typeof jsonLicenseData === "string") {
+                    if (typeof licenseData === "string") {
                       try {
-                        parsedData = JSON.parse(jsonLicenseData) as Record<
+                        parsedData = JSON.parse(licenseData) as Record<
                           string,
                           any
                         >;
@@ -231,15 +231,16 @@ const PropertyDetails: FC<PropertyTableProps> = ({ rows, ...otherProps }) => {
                       } catch (error) {
                         console.error("Invalid JSON:", error);
                       }
-                    } else if (
-                      jsonLicenseData &&
-                      typeof jsonLicenseData === "object"
-                    ) {
-                      parsedData = jsonLicenseData as Record<string, any>;
+                    } else if (licenseData && typeof licenseData === "object") {
+                      parsedData = licenseData as Record<string, any>;
                       const license: License = parsedData?.License as License;
                       instanceID = license?.InstanceID ?? instanceID;
                     }
-                    const blob = new Blob([row.value], {
+                    const data =
+                      typeof licenseData === "string"
+                        ? licenseData
+                        : JSON.stringify(licenseData, null, 2);
+                    const blob = new Blob([data], {
                       type: "text/plain",
                     });
                     const url = URL.createObjectURL(blob);
