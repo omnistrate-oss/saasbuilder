@@ -23,7 +23,6 @@ function ResourceInstanceOverview(props) {
     region,
     cloudProvider,
     status,
-    isCliManagedResource,
     subscriptionOwner,
     detailedNetworkTopology,
     onViewNodesClick,
@@ -42,7 +41,7 @@ function ResourceInstanceOverview(props) {
     <div
       className="grid rounded-xl overflow-hidden border border-[#E4E7EC]"
       style={{
-        gridTemplateColumns: `repeat(${isCliManagedResource ? 6 : 7}, minmax(0, 1fr))`,
+        gridTemplateColumns: `repeat(7, minmax(0, 1fr))`,
         marginTop: "10px",
       }}
     >
@@ -53,7 +52,7 @@ function ResourceInstanceOverview(props) {
         "Lifecycle Status",
         "Region",
         "Cloud Provider",
-        !isCliManagedResource && "Health Status",
+        "Health Status",
       ]
         .filter((el) => el)
         .map((label, index) => (
@@ -157,19 +156,17 @@ function ResourceInstanceOverview(props) {
         )}
       </div>
 
-      {!isCliManagedResource && (
-        <div
-          style={{ padding: "14px" }}
-          className="flex items-center justify-center"
-        >
-          <InstanceHealthStatusChip
-            computedHealthStatus={healthStatus}
-            detailedNetworkTopology={detailedNetworkTopology}
-            onViewNodesClick={onViewNodesClick}
-            openLinkInSameTab={true}
-          />
-        </div>
-      )}
+      <div
+        style={{ padding: "14px" }}
+        className="flex items-center justify-center"
+      >
+        <InstanceHealthStatusChip
+          computedHealthStatus={healthStatus}
+          detailedNetworkTopology={detailedNetworkTopology}
+          onViewNodesClick={onViewNodesClick}
+          openLinkInSameTab={true}
+        />
+      </div>
     </div>
   );
 }
