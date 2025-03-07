@@ -383,7 +383,7 @@ function ResourceInstanceDetails(props) {
         <PropertyDetails
           data-testid="resource-instance-details-table"
           rows={{
-            title: "License Status (Computed)",
+            title: "License Status",
             desc: "Shows the current license status, expiry date, and option to download the license file.",
             rows: licenseData,
             flexWrap: true,
