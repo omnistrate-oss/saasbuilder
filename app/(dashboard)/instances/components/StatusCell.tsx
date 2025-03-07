@@ -3,10 +3,7 @@ import { useMemo } from "react";
 import { Text } from "src/components/Typography/Typography";
 import formatDateUTC from "src/utils/formatDateUTC";
 
-type Status = "has-alerts" | "no-alerts";
-
 type StatusCellProps = {
-  status?: Status;
   upcomingUpgrade?: any;
 };
 
@@ -107,13 +104,7 @@ const TooltipContent = ({
   );
 };
 
-const StatusCell: React.FC<StatusCellProps> = ({
-  status = "no-alerts",
-  upcomingUpgrade,
-}) => {
-  const icon = (
-    <BellIcon color={status === "has-alerts" ? "#414651" : "#D5D7DA"} />
-  );
+const StatusCell: React.FC<StatusCellProps> = ({ upcomingUpgrade }) => {
   const notifications = useMemo(() => {
     const res: Notification[] = [];
 
@@ -133,6 +124,10 @@ const StatusCell: React.FC<StatusCellProps> = ({
 
     return res;
   }, [upcomingUpgrade]);
+
+  const icon = (
+    <BellIcon color={notifications.length ? "#414651" : "#D5D7DA"} />
+  );
 
   if (notifications.length > 0) {
     return (

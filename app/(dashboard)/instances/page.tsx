@@ -618,10 +618,7 @@ const InstancesPage = () => {
                 row.original.maintenanceTasks?.upgrade_paths?.[0];
               return (
                 <div className="flex items-center justify-center">
-                  <StatusCell
-                    status={upcomingUpgrade ? "has-alerts" : "no-alerts"}
-                    upcomingUpgrade={upcomingUpgrade}
-                  />
+                  <StatusCell upcomingUpgrade={upcomingUpgrade} />
                 </div>
               );
             },
