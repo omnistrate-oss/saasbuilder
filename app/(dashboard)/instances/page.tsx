@@ -320,19 +320,19 @@ const InstancesPage = () => {
         id: "subscriptionLicense",
         header: "License Status",
         cell: (data) => {
-          const licenceDetails = data.cell.getValue();
+          const licenseDetails = data.cell.getValue();
 
-          const isExpired = licenceDetails?.expirationDate
-            ? new Date(licenceDetails.expirationDate).getTime() <
+          const isExpired = licenseDetails?.expirationDate
+            ? new Date(licenseDetails.expirationDate).getTime() <
               new Date().getTime()
             : false;
 
-          const licenceStatus = isExpired ? "Expired" : "Active";
+          const licenseStatus = isExpired ? "Expired" : "Active";
 
           const statusSytlesAndLabel =
-            getResourceInstanceDetailsStatusStylesAndLabel(licenceStatus);
+            getResourceInstanceDetailsStatusStylesAndLabel(licenseStatus);
 
-          if (!licenceDetails?.expirationDate) {
+          if (!licenseDetails?.expirationDate) {
             return (
               <Stack
                 direction="row"
@@ -354,7 +354,7 @@ const InstancesPage = () => {
               minWidth="94px"
               justifyContent="space-between"
             >
-              <StatusChip status={licenceStatus} {...statusSytlesAndLabel} />
+              <StatusChip status={licenseStatus} {...statusSytlesAndLabel} />
             </Stack>
           );
         },

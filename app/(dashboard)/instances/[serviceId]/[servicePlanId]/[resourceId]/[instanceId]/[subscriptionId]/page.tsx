@@ -308,7 +308,7 @@ const InstanceDetailsPage = ({
           autoscaling={resourceInstanceData.autoscaling}
           serverlessEnabled={resourceInstanceData.serverlessEnabled}
           isCliManagedResource={isCliManagedResource}
-          licenceDetails={resourceInstanceData?.subscriptionLicense}
+          licenseDetails={resourceInstanceData?.subscriptionLicense}
         />
       )}
       {currentTab === tabs.connectivity && (

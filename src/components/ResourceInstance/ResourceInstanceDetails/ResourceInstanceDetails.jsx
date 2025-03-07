@@ -29,7 +29,7 @@ function ResourceInstanceDetails(props) {
     autoscaling,
     serverlessEnabled,
     isCliManagedResource,
-    licenceDetails,
+    licenseDetails,
   } = props;
 
   const isResourceBYOA =
@@ -124,9 +124,9 @@ function ResourceInstanceDetails(props) {
     isCliManagedResource,
   ]);
 
-  const licenceData = useMemo(() => {
-    const isExpired = licenceDetails?.expirationDate
-      ? new Date(licenceDetails.expirationDate).getTime() < new Date().getTime()
+  const licenseData = useMemo(() => {
+    const isExpired = licenseDetails?.expirationDate
+      ? new Date(licenseDetails.expirationDate).getTime() < new Date().getTime()
       : false;
 
     const res = [
@@ -137,18 +137,18 @@ function ResourceInstanceDetails(props) {
       },
       {
         label: "License Expiry Date",
-        value: formatDateUTC(licenceDetails?.expirationDate),
+        value: formatDateUTC(licenseDetails?.expirationDate),
       },
       {
         label: "Download License",
-        value: licenceDetails?.licenseBase64
-          ? Base64.decode(licenceDetails?.licenseBase64)
+        value: licenseDetails?.licenseBase64
+          ? Base64.decode(licenseDetails?.licenseBase64)
           : "",
         valueType: "download",
       },
     ];
     return res;
-  }, [licenceDetails]);
+  }, [licenseDetails]);
 
   const backupData = useMemo(() => {
     const res = [
@@ -368,13 +368,13 @@ function ResourceInstanceDetails(props) {
           flexWrap: true,
         }}
       />
-      {licenceData && (
+      {licenseData && (
         <PropertyDetails
           data-testid="resource-instance-details-table"
           rows={{
-            title: "Licence Status (Computed)",
+            title: "License Status (Computed)",
             desc: "Shows the current license status, expiry date, and option to download the license file.",
-            rows: licenceData,
+            rows: licenseData,
             flexWrap: true,
           }}
           mt="20px"
