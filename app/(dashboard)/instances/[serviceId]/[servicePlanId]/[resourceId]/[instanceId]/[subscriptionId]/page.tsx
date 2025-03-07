@@ -309,6 +309,7 @@ const InstanceDetailsPage = ({
           serverlessEnabled={resourceInstanceData.serverlessEnabled}
           isCliManagedResource={isCliManagedResource}
           maintenanceTasks={resourceInstanceData.maintenanceTasks}
+          licenseDetails={resourceInstanceData?.subscriptionLicense}
         />
       )}
       {currentTab === tabs.connectivity && (

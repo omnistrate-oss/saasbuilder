@@ -363,6 +363,7 @@ export default function useResourceInstance(
           customNetworkDetails,
           detailedNetworkTopology: data.detailedNetworkTopology || {},
           maintenanceTasks: data.maintenanceTasks || {},
+          subscriptionLicense: data?.subscriptionLicense || {},
         };
 
         return final;
