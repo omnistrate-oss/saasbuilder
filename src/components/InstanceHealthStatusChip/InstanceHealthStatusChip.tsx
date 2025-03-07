@@ -3,6 +3,7 @@ import {
   InstanceComputedHealthStatus,
   ResourceInstanceNode,
   ResourceInstanceNetworkTopology,
+  ResourceNetworkTopologyAdditionalEndpoint,
 } from "src/types/resourceInstance";
 import StatusChip from "../StatusChip/StatusChip";
 import { getResourceInstanceChipStylesAndLabel } from "src/constants/statusChipStyles/resourceInstanceHealthStatus";
@@ -36,13 +37,119 @@ function getInstanceNodes(
   return nodes;
 }
 
+export function getComplexInstanceHealthStatus(
+  detailedNetworkTopology: Record<string, ResourceInstanceNetworkTopology> = {}
+): InstanceComputedHealthStatus {
+  //instance health status for complex resource instances is derived using the node health status and the endpoint health status
+  //we get an addtional field called 'additionalEndpoint' in the topology object
+  //additional endpoints will have a healthStatus
+  //use both node health status and additional endpoint health status to calculate aggregated health status
+
+  //stores addtional endpoints for all resources in detailedNetworkTopology
+  const nodes: ResourceInstanceNode[] = getInstanceNodes(
+    detailedNetworkTopology
+  );
+
+  //stores addtional endpoints for all resources in detailedNetworkTopology
+  const allAdditionalEndpoints: (ResourceNetworkTopologyAdditionalEndpoint & {
+    endpointName: string;
+  })[] = [];
+
+  Object.values(detailedNetworkTopology).forEach((topologyDetails) => {
+    const additionalEndpoints = topologyDetails.additionalEndpoints || {};
+    Object.entries(additionalEndpoints).forEach(
+      ([endpointName, endpointDetails]) => {
+        allAdditionalEndpoints.push({
+          ...endpointDetails,
+          endpointName,
+        });
+      }
+    );
+  });
+
+  const healthStatusEntities: {
+    type: "node" | "additionalEnpoint";
+    healthStatus: string;
+    nodeID?: string;
+    endpoint?: string;
+  }[] = [];
+
+  nodes.forEach((node) => {
+    healthStatusEntities.push({
+      type: "node",
+      healthStatus: node.healthStatus || "UNKNOWN",
+      nodeID: node.id,
+    });
+  });
+
+  allAdditionalEndpoints.forEach((addtionalEnpoint) => {
+    healthStatusEntities.push({
+      type: "additionalEnpoint",
+      healthStatus: addtionalEnpoint.healthStatus || "UNKNOWN",
+      endpoint: addtionalEnpoint.endpoint,
+    });
+  });
+
+  let computedHealthStatus: InstanceComputedHealthStatus = "UNKNOWN";
+
+  if (healthStatusEntities.length > 0) {
+    const unknownHealthEntities = healthStatusEntities.filter(
+      (entity) => entity.healthStatus?.toUpperCase() === "UNKNOWN"
+    );
+    const naHealthEntities = healthStatusEntities.filter(
+      (entity) => entity.healthStatus?.toUpperCase() === "N/A"
+    );
+
+    //health status is UNKNOWN if all entities have UNKNOWN health status
+    if (unknownHealthEntities.length === healthStatusEntities.length) {
+      computedHealthStatus = "UNKNOWN";
+
+      //health status is N/A if all entities have N/A health status
+    } else if (naHealthEntities.length === healthStatusEntities.length) {
+      computedHealthStatus = "UNKNOWN";
+
+      //health status is UNKNOWN if all entities have either UNKNOWN or N/A health status
+    } else if (
+      unknownHealthEntities.length + naHealthEntities.length ===
+      healthStatusEntities.length
+    ) {
+      computedHealthStatus = "UNKNOWN";
+    } else {
+      //ignore UNKNOWN, N/A entities and calculate health status
+      const nonUnknownHealthEntities = healthStatusEntities.filter(
+        (node) =>
+          node.healthStatus?.toUpperCase() !== "UNKNOWN" &&
+          node.healthStatus?.toUpperCase() !== "N/A"
+      );
+      //healhy if all entities are healthy
+      if (
+        nonUnknownHealthEntities.every(
+          (entity) => entity.healthStatus === "HEALTHY"
+        )
+      ) {
+        computedHealthStatus = "HEALTHY";
+      } else if (
+        //unhealhy if all entities are unhealthy
+        nonUnknownHealthEntities.every(
+          (entity) => entity.healthStatus === "UNHEALTHY"
+        )
+      ) {
+        computedHealthStatus = "UNHEALTHY";
+      } else {
+        computedHealthStatus = "DEGRADED";
+      }
+    }
+  }
+
+  return computedHealthStatus;
+}
+
 export function getInstanceHealthStatus(
   detailedNetworkTopology: Record<string, ResourceInstanceNetworkTopology> = {},
   instanceLifecycleStatus: string | undefined
 ): InstanceComputedHealthStatus {
   let isCLIManagedResource = false;
 
-  //Return UNKOWN status for CLI Managed resources
   if (detailedNetworkTopology) {
     const mainResource = Object.values(detailedNetworkTopology).find(
       (topologyDetails) => topologyDetails.main === true
@@ -56,10 +163,11 @@ export function getInstanceHealthStatus(
     }
   }
 
-  if (isCLIManagedResource) return "UNKNOWN";
+  if (isCLIManagedResource)
+    return getComplexInstanceHealthStatus(detailedNetworkTopology);
 
   //return N/A for Stopped instances
-  if (instanceLifecycleStatus === "STOPPED") return "NA";
+  if (instanceLifecycleStatus === "STOPPED") return "UNKNOWN";
 
   const nodes: ResourceInstanceNode[] = getInstanceNodes(
     detailedNetworkTopology
@@ -246,11 +354,23 @@ const InstanceHealthStatusChip: FC<InstanceHealthStatusChipProps> = (props) => {
     );
   }
 
+  let isCLIManagedResource = false;
+
+  if (detailedNetworkTopology) {
+    const mainResource = Object.values(detailedNetworkTopology).find(
+      (topologyDetails) => topologyDetails.main === true
+    );
+
+    if (
+      mainResource &&
+      CLI_MANAGED_RESOURCES.includes(mainResource.resourceType as string)
+    ) {
+      isCLIManagedResource = true;
+    }
+  }
+
   return (
-    <BlackTooltip
-      title={tooltipContent}
-      visible={computedHealthStatus !== "NA"}
-    >
+    <BlackTooltip title={tooltipContent} isVisible={!isCLIManagedResource}>
       <Box display="inline-block">
         <StatusChip {...chipStylesAndLabel} startIcon={startIcon} />
       </Box>
