@@ -23,7 +23,7 @@ async function getUpgradeScheduledMailContent(upgradeEventObj, orgLogoURL) {
     service_name: upgradeEventObj.eventPayload.service_name,
     service_plan_name: upgradeEventObj.eventPayload.source_product_tier_name,
     upgrade_date: `${new Date(
-      upgradeEventObj.eventPayload.scheduled_date
+      upgradeEventObj.eventPayload.scheduled_date // Sometimes, the scheduled_date is an empty string in the event payload
     ).toLocaleString("en-GB", {
       timeZone: "UTC",
       year: "numeric",
@@ -33,6 +33,7 @@ async function getUpgradeScheduledMailContent(upgradeEventObj, orgLogoURL) {
       minute: "2-digit",
       hour12: false,
     })} UTC`,
+    is_now: !!upgradeEventObj.eventPayload.scheduled_date,
     username:
       upgradeEventObj.userName || upgradeEventObj.eventPayload.user_name,
   });

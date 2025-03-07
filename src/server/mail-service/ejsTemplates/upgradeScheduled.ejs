@@ -134,8 +134,13 @@
                                               padding: 12px 0 0;
                                             "
                                           >
-                                            <%= instance_name %> upgrade <br />
-                                            notification
+                                            <% if (is_within_1_hour) { %>
+                                              <%= instance_name %> Upgrade <br />
+                                              Reminder
+                                            <% } else { %>
+                                              <%= instance_name %> Upgrade <br />
+                                              Notification
+                                            <% } %>
                                           </td>
                                         </tr>
                                       </tbody>
@@ -301,7 +306,12 @@
                                               <span style="font-weight: 800"><%= service_name %></span> service
                                               under
                                               <span style="font-weight: 800"><%= service_plan_name %></span>
-                                              is scheduled for a version upgrade on <span style="font-weight: 800"><%= upgrade_date %></span>
+                                              <% if (is_now) { %>
+                                                is scheduled for an upgrade now.
+                                              <% } else { %>
+                                                is scheduled for a version upgrade on 
+                                                <span style="font-weight: 800"><%= upgrade_date %></span>
+                                              <% } %>
                                               <br />
                                               If you have any questions, please contact support.
                                             </p>

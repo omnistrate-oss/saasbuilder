@@ -117,7 +117,7 @@ const StatusCell: React.FC<StatusCellProps> = ({
   const notifications = useMemo(() => {
     const res: Notification[] = [];
 
-    if (upcomingUpgrade) {
+    if (upcomingUpgrade?.upgrade_path_scheduled_at) {
       res.push({
         label: "Upcoming Upgrade",
         value: (
