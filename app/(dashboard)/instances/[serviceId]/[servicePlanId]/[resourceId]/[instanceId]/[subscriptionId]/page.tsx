@@ -308,6 +308,7 @@ const InstanceDetailsPage = ({
           autoscaling={resourceInstanceData.autoscaling}
           serverlessEnabled={resourceInstanceData.serverlessEnabled}
           isCliManagedResource={isCliManagedResource}
+          maintenanceTasks={resourceInstanceData.maintenanceTasks}
           licenseDetails={resourceInstanceData?.subscriptionLicense}
         />
       )}

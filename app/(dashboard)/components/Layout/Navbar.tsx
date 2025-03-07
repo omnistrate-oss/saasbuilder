@@ -9,6 +9,8 @@ import EnvironmentTypeChip from "components/EnvironmentTypeChip/EnvironmentTypeC
 
 import ProfileDropdown from "./ProfileDropdown";
 import useUserData from "src/hooks/usersData";
+// import Notifications from "./Notifications";
+import { Stack } from "@mui/material";
 
 const Navbar = () => {
   const environmentType = useEnvironmentType();
@@ -26,7 +28,10 @@ const Navbar = () => {
         )}
       </div>
 
-      <ProfileDropdown />
+      <Stack direction="row" alignItems="center" gap="16px">
+        {/* <Notifications /> */}
+        <ProfileDropdown />
+      </Stack>
     </div>
   );
 };
