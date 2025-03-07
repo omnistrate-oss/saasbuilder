@@ -1,4 +1,4 @@
-import React, { FC, ReactNode, useMemo, useState } from "react";
+import React, { CSSProperties, FC, ReactNode, useMemo, useState } from "react";
 import Collapse from "@mui/material/Collapse";
 import IconButton from "@mui/material/IconButton";
 import { Box, CircularProgress, Stack, SxProps } from "@mui/material";
@@ -80,6 +80,7 @@ type DataTableProps<TData> = {
   tableStyles?: SxProps;
   minHeight?: string | number;
   getRowClassName?: (rowData: TData) => string;
+  statusColumn?: ColumnDef<TData>;
 };
 
 const DEFAULT_COLUMN_MIN_WIDTH = 150;
@@ -102,6 +103,7 @@ const DataTable = <TData,>(props: DataTableProps<TData>): ReactNode => {
     tableStyles = {},
     minHeight,
     getRowClassName,
+    statusColumn,
   } = props;
 
   const [expanded, setExpanded] = useState<ExpandedState>({});
@@ -131,19 +133,32 @@ const DataTable = <TData,>(props: DataTableProps<TData>): ReactNode => {
       id: "selection",
       header: "",
       cell: ({ row }) => (
-        <CustomCheckbox
-          // @ts-ignore
-          checked={selectedRows.includes(String(row.original[rowId]))}
-          onChange={() => handleSelectionChange(String(row.original[rowId]))}
-        />
+        <div className="flex items-center justify-center">
+          <CustomCheckbox
+            // @ts-ignore
+            checked={selectedRows.includes(String(row.original[rowId]))}
+            onChange={() => handleSelectionChange(String(row.original[rowId]))}
+          />
+        </div>
       ),
       meta: {
-        width: 50,
+        width: 36,
       },
     };
 
-    return [selectionColumn, ...columns];
-  }, [columns, selectionMode, onRowSelectionChange, selectedRows, rowId]);
+    return [
+      ...(statusColumn ? [statusColumn] : []),
+      selectionColumn,
+      ...columns,
+    ];
+  }, [
+    statusColumn,
+    columns,
+    selectionMode,
+    onRowSelectionChange,
+    selectedRows,
+    rowId,
+  ]);
 
   const table = useReactTable({
     data: rows,
@@ -337,6 +352,7 @@ const DataTable = <TData,>(props: DataTableProps<TData>): ReactNode => {
                             sx={{
                               fontSize: "14px",
                               fontWeight: "500",
+                              ...(cell.column.columnDef.meta?.styles || {}),
                             }}
                           >
                             {flexRender(
@@ -412,6 +428,7 @@ interface ColumnCustomFeatures {
   minWidth?: number;
   align?: "center" | "left" | "right";
   disableBrowserTooltip?: boolean;
+  styles?: CSSProperties;
 }
 declare module "@tanstack/react-table" {
   /*eslint-disable-next-line*/

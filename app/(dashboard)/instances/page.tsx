@@ -54,6 +54,7 @@ import { BlackTooltip } from "src/components/Tooltip/Tooltip";
 import LoadIndicatorIdle from "src/components/Icons/LoadIndicator/LoadIndicatorIdle";
 import LoadIndicatorNormal from "src/components/Icons/LoadIndicator/LoadIndicatorNormal";
 import LoadIndicatorHigh from "src/components/Icons/LoadIndicator/LoadIndicatorHigh";
+import StatusCell from "./components/StatusCell";
 
 const columnHelper = createColumnHelper<ResourceInstance>();
 type Overlay =
@@ -564,6 +565,29 @@ const InstancesPage = () => {
             return healthStatus;
           }}
           tableStyles={{ ...getRowBorderStyles() }}
+          statusColumn={{
+            id: "instance-status",
+            header: "",
+            cell: ({ row }) => {
+              const upcomingUpgrade =
+                row.original.maintenanceTasks?.upgrade_paths?.[0];
+              return (
+                <div className="flex items-center justify-center">
+                  <StatusCell
+                    status={upcomingUpgrade ? "has-alerts" : "no-alerts"}
+                    upcomingUpgrade={upcomingUpgrade}
+                  />
+                </div>
+              );
+            },
+            meta: {
+              width: 50,
+              styles: {
+                padding: "0px",
+                paddingLeft: "4px",
+              },
+            },
+          }}
         />
       </div>
 

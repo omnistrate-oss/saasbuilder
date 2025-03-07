@@ -8,6 +8,7 @@ import TerraformDownloadURL from "./TerraformDownloadURL";
 import NonOmnistrateIntegrationRow from "./NonOmnistrateIntegrationRow";
 import { INTEGRATION_TYPE_LABEL_MAP } from "src/constants/productTierFeatures";
 import PropertyDetails from "./PropertyDetails";
+import UpgradeScheduledNotificationBar from "./UpgradeScheduledNotificationBar";
 
 function ResourceInstanceDetails(props) {
   const {
@@ -29,6 +30,7 @@ function ResourceInstanceDetails(props) {
     autoscaling,
     serverlessEnabled,
     isCliManagedResource,
+    maintenanceTasks,
   } = props;
 
   const isResourceBYOA =
@@ -120,7 +122,7 @@ function ResourceInstanceDetails(props) {
     resultParameters,
     highAvailability,
     backupStatus,
-    isCliManagedResource
+    isCliManagedResource,
   ]);
 
   const backupData = useMemo(() => {
@@ -330,8 +332,17 @@ function ResourceInstanceDetails(props) {
     );
   }
 
+  const hasPendingUpgrades = maintenanceTasks?.upgrade_paths?.length > 0;
+
   return (
     <Box marginTop={"20px"}>
+      {hasPendingUpgrades && (
+        <UpgradeScheduledNotificationBar
+          upgradeDate={
+            maintenanceTasks.upgrade_paths?.[0]?.upgrade_path_scheduled_at
+          }
+        />
+      )}
       <PropertyDetails
         data-testid="resource-instance-details-table"
         rows={{

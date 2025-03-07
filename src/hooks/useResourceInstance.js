@@ -362,6 +362,7 @@ export default function useResourceInstance(
           customMetrics: customMetrics,
           customNetworkDetails,
           detailedNetworkTopology: data.detailedNetworkTopology || {},
+          maintenanceTasks: data.maintenanceTasks || {},
         };
 
         return final;
