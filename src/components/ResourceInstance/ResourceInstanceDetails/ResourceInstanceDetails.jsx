@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import { Box } from "@mui/material";
 import formatDateUTC from "src/utils/formatDateUTC";
-
+import { Base64 } from "js-base64";
 import LoadingSpinner from "components/LoadingSpinner/LoadingSpinner";
 
 import TerraformDownloadURL from "./TerraformDownloadURL";
@@ -29,6 +29,7 @@ function ResourceInstanceDetails(props) {
     autoscaling,
     serverlessEnabled,
     isCliManagedResource,
+    licenseDetails,
   } = props;
 
   const isResourceBYOA =
@@ -120,8 +121,34 @@ function ResourceInstanceDetails(props) {
     resultParameters,
     highAvailability,
     backupStatus,
-    isCliManagedResource
+    isCliManagedResource,
   ]);
+
+  const licenseData = useMemo(() => {
+    const isExpired = licenseDetails?.expirationDate
+      ? new Date(licenseDetails.expirationDate).getTime() < new Date().getTime()
+      : false;
+
+    const res = [
+      {
+        label: "License Status",
+        value: isExpired ? "Expired" : "Active",
+        valueType: "boolean",
+      },
+      {
+        label: "License Expiry Date",
+        value: formatDateUTC(licenseDetails?.expirationDate),
+      },
+      {
+        label: "Download License",
+        value: licenseDetails?.licenseBase64
+          ? Base64.decode(licenseDetails?.licenseBase64)
+          : "",
+        valueType: "download",
+      },
+    ];
+    return res;
+  }, [licenseDetails]);
 
   const backupData = useMemo(() => {
     const res = [
@@ -341,6 +368,18 @@ function ResourceInstanceDetails(props) {
           flexWrap: true,
         }}
       />
+      {licenseData && (
+        <PropertyDetails
+          data-testid="resource-instance-details-table"
+          rows={{
+            title: "License Status (Computed)",
+            desc: "Shows the current license status, expiry date, and option to download the license file.",
+            rows: licenseData,
+            flexWrap: true,
+          }}
+          mt="20px"
+        />
+      )}
       {outputParameterData.length > 0 && (
         <PropertyDetails
           data-testid="resource-instance-details-table"
