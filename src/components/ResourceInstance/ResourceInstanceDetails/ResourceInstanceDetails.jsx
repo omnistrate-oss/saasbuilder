@@ -379,7 +379,7 @@ function ResourceInstanceDetails(props) {
           flexWrap: true,
         }}
       />
-      {licenseData && (
+      {licenseDetails?.expirationDate && (
         <PropertyDetails
           data-testid="resource-instance-details-table"
           rows={{
