@@ -308,6 +308,8 @@ const InstanceDetailsPage = ({
           autoscaling={resourceInstanceData.autoscaling}
           serverlessEnabled={resourceInstanceData.serverlessEnabled}
           isCliManagedResource={isCliManagedResource}
+          maintenanceTasks={resourceInstanceData.maintenanceTasks}
+          licenseDetails={resourceInstanceData?.subscriptionLicense}
         />
       )}
       {currentTab === tabs.connectivity && (
@@ -348,7 +350,7 @@ const InstanceDetailsPage = ({
           resourceInstanceId={instanceId}
           subscriptionData={subscription}
           subscriptionId={subscription.id}
-          isBYOAServicePlan = {offering?.serviceModelType === "BYOA"}
+          isBYOAServicePlan={offering?.serviceModelType === "BYOA"}
         />
       )}
       {currentTab === tabs.metrics && (

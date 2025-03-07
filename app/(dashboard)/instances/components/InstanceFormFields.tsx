@@ -402,11 +402,10 @@ export const getNetworkConfigurationFields = (
         customNetworks,
         values.cloudProvider,
         values.cloudProvider === "aws"
-          ? offering.awsRegions
+          ? offering.awsRegions || []
           : values.cloudProvider === "gcp"
-            ? offering.gcpRegions
-            : // @ts-ignore
-              offering.azureRegions || [],
+            ? offering.gcpRegions || []
+            : offering.azureRegions || [],
         values.region
       ),
       emptyMenuText: "No custom networks available",

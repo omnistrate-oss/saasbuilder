@@ -38,11 +38,24 @@ export type Row = {
     | "json"
     | "cloudProvider"
     | "JSON"
+    | "download"
     | "Any";
   linkProps?: {
     href: string;
     target?: "_blank" | "_self";
   };
+};
+
+type License = {
+  ID: string;
+  CreationTime: string;
+  ExpirationTime: string;
+  Description: string;
+  InstanceID: string;
+  SubscriptionID: string;
+  ProductPlanUniqueID: string;
+  OrganizationID: string;
+  Version: number;
 };
 
 const textType = [
@@ -188,6 +201,62 @@ const PropertyDetails: FC<PropertyTableProps> = ({ rows, ...otherProps }) => {
 
           if (!row.value) {
             value = null;
+          } else if (valueType === "download") {
+            value = (
+              <>
+                <Box
+                  sx={{
+                    fontWeight: 600,
+                    fontSize: "14px",
+                    lineHeight: "20px",
+                    color: "#6941C6",
+                    cursor: "pointer",
+                    textDecoration: "underline",
+                    textUnderlineOffset: "2px",
+                    textDecorationThickness: "1px",
+                  }}
+                  onClick={() => {
+                    const licenseData = row.value;
+                    let parsedData: Record<string, unknown> = {};
+                    let instanceID = "file";
+
+                    if (typeof licenseData === "string") {
+                      try {
+                        parsedData = JSON.parse(licenseData) as Record<
+                          string,
+                          any
+                        >;
+                        const license: License = parsedData?.License as License;
+                        instanceID = license?.InstanceID ?? instanceID;
+                      } catch (error) {
+                        console.error("Invalid JSON:", error);
+                      }
+                    } else if (licenseData && typeof licenseData === "object") {
+                      parsedData = licenseData as Record<string, any>;
+                      const license: License = parsedData?.License as License;
+                      instanceID = license?.InstanceID ?? instanceID;
+                    }
+                    const data =
+                      typeof licenseData === "string"
+                        ? licenseData
+                        : JSON.stringify(licenseData, null, 2);
+                    const blob = new Blob([data], {
+                      type: "text/plain",
+                    });
+                    const url = URL.createObjectURL(blob);
+                    const link = document.createElement("a");
+                    link.href = url;
+                    link.download = `${instanceID}.txt`;
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                    URL.revokeObjectURL(url);
+                  }}
+                >
+                  {"Click Here to download"}
+                </Box>
+              </>
+            );
           } else if (isJSONData) {
             value = (
               <>

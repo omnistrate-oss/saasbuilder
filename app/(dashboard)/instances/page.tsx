@@ -54,6 +54,8 @@ import { BlackTooltip } from "src/components/Tooltip/Tooltip";
 import LoadIndicatorIdle from "src/components/Icons/LoadIndicator/LoadIndicatorIdle";
 import LoadIndicatorNormal from "src/components/Icons/LoadIndicator/LoadIndicatorNormal";
 import LoadIndicatorHigh from "src/components/Icons/LoadIndicator/LoadIndicatorHigh";
+import StatusCell from "./components/StatusCell";
+import { getResourceInstanceDetailsStatusStylesAndLabel } from "src/constants/statusChipStyles/resourceInstanceDetailsStatus";
 
 const columnHelper = createColumnHelper<ResourceInstance>();
 type Overlay =
@@ -315,6 +317,50 @@ const InstancesPage = () => {
           },
         }
       ),
+      columnHelper.accessor("subscriptionLicense", {
+        id: "subscriptionLicense",
+        header: "License Status",
+        cell: (data) => {
+          const licenseDetails = data.cell.getValue();
+
+          const isExpired = licenseDetails?.expirationDate
+            ? new Date(licenseDetails.expirationDate).getTime() <
+              new Date().getTime()
+            : false;
+
+          const licenseStatus = isExpired ? "Expired" : "Active";
+
+          const statusSytlesAndLabel =
+            getResourceInstanceDetailsStatusStylesAndLabel(licenseStatus);
+
+          if (!licenseDetails?.expirationDate) {
+            return (
+              <Stack
+                direction="row"
+                alignItems="center"
+                gap="6px"
+                minWidth="94px"
+                justifyContent="space-between"
+              >
+                {"-"}
+              </Stack>
+            );
+          }
+
+          return (
+            <Stack
+              direction="row"
+              alignItems="center"
+              gap="6px"
+              minWidth="94px"
+              justifyContent="space-between"
+            >
+              <StatusChip status={licenseStatus} {...statusSytlesAndLabel} />
+            </Stack>
+          );
+        },
+      }),
+
       columnHelper.accessor((row) => formatDateUTC(row.created_at), {
         id: "created_at",
         header: "Created On",
@@ -564,6 +610,26 @@ const InstancesPage = () => {
             return healthStatus;
           }}
           tableStyles={{ ...getRowBorderStyles() }}
+          statusColumn={{
+            id: "instance-status",
+            header: "",
+            cell: ({ row }) => {
+              const upcomingUpgrade =
+                row.original.maintenanceTasks?.upgrade_paths?.[0];
+              return (
+                <div className="flex items-center justify-center">
+                  <StatusCell upcomingUpgrade={upcomingUpgrade} />
+                </div>
+              );
+            },
+            meta: {
+              width: 50,
+              styles: {
+                padding: "0px",
+                paddingLeft: "4px",
+              },
+            },
+          }}
         />
       </div>
 
