@@ -34,16 +34,6 @@ async function getSignUpMailContent(signUpEventObj, orgLogoURL) {
     username: signUpEventObj.userName || signUpEventObj.eventPayload.user_name,
   });
 
-  // const message = `
-  //   <html>
-  //       <body>
-  //           <p>Hello,</p>
-  //            <p>Thanks for signing up. We're excited to have you onboard.</p>
-  // <p>To begin using the service, please activate your account by clicking <a href="${activationURL}">here</a>.</p>
-  //           <p>Thanks</p>
-  //       </body>
-  //   </html>`;
-
   return {
     recepientEmail: signUpEventObj.userEmail,
     subject: subject,

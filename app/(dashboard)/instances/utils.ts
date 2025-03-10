@@ -552,6 +552,7 @@ export const getRowBorderStyles = () => {
       borderTopRightRadius: "3px",
       borderBottomRightRadius: "3px",
       left: 0,
+      top: "4px",
     };
   }
   return styles;

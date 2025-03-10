@@ -11,6 +11,8 @@ export const resourceInstanceStatusMap: Record<
 > = {
   Enabled: { category: "success", label: "Enabled" },
   Disabled: { category: "failed", label: "Disabled" },
+  Active: { category: "success", label: "Active" },
+  Expired: { category: "unknown", label: "Expired" },
   True: { category: "success", label: "True" },
   False: { category: "failed", label: "False" },
   true: { category: "success", label: "True" },

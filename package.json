@@ -9,7 +9,8 @@
     "lint": "next lint",
     "format:check": "prettier --check --ignore-path .prettierignore .",
     "format:fix": "prettier --write --ignore-path .gitignore .",
-    "find:unused": "next-unused"
+    "find:unused": "next-unused",
+    "update-api-types": "node scripts/updateAPITypes.js"
   },
   "next-unused": {
     "alias": {},
@@ -80,6 +81,7 @@
     "tailwind-merge": "^2.6.0",
     "tailwindcss-animate": "^1.0.7",
     "uuid": "^10.0.0",
+    "js-base64": "^3.7.5",
     "yup": "^0.32.11"
   },
   "devDependencies": {
@@ -98,6 +100,7 @@
     "nodemon": "^3.1.0",
     "postcss": "^8.4.49",
     "prettier": "^3.1.0",
+    "puppeteer": "^24.3.1",
     "tailwindcss": "^3.4.17",
     "typescript": "5.4.2"
   },
