@@ -13,9 +13,12 @@ import { colors } from "src/themeConfig";
 const ServiceLogoImg = styled("img")({
   height: "40px",
   width: "40px",
-  objectFit: "cover",
+  objectFit: "contain",
   borderRadius: "50%",
   flexShrink: 0,
+  objectPosition: "center",
+  border: "1px solid rgba(0, 0, 0, 0.08)",
+  boxShadow: "0px 1px 2px 0px #1018280D",
 });
 
 function ResourceInstanceOverview(props) {
@@ -23,7 +26,6 @@ function ResourceInstanceOverview(props) {
     region,
     cloudProvider,
     status,
-    isCliManagedResource,
     subscriptionOwner,
     detailedNetworkTopology,
     onViewNodesClick,
@@ -42,7 +44,7 @@ function ResourceInstanceOverview(props) {
     <div
       className="grid rounded-xl overflow-hidden border border-[#E4E7EC]"
       style={{
-        gridTemplateColumns: `repeat(${isCliManagedResource ? 6 : 7}, minmax(0, 1fr))`,
+        gridTemplateColumns: `repeat(7, minmax(0, 1fr))`,
         marginTop: "10px",
       }}
     >
@@ -53,7 +55,7 @@ function ResourceInstanceOverview(props) {
         "Lifecycle Status",
         "Region",
         "Cloud Provider",
-        !isCliManagedResource && "Health Status",
+        "Health Status",
       ]
         .filter((el) => el)
         .map((label, index) => (
@@ -157,19 +159,17 @@ function ResourceInstanceOverview(props) {
         )}
       </div>
 
-      {!isCliManagedResource && (
-        <div
-          style={{ padding: "14px" }}
-          className="flex items-center justify-center"
-        >
-          <InstanceHealthStatusChip
-            computedHealthStatus={healthStatus}
-            detailedNetworkTopology={detailedNetworkTopology}
-            onViewNodesClick={onViewNodesClick}
-            openLinkInSameTab={true}
-          />
-        </div>
-      )}
+      <div
+        style={{ padding: "14px" }}
+        className="flex items-center justify-center"
+      >
+        <InstanceHealthStatusChip
+          computedHealthStatus={healthStatus}
+          detailedNetworkTopology={detailedNetworkTopology}
+          onViewNodesClick={onViewNodesClick}
+          openLinkInSameTab={true}
+        />
+      </div>
     </div>
   );
 }
