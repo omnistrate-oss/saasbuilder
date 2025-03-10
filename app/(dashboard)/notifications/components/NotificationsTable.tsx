@@ -97,7 +97,7 @@ const NotificationsTable = () => {
             serviceOfferingsObj[subscription?.serviceId]?.[
               subscription?.productTierId
             ];
-          const resource = offering.resourceParameters?.find(
+          const resource = offering?.resourceParameters?.find(
             (resource) => resource.resourceId === row.resourceID
           );
           return resource?.name || "-";
