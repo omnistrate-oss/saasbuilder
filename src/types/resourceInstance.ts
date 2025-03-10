@@ -14,6 +14,9 @@ export type ResourceInstance =
 export type ResourceInstanceNetworkTopology =
   components["schemas"]["ResourceNetworkTopologyResult"];
 
+export type ResourceNetworkTopologyAdditionalEndpoint =
+  components["schemas"]["ClusterEndpoint"];
+
 export type ResourceInstanceNode =
   components["schemas"]["NodeNetworkTopologyResult"];
 
