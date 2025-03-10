@@ -62,8 +62,8 @@ export const getAccessControlRoute = (userId?: string) => {
   return "/access-control";
 };
 
-export const getAuditLogsRoute = () => {
-  return "/audit-logs";
+export const getEventsRoute = () => {
+  return "/events";
 };
 
 export const getNotificationsRoute = () => {

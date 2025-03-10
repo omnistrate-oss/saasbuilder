@@ -3,7 +3,7 @@ import { ArrowOutward } from "@mui/icons-material";
 import Button from "components/Button/Button";
 import DataGridHeaderTitle from "components/Headers/DataGridHeaderTitle";
 
-import { getAuditLogsRoute } from "src/utils/routes";
+import { getEventsRoute } from "src/utils/routes";
 
 const DashboardLogsTableHeader = () => {
   return (
@@ -16,11 +16,11 @@ const DashboardLogsTableHeader = () => {
       <Button
         data-testid="view-all-audit-logs-button"
         variant="outlined"
-        href={getAuditLogsRoute()}
+        href={getEventsRoute()}
         target="_blank"
         endIcon={<ArrowOutward />}
       >
-        View all audit logs
+        View all events
       </Button>
     </div>
   );

@@ -461,8 +461,8 @@ const InstancesTableHeader = ({
     <div>
       <div className="flex items-center justify-between gap-4 py-4 px-6 border-b border-[#EAECF0]">
         <DataGridHeaderTitle
-          title="List of Instances"
-          desc="Details of instances"
+          title="List of Deployments"
+          desc="Details of deployments"
           count={count}
           units={{ singular: "Instance", plural: "Instances" }}
         />

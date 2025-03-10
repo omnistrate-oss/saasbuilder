@@ -13,7 +13,7 @@ export const PAGE_TITLE_MAP = {
   "/cloud-accounts": "Cloud Accounts",
   "/custom-networks": "Custom Networks",
   "/access-control": "Access Control",
-  "/audit-logs": "Audit Logs",
+  "/events": "Events",
   "/notifications": "Notifications",
   "/settings": "Profile Settings",
   "/billing": "Billing",

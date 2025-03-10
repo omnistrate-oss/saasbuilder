@@ -36,9 +36,9 @@ type FilterType = "failed" | "unhealthy" | "overloaded";
 export type InstanceFilterStatus = Record<FilterType, boolean>;
 
 const filterLabels: Record<FilterType, string> = {
-  failed: "Failed instances",
-  unhealthy: "Unhealthy instances",
-  overloaded: "Overloaded instances",
+  failed: "Failed deployments",
+  unhealthy: "Unhealthy deployments",
+  overloaded: "Overloaded deployments",
 };
 
 type InstanceFilterToggleProps = {

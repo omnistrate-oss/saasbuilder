@@ -3,13 +3,16 @@ import RefreshWithToolTip from "components/RefreshWithTooltip/RefreshWithToolTip
 
 import { SetState } from "src/types/common/reactGenerics";
 import { ServiceOffering } from "src/types/serviceOffering";
-import ServiceFilter from "app/(dashboard)/notifications/components/ServiceFilter";
+
 import {
   DateRange,
   DateTimePickerPopover,
 } from "src/components/DateRangePicker/DateTimeRangePickerStatic";
+import AuditLogsEventFilterDropdown from "src/components/ResourceInstance/AuditLogs/components/AuditLogsEventFilterDropdown";
+import { EventType } from "src/types/event";
+import ServiceFilter from "./ServiceFilter";
 
-type AuditLogsTableHeaderProps = {
+type EventsTableHeaderProps = {
   refetchAuditLogs: () => void;
   isFetchingAuditLogs: boolean;
   selectedDateRange: DateRange;
@@ -17,9 +20,11 @@ type AuditLogsTableHeaderProps = {
   selectedServiceId: string;
   setSelectedServiceId: SetState<string>;
   serviceOfferings: ServiceOffering[];
+  selectedEventTypes: EventType[];
+  setSelectedEventTypes: SetState<EventType[]>;
 };
 
-const AuditLogsTableHeader: React.FC<AuditLogsTableHeaderProps> = ({
+const EventsTableHeader: React.FC<EventsTableHeaderProps> = ({
   refetchAuditLogs,
   isFetchingAuditLogs,
   selectedDateRange,
@@ -27,12 +32,14 @@ const AuditLogsTableHeader: React.FC<AuditLogsTableHeaderProps> = ({
   selectedServiceId,
   setSelectedServiceId,
   serviceOfferings,
+  selectedEventTypes,
+  setSelectedEventTypes,
 }) => {
   return (
     <div className="flex items-center justify-between gap-4 py-5 px-6">
       <DataGridHeaderTitle
-        title="List of Audit Logs"
-        desc="Detailed audit trail of user actions performed on resource instances"
+        title="List of Events"
+        desc="Details of instance events"
       />
 
       <div className="flex justify-end items-center gap-4 flex-wrap flex-grow">
@@ -43,6 +50,11 @@ const AuditLogsTableHeader: React.FC<AuditLogsTableHeaderProps> = ({
         <DateTimePickerPopover
           dateRange={selectedDateRange}
           setDateRange={setSelectedDateRange}
+        />
+        <AuditLogsEventFilterDropdown
+          selectedEventTypes={selectedEventTypes}
+          setSelectedEventTypes={setSelectedEventTypes}
+          filterEventTypes={["Customer", "Infra", "Maintenance"]}
         />
 
         <ServiceFilter
@@ -55,4 +67,4 @@ const AuditLogsTableHeader: React.FC<AuditLogsTableHeaderProps> = ({
   );
 };
 
-export default AuditLogsTableHeader;
+export default EventsTableHeader;
