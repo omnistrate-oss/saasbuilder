@@ -13,9 +13,12 @@ import { colors } from "src/themeConfig";
 const ServiceLogoImg = styled("img")({
   height: "40px",
   width: "40px",
-  objectFit: "cover",
+  objectFit: "contain",
   borderRadius: "50%",
   flexShrink: 0,
+  objectPosition: "center",
+  border: "1px solid rgba(0, 0, 0, 0.08)",
+  boxShadow: "0px 1px 2px 0px #1018280D",
 });
 
 function ResourceInstanceOverview(props) {
