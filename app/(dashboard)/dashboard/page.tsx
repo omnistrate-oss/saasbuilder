@@ -8,7 +8,7 @@ import ClusterLocations from "src/features/Access/Dashboard/ClusterLocations";
 import useInstances from "../instances/hooks/useInstances";
 import DashboardLogsTableHeader from "./components/DashboardLogsTableHeader";
 import EventsTable from "../components/EventsTable/EventsTable";
-import useAuditLogs from "../audit-logs/hooks/useAuditLogs";
+import useAuditLogs from "../events/hooks/useAuditLogs";
 import { useGlobalData } from "src/providers/GlobalDataProvider";
 // import ChartCard from "./components/ChartCard";
 // import LifecycleStatusChart from "./charts/LifecycleStatusChart";

@@ -30,7 +30,7 @@ import {
   getInstancesRoute,
   getAccessControlRoute,
   getSubscriptionsRoute,
-  getAuditLogsRoute,
+  getEventsRoute,
   getNotificationsRoute,
   getBillingRoute,
   getSettingsRoute,
@@ -184,7 +184,7 @@ const Sidebar = () => {
           ) || currentPath.startsWith("/instances"),
         "Governance Hub": [
           getAccessControlRoute(),
-          getAuditLogsRoute(),
+          getEventsRoute(),
           getNotificationsRoute(),
         ].includes(currentPath),
         "Account Management": [
@@ -295,7 +295,7 @@ const Sidebar = () => {
         isExpandible: true,
         subItems: [
           { name: "Access Control", href: getAccessControlRoute() },
-          { name: "Audit Logs", href: getAuditLogsRoute() },
+          { name: "Events", href: getEventsRoute() },
           { name: "Notifications", href: getNotificationsRoute() },
         ],
       },

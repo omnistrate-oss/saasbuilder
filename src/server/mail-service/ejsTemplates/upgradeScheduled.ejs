@@ -134,7 +134,7 @@
                                               padding: 12px 0 0;
                                             "
                                           >
-                                            <%= instance_name %> Upgrade <br />
+                                            Upgrade <br />
                                             Notification
                                           </td>
                                         </tr>
@@ -297,18 +297,22 @@
                                                 text-align: center;
                                               "
                                             >
-                                              Your deployment (<span style="font-weight: 800"><%= instance_name %></span>) for
+                                              Your deployment (<span style="font-weight: 800"><%= instance_id %></span>) for
                                               <span style="font-weight: 800"><%= service_name %></span> service
-                                              under
+                                              under the
                                               <span style="font-weight: 800"><%= service_plan_name %></span>
-                                              <% if (is_now) { %>
+                                              <% if (!is_scheduled) { %>
                                                 is scheduled for an upgrade now.
                                               <% } else { %>
                                                 is scheduled for a version upgrade on 
                                                 <span style="font-weight: 800"><%= upgrade_date %></span>
                                               <% } %>
                                               <br />
-                                              If you have any questions, please contact support.
+                                              <% if (support_email) { %>
+                                                If you have any questions, please contact <a href="mailto:<%= support_email %>">support</a>.
+                                              <% } else { %>
+                                                If you have any questions, please contact support.
+                                              <% } %>
                                             </p>
                                           </td>
                                         </tr>

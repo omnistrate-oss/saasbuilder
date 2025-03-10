@@ -134,7 +134,7 @@
                                               padding: 12px 0 0;
                                             "
                                           >
-                                            <%= instance_name %> Upgrade <br />
+                                            Upgrade <br />
                                             Completed!
                                           </td>
                                         </tr>
@@ -297,14 +297,18 @@
                                                 text-align: center;
                                               "
                                             >
-                                              Your deployment (<span style="font-weight: 800"><%= instance_name %></span>) for
+                                              The upgrade of your deployment (<span style="font-weight: 800"><%= instance_id %></span>) for
                                               <span style="font-weight: 800"><%= service_name %></span> service
-                                              under
+                                              under the
                                               <span style="font-weight: 800"><%= service_plan_name %></span>
-                                              has been upgraded.
+                                              has been completed.
                                               <br/>
 
-                                              If you have any questions or need further assistance, please contact support.
+                                              <% if (support_email) { %>
+                                                If you have any questions or need further assistance, please contact <a href="mailto:<%= support_email %>">support</a>.
+                                              <% } else { %>
+                                                If you have any questions or need further assistance, please contact support.
+                                              <% } %>
                                             </p>
                                           </td>
                                         </tr>

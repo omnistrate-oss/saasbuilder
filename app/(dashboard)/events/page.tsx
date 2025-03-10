@@ -5,19 +5,21 @@ import useAuditLogs from "./hooks/useAuditLogs";
 import PageTitle from "../components/Layout/PageTitle";
 import AuditLogsIcon from "../components/Icons/AuditLogsIcon";
 import PageContainer from "../components/Layout/PageContainer";
-import AuditLogsTableHeader from "./components/AuditLogsTableHeader";
+import EventsTableHeader from "./components/EventsTableHeader";
 
 import { useGlobalData } from "src/providers/GlobalDataProvider";
 
 import { initialRangeState } from "components/DateRangePicker/DateTimeRangePickerStatic";
 import { DateRange } from "src/components/DateRangePicker/DateTimeRangePickerStatic";
 import EventsTable from "../components/EventsTable/EventsTable";
+import { EventType } from "src/types/event";
 
-const AuditLogsPage = () => {
+const EventsPage = () => {
   const [pageIndex, setPageIndex] = useState(0);
   const [selectedDateRange, setSelectedDateRange] =
     useState<DateRange>(initialRangeState);
   const [selectedServiceId, setSelectedServiceId] = useState<string>("");
+  const [selectedEventTypes, setSelectedEventTypes] = useState<EventType[]>([]);
 
   const { serviceOfferings, isLoadingSubscriptions } = useGlobalData();
 
@@ -31,7 +33,9 @@ const AuditLogsPage = () => {
   } = useAuditLogs({
     startDate: selectedDateRange.startDate ?? undefined,
     endDate: selectedDateRange.endDate ?? undefined,
-    eventSourceTypes: "Customer",
+    eventSourceTypes: selectedEventTypes?.length
+      ? selectedEventTypes
+      : ["Customer", "Infra", "Maintenance"],
     serviceID: selectedServiceId,
   });
 
@@ -42,12 +46,12 @@ const AuditLogsPage = () => {
   return (
     <PageContainer>
       <PageTitle icon={AuditLogsIcon} className="mb-6">
-        Audit Logs
+        Events
       </PageTitle>
 
       <div>
         <EventsTable
-          HeaderComponent={AuditLogsTableHeader}
+          HeaderComponent={EventsTableHeader}
           HeaderProps={{
             refetchAuditLogs: () => {
               setPageIndex(0);
@@ -59,6 +63,8 @@ const AuditLogsPage = () => {
             selectedServiceId,
             setSelectedServiceId,
             serviceOfferings,
+            selectedEventTypes,
+            setSelectedEventTypes,
           }}
           columns={[
             "expand",
@@ -66,6 +72,7 @@ const AuditLogsPage = () => {
             "serviceName",
             "resourceType",
             "time",
+            "type",
             "message",
             "user",
             "subscriptionPlan",
@@ -86,4 +93,4 @@ const AuditLogsPage = () => {
   );
 };
 
-export default AuditLogsPage;
+export default EventsPage;

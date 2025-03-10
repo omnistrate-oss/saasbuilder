@@ -61,6 +61,7 @@ function startMailServiceCron() {
       console.log("Events", events);
       const orgDetailsResponse = await getProviderOrgDetails();
       const orgLogoURL = orgDetailsResponse.data.orgLogoURL;
+      const orgSupportEmail = orgDetailsResponse.data.orgSupportEmail;
 
       const mailPromises = [];
 
@@ -140,7 +141,8 @@ function startMailServiceCron() {
             case eventTypes.InstanceMaintenanceScheduled: {
               mailContent = await getUpgradeScheduledMailContent(
                 event,
-                orgLogoURL
+                orgLogoURL,
+                orgSupportEmail
               );
               break;
             }
@@ -148,7 +150,8 @@ function startMailServiceCron() {
             case eventTypes.InstanceMaintenanceCompleted: {
               mailContent = await getUpgradeCompletedMailContent(
                 event,
-                orgLogoURL
+                orgLogoURL,
+                orgSupportEmail
               );
               break;
             }
