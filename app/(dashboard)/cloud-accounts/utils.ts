@@ -68,9 +68,9 @@ export const getInitialValues = (
     (sub) => byoaServiceOfferingsObj[sub.serviceId]?.[sub.productTierId]
   );
 
-  const rootSubscription = filteredSubscriptions.find(
-    (sub) => sub.roleType === "root"
-  );
+  const rootSubscription = filteredSubscriptions
+    .sort((a, b) => a.serviceName.localeCompare(b.serviceName))
+    .find((sub) => sub.roleType === "root");
 
   const serviceId =
     rootSubscription?.serviceId ||

@@ -40,6 +40,10 @@ module.exports = {
           200: "var(--error-200)",
           700: "var(--error-700)",
         },
+
+        warning: {
+          200: "var(--warning-200)",
+        },
       },
     },
   },
