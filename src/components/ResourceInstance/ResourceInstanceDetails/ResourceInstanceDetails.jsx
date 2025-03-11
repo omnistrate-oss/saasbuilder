@@ -365,6 +365,7 @@ function ResourceInstanceDetails(props) {
     <Box marginTop={"20px"}>
       {hasPendingUpgrades && (
         <UpgradeScheduledNotificationBar
+          upgradeStatus={maintenanceTasks.upgrade_paths[0].upgrade_status}
           upgradeDate={
             maintenanceTasks.upgrade_paths?.[0]?.upgrade_path_scheduled_at
           }

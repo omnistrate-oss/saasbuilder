@@ -1,4 +1,5 @@
 import { Text } from "src/components/Typography/Typography";
+import { UpgradeStatus } from "src/types/resourceInstance";
 
 const BellIcon = () => {
   return (
@@ -109,34 +110,35 @@ const BellIcon = () => {
 
 const UpgradeScheduledNotificationBar = ({
   upgradeDate,
+  upgradeStatus,
 }: {
   upgradeDate: string;
+  upgradeStatus: UpgradeStatus;
 }) => {
   return (
     <div
-      className="rounded-xl border border-gray-200 shadow-[0_1px_2px_0_#0A0D120D] overflow-hidden"
-      style={{ marginBottom: "20px" }}
+      className="rounded-xl border border-warning-200 shadow-[0_1px_2px_0_#0A0D120D] overflow-hidden flex items-center gap-4 p-4"
+      style={{ marginBottom: "20px", backgroundColor: "#FFFAEB" }}
     >
-      <div
-        className="flex items-center gap-4 p-4 rounded-xl"
-        style={{ borderTop: "3px solid #717680" }}
-      >
-        <BellIcon />
+      <BellIcon />
 
-        <Text size="small" weight="semibold" color="#414651">
-          This deployment is scheduled for an upgrade on{" "}
-          {new Date(upgradeDate).toLocaleString("en-GB", {
-            timeZone: "UTC",
-            year: "numeric",
-            month: "long",
-            day: "numeric",
-            hour: "2-digit",
-            minute: "2-digit",
-            hour12: false,
-          })}{" "}
-          UTC
-        </Text>
-      </div>
+      <Text size="small" weight="semibold" color="#414651">
+        {upgradeDate
+          ? `This deployment is scheduled for an upgrade on ${new Date(
+              upgradeDate
+            ).toLocaleString("en-GB", {
+              timeZone: "UTC",
+              year: "numeric",
+              month: "long",
+              day: "numeric",
+              hour: "2-digit",
+              minute: "2-digit",
+              hour12: false,
+            })} UTC`
+          : upgradeStatus === "IN_PROGRESS"
+            ? "This deployment is currently being upgraded"
+            : "This deployment is scheduled for an upgrade"}
+      </Text>
     </div>
   );
 };

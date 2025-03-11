@@ -31,3 +31,12 @@ export type InstanceComputedHealthStatus =
   | "DEGRADED"
   | "UNKNOWN"
   | "NA";
+
+export type UpgradeStatus =
+  | "IN_PROGRESS"
+  | "COMPLETE"
+  | "SCHEDULED"
+  | "PENDING"
+  | "FAILED"
+  | "PAUSED"
+  | "CANCELLED";
