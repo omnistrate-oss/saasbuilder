@@ -7,6 +7,8 @@ import DataGridHeaderTitle from "components/Headers/DataGridHeaderTitle";
 import RefreshWithToolTip from "components/RefreshWithTooltip/RefreshWithToolTip";
 
 import { CircularProgress } from "@mui/material";
+import ConnectIcon from "src/components/Icons/Connect/Connect";
+import DisconnectIcon from "src/components/Icons/Disconnect/Disconnect";
 
 const CloudAccountsTableHeader = ({
   count,
@@ -44,6 +46,7 @@ const CloudAccountsTableHeader = ({
           refetch={refetchInstances}
           disabled={isFetchingInstances}
         />
+
         <Button
           data-testid="delete-button"
           variant="outlined"
@@ -65,6 +68,52 @@ const CloudAccountsTableHeader = ({
           }
         >
           Delete
+        </Button>
+        <Button
+          data-testid="disconnect-button"
+          variant="outlined"
+          disabled={
+            !selectedInstance || selectedInstance.status === "DISCONNECT"
+          }
+          onClick={onDeleteClick}
+          startIcon={
+            <DisconnectIcon
+              disabled={
+                !selectedInstance || selectedInstance.status === "DISCONNECT"
+              }
+            />
+          }
+          disabledMessage={
+            !selectedInstance
+              ? "Please select a cloud account"
+              : selectedInstance.status === "DISCONNECT"
+                ? "Cloud account deletion is already in progress"
+                : ""
+          }
+        >
+          Disconnect
+        </Button>
+        <Button
+          data-testid="connect-button"
+          variant="outlined"
+          disabled={!selectedInstance || selectedInstance.status === "CONNECT"}
+          onClick={onDeleteClick}
+          startIcon={
+            <ConnectIcon
+              disabled={
+                !selectedInstance || selectedInstance.status === "CONNECT"
+              }
+            />
+          }
+          disabledMessage={
+            !selectedInstance
+              ? "Please select a cloud account"
+              : selectedInstance.status === "CONNECT"
+                ? "Cloud account deletion is already in progress"
+                : ""
+          }
+        >
+          Connect
         </Button>
         <Button
           data-testid="create-button"
