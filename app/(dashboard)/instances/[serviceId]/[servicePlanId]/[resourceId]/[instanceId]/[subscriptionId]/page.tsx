@@ -145,6 +145,14 @@ const InstanceDetailsPage = ({
     [resourceInstanceData, isCliManagedResource, resourceType]
   );
 
+  const enabledTabs = useMemo(
+    () =>
+      resourceInstanceData?.status === "DISCONNECT"
+        ? ["resourceInstanceDetails", "connectivity", "auditLogs"] // Fixed predefined tabs
+        : Object.keys(tabs), // Extract only keys from tabs
+    [resourceInstanceData, isCliManagedResource, resourceType, tabs]
+  );
+
   if (
     !isFetchingServiceOfferings &&
     !isFetchingSubscriptions &&
@@ -251,18 +259,9 @@ const InstanceDetailsPage = ({
           }}
         />
       </Collapse>
-      <Tabs
-        value={currentTab}
-        sx={{ marginTop: "20px" }}
-        // sx={{
-        //   marginTop: "24px",
-        //   borderBottom: "1px solid #E9EAEB",
-        //   "& .MuiTabs-indicator": {
-        //     backgroundColor: colors.purple700,
-        //   },
-        // }}
-      >
+      <Tabs value={currentTab} sx={{ marginTop: "20px" }}>
         {Object.entries(tabs).map(([key, value]) => {
+          const isEnabled = enabledTabs?.includes(key);
           return (
             <Tab
               key={key}
@@ -272,15 +271,7 @@ const InstanceDetailsPage = ({
                 setCurrentTab(value as CurrentTab);
               }}
               disableRipple
-              // sx={{
-              //   minWidth: "0px",
-              //   textTransform: "none",
-              //   fontWeight: "600",
-              //   color: "#717680",
-              //   "&.Mui-selected": {
-              //     color: colors.purple800,
-              //   },
-              // }}
+              disabled={!isEnabled}
             />
           );
         })}

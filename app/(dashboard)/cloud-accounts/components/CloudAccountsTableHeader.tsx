@@ -19,6 +19,8 @@ const CloudAccountsTableHeader = ({
   selectedInstance,
   refetchInstances,
   isFetchingInstances,
+  onConnectClick,
+  onDisconnectClick,
 }) => {
   return (
     <div className="py-5 px-6 flex items justify-between gap-4">
@@ -75,7 +77,7 @@ const CloudAccountsTableHeader = ({
           disabled={
             !selectedInstance || selectedInstance.status === "DISCONNECT"
           }
-          onClick={onDeleteClick}
+          onClick={onDisconnectClick}
           startIcon={
             <DisconnectIcon
               disabled={
@@ -97,7 +99,7 @@ const CloudAccountsTableHeader = ({
           data-testid="connect-button"
           variant="outlined"
           disabled={!selectedInstance || selectedInstance.status === "CONNECT"}
-          onClick={onDeleteClick}
+          onClick={onConnectClick}
           startIcon={
             <ConnectIcon
               disabled={

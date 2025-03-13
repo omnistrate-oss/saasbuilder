@@ -188,6 +188,26 @@ export const getTerraformKit = (
   );
 };
 
+export const disconnected = (data) => {
+  const { instanceId, disconnect, serviceId, subscriptionId } = data;
+  const queryParams: any = {};
+
+  if (subscriptionId) {
+    queryParams.subscriptionId = subscriptionId;
+  }
+
+  return axios.post(
+    `/resource-instance/account-config/${instanceId}`,
+    {
+      setConnections: disconnect,
+      serviceId: serviceId,
+    },
+    {
+      params: queryParams,
+    }
+  );
+};
+
 export const failoverResourceInstanceNode = (data) => {
   const {
     serviceProviderId,
