@@ -1,19 +1,14 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
 import { useSelector } from "react-redux";
-import { Box, LinearProgress, Stack } from "@mui/material";
+import { Box, Stack } from "@mui/material";
 import ArrowOutwardIcon from "@mui/icons-material/ArrowOutward";
-
 import PageTitle from "../components/Layout/PageTitle";
 import BillingIcon from "../components/Icons/BillingIcon";
 import PageContainer from "../components/Layout/PageContainer";
 import AccountManagementHeader from "../components/AccountManagement/AccountManagementHeader";
-
 import { selectUserrootData } from "src/slices/userDataSlice";
-import useBillingDetails from "src/hooks/query/useBillingDetails";
-
 import Card from "components/Card/Card";
 import Chip from "components/Chip/Chip";
 import Button from "components/Button/Button";
@@ -21,11 +16,21 @@ import { DisplayText, Text } from "components/Typography/Typography";
 import LoadingSpinner from "components/LoadingSpinner/LoadingSpinner";
 import StaticBilling from "./components/StaticBilling";
 import { isStaticBillingEnabled } from "./utils";
+import useBillingDetails from "./hooks/useBillingDetails";
+import useConsumptionInvoices from "./hooks/useConsumptionInvoices";
+import useConsumptionUsage from "./hooks/useConsumptionUsage";
+import ConsumptionUsage from "./components/ConsumptionUsage";
 
 const BillingPage = () => {
   const selectUser = useSelector(selectUserrootData);
-  const [isIframeLoading, setIsIframeLoading] = useState(true);
   const { isLoading, data: billingDetails, error } = useBillingDetails();
+  const { data: invoicesData } = useConsumptionInvoices();
+  const { data: consumptionUsageData } = useConsumptionUsage();
+
+  const invoices = invoicesData?.invoices || [];
+
+  console.log("invoices", invoices);
+  console.log("Consumption usage data", consumptionUsageData);
 
   const paymentConfigured = billingDetails?.paymentConfigured;
   let errorDisplayText = "";
@@ -119,7 +124,7 @@ const BillingPage = () => {
                   />
                 </Box>
                 <Link
-                  href={billingDetails?.paymentInfoPortalURL}
+                  href={billingDetails?.paymentInfoPortalURL ?? ""}
                   target="_blank"
                 >
                   <Button variant="outlined">
@@ -134,16 +139,7 @@ const BillingPage = () => {
                 </Link>
               </Stack>
             </Card>
-            <Box mt={3}>
-              {isIframeLoading && <LinearProgress />}
-              <iframe
-                onLoad={() => {
-                  setIsIframeLoading(false);
-                }}
-                src={billingDetails?.billingEmbedURL}
-                style={{ width: "100%", height: 900, border: "none" }}
-              />
-            </Box>
+            <ConsumptionUsage />
           </>
         )}
       </PageContainer>
