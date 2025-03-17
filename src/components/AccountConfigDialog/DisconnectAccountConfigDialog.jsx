@@ -375,6 +375,18 @@ const Check = ({
                 change to Disconnected.
               </Text>
             </ListItem>
+            <ListItem>
+              <Text size="small" weight="semibold" color="#414651">
+                If you need to update the CloudFormation stack configuration
+                <StyledLink
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  href={`${instance.result_params?.disconnect_cloudformation_url}`}
+                >
+                  click here.
+                </StyledLink>
+              </Text>
+            </ListItem>
           </List>
         </Box>
       )}
