@@ -418,7 +418,7 @@ function DisconnectAccountConfigDialog(props) {
     {
       onSuccess: () => {
         refetchInstances();
-        snackbar.showSuccess("Deleting account config...");
+        snackbar.showSuccess("Disconnect account config...");
         connectStatechange(stateAccountConfigStepper.run);
         // eslint-disable-next-line no-use-before-define
         formik.resetForm();
