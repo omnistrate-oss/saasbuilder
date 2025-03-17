@@ -168,7 +168,7 @@ const polling = (instance, fetchClickedInstanceDetails, setClickedInstance) => {
   }, []);
 };
 
-const Trigger = ({ formData }) => {
+const Trigger = ({ formData, serviceOrgName }) => {
   return (
     <Box width={"100%"} display={"flex"} flexDirection={"column"} gap="10px">
       <Stack direction="row" alignItems="center" gap="16px">
@@ -192,8 +192,8 @@ const Trigger = ({ formData }) => {
       <List>
         <ListItem>
           <Text size="small" weight="regular" color="#414651">
-            Connecting your cloud account will allow DataRobot to manage and
-            automate all associated instances.
+            {`Connecting your cloud account will allow ${serviceOrgName} to manage and
+            automate all associated instances.`}
           </Text>
         </ListItem>
       </List>
@@ -230,6 +230,7 @@ const Run = ({
   instance,
   fetchClickedInstanceDetails,
   setClickedInstance,
+  serviceOrgName,
 }) => {
   useEffect(() => {
     if (activeStepRun === 0 && instance.status === "connecting") {
@@ -282,7 +283,7 @@ const Run = ({
             >
               this
             </StyledLink>
-             CloudFormation template to grant DataRobot the required
+             CloudFormation template to grant {`${serviceOrgName}`} the required
             permissions.
           </Text>
           <Chip
@@ -406,6 +407,8 @@ function ConnectAccountConfigDialog(props) {
     refetchInstances,
     fetchClickedInstanceDetails,
     setClickedInstance,
+    serviceId,
+    serviceOrgName,
   } = props;
   const [connectState, setConnectState] = useState(
     stateAccountConfigStepper.trigger
@@ -473,7 +476,7 @@ function ConnectAccountConfigDialog(props) {
         </Header>
         <Content>
           {connectState === stateAccountConfigStepper.trigger && (
-            <Trigger formData={formik} />
+            <Trigger formData={formik} serviceOrgName={serviceOrgName} />
           )}
           {connectState === stateAccountConfigStepper.run && (
             <Run
@@ -482,6 +485,7 @@ function ConnectAccountConfigDialog(props) {
               instance={instance}
               fetchClickedInstanceDetails={fetchClickedInstanceDetails}
               setClickedInstance={setClickedInstance}
+              serviceOrgName={serviceOrgName}
             />
           )}
 

@@ -167,7 +167,7 @@ const polling = (instance, fetchClickedInstanceDetails) => {
   }, []);
 };
 
-const Trigger = ({ formData }) => {
+const Trigger = ({ formData, serviceOrgName }) => {
   return (
     <Box width={"100%"} display={"flex"} flexDirection={"column"} gap="10px">
       <Stack direction="row" alignItems="center" gap="16px">
@@ -191,8 +191,8 @@ const Trigger = ({ formData }) => {
       <List>
         <ListItem>
           <Text size="small" weight="regular" color="#414651">
-            Disconnecting your cloud account will disconnect all associated
-            instances from the DataRobot Control Plane
+            {`Disconnecting your cloud account will disconnect all associated
+            instances from the ${serviceOrgName} Control Plane`}
           </Text>
         </ListItem>
       </List>
@@ -229,6 +229,7 @@ const Run = ({
   instance,
   fetchClickedInstanceDetails,
   setClickedInstance,
+  serviceOrgName,
 }) => {
   useEffect(() => {
     if (activeStepRun === 0 && instance.status === "detachning") {
@@ -280,8 +281,8 @@ const Run = ({
             >
               this
             </StyledLink>
-             CloudFormation template to revoke all DataRobot permissions from
-            your account.
+             CloudFormation template to revoke all {`${serviceOrgName}`}
+            permissions from your account.
           </Text>
           <Chip
             label={
@@ -405,6 +406,7 @@ function DisconnectAccountConfigDialog(props) {
     fetchClickedInstanceDetails,
     setClickedInstance,
     serviceId,
+    serviceOrgName,
   } = props;
   const [disconnectState, setDisconnectState] = useState(
     stateAccountConfigStepper.trigger
@@ -472,7 +474,7 @@ function DisconnectAccountConfigDialog(props) {
         </Header>
         <Content>
           {disconnectState === stateAccountConfigStepper.trigger && (
-            <Trigger formData={formik} />
+            <Trigger formData={formik} serviceOrgName={serviceOrgName} />
           )}
           {disconnectState === stateAccountConfigStepper.run && (
             <Run
@@ -481,6 +483,7 @@ function DisconnectAccountConfigDialog(props) {
               instance={instance}
               fetchClickedInstanceDetails={fetchClickedInstanceDetails}
               setClickedInstance={setClickedInstance}
+              serviceOrgName={serviceOrgName}
             />
           )}
 

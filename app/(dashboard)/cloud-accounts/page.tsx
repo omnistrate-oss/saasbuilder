@@ -602,11 +602,13 @@ const CloudAccountsPage = () => {
         handleClose={() => {
           setIsOverlayOpen(false);
         }}
+        isFetching={isFetchingInstances}
         instance={selectedInstance}
         refetchInstances={refetchInstances}
         fetchClickedInstanceDetails={fetchClickedInstanceDetails}
         setClickedInstance={setClickedInstance}
         serviceId={selectedInstanceSubscription?.serviceId}
+        serviceOrgName={selectedInstanceSubscription?.serviceOrgName}
       />
 
       <DisconnectAccountConfigDialog
@@ -620,6 +622,7 @@ const CloudAccountsPage = () => {
         fetchClickedInstanceDetails={fetchClickedInstanceDetails}
         setClickedInstance={setClickedInstance}
         serviceId={selectedInstanceSubscription?.serviceId}
+        serviceOrgName={selectedInstanceSubscription?.serviceOrgName}
       />
       <CloudProviderAccountOrgIdModal
         isAccessPage
