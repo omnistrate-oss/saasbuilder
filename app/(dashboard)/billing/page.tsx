@@ -17,20 +17,17 @@ import LoadingSpinner from "components/LoadingSpinner/LoadingSpinner";
 import StaticBilling from "./components/StaticBilling";
 import { isStaticBillingEnabled } from "./utils";
 import useBillingDetails from "./hooks/useBillingDetails";
-import useConsumptionInvoices from "./hooks/useConsumptionInvoices";
-import useConsumptionUsage from "./hooks/useConsumptionUsage";
 import ConsumptionUsage from "./components/ConsumptionUsage";
+import InvoicesTable from "./components/InvoicesTable";
+import useConsumptionUsagePerDay from "./hooks/useConsumptionUsagePerDay";
 
 const BillingPage = () => {
   const selectUser = useSelector(selectUserrootData);
   const { isLoading, data: billingDetails, error } = useBillingDetails();
-  const { data: invoicesData } = useConsumptionInvoices();
-  const { data: consumptionUsageData } = useConsumptionUsage();
-
-  const invoices = invoicesData?.invoices || [];
-
-  console.log("invoices", invoices);
-  console.log("Consumption usage data", consumptionUsageData);
+  const {
+    data: consumptionUsagePerDayData,
+    isLoading: isLoadingConsumptionData,
+  } = useConsumptionUsagePerDay();
 
   const paymentConfigured = billingDetails?.paymentConfigured;
   let errorDisplayText = "";
@@ -80,7 +77,7 @@ const BillingPage = () => {
           Billing
         </PageTitle>
 
-        {isLoading ? (
+        {isLoading || isLoadingConsumptionData ? (
           <LoadingSpinner />
         ) : isStaticBillingEnabled(selectUser) ? (
           <StaticBilling />
@@ -139,7 +136,10 @@ const BillingPage = () => {
                 </Link>
               </Stack>
             </Card>
-            <ConsumptionUsage />
+            <ConsumptionUsage
+              consumptionUsagePerDayData={consumptionUsagePerDayData}
+            />
+            <InvoicesTable />
           </>
         )}
       </PageContainer>
