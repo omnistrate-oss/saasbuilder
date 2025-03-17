@@ -408,8 +408,8 @@ function DisconnectAccountConfigDialog(props) {
   const accountConfigMutation = useMutation(
     () => {
       const requestPayload = {
-        subscriptionId: selectedInstance?.subscriptionId,
-        instanceId: selectedInstance?.id,
+        subscriptionId: instance?.subscriptionId,
+        instanceId: instance?.id,
         disconnect: false,
         serviceId: serviceId,
       };
@@ -430,8 +430,7 @@ function DisconnectAccountConfigDialog(props) {
       disconnect: "",
     },
     onSubmit: (values) => {
-      if (!selectedInstance) return snackbar.showError("No instance selected");
-      if (!selectedResource) return snackbar.showError("Resource not found");
+      if (!instance) return snackbar.showError("No instance selected");
 
       if (values.disconnect === "disconnect") {
         accountConfigMutation.mutate();
@@ -444,6 +443,11 @@ function DisconnectAccountConfigDialog(props) {
 
   const connectStatechange = (step) => {
     setDisconnectState(step);
+  };
+
+  const handleCancel = () => {
+    formik.resetForm();
+    handleClose();
   };
 
   return (
@@ -483,7 +487,7 @@ function DisconnectAccountConfigDialog(props) {
             variant="outlined"
             sx={{ height: "40px !important", padding: "10px 14px !important" }}
             disabled={isFetching}
-            onClick={handleClose}
+            onClick={handleCancel}
           >
             Cancel
           </Button>
@@ -531,7 +535,7 @@ function DisconnectAccountConfigDialog(props) {
               }}
               disabled={isFetching}
               bgColor={buttonColor}
-              onClick={handleClose}
+              onClick={handleCancel}
             >
               {"Close"} {isFetching && <LoadingSpinnerSmall />}
             </Button>

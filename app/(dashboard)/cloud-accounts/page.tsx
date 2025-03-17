@@ -606,7 +606,7 @@ const CloudAccountsPage = () => {
         refetchInstances={refetchInstances}
         fetchClickedInstanceDetails={fetchClickedInstanceDetails}
         setClickedInstance={setClickedInstance}
-        serviceId={serviceId}
+        serviceId={selectedInstanceSubscription?.serviceId}
       />
 
       <DisconnectAccountConfigDialog
@@ -619,7 +619,7 @@ const CloudAccountsPage = () => {
         refetchInstances={refetchInstances}
         fetchClickedInstanceDetails={fetchClickedInstanceDetails}
         setClickedInstance={setClickedInstance}
-        serviceId={serviceId}
+        serviceId={selectedInstanceSubscription?.serviceId}
       />
       <CloudProviderAccountOrgIdModal
         isAccessPage

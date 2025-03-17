@@ -75,13 +75,17 @@ const CloudAccountsTableHeader = ({
           data-testid="disconnect-button"
           variant="outlined"
           disabled={
-            !selectedInstance || selectedInstance.status === "DISCONNECT"
+            !selectedInstance ||
+            selectedInstance.status === "DISCONNECT" ||
+            selectedInstance?.result_params?.cloud_provider === "gcp"
           }
           onClick={onDisconnectClick}
           startIcon={
             <DisconnectIcon
               disabled={
-                !selectedInstance || selectedInstance.status === "DISCONNECT"
+                !selectedInstance ||
+                selectedInstance.status === "DISCONNECT" ||
+                selectedInstance?.result_params?.cloud_provider === "gcp"
               }
             />
           }
@@ -98,12 +102,20 @@ const CloudAccountsTableHeader = ({
         <Button
           data-testid="connect-button"
           variant="outlined"
-          disabled={!selectedInstance || selectedInstance.status === "CONNECT"}
+          disabled={
+            !selectedInstance ||
+            selectedInstance.status === "CONNECT" ||
+            selectedInstance?.status === "READY" ||
+            selectedInstance?.result_params?.cloud_provider === "gcp"
+          }
           onClick={onConnectClick}
           startIcon={
             <ConnectIcon
               disabled={
-                !selectedInstance || selectedInstance.status === "CONNECT"
+                !selectedInstance ||
+                selectedInstance.status === "CONNECT" ||
+                selectedInstance?.status === "READY" ||
+                selectedInstance?.result_params?.cloud_provider === "gcp"
               }
             />
           }

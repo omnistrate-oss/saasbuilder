@@ -192,6 +192,8 @@ export const disconnected = (data) => {
   const { instanceId, disconnect, serviceId, subscriptionId } = data;
   const queryParams: any = {};
 
+  console.log("check service id", serviceId);
+
   if (subscriptionId) {
     queryParams.subscriptionId = subscriptionId;
   }
@@ -200,7 +202,7 @@ export const disconnected = (data) => {
     `/resource-instance/account-config/${instanceId}`,
     {
       setConnections: disconnect,
-      serviceId: serviceId,
+      serviceId,
     },
     {
       params: queryParams,

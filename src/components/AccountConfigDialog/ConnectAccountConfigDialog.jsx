@@ -409,8 +409,8 @@ function ConnectAccountConfigDialog(props) {
   const accountConfigMutation = useMutation(
     () => {
       const requestPayload = {
-        subscriptionId: selectedInstance?.subscriptionId,
-        instanceId: selectedInstance?.id,
+        subscriptionId: instance?.subscriptionId,
+        instanceId: instance?.id,
         disconnect: true,
         serviceId: serviceId,
       };
@@ -431,8 +431,7 @@ function ConnectAccountConfigDialog(props) {
       connect: "",
     },
     onSubmit: (values) => {
-      if (!selectedInstance) return snackbar.showError("No instance selected");
-      if (!selectedResource) return snackbar.showError("Resource not found");
+      if (!instance) return snackbar.showError("No instance selected");
 
       if (values.connect === "connect") {
         accountConfigMutation.mutate();
@@ -445,6 +444,11 @@ function ConnectAccountConfigDialog(props) {
 
   const connectStatechange = (step) => {
     setConnectState(step);
+  };
+
+  const handleCancel = () => {
+    formik.resetForm();
+    handleClose();
   };
 
   return (
@@ -484,7 +488,7 @@ function ConnectAccountConfigDialog(props) {
             variant="outlined"
             sx={{ height: "40px !important", padding: "10px 14px !important" }}
             disabled={isFetching}
-            onClick={handleClose}
+            onClick={handleCancel}
           >
             Cancel
           </Button>
@@ -532,7 +536,7 @@ function ConnectAccountConfigDialog(props) {
               }}
               disabled={isFetching}
               bgColor={buttonColor}
-              onClick={handleClose}
+              onClick={handleCancel}
             >
               {"Close"} {isFetching && <LoadingSpinnerSmall />}
             </Button>
