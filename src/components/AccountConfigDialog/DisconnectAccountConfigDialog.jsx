@@ -30,6 +30,7 @@ import {
   stateAccountConfigStepper,
   stepsDisconnectRunAccountConfig,
 } from "../Stepper/utils";
+import useSnackbar from "src/hooks/useSnackbar";
 
 const StyledForm = styled(Box)({
   position: "fixed",
@@ -95,76 +96,72 @@ const ListItem = styled(Box)({
   gap: "4px",
 });
 
-const polling = (instance, fetchClickedInstanceDetails) => {
+const usePolling = (
+  instance,
+  fetchClickedInstanceDetails,
+  setClickedInstance
+) => {
   const queryClient = useQueryClient();
   const [isPolling, setIsPolling] = useState(true);
   const timeoutId = useRef();
-  // poll for three times with an interval of 2 seconds
   const pollCountRef = useRef(0);
   const pollInterval = 2000;
   const isMounted = useRef(true);
 
-  const startPolling = async () => {
-    if (!isMounted.current) return;
+  useEffect(() => {
+    const startPolling = async () => {
+      if (!isMounted.current) return;
 
-    let resourceInstance;
+      let resourceInstance;
+      try {
+        const resourceInstanceResponse = await fetchClickedInstanceDetails();
+        resourceInstance = resourceInstanceResponse.data;
+      } catch {}
 
-    try {
-      const resourceInstanceResponse = await fetchClickedInstanceDetails();
-      resourceInstance = resourceInstanceResponse.data;
-    } catch {}
+      if (!isMounted.current) return;
 
-    if (!isMounted.current) return;
+      if (resourceInstance?.status !== instance.status) {
+        setClickedInstance((prev) => ({
+          ...prev,
+          result_params: {
+            ...prev?.result_params,
+            ...resourceInstance.result_params,
+          },
+        }));
 
-    const result_params = resourceInstance?.result_params;
-    if (resourceInstance?.status !== instance.status) {
-      setClickedInstance((prev) => ({
-        ...prev,
-        result_params: { ...prev?.result_params, ...result_params },
-      }));
-
-      queryClient.setQueryData(["instances"], (oldData) => {
-        const result_params = {
-          // @ts-ignore
-          ...oldData?.data?.resourceInstances?.result_params,
-          ...resourceInstance.result_params,
-        };
-
-        return {
+        queryClient.setQueryData(["instances"], (oldData) => ({
           ...oldData,
           data: {
-            resourceInstances: [
-              ...(oldData?.data?.resourceInstances || [])?.map((instance) =>
-                instance?.id === resourceInstance?.id
+            resourceInstances: (oldData?.data?.resourceInstances || []).map(
+              (inst) =>
+                inst?.id === resourceInstance?.id
                   ? {
-                      ...(resourceInstance || {}),
-                      result_params: result_params,
+                      ...resourceInstance,
+                      result_params: resourceInstance.result_params,
                     }
-                  : instance
-              ),
-            ],
+                  : inst
+            ),
           },
-        };
-      });
+        }));
 
-      setIsPolling(false);
-    } else if (pollCountRef.current < 3) {
-      pollCountRef.current += 1;
-      timeoutId.current = setTimeout(() => {
-        startPolling();
-      }, pollInterval);
-    } else {
-      setIsPolling(false);
-    }
-  };
-  startPolling();
-  useEffect(() => {
-    isMounted.current = true;
+        setIsPolling(false);
+      } else if (pollCountRef.current < 3) {
+        pollCountRef.current += 1;
+        timeoutId.current = setTimeout(startPolling, pollInterval);
+      } else {
+        setIsPolling(false);
+      }
+    };
+
+    startPolling();
+
     return () => {
       isMounted.current = false;
       if (timeoutId.current) clearTimeout(timeoutId.current);
     };
-  }, []);
+  }, [instance, fetchClickedInstanceDetails, setClickedInstance, queryClient]);
+
+  return { isPolling };
 };
 
 const Trigger = ({ formData, serviceOrgName }) => {
@@ -242,7 +239,7 @@ const Run = ({
       setActiveStepRun(2);
     }
   }, [activeStepRun, setActiveStepRun, instance]);
-  polling(instance, fetchClickedInstanceDetails, setClickedInstance);
+  usePolling(instance, fetchClickedInstanceDetails, setClickedInstance);
   return (
     <Box width={"100%"} display={"flex"} flexDirection={"column"} gap="10px">
       <Stepper activeStep={activeStepRun} orientation="vertical">
@@ -315,7 +312,7 @@ const Check = ({
   fetchClickedInstanceDetails,
   setClickedInstance,
 }) => {
-  polling(instance, fetchClickedInstanceDetails, setClickedInstance);
+  usePolling(instance, fetchClickedInstanceDetails, setClickedInstance);
   return (
     <Box width={"100%"} display={"flex"} flexDirection={"column"} gap="10px">
       {status === "disconnected" ? (
@@ -408,6 +405,7 @@ function DisconnectAccountConfigDialog(props) {
     serviceId,
     serviceOrgName,
   } = props;
+  const snackbar = useSnackbar();
   const [disconnectState, setDisconnectState] = useState(
     stateAccountConfigStepper.trigger
   );
