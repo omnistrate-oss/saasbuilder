@@ -150,7 +150,7 @@ const InstanceDetailsPage = ({
       resourceInstanceData?.status === "DISCONNECT"
         ? ["resourceInstanceDetails", "connectivity", "auditLogs"] // Fixed predefined tabs
         : Object.keys(tabs), // Extract only keys from tabs
-    [resourceInstanceData, isCliManagedResource, resourceType, tabs]
+    [resourceInstanceData, tabs]
   );
 
   if (
