@@ -16,7 +16,6 @@ const RippleCircle = (props) => {
 
   const color = hexToRgb(colorHex) || "0,0,0";
 
-
   return (
     <Box
       sx={{
