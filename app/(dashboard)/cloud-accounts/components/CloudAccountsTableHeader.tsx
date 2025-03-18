@@ -76,7 +76,8 @@ const CloudAccountsTableHeader = ({
           variant="outlined"
           disabled={
             !selectedInstance ||
-            selectedInstance.status === "DISCONNECT" ||
+            selectedInstance.status === "ATTACHING" ||
+            selectedInstance.status === "CONNECTING" ||
             selectedInstance?.result_params?.cloud_provider === "gcp"
           }
           onClick={onDisconnectClick}
@@ -84,8 +85,8 @@ const CloudAccountsTableHeader = ({
             <DisconnectIcon
               disabled={
                 !selectedInstance ||
-                selectedInstance.status === "DISCONNECTING" ||
-                selectedInstance.status === "DISCONNECTED" ||
+                selectedInstance.status !== "ATTACHING" ||
+                selectedInstance.status !== "CONNECTING" ||
                 selectedInstance?.result_params?.cloud_provider === "gcp"
               }
             />
@@ -108,8 +109,7 @@ const CloudAccountsTableHeader = ({
             !selectedInstance ||
             selectedInstance.status !== "FAILED" ||
             selectedInstance?.status !== "READY" ||
-            selectedInstance?.status !== "DETACHING" ||
-            selectedInstance?.status !== "DISCONNECTING" ||
+            selectedInstance?.status !== "DISCONNECTED" ||
             selectedInstance?.result_params?.cloud_provider === "gcp"
           }
           onClick={onConnectClick}
@@ -119,7 +119,6 @@ const CloudAccountsTableHeader = ({
                 !selectedInstance ||
                 selectedInstance.status !== "FAILED" ||
                 selectedInstance?.status !== "DISCONNECTED" ||
-                selectedInstance?.status !== "ATTACHING" ||
                 selectedInstance?.result_params?.cloud_provider === "gcp"
               }
             />
