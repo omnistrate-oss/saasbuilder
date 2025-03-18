@@ -76,8 +76,10 @@ const CloudAccountsTableHeader = ({
           variant="outlined"
           disabled={
             !selectedInstance ||
+            selectedInstance?.status === "CONNECTING" ||
             selectedInstance.status === "ATTACHING" ||
             selectedInstance.status === "CONNECTING" ||
+            selectedInstance.status === "DISCONNECTED" ||
             selectedInstance?.result_params?.cloud_provider === "gcp"
           }
           onClick={onDisconnectClick}
@@ -85,8 +87,10 @@ const CloudAccountsTableHeader = ({
             <DisconnectIcon
               disabled={
                 !selectedInstance ||
-                selectedInstance.status !== "ATTACHING" ||
-                selectedInstance.status !== "CONNECTING" ||
+                selectedInstance?.status === "CONNECTING" ||
+                selectedInstance.status === "ATTACHING" ||
+                selectedInstance.status === "CONNECTING" ||
+                selectedInstance.status === "DISCONNECTED" ||
                 selectedInstance?.result_params?.cloud_provider === "gcp"
               }
             />
@@ -107,9 +111,9 @@ const CloudAccountsTableHeader = ({
           variant="outlined"
           disabled={
             !selectedInstance ||
-            selectedInstance.status !== "FAILED" ||
-            selectedInstance?.status !== "READY" ||
-            selectedInstance?.status !== "DISCONNECTED" ||
+            selectedInstance?.status === "READY" ||
+            selectedInstance?.status === "DISCONNECTING" ||
+            selectedInstance?.status === "DETACHING" ||
             selectedInstance?.result_params?.cloud_provider === "gcp"
           }
           onClick={onConnectClick}
@@ -117,8 +121,9 @@ const CloudAccountsTableHeader = ({
             <ConnectIcon
               disabled={
                 !selectedInstance ||
-                selectedInstance.status !== "FAILED" ||
-                selectedInstance?.status !== "DISCONNECTED" ||
+                selectedInstance?.status === "READY" ||
+                selectedInstance?.status === "DISCONNECTING" ||
+                selectedInstance?.status === "DETACHING" ||
                 selectedInstance?.result_params?.cloud_provider === "gcp"
               }
             />

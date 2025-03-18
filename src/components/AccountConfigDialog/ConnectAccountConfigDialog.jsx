@@ -104,9 +104,9 @@ const usePolling = (
 ) => {
   const queryClient = useQueryClient();
   const [isPolling, setIsPolling] = useState(true);
-  const timeoutId = useRef();
+  const timeoutId = useRef(null);
   const pollCountRef = useRef(0);
-  const pollInterval = 2000;
+  const pollInterval = 10000; // 10 seconds
   const isMounted = useRef(true);
 
   useEffect(() => {
@@ -117,13 +117,16 @@ const usePolling = (
       try {
         const resourceInstanceResponse = await fetchClickedInstanceDetails();
         resourceInstance = resourceInstanceResponse.data;
-      } catch {}
+      } catch {
+        console.log("check error in polling ");
+      }
 
       if (!isMounted.current) return;
 
       if (resourceInstance?.status !== instance?.status) {
         setClickedInstance((prev) => ({
           ...prev,
+          status: resourceInstance.status,
           result_params: {
             ...prev?.result_params,
             ...resourceInstance.result_params,
@@ -138,6 +141,7 @@ const usePolling = (
                 inst?.id === resourceInstance?.id
                   ? {
                       ...resourceInstance,
+                      status: resourceInstance.status,
                       result_params: resourceInstance.result_params,
                     }
                   : inst
@@ -146,7 +150,7 @@ const usePolling = (
         }));
 
         setIsPolling(false);
-      } else if (pollCountRef.current < 3) {
+      } else if (pollCountRef.current < 5) {
         pollCountRef.current += 1;
         timeoutId.current = setTimeout(startPolling, pollInterval);
       } else {
@@ -154,7 +158,8 @@ const usePolling = (
       }
     };
 
-    startPolling();
+    // Delay the first execution by pollInterval (10 seconds)
+    timeoutId.current = setTimeout(startPolling, pollInterval);
 
     return () => {
       isMounted.current = false;
@@ -230,20 +235,30 @@ const Run = ({
   serviceOrgName,
 }) => {
   useEffect(() => {
-    if (
-      activeStepRun === 0 &&
-      (instance?.status === "ATTACHING" || instance?.status === "CONNECTING")
-    ) {
-      const timer = setTimeout(() => {
+    let timer = null;
+
+    // Timer logic for activeStepRun === 0
+    if (activeStepRun === 0) {
+      timer = setTimeout(() => {
         setActiveStepRun(1);
       }, 1000);
+    }
 
-      return () => clearTimeout(timer);
-    } else if (instance?.status === "ATTACHING") {
+    // Handle instance status updates
+    if (instance?.status === "CONNECTING" || instance?.status === "ATTACHING") {
       setActiveStepRun(1);
     }
-  }, [activeStepRun, setActiveStepRun, instance]);
+
+    // Cleanup the timer to avoid memory leaks
+    return () => {
+      if (timer) {
+        clearTimeout(timer);
+      }
+    };
+  }, [activeStepRun, setActiveStepRun, instance?.status]);
+
   usePolling(instance, fetchClickedInstanceDetails, setClickedInstance);
+
   return (
     <Box width={"100%"} display={"flex"} flexDirection={"column"} gap="10px">
       <Stepper activeStep={activeStepRun} orientation="vertical">
@@ -318,6 +333,7 @@ const Check = ({
   setClickedInstance,
 }) => {
   usePolling(instance, fetchClickedInstanceDetails, setClickedInstance);
+
   return (
     <Box width={"100%"} display={"flex"} flexDirection={"column"} gap="10px">
       {status === "READY" ? (
@@ -380,7 +396,7 @@ const Check = ({
             </ListItem>
             <ListItem>
               <Text size="small" weight="semibold" color="#414651">
-                If you need to update the CloudFormation stack configuration
+                If you need to update the CloudFormation stack configuration{" "}
                 <StyledLink
                   target="_blank"
                   rel="noopener noreferrer"
@@ -418,13 +434,20 @@ function ConnectAccountConfigDialog(props) {
 
   useEffect(() => {
     if (
-      instance?.status === "CONNECTING" &&
-      activeStepRun === 0 &&
-      connectState === stateAccountConfigStepper.trigger
+      (instance?.status === "ATTACHING" || instance?.status === "CONNECTING") &&
+      activeStepRun < 1
     ) {
       setConnectState(stateAccountConfigStepper.run);
+    } else if (
+      instance?.status === "READY" ||
+      instance?.status === "CONNECTING"
+    ) {
+      setConnectState(stateAccountConfigStepper.check);
+    } else if (instance?.status === "DISCONNECTED") {
+      setConnectState(stateAccountConfigStepper.trigger);
+      setActiveStepRun(0);
     }
-  }, [connectState, setConnectState, instance]);
+  }, [connectState, setConnectState, instance?.status]);
 
   const accountConfigMutation = useMutation(
     () => {
@@ -469,6 +492,8 @@ function ConnectAccountConfigDialog(props) {
   const handleCancel = () => {
     formik.resetForm();
     handleClose();
+    setConnectState(stateAccountConfigStepper.trigger);
+    setActiveStepRun(0);
   };
 
   return (
@@ -538,7 +563,7 @@ function ConnectAccountConfigDialog(props) {
                 height: "40px !important",
                 padding: "10px 14px !important",
               }}
-              disabled={activeStepRun !== 2}
+              disabled={activeStepRun !== 1 || instance?.status === "ATTACHING"}
               bgColor={buttonColor}
               onClick={() => {
                 connectStatechange(stateAccountConfigStepper.check);

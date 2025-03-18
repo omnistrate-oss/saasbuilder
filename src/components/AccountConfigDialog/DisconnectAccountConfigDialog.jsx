@@ -103,9 +103,9 @@ const usePolling = (
 ) => {
   const queryClient = useQueryClient();
   const [isPolling, setIsPolling] = useState(true);
-  const timeoutId = useRef();
+  const timeoutId = useRef(null);
   const pollCountRef = useRef(0);
-  const pollInterval = 2000;
+  const pollInterval = 10000; // 10 seconds
   const isMounted = useRef(true);
 
   useEffect(() => {
@@ -116,13 +116,16 @@ const usePolling = (
       try {
         const resourceInstanceResponse = await fetchClickedInstanceDetails();
         resourceInstance = resourceInstanceResponse.data;
-      } catch {}
+      } catch {
+        console.log("check error in polling ");
+      }
 
       if (!isMounted.current) return;
 
       if (resourceInstance?.status !== instance?.status) {
         setClickedInstance((prev) => ({
           ...prev,
+          status: resourceInstance.status,
           result_params: {
             ...prev?.result_params,
             ...resourceInstance.result_params,
@@ -137,6 +140,7 @@ const usePolling = (
                 inst?.id === resourceInstance?.id
                   ? {
                       ...resourceInstance,
+                      status: resourceInstance.status,
                       result_params: resourceInstance.result_params,
                     }
                   : inst
@@ -145,7 +149,7 @@ const usePolling = (
         }));
 
         setIsPolling(false);
-      } else if (pollCountRef.current < 3) {
+      } else if (pollCountRef.current < 5) {
         pollCountRef.current += 1;
         timeoutId.current = setTimeout(startPolling, pollInterval);
       } else {
@@ -153,7 +157,8 @@ const usePolling = (
       }
     };
 
-    startPolling();
+    // Delay the first execution by pollInterval (10 seconds)
+    timeoutId.current = setTimeout(startPolling, pollInterval);
 
     return () => {
       isMounted.current = false;
@@ -229,20 +234,32 @@ const Run = ({
   serviceOrgName,
 }) => {
   useEffect(() => {
-    if (
-      activeStepRun === 0 &&
-      (instance?.status === "DETACHING" || instance?.status === "DISCONNECTING")
-    ) {
-      const timer = setTimeout(() => {
+    let timer = null;
+
+    // Timer logic only runs once when activeStepRun is 0
+    if (activeStepRun === 0 && !timer) {
+      timer = setTimeout(() => {
         setActiveStepRun(1);
       }, 1000);
+    }
 
-      return () => clearTimeout(timer);
+    // Handle instance status updates separately
+    if (instance?.status === "DETACHING") {
+      setActiveStepRun(1);
     } else if (instance?.status === "DISCONNECTING") {
       setActiveStepRun(2);
     }
-  }, [activeStepRun, setActiveStepRun, instance]);
+
+    // Cleanup the timer to avoid memory leaks
+    return () => {
+      if (timer) {
+        clearTimeout(timer);
+      }
+    };
+  }, [activeStepRun, setActiveStepRun, instance?.status]);
+
   usePolling(instance, fetchClickedInstanceDetails, setClickedInstance);
+
   return (
     <Box width={"100%"} display={"flex"} flexDirection={"column"} gap="10px">
       <Stepper activeStep={activeStepRun} orientation="vertical">
@@ -316,6 +333,7 @@ const Check = ({
   setClickedInstance,
 }) => {
   usePolling(instance, fetchClickedInstanceDetails, setClickedInstance);
+
   return (
     <Box width={"100%"} display={"flex"} flexDirection={"column"} gap="10px">
       {status === "DISCONNECTED" ? (
@@ -378,7 +396,7 @@ const Check = ({
             </ListItem>
             <ListItem>
               <Text size="small" weight="semibold" color="#414651">
-                If you need to update the CloudFormation stack configuration
+                If you need to update the CloudFormation stack configuration{" "}
                 <StyledLink
                   target="_blank"
                   rel="noopener noreferrer"
@@ -416,13 +434,20 @@ function DisconnectAccountConfigDialog(props) {
 
   useEffect(() => {
     if (
-      instance?.status === "DETACHING" &&
-      activeStepRun === 0 &&
-      disconnectState === stateAccountConfigStepper.trigger
+      instance?.status === "DETACHING" ||
+      (instance?.status === "DISCONNECTING" && activeStepRun < 2)
     ) {
       setDisconnectState(stateAccountConfigStepper.run);
+    } else if (
+      instance?.status === "DISCONNECTED" ||
+      instance?.status === "DISCONNECTING"
+    ) {
+      setDisconnectState(stateAccountConfigStepper.check);
+    } else if (instance?.status === "READY") {
+      setDisconnectState(stateAccountConfigStepper.trigger);
+      setActiveStepRun(0);
     }
-  }, [disconnectState, setDisconnectState, instance]);
+  }, [disconnectState, setDisconnectState, instance?.status]);
 
   const accountConfigMutation = useMutation(
     () => {
@@ -536,7 +561,7 @@ function DisconnectAccountConfigDialog(props) {
                 height: "40px !important",
                 padding: "10px 14px !important",
               }}
-              disabled={activeStepRun !== 2}
+              disabled={activeStepRun !== 2 || instance?.status === "DETACHING"}
               bgColor={buttonColor}
               onClick={() => {
                 connectStatechange(stateAccountConfigStepper.check);
