@@ -52,7 +52,7 @@ function InvoicesTable() {
         },
       }),
       columnHelper.accessor("invoiceDate", {
-        id: "email",
+        id: "invoiceDate",
         header: "Invoice Date",
         meta: {
           minWidth: 240,
@@ -109,20 +109,19 @@ function InvoicesTable() {
       //     },
       //     meta: { minWidth: 150 },
       //   }),
-      // @ts-ignore
       columnHelper.accessor("totalAmount", {
         id: "totalAmount",
         header: "Total Amount (USD)",
         cell: (data) => {
           const totalAmount = data.row.original.totalAmount;
-          let formattedAmout: string =
+          let formattedAmount: string =
             totalAmount !== undefined ? totalAmount?.toString() : "";
           if (totalAmount !== undefined) {
-            formattedAmout = totalAmount?.toFixed(2);
+            formattedAmount = totalAmount?.toFixed(2);
           }
           return (
             <Text size="small" weight="regular" color="#475467" ellipsis>
-              {`$${formattedAmout}`}
+              {`$${formattedAmount}`}
             </Text>
           );
         },

@@ -6,7 +6,7 @@ export type GetCurrentConsumptionUsageSuccessResponse =
 export type GetConsumptionUsagePerDaySuccessResponse =
   paths["/2022-09-01-00/resource-instance/usage-per-day"]["get"]["responses"]["200"]["content"]["application/json"];
 
-export type DecribeConsumptionBillingStatusResponse =
+export type DescribeConsumptionBillingStatusResponse =
   paths["/2022-09-01-00/resource-instance/billing-status"]["get"]["responses"]["200"]["content"]["application/json"];
 
 export type ListConsumptionInvoicesSuccessResponse =
