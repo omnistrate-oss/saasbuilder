@@ -191,11 +191,13 @@ export const getTerraformKit = (
 export const disconnected = (data) => {
   const { instanceId, disconnect, serviceId, subscriptionId } = data;
 
-  return axios.post(`/resource-instance/account-config/${instanceId}`, {
-    setConnections: disconnect,
-    serviceId,
-    subscriptionId,
-  });
+  return axios.post(
+    `/resource-instance/account-config/${instanceId}?subscriptionId=${subscriptionId}`,
+    {
+      setConnections: disconnect,
+      serviceId,
+    }
+  );
 };
 
 export const failoverResourceInstanceNode = (data) => {
