@@ -235,26 +235,15 @@ const Run = ({
   serviceOrgName,
 }) => {
   useEffect(() => {
-    let timer = null;
-
-    // Timer logic for activeStepRun === 0
-    if (activeStepRun === 0) {
-      timer = setTimeout(() => {
-        setActiveStepRun(1);
-      }, 1000);
+    // Handle instance status updates
+    if (instance?.status === "ATTACHING") {
+      setActiveStepRun(0);
     }
 
     // Handle instance status updates
-    if (instance?.status === "CONNECTING" || instance?.status === "ATTACHING") {
+    if (instance?.status === "CONNECTING") {
       setActiveStepRun(1);
     }
-
-    // Cleanup the timer to avoid memory leaks
-    return () => {
-      if (timer) {
-        clearTimeout(timer);
-      }
-    };
   }, [activeStepRun, setActiveStepRun, instance?.status]);
 
   usePolling(instance, fetchClickedInstanceDetails, setClickedInstance);
