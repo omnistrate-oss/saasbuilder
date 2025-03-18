@@ -192,7 +192,7 @@ export const disconnected = (data) => {
   const { instanceId, disconnect, serviceId, subscriptionId } = data;
 
   return axios.post(`/resource-instance/account-config/${instanceId}`, {
-    setConnections: disconnect,
+    setConnection: disconnect,
     serviceId,
     subscriptionId,
   });
