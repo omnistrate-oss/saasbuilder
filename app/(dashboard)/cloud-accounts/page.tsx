@@ -202,7 +202,7 @@ const CloudAccountsPage = () => {
             "DISCONNECTING",
           ].includes(status as string);
 
-          const showConnectInstructions = ["CONNECT", "ATTACHING"].includes(
+          const showConnectInstructions = ["CONNECTING", "ATTACHING"].includes(
             status as string
           );
 
