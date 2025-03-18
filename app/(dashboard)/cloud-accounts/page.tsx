@@ -603,7 +603,7 @@ const CloudAccountsPage = () => {
           setIsOverlayOpen(false);
         }}
         isFetching={isFetchingInstances}
-        instance={selectedInstance}
+        instance={selectedInstance || clickedInstance}
         refetchInstances={refetchInstances}
         fetchClickedInstanceDetails={fetchClickedInstanceDetails}
         setClickedInstance={setClickedInstance}
@@ -617,7 +617,7 @@ const CloudAccountsPage = () => {
           setIsOverlayOpen(false);
         }}
         isFetching={isFetchingInstances}
-        instance={selectedInstance}
+        instance={selectedInstance || clickedInstance}
         refetchInstances={refetchInstances}
         fetchClickedInstanceDetails={fetchClickedInstanceDetails}
         setClickedInstance={setClickedInstance}

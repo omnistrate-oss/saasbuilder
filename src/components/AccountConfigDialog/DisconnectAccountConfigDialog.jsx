@@ -120,7 +120,7 @@ const usePolling = (
 
       if (!isMounted.current) return;
 
-      if (resourceInstance?.status !== instance.status) {
+      if (resourceInstance?.status !== instance?.status) {
         setClickedInstance((prev) => ({
           ...prev,
           result_params: {
@@ -231,14 +231,14 @@ const Run = ({
   useEffect(() => {
     if (
       activeStepRun === 0 &&
-      (instance.status === "DETACHING" || instance.status === "DISCONNECTING")
+      (instance?.status === "DETACHING" || instance?.status === "DISCONNECTING")
     ) {
       const timer = setTimeout(() => {
         setActiveStepRun(1);
       }, 1000);
 
       return () => clearTimeout(timer);
-    } else if (instance.status === "DISCONNECTING") {
+    } else if (instance?.status === "DISCONNECTING") {
       setActiveStepRun(2);
     }
   }, [activeStepRun, setActiveStepRun, instance]);
@@ -277,7 +277,7 @@ const Run = ({
             <StyledLink
               target="_blank"
               rel="noopener noreferrer"
-              href={`${instance.result_params?.disconnect_cloudformation_url}`}
+              href={`${instance?.result_params?.disconnect_cloudformation_url}`}
             >
               this
             </StyledLink>
@@ -382,7 +382,7 @@ const Check = ({
                 <StyledLink
                   target="_blank"
                   rel="noopener noreferrer"
-                  href={`${instance.result_params?.disconnect_cloudformation_url}`}
+                  href={`${instance?.result_params?.disconnect_cloudformation_url}`}
                 >
                   click here.
                 </StyledLink>
