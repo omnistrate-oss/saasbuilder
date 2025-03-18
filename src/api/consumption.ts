@@ -40,8 +40,8 @@ export const getConsumptionBillingStatus = (): Promise<
   return axios.get("/resource-instance/billing-status");
 };
 
-export const getConsumptionInvoices = (): AxiosResponse<
-  Promise<ListConsumptionInvoicesSuccessResponse>
+export const getConsumptionInvoices = (): Promise<
+  AxiosResponse<ListConsumptionInvoicesSuccessResponse>
 > => {
   // const mockResponse: ListConsumptionInvoicesSuccessResponse = {
   //   invoices: [
