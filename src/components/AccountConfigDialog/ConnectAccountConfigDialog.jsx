@@ -420,7 +420,7 @@ function ConnectAccountConfigDialog(props) {
     if (
       instance?.status === "ATTACHING" &&
       activeStepRun === 0 &&
-      disconnectState === stateAccountConfigStepper.trigger
+      connectState === stateAccountConfigStepper.trigger
     ) {
       setConnectState(stateAccountConfigStepper.run);
     }
