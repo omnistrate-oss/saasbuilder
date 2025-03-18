@@ -33,6 +33,7 @@ export const resourceInstanceStatusMap: Record<
   DETACHING: { category: "unknown", label: "Detaching" },
   DISCONNECTING: { category: "unknown", label: "Disconnecting" },
   CONNECTING: { category: "success", label: "Connecting" },
+  CONNECT: { category: "success", label: "Connect" },
   ATTACHING: { category: "success", label: "Attaching" },
 };
 
