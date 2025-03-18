@@ -84,7 +84,8 @@ const CloudAccountsTableHeader = ({
             <DisconnectIcon
               disabled={
                 !selectedInstance ||
-                selectedInstance.status === "DISCONNECT" ||
+                selectedInstance.status === "DISCONNECTING" ||
+                selectedInstance.status === "DISCONNECTED" ||
                 selectedInstance?.result_params?.cloud_provider === "gcp"
               }
             />
@@ -92,7 +93,8 @@ const CloudAccountsTableHeader = ({
           disabledMessage={
             !selectedInstance
               ? "Please select a cloud account"
-              : selectedInstance.status === "DISCONNECT"
+              : selectedInstance.status === "DISCONNECTING" ||
+                  selectedInstance.status === "DISCONNECTED"
                 ? "Cloud account deletion is already in progress"
                 : ""
           }
@@ -104,8 +106,10 @@ const CloudAccountsTableHeader = ({
           variant="outlined"
           disabled={
             !selectedInstance ||
-            selectedInstance.status === "CONNECT" ||
-            selectedInstance?.status === "READY" ||
+            selectedInstance.status !== "FAILED" ||
+            selectedInstance?.status !== "READY" ||
+            selectedInstance?.status !== "DETACHING" ||
+            selectedInstance?.status !== "DISCONNECTING" ||
             selectedInstance?.result_params?.cloud_provider === "gcp"
           }
           onClick={onConnectClick}
@@ -113,8 +117,9 @@ const CloudAccountsTableHeader = ({
             <ConnectIcon
               disabled={
                 !selectedInstance ||
-                selectedInstance.status === "CONNECT" ||
-                selectedInstance?.status === "READY" ||
+                selectedInstance.status !== "FAILED" ||
+                selectedInstance?.status !== "DISCONNECTED" ||
+                selectedInstance?.status !== "ATTACHING" ||
                 selectedInstance?.result_params?.cloud_provider === "gcp"
               }
             />
