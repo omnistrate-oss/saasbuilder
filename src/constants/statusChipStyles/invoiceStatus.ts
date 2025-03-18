@@ -7,8 +7,8 @@ import {
 
 const invoiceStatusMap: Record<string, { category: Category; label: string }> =
   {
-    draft: { category: "pending", label: "Draft" },
-    open: { category: "pending", label: "Open" },
+    draft: { category: "inProgress", label: "Draft" },
+    open: { category: "inProgress", label: "Open" },
     paid: { category: "success", label: "Paid" },
     uncollectible: { category: "unknown", label: "Uncollectible" },
     void: { category: "unknown", label: "Void" },

@@ -17,4 +17,6 @@ export type DescribeConsumptionBillingDetailsSuccessResponse =
 
 export type Invoice = components["schemas"]["Invoice"];
 
-export type ConsumptionUsagePerDay = components["schemas"]["GetConsumptionUsageResult"]
+export type ConsumptionUsagePerDay = components["schemas"]["GetConsumptionUsageResult"];
+
+export type ConsumptionUsage = components["schemas"]["GetConsumptionUsageResult"];

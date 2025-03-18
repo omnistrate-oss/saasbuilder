@@ -1,72 +1,114 @@
 import { FC, useMemo } from "react";
 import { Text } from "src/components/Typography/Typography";
 import UsageDimensionCard, { UsageDimension } from "./UsageDimensionCard";
-import { ConsumptionUsagePerDay } from "src/types/consumption";
+import { ConsumptionUsage as ConsumptionUsageData } from "src/types/consumption";
+import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
+
+dayjs.extend(utc);
 
 type ConsumptionUsageProps = {
-  consumptionUsagePerDayData: ConsumptionUsagePerDay | undefined;
+  // consumptionUsagePerDayData: ConsumptionUsagePerDay | undefined;
+  consumptionUsageData: ConsumptionUsageData | undefined;
 };
 
 const ConsumptionUsage: FC<ConsumptionUsageProps> = (props) => {
-  const { consumptionUsagePerDayData } = props;
+  const { consumptionUsageData } = props;
+
   const aggregatedConsumptionDataHash = useMemo(() => {
     const hash: Record<
       UsageDimension,
       {
         total: number;
-        dailyUsageData: { startTime: string; endTime: string; value: number }[];
       }
     > = {
       "Memory GiB hours": {
         total: 0,
-        dailyUsageData: [],
       },
       "Storage GiB hours": {
         total: 0,
-        dailyUsageData: [],
       },
       "CPU core hours": {
         total: 0,
-        dailyUsageData: [],
       },
     };
 
-    const usage = consumptionUsagePerDayData?.usage || [];
+    const usage = consumptionUsageData?.usage || [];
 
     usage.forEach((usageDatapoint) => {
-      const { dimension, endTime, startTime, total } = usageDatapoint;
+      const { dimension, total } = usageDatapoint;
       if (dimension) {
         if (hash[dimension]) {
           hash[dimension] = {
             total: hash[dimension].total + (total !== undefined ? total : 0),
-            dailyUsageData: [
-              ...hash[dimension].dailyUsageData,
-              {
-                startTime: startTime as string,
-                endTime: endTime as string,
-                value: total !== undefined ? total : 0,
-              },
-            ],
           };
         } else {
           hash[usageDatapoint.dimension as string] = {
             total: total !== undefined ? total : 0,
-            dailyUsageData: [
-              {
-                startTime: startTime as string,
-                endTime: endTime as string,
-                value: total !== undefined ? total : 0,
-              },
-            ],
           };
         }
       }
     });
 
     return hash;
-  }, [consumptionUsagePerDayData]);
+  }, [consumptionUsageData]);
 
-  console.log("aggregatedConsumptionDataHash", aggregatedConsumptionDataHash);
+  //   const aggregatedConsumptionDataHash = useMemo(() => {
+  //     const hash: Record<
+  //       UsageDimension,
+  //       {
+  //         total: number;
+  //         dailyUsageData: { startTime: string; endTime: string; value: number }[];
+  //       }
+  //     > = {
+  //       "Memory GiB hours": {
+  //         total: 0,
+  //         dailyUsageData: [],
+  //       },
+  //       "Storage GiB hours": {
+  //         total: 0,
+  //         dailyUsageData: [],
+  //       },
+  //       "CPU core hours": {
+  //         total: 0,
+  //         dailyUsageData: [],
+  //       },
+  //     };
+
+  //     const usage = consumptionUsagePerDayData?.usage || [];
+
+  //     usage.forEach((usageDatapoint) => {
+  //       const { dimension, endTime, startTime, total } = usageDatapoint;
+  //       if (dimension) {
+  //         if (hash[dimension]) {
+  //           hash[dimension] = {
+  //             total: hash[dimension].total + (total !== undefined ? total : 0),
+  //             dailyUsageData: [
+  //               ...hash[dimension].dailyUsageData,
+  //               {
+  //                 startTime: startTime as string,
+  //                 endTime: endTime as string,
+  //                 value: total !== undefined ? total : 0,
+  //               },
+  //             ],
+  //           };
+  //         } else {
+  //           hash[usageDatapoint.dimension as string] = {
+  //             total: total !== undefined ? total : 0,
+  //             dailyUsageData: [
+  //               {
+  //                 startTime: startTime as string,
+  //                 endTime: endTime as string,
+  //                 value: total !== undefined ? total : 0,
+  //               },
+  //             ],
+  //           };
+  //         }
+  //       }
+  //     });
+
+  //     return hash;
+  //   }, [consumptionUsagePerDayData]);
 
   return (
     <div
@@ -79,9 +121,13 @@ const ConsumptionUsage: FC<ConsumptionUsageProps> = (props) => {
             <Text size="large" weight="semibold" color="#181D27">
               Current Usage
             </Text>
-            {/* <Text size="small" weight="regular" color="#535862">
-              Description
-            </Text> */}
+            <Text size="xsmall" weight="medium" color="#414651">
+              Usage This Month{" "}
+              {consumptionUsageData?.endTime &&
+                `(Until ${dayjs
+                  .utc(consumptionUsageData?.endTime)
+                  .format("MMM DD, YYYY, HH:mm:ss")} UTC)`}
+            </Text>
           </div>
         </div>
       </div>

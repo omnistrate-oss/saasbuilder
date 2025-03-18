@@ -10,7 +10,6 @@ import PageContainer from "../components/Layout/PageContainer";
 import AccountManagementHeader from "../components/AccountManagement/AccountManagementHeader";
 import { selectUserrootData } from "src/slices/userDataSlice";
 import Card from "components/Card/Card";
-import Chip from "components/Chip/Chip";
 import Button from "components/Button/Button";
 import { DisplayText, Text } from "components/Typography/Typography";
 import LoadingSpinner from "components/LoadingSpinner/LoadingSpinner";
@@ -19,15 +18,15 @@ import { isStaticBillingEnabled } from "./utils";
 import useBillingDetails from "./hooks/useBillingDetails";
 import ConsumptionUsage from "./components/ConsumptionUsage";
 import InvoicesTable from "./components/InvoicesTable";
-import useConsumptionUsagePerDay from "./hooks/useConsumptionUsagePerDay";
+import useConsumptionUsage from "./hooks/useConsumptionUsage";
+import StatusChip from "src/components/StatusChip/StatusChip";
 
 const BillingPage = () => {
   const selectUser = useSelector(selectUserrootData);
   const { isLoading, data: billingDetails, error } = useBillingDetails();
-  const {
-    data: consumptionUsagePerDayData,
-    isLoading: isLoadingConsumptionData,
-  } = useConsumptionUsagePerDay();
+
+  const { data: consumptionUsageData, isLoading: isLoadingConsumptionData } =
+    useConsumptionUsage();
 
   const paymentConfigured = billingDetails?.paymentConfigured;
   let errorDisplayText = "";
@@ -104,20 +103,16 @@ const BillingPage = () => {
                 alignItems="center"
               >
                 <Box>
-                  <Text size="large" sx={{ display: "inline-block" }}>
-                    Payment Method
-                  </Text>
-                  <Chip
-                    sx={{ marginLeft: "10px" }}
+                  <Text size="large">Payment Method</Text>
+                  <StatusChip
                     label={
                       paymentConfigured === true
-                        ? "✅ Configured"
+                        ? "Configured"
                         : "Not Configured"
                     }
-                    fontColor={
-                      paymentConfigured === true ? "#6941C6" : "#D92D20"
+                    category={
+                      paymentConfigured === true ? "success" : "pending"
                     }
-                    bgColor={paymentConfigured === true ? "#F9F5FF" : "#f3f3f1"}
                   />
                 </Box>
                 <Link
@@ -137,7 +132,8 @@ const BillingPage = () => {
               </Stack>
             </Card>
             <ConsumptionUsage
-              consumptionUsagePerDayData={consumptionUsagePerDayData}
+              consumptionUsageData={consumptionUsageData}
+              //consumptionUsagePerDayData={consumptionUsagePerDayData}
             />
             <InvoicesTable />
           </>

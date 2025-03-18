@@ -78,34 +78,34 @@ function InvoicesTable() {
           );
         },
       }),
-      columnHelper.accessor("totalAmountWithoutTax", {
-        id: "totalAmountWithoutTax",
-        header: "Total Amount Without Tax ",
-        cell: (data) => {
-          const totalAmountWithoutTax = data.row.original.totalAmountWithoutTax;
-          return (
-            <Text size="small" weight="regular" color="#475467" ellipsis>
-              {`$${totalAmountWithoutTax}`}
-            </Text>
-          );
-        },
-        meta: {
-          minWidth: 200,
-        },
-      }),
-      columnHelper.accessor("taxAmount", {
-        id: "taxAmount",
-        header: "Tax Amount",
-        cell: (data) => {
-          const taxAmount = data.row.original.taxAmount;
-          return (
-            <Text size="small" weight="regular" color="#475467" ellipsis>
-              {`$${taxAmount}`}
-            </Text>
-          );
-        },
-        meta: { minWidth: 150 },
-      }),
+    //   columnHelper.accessor("totalAmountWithoutTax", {
+    //     id: "totalAmountWithoutTax",
+    //     header: "Total Amount Without Tax ",
+    //     cell: (data) => {
+    //       const totalAmountWithoutTax = data.row.original.totalAmountWithoutTax;
+    //       return (
+    //         <Text size="small" weight="regular" color="#475467" ellipsis>
+    //           {`$${totalAmountWithoutTax}`}
+    //         </Text>
+    //       );
+    //     },
+    //     meta: {
+    //       minWidth: 200,
+    //     },
+    //   }),
+    //   columnHelper.accessor("taxAmount", {
+    //     id: "taxAmount",
+    //     header: "Tax Amount",
+    //     cell: (data) => {
+    //       const taxAmount = data.row.original.taxAmount;
+    //       return (
+    //         <Text size="small" weight="regular" color="#475467" ellipsis>
+    //           {`$${taxAmount}`}
+    //         </Text>
+    //       );
+    //     },
+    //     meta: { minWidth: 150 },
+    //   }),
       // @ts-ignore
       columnHelper.accessor("totalAmount", {
         id: "totalAmount",
@@ -122,25 +122,10 @@ function InvoicesTable() {
           minWidth: 150,
         },
       }),
-      columnHelper.accessor("invoicePaymentTerm", {
-        id: "invoicePaymentTerm",
-        header: "Invoice Payment Term",
-        cell: (data) => {
-          const invoicePaymentTerm = data.row.original.invoicePaymentTerm;
-          return (
-            <Text size="small" weight="regular" color="#475467" ellipsis>
-              {`$${invoicePaymentTerm}`}
-            </Text>
-          );
-        },
-        meta: {
-          minWidth: 150,
-        },
-      }),
+  
     ];
   }, []);
 
-  console.log("invoices", invoices);
 
   return (
     <DataTable
