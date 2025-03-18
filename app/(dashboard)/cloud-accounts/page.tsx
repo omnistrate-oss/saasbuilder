@@ -276,7 +276,7 @@ const CloudAccountsPage = () => {
           );
         },
         meta: {
-          minWidth: 170,
+          minWidth: 190,
         },
       }),
       columnHelper.accessor(
