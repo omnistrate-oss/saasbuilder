@@ -229,7 +229,10 @@ const Run = ({
   serviceOrgName,
 }) => {
   useEffect(() => {
-    if (activeStepRun === 0 && instance.status === "DETACHING") {
+    if (
+      activeStepRun === 0 &&
+      (instance.status === "DETACHING" || instance.status === "DISCONNECTING")
+    ) {
       const timer = setTimeout(() => {
         setActiveStepRun(1);
       }, 1000);
@@ -412,8 +415,12 @@ function DisconnectAccountConfigDialog(props) {
   const [activeStepRun, setActiveStepRun] = useState(0);
 
   useEffect(() => {
-    if (instance?.status === "DETACHING" && activeStepRun === 0) {
-      setDisconnectState(stateAccountConfigStepper.check);
+    if (
+      instance?.status === "DETACHING" &&
+      activeStepRun === 0 &&
+      disconnectState === stateAccountConfigStepper.trigger
+    ) {
+      setDisconnectState(stateAccountConfigStepper.run);
     }
   }, [disconnectState, setDisconnectState, instance]);
 

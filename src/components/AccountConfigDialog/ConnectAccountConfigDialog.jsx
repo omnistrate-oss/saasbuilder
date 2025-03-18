@@ -230,7 +230,10 @@ const Run = ({
   serviceOrgName,
 }) => {
   useEffect(() => {
-    if (activeStepRun === 0 && instance.status === "CONNECTING") {
+    if (
+      activeStepRun === 0 &&
+      (instance.status === "ATTACHING" || instance.status === "CONNECTING")
+    ) {
       const timer = setTimeout(() => {
         setActiveStepRun(1);
       }, 1000);
@@ -414,8 +417,12 @@ function ConnectAccountConfigDialog(props) {
   const [activeStepRun, setActiveStepRun] = useState(0);
 
   useEffect(() => {
-    if (instance?.status === "ATTACHING" && activeStepRun === 0) {
-      setConnectState(stateAccountConfigStepper.check);
+    if (
+      instance?.status === "ATTACHING" &&
+      activeStepRun === 0 &&
+      disconnectState === stateAccountConfigStepper.trigger
+    ) {
+      setConnectState(stateAccountConfigStepper.run);
     }
   }, [connectState, setConnectState, instance]);
 
