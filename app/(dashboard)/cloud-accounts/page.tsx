@@ -211,7 +211,7 @@ const CloudAccountsPage = () => {
               direction="row"
               alignItems="center"
               gap="6px"
-              width="94px"
+              width="104px"
               justifyContent="space-between"
             >
               <StatusChip status={status} {...statusSytlesAndLabel} />
