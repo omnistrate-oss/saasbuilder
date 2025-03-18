@@ -229,13 +229,13 @@ const Run = ({
   serviceOrgName,
 }) => {
   useEffect(() => {
-    if (activeStepRun === 0 && instance.status === "detachning") {
+    if (activeStepRun === 0 && instance.status === "DETACHING") {
       const timer = setTimeout(() => {
         setActiveStepRun(1);
       }, 1000);
 
       return () => clearTimeout(timer);
-    } else if (instance.status === "disconnecting") {
+    } else if (instance.status === "DISCONNECTING") {
       setActiveStepRun(2);
     }
   }, [activeStepRun, setActiveStepRun, instance]);
@@ -315,7 +315,7 @@ const Check = ({
   usePolling(instance, fetchClickedInstanceDetails, setClickedInstance);
   return (
     <Box width={"100%"} display={"flex"} flexDirection={"column"} gap="10px">
-      {status === "disconnected" ? (
+      {status === "DISCONNECTED" ? (
         <Box
           sx={{
             padding: "12px",
@@ -412,7 +412,7 @@ function DisconnectAccountConfigDialog(props) {
   const [activeStepRun, setActiveStepRun] = useState(0);
 
   useEffect(() => {
-    if (instance?.status === "disconnecting" && activeStepRun === 0) {
+    if (instance?.status === "DETACHING" && activeStepRun === 0) {
       setDisconnectState(stateAccountConfigStepper.check);
     }
   }, [disconnectState, setDisconnectState, instance]);

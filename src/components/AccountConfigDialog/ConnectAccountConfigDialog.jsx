@@ -230,13 +230,13 @@ const Run = ({
   serviceOrgName,
 }) => {
   useEffect(() => {
-    if (activeStepRun === 0 && instance.status === "connecting") {
+    if (activeStepRun === 0 && instance.status === "CONNECTING") {
       const timer = setTimeout(() => {
         setActiveStepRun(1);
       }, 1000);
 
       return () => clearTimeout(timer);
-    } else if (instance.status === "connecting") {
+    } else if (instance.status === "CONNECTING") {
       setActiveStepRun(1);
     }
   }, [activeStepRun, setActiveStepRun, instance]);
@@ -317,7 +317,7 @@ const Check = ({
   usePolling(instance, fetchClickedInstanceDetails, setClickedInstance);
   return (
     <Box width={"100%"} display={"flex"} flexDirection={"column"} gap="10px">
-      {status === "ready" ? (
+      {status === "READY" ? (
         <Box
           sx={{
             padding: "12px",
@@ -414,7 +414,7 @@ function ConnectAccountConfigDialog(props) {
   const [activeStepRun, setActiveStepRun] = useState(0);
 
   useEffect(() => {
-    if (instance?.status === "attaching" && activeStepRun === 0) {
+    if (instance?.status === "ATTACHING" && activeStepRun === 0) {
       setConnectState(stateAccountConfigStepper.check);
     }
   }, [connectState, setConnectState, instance]);

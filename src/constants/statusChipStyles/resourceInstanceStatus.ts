@@ -29,10 +29,10 @@ export const resourceInstanceStatusMap: Record<
   UNHEALTHY: { category: "failed", label: "Unhealthy" },
   SCALING_UP: { category: "inProgress", label: "Scaling Up" },
   SCALING_DOWN: { category: "inProgress", label: "Scaling Down" },
-  DISCONNECT: { category: "unknown", label: "Disconnected" },
+  DISCONNECTED: { category: "unknown", label: "Disconnected" },
   DETACHING: { category: "unknown", label: "Detaching" },
   DISCONNECTING: { category: "unknown", label: "Disconnecting" },
-  CONNECT: { category: "success", label: "Connecting" },
+  CONNECTING: { category: "success", label: "Connecting" },
   ATTACHING: { category: "success", label: "Attaching" },
 };
 
