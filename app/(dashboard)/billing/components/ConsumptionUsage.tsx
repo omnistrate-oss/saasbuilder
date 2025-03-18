@@ -1,7 +1,10 @@
 import { FC, useMemo } from "react";
 import { Text } from "src/components/Typography/Typography";
-import UsageDimensionCard, { UsageDimension } from "./UsageDimensionCard";
-import { ConsumptionUsage as ConsumptionUsageData } from "src/types/consumption";
+import UsageDimensionCard from "./UsageDimensionCard";
+import {
+  ConsumptionUsage as ConsumptionUsageData,
+  UsageDimension,
+} from "src/types/consumption";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 
@@ -134,14 +137,17 @@ const ConsumptionUsage: FC<ConsumptionUsageProps> = (props) => {
       <div className="border-t border-[#E9EAEB] py-3 px-6">
         <div className="flex gap-x-3 justify-center max-w-[900px] mx-auto">
           <UsageDimensionCard
+            title="Memory Usage"
             dimensionName="Memory GiB hours"
             value={aggregatedConsumptionDataHash["Memory GiB hours"].total}
           />
           <UsageDimensionCard
+            title="Storage Usage"
             dimensionName="Storage GiB hours"
             value={aggregatedConsumptionDataHash["Storage GiB hours"].total}
           />
           <UsageDimensionCard
+            title="CPU Usage"
             dimensionName="CPU core hours"
             value={aggregatedConsumptionDataHash["CPU core hours"].total}
           />

@@ -1,19 +1,16 @@
 import UsageDimensionIcon from "app/(dashboard)/components/Icons/UsageDimension";
 import { FC } from "react";
 import { Text } from "src/components/Typography/Typography";
-
-export type UsageDimension =
-  | "Memory GiB hours"
-  | "Storage GiB hours"
-  | "CPU core hours";
+import { UsageDimension } from "src/types/consumption";
 
 type UsageDimensionCardProps = {
   dimensionName: UsageDimension;
   value: number;
+  title: string;
 };
 
 const UsageDimensionCard: FC<UsageDimensionCardProps> = (props) => {
-  const { dimensionName, value } = props;
+  const { dimensionName, value, title } = props;
 
   return (
     <div
@@ -26,7 +23,7 @@ const UsageDimensionCard: FC<UsageDimensionCardProps> = (props) => {
         </div>
         <div>
           <Text size="medium" weight="bold" color="#414651">
-            {dimensionName}{" "}
+            {title}{" "}
           </Text>
           <Text size="small" weight="bold" color="#475467">
             {value} {dimensionName}

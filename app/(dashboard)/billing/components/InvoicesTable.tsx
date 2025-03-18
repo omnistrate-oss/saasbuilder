@@ -2,13 +2,16 @@ import { createColumnHelper } from "@tanstack/react-table";
 import useConsumptionInvoices from "../hooks/useConsumptionInvoices";
 import { Invoice } from "src/types/consumption";
 import DataTable from "src/components/DataTable/DataTable";
-import formatDateUTC from "src/utils/formatDateUTC";
 import { useMemo } from "react";
 import { Text } from "src/components/Typography/Typography";
 import GridCellExpand from "src/components/GridCellExpand/GridCellExpand";
 import InvoiceIcon from "src/components/Icons/Invoice/Invoice";
 import StatusChip from "src/components/StatusChip/StatusChip";
 import { getInvoiceStatusStylesAndLabel } from "src/constants/statusChipStyles/invoiceStatus";
+import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
+
+dayjs.extend(utc);
 
 const columnHelper = createColumnHelper<Invoice>();
 
@@ -32,7 +35,7 @@ function InvoicesTable() {
         id: "invoiceId",
         header: "Invoice ID",
         meta: {
-          minWidth: 250,
+          minWidth: 320,
         },
         cell: (data) => {
           const { invoiceUrl, invoiceId } = data.row.original;
@@ -56,7 +59,7 @@ function InvoicesTable() {
         },
         cell: (data) => {
           const invoiceDate = data.row.original.invoiceDate;
-          const formattedDate = formatDateUTC(invoiceDate);
+          const formattedDate = dayjs.utc(invoiceDate).format("YYYY-MM-DD");
           return (
             <Text size="small" weight="regular" color="#475467" ellipsis>
               {formattedDate}
@@ -78,43 +81,48 @@ function InvoicesTable() {
           );
         },
       }),
-    //   columnHelper.accessor("totalAmountWithoutTax", {
-    //     id: "totalAmountWithoutTax",
-    //     header: "Total Amount Without Tax ",
-    //     cell: (data) => {
-    //       const totalAmountWithoutTax = data.row.original.totalAmountWithoutTax;
-    //       return (
-    //         <Text size="small" weight="regular" color="#475467" ellipsis>
-    //           {`$${totalAmountWithoutTax}`}
-    //         </Text>
-    //       );
-    //     },
-    //     meta: {
-    //       minWidth: 200,
-    //     },
-    //   }),
-    //   columnHelper.accessor("taxAmount", {
-    //     id: "taxAmount",
-    //     header: "Tax Amount",
-    //     cell: (data) => {
-    //       const taxAmount = data.row.original.taxAmount;
-    //       return (
-    //         <Text size="small" weight="regular" color="#475467" ellipsis>
-    //           {`$${taxAmount}`}
-    //         </Text>
-    //       );
-    //     },
-    //     meta: { minWidth: 150 },
-    //   }),
+      //   columnHelper.accessor("totalAmountWithoutTax", {
+      //     id: "totalAmountWithoutTax",
+      //     header: "Total Amount Without Tax ",
+      //     cell: (data) => {
+      //       const totalAmountWithoutTax = data.row.original.totalAmountWithoutTax;
+      //       return (
+      //         <Text size="small" weight="regular" color="#475467" ellipsis>
+      //           {`$${totalAmountWithoutTax}`}
+      //         </Text>
+      //       );
+      //     },
+      //     meta: {
+      //       minWidth: 200,
+      //     },
+      //   }),
+      //   columnHelper.accessor("taxAmount", {
+      //     id: "taxAmount",
+      //     header: "Tax Amount",
+      //     cell: (data) => {
+      //       const taxAmount = data.row.original.taxAmount;
+      //       return (
+      //         <Text size="small" weight="regular" color="#475467" ellipsis>
+      //           {`$${taxAmount}`}
+      //         </Text>
+      //       );
+      //     },
+      //     meta: { minWidth: 150 },
+      //   }),
       // @ts-ignore
       columnHelper.accessor("totalAmount", {
         id: "totalAmount",
-        header: "Total Amount",
+        header: "Total Amount (USD)",
         cell: (data) => {
           const totalAmount = data.row.original.totalAmount;
+          let formattedAmout: string =
+            totalAmount !== undefined ? totalAmount?.toString() : "";
+          if (totalAmount !== undefined) {
+            formattedAmout = totalAmount?.toFixed(2);
+          }
           return (
             <Text size="small" weight="regular" color="#475467" ellipsis>
-              {`$${totalAmount}`}
+              {`$${formattedAmout}`}
             </Text>
           );
         },
@@ -122,10 +130,8 @@ function InvoicesTable() {
           minWidth: 150,
         },
       }),
-  
     ];
   }, []);
-
 
   return (
     <DataTable
