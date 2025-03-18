@@ -239,7 +239,7 @@ const Run = ({
       }, 1000);
 
       return () => clearTimeout(timer);
-    } else if (instance.status === "CONNECTING") {
+    } else if (instance.status === "ATTACHING") {
       setActiveStepRun(1);
     }
   }, [activeStepRun, setActiveStepRun, instance]);
@@ -418,7 +418,7 @@ function ConnectAccountConfigDialog(props) {
 
   useEffect(() => {
     if (
-      instance?.status === "ATTACHING" &&
+      instance?.status === "CONNECTING" &&
       activeStepRun === 0 &&
       connectState === stateAccountConfigStepper.trigger
     ) {
