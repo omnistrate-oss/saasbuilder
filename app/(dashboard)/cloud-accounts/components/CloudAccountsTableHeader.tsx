@@ -76,7 +76,6 @@ const CloudAccountsTableHeader = ({
           variant="outlined"
           disabled={
             !selectedInstance ||
-            selectedInstance?.status === "CONNECTING" ||
             selectedInstance.status === "ATTACHING" ||
             selectedInstance.status === "CONNECTING" ||
             selectedInstance.status === "DISCONNECTED" ||
@@ -87,7 +86,6 @@ const CloudAccountsTableHeader = ({
             <DisconnectIcon
               disabled={
                 !selectedInstance ||
-                selectedInstance?.status === "CONNECTING" ||
                 selectedInstance.status === "ATTACHING" ||
                 selectedInstance.status === "CONNECTING" ||
                 selectedInstance.status === "DISCONNECTED" ||
