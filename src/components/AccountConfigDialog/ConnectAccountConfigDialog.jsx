@@ -460,7 +460,7 @@ function ConnectAccountConfigDialog(props) {
     {
       onSuccess: () => {
         refetchInstances();
-        snackbar.showSuccess("Connect account config...");
+        snackbar.showSuccess("Connecting account config");
         connectStatechange(stateAccountConfigStepper.run);
         // eslint-disable-next-line no-use-before-define
         formik.resetForm();

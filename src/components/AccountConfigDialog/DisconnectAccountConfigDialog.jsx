@@ -463,7 +463,7 @@ function DisconnectAccountConfigDialog(props) {
     {
       onSuccess: () => {
         refetchInstances();
-        snackbar.showSuccess("Disconnect account config...");
+        snackbar.showSuccess("Disconnecting account config");
         connectStatechange(stateAccountConfigStepper.run);
         // eslint-disable-next-line no-use-before-define
         formik.resetForm();

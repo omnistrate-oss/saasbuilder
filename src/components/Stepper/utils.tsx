@@ -95,7 +95,7 @@ export const stepsDisconnectRunAccountConfig = [
   {
     label: (
       <Text size="small" weight="semibold" color="#414651">
-        Syncing & Purging
+        Disconnecting
       </Text>
     ),
   },
