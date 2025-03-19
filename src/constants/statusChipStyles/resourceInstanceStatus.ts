@@ -29,6 +29,11 @@ export const resourceInstanceStatusMap: Record<
   UNHEALTHY: { category: "failed", label: "Unhealthy" },
   SCALING_UP: { category: "inProgress", label: "Scaling Up" },
   SCALING_DOWN: { category: "inProgress", label: "Scaling Down" },
+  DISCONNECTED: { category: "failed", label: "Disconnected" },
+  DETACHING: { category: "inProgress", label: "Detaching" },
+  DISCONNECTING: { category: "inProgress", label: "Disconnecting" },
+  CONNECTING: { category: "pending", label: "Connecting" },
+  ATTACHING: { category: "pending", label: "Attaching" },
 };
 
 export const getResourceInstanceStatusStylesAndLabel = (

@@ -7,6 +7,8 @@ import DataGridHeaderTitle from "components/Headers/DataGridHeaderTitle";
 import RefreshWithToolTip from "components/RefreshWithTooltip/RefreshWithToolTip";
 
 import { CircularProgress } from "@mui/material";
+import ConnectIcon from "src/components/Icons/Connect/Connect";
+import DisconnectIcon from "src/components/Icons/Disconnect/Disconnect";
 
 const CloudAccountsTableHeader = ({
   count,
@@ -17,6 +19,8 @@ const CloudAccountsTableHeader = ({
   selectedInstance,
   refetchInstances,
   isFetchingInstances,
+  onConnectClick,
+  onDisconnectClick,
 }) => {
   return (
     <div className="py-5 px-6 flex items justify-between gap-4">
@@ -44,6 +48,7 @@ const CloudAccountsTableHeader = ({
           refetch={refetchInstances}
           disabled={isFetchingInstances}
         />
+
         <Button
           data-testid="delete-button"
           variant="outlined"
@@ -65,6 +70,71 @@ const CloudAccountsTableHeader = ({
           }
         >
           Delete
+        </Button>
+        <Button
+          data-testid="disconnect-button"
+          variant="outlined"
+          disabled={
+            !selectedInstance ||
+            selectedInstance.status === "ATTACHING" ||
+            selectedInstance.status === "CONNECTING" ||
+            selectedInstance.status === "DISCONNECTED" ||
+            selectedInstance?.result_params?.cloud_provider === "gcp"
+          }
+          onClick={onDisconnectClick}
+          startIcon={
+            <DisconnectIcon
+              disabled={
+                !selectedInstance ||
+                selectedInstance.status === "ATTACHING" ||
+                selectedInstance.status === "CONNECTING" ||
+                selectedInstance.status === "DISCONNECTED" ||
+                selectedInstance?.result_params?.cloud_provider === "gcp"
+              }
+            />
+          }
+          disabledMessage={
+            !selectedInstance
+              ? "Please select a cloud account"
+              : selectedInstance.status === "DISCONNECTING" ||
+                  selectedInstance.status === "DISCONNECTED"
+                ? "Cloud account deletion is already in progress"
+                : ""
+          }
+        >
+          Disconnect
+        </Button>
+        <Button
+          data-testid="connect-button"
+          variant="outlined"
+          disabled={
+            !selectedInstance ||
+            selectedInstance?.status === "READY" ||
+            selectedInstance?.status === "DISCONNECTING" ||
+            selectedInstance?.status === "DETACHING" ||
+            selectedInstance?.result_params?.cloud_provider === "gcp"
+          }
+          onClick={onConnectClick}
+          startIcon={
+            <ConnectIcon
+              disabled={
+                !selectedInstance ||
+                selectedInstance?.status === "READY" ||
+                selectedInstance?.status === "DISCONNECTING" ||
+                selectedInstance?.status === "DETACHING" ||
+                selectedInstance?.result_params?.cloud_provider === "gcp"
+              }
+            />
+          }
+          disabledMessage={
+            !selectedInstance
+              ? "Please select a cloud account"
+              : selectedInstance.status === "CONNECT"
+                ? "Cloud account deletion is already in progress"
+                : ""
+          }
+        >
+          Connect
         </Button>
         <Button
           data-testid="create-button"

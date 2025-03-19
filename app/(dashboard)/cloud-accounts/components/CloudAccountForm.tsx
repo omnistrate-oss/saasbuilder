@@ -61,7 +61,9 @@ const CloudAccountForm = ({
 
   const byoaServiceOfferings = useMemo(() => {
     return serviceOfferings.filter(
-      (offering) => offering.serviceModelType === "BYOA"
+      (offering) =>
+        offering.serviceModelType === "BYOA" ||
+        offering.serviceModelType === "ON_PREM_COPILOT"
     );
   }, [serviceOfferings]);
 
