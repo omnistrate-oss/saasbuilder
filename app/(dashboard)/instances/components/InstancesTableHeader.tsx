@@ -220,6 +220,7 @@ const InstancesTableHeader = ({
       isDisabled:
         !selectedInstance ||
         status === "DELETING" ||
+        status === "DISCONNECTED" ||
         isProxyResource ||
         !isDeleteAllowedByRBAC,
       onClick: () => {
@@ -349,7 +350,7 @@ const InstancesTableHeader = ({
       other.push({
         dataTestId: "open-dashboard-button",
         label: "Generate Token",
-        isDisabled: !selectedInstance,
+        isDisabled: !selectedInstance || status === "DISCONNECTED",
         disabledMessage: !selectedInstance ? "Please select an instance" : "",
         onClick: () => {
           if (!selectedInstance)

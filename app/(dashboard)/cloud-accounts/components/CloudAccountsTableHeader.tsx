@@ -52,12 +52,18 @@ const CloudAccountsTableHeader = ({
         <Button
           data-testid="delete-button"
           variant="outlined"
-          disabled={!selectedInstance || selectedInstance.status === "DELETING"}
+          disabled={
+            !selectedInstance ||
+            selectedInstance.status === "DELETING" ||
+            selectedInstance.status === "DISCONNECTED"
+          }
           onClick={onDeleteClick}
           startIcon={
             <DeleteIcon
               disabled={
-                !selectedInstance || selectedInstance.status === "DELETING"
+                !selectedInstance ||
+                selectedInstance.status === "DELETING" ||
+                selectedInstance.status === "DISCONNECTED"
               }
             />
           }

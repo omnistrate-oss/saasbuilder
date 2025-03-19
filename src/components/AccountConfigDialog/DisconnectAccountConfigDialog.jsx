@@ -97,74 +97,75 @@ const ListItem = styled(Box)({
 });
 
 const usePolling = (
-  instance,
   fetchClickedInstanceDetails,
-  setClickedInstance
+  setClickedInstance,
+  stepStatusStopPolling
 ) => {
   const queryClient = useQueryClient();
   const [isPolling, setIsPolling] = useState(true);
   const timeoutId = useRef(null);
-  const pollCountRef = useRef(0);
-  const pollInterval = 10000; // 10 seconds
+  const pollInterval = 5000; // 5 seconds
   const isMounted = useRef(true);
 
-  useEffect(() => {
-    const startPolling = async () => {
-      if (!isMounted.current) return;
+  const startPolling = async () => {
+    if (!isMounted.current) return;
 
-      let resourceInstance;
-      try {
-        const resourceInstanceResponse = await fetchClickedInstanceDetails();
-        resourceInstance = resourceInstanceResponse.data;
-      } catch {
-        console.log("check error in polling ");
-      }
+    let resourceInstance;
+    try {
+      const resourceInstanceResponse = await fetchClickedInstanceDetails();
+      resourceInstance = resourceInstanceResponse.data;
+    } catch {
+      console.log("check error in polling ");
+    }
 
-      if (!isMounted.current) return;
+    if (resourceInstance?.status) {
+      setClickedInstance((prev) => ({
+        ...prev,
+        status: resourceInstance.status,
+        result_params: {
+          ...prev?.result_params,
+          ...resourceInstance.result_params,
+        },
+      }));
 
-      if (resourceInstance?.status !== instance?.status) {
-        setClickedInstance((prev) => ({
-          ...prev,
-          status: resourceInstance.status,
-          result_params: {
-            ...prev?.result_params,
-            ...resourceInstance.result_params,
-          },
-        }));
+      queryClient.setQueryData(["instances"], (oldData) => ({
+        ...oldData,
+        data: {
+          resourceInstances: (oldData?.data?.resourceInstances || []).map(
+            (inst) =>
+              inst?.id === resourceInstance?.id
+                ? {
+                    ...resourceInstance,
+                    status: resourceInstance.status,
+                    result_params: resourceInstance.result_params,
+                  }
+                : inst
+          ),
+        },
+      }));
 
-        queryClient.setQueryData(["instances"], (oldData) => ({
-          ...oldData,
-          data: {
-            resourceInstances: (oldData?.data?.resourceInstances || []).map(
-              (inst) =>
-                inst?.id === resourceInstance?.id
-                  ? {
-                      ...resourceInstance,
-                      status: resourceInstance.status,
-                      result_params: resourceInstance.result_params,
-                    }
-                  : inst
-            ),
-          },
-        }));
-
+      // // Stop polling if the status matches the stop condition
+      if (resourceInstance?.status === stepStatusStopPolling) {
         setIsPolling(false);
-      } else if (pollCountRef.current < 5) {
-        pollCountRef.current += 1;
-        timeoutId.current = setTimeout(startPolling, pollInterval);
-      } else {
-        setIsPolling(false);
+        return; // Exit the polling
       }
-    };
+    }
 
-    // Delay the first execution by pollInterval (10 seconds)
+    // Continue polling without a limit
     timeoutId.current = setTimeout(startPolling, pollInterval);
+  };
 
+  useEffect(() => {
+    startPolling();
+    isMounted.current = true;
+    // Clean up on unmount
     return () => {
       isMounted.current = false;
-      if (timeoutId.current) clearTimeout(timeoutId.current);
+      if (timeoutId.current) {
+        clearTimeout(timeoutId.current);
+      }
     };
-  }, [instance, fetchClickedInstanceDetails, setClickedInstance, queryClient]);
+  }, []);
 
   return { isPolling };
 };
@@ -258,7 +259,7 @@ const Run = ({
     };
   }, [activeStepRun, setActiveStepRun, instance?.status]);
 
-  usePolling(instance, fetchClickedInstanceDetails, setClickedInstance);
+  usePolling(fetchClickedInstanceDetails, setClickedInstance, "DISCONNECTING");
 
   return (
     <Box width={"100%"} display={"flex"} flexDirection={"column"} gap="10px">
@@ -332,7 +333,7 @@ const Check = ({
   fetchClickedInstanceDetails,
   setClickedInstance,
 }) => {
-  usePolling(instance, fetchClickedInstanceDetails, setClickedInstance);
+  usePolling(fetchClickedInstanceDetails, setClickedInstance, "DISCONNECTED");
 
   return (
     <Box width={"100%"} display={"flex"} flexDirection={"column"} gap="10px">
