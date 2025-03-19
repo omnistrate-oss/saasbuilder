@@ -102,7 +102,8 @@ const CloudAccountsTableHeader = ({
           disabledMessage={
             !selectedInstance
               ? "Please select a cloud account"
-              : selectedInstance.status === "DISCONNECTING" ||
+              : selectedInstance.status === "ATTACHING" ||
+                  selectedInstance.status === "CONNECTING" ||
                   selectedInstance.status === "DISCONNECTED"
                 ? "Cloud account deletion is already in progress"
                 : ""
