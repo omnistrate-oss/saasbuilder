@@ -245,7 +245,7 @@ const Run = ({
     }
 
     // Handle instance status updates
-    if (instance?.status === "CONNECTING" || instance?.status === "ATTACHING") {
+    if (instance?.status === "CONNECTING") {
       setActiveStepRun(1);
     }
 
@@ -433,14 +433,11 @@ function ConnectAccountConfigDialog(props) {
   const [activeStepRun, setActiveStepRun] = useState(0);
 
   useEffect(() => {
-    if (
-      (instance?.status === "ATTACHING" || instance?.status === "CONNECTING") &&
-      activeStepRun < 1
-    ) {
+    if (instance?.status === "CONNECTING" && activeStepRun < 1) {
       setConnectState(stateAccountConfigStepper.run);
     } else if (
       instance?.status === "READY" ||
-      instance?.status === "CONNECTING"
+      instance?.status === "ATTACHING"
     ) {
       setConnectState(stateAccountConfigStepper.check);
     } else if (instance?.status === "DISCONNECTED") {
