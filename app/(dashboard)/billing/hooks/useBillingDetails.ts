@@ -5,13 +5,12 @@ function useBillingDetails() {
   const baseURL =
     typeof window !== "undefined" ? `${window.location.origin}/billing` : "";
 
+    
   const query = useQuery({
     queryKey: ["consumption-billing-details", baseURL],
     queryFn: async () => {
       const response = await getBillingDetails({
-        returnUrl: baseURL.includes("localhost")
-          ? "https://omnistrate-access-ui.fly.dev/signin"
-          : baseURL,
+        returnUrl: baseURL,
       });
 
       return response.data;

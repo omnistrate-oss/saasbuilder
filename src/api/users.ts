@@ -36,10 +36,6 @@ export const updatePassword = (payload) => {
   return axios.post(`/update-password`, payload);
 };
 
-//todo remove this
-export const getBillingDetails = (userId) => {
-  return axios.get(`/resource-instance/user/${userId}/billing-details`);
-};
 
 export const getAllSubscriptionUsers = (
   params = {}
