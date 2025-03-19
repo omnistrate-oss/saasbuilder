@@ -31,18 +31,20 @@ function InvoicesTable() {
 
   const columns = useMemo(() => {
     return [
-      columnHelper.accessor("invoiceId", {
-        id: "invoiceId",
-        header: "Invoice ID",
+      //@ts-ignore
+      columnHelper.accessor("invoiceNumber", {
+        id: "invoiceNumber",
+        header: "Invoice Number",
         meta: {
           minWidth: 320,
         },
         cell: (data) => {
-          const { invoiceUrl, invoiceId } = data.row.original;
+          //@ts-ignore
+          const { invoiceUrl, invoiceNumber } = data.row.original;
           return (
             <GridCellExpand
               startIcon={<InvoiceIcon />}
-              value={invoiceId as string}
+              value={invoiceNumber as string}
               href={invoiceUrl}
               externalLinkArrow
               target="_blank"
