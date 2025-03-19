@@ -43,6 +43,8 @@ import {
   getGcpBootstrapShellCommand,
   getGcpShellScriptOffboardCommand,
 } from "src/utils/accountConfig/accountConfig";
+import DisconnectAccountConfigDialog from "src/components/AccountConfigDialog/DisconnectAccountConfigDialog";
+import ConnectAccountConfigDialog from "src/components/AccountConfigDialog/ConnectAccountConfigDialog";
 
 const columnHelper = createColumnHelper<ResourceInstance>();
 
@@ -50,7 +52,9 @@ type Overlay =
   | "delete-dialog"
   | "create-instance-form"
   | "view-instance-form"
-  | "view-instructions-dialog";
+  | "view-instructions-dialog"
+  | "connect-dialog"
+  | "disconnect-dialog";
 
 const CloudAccountsPage = () => {
   const snackbar = useSnackbar();
@@ -193,12 +197,21 @@ const CloudAccountsPage = () => {
             "FAILED",
           ].includes(status as string);
 
+          const showDisconnectInstructions = [
+            "DETACHING",
+            "DISCONNECTING",
+          ].includes(status as string);
+
+          const showConnectInstructions = ["CONNECTING", "ATTACHING"].includes(
+            status as string
+          );
+
           return (
             <Stack
               direction="row"
               alignItems="center"
               gap="6px"
-              width="94px"
+              width="104px"
               justifyContent="space-between"
             >
               <StatusChip status={status} {...statusSytlesAndLabel} />
@@ -223,11 +236,47 @@ const CloudAccountsPage = () => {
                   </Box>
                 </Tooltip>
               )}
+              {showDisconnectInstructions && (
+                <Tooltip title="View disconnect cloud account" placement="top">
+                  <Box
+                    sx={{
+                      cursor: "pointer",
+                      display: "flex",
+                      alignItems: "center",
+                    }}
+                    onClick={() => {
+                      setClickedInstance(data.row.original);
+                      setIsOverlayOpen(true);
+                      setOverlayType("disconnect-dialog");
+                    }}
+                  >
+                    <ViewInstructionsIcon />
+                  </Box>
+                </Tooltip>
+              )}
+              {showConnectInstructions && (
+                <Tooltip title="View connect cloud account" placement="top">
+                  <Box
+                    sx={{
+                      cursor: "pointer",
+                      display: "flex",
+                      alignItems: "center",
+                    }}
+                    onClick={() => {
+                      setClickedInstance(data.row.original);
+                      setIsOverlayOpen(true);
+                      setOverlayType("connect-dialog");
+                    }}
+                  >
+                    <ViewInstructionsIcon />
+                  </Box>
+                </Tooltip>
+              )}
             </Stack>
           );
         },
         meta: {
-          minWidth: 170,
+          minWidth: 190,
         },
       }),
       columnHelper.accessor(
@@ -489,6 +538,16 @@ const CloudAccountsPage = () => {
               setIsOverlayOpen(true);
               setOverlayType("delete-dialog");
             },
+            onConnectClick: () => {
+              setClickedInstance(selectedInstance);
+              setIsOverlayOpen(true);
+              setOverlayType("connect-dialog");
+            },
+            onDisconnectClick: () => {
+              setClickedInstance(selectedInstance);
+              setIsOverlayOpen(true);
+              setOverlayType("disconnect-dialog");
+            },
             selectedInstance,
             refetchInstances: refetchInstances,
             isFetchingInstances: isFetchingInstances,
@@ -538,7 +597,33 @@ const CloudAccountsPage = () => {
         isLoading={deleteAccountConfigMutation.isLoading}
         accountInstructionDetails={deleteAccountInstructionDetails}
       />
+      <ConnectAccountConfigDialog
+        open={isOverlayOpen && overlayType === "connect-dialog"}
+        handleClose={() => {
+          setIsOverlayOpen(false);
+        }}
+        isFetching={isFetchingInstances}
+        instance={selectedInstance || clickedInstance}
+        refetchInstances={refetchInstances}
+        fetchClickedInstanceDetails={fetchClickedInstanceDetails}
+        setClickedInstance={setClickedInstance}
+        serviceId={selectedInstanceSubscription?.serviceId}
+        serviceOrgName={selectedInstanceSubscription?.serviceOrgName}
+      />
 
+      <DisconnectAccountConfigDialog
+        open={isOverlayOpen && overlayType === "disconnect-dialog"}
+        handleClose={() => {
+          setIsOverlayOpen(false);
+        }}
+        isFetching={isFetchingInstances}
+        instance={selectedInstance || clickedInstance}
+        refetchInstances={refetchInstances}
+        fetchClickedInstanceDetails={fetchClickedInstanceDetails}
+        setClickedInstance={setClickedInstance}
+        serviceId={selectedInstanceSubscription?.serviceId}
+        serviceOrgName={selectedInstanceSubscription?.serviceOrgName}
+      />
       <CloudProviderAccountOrgIdModal
         isAccessPage
         open={isOverlayOpen && overlayType === "view-instructions-dialog"}

@@ -1,31 +1,32 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
 import { useSelector } from "react-redux";
-import { Box, LinearProgress, Stack } from "@mui/material";
+import { Box, Stack } from "@mui/material";
 import ArrowOutwardIcon from "@mui/icons-material/ArrowOutward";
-
 import PageTitle from "../components/Layout/PageTitle";
 import BillingIcon from "../components/Icons/BillingIcon";
 import PageContainer from "../components/Layout/PageContainer";
 import AccountManagementHeader from "../components/AccountManagement/AccountManagementHeader";
-
 import { selectUserrootData } from "src/slices/userDataSlice";
-import useBillingDetails from "src/hooks/query/useBillingDetails";
-
 import Card from "components/Card/Card";
-import Chip from "components/Chip/Chip";
 import Button from "components/Button/Button";
 import { DisplayText, Text } from "components/Typography/Typography";
 import LoadingSpinner from "components/LoadingSpinner/LoadingSpinner";
 import StaticBilling from "./components/StaticBilling";
 import { isStaticBillingEnabled } from "./utils";
+import useBillingDetails from "./hooks/useBillingDetails";
+import ConsumptionUsage from "./components/ConsumptionUsage";
+import InvoicesTable from "./components/InvoicesTable";
+import useConsumptionUsage from "./hooks/useConsumptionUsage";
+import StatusChip from "src/components/StatusChip/StatusChip";
 
 const BillingPage = () => {
   const selectUser = useSelector(selectUserrootData);
-  const [isIframeLoading, setIsIframeLoading] = useState(true);
   const { isLoading, data: billingDetails, error } = useBillingDetails();
+
+  const { data: consumptionUsageData, isLoading: isLoadingConsumptionData } =
+    useConsumptionUsage();
 
   const paymentConfigured = billingDetails?.paymentConfigured;
   let errorDisplayText = "";
@@ -75,7 +76,7 @@ const BillingPage = () => {
           Billing
         </PageTitle>
 
-        {isLoading ? (
+        {isLoading || isLoadingConsumptionData ? (
           <LoadingSpinner />
         ) : isStaticBillingEnabled(selectUser) ? (
           <StaticBilling />
@@ -102,24 +103,20 @@ const BillingPage = () => {
                 alignItems="center"
               >
                 <Box>
-                  <Text size="large" sx={{ display: "inline-block" }}>
-                    Payment Method
-                  </Text>
-                  <Chip
-                    sx={{ marginLeft: "10px" }}
+                  <Text size="large">Payment Method</Text>
+                  <StatusChip
                     label={
                       paymentConfigured === true
-                        ? "✅ Configured"
+                        ? "Configured"
                         : "Not Configured"
                     }
-                    fontColor={
-                      paymentConfigured === true ? "#6941C6" : "#D92D20"
+                    category={
+                      paymentConfigured === true ? "success" : "pending"
                     }
-                    bgColor={paymentConfigured === true ? "#F9F5FF" : "#f3f3f1"}
                   />
                 </Box>
                 <Link
-                  href={billingDetails?.paymentInfoPortalURL}
+                  href={billingDetails?.paymentInfoPortalURL ?? ""}
                   target="_blank"
                 >
                   <Button variant="outlined">
@@ -134,16 +131,11 @@ const BillingPage = () => {
                 </Link>
               </Stack>
             </Card>
-            <Box mt={3}>
-              {isIframeLoading && <LinearProgress />}
-              <iframe
-                onLoad={() => {
-                  setIsIframeLoading(false);
-                }}
-                src={billingDetails?.billingEmbedURL}
-                style={{ width: "100%", height: 900, border: "none" }}
-              />
-            </Box>
+            <ConsumptionUsage
+              consumptionUsageData={consumptionUsageData}
+              //consumptionUsagePerDayData={consumptionUsagePerDayData}
+            />
+            <InvoicesTable />
           </>
         )}
       </PageContainer>

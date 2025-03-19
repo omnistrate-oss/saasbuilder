@@ -21,7 +21,6 @@ import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 
 import { colors } from "src/themeConfig";
 import { useGlobalData } from "src/providers/GlobalDataProvider";
-import useBillingDetails from "src/hooks/query/useBillingDetails";
 import FullScreenDrawer from "../FullScreenDrawer/FullScreenDrawer";
 import PlanDetails from "./PlanDetails";
 import {
@@ -35,6 +34,7 @@ import {
   getBillingRoute,
   getSettingsRoute,
 } from "src/utils/routes";
+import useBillingStatus from "app/(dashboard)/billing/hooks/useBillingStatus";
 
 const SingleNavItem = ({
   name,
@@ -213,10 +213,10 @@ const Sidebar = () => {
   }, [serviceOfferings]);
 
   // Prefetch Billing Data
-  const billingDetailsQuery = useBillingDetails();
-  const isBillingEnabled = Boolean(
-    billingDetailsQuery.isFetched && billingDetailsQuery.data
-  );
+  const billingStatusQuery = useBillingStatus();
+
+  const isBillingEnabled = Boolean(billingStatusQuery.data?.enabled);
+
 
   const bottomItems = useMemo(
     () => [

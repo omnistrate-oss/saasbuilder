@@ -71,7 +71,7 @@ type DataTableProps<TData> = {
   getRowCanExpand?: (rowData: Row<TData>) => boolean;
   getSubRows?: (orginalRow: TData) => TData[];
   HeaderComponent: FC;
-  headerProps: any;
+  headerProps?: any;
   // Row Selection Props
   selectionMode?: SelectionMode;
   selectedRows?: string[];
