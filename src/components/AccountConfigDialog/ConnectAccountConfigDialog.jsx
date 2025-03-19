@@ -391,7 +391,7 @@ const Check = ({
             <ListItem>
               <Text size="small" weight="semibold" color="#414651">
                 Once the verification is complete, the lifecycle status will
-                change to Connected.
+                change to Ready.
               </Text>
             </ListItem>
             <ListItem>
