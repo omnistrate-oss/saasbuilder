@@ -119,6 +119,7 @@ const CloudAccountsTableHeader = ({
             selectedInstance?.status === "READY" ||
             selectedInstance?.status === "DISCONNECTING" ||
             selectedInstance?.status === "DETACHING" ||
+            selectedInstance?.status === "PENDING_DETACHING" ||
             selectedInstance?.result_params?.cloud_provider === "gcp"
           }
           onClick={onConnectClick}
@@ -129,6 +130,7 @@ const CloudAccountsTableHeader = ({
                 selectedInstance?.status === "READY" ||
                 selectedInstance?.status === "DISCONNECTING" ||
                 selectedInstance?.status === "DETACHING" ||
+                selectedInstance?.status === "PENDING_DETACHING" ||
                 selectedInstance?.result_params?.cloud_provider === "gcp"
               }
             />
