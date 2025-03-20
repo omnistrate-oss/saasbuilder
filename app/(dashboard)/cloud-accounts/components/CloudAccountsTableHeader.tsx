@@ -72,7 +72,9 @@ const CloudAccountsTableHeader = ({
               ? "Please select a cloud account"
               : selectedInstance.status === "DELETING"
                 ? "Cloud account deletion is already in progress"
-                : ""
+                : selectedInstance.status === "DISCONNECTED"
+                  ? "Cloud account is disconnected"
+                  : ""
           }
         >
           Delete
@@ -103,10 +105,13 @@ const CloudAccountsTableHeader = ({
             !selectedInstance
               ? "Please select a cloud account"
               : selectedInstance.status === "ATTACHING" ||
-                  selectedInstance.status === "CONNECTING" ||
-                  selectedInstance.status === "DISCONNECTED"
-                ? "Cloud account deletion is already in progress"
-                : ""
+                  selectedInstance.status === "CONNECTING"
+                ? "Cloud account is connecting"
+                : selectedInstance.status === "DISCONNECTED"
+                  ? "Cloud account is disconnected"
+                  : selectedInstance?.result_params?.cloud_provider === "gcp"
+                    ? "Disconnect not supported for GCP cloud account"
+                    : ""
           }
         >
           Disconnect
@@ -138,9 +143,15 @@ const CloudAccountsTableHeader = ({
           disabledMessage={
             !selectedInstance
               ? "Please select a cloud account"
-              : selectedInstance.status === "CONNECT"
-                ? "Cloud account deletion is already in progress"
-                : ""
+              : selectedInstance?.status === "READY"
+                ? "Cloud account is already connected"
+                : selectedInstance?.status === "DISCONNECTING" ||
+                    selectedInstance?.status === "DETACHING" ||
+                    selectedInstance?.status === "PENDING_DETACHING"
+                  ? "Cloud account is disconnecting"
+                  : selectedInstance?.result_params?.cloud_provider === "gcp"
+                    ? "Connect not supported for GCP cloud account"
+                    : ""
           }
         >
           Connect
