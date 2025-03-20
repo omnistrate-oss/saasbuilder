@@ -20,7 +20,7 @@ export const getStepperProps = (
   if (StepperSetpStatus === stateAccountConfigStepper.trigger) {
     return {
       step1: {
-        title: "Tigger",
+        title: "Trigger",
         icon: <StepperInProgressIcon />,
       },
       step2: {
@@ -37,7 +37,7 @@ export const getStepperProps = (
   if (StepperSetpStatus === stateAccountConfigStepper.run) {
     return {
       step1: {
-        title: "Tigger",
+        title: "Trigger",
         icon: <StepperSuccessIcon />,
       },
       step2: {
@@ -54,7 +54,7 @@ export const getStepperProps = (
   if (StepperSetpStatus === stateAccountConfigStepper.check) {
     return {
       step1: {
-        title: "Tigger",
+        title: "Trigger",
         icon: <StepperSuccessIcon />,
       },
       step2: {
@@ -70,7 +70,7 @@ export const getStepperProps = (
 
   return {
     step1: {
-      title: "Tigger",
+      title: "Trigger",
       icon: <StepperDefaultIcon />,
     },
     step2: {
