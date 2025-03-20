@@ -31,6 +31,7 @@ export const resourceInstanceStatusMap: Record<
   SCALING_DOWN: { category: "inProgress", label: "Scaling Down" },
   DISCONNECTED: { category: "failed", label: "Disconnected" },
   DETACHING: { category: "inProgress", label: "Detaching" },
+  PENDING_DETACHING: { category: "inProgress", label: "Pending Detaching" },
   DISCONNECTING: { category: "inProgress", label: "Disconnecting" },
   CONNECTING: { category: "pending", label: "Connecting" },
   ATTACHING: { category: "pending", label: "Attaching" },

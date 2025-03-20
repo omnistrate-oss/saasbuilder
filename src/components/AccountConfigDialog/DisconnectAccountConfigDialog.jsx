@@ -245,7 +245,10 @@ const Run = ({
     }
 
     // Handle instance status updates separately
-    if (instance?.status === "DETACHING") {
+    if (
+      instance?.status === "DETACHING" ||
+      instance?.status === "PENDING_DETACHING"
+    ) {
       setActiveStepRun(1);
     } else if (instance?.status === "DISCONNECTING") {
       setActiveStepRun(2);
@@ -435,8 +438,10 @@ function DisconnectAccountConfigDialog(props) {
 
   useEffect(() => {
     if (
-      instance?.status === "DETACHING" ||
-      (instance?.status === "DISCONNECTING" && activeStepRun < 2)
+      (instance?.status === "DETACHING" ||
+        instance?.status === "PENDING_DETACHING" ||
+        instance?.status === "DISCONNECTING") &&
+      activeStepRun < 2
     ) {
       setDisconnectState(stateAccountConfigStepper.run);
     } else if (
