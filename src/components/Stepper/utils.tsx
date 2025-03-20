@@ -119,7 +119,7 @@ export const stepsConnectRunAccountConfig = [
   {
     label: (
       <Text size="small" weight="semibold" color="#414651">
-        Granting Permissions (manual step)
+        Action Required: Please run the CloudFormation template to proceed.
       </Text>
     ),
   },

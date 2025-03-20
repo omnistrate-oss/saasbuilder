@@ -573,7 +573,7 @@ function DisconnectAccountConfigDialog(props) {
                 connectStatechange(stateAccountConfigStepper.check);
               }}
             >
-              {"Verify"} {isFetching && <LoadingSpinnerSmall />}
+              {"Confirm"} {isFetching && <LoadingSpinnerSmall />}
             </Button>
           )}
           {disconnectState === stateAccountConfigStepper.check && (

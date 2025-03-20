@@ -339,6 +339,7 @@ const InstanceDetailsPage = ({
           serviceOffering={offering}
           resourceKey={resourceKey}
           resourceInstanceId={instanceId}
+          resourceInstancestatus={resourceInstanceData.status}
           subscriptionData={subscription}
           subscriptionId={subscription.id}
           isBYOAServicePlan={offering?.serviceModelType === "BYOA"}

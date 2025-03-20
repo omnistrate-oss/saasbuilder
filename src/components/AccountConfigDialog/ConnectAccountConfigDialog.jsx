@@ -567,7 +567,7 @@ function ConnectAccountConfigDialog(props) {
                 connectStatechange(stateAccountConfigStepper.check);
               }}
             >
-              {"Verify"} {isFetching && <LoadingSpinnerSmall />}
+              {"Confirm"} {isFetching && <LoadingSpinnerSmall />}
             </Button>
           )}
           {connectState === stateAccountConfigStepper.check && (
