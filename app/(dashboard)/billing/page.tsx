@@ -20,6 +20,8 @@ import ConsumptionUsage from "./components/ConsumptionUsage";
 import InvoicesTable from "./components/InvoicesTable";
 import useConsumptionUsage from "./hooks/useConsumptionUsage";
 import StatusChip from "src/components/StatusChip/StatusChip";
+import useConsumptionUsagePerDay from "./hooks/useConsumptionUsagePerDay";
+import ConsumptionUsageChart from "./components/ConsumptionUsageChart";
 
 const BillingPage = () => {
   const selectUser = useSelector(selectUserrootData);
@@ -27,6 +29,9 @@ const BillingPage = () => {
 
   const { data: consumptionUsageData, isLoading: isLoadingConsumptionData } =
     useConsumptionUsage();
+
+  const { data: usagePerDayData, isLoading: isUsagePerDayLoading } =
+    useConsumptionUsagePerDay();
 
   const paymentConfigured = billingDetails?.paymentConfigured;
   let errorDisplayText = "";
@@ -135,6 +140,7 @@ const BillingPage = () => {
               consumptionUsageData={consumptionUsageData}
               //consumptionUsagePerDayData={consumptionUsagePerDayData}
             />
+            <ConsumptionUsageChart usagePerDayData={usagePerDayData} />
             <InvoicesTable />
           </>
         )}

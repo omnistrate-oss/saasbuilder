@@ -12,9 +12,11 @@ function useConsumptionUsagePerDay(
   const query = useQuery({
     queryKey: ["consumption-usage-per-day", subscriptionID, startDate, endDate],
     queryFn: async () => {
-      const response = await getConsumptionUsagePerDay();
 
-      return response.data;
+      
+      const response = await getConsumptionUsagePerDay();
+      //todo add .data
+      return response;
     },
   });
 
