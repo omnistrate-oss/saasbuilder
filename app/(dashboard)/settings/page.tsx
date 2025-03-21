@@ -12,7 +12,6 @@ import { tabLabels } from "./constants";
 import ProfileForm from "./components/ProfileForm";
 import PasswordForm from "./components/PasswordForm";
 import PageContainer from "../components/Layout/PageContainer";
-import BillingAddressForm from "./components/BillingAddressForm";
 
 import { colors } from "src/themeConfig";
 import useUserData from "src/hooks/usersData";
@@ -62,21 +61,7 @@ const SettingsPage = () => {
               },
             }}
           />
-          <Tab
-            label={tabLabels.billingAddress}
-            value={"billingAddress"}
-            onClick={() => setCurrentTab("billingAddress")}
-            sx={{
-              paddingY: "12px !important",
-              paddingX: "16px !important",
-              minWidth: "0px",
-              textTransform: "none",
-              fontWeight: "600",
-              "&.Mui-selected": {
-                color: colors.purple700,
-              },
-            }}
-          />
+    
           <Tab
             label={tabLabels.password}
             value={"password"}
@@ -101,13 +86,7 @@ const SettingsPage = () => {
             isLoadingUserData={isLoadingUserData}
           />
         )}
-        {currentTab === "billingAddress" && (
-          <BillingAddressForm
-            userData={selectUser}
-            refetchUserData={refetchUserData}
-            isLoadingUserData={isLoadingUserData}
-          />
-        )}
+    
         {currentTab === "password" && (
           <PasswordForm email={selectUser?.email} />
         )}

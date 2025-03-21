@@ -75,7 +75,10 @@ function CookieConsentModal() {
   return (
     <>
       {isConsentModalOpen && !isPreferenceModalOpen && (
-        <StyledConsentContainer maxWidth={"1216px"}>
+        <StyledConsentContainer
+          data-testid="cookie-consent-banner"
+          maxWidth={"1216px"}
+        >
           <Stack direction="row" justifyContent="space-between">
             <Stack direction="row" alignItems="center" gap="16px">
               <FlagWithBackground />

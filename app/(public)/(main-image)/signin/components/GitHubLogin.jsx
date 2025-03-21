@@ -50,6 +50,7 @@ function GithubLogin(props) {
     >
       <Box>
         <SSOLoginButton
+          data-testid="github-signin-button"
           onClick={() => {
             handleGitHubLogin();
           }}
