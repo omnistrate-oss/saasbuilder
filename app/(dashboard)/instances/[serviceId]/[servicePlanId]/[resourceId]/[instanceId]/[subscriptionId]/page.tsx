@@ -147,7 +147,7 @@ const InstanceDetailsPage = ({
 
   const disabledTabs = useMemo(
     () =>
-      resourceInstanceData?.status === "DISCONNECT"
+      resourceInstanceData?.status === "DISCONNECTED"
         ? ["Nodes", "backups"] // Fixed predefined tabs
         : Object.keys(tabs), // Extract only keys from tabs
     [resourceInstanceData, tabs]
