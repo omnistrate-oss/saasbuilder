@@ -1,10 +1,21 @@
 import { styled, Tooltip, tooltipClasses } from "@mui/material";
 import { useMemo } from "react";
 import { Text } from "src/components/Typography/Typography";
+import { UpgradeStatus } from "src/types/resourceInstance";
 import formatDateUTC from "src/utils/formatDateUTC";
 
 type StatusCellProps = {
   upcomingUpgrade?: any;
+};
+
+const statusMap: Record<UpgradeStatus, string> = {
+  IN_PROGRESS: "In Progress",
+  CANCELLED: "Cancelled",
+  COMPLETE: "Complete",
+  FAILED: "Failed",
+  PAUSED: "Paused",
+  PENDING: "Pending",
+  SCHEDULED: "Scheduled",
 };
 
 const StyledTooltip = styled(({ className, ...props }: any) => (
@@ -118,6 +129,16 @@ const StatusCell: React.FC<StatusCellProps> = ({ upcomingUpgrade }) => {
               {formatDateUTC(upcomingUpgrade.upgrade_path_scheduled_at)}
             </Text>
           </div>
+        ),
+      });
+    } else if (upcomingUpgrade?.upgrade_instance_status) {
+      res.push({
+        label: "Upgrade Status",
+        value: (
+          <Text size="xsmall" weight="regular" color="#181D27">
+            {statusMap[upcomingUpgrade.upgrade_instance_status] ||
+              upcomingUpgrade.upgrade_instance_status}
+          </Text>
         ),
       });
     }

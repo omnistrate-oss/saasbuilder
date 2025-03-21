@@ -63,6 +63,7 @@ function GoogleLogin(props) {
     >
       <Box>
         <SSOLoginButton
+          data-testid="google-signin-button"
           onClick={() => {
             handleGoogleLogin();
           }}
