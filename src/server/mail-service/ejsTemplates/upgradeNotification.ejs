@@ -134,8 +134,21 @@
                                               padding: 12px 0 0;
                                             "
                                           >
-                                            Upgrade <br />
-                                            Notification
+                                            <% if (notification_type == "upgradeScheduled") { %>
+                                                <% if (scheduling_event_type == "reminder") { %>
+                                                    Upgrade <br/> Reminder!
+                                                <% } else { %>
+                                                    Upgrade <br/> Notification
+                                                <% } %>
+                                            <% } else { %>
+                                                <% if (completion_status == "SUCCESS") { %>
+                                                    Upgrade <br/> Successful!
+                                                <% } else if (completion_status == "CANCELLED") { %>
+                                                    Upgrade <br/> Cancelled!
+                                                <% } else { %>
+                                                    Instance <br/> Skipped!
+                                                <% } %>
+                                            <% } %>
                                           </td>
                                         </tr>
                                       </tbody>
@@ -226,7 +239,7 @@
                                   >
                                     <img
                                       height="140px"
-                                      src="<%= upgrade_notification %>"
+                                      src="<%= upgrade_notification_image_url %>"
                                       style="
                                         display: block;
                                         outline: none;
@@ -297,22 +310,38 @@
                                                 text-align: center;
                                               "
                                             >
-                                              Your deployment (<span style="font-weight: 800"><%= instance_id %></span>) for
-                                              <span style="font-weight: 800"><%= service_name %></span> service
-                                              under the
-                                              <span style="font-weight: 800"><%= service_plan_name %></span>
-                                              <% if (!is_scheduled) { %>
-                                                is scheduled for an upgrade now.
-                                              <% } else { %>
-                                                is scheduled for a version upgrade on 
-                                                <span style="font-weight: 800"><%= upgrade_date %></span>
-                                              <% } %>
-                                              <br />
-                                              <% if (support_email) { %>
-                                                If you have any questions, please contact <a href="mailto:<%= support_email %>">support</a>.
-                                              <% } else { %>
-                                                If you have any questions, please contact support.
-                                              <% } %>
+                                            <% if (notification_type == "upgradeScheduled") { %>
+                                                Your deployment (<span style="font-weight: 800"><%= instance_id %></span>) for
+                                                <span style="font-weight: 800"><%= service_name %></span> service
+                                                under <span style="font-weight: 800"><%= service_plan_name %></span>
+                                                <% if (scheduling_event_type == "reminder") { %>
+                                                  is scheduled for an upgrade in 1 hour.
+                                                <% } else if (scheduling_event_type == "scheduled" && scheduled_date) { %>
+                                                  is scheduled for a version upgrade on 
+                                                  <span style="font-weight: 800"><%= scheduled_date %></span>
+                                                <% } else { %>
+                                                    is scheduled for an upgrade <span style="font-weight: 800">now</span>.
+                                                <% } %>
+                                            <% } else { %>
+                                                The upgrade of your deployment (<span style="font-weight: 800"><%= instance_id %></span>) for
+                                                <span style="font-weight: 800"><%= service_name %></span> service
+                                                under <span style="font-weight: 800"><%= service_plan_name %></span>
+                                                <% if (completion_status == "SUCCESS") { %>
+                                                    has been completed successfully.
+                                                <% } else if (completion_status == "CANCELLED") { %>
+                                                    has been cancelled.
+                                                <% } else { %>
+                                                    has been skipped.
+                                                <% } %>
+                                            <% } %>
+
+                                            <br />
+
+                                            <% if (support_email) { %>
+                                                If you have any questions or need further assistance, please contact <a href="mailto:<%= support_email %>">support</a>.
+                                            <% } else { %>
+                                                If you have any questions or need further assistance, please contact support.
+                                            <% } %>
                                             </p>
                                           </td>
                                         </tr>

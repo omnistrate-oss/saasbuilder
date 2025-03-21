@@ -98,6 +98,7 @@ const PasswordField = (props) => {
             )}
           </InputAdornment>
         ),
+        ...restProps.InputProps,
       }}
     />
   );

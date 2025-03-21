@@ -5569,11 +5569,9 @@ export interface components {
          *       "exportUsageMetering": true,
          *       "exportUsageMeteringConfig": {
          *         "GCS": {
-         *           "Enabled": true,
          *           "GCSBucketName": "my_billing_bucket_name"
          *         },
          *         "S3": {
-         *           "Enabled": true,
          *           "S3BucketArn": "arn:aws:s3:::my_billing_bucket_name"
          *         }
          *       },
@@ -5584,9 +5582,18 @@ export interface components {
          *       "name": "Premium",
          *       "planDescription": "A premium plan",
          *       "pricePerUnit": {
-         *         "CPU core hours": "0.001",
-         *         "Memory GiB hours": "0.0001",
-         *         "Storage GiB hours": "0.0001"
+         *         "CPU core hours": {
+         *           "amount": 0.001,
+         *           "currency": "USD"
+         *         },
+         *         "Memory GiB hours": {
+         *           "amount": 0.0001,
+         *           "currency": "USD"
+         *         },
+         *         "Storage GiB hours": {
+         *           "amount": 0.0001,
+         *           "currency": "USD"
+         *         }
          *       },
          *       "pricing": {
          *         "price1": "value1"
@@ -5643,11 +5650,9 @@ export interface components {
              * @description Export usage metering data configuration
              * @example {
              *       "GCS": {
-             *         "Enabled": true,
              *         "GCSBucketName": "my_billing_bucket_name"
              *       },
              *       "S3": {
-             *         "Enabled": true,
              *         "S3BucketArn": "arn:aws:s3:::my_billing_bucket_name"
              *       }
              *     }
@@ -5681,9 +5686,18 @@ export interface components {
             /**
              * @description Price per unit.
              * @example {
-             *       "CPU core hours": "0.001",
-             *       "Memory GiB hours": "0.0001",
-             *       "Storage GiB hours": "0.0001"
+             *       "CPU core hours": {
+             *         "amount": 0.001,
+             *         "currency": "USD"
+             *       },
+             *       "Memory GiB hours": {
+             *         "amount": 0.0001,
+             *         "currency": "USD"
+             *       },
+             *       "Storage GiB hours": {
+             *         "amount": 0.0001,
+             *         "currency": "USD"
+             *       }
              *     }
              */
             pricePerUnit?: {
@@ -5742,11 +5756,9 @@ export interface components {
          *       "exportUsageMetering": true,
          *       "exportUsageMeteringConfig": {
          *         "GCS": {
-         *           "Enabled": true,
          *           "GCSBucketName": "my_billing_bucket_name"
          *         },
          *         "S3": {
-         *           "Enabled": true,
          *           "S3BucketArn": "arn:aws:s3:::my_billing_bucket_name"
          *         }
          *       },
@@ -5757,9 +5769,18 @@ export interface components {
          *       "name": "Premium",
          *       "planDescription": "A premium plan",
          *       "pricePerUnit": {
-         *         "CPU core hours": "0.001",
-         *         "Memory GiB hours": "0.0001",
-         *         "Storage GiB hours": "0.0001"
+         *         "CPU core hours": {
+         *           "amount": 0.001,
+         *           "currency": "USD"
+         *         },
+         *         "Memory GiB hours": {
+         *           "amount": 0.0001,
+         *           "currency": "USD"
+         *         },
+         *         "Storage GiB hours": {
+         *           "amount": 0.0001,
+         *           "currency": "USD"
+         *         }
          *       },
          *       "pricing": {
          *         "price1": "value1"
@@ -5813,11 +5834,9 @@ export interface components {
              * @description Export usage metering data configuration
              * @example {
              *       "GCS": {
-             *         "Enabled": true,
              *         "GCSBucketName": "my_billing_bucket_name"
              *       },
              *       "S3": {
-             *         "Enabled": true,
              *         "S3BucketArn": "arn:aws:s3:::my_billing_bucket_name"
              *       }
              *     }
@@ -5851,9 +5870,18 @@ export interface components {
             /**
              * @description Price per unit.
              * @example {
-             *       "CPU core hours": "0.001",
-             *       "Memory GiB hours": "0.0001",
-             *       "Storage GiB hours": "0.0001"
+             *       "CPU core hours": {
+             *         "amount": 0.001,
+             *         "currency": "USD"
+             *       },
+             *       "Memory GiB hours": {
+             *         "amount": 0.0001,
+             *         "currency": "USD"
+             *       },
+             *       "Storage GiB hours": {
+             *         "amount": 0.0001,
+             *         "currency": "USD"
+             *       }
              *     }
              */
             pricePerUnit?: {
@@ -7592,11 +7620,9 @@ export interface components {
          *       "exportUsageMetering": true,
          *       "exportUsageMeteringConfig": {
          *         "GCS": {
-         *           "Enabled": true,
          *           "GCSBucketName": "my_billing_bucket_name"
          *         },
          *         "S3": {
-         *           "Enabled": true,
          *           "S3BucketArn": "arn:aws:s3:::my_billing_bucket_name"
          *         }
          *       },
@@ -7608,9 +7634,18 @@ export interface components {
          *       "name": "Premium",
          *       "planDescription": "A premium plan",
          *       "pricePerUnit": {
-         *         "CPU core hours": "0.001",
-         *         "Memory GiB hours": "0.0001",
-         *         "Storage GiB hours": "0.0001"
+         *         "CPU core hours": {
+         *           "amount": 0.001,
+         *           "currency": "USD"
+         *         },
+         *         "Memory GiB hours": {
+         *           "amount": 0.0001,
+         *           "currency": "USD"
+         *         },
+         *         "Storage GiB hours": {
+         *           "amount": 0.0001,
+         *           "currency": "USD"
+         *         }
          *       },
          *       "pricing": {
          *         "price1": "value1"
@@ -7666,11 +7701,9 @@ export interface components {
              * @description Export usage metering data configuration
              * @example {
              *       "GCS": {
-             *         "Enabled": true,
              *         "GCSBucketName": "my_billing_bucket_name"
              *       },
              *       "S3": {
-             *         "Enabled": true,
              *         "S3BucketArn": "arn:aws:s3:::my_billing_bucket_name"
              *       }
              *     }
@@ -7709,9 +7742,18 @@ export interface components {
             /**
              * @description Price per unit.
              * @example {
-             *       "CPU core hours": "0.001",
-             *       "Memory GiB hours": "0.0001",
-             *       "Storage GiB hours": "0.0001"
+             *       "CPU core hours": {
+             *         "amount": 0.001,
+             *         "currency": "USD"
+             *       },
+             *       "Memory GiB hours": {
+             *         "amount": 0.0001,
+             *         "currency": "USD"
+             *       },
+             *       "Storage GiB hours": {
+             *         "amount": 0.0001,
+             *         "currency": "USD"
+             *       }
              *     }
              */
             pricePerUnit?: {
@@ -7765,11 +7807,9 @@ export interface components {
          *       "exportUsageMetering": true,
          *       "exportUsageMeteringConfig": {
          *         "GCS": {
-         *           "Enabled": true,
          *           "GCSBucketName": "my_billing_bucket_name"
          *         },
          *         "S3": {
-         *           "Enabled": true,
          *           "S3BucketArn": "arn:aws:s3:::my_billing_bucket_name"
          *         }
          *       },
@@ -7781,9 +7821,18 @@ export interface components {
          *       "name": "Premium",
          *       "planDescription": "A premium plan",
          *       "pricePerUnit": {
-         *         "CPU core hours": "0.001",
-         *         "Memory GiB hours": "0.0001",
-         *         "Storage GiB hours": "0.0001"
+         *         "CPU core hours": {
+         *           "amount": 0.001,
+         *           "currency": "USD"
+         *         },
+         *         "Memory GiB hours": {
+         *           "amount": 0.0001,
+         *           "currency": "USD"
+         *         },
+         *         "Storage GiB hours": {
+         *           "amount": 0.0001,
+         *           "currency": "USD"
+         *         }
          *       },
          *       "pricing": {
          *         "price1": "value1"
@@ -7837,11 +7886,9 @@ export interface components {
              * @description Export usage metering data configuration
              * @example {
              *       "GCS": {
-             *         "Enabled": true,
              *         "GCSBucketName": "my_billing_bucket_name"
              *       },
              *       "S3": {
-             *         "Enabled": true,
              *         "S3BucketArn": "arn:aws:s3:::my_billing_bucket_name"
              *       }
              *     }
@@ -7880,9 +7927,18 @@ export interface components {
             /**
              * @description Price per unit.
              * @example {
-             *       "CPU core hours": "0.001",
-             *       "Memory GiB hours": "0.0001",
-             *       "Storage GiB hours": "0.0001"
+             *       "CPU core hours": {
+             *         "amount": 0.001,
+             *         "currency": "USD"
+             *       },
+             *       "Memory GiB hours": {
+             *         "amount": 0.0001,
+             *         "currency": "USD"
+             *       },
+             *       "Storage GiB hours": {
+             *         "amount": 0.0001,
+             *         "currency": "USD"
+             *       }
              *     }
              */
             pricePerUnit?: {
@@ -13980,9 +14036,18 @@ export interface components {
          *       "name": "Premium",
          *       "planDescription": "A premium plan",
          *       "pricePerUnit": {
-         *         "CPU core hours": "0.001",
-         *         "Memory GiB hours": "0.0001",
-         *         "Storage GiB hours": "0.0001"
+         *         "CPU core hours": {
+         *           "amount": 0.001,
+         *           "currency": "USD"
+         *         },
+         *         "Memory GiB hours": {
+         *           "amount": 0.0001,
+         *           "currency": "USD"
+         *         },
+         *         "Storage GiB hours": {
+         *           "amount": 0.0001,
+         *           "currency": "USD"
+         *         }
          *       },
          *       "pricing": {
          *         "price1": "value1"
@@ -14137,9 +14202,18 @@ export interface components {
             /**
              * @description Price per unit.
              * @example {
-             *       "CPU core hours": "0.001",
-             *       "Memory GiB hours": "0.0001",
-             *       "Storage GiB hours": "0.0001"
+             *       "CPU core hours": {
+             *         "amount": 0.001,
+             *         "currency": "USD"
+             *       },
+             *       "Memory GiB hours": {
+             *         "amount": 0.0001,
+             *         "currency": "USD"
+             *       },
+             *       "Storage GiB hours": {
+             *         "amount": 0.0001,
+             *         "currency": "USD"
+             *       }
              *     }
              */
             pricePerUnit?: {
@@ -15764,11 +15838,12 @@ export interface components {
          *       "isDeprecated": false,
          *       "offerings": [
          *         {
+         *           "allowCreatesWhenPaymentNotConfigured": true,
          *           "assets": {
          *             "cloudFormationURL": "https://us-east-1.console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/quickcreate?templateURL=https://s3.amazonaws.com/omnistrate-cloudformation-dev/org-EUVvex3bVm/account-config-setup-template.yaml&stackName=AccountConfigSetup&param_AccountConfigIdentityId=org-EUVvex3bVm&param_OIDCIssuerURLWithoutPrefix=oidc.eks.us-east-2.amazonaws.com/id/C339DC3726AD36506FB7ABE55754784F&param_OIDCIssuerThumbprintList=9e99a48a9960b14926bb7f3b02e22da2b0ab7280&param_ServiceAccount=bootstrap-sa",
          *             "cloudFormationURLNoLB": "https://us-east-1.console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/quickcreate?templateURL=https://s3.amazonaws.com/omnistrate-cloudformation-dev/org-EUVvex3bVm/account-config-setup-template.yaml&stackName=AccountConfigSetup&param_AccountConfigIdentityId=org-EUVvex3bVm&param_OIDCIssuerURLWithoutPrefix=oidc.eks.us-east-2.amazonaws.com/id/C339DC3726AD36506FB7ABE55754784F&param_OIDCIssuerThumbprintList=9e99a48a9960b14926bb7f3b02e22da2b0ab7280&param_ServiceAccount=bootstrap-sa&param_CreateLoadBalancerPolicy=false"
          *           },
-         *           "maxNumberofInstances": 4,
+         *           "maxNumberOfInstances": 4,
          *           "productTierName": "Premium",
          *           "productTierURLKey": "premium",
          *           "resourceParameters": [
@@ -15835,11 +15910,12 @@ export interface components {
              * @description The service offerings
              * @example [
              *       {
+             *         "allowCreatesWhenPaymentNotConfigured": true,
              *         "assets": {
              *           "cloudFormationURL": "https://us-east-1.console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/quickcreate?templateURL=https://s3.amazonaws.com/omnistrate-cloudformation-dev/org-EUVvex3bVm/account-config-setup-template.yaml&stackName=AccountConfigSetup&param_AccountConfigIdentityId=org-EUVvex3bVm&param_OIDCIssuerURLWithoutPrefix=oidc.eks.us-east-2.amazonaws.com/id/C339DC3726AD36506FB7ABE55754784F&param_OIDCIssuerThumbprintList=9e99a48a9960b14926bb7f3b02e22da2b0ab7280&param_ServiceAccount=bootstrap-sa",
              *           "cloudFormationURLNoLB": "https://us-east-1.console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/quickcreate?templateURL=https://s3.amazonaws.com/omnistrate-cloudformation-dev/org-EUVvex3bVm/account-config-setup-template.yaml&stackName=AccountConfigSetup&param_AccountConfigIdentityId=org-EUVvex3bVm&param_OIDCIssuerURLWithoutPrefix=oidc.eks.us-east-2.amazonaws.com/id/C339DC3726AD36506FB7ABE55754784F&param_OIDCIssuerThumbprintList=9e99a48a9960b14926bb7f3b02e22da2b0ab7280&param_ServiceAccount=bootstrap-sa&param_CreateLoadBalancerPolicy=false"
              *         },
-             *         "maxNumberofInstances": 4,
+             *         "maxNumberOfInstances": 4,
              *         "productTierName": "Premium",
              *         "productTierURLKey": "premium",
              *         "resourceParameters": [
@@ -17885,7 +17961,7 @@ export interface components {
             };
             /**
              * @description The type of the end customer specific event
-             * @example InviteUser|RevokeUserRole|RevokeUserRole|InstanceMaintenanceScheduled|CustomerSignUp
+             * @example InviteUser|RevokeUserRole|InstanceMaintenanceScheduled|CustomerSignUp|DisconnectAccountComplete|ConnectAccountComplete|PendingRevokePermissions|PendingRestorePermissions
              */
             eventType: string;
             /**
@@ -19763,7 +19839,8 @@ export interface components {
         /** @example {
          *       "currency": "USD",
          *       "invoiceDate": "2021-01-01T00:00:00.000Z",
-         *       "invoiceId": "123MyCoolCorp980-2021-01-01-1234567890",
+         *       "invoiceId": "in_1234568",
+         *       "invoiceNumber": "2021-01-01-1234567890",
          *       "invoicePdf": "https://pay.stripe.com/invoice/acct_1M2JTkLkdIwHu7ix/test_YWNjdF8xTTJKVGtMa2RJd0h1N2l4LF9OZVp3dVBYNnF0dGlvdXRubGVjSXVOOWhiVWpmUktPLDcxMTgyMTA10200x7P2wMSm/pdf?s=ap",
          *       "invoiceStatus": "Open",
          *       "invoiceUrl": "https://invoice.stripe.com/i/acct_1M2JTkLkdIwHu7ix/test_YWNjdF8xTTJKVGtMa2RJd0h1N2l4LF9OZVp3dVBYNnF0dGlvdXRubGVjSXVOOWhiVWpmUktPLDcxMTgyMTA10200x7P2wMSm?s=ap",
@@ -19784,9 +19861,14 @@ export interface components {
             invoiceDate?: string;
             /**
              * @description ID of the invoice
-             * @example 123MyCoolCorp980-2021-01-01-1234567890
+             * @example in_1234568
              */
             invoiceId?: string;
+            /**
+             * @description The invoice number
+             * @example 2021-01-01-1234567890
+             */
+            invoiceNumber?: string;
             /**
              * @description URL for the PDF of the invoice
              * @example https://pay.stripe.com/invoice/acct_1M2JTkLkdIwHu7ix/test_YWNjdF8xTTJKVGtMa2RJd0h1N2l4LF9OZVp3dVBYNnF0dGlvdXRubGVjSXVOOWhiVWpmUktPLDcxMTgyMTA10200x7P2wMSm/pdf?s=ap
@@ -22972,7 +23054,8 @@ export interface components {
          *         {
          *           "currency": "USD",
          *           "invoiceDate": "2021-01-01T00:00:00.000Z",
-         *           "invoiceId": "123MyCoolCorp980-2021-01-01-1234567890",
+         *           "invoiceId": "in_1234568",
+         *           "invoiceNumber": "2021-01-01-1234567890",
          *           "invoicePdf": "https://pay.stripe.com/invoice/acct_1M2JTkLkdIwHu7ix/test_YWNjdF8xTTJKVGtMa2RJd0h1N2l4LF9OZVp3dVBYNnF0dGlvdXRubGVjSXVOOWhiVWpmUktPLDcxMTgyMTA10200x7P2wMSm/pdf?s=ap",
          *           "invoiceStatus": "Open",
          *           "invoiceUrl": "https://invoice.stripe.com/i/acct_1M2JTkLkdIwHu7ix/test_YWNjdF8xTTJKVGtMa2RJd0h1N2l4LF9OZVp3dVBYNnF0dGlvdXRubGVjSXVOOWhiVWpmUktPLDcxMTgyMTA10200x7P2wMSm?s=ap",
@@ -22983,7 +23066,8 @@ export interface components {
          *         {
          *           "currency": "USD",
          *           "invoiceDate": "2021-01-01T00:00:00.000Z",
-         *           "invoiceId": "123MyCoolCorp980-2021-01-01-1234567890",
+         *           "invoiceId": "in_1234568",
+         *           "invoiceNumber": "2021-01-01-1234567890",
          *           "invoicePdf": "https://pay.stripe.com/invoice/acct_1M2JTkLkdIwHu7ix/test_YWNjdF8xTTJKVGtMa2RJd0h1N2l4LF9OZVp3dVBYNnF0dGlvdXRubGVjSXVOOWhiVWpmUktPLDcxMTgyMTA10200x7P2wMSm/pdf?s=ap",
          *           "invoiceStatus": "Open",
          *           "invoiceUrl": "https://invoice.stripe.com/i/acct_1M2JTkLkdIwHu7ix/test_YWNjdF8xTTJKVGtMa2RJd0h1N2l4LF9OZVp3dVBYNnF0dGlvdXRubGVjSXVOOWhiVWpmUktPLDcxMTgyMTA10200x7P2wMSm?s=ap",
@@ -23000,7 +23084,8 @@ export interface components {
              *       {
              *         "currency": "USD",
              *         "invoiceDate": "2021-01-01T00:00:00.000Z",
-             *         "invoiceId": "123MyCoolCorp980-2021-01-01-1234567890",
+             *         "invoiceId": "in_1234568",
+             *         "invoiceNumber": "2021-01-01-1234567890",
              *         "invoicePdf": "https://pay.stripe.com/invoice/acct_1M2JTkLkdIwHu7ix/test_YWNjdF8xTTJKVGtMa2RJd0h1N2l4LF9OZVp3dVBYNnF0dGlvdXRubGVjSXVOOWhiVWpmUktPLDcxMTgyMTA10200x7P2wMSm/pdf?s=ap",
              *         "invoiceStatus": "Open",
              *         "invoiceUrl": "https://invoice.stripe.com/i/acct_1M2JTkLkdIwHu7ix/test_YWNjdF8xTTJKVGtMa2RJd0h1N2l4LF9OZVp3dVBYNnF0dGlvdXRubGVjSXVOOWhiVWpmUktPLDcxMTgyMTA10200x7P2wMSm?s=ap",
@@ -23011,7 +23096,8 @@ export interface components {
              *       {
              *         "currency": "USD",
              *         "invoiceDate": "2021-01-01T00:00:00.000Z",
-             *         "invoiceId": "123MyCoolCorp980-2021-01-01-1234567890",
+             *         "invoiceId": "in_1234568",
+             *         "invoiceNumber": "2021-01-01-1234567890",
              *         "invoicePdf": "https://pay.stripe.com/invoice/acct_1M2JTkLkdIwHu7ix/test_YWNjdF8xTTJKVGtMa2RJd0h1N2l4LF9OZVp3dVBYNnF0dGlvdXRubGVjSXVOOWhiVWpmUktPLDcxMTgyMTA10200x7P2wMSm/pdf?s=ap",
              *         "invoiceStatus": "Open",
              *         "invoiceUrl": "https://invoice.stripe.com/i/acct_1M2JTkLkdIwHu7ix/test_YWNjdF8xTTJKVGtMa2RJd0h1N2l4LF9OZVp3dVBYNnF0dGlvdXRubGVjSXVOOWhiVWpmUktPLDcxMTgyMTA10200x7P2wMSm?s=ap",
@@ -26709,11 +26795,12 @@ export interface components {
          *           "isDeprecated": false,
          *           "offerings": [
          *             {
+         *               "allowCreatesWhenPaymentNotConfigured": true,
          *               "assets": {
          *                 "cloudFormationURL": "https://us-east-1.console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/quickcreate?templateURL=https://s3.amazonaws.com/omnistrate-cloudformation-dev/org-EUVvex3bVm/account-config-setup-template.yaml&stackName=AccountConfigSetup&param_AccountConfigIdentityId=org-EUVvex3bVm&param_OIDCIssuerURLWithoutPrefix=oidc.eks.us-east-2.amazonaws.com/id/C339DC3726AD36506FB7ABE55754784F&param_OIDCIssuerThumbprintList=9e99a48a9960b14926bb7f3b02e22da2b0ab7280&param_ServiceAccount=bootstrap-sa",
          *                 "cloudFormationURLNoLB": "https://us-east-1.console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/quickcreate?templateURL=https://s3.amazonaws.com/omnistrate-cloudformation-dev/org-EUVvex3bVm/account-config-setup-template.yaml&stackName=AccountConfigSetup&param_AccountConfigIdentityId=org-EUVvex3bVm&param_OIDCIssuerURLWithoutPrefix=oidc.eks.us-east-2.amazonaws.com/id/C339DC3726AD36506FB7ABE55754784F&param_OIDCIssuerThumbprintList=9e99a48a9960b14926bb7f3b02e22da2b0ab7280&param_ServiceAccount=bootstrap-sa&param_CreateLoadBalancerPolicy=false"
          *               },
-         *               "maxNumberofInstances": 4,
+         *               "maxNumberOfInstances": 4,
          *               "productTierName": "Premium",
          *               "productTierURLKey": "premium",
          *               "resourceParameters": [
@@ -26769,11 +26856,12 @@ export interface components {
          *           "isDeprecated": false,
          *           "offerings": [
          *             {
+         *               "allowCreatesWhenPaymentNotConfigured": true,
          *               "assets": {
          *                 "cloudFormationURL": "https://us-east-1.console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/quickcreate?templateURL=https://s3.amazonaws.com/omnistrate-cloudformation-dev/org-EUVvex3bVm/account-config-setup-template.yaml&stackName=AccountConfigSetup&param_AccountConfigIdentityId=org-EUVvex3bVm&param_OIDCIssuerURLWithoutPrefix=oidc.eks.us-east-2.amazonaws.com/id/C339DC3726AD36506FB7ABE55754784F&param_OIDCIssuerThumbprintList=9e99a48a9960b14926bb7f3b02e22da2b0ab7280&param_ServiceAccount=bootstrap-sa",
          *                 "cloudFormationURLNoLB": "https://us-east-1.console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/quickcreate?templateURL=https://s3.amazonaws.com/omnistrate-cloudformation-dev/org-EUVvex3bVm/account-config-setup-template.yaml&stackName=AccountConfigSetup&param_AccountConfigIdentityId=org-EUVvex3bVm&param_OIDCIssuerURLWithoutPrefix=oidc.eks.us-east-2.amazonaws.com/id/C339DC3726AD36506FB7ABE55754784F&param_OIDCIssuerThumbprintList=9e99a48a9960b14926bb7f3b02e22da2b0ab7280&param_ServiceAccount=bootstrap-sa&param_CreateLoadBalancerPolicy=false"
          *               },
-         *               "maxNumberofInstances": 4,
+         *               "maxNumberOfInstances": 4,
          *               "productTierName": "Premium",
          *               "productTierURLKey": "premium",
          *               "resourceParameters": [
@@ -26848,11 +26936,12 @@ export interface components {
              *         "isDeprecated": false,
              *         "offerings": [
              *           {
+             *             "allowCreatesWhenPaymentNotConfigured": true,
              *             "assets": {
              *               "cloudFormationURL": "https://us-east-1.console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/quickcreate?templateURL=https://s3.amazonaws.com/omnistrate-cloudformation-dev/org-EUVvex3bVm/account-config-setup-template.yaml&stackName=AccountConfigSetup&param_AccountConfigIdentityId=org-EUVvex3bVm&param_OIDCIssuerURLWithoutPrefix=oidc.eks.us-east-2.amazonaws.com/id/C339DC3726AD36506FB7ABE55754784F&param_OIDCIssuerThumbprintList=9e99a48a9960b14926bb7f3b02e22da2b0ab7280&param_ServiceAccount=bootstrap-sa",
              *               "cloudFormationURLNoLB": "https://us-east-1.console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/quickcreate?templateURL=https://s3.amazonaws.com/omnistrate-cloudformation-dev/org-EUVvex3bVm/account-config-setup-template.yaml&stackName=AccountConfigSetup&param_AccountConfigIdentityId=org-EUVvex3bVm&param_OIDCIssuerURLWithoutPrefix=oidc.eks.us-east-2.amazonaws.com/id/C339DC3726AD36506FB7ABE55754784F&param_OIDCIssuerThumbprintList=9e99a48a9960b14926bb7f3b02e22da2b0ab7280&param_ServiceAccount=bootstrap-sa&param_CreateLoadBalancerPolicy=false"
              *             },
-             *             "maxNumberofInstances": 4,
+             *             "maxNumberOfInstances": 4,
              *             "productTierName": "Premium",
              *             "productTierURLKey": "premium",
              *             "resourceParameters": [
@@ -26908,11 +26997,12 @@ export interface components {
              *         "isDeprecated": false,
              *         "offerings": [
              *           {
+             *             "allowCreatesWhenPaymentNotConfigured": true,
              *             "assets": {
              *               "cloudFormationURL": "https://us-east-1.console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/quickcreate?templateURL=https://s3.amazonaws.com/omnistrate-cloudformation-dev/org-EUVvex3bVm/account-config-setup-template.yaml&stackName=AccountConfigSetup&param_AccountConfigIdentityId=org-EUVvex3bVm&param_OIDCIssuerURLWithoutPrefix=oidc.eks.us-east-2.amazonaws.com/id/C339DC3726AD36506FB7ABE55754784F&param_OIDCIssuerThumbprintList=9e99a48a9960b14926bb7f3b02e22da2b0ab7280&param_ServiceAccount=bootstrap-sa",
              *               "cloudFormationURLNoLB": "https://us-east-1.console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/quickcreate?templateURL=https://s3.amazonaws.com/omnistrate-cloudformation-dev/org-EUVvex3bVm/account-config-setup-template.yaml&stackName=AccountConfigSetup&param_AccountConfigIdentityId=org-EUVvex3bVm&param_OIDCIssuerURLWithoutPrefix=oidc.eks.us-east-2.amazonaws.com/id/C339DC3726AD36506FB7ABE55754784F&param_OIDCIssuerThumbprintList=9e99a48a9960b14926bb7f3b02e22da2b0ab7280&param_ServiceAccount=bootstrap-sa&param_CreateLoadBalancerPolicy=false"
              *             },
-             *             "maxNumberofInstances": 4,
+             *             "maxNumberOfInstances": 4,
              *             "productTierName": "Premium",
              *             "productTierURLKey": "premium",
              *             "resourceParameters": [
@@ -33557,6 +33647,7 @@ export interface components {
         };
         /** @example {
          *       "AutoApproveSubscription": false,
+         *       "allowCreatesWhenPaymentNotConfigured": true,
          *       "assets": {
          *         "cloudFormationURL": "https://us-east-1.console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/quickcreate?templateURL=https://s3.amazonaws.com/omnistrate-cloudformation-dev/org-EUVvex3bVm/account-config-setup-template.yaml&stackName=AccountConfigSetup&param_AccountConfigIdentityId=org-EUVvex3bVm&param_OIDCIssuerURLWithoutPrefix=oidc.eks.us-east-2.amazonaws.com/id/C339DC3726AD36506FB7ABE55754784F&param_OIDCIssuerThumbprintList=9e99a48a9960b14926bb7f3b02e22da2b0ab7280&param_ServiceAccount=bootstrap-sa",
          *         "cloudFormationURLNoLB": "https://us-east-1.console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/quickcreate?templateURL=https://s3.amazonaws.com/omnistrate-cloudformation-dev/org-EUVvex3bVm/account-config-setup-template.yaml&stackName=AccountConfigSetup&param_AccountConfigIdentityId=org-EUVvex3bVm&param_OIDCIssuerURLWithoutPrefix=oidc.eks.us-east-2.amazonaws.com/id/C339DC3726AD36506FB7ABE55754784F&param_OIDCIssuerThumbprintList=9e99a48a9960b14926bb7f3b02e22da2b0ab7280&param_ServiceAccount=bootstrap-sa&param_CreateLoadBalancerPolicy=false"
@@ -33590,7 +33681,7 @@ export interface components {
          *       "gcpRegions": [
          *         "us-central1"
          *       ],
-         *       "maxNumberofInstances": 5,
+         *       "maxNumberOfInstances": 5,
          *       "productTierDescription": "A premium product tier",
          *       "productTierDocumentation": "Any documentation",
          *       "productTierID": "pt-12345678",
@@ -33650,6 +33741,11 @@ export interface components {
              * @example false
              */
             AutoApproveSubscription: boolean;
+            /**
+             * @description Allow creates when payment not configured
+             * @example true
+             */
+            allowCreatesWhenPaymentNotConfigured?: boolean;
             assets?: components["schemas"]["ServiceAssets"];
             /**
              * @description The AWS regions that this service offering is available on
@@ -33705,7 +33801,7 @@ export interface components {
              * @description Maximum number of instances
              * @example 5
              */
-            maxNumberofInstances?: number;
+            maxNumberOfInstances?: number;
             /**
              * @description A brief description of the product tier
              * @example A premium product tier
@@ -34817,7 +34913,8 @@ export interface components {
         };
         /** @example {
          *       "serviceId": "service-1234",
-         *       "setConnection": true
+         *       "setConnection": true,
+         *       "subscriptionId": "sub-abcd1234"
          *     } */
         UpdateAccountConfigResourceInstanceRequest2: {
             /**
@@ -34830,6 +34927,11 @@ export interface components {
              * @example true
              */
             setConnection?: boolean;
+            /**
+             * @description The subscription ID
+             * @example sub-abcd1234
+             */
+            subscriptionId: string;
         };
         /** @example {
          *       "autoscalingPolicy": {
@@ -36261,11 +36363,9 @@ export interface components {
          *       "exportUsageMetering": true,
          *       "exportUsageMeteringConfig": {
          *         "GCS": {
-         *           "Enabled": true,
          *           "GCSBucketName": "my_billing_bucket_name"
          *         },
          *         "S3": {
-         *           "Enabled": true,
          *           "S3BucketArn": "arn:aws:s3:::my_billing_bucket_name"
          *         }
          *       },
@@ -36278,9 +36378,18 @@ export interface components {
          *       "name": "Premium",
          *       "planDescription": "A premium plan",
          *       "pricePerUnit": {
-         *         "CPU core hours": "0.001",
-         *         "Memory GiB hours": "0.0001",
-         *         "Storage GiB hours": "0.0001"
+         *         "CPU core hours": {
+         *           "amount": 0.001,
+         *           "currency": "USD"
+         *         },
+         *         "Memory GiB hours": {
+         *           "amount": 0.0001,
+         *           "currency": "USD"
+         *         },
+         *         "Storage GiB hours": {
+         *           "amount": 0.0001,
+         *           "currency": "USD"
+         *         }
          *       },
          *       "pricing": {
          *         "price1": "value1"
@@ -36335,11 +36444,9 @@ export interface components {
              * @description Export usage metering data configuration
              * @example {
              *       "GCS": {
-             *         "Enabled": true,
              *         "GCSBucketName": "my_billing_bucket_name"
              *       },
              *       "S3": {
-             *         "Enabled": true,
              *         "S3BucketArn": "arn:aws:s3:::my_billing_bucket_name"
              *       }
              *     }
@@ -36383,9 +36490,18 @@ export interface components {
             /**
              * @description Price per unit.
              * @example {
-             *       "CPU core hours": "0.001",
-             *       "Memory GiB hours": "0.0001",
-             *       "Storage GiB hours": "0.0001"
+             *       "CPU core hours": {
+             *         "amount": 0.001,
+             *         "currency": "USD"
+             *       },
+             *       "Memory GiB hours": {
+             *         "amount": 0.0001,
+             *         "currency": "USD"
+             *       },
+             *       "Storage GiB hours": {
+             *         "amount": 0.0001,
+             *         "currency": "USD"
+             *       }
              *     }
              */
             pricePerUnit?: {
@@ -36434,11 +36550,9 @@ export interface components {
          *       "exportUsageMetering": true,
          *       "exportUsageMeteringConfig": {
          *         "GCS": {
-         *           "Enabled": true,
          *           "GCSBucketName": "my_billing_bucket_name"
          *         },
          *         "S3": {
-         *           "Enabled": true,
          *           "S3BucketArn": "arn:aws:s3:::my_billing_bucket_name"
          *         }
          *       },
@@ -36450,9 +36564,18 @@ export interface components {
          *       "name": "Premium",
          *       "planDescription": "A premium plan",
          *       "pricePerUnit": {
-         *         "CPU core hours": "0.001",
-         *         "Memory GiB hours": "0.0001",
-         *         "Storage GiB hours": "0.0001"
+         *         "CPU core hours": {
+         *           "amount": 0.001,
+         *           "currency": "USD"
+         *         },
+         *         "Memory GiB hours": {
+         *           "amount": 0.0001,
+         *           "currency": "USD"
+         *         },
+         *         "Storage GiB hours": {
+         *           "amount": 0.0001,
+         *           "currency": "USD"
+         *         }
          *       },
          *       "pricing": {
          *         "price1": "value1"
@@ -36505,11 +36628,9 @@ export interface components {
              * @description Export usage metering data configuration
              * @example {
              *       "GCS": {
-             *         "Enabled": true,
              *         "GCSBucketName": "my_billing_bucket_name"
              *       },
              *       "S3": {
-             *         "Enabled": true,
              *         "S3BucketArn": "arn:aws:s3:::my_billing_bucket_name"
              *       }
              *     }
@@ -36548,9 +36669,18 @@ export interface components {
             /**
              * @description Price per unit.
              * @example {
-             *       "CPU core hours": "0.001",
-             *       "Memory GiB hours": "0.0001",
-             *       "Storage GiB hours": "0.0001"
+             *       "CPU core hours": {
+             *         "amount": 0.001,
+             *         "currency": "USD"
+             *       },
+             *       "Memory GiB hours": {
+             *         "amount": 0.0001,
+             *         "currency": "USD"
+             *       },
+             *       "Storage GiB hours": {
+             *         "amount": 0.0001,
+             *         "currency": "USD"
+             *       }
              *     }
              */
             pricePerUnit?: {
@@ -46248,13 +46378,7 @@ export interface operations {
     };
     "resource-instance-api/UpdateAccountConfigResourceInstance": {
         parameters: {
-            query: {
-                /**
-                 * @description Subscription Id
-                 * @example sub-abcd1234
-                 */
-                subscriptionId: string;
-            };
+            query?: never;
             header?: never;
             path: {
                 /**
@@ -46269,7 +46393,8 @@ export interface operations {
             content: {
                 /** @example {
                  *       "serviceId": "service-1234",
-                 *       "setConnection": true
+                 *       "setConnection": true,
+                 *       "subscriptionId": "sub-abcd1234"
                  *     } */
                 "application/json": components["schemas"]["UpdateAccountConfigResourceInstanceRequest2"];
             };
@@ -55120,11 +55245,9 @@ export interface operations {
                  *       "exportUsageMetering": true,
                  *       "exportUsageMeteringConfig": {
                  *         "GCS": {
-                 *           "Enabled": true,
                  *           "GCSBucketName": "my_billing_bucket_name"
                  *         },
                  *         "S3": {
-                 *           "Enabled": true,
                  *           "S3BucketArn": "arn:aws:s3:::my_billing_bucket_name"
                  *         }
                  *       },
@@ -55136,9 +55259,18 @@ export interface operations {
                  *       "name": "Premium",
                  *       "planDescription": "A premium plan",
                  *       "pricePerUnit": {
-                 *         "CPU core hours": "0.001",
-                 *         "Memory GiB hours": "0.0001",
-                 *         "Storage GiB hours": "0.0001"
+                 *         "CPU core hours": {
+                 *           "amount": 0.001,
+                 *           "currency": "USD"
+                 *         },
+                 *         "Memory GiB hours": {
+                 *           "amount": 0.0001,
+                 *           "currency": "USD"
+                 *         },
+                 *         "Storage GiB hours": {
+                 *           "amount": 0.0001,
+                 *           "currency": "USD"
+                 *         }
                  *       },
                  *       "pricing": {
                  *         "price1": "value1"
@@ -55425,11 +55557,9 @@ export interface operations {
                  *       "exportUsageMetering": true,
                  *       "exportUsageMeteringConfig": {
                  *         "GCS": {
-                 *           "Enabled": true,
                  *           "GCSBucketName": "my_billing_bucket_name"
                  *         },
                  *         "S3": {
-                 *           "Enabled": true,
                  *           "S3BucketArn": "arn:aws:s3:::my_billing_bucket_name"
                  *         }
                  *       },
@@ -55441,9 +55571,18 @@ export interface operations {
                  *       "name": "Premium",
                  *       "planDescription": "A premium plan",
                  *       "pricePerUnit": {
-                 *         "CPU core hours": "0.001",
-                 *         "Memory GiB hours": "0.0001",
-                 *         "Storage GiB hours": "0.0001"
+                 *         "CPU core hours": {
+                 *           "amount": 0.001,
+                 *           "currency": "USD"
+                 *         },
+                 *         "Memory GiB hours": {
+                 *           "amount": 0.0001,
+                 *           "currency": "USD"
+                 *         },
+                 *         "Storage GiB hours": {
+                 *           "amount": 0.0001,
+                 *           "currency": "USD"
+                 *         }
                  *       },
                  *       "pricing": {
                  *         "price1": "value1"
@@ -56287,11 +56426,9 @@ export interface operations {
                  *       "exportUsageMetering": true,
                  *       "exportUsageMeteringConfig": {
                  *         "GCS": {
-                 *           "Enabled": true,
                  *           "GCSBucketName": "my_billing_bucket_name"
                  *         },
                  *         "S3": {
-                 *           "Enabled": true,
                  *           "S3BucketArn": "arn:aws:s3:::my_billing_bucket_name"
                  *         }
                  *       },
@@ -56302,9 +56439,18 @@ export interface operations {
                  *       "name": "Premium",
                  *       "planDescription": "A premium plan",
                  *       "pricePerUnit": {
-                 *         "CPU core hours": "0.001",
-                 *         "Memory GiB hours": "0.0001",
-                 *         "Storage GiB hours": "0.0001"
+                 *         "CPU core hours": {
+                 *           "amount": 0.001,
+                 *           "currency": "USD"
+                 *         },
+                 *         "Memory GiB hours": {
+                 *           "amount": 0.0001,
+                 *           "currency": "USD"
+                 *         },
+                 *         "Storage GiB hours": {
+                 *           "amount": 0.0001,
+                 *           "currency": "USD"
+                 *         }
                  *       },
                  *       "pricing": {
                  *         "price1": "value1"

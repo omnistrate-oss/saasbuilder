@@ -350,7 +350,7 @@ const InstancesTableHeader = ({
 
     if (selectedInstance?.kubernetesDashboardEndpoint?.dashboardEndpoint) {
       other.push({
-        dataTestId: "open-dashboard-button",
+        dataTestId: "generate-token-button",
         label: "Generate Token",
         isDisabled: !selectedInstance || status === "DISCONNECTED",
         disabledMessage: !selectedInstance
@@ -488,6 +488,7 @@ const InstancesTableHeader = ({
             const Icon = icons[action.label];
             return (
               <Button
+                data-testid={action.dataTestId || action.label}
                 key={index}
                 variant={
                   action.actionType === "primary" ? "contained" : "outlined"
