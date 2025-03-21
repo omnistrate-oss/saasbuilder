@@ -557,3 +557,22 @@ export const getRowBorderStyles = () => {
   }
   return styles;
 };
+
+//
+export const getOfferingPaymentConfigRequiredStatus = (
+  serviceOfferings: ServiceOffering[],
+  selectedServiceId: string,
+  selectedProductTierId: string
+): boolean => {
+  let requiresValidPaymentConfig = false;
+  const offering = serviceOfferings.find(
+    (offering) =>
+      offering.serviceId === selectedServiceId &&
+      offering.productTierID === selectedProductTierId
+  );
+  if (offering && offering.allowCreatesWhenPaymentNotConfigured === false) {
+    requiresValidPaymentConfig = true;
+  }
+
+  return requiresValidPaymentConfig;
+};

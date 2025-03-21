@@ -56,6 +56,7 @@ import LoadIndicatorNormal from "src/components/Icons/LoadIndicator/LoadIndicato
 import LoadIndicatorHigh from "src/components/Icons/LoadIndicator/LoadIndicatorHigh";
 import StatusCell from "./components/StatusCell";
 import { getResourceInstanceDetailsStatusStylesAndLabel } from "src/constants/statusChipStyles/resourceInstanceDetailsStatus";
+import useBillingDetails from "../billing/hooks/useBillingDetails";
 
 const columnHelper = createColumnHelper<ResourceInstance>();
 type Overlay =
@@ -79,6 +80,8 @@ const InstancesPage = () => {
     instanceId?: string;
     isCustomDNS?: boolean;
   }>({});
+  const { data: billingConfig } = useBillingDetails();
+  const isPaymentConfigured = Boolean(billingConfig?.paymentConfigured);
 
   const [statusFilters, setStatusFilters] = useState(getInitialFilterState());
 
@@ -660,6 +663,7 @@ const InstancesPage = () => {
             setCreateInstanceModalData={setCreateInstanceModalData}
             setIsOverlayOpen={setIsOverlayOpen}
             setOverlayType={setOverlayType}
+            isPaymentConfigured={isPaymentConfigured}
           />
         }
       />
