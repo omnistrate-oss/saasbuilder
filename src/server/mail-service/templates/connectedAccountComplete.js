@@ -1,5 +1,6 @@
 const ejs = require("ejs");
 const path = require("path");
+const { getSaaSDomainURL } = require("../../utils/getSaaSDomainURL");
 
 async function getConnectedAccountCompleteMailContent(
   connectedAccountCompleteEventObj,
