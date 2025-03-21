@@ -1,53 +1,40 @@
 const ejs = require("ejs");
 const path = require("path");
-const { getSaaSDomainURL } = require("../../utils/getSaaSDomainURL");
 
 async function getConnectedAccountCompleteMailContent(
-  approveSubsriptionEventObj,
-  orgLogoURL
+  connectedAccountCompleteEventObj,
+  orgLogoURL,
+  orgSupportEmail
 ) {
-  const orgName = approveSubsriptionEventObj.orgName;
-  const email = approveSubsriptionEventObj.userEmail;
-  const serviceName = approveSubsriptionEventObj.eventPayload.service_name;
-  const servicePlanName =
-    approveSubsriptionEventObj.eventPayload.product_tier_name;
+  const userName = connectedAccountCompleteEventObj.eventPayload.user_name;
+  const email = connectedAccountCompleteEventObj.eventPayload.user_email;
+  const accountId = connectedAccountCompleteEventObj.eventPayload.account_id;
+  const orgName = connectedAccountCompleteEventObj.orgName;
 
-  const subject = `Your ${serviceName} - ${servicePlanName} subscription request approved`;
+  const subject = `Success: AWS Account ${accountId} Connected to ${orgName}`;
 
   const templatePath = path.resolve(
     __dirname,
     "..",
     "ejsTemplates",
-    "approveSubscriptionRequest.ejs"
+    "connectedAccountComplete.ejs"
   );
 
-  const baseURL = getSaaSDomainURL();
-
   const message = await ejs.renderFile(templatePath, {
-    service_plan_name: servicePlanName,
-    service_name: serviceName,
+    account_number: accountId,
+    org_name: orgName,
+    user_name: userName,
     logo_url: orgLogoURL,
+    support_email: orgSupportEmail,
     bottom_bg_image_url: `${baseURL}/mail/bottom-bg.png`,
     hero_banner: `${baseURL}/mail/cloud-hero-section.png`,
-    approve_subscription_request: `${baseURL}/mail/approve-subscription-request.png`,
-    get_started: `${baseURL}/signin`,
+    connected_success: `${baseURL}/mail/connected_success.png`,
   });
-
-  // const message = `
-  //       <html>
-  //           <body>
-  //               <p>Hello,</p>
-  //               <p>We're pleased to confirm that your subscription to the ${servicePlanName} plan on ${serviceName} has been approved. You can now start to use the service.</p>
-  //               <p>If you have any questions, please contact support.</p>
-  //               <p>Sincerely</p>
-  //               <p>The ${serviceName} Team</p>
-  //           </body>
-  //       </html>`;
 
   const recepientEmail = email;
 
   let mailContent = null;
-  if (orgName && serviceName && servicePlanName && recepientEmail) {
+  if (orgName && accountId && orgSupportEmail && recepientEmail) {
     mailContent = {
       recepientEmail: recepientEmail,
       subject: subject,
