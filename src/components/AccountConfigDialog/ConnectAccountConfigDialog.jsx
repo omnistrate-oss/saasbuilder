@@ -460,7 +460,7 @@ function ConnectAccountConfigDialog(props) {
     {
       onSuccess: () => {
         refetchInstances();
-        snackbar.showSuccess("Connect account config...");
+        snackbar.showSuccess("Connecting cloud account");
         connectStatechange(stateAccountConfigStepper.run);
         // eslint-disable-next-line no-use-before-define
         formik.resetForm();
@@ -567,7 +567,7 @@ function ConnectAccountConfigDialog(props) {
                 connectStatechange(stateAccountConfigStepper.check);
               }}
             >
-              {"Verify"} {isFetching && <LoadingSpinnerSmall />}
+              {"Confirm"} {isFetching && <LoadingSpinnerSmall />}
             </Button>
           )}
           {connectState === stateAccountConfigStepper.check && (
