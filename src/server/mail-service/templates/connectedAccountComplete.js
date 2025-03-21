@@ -20,6 +20,8 @@ async function getConnectedAccountCompleteMailContent(
     "connectedAccountComplete.ejs"
   );
 
+  const baseURL = getSaaSDomainURL();
+
   const message = await ejs.renderFile(templatePath, {
     account_number: accountId,
     org_name: orgName,
