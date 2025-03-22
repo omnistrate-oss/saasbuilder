@@ -11,6 +11,10 @@ const eventTypes = {
   InvoiceCreated: "InvoiceCreated",
   InstanceMaintenanceScheduled: "InstanceMaintenanceScheduled",
   InstanceMaintenanceCompleted: "InstanceMaintenanceCompleted",
+  DisconnectAccountComplete: "DisconnectAccountComplete",
+  ConnectAccountComplete: "ConnectAccountComplete",
+  PendingRevokePermissions: "PendingRevokePermissions",
+  PendingRestorePermissions: "PendingRestorePermissions",
 };
 
 module.exports = { eventTypes };
