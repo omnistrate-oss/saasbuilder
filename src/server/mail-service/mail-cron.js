@@ -31,8 +31,7 @@ const {
   getInvoiceCreatedTemplate,
 } = require("./templates/invoiceCreatedTemplate");
 const {
-  getUpgradeScheduledMailContent,
-  getUpgradeCompletedMailContent,
+  getUpgradeNotificationMailContent,
 } = require("./templates/upgradeNotification");
 
 const { getProviderOrgDetails } = require("../api/customer-user");
@@ -151,7 +150,8 @@ function startMailServiceCron() {
             }
 
             case eventTypes.InstanceMaintenanceScheduled: {
-              mailContent = await getUpgradeScheduledMailContent(
+              mailContent = await getUpgradeNotificationMailContent(
+                "upgradeScheduled",
                 event,
                 orgLogoURL,
                 orgSupportEmail
@@ -160,7 +160,8 @@ function startMailServiceCron() {
             }
 
             case eventTypes.InstanceMaintenanceCompleted: {
-              mailContent = await getUpgradeCompletedMailContent(
+              mailContent = await getUpgradeNotificationMailContent(
+                "upgradeCompleted",
                 event,
                 orgLogoURL,
                 orgSupportEmail

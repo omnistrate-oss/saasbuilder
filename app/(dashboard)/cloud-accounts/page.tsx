@@ -198,6 +198,7 @@ const CloudAccountsPage = () => {
           ].includes(status as string);
 
           const showDisconnectInstructions = [
+            "PENDING_DETACHING",
             "DETACHING",
             "DISCONNECTING",
           ].includes(status as string);
