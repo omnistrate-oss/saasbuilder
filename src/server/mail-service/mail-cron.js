@@ -37,6 +37,18 @@ const {
 const { getProviderOrgDetails } = require("../api/customer-user");
 const { getNodeMailerConfig } = require("./mail-config");
 const { getEnvironmentType } = require("../utils/getEnvironmentType");
+const {
+  getDisconnectedAccountCompleteMailContent,
+} = require("./templates/disconnectedAccountcomplete");
+const {
+  getConnectedAccountCompleteMailContent,
+} = require("./templates/connectedAccountComplete");
+const {
+  getPendingRevokePermissionsMailContent,
+} = require("./templates/pendingRevokePermissions");
+const {
+  getPendingRestorePermissionsMailContent,
+} = require("./templates/pendingRestorePermissions");
 
 let isRunning = false;
 
@@ -159,6 +171,40 @@ function startMailServiceCron() {
 
             case eventTypes.InvoiceCreated: {
               mailContent = await getInvoiceCreatedTemplate(event, orgLogoURL);
+              break;
+            }
+
+            case eventTypes.PendingRestorePermissions: {
+              mailContent = await getPendingRestorePermissionsMailContent(
+                event,
+                orgLogoURL,
+                orgSupportEmail
+              );
+              break;
+            }
+            case eventTypes.PendingRevokePermissions: {
+              mailContent = await getPendingRevokePermissionsMailContent(
+                event,
+                orgLogoURL,
+                orgSupportEmail
+              );
+              break;
+            }
+            case eventTypes.DisconnectAccountComplete: {
+              mailContent = await getDisconnectedAccountCompleteMailContent(
+                event,
+                orgLogoURL,
+                orgSupportEmail
+              );
+              break;
+            }
+
+            case eventTypes.ConnectAccountComplete: {
+              mailContent = await getConnectedAccountCompleteMailContent(
+                event,
+                orgLogoURL,
+                orgSupportEmail
+              );
               break;
             }
 
