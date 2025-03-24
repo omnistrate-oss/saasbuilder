@@ -171,7 +171,7 @@ const usePolling = (
   return { isPolling };
 };
 
-const Trigger = ({ formData, serviceOrgName }) => {
+const Trigger = ({ formData, serviceProviderName }) => {
   return (
     <Box width={"100%"} display={"flex"} flexDirection={"column"} gap="10px">
       <Stack direction="row" alignItems="center" gap="16px">
@@ -195,7 +195,7 @@ const Trigger = ({ formData, serviceOrgName }) => {
       <List>
         <ListItem>
           <Text size="small" weight="regular" color="#414651">
-            {`Connecting your cloud account will allow ${serviceOrgName} to manage and
+            {`Connecting your cloud account will allow ${serviceProviderName} to manage and
             automate all associated instances.`}
           </Text>
         </ListItem>
@@ -233,7 +233,7 @@ const Run = ({
   instance,
   fetchClickedInstanceDetails,
   setClickedInstance,
-  serviceOrgName,
+  serviceProviderName,
 }) => {
   useEffect(() => {
     let timer = null;
@@ -299,7 +299,7 @@ const Run = ({
             >
               this
             </StyledLink>
-             CloudFormation template to grant {`${serviceOrgName}`} the required
+             CloudFormation template to grant {`${serviceProviderName}`} the required
             permissions.
           </Text>
           <Chip
@@ -425,7 +425,7 @@ function ConnectAccountConfigDialog(props) {
     fetchClickedInstanceDetails,
     setClickedInstance,
     serviceId,
-    serviceOrgName,
+    serviceProviderName,
   } = props;
   const snackbar = useSnackbar();
   const [connectState, setConnectState] = useState(
@@ -504,7 +504,7 @@ function ConnectAccountConfigDialog(props) {
         </Header>
         <Content>
           {connectState === stateAccountConfigStepper.trigger && (
-            <Trigger formData={formik} serviceOrgName={serviceOrgName} />
+            <Trigger formData={formik} serviceProviderName={serviceProviderName} />
           )}
           {connectState === stateAccountConfigStepper.run && (
             <Run
@@ -513,7 +513,7 @@ function ConnectAccountConfigDialog(props) {
               instance={instance}
               fetchClickedInstanceDetails={fetchClickedInstanceDetails}
               setClickedInstance={setClickedInstance}
-              serviceOrgName={serviceOrgName}
+              serviceProviderName={serviceProviderName}
             />
           )}
 
