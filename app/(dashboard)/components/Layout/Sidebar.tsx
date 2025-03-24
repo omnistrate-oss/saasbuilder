@@ -198,7 +198,11 @@ const Sidebar = () => {
 
   const showCloudProvidersPage = useMemo(() => {
     return Boolean(
-      serviceOfferings.find((offering) => offering.serviceModelType === "BYOA")
+      serviceOfferings.find(
+        (offering) =>
+          offering.serviceModelType === "BYOA" ||
+          offering.serviceModelType === "ON_PREM_COPILOT"
+      )
     );
   }, [serviceOfferings]);
 
@@ -216,7 +220,6 @@ const Sidebar = () => {
   const billingStatusQuery = useBillingStatus();
 
   const isBillingEnabled = Boolean(billingStatusQuery.data?.enabled);
-
 
   const bottomItems = useMemo(
     () => [
