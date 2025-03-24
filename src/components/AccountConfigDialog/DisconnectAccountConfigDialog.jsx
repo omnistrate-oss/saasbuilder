@@ -170,7 +170,7 @@ const usePolling = (
   return { isPolling };
 };
 
-const Trigger = ({ formData, serviceOrgName }) => {
+const Trigger = ({ formData, serviceProviderName }) => {
   return (
     <Box width={"100%"} display={"flex"} flexDirection={"column"} gap="10px">
       <Stack direction="row" alignItems="center" gap="16px">
@@ -195,7 +195,7 @@ const Trigger = ({ formData, serviceOrgName }) => {
         <ListItem>
           <Text size="small" weight="regular" color="#414651">
             {`Disconnecting your cloud account will disconnect all associated
-            instances from the ${serviceOrgName} Control Plane`}
+            instances from the ${serviceProviderName} Control Plane`}
           </Text>
         </ListItem>
       </List>
@@ -232,7 +232,7 @@ const Run = ({
   instance,
   fetchClickedInstanceDetails,
   setClickedInstance,
-  serviceOrgName,
+  serviceProviderName,
 }) => {
   useEffect(() => {
     let timer = null;
@@ -302,7 +302,7 @@ const Run = ({
             >
               this
             </StyledLink>
-             CloudFormation template to revoke all {`${serviceOrgName}`}
+             CloudFormation template to revoke all {`${serviceProviderName}`}{" "}
             permissions from your account.
           </Text>
           <Chip
@@ -428,7 +428,7 @@ function DisconnectAccountConfigDialog(props) {
     fetchClickedInstanceDetails,
     setClickedInstance,
     serviceId,
-    serviceOrgName,
+    serviceProviderName,
   } = props;
   const snackbar = useSnackbar();
   const [disconnectState, setDisconnectState] = useState(
@@ -510,7 +510,10 @@ function DisconnectAccountConfigDialog(props) {
         </Header>
         <Content>
           {disconnectState === stateAccountConfigStepper.trigger && (
-            <Trigger formData={formik} serviceOrgName={serviceOrgName} />
+            <Trigger
+              formData={formik}
+              serviceProviderName={serviceProviderName}
+            />
           )}
           {disconnectState === stateAccountConfigStepper.run && (
             <Run
@@ -519,7 +522,7 @@ function DisconnectAccountConfigDialog(props) {
               instance={instance}
               fetchClickedInstanceDetails={fetchClickedInstanceDetails}
               setClickedInstance={setClickedInstance}
-              serviceOrgName={serviceOrgName}
+              serviceProviderName={serviceProviderName}
             />
           )}
 
