@@ -198,6 +198,7 @@ const CloudAccountsPage = () => {
           ].includes(status as string);
 
           const showDisconnectInstructions = [
+            "PENDING_DETACHING",
             "DETACHING",
             "DISCONNECTING",
           ].includes(status as string);
@@ -608,7 +609,7 @@ const CloudAccountsPage = () => {
         fetchClickedInstanceDetails={fetchClickedInstanceDetails}
         setClickedInstance={setClickedInstance}
         serviceId={selectedInstanceSubscription?.serviceId}
-        serviceOrgName={selectedInstanceSubscription?.serviceOrgName}
+        serviceProviderName={selectedInstanceOffering?.serviceProviderName}
       />
 
       <DisconnectAccountConfigDialog
@@ -622,7 +623,7 @@ const CloudAccountsPage = () => {
         fetchClickedInstanceDetails={fetchClickedInstanceDetails}
         setClickedInstance={setClickedInstance}
         serviceId={selectedInstanceSubscription?.serviceId}
-        serviceOrgName={selectedInstanceSubscription?.serviceOrgName}
+        serviceProviderName={selectedInstanceOffering?.serviceProviderName}
       />
       <CloudProviderAccountOrgIdModal
         isAccessPage

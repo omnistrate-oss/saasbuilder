@@ -110,7 +110,9 @@ const ResetPasswordPage = (props) => {
           </PageDescription>
         </Stack>
         {/* @ts-ignore */}
-        <SubmitButton href="/signin">Go to Login</SubmitButton>
+        <SubmitButton data-testid="go-to-login-button" href="/signin">
+          Go to Login
+        </SubmitButton>
 
         <Text
           size="small"
@@ -155,6 +157,9 @@ const ResetPasswordPage = (props) => {
           <FieldLabel required>Registered Email</FieldLabel>
           {/* @ts-ignore */}
           <TextField
+            inputProps={{
+              "data-testid": "email-input",
+            }}
             name="email"
             id="email"
             placeholder="Input your registered email"
@@ -166,6 +171,7 @@ const ResetPasswordPage = (props) => {
           />
         </FieldContainer>
         <SubmitButton
+          data-testid="submit-button"
           type="submit"
           onClick={formik.handleSubmit}
           disabled={!formik.isValid || (isReCaptchaSetup && !isScriptLoaded)}

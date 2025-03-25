@@ -22,6 +22,7 @@ const FullScreenDrawerNavbar: React.FC<FullScreenDrawerNavbarProps> = ({
       <div className="max-w-[84rem] py-2.5 px-4 mx-auto flex items-center justify-between gap-6">
         <div>
           <DisplayText
+            data-testid="drawer-title"
             // @ts-ignore
             size="xsmall"
             weight="bold"
@@ -31,13 +32,22 @@ const FullScreenDrawerNavbar: React.FC<FullScreenDrawerNavbarProps> = ({
             {title}
           </DisplayText>
           {description && (
-            <Text size="medium" weight="regular" color="#535862">
+            <Text
+              data-testid="drawer-description"
+              size="medium"
+              weight="regular"
+              color="#535862"
+            >
               {description}
             </Text>
           )}
         </div>
 
-        <button className="flex items-center gap-1.5 p-1" onClick={closeDrawer}>
+        <button
+          data-testid="close-button"
+          className="flex items-center gap-1.5 p-1"
+          onClick={closeDrawer}
+        >
           <Text size="small" weight="semibold" color="#414651">
             Close
           </Text>

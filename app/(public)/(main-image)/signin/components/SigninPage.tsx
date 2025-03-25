@@ -204,6 +204,9 @@ const SigninPage = (props) => {
             <FieldLabel required>Email Address</FieldLabel>
             {/* @ts-ignore */}
             <TextField
+              inputProps={{
+                "data-testid": "email-input",
+              }}
               name="email"
               id="email"
               placeholder="Enter your registered email"
@@ -218,6 +221,9 @@ const SigninPage = (props) => {
           <FieldContainer>
             <FieldLabel required>Password</FieldLabel>
             <PasswordField
+              inputProps={{
+                "data-testid": "password-input",
+              }}
               name="password"
               id="password"
               placeholder="Enter your password"
@@ -246,6 +252,7 @@ const SigninPage = (props) => {
         {/* Login and Google Button */}
         <Stack gap="16px">
           <SubmitButton
+            data-testid="login-button"
             type="submit"
             onClick={formik.handleSubmit}
             disabled={!formik.isValid || (isReCaptchaSetup && !isScriptLoaded)}
