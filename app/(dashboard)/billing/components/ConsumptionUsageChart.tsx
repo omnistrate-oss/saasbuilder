@@ -1,5 +1,5 @@
 import dayjs from "dayjs";
-import React, { useMemo } from "react";
+import React, { FC, useMemo } from "react";
 import {
   ComposedChart,
   Line,
@@ -12,23 +12,32 @@ import {
 } from "recharts";
 import LoadingSpinner from "src/components/LoadingSpinner/LoadingSpinner";
 import ReChartContainer from "src/components/ReChartContainer/ReChartContainer";
+import { ConsumptionUsagePerDay } from "src/types/consumption";
 
 function formatDate(inputDate) {
   return dayjs.utc(inputDate).format("MMM DD");
 }
 
-export default function ConsumptionUsageChart({
-  usagePerDayData,
-  isBillingPerDayfetching,
-}) {
+type ConsumptionUsageChartProps = {
+  usagePerDayData  : ConsumptionUsagePerDay ;
+  isFetchingUsagePerDay: boolean;
+}
+
+ const ConsumptionUsageChart : FC<ConsumptionUsageChartProps> = (props) => {
+  const {usagePerDayData, isFetchingUsagePerDay} = props
 
   const billingUsagePerDay = useMemo(() => {
-    const usage = usagePerDayData
-  },[usagePerDayData]);
+    const usage = usagePerDayData?.usage || [];
+    const dataHashByDate = Record<string>
+
+    usage.forEach((item) =>{})
+
+    console.log("Usage per day data", usagePerDayData);
+  }, [usagePerDayData]);
 
   console.log("billingUsagePerDay", billingUsagePerDay);
   const keys = ["Memory GiB hours", "Storage GiB hours", "CPU core hours"];
-  const COLORS = ["#3E97FF", "#10AA50", "#7239EA", ];
+  const COLORS = ["#3E97FF", "#10AA50", "#7239EA"];
   const translateX = [-17, -6, 5];
 
   const minWidth = useMemo(() => {
@@ -54,7 +63,7 @@ export default function ConsumptionUsageChart({
     }
   }, [billingUsagePerDay]);
 
-  return isBillingPerDayfetching ? (
+  return isFetchingUsagePerDay ? (
     <LoadingSpinner />
   ) : (
     <ReChartContainer
@@ -235,3 +244,5 @@ export default function ConsumptionUsageChart({
     </ReChartContainer>
   );
 }
+
+export default ConsumptionUsageChart;

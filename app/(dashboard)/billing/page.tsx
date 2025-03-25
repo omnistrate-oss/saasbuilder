@@ -30,7 +30,7 @@ const BillingPage = () => {
   const { data: consumptionUsageData, isLoading: isLoadingConsumptionData } =
     useConsumptionUsage();
 
-  const { data: usagePerDayData, isLoading: isUsagePerDayLoading } =
+  const { data: usagePerDayData, isFetching: isFetchingUsagePerDay } =
     useConsumptionUsagePerDay();
 
   const paymentConfigured = billingDetails?.paymentConfigured;
@@ -140,7 +140,10 @@ const BillingPage = () => {
               consumptionUsageData={consumptionUsageData}
               //consumptionUsagePerDayData={consumptionUsagePerDayData}
             />
-            <ConsumptionUsageChart usagePerDayData={usagePerDayData} />
+            <ConsumptionUsageChart
+              usagePerDayData={usagePerDayData}
+              isFetchingUsagePerDay={isFetchingUsagePerDay}
+            />
             <InvoicesTable />
           </>
         )}
