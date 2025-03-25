@@ -552,6 +552,7 @@ const CloudAccountsPage = () => {
             selectedInstance,
             refetchInstances: refetchInstances,
             isFetchingInstances: isFetchingInstances,
+            serviceModelType: selectedInstanceOffering?.serviceModelType,
           }}
           isLoading={isLoadingInstances}
           selectionMode="single"
