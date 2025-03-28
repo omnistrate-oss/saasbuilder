@@ -24,18 +24,18 @@ const CloudAccountsTableHeader = ({
   serviceModelType,
 }) => {
   const isDeploying = selectedInstance?.status === "DEPLOYING";
-  const isAttaching = selectedInstance.status === "ATTACHING";
-  const isConnecting = selectedInstance.status === "CONNECTING";
-  const isDisconnected = selectedInstance.status === "DISCONNECTED";
+  const isAttaching = selectedInstance?.status === "ATTACHING";
+  const isConnecting = selectedInstance?.status === "CONNECTING";
+  const isDisconnected = selectedInstance?.status === "DISCONNECTED";
   const isCloudProviderGCP =
     selectedInstance?.result_params?.cloud_provider === "gcp";
   const isOnPremCopilot = serviceModelType === "ON_PREM_COPILOT";
-  const isReady = selectedInstance.status === "READY";
-  const isDisconnecting = selectedInstance.status === "DISCONNECTING";
+  const isReady = selectedInstance?.status === "READY";
+  const isDisconnecting = selectedInstance?.status === "DISCONNECTING";
 
-  const isDetaching = selectedInstance.status === "DETACHING";
-  const isPendingDetaching = selectedInstance.status === "PENDING_DETACHING";
-  const isDeleting = selectedInstance.status === "DELETING";
+  const isDetaching = selectedInstance?.status === "DETACHING";
+  const isPendingDetaching = selectedInstance?.status === "PENDING_DETACHING";
+  const isDeleting = selectedInstance?.status === "DELETING";
 
   const isDisconnectDisabled =
     !selectedInstance ||
