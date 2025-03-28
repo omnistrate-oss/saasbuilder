@@ -168,7 +168,8 @@ const DeleteInstructions = ({ accountInstructionDetails }) => {
             </ListItemIcon>
 
             <Text size="medium" weight="regular" color="#374151">
-              <b>Using CloudFormation:</b> Follow the provided steps{" "}
+              {/* <b>Using CloudFormation:</b>  */}
+              Follow the provided steps{" "}
               <StyledLink
                 target="_blank"
                 rel="noopener noreferrer"
@@ -188,8 +189,8 @@ const DeleteInstructions = ({ accountInstructionDetails }) => {
             </ListItemIcon>
             <Box overflow={"hidden"} flex={1}>
               <Text size="medium" weight="regular" color="#374151">
-                <b>Using GCP Cloud Shell:</b> Open the Google Cloud Shell
-                environment using the following link{" "}
+                {/* <b>Using GCP Cloud Shell:</b>  */}
+                Open the Google Cloud Shell environment using the following link{" "}
                 <StyledLink
                   target="_blank"
                   rel="noopener noreferrer"
@@ -211,7 +212,7 @@ const DeleteInstructions = ({ accountInstructionDetails }) => {
         )}
       </List>
 
-      <List sx={{ marginTop: "12px" }}>
+      {/* <List sx={{ marginTop: "12px" }}>
         <ListItem>
           <ListItemIcon>
             <ArrowBullet />
@@ -230,7 +231,7 @@ const DeleteInstructions = ({ accountInstructionDetails }) => {
             .
           </Text>
         </ListItem>
-      </List>
+      </List> */}
     </Box>
   );
 };

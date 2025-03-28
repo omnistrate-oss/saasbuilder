@@ -34,7 +34,7 @@ import { useGlobalData } from "src/providers/GlobalDataProvider";
 import {
   deleteResourceInstance,
   getResourceInstanceDetails,
-  getTerraformKit,
+  // getTerraformKit,
 } from "src/api/resourceInstance";
 import { getResourceInstanceStatusStylesAndLabel } from "src/constants/statusChipStyles/resourceInstanceStatus";
 import { getCloudAccountsRoute } from "src/utils/routes";
@@ -475,37 +475,37 @@ const CloudAccountsPage = () => {
     );
   };
 
-  const downloadTerraformKitMutation = useMutation(
-    () => {
-      if (clickedInstanceOffering && clickedInstanceSubscription) {
-        return getTerraformKit(
-          clickedInstanceOffering.serviceProviderId,
-          clickedInstanceOffering.serviceURLKey,
-          clickedInstanceOffering.serviceAPIVersion,
-          clickedInstanceOffering.serviceEnvironmentURLKey,
-          clickedInstanceOffering.serviceModelURLKey,
-          clickedInstanceSubscription.id,
-          // @ts-ignore
-          clickedInstance?.result_params?.gcp_project_id ? "gcp" : "aws"
-        );
-      }
-    },
-    {
-      onSuccess: (response: any) => {
-        if (!response?.data) {
-          return snackbar.showError("Failed to download terraform kit");
-        }
-        const href = URL.createObjectURL(response.data);
-        const link = document.createElement("a");
-        link.href = href;
-        link.setAttribute("download", "terraformkit.tar");
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        URL.revokeObjectURL(href);
-      },
-    }
-  );
+  // const downloadTerraformKitMutation = useMutation(
+  //   () => {
+  //     if (clickedInstanceOffering && clickedInstanceSubscription) {
+  //       return getTerraformKit(
+  //         clickedInstanceOffering.serviceProviderId,
+  //         clickedInstanceOffering.serviceURLKey,
+  //         clickedInstanceOffering.serviceAPIVersion,
+  //         clickedInstanceOffering.serviceEnvironmentURLKey,
+  //         clickedInstanceOffering.serviceModelURLKey,
+  //         clickedInstanceSubscription.id,
+  //         // @ts-ignore
+  //         clickedInstance?.result_params?.gcp_project_id ? "gcp" : "aws"
+  //       );
+  //     }
+  //   },
+  //   {
+  //     onSuccess: (response: any) => {
+  //       if (!response?.data) {
+  //         return snackbar.showError("Failed to download terraform kit");
+  //       }
+  //       const href = URL.createObjectURL(response.data);
+  //       const link = document.createElement("a");
+  //       link.href = href;
+  //       link.setAttribute("download", "terraformkit.tar");
+  //       document.body.appendChild(link);
+  //       link.click();
+  //       document.body.removeChild(link);
+  //       URL.revokeObjectURL(href);
+  //     },
+  //   }
+  // );
 
   useEffect(() => {
     if (isAccountCreation) {
@@ -642,8 +642,8 @@ const CloudAccountsPage = () => {
         isAccountCreation={isAccountCreation}
         gcpBootstrapShellCommand={gcpBootstrapShellCommand}
         accountInstructionDetails={accountInstructionDetails}
-        downloadTerraformKitMutation={downloadTerraformKitMutation}
-        orgId={clickedInstanceSubscription?.accountConfigIdentityId}
+        // downloadTerraformKitMutation={downloadTerraformKitMutation}
+        // orgId={clickedInstanceSubscription?.accountConfigIdentityId}
         accountConfigMethod={
           // @ts-ignore
           clickedInstance?.result_params?.account_configuration_method
