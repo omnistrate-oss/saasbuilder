@@ -80,7 +80,8 @@ const InstancesPage = () => {
     instanceId?: string;
     isCustomDNS?: boolean;
   }>({});
-  const { data: billingConfig } = useBillingDetails();
+  const { data: billingConfig, isLoading: isLoadingPaymentConfiguration } =
+    useBillingDetails();
   const isPaymentConfigured = Boolean(billingConfig?.paymentConfigured);
 
   const [statusFilters, setStatusFilters] = useState(getInitialFilterState());
@@ -590,6 +591,8 @@ const InstancesPage = () => {
             filterOptionsMap,
             selectedFilters,
             setSelectedFilters,
+            isLoadingInstances,
+            isLoadingPaymentConfiguration,
             instancesFilterCount: instancesFilterCount,
             statusFilters: statusFilters,
             setStatusFilters: setStatusFilters,

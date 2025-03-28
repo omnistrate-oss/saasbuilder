@@ -57,7 +57,10 @@ const InstancesTableHeader = ({
   instancesFilterCount,
   statusFilters,
   setStatusFilters,
+  isLoadingInstances,
+  isLoadingPaymentConfiguration,
 }) => {
+  console.log("isLoadingPaymentConfiguration", isLoadingPaymentConfiguration);
   const snackbar = useSnackbar();
 
   const stopInstanceMutation = useMutation(stopResourceInstance, {
@@ -246,12 +249,13 @@ const InstancesTableHeader = ({
       dataTestId: "create-button",
       label: "Create",
       actionType: "primary",
-      isDisabled: false,
+      isDisabled: isLoadingInstances || isLoadingPaymentConfiguration,
       onClick: () => {
         setSelectedRows([]); // To make selectedInstance becomes undefined. See page.tsx
         setOverlayType("create-instance-form");
         setIsOverlayOpen(true);
       },
+      disabledMessage: "Please wait for the instances to load",
     });
 
     const other: Action[] = [];

@@ -7,11 +7,10 @@ import {
   getRegionMenuItems,
   getResourceMenuItems,
   getServiceMenuItems,
+  getValidSubscriptionForInstanceCreation,
 } from "../utils";
-
 import CloudProviderRadio from "../../components/CloudProviderRadio/CloudProviderRadio";
 import SubscriptionPlanRadio from "../../components/SubscriptionPlanRadio/SubscriptionPlanRadio";
-
 import { Subscription } from "src/types/subscription";
 import { CustomNetwork } from "src/types/customNetwork";
 import { AvailabilityZone } from "src/types/availabilityZone";
@@ -20,6 +19,7 @@ import { APIEntity, ServiceOffering } from "src/types/serviceOffering";
 import SubscriptionMenu from "app/(dashboard)/components/SubscriptionMenu/SubscriptionMenu";
 import AccountConfigDescription from "./AccountConfigDescription";
 import CustomNetworkDescription from "./CustomNetworkDescription";
+import { ResourceInstance } from "src/types/resourceInstance";
 
 export const getStandardInformationFields = (
   servicesObj,
@@ -33,9 +33,13 @@ export const getStandardInformationFields = (
   resourceSchema: APIEntity,
   formMode: FormMode,
   customAvailabilityZones: AvailabilityZone[],
-  isFetchingCustomAvailabilityZones: boolean
+  isFetchingCustomAvailabilityZones: boolean,
+  isPaymentConfigured: boolean,
+  instances: ResourceInstance[]
 ) => {
   if (isFetchingServiceOfferings) return [];
+
+  console.log("instances", instances);
 
   const { values, setFieldValue, setFieldTouched } = formData;
   const {
@@ -85,21 +89,17 @@ export const getStandardInformationFields = (
       onChange: (e) => {
         const serviceId = e.target.value;
 
-        const filteredSubscriptions = subscriptions.filter(
-          (sub) =>
-            sub.serviceId === serviceId &&
-            ["root", "editor"].includes(sub.roleType)
-        );
-        const rootSubscription = filteredSubscriptions.find(
-          (sub) => sub.roleType === "root"
+        const subscription = getValidSubscriptionForInstanceCreation(
+          serviceOfferings,
+          serviceOfferingsObj,
+          subscriptions,
+          instances,
+          isPaymentConfigured,
+          serviceId
         );
 
-        const servicePlanId =
-          rootSubscription?.productTierId ||
-          filteredSubscriptions[0]?.productTierId ||
-          "";
-        const subscriptionId =
-          rootSubscription?.id || filteredSubscriptions[0]?.id || "";
+        const servicePlanId = subscription?.productTierId || "";
+        const subscriptionId = subscription?.id || "";
         setFieldValue("servicePlanId", servicePlanId);
         setFieldValue("subscriptionId", subscriptionId);
 
@@ -137,6 +137,9 @@ export const getStandardInformationFields = (
           ).sort((a: any, b: any) =>
             a.productTierName.localeCompare(b.productTierName)
           )}
+          serviceSubscriptions = {
+            subscriptions.filter((subscription) => subscription.serviceId === serviceId )
+          }
           name="servicePlanId"
           formData={formData}
           disabled={formMode !== "create"}
@@ -182,6 +185,8 @@ export const getStandardInformationFields = (
             setFieldTouched("subscriptionId", false);
             setFieldTouched("resourceId", false);
           }}
+          isPaymentConfigured={isPaymentConfigured}
+          instances={instances}
         />
       ),
       previewValue: offering?.productTierName,

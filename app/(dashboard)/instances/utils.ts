@@ -162,11 +162,116 @@ export const getMainResourceFromInstance = (
   return mainResource;
 };
 
+export const getValidSubscriptionForInstanceCreation = (
+  serviceOfferings: ServiceOffering[],
+  serviceOfferingsObj: Record<string, Record<string, ServiceOffering>>,
+  subscriptions: Subscription[],
+  instances: ResourceInstance[],
+  isPaymentConfigured: boolean,
+  serviceID?: string
+): Subscription | undefined => {
+  const productTierInstanceLimitHash: Record<string, number> = {};
+  const productTierPaymentRequirementHash: Record<string, boolean> = {};
+  const subscriptionInstancesNumHash: Record<string, number> = {};
+
+  serviceOfferings.forEach((serviceOffering) => {
+    productTierInstanceLimitHash[serviceOffering.productTierID] =
+      serviceOffering.maxNumberOfInstances !== undefined
+        ? serviceOffering.maxNumberOfInstances
+        : -1;
+
+    productTierPaymentRequirementHash[serviceOffering.productTierID] = !Boolean(
+      serviceOffering.allowCreatesWhenPaymentNotConfigured
+    );
+  });
+
+  instances.forEach((instance) => {
+    if (subscriptionInstancesNumHash[instance.subscriptionId as string]) {
+      subscriptionInstancesNumHash[instance.subscriptionId as string] =
+        subscriptionInstancesNumHash[instance.subscriptionId as string] + 1;
+    } else {
+      subscriptionInstancesNumHash[instance.subscriptionId as string] = 1;
+    }
+  });
+
+  let filteredSubscriptions = subscriptions.filter(
+    (sub) =>
+      serviceOfferingsObj[sub.serviceId]?.[sub.productTierId] &&
+      ["root", "editor"].includes(sub.roleType)
+  );
+
+  //if serviceID has been provided, look for subscriptions within the serviceID
+  if (serviceID) {
+    filteredSubscriptions = filteredSubscriptions.filter(
+      (subscription) => subscription.serviceId === serviceID
+    );
+  }
+
+  const sortedSubscriptionsByName = filteredSubscriptions.sort((a, b) =>
+    a.serviceName.localeCompare(b.serviceName)
+  );
+
+  const rootSubscriptions = sortedSubscriptionsByName.filter(
+    (sub) => sub.roleType === "root"
+  );
+
+  const editorSubscriptions = sortedSubscriptionsByName.filter(
+    (sub) => sub.roleType === "editor"
+  );
+
+  let selectedSubscription: Subscription | undefined;
+
+  //from all subscriptions, prefer a root subscription, where user has not hit subsription limit
+
+  selectedSubscription = rootSubscriptions.find((subsription) => {
+    //check for blockers
+    //-> if plan requires valid payment config, check that payment is configured
+    //-> if plan has max instance limit set, check that the limit has not been met
+    const productTierID = subsription.productTierId;
+    const requiresPaymentConfig =
+      productTierPaymentRequirementHash[productTierID];
+    const numInstances = subscriptionInstancesNumHash[subsription.id] || 0;
+    const instancesLimit = productTierInstanceLimitHash[productTierID];
+    if (
+      (requiresPaymentConfig && !isPaymentConfigured) ||
+      (instancesLimit > -1 && numInstances >= instancesLimit)
+    )
+      return false;
+
+    return true;
+  });
+
+  if (!selectedSubscription) {
+    //if no root subscription matches the required criteria, look for editor subscriptions
+    selectedSubscription = editorSubscriptions.find((subsription) => {
+      //check for blockers
+      //-> if plan requires valid payment config, check that payment is configured
+      //-> if plan has max instance limit set, check that the limit has not been met
+      const productTierID = subsription.productTierId;
+      const requiresPaymentConfig =
+        productTierPaymentRequirementHash[productTierID];
+      const numInstances = subscriptionInstancesNumHash[subsription.id] || 0;
+      const instancesLimit = productTierInstanceLimitHash[productTierID];
+      if (
+        (requiresPaymentConfig && !isPaymentConfigured) ||
+        (instancesLimit > -1 && numInstances >= instancesLimit)
+      )
+        return false;
+
+      return true;
+    });
+  }
+
+  return selectedSubscription;
+};
+
 export const getInitialValues = (
   instance: ResourceInstance | undefined,
   subscriptions: Subscription[],
   serviceOfferingsObj: Record<string, Record<string, ServiceOffering>>,
-  serviceOfferings: ServiceOffering[]
+  serviceOfferings: ServiceOffering[],
+  instances: ResourceInstance[],
+  isPaymentConfigured: boolean
 ) => {
   if (instance) {
     const subscription = subscriptions.find(
@@ -202,19 +307,31 @@ export const getInitialValues = (
       ["root", "editor"].includes(sub.roleType)
   );
 
-  const rootSubscription = filteredSubscriptions
-    .sort((a, b) => a.serviceName.localeCompare(b.serviceName))
-    .find((sub) => sub.roleType === "root");
+  const sortedSubscriptionsByName = filteredSubscriptions.sort((a, b) =>
+    a.serviceName.localeCompare(b.serviceName)
+  );
+
+  //choose first subscription from which user can create an instance
+
+  const selectedSubscription: Subscription | undefined =
+    getValidSubscriptionForInstanceCreation(
+      serviceOfferings,
+      serviceOfferingsObj,
+      subscriptions,
+      instances,
+      isPaymentConfigured
+    );
+
+  console.log("selectedSubscription", selectedSubscription);
 
   const serviceId =
-    rootSubscription?.serviceId ||
-    filteredSubscriptions[0]?.serviceId ||
+    selectedSubscription?.serviceId ||
+    sortedSubscriptionsByName[0]?.serviceId ||
     serviceOfferings[0]?.serviceId ||
     "";
-  const servicePlanId =
-    rootSubscription?.productTierId ||
-    filteredSubscriptions[0]?.productTierId ||
-    "";
+
+  //dont't select service plan card if a valid subsription is not found
+  const servicePlanId = selectedSubscription?.productTierId || "";
 
   const offering = serviceOfferingsObj[serviceId]?.[servicePlanId];
   const cloudProvider = offering?.cloudProviders?.[0] || "";
@@ -234,7 +351,7 @@ export const getInitialValues = (
   return {
     serviceId,
     servicePlanId,
-    subscriptionId: rootSubscription?.id || filteredSubscriptions[0]?.id || "",
+    subscriptionId: selectedSubscription?.id || "",
     resourceId: (resources[0]?.value as string) || "",
     cloudProvider,
     region: region || "",

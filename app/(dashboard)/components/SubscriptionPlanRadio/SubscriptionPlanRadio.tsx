@@ -2,7 +2,7 @@
 
 import clsx from "clsx";
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import { ReactNode, useMemo, useState } from "react";
 import { ArrowOutward } from "@mui/icons-material";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
@@ -24,6 +24,10 @@ import { ServiceOffering } from "src/types/serviceOffering";
 import LoadingSpinnerSmall from "src/components/CircularProgress/CircularProgress";
 import { useSelector } from "react-redux";
 import { selectUserrootData } from "src/slices/userDataSlice";
+import { Box } from "@mui/material";
+import AlertTriangle from "src/components/Icons/AlertTriangle/AlertTriangle";
+import { ResourceInstance } from "src/types/resourceInstance";
+import { Subscription } from "src/types/subscription";
 
 const SubscriptionPlanCard = ({
   plan,
@@ -34,6 +38,7 @@ const SubscriptionPlanCard = ({
   onClick,
   disabled,
   disabledMessage,
+  isPlanSelectionDisabled,
 }) => {
   const rootSubscription = subscriptions.find((sub) => sub.roleType === "root");
   const [isSubscribing, setIsSubscribing] = useState(false);
@@ -47,10 +52,13 @@ const SubscriptionPlanCard = ({
         (!subscriptions.length || disabled) && "bg-gray-50"
       )}
       style={{
-        cursor: subscriptions.length && !disabled ? "pointer" : "default",
+        cursor:
+          subscriptions.length && !isPlanSelectionDisabled
+            ? "pointer"
+            : "default",
       }}
       onClick={() => {
-        if (subscriptions.length && !disabled) {
+        if (subscriptions.length && !isPlanSelectionDisabled) {
           onClick();
         }
       }}
@@ -164,19 +172,26 @@ const SubscriptionPlanCard = ({
 
 type SubscriptionPlanRadioProps = {
   servicePlans: ServiceOffering[];
+  serviceSubscriptions: Subscription[];
   formData: any;
   name: string;
   onChange?: (servicePlanId?: string, subscriptionId?: string) => void;
   disabled?: boolean;
+  isPaymentConfigured: boolean;
+  instances: ResourceInstance[];
 };
 
 const SubscriptionPlanRadio: React.FC<SubscriptionPlanRadioProps> = ({
   servicePlans,
+  serviceSubscriptions,
   name,
   formData,
   onChange = () => {},
   disabled,
+  isPaymentConfigured,
+  instances,
 }) => {
+  console.log("name", name);
   const snackbar = useSnackbar();
   const queryClient = useQueryClient();
   const selectUser = useSelector(selectUserrootData);
@@ -218,124 +233,222 @@ const SubscriptionPlanRadio: React.FC<SubscriptionPlanRadioProps> = ({
     );
   }
 
+  const subscriptionInstanceCountHash: Record<string, number> = {};
+  instances.forEach((instance) => {
+    if (subscriptionInstanceCountHash[instance?.subscriptionId as string]) {
+      subscriptionInstanceCountHash[instance.subscriptionId as string] =
+        subscriptionInstanceCountHash[instance.subscriptionId as string] + 1;
+    } else {
+      subscriptionInstanceCountHash[instance.subscriptionId as string] = 1;
+    }
+  });
+
   return (
     <div className="space-y-4">
       {servicePlans
         // When disabled, show only the Selected Service Plan. This is in case of Modify Instance
         .filter((el) => (disabled ? el.productTierID === servicePlanId : true))
-        .map((plan) => (
-          <SubscriptionPlanCard
-            key={plan.productTierID}
-            plan={plan}
-            subscriptions={subscriptions.filter(
-              (sub) =>
-                sub.productTierId === plan.productTierID &&
-                ["root", "editor"].includes(sub.roleType)
-            )}
-            subscriptionRequest={subscriptionRequestsObj[plan.productTierID]}
-            onSubscribeClick={async () => {
-              try {
-                const res = await subscribeMutation.mutateAsync({
-                  productTierId: plan.productTierID,
-                  serviceId: plan.serviceId,
-                  AutoApproveSubscription: plan.AutoApproveSubscription,
-                });
+        .map((plan) => {
+          console.log("serviceSubscriptions", serviceSubscriptions);
 
-                // @ts-ignore
-                const id = Object.values(res?.data || {}).join("");
+          let isPaymentConfigBlock = false;
+          let hasReachedInstanceLimit = false;
 
-                if (id.startsWith("subr")) {
-                  snackbar.showSuccess(
-                    "Subscription Request sent successfully"
-                  );
+          const planSubscritions = serviceSubscriptions.filter(
+            (subscription) => subscription.productTierId === plan.productTierID
+          );
 
-                  queryClient.setQueryData(
-                    ["subscription-requests"],
-                    (oldData: any) => {
-                      return {
-                        ...oldData,
-                        data: {
-                          ids: [...(oldData.data.ids || []), id],
-                          subscriptionRequests: [
-                            ...(oldData.data.subscriptionRequests || []),
-                            {
-                              id,
-                              serviceId: plan.serviceId,
-                              serviceName: plan.serviceName,
-                              productTierId: plan.productTierID,
-                              productTierName: plan.productTierName,
-                              rootUserId: selectUser.id,
-                              rootUserEmail: selectUser.email,
-                              rootUserName: selectUser.name,
-                              status: "PENDING",
-                              createdAt: new Date().toISOString(),
-                              updatedAt: new Date().toISOString(),
-                              updatedByUserId: "",
-                              updatedByUserName: "",
-                            },
-                          ],
-                        },
-                      };
-                    }
-                  );
-                } else if (id.startsWith("sub")) {
-                  formData.setFieldValue(name, plan.productTierID);
-                  onChange(plan.productTierID, id);
-                  snackbar.showSuccess("Subscribed successfully");
+          const maxAllowedInstances = plan.maxNumberOfInstances;
 
-                  queryClient.setQueryData(
-                    ["user-subscriptions"],
-                    (oldData: any) => {
-                      return {
-                        ...oldData,
-                        data: {
-                          ids: [...(oldData.data.ids || []), id],
-                          subscriptions: [
-                            ...(oldData.data.subscriptions || []),
-                            {
-                              id,
-                              rootUserId: selectUser.id,
-                              serviceId: plan.serviceId,
-                              productTierId: plan.productTierID,
-                              serviceOrgId: plan.serviceOrgId,
-                              serviceOrgName: plan.serviceProviderName,
-                              roleType: "root",
-                              createdAt: new Date().toISOString(),
-                              subscriptionOwnerName: selectUser.name,
-                              serviceName: plan.serviceName,
-                              serviceLogoURL: plan.serviceLogoURL,
-                              cloudProviderNames: plan.cloudProviders,
-                              defaultSubscription: false,
-                              productTierName: plan.productTierName,
-                              accountConfigIdentityId: selectUser.orgId,
-                              status: "ACTIVE",
-                            },
-                          ],
-                        },
-                      };
-                    }
-                  );
-                }
-              } catch (error) {
-                console.error(error);
-                snackbar.showError("Failed to subscribe. Please try again");
-              }
-            }}
-            onClick={() => {
-              if (servicePlanId !== plan.productTierID) {
-                onChange(plan.productTierID);
-              }
-              formData.setFieldValue(name, plan.productTierID);
-            }}
-            isSelected={servicePlanId === plan.productTierID}
-            disabled={disabled || plan.serviceModelStatus !== "READY"}
-            disabledMessage={
-              plan.serviceModelStatus !== "READY"
-                ? "Service not available at the moment"
-                : ""
+          let isPlanSelectionDisabled = false;
+          if (planSubscritions.length === 1) {
+            //if there's just one subscription, plan should be selectable if
+            //-> subscription is not reader
+            //-> if plan requires valid payment config, check that payment is configured
+            //-> if plan has max instance limit set, check that the limit has not been met
+            const [subscription] = planSubscritions;
+            if (subscription.roleType === "reader") {
+              isPlanSelectionDisabled = true;
             }
-          />
-        ))}
+
+            isPaymentConfigBlock =
+              !isPaymentConfigured &&
+              !plan.allowCreatesWhenPaymentNotConfigured;
+
+            if (isPaymentConfigBlock) {
+              isPlanSelectionDisabled = true;
+            }
+
+            hasReachedInstanceLimit =
+              maxAllowedInstances !== undefined &&
+              (subscriptionInstanceCountHash[subscription.id] || 0) >=
+                maxAllowedInstances;
+
+            if (hasReachedInstanceLimit) {
+              isPlanSelectionDisabled = true;
+            }
+          }
+
+          let servicePlanDisabledText: ReactNode = "";
+
+          if (hasReachedInstanceLimit) {
+            servicePlanDisabledText =
+              "You have reached the limit for maximum allowed instances";
+          }
+          if (isPaymentConfigBlock) {
+            servicePlanDisabledText = (
+              <>
+                To use this subscription plan, you need to set up your payment.{" "}
+                <Link
+                  href="/billing"
+                  style={{
+                    textDecoration: "underline",
+                    textUnderlineOffset: "2px",
+                  }}
+                >
+                  Click here to configure{" "}
+                </Link>
+              </>
+            );
+          }
+
+          return (
+            <Box key={plan.productTierID} id="plan-card-container">
+              <SubscriptionPlanCard
+                key={plan.productTierID}
+                plan={plan}
+                subscriptions={subscriptions.filter(
+                  (sub) =>
+                    sub.productTierId === plan.productTierID &&
+                    ["root", "editor"].includes(sub.roleType)
+                )}
+                subscriptionRequest={
+                  subscriptionRequestsObj[plan.productTierID]
+                }
+                onSubscribeClick={async () => {
+                  try {
+                    const res = await subscribeMutation.mutateAsync({
+                      productTierId: plan.productTierID,
+                      serviceId: plan.serviceId,
+                      AutoApproveSubscription: plan.AutoApproveSubscription,
+                    });
+
+                    // @ts-ignore
+                    const id = Object.values(res?.data || {}).join("");
+
+                    if (id.startsWith("subr")) {
+                      snackbar.showSuccess(
+                        "Subscription Request sent successfully"
+                      );
+
+                      queryClient.setQueryData(
+                        ["subscription-requests"],
+                        (oldData: any) => {
+                          return {
+                            ...oldData,
+                            data: {
+                              ids: [...(oldData.data.ids || []), id],
+                              subscriptionRequests: [
+                                ...(oldData.data.subscriptionRequests || []),
+                                {
+                                  id,
+                                  serviceId: plan.serviceId,
+                                  serviceName: plan.serviceName,
+                                  productTierId: plan.productTierID,
+                                  productTierName: plan.productTierName,
+                                  rootUserId: selectUser.id,
+                                  rootUserEmail: selectUser.email,
+                                  rootUserName: selectUser.name,
+                                  status: "PENDING",
+                                  createdAt: new Date().toISOString(),
+                                  updatedAt: new Date().toISOString(),
+                                  updatedByUserId: "",
+                                  updatedByUserName: "",
+                                },
+                              ],
+                            },
+                          };
+                        }
+                      );
+                    } else if (id.startsWith("sub")) {
+                      formData.setFieldValue(name, plan.productTierID);
+                      snackbar.showSuccess("Subscribed successfully");
+
+                      queryClient.setQueryData(
+                        ["user-subscriptions"],
+                        (oldData: any) => {
+                          return {
+                            ...oldData,
+                            data: {
+                              ids: [...(oldData.data.ids || []), id],
+                              subscriptions: [
+                                ...(oldData.data.subscriptions || []),
+                                {
+                                  id,
+                                  rootUserId: selectUser.id,
+                                  serviceId: plan.serviceId,
+                                  productTierId: plan.productTierID,
+                                  serviceOrgId: plan.serviceOrgId,
+                                  serviceOrgName: plan.serviceProviderName,
+                                  roleType: "root",
+                                  createdAt: new Date().toISOString(),
+                                  subscriptionOwnerName: selectUser.name,
+                                  serviceName: plan.serviceName,
+                                  serviceLogoURL: plan.serviceLogoURL,
+                                  cloudProviderNames: plan.cloudProviders,
+                                  defaultSubscription: false,
+                                  productTierName: plan.productTierName,
+                                  accountConfigIdentityId: selectUser.orgId,
+                                  status: "ACTIVE",
+                                },
+                              ],
+                            },
+                          };
+                        }
+                      );
+                      onChange(plan.productTierID, id);
+
+                    }
+                  } catch (error) {
+                    console.error(error);
+                    snackbar.showError("Failed to subscribe. Please try again");
+                  }
+                }}
+                onClick={() => {
+                  if (servicePlanId !== plan.productTierID) {
+                    onChange(plan.productTierID);
+                  }
+                  formData.setFieldValue(name, plan.productTierID);
+                }}
+                isSelected={servicePlanId === plan.productTierID}
+                disabled={disabled || plan.serviceModelStatus !== "READY"}
+                disabledMessage={
+                  plan.serviceModelStatus !== "READY"
+                    ? "Service not available at the moment"
+                    : ""
+                }
+                isPlanSelectionDisabled={
+                  isPlanSelectionDisabled ||
+                  disabled ||
+                  plan.serviceModelStatus !== "READY"
+                }
+              />
+              {isPlanSelectionDisabled && (
+                <div className="mt-2 flex items-center gap-2">
+                  <AlertTriangle
+                    height="24px"
+                    width="24px"
+                    color="#DC6803"
+                    style={{ flexShrink: 0 }}
+                  />
+                  <Text weight="medium" size="small" color="#DC6803">
+                    {servicePlanDisabledText}
+                  </Text>
+                </div>
+              )}
+            </Box>
+          );
+        })}
     </div>
   );
 };
