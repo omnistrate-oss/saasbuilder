@@ -50,8 +50,20 @@ export const getStandardInformationFields = (
     }
   });
 
-  console.log("instances", instances);
-  console.log("subscriptionInstanceCountHash", subscriptionInstanceCountHash);
+  //key-> subscriptionID value-> boolean that indicates if the subscription has reached its quota limit
+  const subscriptionQuotaLimitHash: Record<string, boolean> = {};
+  subscriptions.forEach((subscription) => {
+    const { serviceId, productTierId} = subscription;
+    const offering = serviceOfferingsObj[serviceId]?.[productTierId];
+    const quotaLimit = offering?.maxNumberOfInstances;
+    const instanceCount = subscriptionInstanceCountHash[subscription.id] || 0;
+    let hasReachedInstanceQuotaLimit = false;
+    if(quotaLimit) {
+      hasReachedInstanceQuotaLimit = instanceCount >= quotaLimit;
+    }
+    subscriptionQuotaLimitHash[subscription.id] = hasReachedInstanceQuotaLimit;
+  })
+
 
   const { values, setFieldValue, setFieldTouched } = formData;
   const {
@@ -235,7 +247,7 @@ export const getStandardInformationFields = (
           }}
           formData={formData}
           subscriptions={subscriptionMenuItems}
-          subscriptionInstanceCountHash={subscriptionInstanceCountHash}
+          subscriptionQuotaLimitHash={subscriptionQuotaLimitHash}
         />
       ),
       previewValue: subscriptionsObj[values.subscriptionId]?.id,

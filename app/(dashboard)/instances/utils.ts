@@ -174,8 +174,6 @@ export const getValidSubscriptionForInstanceCreation = (
   const productTierPaymentRequirementHash: Record<string, boolean> = {};
   const subscriptionInstancesNumHash: Record<string, number> = {};
 
-  console.log("serviceOfferingsObj", serviceOfferingsObj);
-
   serviceOfferings.forEach((serviceOffering) => {
     productTierInstanceLimitHash[serviceOffering.productTierID] =
       serviceOffering.maxNumberOfInstances !== undefined
@@ -324,7 +322,6 @@ export const getInitialValues = (
       isPaymentConfigured
     );
 
-  console.log("selectedSubscription", selectedSubscription);
 
   const serviceId =
     selectedSubscription?.serviceId ||

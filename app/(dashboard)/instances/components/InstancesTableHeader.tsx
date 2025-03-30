@@ -60,7 +60,6 @@ const InstancesTableHeader = ({
   isLoadingInstances,
   isLoadingPaymentConfiguration,
 }) => {
-  console.log("isLoadingPaymentConfiguration", isLoadingPaymentConfiguration);
   const snackbar = useSnackbar();
 
   const stopInstanceMutation = useMutation(stopResourceInstance, {

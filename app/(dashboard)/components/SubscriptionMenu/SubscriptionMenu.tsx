@@ -5,24 +5,24 @@ import { Field } from "src/components/DynamicForm/types";
 import { Subscription } from "src/types/subscription";
 import SubscriptionTypeDirectIcon from "src/components/Icons/SubscriptionType/SubscriptionTypeDirectIcon";
 import SubscriptionTypeInvitedIcon from "src/components/Icons/SubscriptionType/SubscriptionTypeInvitedIcon";
+import { Text } from "src/components/Typography/Typography";
 
 type SubscriptionMenuProps = {
   formData: any;
   field: Omit<Field, "label" | "subLabel">;
   subscriptions: Subscription[];
-  subscriptionInstanceCountHash: Record<string, number>;
+  subscriptionQuotaLimitHash: Record<string, boolean>;
+  isCloudAccountForm?: boolean;
 };
 
 const SubscriptionMenu: React.FC<SubscriptionMenuProps> = ({
   formData,
   field,
   subscriptions,
-  subscriptionInstanceCountHash = {},
+  subscriptionQuotaLimitHash = {},
+  isCloudAccountForm = false,
 }) => {
   const { values, touched, errors, handleChange, handleBlur } = formData;
-
-  // console.log("Subscriptions", subscriptions);
-  // console.log("subscriptionInstanceCountHash", subscriptionInstanceCountHash);
 
   return (
     <Select
@@ -44,17 +44,28 @@ const SubscriptionMenu: React.FC<SubscriptionMenuProps> = ({
     >
       {subscriptions?.length > 0 ? (
         subscriptions.map((subscription) => {
-          const isDisabled = !["editor", "root"].includes(
-            subscription.roleType
-          );
-          const disabledMessage = "Readers cannot create instances";
+          const isQuotaLimitReached = !isCloudAccountForm &&
+          subscriptionQuotaLimitHash[subscription.id] || false;
+
+          const isDisabled =
+            !["editor", "root"].includes(subscription.roleType) ||
+            isQuotaLimitReached;
+
+          let disabledMessage = "";
+          if (isQuotaLimitReached) {
+            disabledMessage = `Quota limit reached `;
+          }
+          if (subscription.roleType === "reader") {
+            disabledMessage = "Readers cannot create instances";
+          }
+
           const role = subscription.roleType;
 
           const menuItem = (
             <MenuItem
               key={subscription.id}
               value={subscription.id}
-              disabled={!["editor", "root"].includes(role)}
+              disabled={isDisabled}
             >
               <div className="flex items-center gap-2">
                 {role === "root" ? (
@@ -64,6 +75,12 @@ const SubscriptionMenu: React.FC<SubscriptionMenuProps> = ({
                 )}
                 {subscription.id} (
                 {role && role.charAt(0).toUpperCase() + role.slice(1)})
+                {isDisabled && (
+                  <Text size="small" weight="regular" color="#DC6803">
+                    {" "}
+                    {disabledMessage}
+                  </Text>
+                )}
               </div>
             </MenuItem>
           );

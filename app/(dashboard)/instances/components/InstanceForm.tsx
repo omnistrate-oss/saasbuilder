@@ -63,6 +63,10 @@ const InstanceForm = ({
     isFetchingSubscriptions,
   } = useGlobalData();
 
+  const nonCloudAccountInstances = useMemo(() => {
+    return instances.filter((instance) => !isCloudAccountInstance(instance));
+  }, [instances]);
+
   const createInstanceMutation = useMutation(
     async (payload: any) => {
       return createResourceInstance(payload);
@@ -100,7 +104,7 @@ const InstanceForm = ({
       subscriptions,
       serviceOfferingsObj,
       serviceOfferings,
-      instances,
+      nonCloudAccountInstances,
       isPaymentConfigured
     ),
     enableReinitialize: true,
@@ -108,7 +112,7 @@ const InstanceForm = ({
       serviceId: yup.string().required("Service is required"),
       servicePlanId: yup
         .string()
-        .required("Plan with active subscription is required"),
+        .required("A service plan with a valid subscription is required"),
       subscriptionId: yup.string().required("Subscription is required"),
       resourceId: yup.string().required("Resource is required"),
     }),
@@ -309,7 +313,6 @@ const InstanceForm = ({
     },
   });
 
-  console.log("formData.values", formData.values);
 
   const { values } = formData;
   const offering =
@@ -442,7 +445,7 @@ const InstanceForm = ({
       customAvailabilityZones,
       isFetchingCustomAvailabilityZones,
       isPaymentConfigured,
-      instances
+      nonCloudAccountInstances
     );
   }, [
     formMode,
@@ -451,7 +454,7 @@ const InstanceForm = ({
     customAvailabilityZones,
     subscriptions,
     isPaymentConfigured,
-    instances,
+    nonCloudAccountInstances,
   ]);
 
   const networkConfigurationFields = useMemo(() => {
@@ -536,6 +539,7 @@ const InstanceForm = ({
             })}
           </div>
         </CardWithTitle>
+        
         {isFetchingResourceSchema ||
         !networkConfigurationFields.length ? null : (
           <CardWithTitle title="Network Configuration">

@@ -179,6 +179,7 @@ type SubscriptionPlanRadioProps = {
   disabled?: boolean;
   isPaymentConfigured: boolean;
   instances: ResourceInstance[];
+  isCloudAccountForm?: boolean;
 };
 
 const SubscriptionPlanRadio: React.FC<SubscriptionPlanRadioProps> = ({
@@ -190,8 +191,8 @@ const SubscriptionPlanRadio: React.FC<SubscriptionPlanRadioProps> = ({
   disabled,
   isPaymentConfigured,
   instances,
+  isCloudAccountForm = false
 }) => {
-  console.log("name", name);
   const snackbar = useSnackbar();
   const queryClient = useQueryClient();
   const selectUser = useSelector(selectUserrootData);
@@ -249,8 +250,6 @@ const SubscriptionPlanRadio: React.FC<SubscriptionPlanRadioProps> = ({
         // When disabled, show only the Selected Service Plan. This is in case of Modify Instance
         .filter((el) => (disabled ? el.productTierID === servicePlanId : true))
         .map((plan) => {
-          console.log("serviceSubscriptions", serviceSubscriptions);
-
           const isPaymentConfigBlock =
             !isPaymentConfigured && !plan.allowCreatesWhenPaymentNotConfigured;
 
@@ -266,8 +265,8 @@ const SubscriptionPlanRadio: React.FC<SubscriptionPlanRadioProps> = ({
 
           const maxAllowedInstances = plan.maxNumberOfInstances;
 
-          //card should be disabled for selection if quota limits have been hit for all editor, root subscriptions
-          if (editorAndRootSubscriptions.length > 0) {
+          //card should be disabled for selection if quota limits have been hit for all editor, root subscriptions and the form type is not cloud account
+          if (editorAndRootSubscriptions.length > 0 && !isCloudAccountForm) {
             hasReachedInstanceQuotaLimit = editorAndRootSubscriptions.every(
               (subscription) =>
                 maxAllowedInstances !== undefined &&
@@ -423,7 +422,7 @@ const SubscriptionPlanRadio: React.FC<SubscriptionPlanRadioProps> = ({
                 }
               />
               {isPlanSelectionDisabled && (
-                <div className="mt-2 flex items-center gap-2">
+                <div className="mt-2 mb-1 flex items-center gap-2">
                   <AlertTriangle
                     height="24px"
                     width="24px"
