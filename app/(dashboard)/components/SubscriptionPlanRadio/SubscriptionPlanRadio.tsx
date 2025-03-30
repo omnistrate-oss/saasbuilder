@@ -251,50 +251,40 @@ const SubscriptionPlanRadio: React.FC<SubscriptionPlanRadioProps> = ({
         .map((plan) => {
           console.log("serviceSubscriptions", serviceSubscriptions);
 
-          let isPaymentConfigBlock = false;
-          let hasReachedInstanceLimit = false;
+          const isPaymentConfigBlock =
+            !isPaymentConfigured && !plan.allowCreatesWhenPaymentNotConfigured;
+
+          let hasReachedInstanceQuotaLimit = false;
 
           const planSubscritions = serviceSubscriptions.filter(
             (subscription) => subscription.productTierId === plan.productTierID
           );
 
+          const editorAndRootSubscriptions = planSubscritions.filter(
+            (subscription) => ["root", "editor"].includes(subscription.roleType)
+          );
+
           const maxAllowedInstances = plan.maxNumberOfInstances;
 
-          let isPlanSelectionDisabled = false;
-          if (planSubscritions.length === 1) {
-            //if there's just one subscription, plan should be selectable if
-            //-> subscription is not reader
-            //-> if plan requires valid payment config, check that payment is configured
-            //-> if plan has max instance limit set, check that the limit has not been met
-            const [subscription] = planSubscritions;
-            if (subscription.roleType === "reader") {
-              isPlanSelectionDisabled = true;
-            }
-
-            isPaymentConfigBlock =
-              !isPaymentConfigured &&
-              !plan.allowCreatesWhenPaymentNotConfigured;
-
-            if (isPaymentConfigBlock) {
-              isPlanSelectionDisabled = true;
-            }
-
-            hasReachedInstanceLimit =
-              maxAllowedInstances !== undefined &&
-              (subscriptionInstanceCountHash[subscription.id] || 0) >=
-                maxAllowedInstances;
-
-            if (hasReachedInstanceLimit) {
-              isPlanSelectionDisabled = true;
-            }
+          //card should be disabled for selection if quota limits have been hit for all editor, root subscriptions
+          if (editorAndRootSubscriptions.length > 0) {
+            hasReachedInstanceQuotaLimit = editorAndRootSubscriptions.every(
+              (subscription) =>
+                maxAllowedInstances !== undefined &&
+                (subscriptionInstanceCountHash[subscription.id] || 0) >=
+                  maxAllowedInstances
+            );
           }
+
+          const isPlanSelectionDisabled =
+            isPaymentConfigBlock || hasReachedInstanceQuotaLimit;
 
           let servicePlanDisabledText: ReactNode = "";
 
-          if (hasReachedInstanceLimit) {
-            servicePlanDisabledText =
-              "You have reached the limit for maximum allowed instances";
+          if (hasReachedInstanceQuotaLimit) {
+            servicePlanDisabledText = `You have reached the quota limit for maximum allowed instances ${editorAndRootSubscriptions.length > 1 ? "for all subscriptions" : ""}`;
           }
+          
           if (isPaymentConfigBlock) {
             servicePlanDisabledText = (
               <>
@@ -407,7 +397,6 @@ const SubscriptionPlanRadio: React.FC<SubscriptionPlanRadioProps> = ({
                         }
                       );
                       onChange(plan.productTierID, id);
-
                     }
                   } catch (error) {
                     console.error(error);

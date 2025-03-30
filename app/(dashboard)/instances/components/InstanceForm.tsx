@@ -63,35 +63,6 @@ const InstanceForm = ({
     isFetchingSubscriptions,
   } = useGlobalData();
 
-  //hash stores productTierID as the key and maxInstanceCount if any as the max instance limit. -1 means no limit
-  const productTierInstanceLimitHash: Record<string, number> = {};
-
-  //productTierID -> key, validPaymentNeededForInstanceCreation -> value
-  const productTierPaymentRequirementHash: Record<string, boolean> = {};
-
-  //subscriptionID -> key, number of instances -> value
-  const subscriptionInstancesNumHash: Record<string, number> = {};
-
-  serviceOfferings.forEach((serviceOffering) => {
-    productTierInstanceLimitHash[serviceOffering.productTierID] =
-      serviceOffering.maxNumberOfInstances !== undefined
-        ? serviceOffering.maxNumberOfInstances
-        : -1;
-
-    productTierPaymentRequirementHash[serviceOffering.productTierID] = !Boolean(
-      serviceOffering.allowCreatesWhenPaymentNotConfigured
-    );
-  });
-
-  instances.forEach((instance) => {
-    if (subscriptionInstancesNumHash[instance.subscriptionId as string]) {
-      subscriptionInstancesNumHash[instance.subscriptionId as string] =
-        subscriptionInstancesNumHash[instance.subscriptionId as string] + 1;
-    } else {
-      subscriptionInstancesNumHash[instance.subscriptionId as string] = 1;
-    }
-  });
-
   const createInstanceMutation = useMutation(
     async (payload: any) => {
       return createResourceInstance(payload);

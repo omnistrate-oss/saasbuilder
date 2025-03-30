@@ -39,7 +39,19 @@ export const getStandardInformationFields = (
 ) => {
   if (isFetchingServiceOfferings) return [];
 
+  //subscriptionID -> key, number of instances -> value
+  const subscriptionInstanceCountHash: Record<string, number> = {};
+  instances.forEach((instance) => {
+    if (subscriptionInstanceCountHash[instance?.subscriptionId as string]) {
+      subscriptionInstanceCountHash[instance.subscriptionId as string] =
+        subscriptionInstanceCountHash[instance.subscriptionId as string] + 1;
+    } else {
+      subscriptionInstanceCountHash[instance.subscriptionId as string] = 1;
+    }
+  });
+
   console.log("instances", instances);
+  console.log("subscriptionInstanceCountHash", subscriptionInstanceCountHash);
 
   const { values, setFieldValue, setFieldTouched } = formData;
   const {
@@ -137,9 +149,9 @@ export const getStandardInformationFields = (
           ).sort((a: any, b: any) =>
             a.productTierName.localeCompare(b.productTierName)
           )}
-          serviceSubscriptions = {
-            subscriptions.filter((subscription) => subscription.serviceId === serviceId )
-          }
+          serviceSubscriptions={subscriptions.filter(
+            (subscription) => subscription.serviceId === serviceId
+          )}
           name="servicePlanId"
           formData={formData}
           disabled={formMode !== "create"}
@@ -223,6 +235,7 @@ export const getStandardInformationFields = (
           }}
           formData={formData}
           subscriptions={subscriptionMenuItems}
+          subscriptionInstanceCountHash={subscriptionInstanceCountHash}
         />
       ),
       previewValue: subscriptionsObj[values.subscriptionId]?.id,

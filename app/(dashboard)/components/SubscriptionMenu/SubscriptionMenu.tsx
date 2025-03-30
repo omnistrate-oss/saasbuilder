@@ -10,14 +10,19 @@ type SubscriptionMenuProps = {
   formData: any;
   field: Omit<Field, "label" | "subLabel">;
   subscriptions: Subscription[];
+  subscriptionInstanceCountHash: Record<string, number>;
 };
 
 const SubscriptionMenu: React.FC<SubscriptionMenuProps> = ({
   formData,
   field,
   subscriptions,
+  subscriptionInstanceCountHash = {},
 }) => {
   const { values, touched, errors, handleChange, handleBlur } = formData;
+
+  // console.log("Subscriptions", subscriptions);
+  // console.log("subscriptionInstanceCountHash", subscriptionInstanceCountHash);
 
   return (
     <Select
