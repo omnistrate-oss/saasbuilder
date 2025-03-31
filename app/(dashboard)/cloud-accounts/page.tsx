@@ -108,7 +108,7 @@ const CloudAccountsPage = () => {
     refetch: refetchInstances,
   } = useInstances();
 
-  const { data: billingConfig, isLoading: isLoadingPaymentConfiguration } =
+  const { data: billingConfig } =
   useBillingDetails();
 const isPaymentConfigured = Boolean(billingConfig?.paymentConfigured);
 

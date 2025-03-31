@@ -188,10 +188,6 @@ export const getInitialValues = (
       false
     );
 
-  const rootSubscription = filteredSubscriptions
-    .sort((a, b) => a.serviceName.localeCompare(b.serviceName))
-    .find((sub) => sub.roleType === "root");
-
   const serviceId =
   selectedSubscription?.serviceId ||
     filteredSubscriptions[0]?.serviceId ||
