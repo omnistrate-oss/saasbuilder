@@ -191,7 +191,7 @@ const SubscriptionPlanRadio: React.FC<SubscriptionPlanRadioProps> = ({
   disabled,
   isPaymentConfigured,
   instances,
-  isCloudAccountForm = false
+  isCloudAccountForm = false,
 }) => {
   const snackbar = useSnackbar();
   const queryClient = useQueryClient();
@@ -283,7 +283,7 @@ const SubscriptionPlanRadio: React.FC<SubscriptionPlanRadioProps> = ({
           if (hasReachedInstanceQuotaLimit) {
             servicePlanDisabledText = `You have reached the quota limit for maximum allowed instances ${editorAndRootSubscriptions.length > 1 ? "for all subscriptions" : ""}`;
           }
-          
+
           if (isPaymentConfigBlock) {
             servicePlanDisabledText = (
               <>
@@ -360,7 +360,6 @@ const SubscriptionPlanRadio: React.FC<SubscriptionPlanRadioProps> = ({
                         }
                       );
                     } else if (id.startsWith("sub")) {
-                      formData.setFieldValue(name, plan.productTierID);
                       snackbar.showSuccess("Subscribed successfully");
 
                       queryClient.setQueryData(
@@ -395,7 +394,10 @@ const SubscriptionPlanRadio: React.FC<SubscriptionPlanRadioProps> = ({
                           };
                         }
                       );
-                      onChange(plan.productTierID, id);
+                      if (!isPaymentConfigBlock) {
+                        formData.setFieldValue(name, plan.productTierID);
+                        onChange(plan.productTierID, id);
+                      }
                     }
                   } catch (error) {
                     console.error(error);
