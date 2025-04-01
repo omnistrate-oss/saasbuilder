@@ -94,11 +94,8 @@ const Button = styled(
       },
     },
     [`&.${buttonClasses.contained}.Mui-disabled`]: {
-      color: fontColor ? fontColor : colors.gray700,
-      background: outlineBg ? outlineBg : "white",
       borderWidth: "1px",
       borderStyle: "solid",
-      borderColor: outlineColor ? outlineColor : colors.gray300,
       boxShadow: "0px 1px 2px 0px #0A0D120D, 0px -2px 0px 0px #0A0D120D inset",
       background: "white",
       borderColor: "#EAECF0",

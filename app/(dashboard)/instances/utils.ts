@@ -322,14 +322,13 @@ export const getInitialValues = (
       isPaymentConfigured
     );
 
-
   const serviceId =
     selectedSubscription?.serviceId ||
     sortedSubscriptionsByName[0]?.serviceId ||
     serviceOfferings[0]?.serviceId ||
     "";
 
-  //dont't select service plan card if a valid subsription is not found
+  //dont't select service plan card if a valid subsription (where a user can create an instance) is not found
   const servicePlanId = selectedSubscription?.productTierId || "";
 
   const offering = serviceOfferingsObj[serviceId]?.[servicePlanId];
