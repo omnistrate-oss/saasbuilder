@@ -28,7 +28,7 @@ export type GetConsumptionUsagePerDayQueryParams = {
 
 export const getConsumptionUsagePerDay = (
   queryParams: GetConsumptionUsagePerDayQueryParams = {}
-): Promise<GetConsumptionUsagePerDaySuccessResponse> => {
+): Promise<AxiosResponse<GetConsumptionUsagePerDaySuccessResponse>> => {
   const mock = {
     usage: [
       {
@@ -396,11 +396,11 @@ export const getConsumptionUsagePerDay = (
     endTime: "2025-03-20T10:00:00Z",
   };
 
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve(mock);
-    }, 1000);
-  });
+  // return new Promise((resolve) => {
+  //   setTimeout(() => {
+  //     resolve(mock);
+  //   }, 1000);
+  // });
   return axios.get("/resource-instance/usage-per-day", {
     params: queryParams,
   });

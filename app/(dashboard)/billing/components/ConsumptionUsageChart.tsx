@@ -1,4 +1,4 @@
-import { Box } from "@mui/material";
+import { Box, Stack } from "@mui/material";
 import dayjs from "dayjs";
 import React, { FC, useMemo } from "react";
 import {
@@ -13,11 +13,46 @@ import {
 } from "recharts";
 import LoadingSpinner from "src/components/LoadingSpinner/LoadingSpinner";
 import ReChartContainer from "src/components/ReChartContainer/ReChartContainer";
+import { Text } from "src/components/Typography/Typography";
 import { ConsumptionUsagePerDay } from "src/types/consumption";
 
 function formatDate(inputDate) {
   return dayjs.utc(inputDate).format("MMM DD");
 }
+
+const LegendItem = ({ title = "", bgColor }) => {
+  return (
+    <Box
+      display={"flex"}
+      justifyContent={"space-between"}
+      alignSelf={"center"}
+      gap={"8px"}
+    >
+      <Box
+        alignSelf={"center"}
+        sx={{ background: bgColor, width: "11px", height: "11px" }}
+      />
+      <Text size="xsmall" weight="medium" color="#7E8299">
+        {title}
+      </Text>
+    </Box>
+  );
+};
+
+const Legend = () => {
+  return (
+    <Box
+      display={"flex"}
+      justifyContent={"space-between"}
+      gap={"17px"}
+      mt="16px"
+    >
+      <LegendItem bgColor="#3E97FF" title="Memory GiB hours" />
+      <LegendItem bgColor="#10AA50" title="Storage GiB hours" />
+      <LegendItem bgColor="#7239EA" title="CPU core hours" />
+    </Box>
+  );
+};
 
 export function handleYAxisShift(
   chartID: string,
@@ -50,7 +85,7 @@ export function handleYAxisShift(
 
       rect.setAttribute("x", "0");
       rect.setAttribute("y", "0");
-      rect.setAttribute("width", `${yAxisWidth + 20}px`);
+      rect.setAttribute("width", `${Math.max(yAxisWidth + 20, 53)  }px`);
       rect.setAttribute("height", `${yAxisheight + xAxisHeight}px`);
       rect.setAttribute("fill", "white");
       rect.setAttribute("class", `y-axis-rect-${orientation}`);
@@ -64,7 +99,7 @@ export function handleYAxisShift(
   axis.style = "transform: translateX(" + e.target.scrollLeft + "px);"; //@ts-ignore
 }
 
-const chartMargins = { bottom: 50, top: 5, left: 0, right: 0 };
+const chartMargins = { bottom: 20, top: 5, left: 0, right: 0 };
 const barCategoryGap = 50;
 const barWidth = 10;
 
@@ -88,6 +123,7 @@ const scrollbarStyles = {
   "&::-webkit-scrollbar-thumb:hover": {
     background: "#eaecf0",
   },
+  overscrollBehavior: "none",
 };
 
 type ConsumptionUsageChartProps = {
@@ -153,10 +189,13 @@ const ConsumptionUsageChart: FC<ConsumptionUsageChartProps> = (props) => {
   return isFetchingUsagePerDay ? (
     <LoadingSpinner />
   ) : (
-    <Box position="relative" id="usage-per-day-chart">
-      <ReChartContainer mt={2} debounce={100} height={370}>
+    <Box position="relative" id="usage-per-day-chart" overflow={"hidden"}>
+      <Stack direction="row" justifyContent="flex-end">
+        <Legend />
+      </Stack>
+      <ReChartContainer mt={4} debounce={100} height={370}>
         <Box
-          sx={{overflowY: "hidden", ...scrollbarStyles }}
+          sx={{ overflowY: "hidden", ...scrollbarStyles }}
           onScroll={(e: React.UIEvent<HTMLDivElement>) => {
             handleYAxisShift("usage-per-day-chart", e);
           }}
@@ -194,6 +233,7 @@ const ConsumptionUsageChart: FC<ConsumptionUsageChartProps> = (props) => {
               />
 
               <Tooltip
+                animationDuration={0}
                 content={({ payload, label }) => {
                   if (!payload || payload.length === 0) return null;
 

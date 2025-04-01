@@ -14,9 +14,9 @@ function useConsumptionUsagePerDay(
     queryFn: async () => {
 
       
-      const response = await getConsumptionUsagePerDay();
+      const response = await getConsumptionUsagePerDay(queryParams);
       //todo add .data
-      return response;
+      return response.data;
     },
   });
 
