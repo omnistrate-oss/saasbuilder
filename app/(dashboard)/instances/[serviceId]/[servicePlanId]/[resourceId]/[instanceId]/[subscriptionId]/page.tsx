@@ -145,11 +145,11 @@ const InstanceDetailsPage = ({
     [resourceInstanceData, isCliManagedResource, resourceType]
   );
 
-  const enabledTabs = useMemo(
+  const disabledTabs = useMemo(
     () =>
-      resourceInstanceData?.status === "DISCONNECT"
-        ? ["resourceInstanceDetails", "connectivity", "auditLogs"] // Fixed predefined tabs
-        : Object.keys(tabs), // Extract only keys from tabs
+      resourceInstanceData?.status === "DISCONNECTED"
+        ? ["nodes", "backups"]
+        : [],
     [resourceInstanceData, tabs]
   );
 
@@ -261,7 +261,7 @@ const InstanceDetailsPage = ({
       </Collapse>
       <Tabs value={currentTab} sx={{ marginTop: "20px" }}>
         {Object.entries(tabs).map(([key, value]) => {
-          const isEnabled = enabledTabs?.includes(key);
+          const isDisabled = disabledTabs?.includes(key);
           return (
             <Tab
               key={key}
@@ -271,7 +271,7 @@ const InstanceDetailsPage = ({
                 setCurrentTab(value as CurrentTab);
               }}
               disableRipple
-              disabled={!isEnabled}
+              disabled={isDisabled}
             />
           );
         })}
@@ -339,6 +339,7 @@ const InstanceDetailsPage = ({
           serviceOffering={offering}
           resourceKey={resourceKey}
           resourceInstanceId={instanceId}
+          resourceInstancestatus={resourceInstanceData.status}
           subscriptionData={subscription}
           subscriptionId={subscription.id}
           isBYOAServicePlan={offering?.serviceModelType === "BYOA"}

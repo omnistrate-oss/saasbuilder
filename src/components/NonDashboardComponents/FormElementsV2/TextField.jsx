@@ -6,6 +6,7 @@ const TextField = ({ type, endAdornment, ...restProps }) => {
       fullWidth
       autoComplete="off"
       type={type || "text"}
+      {...restProps}
       sx={{
         ".MuiOutlinedInput-root": {
           borderRadius: "6px",
@@ -26,9 +27,11 @@ const TextField = ({ type, endAdornment, ...restProps }) => {
         "& .MuiOutlinedInput-notchedOutline": {
           borderColor: "#D1D5DB",
         },
+        ...restProps.sx,
       }}
       InputProps={{
         endAdornment: endAdornment || null,
+        ...restProps.InputProps,
       }}
       FormHelperTextProps={{
         sx: {
@@ -36,8 +39,8 @@ const TextField = ({ type, endAdornment, ...restProps }) => {
           left: "0px",
           bottom: -24,
         },
+        ...restProps.FormHelperTextProps,
       }}
-      {...restProps}
     />
   );
 };

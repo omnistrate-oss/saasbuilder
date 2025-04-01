@@ -233,11 +233,13 @@ const InstancesTableHeader = ({
         ? "Please select an instance"
         : status === "DELETING"
           ? "Instance deletion is already in progress"
-          : isProxyResource
-            ? "System managed instances cannot be deleted"
-            : !isDeleteAllowedByRBAC
-              ? "Unauthorized to delete instances"
-              : "",
+          : status === "DISCONNECTED"
+            ? "Cloud account is disconnected"
+            : isProxyResource
+              ? "System managed instances cannot be deleted"
+              : !isDeleteAllowedByRBAC
+                ? "Unauthorized to delete instances"
+                : "",
     });
 
     actions.push({
@@ -348,10 +350,14 @@ const InstancesTableHeader = ({
 
     if (selectedInstance?.kubernetesDashboardEndpoint?.dashboardEndpoint) {
       other.push({
-        dataTestId: "open-dashboard-button",
+        dataTestId: "generate-token-button",
         label: "Generate Token",
         isDisabled: !selectedInstance || status === "DISCONNECTED",
-        disabledMessage: !selectedInstance ? "Please select an instance" : "",
+        disabledMessage: !selectedInstance
+          ? "Please select an instance"
+          : status === "DISCONNECTED"
+            ? "Cloud account is disconnected"
+            : "",
         onClick: () => {
           if (!selectedInstance)
             return snackbar.showError("Please select an instance");
@@ -482,6 +488,7 @@ const InstancesTableHeader = ({
             const Icon = icons[action.label];
             return (
               <Button
+                data-testid={action.dataTestId || action.label}
                 key={index}
                 variant={
                   action.actionType === "primary" ? "contained" : "outlined"

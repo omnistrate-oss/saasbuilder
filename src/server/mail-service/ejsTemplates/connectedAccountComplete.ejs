@@ -1,16 +1,18 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!--$-->
 <html dir="ltr" lang="en">
   <head>
     <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
+    <meta name="x-apple-disable-message-reformatting" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" />
     <link
-    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
-    rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&amp;display=swap"
+      rel="stylesheet"
     />
   </head>
 
-  <body style="background:#ffffff;font-family:&#x27;Inter&#x27;,sans-serif">
+  <body style="background:#ffffff;font-family:&#x27;Manrope&#x27;, sans-serif">
     <table
       align="center"
       width="100%"
@@ -55,12 +57,12 @@
                       cellSpacing="0"
                       role="presentation"
                       style="
-                        width: 100%;
                         background: #001829;
                         display: flex;
                         flex-direction: column;
                         justify-content: space-between;
-                        padding: 32px 30px 0;
+                        padding: 32px 32px 0;
+                        border-radius: 8px 8px 0 0;
                       "
                     >
                       <tbody style="width: 100%">
@@ -84,7 +86,6 @@
                                     data-id="__react-email-column"
                                     style="vertical-align: top"
                                   >
-                                  <% if(logo_url){ %>
                                     <table
                                       align="center"
                                       width="100%"
@@ -111,7 +112,6 @@
                                         </tr>
                                       </tbody>
                                     </table>
-                                    <% } %>
                                     <table
                                       align="center"
                                       width="100%"
@@ -125,17 +125,14 @@
                                           <td
                                             data-id="__react-email-column"
                                             style="
-                                              font-family: Arial, Helvetica, sans-serif;
-                                              font-size: 26px;
-                                              font-weight: 600;
+                                              font-size: 24px;
+                                              font-weight: 400;
                                               line-height: 38px;
-                                              text-align: left;
                                               color: #ffffff;
-                                              padding: 12px 0 0;
+                                              margin: 12px 0;
                                             "
                                           >
-                                            Upgrade <br />
-                                            Notification
+                                            Cloud Account Connected Successfully
                                           </td>
                                         </tr>
                                       </tbody>
@@ -146,7 +143,7 @@
                                     style="text-align: right"
                                   >
                                     <img
-                                      height="190px"
+                                      height="90px"
                                       src="<%= hero_banner %>"
                                       style="
                                         display: block;
@@ -155,7 +152,7 @@
                                         text-decoration: none;
                                         max-width: 300px;
                                       "
-                                      width="270px"
+                                      width="170px"
                                     />
                                   </td>
                                 </tr>
@@ -195,19 +192,16 @@
                       cellPadding="0"
                       cellSpacing="0"
                       role="presentation"
-                      style="border-radius: 0 0 8px 8px; padding: 0 30px"
+                      style="padding: 0 32px !important"
                     >
                       <tbody style="width: 100%">
                         <tr style="width: 100%">
-                          <td data-id="__react-email-column"></td>
                           <td
                             data-id="__react-email-column"
                             style="
-                              width: 100%;
                               background: #ffffff;
-                              height: 200px;
-                              border-radius: 0 0 8px 8px;
-                              vertical-align: top;
+                              border-radius: 8px;
+                              padding: 0 32px !important;
                             "
                           >
                             <table
@@ -222,11 +216,11 @@
                                 <tr style="width: 100%">
                                   <td
                                     data-id="__react-email-column"
-                                    style="margin: auto; padding-top: 40px"
+                                    style="text-align: center"
                                   >
                                     <img
-                                      height="140px"
-                                      src="<%= upgrade_notification %>"
+                                      height="72px"
+                                      src="<%= connected_success %>"
                                       style="
                                         display: block;
                                         outline: none;
@@ -239,89 +233,49 @@
                                 </tr>
                               </tbody>
                             </table>
-                            <table
-                              align="center"
-                              width="100%"
-                              border="0"
-                              cellPadding="0"
-                              cellSpacing="0"
-                              role="presentation"
+                            <p
+                              style="
+                                font-size: 16px;
+                                line-height: 24px;
+                                margin: 24px 0 0;
+                                font-weight: 400;
+                                text-align: left;
+                              "
                             >
-                              <tbody style="width: 100%">
-                                <tr style="width: 100%">
-                                  <td data-id="__react-email-column">
-                                    <p
-                                      style="
-                                        font-size: 32px;
-                                        line-height: 40px;
-                                        margin: 32px auto 0;
-                                        font-weight: 800;
-                                        text-align: center;
-                                      "
-                                    >
-                                      Hello<%= username ? ` ${username}` : "" %>!
-                                    </p>
-                                  </td>
-                                </tr>
-                              </tbody>
-                            </table>
-                            <table
-                              align="center"
-                              width="100%"
-                              border="0"
-                              cellPadding="0"
-                              cellSpacing="0"
-                              role="presentation"
+                              Dear <%= user_name %>,
+                            </p>
+                            <p
+                              style="
+                                font-size: 16px;
+                                line-height: 24px;
+                                margin: 16px 0;
+                                font-weight: 400;
+                                text-align: left;
+                              "
                             >
-                              <tbody style="width: 100%">
-                                <tr style="width: 100%">
-                                  <td data-id="__react-email-column">
-                                    <table
-                                      align="center"
-                                      width="100%"
-                                      border="0"
-                                      cellPadding="0"
-                                      cellSpacing="0"
-                                      role="presentation"
-                                      style="padding: 0 32px"
-                                    >
-                                      <tbody style="width: 100%">
-                                        <tr style="width: 100%">
-                                          <td data-id="__react-email-column">
-                                            <p
-                                              style="
-                                                font-size: 17px;
-                                                line-height: 25px;
-                                                margin: 32px auto 0;
-                                                font-weight: 400;
-                                                text-align: center;
-                                              "
-                                            >
-                                              Your deployment (<span style="font-weight: 800"><%= instance_id %></span>) for
-                                              <span style="font-weight: 800"><%= service_name %></span> service
-                                              under the
-                                              <span style="font-weight: 800"><%= service_plan_name %></span>
-                                              <% if (!is_scheduled) { %>
-                                                is scheduled for an upgrade now.
-                                              <% } else { %>
-                                                is scheduled for a version upgrade on 
-                                                <span style="font-weight: 800"><%= upgrade_date %></span>
-                                              <% } %>
-                                              <br />
-                                              <% if (support_email) { %>
-                                                If you have any questions, please contact <a href="mailto:<%= support_email %>">support</a>.
-                                              <% } else { %>
-                                                If you have any questions, please contact support.
-                                              <% } %>
-                                            </p>
-                                          </td>
-                                        </tr>
-                                      </tbody>
-                                    </table>
-                                  </td>
-                                </tr>
-                              </tbody>
-                            </table>
+                              Your AWS account<!-- -->
+                              <span style="font-weight: 800"
+                                ><%= account_number %></span
+                              >
+                              has been successfully connected to<!-- -->
+                              <span style="font-weight: 800"
+                                ><%= org_name %></span
+                              >.
+                            </p>
+                            <p
+                              style="
+                                font-size: 16px;
+                                line-height: 24px;
+                                margin: 16px 0 0 0;
+                                font-weight: 400;
+                                text-align: left;
+                              "
+                            >
+                              For assistance, contact<!-- -->
+                              <span style="font-weight: 800"
+                                ><%= support_email %></span
+                              >.
+                            </p>
                             <table
                               align="center"
                               width="100%"
@@ -337,13 +291,13 @@
                                       style="
                                         font-size: 18px;
                                         line-height: 27px;
-                                        margin: 32px auto 48px;
+                                        margin: 32px 0px;
                                         font-weight: 800;
                                         text-align: center;
                                       "
                                     >
-                                      Sincerely <br />
-                                      The <span style="font-weight: 800"><%= org_name %></span> Team
+                                      Thank you <br />The <%= org_name %>
+                                      <!-- -->Team
                                     </p>
                                   </td>
                                 </tr>
@@ -363,3 +317,4 @@
     </table>
   </body>
 </html>
+<!--/$-->

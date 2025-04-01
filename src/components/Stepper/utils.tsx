@@ -20,7 +20,7 @@ export const getStepperProps = (
   if (StepperSetpStatus === stateAccountConfigStepper.trigger) {
     return {
       step1: {
-        title: "Tigger",
+        title: "Trigger",
         icon: <StepperInProgressIcon />,
       },
       step2: {
@@ -37,7 +37,7 @@ export const getStepperProps = (
   if (StepperSetpStatus === stateAccountConfigStepper.run) {
     return {
       step1: {
-        title: "Tigger",
+        title: "Trigger",
         icon: <StepperSuccessIcon />,
       },
       step2: {
@@ -54,7 +54,7 @@ export const getStepperProps = (
   if (StepperSetpStatus === stateAccountConfigStepper.check) {
     return {
       step1: {
-        title: "Tigger",
+        title: "Trigger",
         icon: <StepperSuccessIcon />,
       },
       step2: {
@@ -70,7 +70,7 @@ export const getStepperProps = (
 
   return {
     step1: {
-      title: "Tigger",
+      title: "Trigger",
       icon: <StepperDefaultIcon />,
     },
     step2: {
@@ -95,7 +95,7 @@ export const stepsDisconnectRunAccountConfig = [
   {
     label: (
       <Text size="small" weight="semibold" color="#414651">
-        Syncing & Purging
+        Disconnecting
       </Text>
     ),
   },
@@ -119,7 +119,7 @@ export const stepsConnectRunAccountConfig = [
   {
     label: (
       <Text size="small" weight="semibold" color="#414651">
-        Granting Permissions (manual step)
+        Action Required: Please run the CloudFormation template to proceed.
       </Text>
     ),
   },

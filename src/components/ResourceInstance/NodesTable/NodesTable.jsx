@@ -68,6 +68,7 @@ export default function NodesTable(props) {
     resourceInstanceId,
     subscriptionId,
     isBYOAServicePlan,
+    resourceInstancestatus,
   } = props;
 
   const isCustomTenancy =
@@ -414,6 +415,8 @@ export default function NodesTable(props) {
               isCustomTenancy &&
                 nodes.some((node) => node.kubernetesDashboardEndpoint)
             ),
+            disabledGenerateTokenButton:
+              resourceInstancestatus === "DISCONNECTED",
             onGenerateTokenClick: () => setIsGenerateTokenDialogOpen(true),
             handleFailover,
             failoverMutation,

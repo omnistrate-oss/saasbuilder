@@ -244,7 +244,7 @@ const CloudAccountForm = ({
         ? [ACCOUNT_CREATION_METHODS.CLOUDFORMATION]
         : [
             ACCOUNT_CREATION_METHODS.GCP_SCRIPT,
-            ACCOUNT_CREATION_METHODS.TERRAFORM,
+            // ACCOUNT_CREATION_METHODS.TERRAFORM,
           ];
 
     return {

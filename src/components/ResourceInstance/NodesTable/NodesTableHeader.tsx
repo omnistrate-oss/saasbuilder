@@ -17,6 +17,7 @@ type NodesTableHeaderProps = {
   selectedNode?: { nodeId: string; resourceKey: string };
   showFailoverButton: boolean;
   showGenerateTokenButton: boolean;
+  disabledGenerateTokenButton: boolean;
   onGenerateTokenClick?: () => void;
   handleFailover: (nodeId: string, resourceKey: string) => void;
   failoverMutation: { isLoading: boolean };
@@ -34,6 +35,7 @@ const NodesTableHeader: React.FC<NodesTableHeaderProps> = ({
   selectedNode,
   showFailoverButton,
   showGenerateTokenButton,
+  disabledGenerateTokenButton,
   onGenerateTokenClick = () => {},
   handleFailover,
   failoverMutation,
@@ -100,6 +102,7 @@ const NodesTableHeader: React.FC<NodesTableHeaderProps> = ({
                 height: "40px !important",
                 padding: "10px 14px !important",
               }}
+              disabled={disabledGenerateTokenButton}
               startIcon={<GenerateTokenIcon />}
               onClick={onGenerateTokenClick}
             >

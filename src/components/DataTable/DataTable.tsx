@@ -325,6 +325,7 @@ const DataTable = <TData,>(props: DataTableProps<TData>): ReactNode => {
                 rowData.map((row) => (
                   <React.Fragment key={row.id}>
                     <TableRow
+                      data-testid={row.id || "data-table-row"}
                       className={
                         getRowClassName ? getRowClassName(row.original) : ""
                       }
