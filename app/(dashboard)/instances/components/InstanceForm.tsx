@@ -26,7 +26,10 @@ import LoadingSpinner from "components/LoadingSpinner/LoadingSpinner";
 import GridDynamicField from "components/DynamicForm/GridDynamicField";
 import LoadingSpinnerSmall from "components/CircularProgress/CircularProgress";
 
-import { getInitialValues } from "../utils";
+import {
+  getInitialValues,
+  getOfferingPaymentConfigRequiredStatus,
+} from "../utils";
 import useResourceSchema from "../hooks/useResourceSchema";
 import {
   getDeploymentConfigurationFields,
@@ -37,6 +40,7 @@ import useCustomNetworks from "app/(dashboard)/custom-networks/hooks/useCustomNe
 import { CloudProvider } from "src/types/common/enums";
 import { productTierTypes } from "src/constants/servicePlan";
 import { isCloudAccountInstance } from "src/utils/access/byoaResource";
+import Tooltip from "src/components/Tooltip/Tooltip";
 
 const InstanceForm = ({
   formMode,
@@ -46,6 +50,7 @@ const InstanceForm = ({
   setOverlayType,
   setIsOverlayOpen,
   setCreateInstanceModalData,
+  isPaymentConfigured,
 }) => {
   const snackbar = useSnackbar();
   const {
@@ -57,6 +62,10 @@ const InstanceForm = ({
     subscriptionsObj,
     isFetchingSubscriptions,
   } = useGlobalData();
+
+  const nonCloudAccountInstances = useMemo(() => {
+    return instances.filter((instance) => !isCloudAccountInstance(instance));
+  }, [instances]);
 
   const createInstanceMutation = useMutation(
     async (payload: any) => {
@@ -94,14 +103,16 @@ const InstanceForm = ({
       selectedInstance,
       subscriptions,
       serviceOfferingsObj,
-      serviceOfferings
+      serviceOfferings,
+      nonCloudAccountInstances,
+      isPaymentConfigured
     ),
     enableReinitialize: true,
     validationSchema: yup.object({
       serviceId: yup.string().required("Service is required"),
       servicePlanId: yup
         .string()
-        .required("Plan with active subscription is required"),
+        .required("A service plan with a valid subscription is required"),
       subscriptionId: yup.string().required("Subscription is required"),
       resourceId: yup.string().required("Resource is required"),
     }),
@@ -302,6 +313,7 @@ const InstanceForm = ({
     },
   });
 
+
   const { values } = formData;
   const offering =
     serviceOfferingsObj[values.serviceId]?.[values.servicePlanId];
@@ -346,6 +358,12 @@ const InstanceForm = ({
     offering?.resourceParameters,
     subscriptionsObj[values.subscriptionId]?.productTierId ===
       values.servicePlanId && values.subscriptionId
+  );
+
+  const requiresValidPaymentConfig = getOfferingPaymentConfigRequiredStatus(
+    serviceOfferings,
+    values.serviceId,
+    values.servicePlanId
   );
 
   // Sets the Default Values for the Request Parameters
@@ -425,7 +443,9 @@ const InstanceForm = ({
       resourceSchema,
       formMode,
       customAvailabilityZones,
-      isFetchingCustomAvailabilityZones
+      isFetchingCustomAvailabilityZones,
+      isPaymentConfigured,
+      nonCloudAccountInstances
     );
   }, [
     formMode,
@@ -433,6 +453,8 @@ const InstanceForm = ({
     resourceSchema,
     customAvailabilityZones,
     subscriptions,
+    isPaymentConfigured,
+    nonCloudAccountInstances,
   ]);
 
   const networkConfigurationFields = useMemo(() => {
@@ -493,6 +515,9 @@ const InstanceForm = ({
     ]
   );
 
+  const disableInstanceCreation =
+    requiresValidPaymentConfig && !isPaymentConfigured;
+
   if (isFetchingServiceOfferings) {
     return <LoadingSpinner />;
   }
@@ -514,6 +539,7 @@ const InstanceForm = ({
             })}
           </div>
         </CardWithTitle>
+        
         {isFetchingResourceSchema ||
         !networkConfigurationFields.length ? null : (
           <CardWithTitle title="Network Configuration">
@@ -588,22 +614,30 @@ const InstanceForm = ({
             >
               Cancel
             </Button>
-
-            <Button
-              data-testid="submit-button"
-              variant="contained"
-              disabled={
-                createInstanceMutation.isLoading ||
-                updateResourceInstanceMutation.isLoading
-              }
-              type="submit"
+            <Tooltip
+              title="Valid payment method configuration required"
+              placement="top"
+              isVisible={disableInstanceCreation}
             >
-              {formMode === "create" ? "Create" : "Update"}
-              {(createInstanceMutation.isLoading ||
-                updateResourceInstanceMutation.isLoading) && (
-                <LoadingSpinnerSmall />
-              )}
-            </Button>
+              <span>
+                <Button
+                  data-testid="submit-button"
+                  variant="contained"
+                  disabled={
+                    createInstanceMutation.isLoading ||
+                    updateResourceInstanceMutation.isLoading ||
+                    disableInstanceCreation
+                  }
+                  type="submit"
+                >
+                  {formMode === "create" ? "Create" : "Update"}
+                  {(createInstanceMutation.isLoading ||
+                    updateResourceInstanceMutation.isLoading) && (
+                    <LoadingSpinnerSmall />
+                  )}
+                </Button>
+              </span>
+            </Tooltip>
           </div>
         </div>
       </div>

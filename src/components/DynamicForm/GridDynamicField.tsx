@@ -67,7 +67,7 @@ const GridDynamicField: React.FC<GridDynamicFieldProps> = ({
       <div className="flex-1" style={{ maxWidth: "596px" }}>
         {Field}
         {field.description && field.description}
-        <FieldError>
+        <FieldError marginTop="4px">
           {formData.touched[field.name] && formData.errors[field.name]}
         </FieldError>
       </div>

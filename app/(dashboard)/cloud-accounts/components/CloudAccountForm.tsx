@@ -31,11 +31,15 @@ import SubscriptionMenu from "app/(dashboard)/components/SubscriptionMenu/Subscr
 import CloudProviderRadio from "app/(dashboard)/components/CloudProviderRadio/CloudProviderRadio";
 import SubscriptionPlanRadio from "app/(dashboard)/components/SubscriptionPlanRadio/SubscriptionPlanRadio";
 import CustomLabelDescription from "./CustomLabelDescription";
-import { getInitialValues } from "../utils";
+import {
+  getInitialValues,
+  getValidSubscriptionForInstanceCreation,
+} from "../utils";
 import {
   ACCOUNT_CREATION_METHOD_LABELS,
   ACCOUNT_CREATION_METHODS,
 } from "src/utils/constants/accountConfig";
+import { ResourceInstance } from "src/types/resourceInstance";
 
 const CloudAccountForm = ({
   initialFormValues, // These are from URL Params
@@ -45,6 +49,8 @@ const CloudAccountForm = ({
   setIsAccountCreation,
   setOverlayType,
   setClickedInstance,
+  instances,
+  isPaymentConfigured,
 }) => {
   const queryClient = useQueryClient();
   const snackbar = useSnackbar();
@@ -58,6 +64,32 @@ const CloudAccountForm = ({
     subscriptionsObj,
     isLoadingSubscriptions,
   } = useGlobalData();
+
+  const allInstances: ResourceInstance[] = instances;
+  //subscriptionID -> key, number of instances -> value
+  const subscriptionInstanceCountHash: Record<string, number> = {};
+  allInstances.forEach((instance) => {
+    if (subscriptionInstanceCountHash[instance?.subscriptionId as string]) {
+      subscriptionInstanceCountHash[instance.subscriptionId as string] =
+        subscriptionInstanceCountHash[instance.subscriptionId as string] + 1;
+    } else {
+      subscriptionInstanceCountHash[instance.subscriptionId as string] = 1;
+    }
+  });
+
+  //key-> subscriptionID value-> boolean that indicates if the subscription has reached its quota limit
+  const subscriptionQuotaLimitHash: Record<string, boolean> = {};
+  subscriptions.forEach((subscription) => {
+    const { serviceId, productTierId } = subscription;
+    const offering = serviceOfferingsObj[serviceId]?.[productTierId];
+    const quotaLimit = offering?.maxNumberOfInstances;
+    const instanceCount = subscriptionInstanceCountHash[subscription.id] || 0;
+    let hasReachedInstanceQuotaLimit = false;
+    if (quotaLimit) {
+      hasReachedInstanceQuotaLimit = instanceCount >= quotaLimit;
+    }
+    subscriptionQuotaLimitHash[subscription.id] = hasReachedInstanceQuotaLimit;
+  });
 
   const byoaServiceOfferings = useMemo(() => {
     return serviceOfferings.filter(
@@ -175,7 +207,9 @@ const CloudAccountForm = ({
       selectedInstance,
       byoaSubscriptions,
       byoaServiceOfferingsObj,
-      byoaServiceOfferings
+      byoaServiceOfferings,
+      allInstances,
+      isPaymentConfigured
     ),
     enableReinitialize: true,
     validationSchema: CloudAccountValidationSchema,
@@ -275,21 +309,19 @@ const CloudAccountForm = ({
                 // Otherwise, Reset the Service Plan and Subscription
 
                 const serviceId = e.target.value;
-                const filteredSubscriptions = byoaSubscriptions.filter(
-                  (sub) =>
-                    sub.serviceId === serviceId &&
-                    ["root", "editor"].includes(sub.roleType)
-                );
-                const rootSubscription = filteredSubscriptions.find(
-                  (sub) => sub.roleType === "root"
+
+                const subscription = getValidSubscriptionForInstanceCreation(
+                  byoaServiceOfferings,
+                  byoaServiceOfferingsObj,
+                  byoaSubscriptions,
+                  allInstances,
+                  isPaymentConfigured,
+                  serviceId,
+                  true
                 );
 
-                const servicePlanId =
-                  rootSubscription?.productTierId ||
-                  filteredSubscriptions[0]?.productTierId ||
-                  "";
-                const subscriptionId =
-                  rootSubscription?.id || filteredSubscriptions[0]?.id || "";
+                const servicePlanId = subscription?.productTierId || "";
+                const subscriptionId = subscription?.id || "";
 
                 const offering =
                   byoaServiceOfferingsObj[serviceId]?.[servicePlanId];
@@ -362,6 +394,12 @@ const CloudAccountForm = ({
                     formData.setFieldTouched("subscriptionId", false);
                     formData.setFieldTouched("cloudProvider", false);
                   }}
+                  serviceSubscriptions={subscriptions.filter(
+                    (subscription) => subscription.serviceId === serviceId
+                  )}
+                  isPaymentConfigured={isPaymentConfigured}
+                  instances={allInstances}
+                  isCloudAccountForm={true}
                 />
               ),
               previewValue:
@@ -390,6 +428,8 @@ const CloudAccountForm = ({
                   }}
                   formData={formData}
                   subscriptions={subscriptionMenuItems}
+                  subscriptionQuotaLimitHash={subscriptionQuotaLimitHash}
+                  isCloudAccountForm={true}
                 />
               ),
               previewValue: subscriptionsObj[values.subscriptionId]?.id,

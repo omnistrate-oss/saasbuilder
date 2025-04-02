@@ -14,6 +14,9 @@ const MenuItem = styled(MuiMenuItem)(() => ({
   [`&.${menuItemClasses.selected}`]: {
     backgroundColor: "#F4F4F4 !important",
   },
+  [`&.${menuItemClasses.disabled}`]: {
+    opacity: 0.7
+  },
 }));
 
 export default MenuItem;
