@@ -3,6 +3,113 @@ import { ServiceOffering } from "src/types/serviceOffering";
 import { ResourceInstance } from "src/types/resourceInstance";
 import { ACCOUNT_CREATION_METHODS } from "src/utils/constants/accountConfig";
 
+
+
+export const getValidSubscriptionForInstanceCreation = (
+  serviceOfferings: ServiceOffering[],
+  serviceOfferingsObj: Record<string, Record<string, ServiceOffering>>,
+  subscriptions: Subscription[],
+  instances: ResourceInstance[],
+  isPaymentConfigured: boolean,
+  serviceID?: string,
+  skipInstanceQuotaCheck = true
+): Subscription | undefined => {
+
+  const productTierInstanceLimitHash: Record<string, number> = {};
+  const productTierPaymentRequirementHash: Record<string, boolean> = {};
+  const subscriptionInstancesNumHash: Record<string, number> = {};
+
+  serviceOfferings.forEach((serviceOffering) => {
+    productTierInstanceLimitHash[serviceOffering.productTierID] =
+      serviceOffering.maxNumberOfInstances !== undefined
+        ? serviceOffering.maxNumberOfInstances
+        : -1;
+
+    productTierPaymentRequirementHash[serviceOffering.productTierID] = !Boolean(
+      serviceOffering.allowCreatesWhenPaymentNotConfigured
+    );
+  });
+
+  instances.forEach((instance) => {
+    if (subscriptionInstancesNumHash[instance.subscriptionId as string]) {
+      subscriptionInstancesNumHash[instance.subscriptionId as string] =
+        subscriptionInstancesNumHash[instance.subscriptionId as string] + 1;
+    } else {
+      subscriptionInstancesNumHash[instance.subscriptionId as string] = 1;
+    }
+  });
+
+  let filteredSubscriptions = subscriptions.filter(
+    (sub) =>
+      serviceOfferingsObj[sub.serviceId]?.[sub.productTierId] &&
+      ["root", "editor"].includes(sub.roleType)
+  );
+
+  //if serviceID has been provided, look for subscriptions within the serviceID
+  if (serviceID) {
+    filteredSubscriptions = filteredSubscriptions.filter(
+      (subscription) => subscription.serviceId === serviceID
+    );
+  }
+
+  const sortedSubscriptionsByName = filteredSubscriptions.sort((a, b) =>
+    a.serviceName.localeCompare(b.serviceName)
+  );
+
+  const rootSubscriptions = sortedSubscriptionsByName.filter(
+    (sub) => sub.roleType === "root"
+  );
+
+  const editorSubscriptions = sortedSubscriptionsByName.filter(
+    (sub) => sub.roleType === "editor"
+  );
+
+  let selectedSubscription: Subscription | undefined;
+
+  //from all subscriptions, prefer a root subscription, where user has not hit subsription limit
+
+  selectedSubscription = rootSubscriptions.find((subsription) => {
+    //check for blockers
+    //-> if plan requires valid payment config, check that payment is configured
+    //-> if plan has max instance limit set, check that the limit has not been met
+    const productTierID = subsription.productTierId;
+    const requiresPaymentConfig =
+      productTierPaymentRequirementHash[productTierID];
+    const numInstances = subscriptionInstancesNumHash[subsription.id] || 0;
+    const instancesLimit = productTierInstanceLimitHash[productTierID];
+    if (
+      (requiresPaymentConfig && !isPaymentConfigured) ||
+      (instancesLimit > -1 && numInstances >= instancesLimit && !skipInstanceQuotaCheck)
+    )
+      return false;
+
+    return true;
+  });
+
+  if (!selectedSubscription) {
+    //if no root subscription matches the required criteria, look for editor subscriptions
+    selectedSubscription = editorSubscriptions.find((subsription) => {
+      //check for blockers
+      //-> if plan requires valid payment config, check that payment is configured
+      //-> if plan has max instance limit set, check that the limit has not been met
+      const productTierID = subsription.productTierId;
+      const requiresPaymentConfig =
+        productTierPaymentRequirementHash[productTierID];
+      const numInstances = subscriptionInstancesNumHash[subsription.id] || 0;
+      const instancesLimit = productTierInstanceLimitHash[productTierID];
+      if (
+        (requiresPaymentConfig && !isPaymentConfigured) ||
+        (instancesLimit > -1 && numInstances >= instancesLimit)
+      )
+        return false;
+
+      return true;
+    });
+  }
+
+  return selectedSubscription;
+};
+
 export const getInitialValues = (
   initialFormValues: {
     serviceId: string;
@@ -12,7 +119,9 @@ export const getInitialValues = (
   selectedInstance: ResourceInstance | undefined,
   byoaSubscriptions: Subscription[],
   byoaServiceOfferingsObj: Record<string, Record<string, ServiceOffering>>,
-  byoaServiceOfferings: ServiceOffering[]
+  byoaServiceOfferings: ServiceOffering[],
+  instances : ResourceInstance[],
+  isPaymentConfigured : boolean,
 ) => {
   if (selectedInstance) {
     const subscription = byoaSubscriptions.find(
@@ -68,19 +177,25 @@ export const getInitialValues = (
     (sub) => byoaServiceOfferingsObj[sub.serviceId]?.[sub.productTierId]
   );
 
-  const rootSubscription = filteredSubscriptions
-    .sort((a, b) => a.serviceName.localeCompare(b.serviceName))
-    .find((sub) => sub.roleType === "root");
+  const selectedSubscription: Subscription | undefined =
+    getValidSubscriptionForInstanceCreation(
+      byoaServiceOfferings,
+      byoaServiceOfferingsObj,
+      byoaSubscriptions,
+      instances,
+      isPaymentConfigured,
+      "",
+      false
+    );
 
   const serviceId =
-    rootSubscription?.serviceId ||
+  selectedSubscription?.serviceId ||
     filteredSubscriptions[0]?.serviceId ||
     byoaServiceOfferings[0]?.serviceId ||
     "";
 
   const servicePlanId =
-    rootSubscription?.productTierId ||
-    filteredSubscriptions[0]?.productTierId ||
+    selectedSubscription?.productTierId ||
     "";
 
   const cloudProvider =
@@ -90,7 +205,7 @@ export const getInitialValues = (
   return {
     serviceId,
     servicePlanId,
-    subscriptionId: rootSubscription?.id || filteredSubscriptions[0]?.id || "",
+    subscriptionId: selectedSubscription?.id || "",
     cloudProvider,
     accountConfigurationMethod:
       cloudProvider === "aws"

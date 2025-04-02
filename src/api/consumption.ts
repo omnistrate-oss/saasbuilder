@@ -17,6 +17,7 @@ export const getConsumptionUsage = (
 ): Promise<AxiosResponse<GetCurrentConsumptionUsageSuccessResponse>> => {
   return axios.get("/resource-instance/usage", {
     params: queryParams,
+    ignoreGlobalErrorSnack: true,
   });
 };
 
@@ -54,5 +55,6 @@ export const getBillingDetails = (
 ): Promise<AxiosResponse<DescribeConsumptionBillingDetailsSuccessResponse>> => {
   return axios.get("/resource-instance/billing-details", {
     params: queryParams,
+    ignoreGlobalErrorSnack: true,
   });
 };
