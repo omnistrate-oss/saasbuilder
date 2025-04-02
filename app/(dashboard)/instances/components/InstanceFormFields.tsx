@@ -53,17 +53,16 @@ export const getStandardInformationFields = (
   //key-> subscriptionID value-> boolean that indicates if the subscription has reached its quota limit
   const subscriptionQuotaLimitHash: Record<string, boolean> = {};
   subscriptions.forEach((subscription) => {
-    const { serviceId, productTierId} = subscription;
+    const { serviceId, productTierId } = subscription;
     const offering = serviceOfferingsObj[serviceId]?.[productTierId];
     const quotaLimit = offering?.maxNumberOfInstances;
     const instanceCount = subscriptionInstanceCountHash[subscription.id] || 0;
     let hasReachedInstanceQuotaLimit = false;
-    if(quotaLimit) {
+    if (quotaLimit) {
       hasReachedInstanceQuotaLimit = instanceCount >= quotaLimit;
     }
     subscriptionQuotaLimitHash[subscription.id] = hasReachedInstanceQuotaLimit;
-  })
-
+  });
 
   const { values, setFieldValue, setFieldTouched } = formData;
   const {
@@ -254,7 +253,7 @@ export const getStandardInformationFields = (
     },
     {
       dataTestId: "resource-type-select",
-      label: "Resource Type",
+      label: "Resource Name",
       subLabel: "Select the resource",
       name: "resourceId",
       type: "select",

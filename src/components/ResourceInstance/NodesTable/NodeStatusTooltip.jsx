@@ -4,6 +4,7 @@ import { Text } from "components/Typography/Typography";
 
 import CircleCheckIcon from "components/Icons/CircleCheck/CircleCheckIcon";
 import CircleCrossIcon from "components/Icons/CircleCross/CircleCrossIcon";
+import QuestionIcon from "src/components/Icons/Question/QuestionIcon";
 
 const CustomTooltip = styled(({ className, ...props }) => (
   <Tooltip {...props} classes={{ popper: className }} />
@@ -19,7 +20,7 @@ const CustomTooltip = styled(({ className, ...props }) => (
   },
 });
 
-const NodeStatusTooltip = ({ detailedHealth, children }) => {
+const NodeStatusTooltip = ({ isJob = false, detailedHealth, children }) => {
   const {
     ConnectivityStatus,
     DiskHealth,
@@ -71,7 +72,9 @@ const NodeStatusTooltip = ({ detailedHealth, children }) => {
               gap="12px"
               sx={{ paddingTop: "6px" }}
             >
-              {item.status === "HEALTHY" ? (
+              {isJob ? (
+                <QuestionIcon />
+              ) : item.status === "HEALTHY" ? (
                 <CircleCheckIcon />
               ) : (
                 <CircleCrossIcon

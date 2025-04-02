@@ -140,6 +140,8 @@ export default function useResourceInstance(
               const resourceKey = topologyDetails.resourceKey;
               const healthStatus = node.healthStatus;
               const detailedHealth = node.detailedHealth;
+              const isJob = topologyDetails?.isJob;
+              const isMain = topologyDetails?.main;
               nodes.push({
                 ...node,
                 id: nodeId,
@@ -155,6 +157,8 @@ export default function useResourceInstance(
                 displayName: nodeId,
                 detailedHealth: detailedHealth,
                 storageSize: node.storageSize,
+                isJob,
+                isMain,
               });
 
               nodeEndpointsList.push(node.endpoint);
@@ -226,6 +230,9 @@ export default function useResourceInstance(
                     const resourceName = topologyDetails.resourceName;
                     const resourceKey = topologyDetails.resourceKey;
                     const detailedHealth = node.detailedHealth;
+                    const isJob = topologyDetails?.isJob;
+                    const isMain = topologyDetails?.main;
+
                     nodes.push({
                       ...node,
                       id: nodeId,
@@ -241,6 +248,8 @@ export default function useResourceInstance(
                       displayName: nodeId,
                       detailedHealth: detailedHealth,
                       storageSize: node.storageSize,
+                      isJob,
+                      isMain,
                     });
                   });
                 } else {
