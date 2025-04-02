@@ -21,15 +21,44 @@ import InvoicesTable from "./components/InvoicesTable";
 import useConsumptionUsage from "./hooks/useConsumptionUsage";
 import StatusChip from "src/components/StatusChip/StatusChip";
 import useConsumptionUsagePerDay from "./hooks/useConsumptionUsagePerDay";
-import ConsumptionUsageChart from "./components/ConsumptionUsageChart";
 import UsageOverview from "./components/UsageOverview";
+import { useState } from "react";
+import { DateRange } from "src/components/DateRangePicker/DateTimeRangePickerStatic";
+import { getEndOfCurrentUTCDay, getFirstDayOfUTCMonth } from "src/utils/time";
+import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
+
+dayjs.extend(utc);
+
+const defaultDailyDateRange = {
+  startDate: getFirstDayOfUTCMonth(),
+  endDate: getEndOfCurrentUTCDay(),
+};
 
 const BillingPage = () => {
   const selectUser = useSelector(selectUserrootData);
   const { isLoading, data: billingDetails, error } = useBillingDetails();
-
+  const [dateRange, setDateRange] = useState<DateRange>(defaultDailyDateRange);
+  const [selectedSubscriptionId, setSelectedSubscriptionId] =
+    useState<string>("");
   const { data: consumptionUsageData, isLoading: isLoadingConsumptionData } =
     useConsumptionUsage();
+
+  let filterEndDate;
+  if (dateRange.endDate) {
+    //add 1 day to end date to get data, otherwise backend doesn't send the data for last date
+    filterEndDate = dayjs.utc(dateRange.endDate).add(1, "day").toISOString();
+  }
+
+  const { data: usagePerDayData, isFetching: isFetchingUsagePerDay } =
+    useConsumptionUsagePerDay({
+      startDate: dateRange.startDate,
+      endDate: filterEndDate,
+      subscriptionID:
+        selectedSubscriptionId.trim() !== ""
+          ? selectedSubscriptionId
+          : undefined,
+    });
 
   const paymentConfigured = billingDetails?.paymentConfigured;
   let errorDisplayText = "";
@@ -138,8 +167,16 @@ const BillingPage = () => {
               consumptionUsageData={consumptionUsageData}
               //consumptionUsagePerDayData={consumptionUsagePerDayData}
             />
-            <UsageOverview />
-
+            <UsageOverview
+              consumptionUsagePerDayData={usagePerDayData}
+              isFetchingUsagePerDay={isFetchingUsagePerDay}
+              dateRange={dateRange}
+              setDateRange={setDateRange}
+              initialDateRangeState={defaultDailyDateRange}
+              selectedSubscriptionId={selectedSubscriptionId}
+              setSelectedSubscriptionId={setSelectedSubscriptionId}
+            />
+            <InvoicesTable />
           </>
         )}
       </PageContainer>

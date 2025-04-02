@@ -63,8 +63,6 @@ export function handleYAxisShift(
   const xAxis = document.querySelector(`#${chartID} .recharts-xAxis`);
   const xAxisHeight = xAxis?.getBoundingClientRect().height || 0;
 
-  console.log("allAxis", allAxis);
-
   allAxis?.forEach((axis) => {
     const orientation =
       axis
@@ -151,8 +149,6 @@ const ConsumptionUsageChart: FC<ConsumptionUsageChartProps> = (props) => {
       }
     > = {};
 
-    console.log("usage", usage);
-
     usage.forEach((usageDimensionData) => {
       const { startTime: date, dimension, total: value } = usageDimensionData;
       if (dataHashByDate[date as string]) {
@@ -181,7 +177,6 @@ const ConsumptionUsageChart: FC<ConsumptionUsageChartProps> = (props) => {
     chartMargins.left +
     chartMargins.right;
 
-  console.log("billingUsagePerDay", billingUsagePerDay);
   const keys = ["Memory GiB hours", "Storage GiB hours", "CPU core hours"];
   const COLORS = ["#3E97FF", "#10AA50", "#7239EA"];
   const translateX = [-14, -3, 8];
