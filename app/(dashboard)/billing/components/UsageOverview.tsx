@@ -49,7 +49,10 @@ const UsageOverview: FC<UsageOverviewProps> = (props) => {
         return subscription.roleType === "root";
       })
       .sort((subscriptionA, subscriptionB) =>
-        subscriptionA.productTierName < subscriptionB.productTierName ? -1 : 1
+        subscriptionA.productTierName.toLowerCase() <
+        subscriptionB.productTierName.toLowerCase()
+          ? -1
+          : 1
       );
 
     const servicePlansGroupedByServiceId: Record<
@@ -97,12 +100,13 @@ const UsageOverview: FC<UsageOverviewProps> = (props) => {
         service.serviceId in servicePlansGroupedByServiceId ? true : false
       )
       .sort((serviceA, serviceB) =>
-        serviceA.serviceName < serviceB.serviceName ? -1 : 1
+        serviceA.serviceName.toLowerCase() < serviceB.serviceName.toLowerCase()
+          ? -1
+          : 1
       );
 
     return services;
   }, [subscriptions, servicePlansGroupedByServiceId]);
-
 
   const serviceOptions = [
     { serviceName: "All Services", serviceId: "" },
@@ -122,7 +126,7 @@ const UsageOverview: FC<UsageOverviewProps> = (props) => {
   return (
     <div
       className="mt-[20px] border border-[#E9EAEB] rounded-[12px] bg-[#FFF]"
-      style={{ boxShadow: "0px 1px 2px 0px var(#0A0D120D)" }}
+      style={{ boxShadow: "0px 1px 2px 0px #0A0D120D" }}
     >
       <div className="py-[20px] px-[24px]">
         <div className="flex flex-row items-center justify-between">
