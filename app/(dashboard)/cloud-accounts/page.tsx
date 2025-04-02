@@ -45,6 +45,7 @@ import {
 } from "src/utils/accountConfig/accountConfig";
 import DisconnectAccountConfigDialog from "src/components/AccountConfigDialog/DisconnectAccountConfigDialog";
 import ConnectAccountConfigDialog from "src/components/AccountConfigDialog/ConnectAccountConfigDialog";
+import useBillingDetails from "../billing/hooks/useBillingDetails";
 
 const columnHelper = createColumnHelper<ResourceInstance>();
 
@@ -106,6 +107,10 @@ const CloudAccountsPage = () => {
     isFetching: isFetchingInstances,
     refetch: refetchInstances,
   } = useInstances();
+
+  const { data: billingConfig } =
+  useBillingDetails();
+const isPaymentConfigured = Boolean(billingConfig?.paymentConfigured);
 
   // Open the Create Form Overlay when serviceId, servicePlanId and subscriptionId are present in the URL
   useEffect(() => {
@@ -584,6 +589,8 @@ const CloudAccountsPage = () => {
             setIsAccountCreation={setIsAccountCreation}
             setOverlayType={setOverlayType}
             setClickedInstance={setClickedInstance}
+            instances={instances}
+            isPaymentConfigured={isPaymentConfigured}
           />
         }
       />
