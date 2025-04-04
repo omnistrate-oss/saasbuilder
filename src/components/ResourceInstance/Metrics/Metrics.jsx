@@ -21,6 +21,7 @@ import DataGridHeaderTitle from "src/components/Headers/DataGridHeaderTitle";
 import Select from "src/components/FormElementsv2/Select/Select";
 import MenuItem from "src/components/FormElementsv2/MenuItem/MenuItem";
 import _ from "lodash";
+import JobCompleted from "src/components/JobResource/JobCompleted";
 
 const initialCpuUsage = {
   current: "",
@@ -685,22 +686,27 @@ function Metrics(props) {
   useEffect(() => {
     initialiseCustomMetricsData();
   }, [initialiseCustomMetricsData]);
-
-  if (!metricsSocketEndpoint || errorMessage || instanceStatus === "STOPPED") {
-    return (
-      <ContainerCard>
-        <Stack direction="row" justifyContent="center" marginTop="200px">
-          <Text size="xlarge">
-            {errorMessage ||
-              `Metrics are not available ${
-                instanceStatus !== "RUNNING"
-                  ? "as the instance is not running"
-                  : ""
-              }`}
-          </Text>
-        </Stack>
-      </ContainerCard>
-    );
+  if (instanceStatus !== "COMPLETE" && selectedNode?.isJob !== true) {
+    if (
+      !metricsSocketEndpoint ||
+      errorMessage ||
+      instanceStatus === "STOPPED"
+    ) {
+      return (
+        <ContainerCard>
+          <Stack direction="row" justifyContent="center" marginTop="200px">
+            <Text size="xlarge">
+              {errorMessage ||
+                `Metrics are not available ${
+                  instanceStatus !== "RUNNING"
+                    ? "as the instance is not running"
+                    : ""
+                }`}
+            </Text>
+          </Stack>
+        </ContainerCard>
+      );
+    }
   }
 
   //console.log("connectionStatus", connectionStatus);
@@ -791,7 +797,11 @@ function Metrics(props) {
       </Stack>
     );
   }
-  if (!isMetricsDataLoaded) {
+  if (
+    !isMetricsDataLoaded &&
+    instanceStatus !== "COMPLETE" &&
+    selectedNode?.isJob !== true
+  ) {
     return <LoadingSpinner />;
   }
 
@@ -811,7 +821,11 @@ function Metrics(props) {
         <DataGridHeaderTitle
           title={`Metrics`}
           desc="Metrics for monitoring and performance insights"
-          count={10 + customMetrics?.length}
+          count={
+            instanceStatus !== "COMPLETE" && selectedNode?.isJob !== true
+              ? 10 + customMetrics?.length
+              : 0
+          }
           units={{
             singular: "Metric",
             plural: "Metrics",
@@ -847,110 +861,130 @@ function Metrics(props) {
           </Box>
         )}
       </Stack>
-      <Box display="flex" alignItems="stretch" gap={"12px"} mt={2.5}>
-        <MetricCard title="CPU Usage" value={cpuUsageData.current} unit="%" />
-        {productTierType !== "OMNISTRATE_MULTI_TENANCY" && (
-          <MetricCard title="Load average" value={loadAverage.current} />
-        )}
-        {selectedNode?.storageSize && (
-          <MetricCard
-            title="Storage"
-            value={selectedNode?.storageSize}
-            unit="GiB"
-          />
-        )}
-        <MetricCard title="Total RAM" value={totalMemoryGiB} unit="GiB" />
-        <MetricCard title="Used RAM" value={memoryUsageGiB} unit="GiB" />
-        <MetricCard title="RAM Usage (%)" value={memoryUsagePercent} unit="%" />
-        <MetricCard
-          title="System Uptime"
-          value={systemUptimeHours}
-          unit="hrs"
-        />
-      </Box>
-      <MetricsContainerCard title="CPU Usage">
-        <CpuUsageChart data={cpuUsageData.data} />
-      </MetricsContainerCard>
-      <MetricsContainerCard title="Memory Usage">
-        <MemUsagePercentChart data={memUsagePercentData.data} />
-      </MetricsContainerCard>
-
-      {productTierType !== "OMNISTRATE_MULTI_TENANCY" && (
-        <MetricsContainerCard title="Load Average">
-          <LoadAverageChart data={loadAverage.data} />
-        </MetricsContainerCard>
-      )}
-
-      <MetricsContainerCard title="Disk Usage">
-        <DiskUsageChart data={diskUsage} labels={diskPathLabels} />
-      </MetricsContainerCard>
-
-      <MetricsContainerCard title="Disk IOPS (Read)">
-        <DiskIOPSReadChart data={diskIOPSRead} labels={diskIOPSReadLabels} />
-      </MetricsContainerCard>
-
-      <MetricsContainerCard title="Disk IOPS (Write)">
-        <DiskIOPSWriteChart data={diskIOPSWrite} labels={diskIOPSWriteLabels} />
-      </MetricsContainerCard>
-
-      <MetricsContainerCard title="Disk Throughput (Read)">
-        <DiskThroughputChart
-          data={diskThroughputRead}
-          labels={diskThroughputReadLabels}
-        />
-      </MetricsContainerCard>
-
-      <MetricsContainerCard title="Disk Throughput (Write)">
-        <DiskThroughputChart
-          data={diskThroughputWrite}
-          labels={diskThroughputWriteLabels}
-        />
-      </MetricsContainerCard>
-      {productTierType !== "OMNISTRATE_MULTI_TENANCY" && (
+      {instanceStatus === "COMPLETE" && selectedNode?.isJob === true ? (
+        <JobCompleted />
+      ) : (
         <>
-          <MetricsContainerCard title="Network Throughput (Receive)">
-            <NetworkThroughputChart
-              data={netThroughputReceive}
-              labels={netThroughputReceiveLabels}
+          <Box display="flex" alignItems="stretch" gap={"12px"} mt={2.5}>
+            <MetricCard
+              title="CPU Usage"
+              value={cpuUsageData.current}
+              unit="%"
+            />
+            {productTierType !== "OMNISTRATE_MULTI_TENANCY" && (
+              <MetricCard title="Load average" value={loadAverage.current} />
+            )}
+            {selectedNode?.storageSize && (
+              <MetricCard
+                title="Storage"
+                value={selectedNode?.storageSize}
+                unit="GiB"
+              />
+            )}
+            <MetricCard title="Total RAM" value={totalMemoryGiB} unit="GiB" />
+            <MetricCard title="Used RAM" value={memoryUsageGiB} unit="GiB" />
+            <MetricCard
+              title="RAM Usage (%)"
+              value={memoryUsagePercent}
+              unit="%"
+            />
+            <MetricCard
+              title="System Uptime"
+              value={systemUptimeHours}
+              unit="hrs"
+            />
+          </Box>
+          <MetricsContainerCard title="CPU Usage">
+            <CpuUsageChart data={cpuUsageData.data} />
+          </MetricsContainerCard>
+          <MetricsContainerCard title="Memory Usage">
+            <MemUsagePercentChart data={memUsagePercentData.data} />
+          </MetricsContainerCard>
+
+          {productTierType !== "OMNISTRATE_MULTI_TENANCY" && (
+            <MetricsContainerCard title="Load Average">
+              <LoadAverageChart data={loadAverage.data} />
+            </MetricsContainerCard>
+          )}
+
+          <MetricsContainerCard title="Disk Usage">
+            <DiskUsageChart data={diskUsage} labels={diskPathLabels} />
+          </MetricsContainerCard>
+
+          <MetricsContainerCard title="Disk IOPS (Read)">
+            <DiskIOPSReadChart
+              data={diskIOPSRead}
+              labels={diskIOPSReadLabels}
             />
           </MetricsContainerCard>
-          <MetricsContainerCard title="Network Throughput (Send)">
-            <NetworkThroughputChart
-              data={netThroughputSend}
-              labels={netThroughputSendLabels}
+
+          <MetricsContainerCard title="Disk IOPS (Write)">
+            <DiskIOPSWriteChart
+              data={diskIOPSWrite}
+              labels={diskIOPSWriteLabels}
             />
           </MetricsContainerCard>
+
+          <MetricsContainerCard title="Disk Throughput (Read)">
+            <DiskThroughputChart
+              data={diskThroughputRead}
+              labels={diskThroughputReadLabels}
+            />
+          </MetricsContainerCard>
+
+          <MetricsContainerCard title="Disk Throughput (Write)">
+            <DiskThroughputChart
+              data={diskThroughputWrite}
+              labels={diskThroughputWriteLabels}
+            />
+          </MetricsContainerCard>
+          {productTierType !== "OMNISTRATE_MULTI_TENANCY" && (
+            <>
+              <MetricsContainerCard title="Network Throughput (Receive)">
+                <NetworkThroughputChart
+                  data={netThroughputReceive}
+                  labels={netThroughputReceiveLabels}
+                />
+              </MetricsContainerCard>
+              <MetricsContainerCard title="Network Throughput (Send)">
+                <NetworkThroughputChart
+                  data={netThroughputSend}
+                  labels={netThroughputSendLabels}
+                />
+              </MetricsContainerCard>
+            </>
+          )}
+          {customMetrics //show metrics for selected node resource type
+            .filter((metric) => {
+              if (selectedNode)
+                return metric.resourceKey === selectedNode?.resourceKey;
+              //else assume it's a serverless resource and filter by the main resource key
+              else return metric.resourceKey === resourceKey;
+            })
+            .map((metricInfo) => {
+              const { metricName, labels } = metricInfo;
+              if (labels.length > 0)
+                return (
+                  <MetricsContainerCard key={metricName} title={metricName}>
+                    <MultiLineChart
+                      data={customMetricsChartData[metricName]}
+                      labels={labels}
+                      key={metricName}
+                    />
+                  </MetricsContainerCard>
+                );
+              else
+                return (
+                  <MetricsContainerCard key={metricName} title={metricName}>
+                    <SingleLineChart
+                      data={customMetricsChartData[metricName]}
+                      key={metricName}
+                    />
+                  </MetricsContainerCard>
+                );
+            })}
         </>
       )}
-      {customMetrics //show metrics for selected node resource type
-        .filter((metric) => {
-          if (selectedNode)
-            return metric.resourceKey === selectedNode?.resourceKey;
-          //else assume it's a serverless resource and filter by the main resource key
-          else return metric.resourceKey === resourceKey;
-        })
-        .map((metricInfo) => {
-          const { metricName, labels } = metricInfo;
-          if (labels.length > 0)
-            return (
-              <MetricsContainerCard key={metricName} title={metricName}>
-                <MultiLineChart
-                  data={customMetricsChartData[metricName]}
-                  labels={labels}
-                  key={metricName}
-                />
-              </MetricsContainerCard>
-            );
-          else
-            return (
-              <MetricsContainerCard key={metricName} title={metricName}>
-                <SingleLineChart
-                  data={customMetricsChartData[metricName]}
-                  key={metricName}
-                />
-              </MetricsContainerCard>
-            );
-        })}
     </>
   );
 }
