@@ -27,8 +27,7 @@ const CloudAccountsTableHeader = ({
   const isAttaching = selectedInstance?.status === "ATTACHING";
   const isConnecting = selectedInstance?.status === "CONNECTING";
   const isDisconnected = selectedInstance?.status === "DISCONNECTED";
-  const isCloudProviderGCP =
-    selectedInstance?.result_params?.cloud_provider === "gcp";
+
   const isOnPremCopilot = serviceModelType === "ON_PREM_COPILOT";
   const isReady = selectedInstance?.status === "READY";
   const isDisconnecting = selectedInstance?.status === "DISCONNECTING";
@@ -42,7 +41,6 @@ const CloudAccountsTableHeader = ({
     isAttaching ||
     isConnecting ||
     isDisconnected ||
-    isCloudProviderGCP ||
     isDeploying ||
     !isOnPremCopilot;
 
@@ -52,7 +50,6 @@ const CloudAccountsTableHeader = ({
     isDisconnecting ||
     isDetaching ||
     isPendingDetaching ||
-    isCloudProviderGCP ||
     isDeploying ||
     !isOnPremCopilot;
 
@@ -64,26 +61,22 @@ const CloudAccountsTableHeader = ({
       ? "Cloud account is connecting"
       : isDisconnected
         ? "Cloud account is disconnected"
-        : isCloudProviderGCP
-          ? "Disconnect not supported for GCP cloud account"
-          : isDeploying
-            ? "Please wait for the instance to get to Ready state"
-            : !isOnPremCopilot
-              ? "This feature is not supported for this service plan"
-              : "";
+        : isDeploying
+          ? "Please wait for the instance to get to Ready state"
+          : !isOnPremCopilot
+            ? "This feature is not supported for this service plan"
+            : "";
   const isConnectDisabledMessage = !selectedInstance
     ? "Please select a cloud account"
     : isReady
       ? "Cloud account is already connected"
       : isDisconnecting || isDetaching || isPendingDetaching
         ? "Cloud account is disconnecting"
-        : isCloudProviderGCP
-          ? "Connect not supported for GCP cloud account"
-          : isDeploying
-            ? "Please wait for the instance to get to Ready state"
-            : !isOnPremCopilot
-              ? "This feature is not supported for this service plan"
-              : "";
+        : isDeploying
+          ? "Please wait for the instance to get to Ready state"
+          : !isOnPremCopilot
+            ? "This feature is not supported for this service plan"
+            : "";
 
   const isDeleteDisabledMessage = !selectedInstance
     ? "Please select a cloud account"
