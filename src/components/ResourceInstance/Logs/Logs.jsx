@@ -21,6 +21,7 @@ import DataGridHeaderTitle from "src/components/Headers/DataGridHeaderTitle";
 import Select from "src/components/FormElementsv2/Select/Select";
 import MenuItem from "src/components/FormElementsv2/MenuItem/MenuItem";
 import _ from "lodash";
+import JobCompleted from "src/components/JobResource/JobCompleted";
 
 const logsPerPage = 50;
 
@@ -97,18 +98,20 @@ function Logs(props) {
     //mainResourceHasCompute,
   } = props;
   const [logs, setLogs] = useState([]);
-  let selectedId = "";
+  let firstNode = null;
 
   const nodes = _.uniqBy(nodesList, "id");
 
   if (nodes.length > 0) {
-    selectedId = nodes[0].id;
+    firstNode = nodes[0];
   }
-  const [selectedNodeId, setSelectedNodeId] = useState(selectedId);
+
+  const [selectedNode, setSelectedNode] = useState(firstNode);
+
   const [errorMessage, setErrorMessage] = useState("");
   let logsSocketEndpoint = null;
-  if (socketBaseURL && selectedNodeId) {
-    logsSocketEndpoint = `${socketBaseURL}&podName=${selectedNodeId}&instanceId=${resourceInstanceId}`;
+  if (socketBaseURL && selectedNode) {
+    logsSocketEndpoint = `${socketBaseURL}&podName=${selectedNode.id}&instanceId=${resourceInstanceId}`;
   }
   if (instanceStatus === "STOPPED") {
     logsSocketEndpoint = null;
@@ -134,11 +137,11 @@ function Logs(props) {
   const snackbar = useSnackbar();
   useEffect(() => {
     setLogs([]);
-  }, [selectedNodeId]);
+  }, [selectedNode]);
 
   function handleNodeChange(event) {
     const { value } = event.target;
-    setSelectedNodeId(value);
+    setSelectedNode(value);
   }
 
   const { getWebSocket } = useWebSocket(logsSocketEndpoint, {
@@ -194,26 +197,27 @@ function Logs(props) {
       }
     };
   }, [logsSocketEndpoint]);
-
-  if (!logsSocketEndpoint || errorMessage || instanceStatus === "STOPPED") {
-    return (
-      <Card
-        mt={4}
-        sx={{
-          paddingTop: "12.5px",
-          paddingLeft: "20px",
-          paddingRight: "20px",
-          minHeight: "500px",
-        }}
-      >
-        <Stack direction="row" justifyContent="center" marginTop="200px">
-          <Text size="xlarge">
-            {errorMessage ||
-              `Logs are not available ${instanceStatus !== "RUNNING" ? "as the instance is not running" : ""}`}
-          </Text>
-        </Stack>
-      </Card>
-    );
+  if (instanceStatus !== "COMPLETE" && selectedNode?.isJob !== true) {
+    if (!logsSocketEndpoint || errorMessage || instanceStatus === "STOPPED") {
+      return (
+        <Card
+          mt={4}
+          sx={{
+            paddingTop: "12.5px",
+            paddingLeft: "20px",
+            paddingRight: "20px",
+            minHeight: "500px",
+          }}
+        >
+          <Stack direction="row" justifyContent="center" marginTop="200px">
+            <Text size="xlarge">
+              {errorMessage ||
+                `Logs are not available ${instanceStatus !== "RUNNING" ? "as the instance is not running" : ""}`}
+            </Text>
+          </Stack>
+        </Card>
+      );
+    }
   }
 
   if (
@@ -234,7 +238,11 @@ function Logs(props) {
       </Stack>
     );
   }
-  if (!isLogsDataLoaded) {
+  if (
+    !isLogsDataLoaded &&
+    instanceStatus !== "COMPLETE" &&
+    selectedNode?.isJob !== true
+  ) {
     return <LoadingSpinner />;
   }
 
@@ -266,7 +274,7 @@ function Logs(props) {
               Node ID
             </Text>
             <Select
-              value={selectedNodeId}
+              value={selectedNode}
               sx={{
                 width: "auto",
                 maxWidth: "250px",
@@ -275,7 +283,7 @@ function Logs(props) {
             >
               {nodes.map((node) => (
                 <MenuItem
-                  value={node.id}
+                  value={node}
                   key={node.id}
                   sx={{
                     whiteSpace: "normal",
@@ -283,7 +291,7 @@ function Logs(props) {
                     maxWidth: "255px",
                   }}
                 >
-                  {node.id}
+                  {node.displayName}
                 </MenuItem>
               ))}
             </Select>
@@ -291,48 +299,51 @@ function Logs(props) {
         )}
       </Stack>
       <Divider sx={{ marginTop: "12px" }} />
-
-      <Box position="relative">
-        <LogsContainer className="sleek-scroll">
-          <div
-            ref={startDivRef}
-            style={{ visibility: "hidden", height: "24px" }}
-          />
-          <InfiniteScroll
-            pageStart={0}
-            hasMore={hasMoreLogs}
-            loadMore={loadMoreLogs}
-            useWindow={false}
-          >
-            {logs
-              ?.filter((log, index) => index < records)
-              .map((log) => {
-                return (
-                  <>
-                    <Log key={log}>
-                      <Ansi>{log}</Ansi>
-                    </Log>
-                  </>
-                );
-              })}
-          </InfiniteScroll>
-          <div ref={endDivRef} style={{ visibility: "hidden" }} />
-        </LogsContainer>
-        {isLogsDataLoaded && (
-          <>
-            <IconButton
-              titleText={"Navigate to top"}
-              direction="up"
-              divRef={startDivRef}
+      {instanceStatus === "COMPLETE" && selectedNode?.isJob === true ? (
+        <JobCompleted />
+      ) : (
+        <Box position="relative">
+          <LogsContainer className="sleek-scroll">
+            <div
+              ref={startDivRef}
+              style={{ visibility: "hidden", height: "24px" }}
             />
-            <IconButton
-              titleText={"Navigate to bottom"}
-              direction="down"
-              divRef={endDivRef}
-            />
-          </>
-        )}
-      </Box>
+            <InfiniteScroll
+              pageStart={0}
+              hasMore={hasMoreLogs}
+              loadMore={loadMoreLogs}
+              useWindow={false}
+            >
+              {logs
+                ?.filter((log, index) => index < records)
+                .map((log) => {
+                  return (
+                    <>
+                      <Log key={log}>
+                        <Ansi>{log}</Ansi>
+                      </Log>
+                    </>
+                  );
+                })}
+            </InfiniteScroll>
+            <div ref={endDivRef} style={{ visibility: "hidden" }} />
+          </LogsContainer>
+          {isLogsDataLoaded && (
+            <>
+              <IconButton
+                titleText={"Navigate to top"}
+                direction="up"
+                divRef={startDivRef}
+              />
+              <IconButton
+                titleText={"Navigate to bottom"}
+                direction="down"
+                divRef={endDivRef}
+              />
+            </>
+          )}
+        </Box>
+      )}
     </Card>
   );
 }
