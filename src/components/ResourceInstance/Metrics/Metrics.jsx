@@ -781,7 +781,9 @@ function Metrics(props) {
 
   if (
     !isMetricsDataLoaded &&
-    socketConnectionStatus === connectionStatuses.connected
+    socketConnectionStatus === connectionStatuses.connected &&
+    instanceStatus !== "COMPLETE" &&
+    selectedNode?.isJob !== true
   ) {
     return (
       <Stack
