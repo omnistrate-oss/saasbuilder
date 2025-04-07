@@ -263,6 +263,15 @@ const Run = ({
   }, [activeStepRun, setActiveStepRun, instance?.status]);
 
   usePolling(fetchClickedInstanceDetails, setClickedInstance, "DISCONNECTING");
+  let bashScript = null;
+  if (
+    instance?.result_params?.gcp_project_id &&
+    instance?.result_params?.cloud_provider_account_config_id
+  ) {
+    bashScript = getGcpBootstrapShellCommand(
+      instance?.result_params?.cloud_provider_account_config_id
+    );
+  }
 
   return (
     <Box width={"100%"} display={"flex"} flexDirection={"column"} gap="10px">
@@ -293,18 +302,39 @@ const Run = ({
             borderRadius: "12px",
           }}
         >
-          <Text size="small" weight="semibold" color="#414651">
-            Run{" "}
-            <StyledLink
-              target="_blank"
-              rel="noopener noreferrer"
-              href={`${instance?.result_params?.disconnect_cloudformation_url}`}
-            >
-              this
-            </StyledLink>
-             CloudFormation template to revoke all {`${serviceProviderName}`}{" "}
-            permissions from your account.
-          </Text>
+          {instance?.result_params?.aws_account_id ? (
+            <Text size="small" weight="semibold" color="#414651">
+              Run{" "}
+              <StyledLink
+                target="_blank"
+                rel="noopener noreferrer"
+                href={`${instance?.result_params?.disconnect_cloudformation_url}`}
+              >
+                this
+              </StyledLink>
+               CloudFormation template to revoke all {`${serviceProviderName}`}{" "}
+              permissions from your account.
+            </Text>
+          ) : (
+            <Box>
+              <Text size="medium" weight="regular" color="#374151">
+                {/* <b>Using GCP Cloud Shell:</b>  */}
+                Please open the Google Cloud Shell environment using the
+                following link:
+                <StyledLink
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  href="https://shell.cloud.google.com/?cloudshell_ephemeral=true&show=terminal"
+                >
+                  Google Cloud Shell
+                </StyledLink>
+                . Once the terminal is open, execute the following command:
+              </Text>
+              {accountInstructionDetails?.gcpOffboardCommand && (
+                <TextContainerToCopy text={bashScript} marginTop="12px" />
+              )}
+            </Box>
+          )}
           <Chip
             label={
               <Stack direction="row" alignItems="center" gap="6px">
@@ -337,7 +367,15 @@ const Check = ({
   setClickedInstance,
 }) => {
   usePolling(fetchClickedInstanceDetails, setClickedInstance, "DISCONNECTED");
-
+  let bashScript = null;
+  if (
+    instance?.result_params?.gcp_project_id &&
+    instance?.result_params?.cloud_provider_account_config_id
+  ) {
+    bashScript = getGcpBootstrapShellCommand(
+      instance?.result_params?.cloud_provider_account_config_id
+    );
+  }
   return (
     <Box width={"100%"} display={"flex"} flexDirection={"column"} gap="10px">
       {status === "DISCONNECTED" ? (
@@ -399,16 +437,30 @@ const Check = ({
               </Text>
             </ListItem>
             <ListItem>
-              <Text size="small" weight="semibold" color="#414651">
-                If you need to update the CloudFormation stack configuration{" "}
-                <StyledLink
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  href={`${instance?.result_params?.disconnect_cloudformation_url}`}
-                >
-                  click here.
-                </StyledLink>
-              </Text>
+              {instance?.result_params?.aws_account_id ? (
+                <Text size="small" weight="semibold" color="#414651">
+                  If you need to update the CloudFormation stack configuration{" "}
+                  <StyledLink
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    href={`${instance?.result_params?.disconnect_cloudformation_url}`}
+                  >
+                    click here.
+                  </StyledLink>
+                </Text>
+              ) : (
+                <Text size="small" weight="semibold" color="#414651">
+                  If you need to update the Google Cloud Shell stack
+                  configuration{" "}
+                  <StyledLink
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    href={`${bashScript}`}
+                  >
+                    click here.
+                  </StyledLink>
+                </Text>
+              )}
             </ListItem>
           </List>
         </Box>
