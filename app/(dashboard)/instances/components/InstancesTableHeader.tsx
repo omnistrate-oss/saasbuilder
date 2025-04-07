@@ -195,7 +195,9 @@ const InstancesTableHeader = ({
       actionType: "secondary",
       isDisabled:
         !selectedInstance ||
-        (status !== "RUNNING" && status !== "FAILED") ||
+        (status !== "RUNNING" &&
+          status !== "FAILED" &&
+          status !== "COMPLETE") ||
         isProxyResource ||
         !isUpdateAllowedByRBAC,
       onClick: () => {
@@ -266,7 +268,9 @@ const InstancesTableHeader = ({
         isLoading: restartInstanceMutation.isLoading,
         isDisabled:
           !selectedInstance ||
-          (status !== "RUNNING" && status !== "FAILED") ||
+          (status !== "RUNNING" &&
+            status !== "FAILED" &&
+            status !== "COMPLETE") ||
           !isUpdateAllowedByRBAC,
         onClick: () => {
           if (!selectedInstance)
