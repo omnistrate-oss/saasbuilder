@@ -31,6 +31,8 @@ import {
   stepsDisconnectRunAccountConfig,
 } from "../Stepper/utils";
 import useSnackbar from "src/hooks/useSnackbar";
+import { TextContainerToCopy } from "../CloudProviderAccountOrgIdModal/CloudProviderAccountOrgIdModal";
+import { getGcpBootstrapShellCommand } from "src/utils/accountConfig/accountConfig";
 
 const StyledForm = styled(Box)({
   position: "fixed",
@@ -330,7 +332,7 @@ const Run = ({
                 </StyledLink>
                 . Once the terminal is open, execute the following command:
               </Text>
-              {accountInstructionDetails?.gcpOffboardCommand && (
+              {bashScript && (
                 <TextContainerToCopy text={bashScript} marginTop="12px" />
               )}
             </Box>
