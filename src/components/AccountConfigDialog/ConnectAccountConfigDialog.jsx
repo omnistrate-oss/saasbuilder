@@ -32,7 +32,6 @@ import {
   stepsConnectRunAccountConfig,
 } from "../Stepper/utils";
 import useSnackbar from "src/hooks/useSnackbar";
-import { getGcpBootstrapShellCommand } from "src/utils/accountConfig/accountConfig";
 import { TextContainerToCopy } from "../CloudProviderAccountOrgIdModal/CloudProviderAccountOrgIdModal";
 
 const StyledForm = styled(Box)({
@@ -262,16 +261,6 @@ const Run = ({
 
   usePolling(fetchClickedInstanceDetails, setClickedInstance, "CONNECTING");
 
-  let bashScript = null;
-  if (
-    instance?.result_params?.gcp_project_id &&
-    instance?.result_params?.cloud_provider_account_config_id
-  ) {
-    bashScript = getGcpBootstrapShellCommand(
-      instance?.result_params?.cloud_provider_account_config_id
-    );
-  }
-
   return (
     <Box width={"100%"} display={"flex"} flexDirection={"column"} gap="10px">
       <Stepper activeStep={activeStepRun} orientation="vertical">
@@ -331,8 +320,11 @@ const Run = ({
                 </StyledLink>
                 . Once the terminal is open, execute the following command:
               </Text>
-              {bashScript && (
-                <TextContainerToCopy text={bashScript} marginTop="12px" />
+              {instance?.result_params?.gcp_bootstrap_sell_script && (
+                <TextContainerToCopy
+                  text={instance?.result_params?.gcp_bootstrap_sell_script}
+                  marginTop="12px"
+                />
               )}
             </Box>
           )}
@@ -369,15 +361,6 @@ const Check = ({
   setClickedInstance,
 }) => {
   usePolling(fetchClickedInstanceDetails, setClickedInstance, "READY");
-  let bashScript = null;
-  if (
-    instance?.result_params?.gcp_project_id &&
-    instance?.result_params?.cloud_provider_account_config_id
-  ) {
-    bashScript = getGcpBootstrapShellCommand(
-      instance?.result_params?.cloud_provider_account_config_id
-    );
-  }
 
   return (
     <Box width={"100%"} display={"flex"} flexDirection={"column"} gap="10px">
@@ -458,7 +441,7 @@ const Check = ({
                   <StyledLink
                     target="_blank"
                     rel="noopener noreferrer"
-                    href={`${bashScript}`}
+                    href={`${instance?.result_params?.gcp_bootstrap_sell_script}`}
                   >
                     click here.
                   </StyledLink>

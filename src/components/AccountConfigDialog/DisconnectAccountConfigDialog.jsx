@@ -32,7 +32,6 @@ import {
 } from "../Stepper/utils";
 import useSnackbar from "src/hooks/useSnackbar";
 import { TextContainerToCopy } from "../CloudProviderAccountOrgIdModal/CloudProviderAccountOrgIdModal";
-import { getGcpBootstrapShellCommand } from "src/utils/accountConfig/accountConfig";
 
 const StyledForm = styled(Box)({
   position: "fixed",
@@ -265,15 +264,6 @@ const Run = ({
   }, [activeStepRun, setActiveStepRun, instance?.status]);
 
   usePolling(fetchClickedInstanceDetails, setClickedInstance, "DISCONNECTING");
-  let bashScript = null;
-  if (
-    instance?.result_params?.gcp_project_id &&
-    instance?.result_params?.cloud_provider_account_config_id
-  ) {
-    bashScript = getGcpBootstrapShellCommand(
-      instance?.result_params?.cloud_provider_account_config_id
-    );
-  }
 
   return (
     <Box width={"100%"} display={"flex"} flexDirection={"column"} gap="10px">
@@ -332,8 +322,11 @@ const Run = ({
                 </StyledLink>
                 . Once the terminal is open, execute the following command:
               </Text>
-              {bashScript && (
-                <TextContainerToCopy text={bashScript} marginTop="12px" />
+              {instance?.result_params?.gcp_disconnect_sell_script && (
+                <TextContainerToCopy
+                  text={instance?.result_params?.gcp_disconnect_sell_script}
+                  marginTop="12px"
+                />
               )}
             </Box>
           )}
@@ -369,15 +362,7 @@ const Check = ({
   setClickedInstance,
 }) => {
   usePolling(fetchClickedInstanceDetails, setClickedInstance, "DISCONNECTED");
-  let bashScript = null;
-  if (
-    instance?.result_params?.gcp_project_id &&
-    instance?.result_params?.cloud_provider_account_config_id
-  ) {
-    bashScript = getGcpBootstrapShellCommand(
-      instance?.result_params?.cloud_provider_account_config_id
-    );
-  }
+
   return (
     <Box width={"100%"} display={"flex"} flexDirection={"column"} gap="10px">
       {status === "DISCONNECTED" ? (
@@ -457,7 +442,7 @@ const Check = ({
                   <StyledLink
                     target="_blank"
                     rel="noopener noreferrer"
-                    href={`${bashScript}`}
+                    href={`${instance?.result_params?.gcp_disconnect_sell_script}`}
                   >
                     click here.
                   </StyledLink>
