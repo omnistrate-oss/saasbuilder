@@ -38,17 +38,30 @@ const { getProviderOrgDetails } = require("../api/customer-user");
 const { getNodeMailerConfig } = require("./mail-config");
 const { getEnvironmentType } = require("../utils/getEnvironmentType");
 const {
-  getDisconnectedAccountCompleteMailContent,
-} = require("./templates/disconnectedAccountcomplete");
+  getDisconnectedAccountCompleteMailContentAWS,
+} = require("./templates/disconnectedAccountcompleteAWS");
 const {
-  getConnectedAccountCompleteMailContent,
-} = require("./templates/connectedAccountComplete");
+  getConnectedAccountCompleteMailContentAWS,
+} = require("./templates/connectedAccountCompleteAWS");
 const {
-  getPendingRevokePermissionsMailContent,
-} = require("./templates/pendingRevokePermissions");
+  getPendingRevokePermissionsMailContentAWS,
+} = require("./templates/pendingRevokePermissionsAWS");
 const {
-  getPendingRestorePermissionsMailContent,
-} = require("./templates/pendingRestorePermissions");
+  getPendingRestorePermissionsMailContentAWS,
+} = require("./templates/pendingRestorePermissionsAWS");
+
+const {
+  getDisconnectedAccountCompleteMailContentGCP,
+} = require("./templates/disconnectedAccountcompleteGCP");
+const {
+  getConnectedAccountCompleteMailContentGCP,
+} = require("./templates/connectedAccountCompleteGCP");
+const {
+  getPendingRevokePermissionsMailContentGCP,
+} = require("./templates/pendingRevokePermissionsGCP");
+const {
+  getPendingRestorePermissionsMailContentGCP,
+} = require("./templates/pendingRestorePermissionsGCP");
 
 let isRunning = false;
 
@@ -175,36 +188,74 @@ function startMailServiceCron() {
             }
 
             case eventTypes.PendingRestorePermissions: {
-              mailContent = await getPendingRestorePermissionsMailContent(
-                event,
-                orgLogoURL,
-                orgSupportEmail
-              );
+              if (event?.eventPayload?.gcp_connect_bash_script) {
+                mailContent = await getPendingRestorePermissionsMailContentGCP(
+                  event,
+                  orgLogoURL,
+                  orgSupportEmail
+                );
+              }
+              if (event?.eventPayload?.connect_cfn_url) {
+                mailContent = await getPendingRestorePermissionsMailContentAWS(
+                  event,
+                  orgLogoURL,
+                  orgSupportEmail
+                );
+              }
               break;
             }
             case eventTypes.PendingRevokePermissions: {
-              mailContent = await getPendingRevokePermissionsMailContent(
-                event,
-                orgLogoURL,
-                orgSupportEmail
-              );
+              if (event?.eventPayload?.gcp_connect_bash_script) {
+                mailContent = await getPendingRevokePermissionsMailContentGCP(
+                  event,
+                  orgLogoURL,
+                  orgSupportEmail
+                );
+              }
+              if (event?.eventPayload?.connect_cfn_url) {
+                mailContent = await getPendingRevokePermissionsMailContentAWS(
+                  event,
+                  orgLogoURL,
+                  orgSupportEmail
+                );
+              }
               break;
             }
             case eventTypes.DisconnectAccountComplete: {
-              mailContent = await getDisconnectedAccountCompleteMailContent(
-                event,
-                orgLogoURL,
-                orgSupportEmail
-              );
+              if (event?.eventPayload?.gcp_connect_bash_script) {
+                mailContent =
+                  await getDisconnectedAccountCompleteMailContentGCP(
+                    event,
+                    orgLogoURL,
+                    orgSupportEmail
+                  );
+              }
+              if (event?.eventPayload?.connect_cfn_url) {
+                mailContent =
+                  await getDisconnectedAccountCompleteMailContentAWS(
+                    event,
+                    orgLogoURL,
+                    orgSupportEmail
+                  );
+              }
               break;
             }
 
             case eventTypes.ConnectAccountComplete: {
-              mailContent = await getConnectedAccountCompleteMailContent(
-                event,
-                orgLogoURL,
-                orgSupportEmail
-              );
+              if (event?.eventPayload?.gcp_connect_bash_script) {
+                mailContent = await getConnectedAccountCompleteMailContentGCP(
+                  event,
+                  orgLogoURL,
+                  orgSupportEmail
+                );
+              }
+              if (event?.eventPayload?.connect_cfn_url) {
+                mailContent = await getConnectedAccountCompleteMailContentAWS(
+                  event,
+                  orgLogoURL,
+                  orgSupportEmail
+                );
+              }
               break;
             }
 

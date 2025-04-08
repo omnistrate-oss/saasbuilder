@@ -2,23 +2,24 @@ const ejs = require("ejs");
 const path = require("path");
 const { getSaaSDomainURL } = require("../../utils/getSaaSDomainURL");
 
-async function getDisconnectedAccountCompleteMailContent(
-  disconnectedAccountCompleteEventObj,
+async function getPendingRestorePermissionsMailContentAWS(
+  pendingRestorePermissionsEventObj,
   orgLogoURL,
-  orgSupportEmail,
+  orgSupportEmail
 ) {
-  const userName = disconnectedAccountCompleteEventObj.eventPayload.user_name;
-  const email = disconnectedAccountCompleteEventObj.eventPayload.user_email;
-  const accountId = disconnectedAccountCompleteEventObj.eventPayload.account_id;
-  const orgName = disconnectedAccountCompleteEventObj.orgName;
-
-  const subject = `Success: AWS Account ${accountId} Disconnected from ${orgName}`;
+  const userName = pendingRestorePermissionsEventObj.eventPayload.user_name;
+  const email = pendingRestorePermissionsEventObj.eventPayload.user_email;
+  const accountId = pendingRestorePermissionsEventObj.eventPayload.account_id;
+  const connectCloudFormationURL =
+    pendingRestorePermissionsEventObj.eventPayload.connect_cfn_url;
+  const orgName = pendingRestorePermissionsEventObj.orgName;
+  const subject = `Action Required: Connect AWS Account ${accountId} to ${orgName}`;
 
   const templatePath = path.resolve(
     __dirname,
     "..",
     "ejsTemplates",
-    "disconnectedAccountcomplete.ejs"
+    "pendingRestorePermissionsAWS.ejs"
   );
 
   const baseURL = getSaaSDomainURL();
@@ -29,9 +30,10 @@ async function getDisconnectedAccountCompleteMailContent(
     user_name: userName,
     logo_url: orgLogoURL,
     support_email: orgSupportEmail,
+    connect_cloud_formation_url: connectCloudFormationURL,
     bottom_bg_image_url: `${baseURL}/mail/bottom-bg.png`,
     hero_banner: `${baseURL}/mail/cloud-hero-section.png`,
-    disconnected_success: `${baseURL}/mail/disconnected_success.png`,
+    connected_confirmation: `${baseURL}/mail/connected_confirmation.png`,
   });
 
   const recepientEmail = email;
@@ -50,5 +52,5 @@ async function getDisconnectedAccountCompleteMailContent(
 }
 
 module.exports = {
-  getDisconnectedAccountCompleteMailContent,
+  getPendingRestorePermissionsMailContentAWS,
 };
