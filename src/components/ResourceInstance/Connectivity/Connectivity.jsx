@@ -124,22 +124,29 @@ function Connectivity(props) {
   const connectivitySummaryData = useMemo(() => {
     const dataFields = [];
     if (networkType) {
-      dataFields.push({ label: "Network Type", value: networkType });
+      dataFields.push({
+        dataTestId: "network-type",
+        label: "Network Type",
+        value: networkType,
+      });
     }
     if (availabilityZones) {
       dataFields.push({
+        dataTestId: "availability-zones",
         label: "Availability zones",
         value: availabilityZones,
       });
     }
 
     dataFields.push({
+      dataTestId: "publicly-accessible",
       label: "Publicly Accessible",
       value: publiclyAccessible ? "Yes" : "No",
     });
 
     if (privateNetworkCIDR) {
       dataFields.push({
+        dataTestId: "private-network-cidr",
         label: "Private network CIDR",
         value: privateNetworkCIDR,
       });
@@ -147,6 +154,7 @@ function Connectivity(props) {
 
     if (privateNetworkId) {
       dataFields.push({
+        dataTestId: "private-network-id",
         label: "Private network ID",
         value: privateNetworkId,
       });

@@ -313,7 +313,6 @@ const InstanceForm = ({
     },
   });
 
-
   const { values } = formData;
   const offering =
     serviceOfferingsObj[values.serviceId]?.[values.servicePlanId];
@@ -539,7 +538,7 @@ const InstanceForm = ({
             })}
           </div>
         </CardWithTitle>
-        
+
         {isFetchingResourceSchema ||
         !networkConfigurationFields.length ? null : (
           <CardWithTitle title="Network Configuration">

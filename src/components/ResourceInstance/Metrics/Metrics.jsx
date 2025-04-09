@@ -839,6 +839,7 @@ function Metrics(props) {
               Node ID
             </Text>
             <Select
+              data-testid="node-id-menu"
               value={selectedNode}
               sx={{
                 width: "auto",
