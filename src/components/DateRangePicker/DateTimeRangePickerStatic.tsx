@@ -24,6 +24,7 @@ import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import { PopoverDynamicHeight } from "../Popover/Popover";
 import CalendarIcon from "../Icons/Calendar/Calendar";
+import { secondsPassedInCurrentUTCMonth } from "src/utils/time";
 dayjs.extend(utc);
 
 const StyledIconCard = styled(Box)({
@@ -89,12 +90,19 @@ export type DateRange = {
   endDate?: string;
 };
 
+type RelativeRangeOption = {
+  label: string;
+  value: number; // relative past time from now in milliseconds
+};
+
 type RelativeRangeProps = {
   dateRange: DateRange;
   setDateRange: SetState<DateRange>;
   handleCancel: () => void;
   handleClear: () => void;
   handleTabChange: (tab: string) => void;
+  relativeRangeOptions: RelativeRangeOption[];
+  selectionType: "date" | "date-time";
 };
 
 export const initialRangeState: DateRange = {
@@ -103,11 +111,7 @@ export const initialRangeState: DateRange = {
   //   key: "selection",
 };
 
-type RelativeRangeOption = {
-  label: string;
-  value: number; // relative past time from now in milliseconds
-};
-const relativeRangeOptions: RelativeRangeOption[] = [
+const defaultRelativeRangeOptions: RelativeRangeOption[] = [
   {
     label: "Last 5 minutes",
     value: 5 * 60 * 1000, // relative past time in milliseconds
@@ -140,6 +144,8 @@ const RelativeRange = ({
   handleCancel,
   handleClear,
   handleTabChange,
+  relativeRangeOptions = defaultRelativeRangeOptions,
+  selectionType,
 }: RelativeRangeProps) => {
   const [selectedValue, setSelectedValue] = useState<number | null>(null);
 
@@ -147,10 +153,22 @@ const RelativeRange = ({
     if (selectedValue) {
       const endDate = new Date();
       const startDate = addMilliseconds(endDate, -selectedValue);
-      setDateRange({
-        startDate: startDate.toISOString(),
-        endDate: endDate.toISOString(),
-      });
+      if (selectionType === "date") {
+        const startDateBeginningOfDay = dayjs(startDate)
+          .utc()
+          .startOf("day")
+          .toISOString();
+        const endDateEndOfDay = dayjs(endDate).utc().endOf("day").toISOString();
+        setDateRange({
+          startDate: startDateBeginningOfDay,
+          endDate: endDateEndOfDay,
+        });
+      } else {
+        setDateRange({
+          startDate: startDate.toISOString(),
+          endDate: endDate.toISOString(),
+        });
+      }
     } else {
       setDateRange({ startDate: undefined, endDate: undefined });
     }
@@ -262,11 +280,28 @@ const RelativeRange = ({
   );
 };
 
+const SelectedDateContainer = styled(Box)({
+  padding: "10px 14px",
+  border: "1px solid #D0D5DD",
+  borderRadius: "8px",
+  boxShadow: "0px 1px 2px 0px #1018280D",
+  fontSize: "14px",
+  lineHeight: "20px",
+  minWidth: "126px",
+  minHeight: "42px",
+  background: "rgba(0,0,0,0.03)",
+  color: "rgba(0,0,0,0.65)",
+  fontWeight: 500,
+  textAlign: "center",
+});
+
 type AbsoluteRangeProps = {
   dateRange: DateRange;
   setDateRange: SetState<DateRange>;
   handleCancel: () => void;
   handleClear: () => void;
+  selectionType?: "date" | "date-time";
+  hideClearButton?: boolean;
 };
 
 const AbsoluteRange = (props: AbsoluteRangeProps) => {
@@ -275,6 +310,8 @@ const AbsoluteRange = (props: AbsoluteRangeProps) => {
     setDateRange,
     handleCancel,
     handleClear,
+    selectionType = "date-time",
+    hideClearButton = false,
   } = props;
 
   const [selectedStartDate, setSelectedStartDate] = useState(
@@ -360,6 +397,18 @@ const AbsoluteRange = (props: AbsoluteRangeProps) => {
     handleClear();
   };
 
+  //meant to be used on the button
+  let formattedStartDate = "Select Start Date";
+  if (dateRange?.startDate) {
+    formattedStartDate = dayjs(selectedStartDate).format("YYYY-MM-DD");
+  }
+
+  //meant to be used on the button
+  let formattedEndDate = "Select End Date";
+  if (dateRange?.endDate) {
+    formattedEndDate = dayjs(selectedEndDate).format("YYYY-MM-DD");
+  }
+
   return (
     <Box>
       {/*@ts-ignore */}
@@ -378,75 +427,84 @@ const AbsoluteRange = (props: AbsoluteRangeProps) => {
         showDateDisplay={false}
       />
 
-      <Stack direction="row" gap="12px" alignItems="center" padding="12px 16px">
-        <Stack direction={"row"} gap="12px" alignItems="center" flex={1}>
-          <Box>
-            <Text size="small" color={themeConfig.colors.gray600}>
-              Start Date
-            </Text>
-            <StyledInput
-              value={
-                selectedStartDate ? format(selectedStartDate, "yyyy/MM/dd") : ""
-              }
-              disabled
-            />
-            <Box height="18px">
-              <FieldError>{touched.startDate && errors.startDate}</FieldError>
+      {selectionType === "date-time" && (
+        <Stack
+          direction="row"
+          gap="12px"
+          alignItems="center"
+          padding="12px 16px"
+        >
+          <Stack direction={"row"} gap="12px" alignItems="center" flex={1}>
+            <Box>
+              <Text size="small" color={themeConfig.colors.gray600}>
+                Start Date
+              </Text>
+              <StyledInput
+                value={
+                  selectedStartDate
+                    ? format(selectedStartDate, "yyyy/MM/dd")
+                    : ""
+                }
+                disabled
+              />
+              <Box height="18px">
+                <FieldError>{touched.startDate && errors.startDate}</FieldError>
+              </Box>
             </Box>
-          </Box>
-          {/* - */}
-          <Box>
-            <Text size="small" color={themeConfig.colors.gray600}>
-              Start Time
-            </Text>
-            <StyledInput
-              name="startTime"
-              placeholder="hh:mm:ss"
-              value={values.startTime}
-              onChange={handleChange}
-              onBlur={handleBlur}
-              error={Boolean(touched.startTime && errors.startTime)}
-            />
-            <Box height="18px">
-              <FieldError>{touched.startTime && errors.startTime}</FieldError>
-            </Box>
-          </Box>{" "}
-        </Stack>
+            {/* - */}
+            <Box>
+              <Text size="small" color={themeConfig.colors.gray600}>
+                Start Time
+              </Text>
+              <StyledInput
+                name="startTime"
+                placeholder="hh:mm:ss"
+                value={values.startTime}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                error={Boolean(touched.startTime && errors.startTime)}
+              />
+              <Box height="18px">
+                <FieldError>{touched.startTime && errors.startTime}</FieldError>
+              </Box>
+            </Box>{" "}
+          </Stack>
 
-        <Stack direction={"row"} gap="12px" alignItems="center" flex={1}>
-          <Box>
-            <Text size="small" color={themeConfig.colors.gray600}>
-              End Date
-            </Text>
-            <StyledInput
-              value={
-                selectedEndDate ? format(selectedEndDate, "yyyy/MM/dd") : ""
-              }
-              disabled
-            />
-            <Box height="18px">
-              <FieldError>{touched.endDate && errors.endDate}</FieldError>
+          <Stack direction={"row"} gap="12px" alignItems="center" flex={1}>
+            <Box>
+              <Text size="small" color={themeConfig.colors.gray600}>
+                End Date
+              </Text>
+              <StyledInput
+                value={
+                  selectedEndDate ? format(selectedEndDate, "yyyy/MM/dd") : ""
+                }
+                disabled
+              />
+              <Box height="18px">
+                <FieldError>{touched.endDate && errors.endDate}</FieldError>
+              </Box>
             </Box>
-          </Box>
-          {/* - */}
-          <Box>
-            <Text size="small" color={themeConfig.colors.gray600}>
-              End Time
-            </Text>
-            <StyledInput
-              name="endTime"
-              placeholder="hh:mm:ss"
-              value={values.endTime}
-              onChange={handleChange}
-              onBlur={handleBlur}
-              error={Boolean(touched.endTime && errors.endTime)}
-            />
-            <Box height="18px">
-              <FieldError>{touched.endTime && errors.endTime}</FieldError>
-            </Box>
-          </Box>{" "}
+            {/* - */}
+            <Box>
+              <Text size="small" color={themeConfig.colors.gray600}>
+                End Time
+              </Text>
+              <StyledInput
+                name="endTime"
+                placeholder="hh:mm:ss"
+                value={values.endTime}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                error={Boolean(touched.endTime && errors.endTime)}
+              />
+              <Box height="18px">
+                <FieldError>{touched.endTime && errors.endTime}</FieldError>
+              </Box>
+            </Box>{" "}
+          </Stack>
         </Stack>
-      </Stack>
+      )}
 
       <Stack
         direction="row"
@@ -455,14 +513,23 @@ const AbsoluteRange = (props: AbsoluteRangeProps) => {
         borderTop={`1px solid ${themeConfig.colors.gray200}`}
         padding="16px"
       >
-        <Button
-          variant="text"
-          fontColor={themeConfig.colors.success600}
-          onClick={onClear}
-          bgColor={"#0794550a"}
-        >
-          Clear
-        </Button>
+        {selectionType === "date" && (
+          <Stack direction="row" gap="8px" alignItems="center">
+            <SelectedDateContainer>{formattedStartDate}</SelectedDateContainer>-
+            <SelectedDateContainer>{formattedEndDate}</SelectedDateContainer>
+          </Stack>
+        )}
+        {!hideClearButton && (
+          <Button
+            variant="text"
+            fontColor={themeConfig.colors.success600}
+            onClick={onClear}
+            bgColor={"#0794550a"}
+          >
+            Clear
+          </Button>
+        )}
+
         <Stack
           direction="row"
           justifyContent="flex-end"
@@ -489,12 +556,20 @@ type DateRangePickerStaticProps = {
   handleCancel: () => void;
   handleClear: () => void;
   hideBackArrow?: boolean;
+  selectionType?: "date" | "date-time";
+  hideClearButton?: boolean;
 };
 
 export const DateTimeRangePickerStatic = (
   props: DateRangePickerStaticProps
 ) => {
-  const { handleCancel, dateRange, hideBackArrow = false } = props;
+  const {
+    handleCancel,
+    dateRange,
+    hideBackArrow = false,
+    selectionType = "date-time",
+  } = props;
+
   const [tab, setTab] = useState<TabType>(
     dateRange?.startDate ? "absolute" : "relative"
   );
@@ -581,7 +656,33 @@ export const DateTimeRangePickerStatic = (
       </Stack>
 
       {tab === "relative" && (
-        <RelativeRange {...props} handleTabChange={handleTabChange} />
+        <RelativeRange
+          {...props}
+          handleTabChange={handleTabChange}
+          selectionType={selectionType}
+          relativeRangeOptions={
+            selectionType === "date"
+              ? [
+                  {
+                    label: "Last 7 days",
+                    value: 7 * 24 * 60 * 60 * 1000,
+                  },
+                  {
+                    label: "Last 15 days",
+                    value: 15 * 24 * 60 * 60 * 1000,
+                  },
+                  {
+                    label: "Last 30 days",
+                    value: 30 * 24 * 60 * 60 * 1000,
+                  },
+                  {
+                    label: "This Month",
+                    value: secondsPassedInCurrentUTCMonth() * 1000,
+                  },
+                ]
+              : defaultRelativeRangeOptions
+          }
+        />
       )}
       {tab === "absolute" && <AbsoluteRange {...props} />}
     </>
@@ -591,12 +692,23 @@ export const DateTimeRangePickerStatic = (
 type DateTimePickerPopoverProps = {
   dateRange: DateRange;
   setDateRange: SetState<DateRange>;
+  selectionType?: "date" | "date-time";
+  hideClearButton?: boolean;
+  initialDateRange?: DateRange;
 };
 
 export const DateTimePickerPopover = (props: DateTimePickerPopoverProps) => {
-  const { dateRange, setDateRange } = props;
+  const {
+    dateRange,
+    setDateRange,
+    hideClearButton = false,
+    selectionType = "date-time",
+    initialDateRange,
+  } = props;
 
   const [anchorElem, setAnchorElem] = useState<HTMLElement | null>(null);
+
+  const isDateOnly = selectionType === "date";
 
   const open = Boolean(anchorElem);
   const id = open ? "date-time-picker-popover" : undefined;
@@ -606,7 +718,7 @@ export const DateTimePickerPopover = (props: DateTimePickerPopoverProps) => {
   if (dateRange?.startDate) {
     formattedStartDate = dayjs(dateRange.startDate)
       .utc()
-      .format("YYYY-MM-DD HH:mm:ss");
+      .format(isDateOnly ? "DD MMM YYYY" : "YYYY-MM-DD HH:mm:ss");
   }
 
   //meant to be used on the button
@@ -614,7 +726,7 @@ export const DateTimePickerPopover = (props: DateTimePickerPopoverProps) => {
   if (dateRange?.endDate) {
     formattedEndDate = dayjs(dateRange.endDate)
       .utc()
-      .format("YYYY-MM-DD HH:mm:ss");
+      .format(isDateOnly ? "DD MMM YYYY" : "YYYY-MM-DD HH:mm:ss");
   }
 
   let buttonText = "Filter by Date";
@@ -636,7 +748,11 @@ export const DateTimePickerPopover = (props: DateTimePickerPopoverProps) => {
   }
 
   function handleCancel() {
-    setDateRange(initialRangeState);
+    if (initialDateRange) {
+      setDateRange(initialDateRange);
+    } else {
+      setDateRange(initialRangeState);
+    }
     setAnchorElem(null);
   }
 
@@ -659,6 +775,7 @@ export const DateTimePickerPopover = (props: DateTimePickerPopoverProps) => {
           padding: "10px 14px !important",
           borderColor: "#D5D7DA !important",
           minWidth: "150px",
+          flexShrink: 0,
         }}
       >
         {buttonText}
@@ -682,6 +799,8 @@ export const DateTimePickerPopover = (props: DateTimePickerPopoverProps) => {
             handleClear={handleClear}
             handleCancel={handleCancel}
             hideBackArrow={true}
+            hideClearButton={hideClearButton}
+            selectionType={selectionType}
           />
         </Box>
       </PopoverDynamicHeight>

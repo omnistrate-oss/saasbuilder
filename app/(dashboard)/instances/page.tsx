@@ -177,7 +177,7 @@ const InstancesPage = () => {
         },
         {
           id: "resourceName",
-          header: "Resource Type",
+          header: "Resource Name",
         }
       ),
       columnHelper.accessor(

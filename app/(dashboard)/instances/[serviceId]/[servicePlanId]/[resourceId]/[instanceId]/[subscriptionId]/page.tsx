@@ -148,7 +148,7 @@ const InstanceDetailsPage = ({
   const disabledTabs = useMemo(
     () =>
       resourceInstanceData?.status === "DISCONNECTED"
-        ? ["nodes", "backups"]
+        ? ["backups", "metrics", "logs"]
         : [],
     [resourceInstanceData, tabs]
   );

@@ -5,7 +5,7 @@ import StatusChip, {
 } from "src/components/StatusChip/StatusChip";
 
 export const NodeStatus = (props) => {
-  const { detailedHealth, isStopped } = props;
+  const { detailedHealth, isStopped, isJob } = props;
   const ConnectivityStatus = detailedHealth?.ConnectivityStatus;
   const DiskHealth = detailedHealth?.DiskHealth;
   const NodeHealth = detailedHealth?.NodeHealth;
@@ -20,7 +20,7 @@ export const NodeStatus = (props) => {
   ];
 
   return (
-    <NodeStatusTooltip detailedHealth={detailedHealth}>
+    <NodeStatusTooltip detailedHealth={detailedHealth} isJob={isJob}>
       <Box
         display="flex"
         alignItems="center"
@@ -40,7 +40,7 @@ export const NodeStatus = (props) => {
           return (
             <Box
               key={index}
-              bgcolor={chipStyles.color || "gray"}
+              bgcolor={isJob ? "#A4A7AE" : chipStyles.color || "gray"}
               width="8px"
               height="8px"
               borderRadius="50%"
