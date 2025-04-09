@@ -212,7 +212,7 @@ function startMailServiceCron() {
                   orgSupportEmail
                 );
               }
-              if (event?.eventPayload?.connect_cfn_url) {
+              if (event?.eventPayload?.disconnect_cfn_url) {
                 mailContent = await getPendingRevokePermissionsMailContentAWS(
                   event,
                   orgLogoURL,
@@ -230,7 +230,7 @@ function startMailServiceCron() {
                     orgSupportEmail
                   );
               }
-              if (event?.eventPayload?.connect_cfn_url) {
+              if (event?.eventPayload?.disconnect_cfn_url) {
                 mailContent =
                   await getDisconnectedAccountCompleteMailContentAWS(
                     event,
