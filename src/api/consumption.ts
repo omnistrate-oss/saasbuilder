@@ -30,6 +30,7 @@ export type GetConsumptionUsagePerDayQueryParams = {
 export const getConsumptionUsagePerDay = (
   queryParams: GetConsumptionUsagePerDayQueryParams = {}
 ): Promise<AxiosResponse<GetConsumptionUsagePerDaySuccessResponse>> => {
+
   return axios.get("/resource-instance/usage-per-day", {
     params: queryParams,
   });

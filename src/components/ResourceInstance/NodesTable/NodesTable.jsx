@@ -127,9 +127,19 @@ export default function NodesTable(props) {
       },
       {
         field: "resourceName",
-        headerName: `Resource Type`,
+        headerName: `Resource Name`,
         flex: 0.9,
         minWidth: 150,
+      },
+      {
+        field: "isJob",
+        headerName: `Resource Type`,
+        flex: 0.9,
+        minWidth: 80,
+        renderCell: (params) => {
+          const isJob = params.row.isJob;
+          return isJob ? "Job Resource" : "Resource";
+        },
       },
     ];
     if (isBYOAServicePlan) {
@@ -237,9 +247,19 @@ export default function NodesTable(props) {
       },
       {
         field: "resourceName",
-        headerName: `Resource Type`,
+        headerName: `Resource Name`,
         flex: 0.9,
         minWidth: 150,
+      },
+      {
+        field: "isJob",
+        headerName: `Resource Type`,
+        flex: 0.9,
+        minWidth: 80,
+        renderCell: (params) => {
+          const isJob = params.row.isJob;
+          return isJob ? "Job Resource" : "Resource";
+        },
       },
       {
         field: "endpoint",
@@ -304,7 +324,7 @@ export default function NodesTable(props) {
             : "UNKNOWN";
 
           const lifecycleStatus = params.row.status;
-
+          const isJob = params.row.isJob;
           if (lifecycleStatus === "STOPPED")
             return <StatusChip category="unknown" label="Unknown" />;
 
@@ -312,6 +332,7 @@ export default function NodesTable(props) {
             <NodeStatus
               detailedHealth={params.row?.detailedHealth}
               isStopped={params.row.healthStatus === "STOPPED"}
+              isJob={isJob}
             />
           ) : (
             <StatusChip

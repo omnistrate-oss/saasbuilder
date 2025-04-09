@@ -11,7 +11,7 @@ function useBillingDetails() {
     queryFn: async () => {
       const response = await getBillingDetails({
         returnUrl: baseURL,
-      });
+      }); 
 
       return response.data;
     },
