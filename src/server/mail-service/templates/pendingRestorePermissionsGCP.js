@@ -13,7 +13,7 @@ async function getPendingRestorePermissionsMailContentGCP(
   const gcpDisconnectBashScript =
     pendingRestorePermissionsEventObj.eventPayload.gcp_disconnect_bash_script;
   const orgName = pendingRestorePermissionsEventObj.orgName;
-  const subject = `Action Required: Connect AWS Account ${accountId} to ${orgName}`;
+  const subject = `Action Required: Connect GCP Account ${accountId} to ${orgName}`;
 
   const templatePath = path.resolve(
     __dirname,

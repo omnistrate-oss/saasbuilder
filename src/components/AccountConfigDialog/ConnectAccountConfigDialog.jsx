@@ -264,7 +264,9 @@ const Run = ({
   return (
     <Box width={"100%"} display={"flex"} flexDirection={"column"} gap="10px">
       <Stepper activeStep={activeStepRun} orientation="vertical">
-        {stepsConnectRunAccountConfig.map((step, index) => {
+        {stepsConnectRunAccountConfig(
+          instance?.result_params?.aws_account_id ? "aws" : "gcp"
+        ).map((step, index) => {
           return (
             <Step key={index}>
               <StepLabel
@@ -435,17 +437,27 @@ const Check = ({
                   </StyledLink>
                 </Text>
               ) : (
-                <Text size="small" weight="semibold" color="#414651">
-                  If you need to update the Google Cloud Shell stack
-                  configuration{" "}
-                  <StyledLink
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    href={`${instance?.result_params?.gcp_bootstrap_sell_script}`}
-                  >
-                    click here.
-                  </StyledLink>
-                </Text>
+                <Box>
+                  <Text size="medium" weight="regular" color="#374151">
+                    {/* <b>Using GCP Cloud Shell:</b>  */}
+                    Please open the Google Cloud Shell environment using the
+                    following link:
+                    <StyledLink
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      href="https://shell.cloud.google.com/?cloudshell_ephemeral=true&show=terminal"
+                    >
+                      Google Cloud Shell
+                    </StyledLink>
+                    . Once the terminal is open, execute the following command:
+                  </Text>
+                  {instance?.result_params?.gcp_bootstrap_sell_script && (
+                    <TextContainerToCopy
+                      text={instance?.result_params?.gcp_bootstrap_sell_script}
+                      marginTop="12px"
+                    />
+                  )}
+                </Box>
               )}
             </ListItem>
           </List>

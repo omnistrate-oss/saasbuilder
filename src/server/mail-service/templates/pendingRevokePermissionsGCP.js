@@ -13,7 +13,7 @@ async function getPendingRevokePermissionsMailContentGCP(
   const disconnectCloudFormationURL =
     pendingRevokePermissionsEventObj.eventPayload.disconnect_cfn_url;
   const orgName = pendingRevokePermissionsEventObj.orgName;
-  const subject = `Action Required: Disconnect AWS Account ${accountId} from ${orgName}`;
+  const subject = `Action Required: Disconnect GCP Account ${accountId} from ${orgName}`;
 
   const templatePath = path.resolve(
     __dirname,

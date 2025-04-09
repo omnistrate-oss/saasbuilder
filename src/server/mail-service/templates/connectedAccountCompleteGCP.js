@@ -12,7 +12,7 @@ async function getConnectedAccountCompleteMailContentGCP(
   const accountId = connectedAccountCompleteEventObj.eventPayload.account_id;
   const orgName = connectedAccountCompleteEventObj.orgName;
 
-  const subject = `Success: AWS Account ${accountId} Connected to ${orgName}`;
+  const subject = `Success: GCP Account ${accountId} Connected to ${orgName}`;
 
   const templatePath = path.resolve(
     __dirname,

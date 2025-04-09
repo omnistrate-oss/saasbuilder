@@ -12,7 +12,7 @@ async function getDisconnectedAccountCompleteMailContentGCP(
   const accountId = disconnectedAccountCompleteEventObj.eventPayload.account_id;
   const orgName = disconnectedAccountCompleteEventObj.orgName;
 
-  const subject = `Success: AWS Account ${accountId} Disconnected from ${orgName}`;
+  const subject = `Success: GCP Account ${accountId} Disconnected from ${orgName}`;
 
   const templatePath = path.resolve(
     __dirname,
