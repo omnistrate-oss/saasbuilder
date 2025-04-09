@@ -11,7 +11,7 @@ async function getPendingRestorePermissionsMailContentGCP(
   const email = pendingRestorePermissionsEventObj.eventPayload.user_email;
   const accountId = pendingRestorePermissionsEventObj.eventPayload.account_id;
   const gcpDisconnectBashScript =
-    pendingRestorePermissionsEventObj.eventPayload.gcp_disconnect_bash_script;
+    pendingRestorePermissionsEventObj.eventPayload.gcp_connect_bash_script;
   const orgName = pendingRestorePermissionsEventObj.orgName;
   const subject = `Action Required: Connect GCP Account ${accountId} to ${orgName}`;
 

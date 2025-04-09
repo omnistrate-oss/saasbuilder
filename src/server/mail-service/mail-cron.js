@@ -205,7 +205,7 @@ function startMailServiceCron() {
               break;
             }
             case eventTypes.PendingRevokePermissions: {
-              if (event?.eventPayload?.gcp_connect_bash_script) {
+              if (event?.eventPayload?.gcp_disconnect_bash_script) {
                 mailContent = await getPendingRevokePermissionsMailContentGCP(
                   event,
                   orgLogoURL,
@@ -222,7 +222,7 @@ function startMailServiceCron() {
               break;
             }
             case eventTypes.DisconnectAccountComplete: {
-              if (event?.eventPayload?.gcp_connect_bash_script) {
+              if (event?.eventPayload?.gcp_disconnect_bash_script) {
                 mailContent =
                   await getDisconnectedAccountCompleteMailContentGCP(
                     event,

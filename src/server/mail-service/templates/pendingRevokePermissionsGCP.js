@@ -11,7 +11,7 @@ async function getPendingRevokePermissionsMailContentGCP(
   const email = pendingRevokePermissionsEventObj.eventPayload.user_email;
   const accountId = pendingRevokePermissionsEventObj.eventPayload.account_id;
   const disconnectCloudFormationURL =
-    pendingRevokePermissionsEventObj.eventPayload.disconnect_cfn_url;
+    pendingRevokePermissionsEventObj.eventPayload.gcp_disconnect_bash_script;
   const orgName = pendingRevokePermissionsEventObj.orgName;
   const subject = `Action Required: Disconnect GCP Account ${accountId} from ${orgName}`;
 

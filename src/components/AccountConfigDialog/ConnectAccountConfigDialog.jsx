@@ -322,9 +322,9 @@ const Run = ({
                 </StyledLink>
                 . Once the terminal is open, execute the following command:
               </Text>
-              {instance?.result_params?.gcp_bootstrap_sell_script && (
+              {instance?.result_params?.gcp_bootstrap_shell_script && (
                 <TextContainerToCopy
-                  text={instance?.result_params?.gcp_bootstrap_sell_script}
+                  text={instance?.result_params?.gcp_bootstrap_shell_script}
                   marginTop="12px"
                 />
               )}
@@ -451,9 +451,9 @@ const Check = ({
                     </StyledLink>
                     . Once the terminal is open, execute the following command:
                   </Text>
-                  {instance?.result_params?.gcp_bootstrap_sell_script && (
+                  {instance?.result_params?.gcp_bootstrap_shell_script && (
                     <TextContainerToCopy
-                      text={instance?.result_params?.gcp_bootstrap_sell_script}
+                      text={instance?.result_params?.gcp_bootstrap_shell_script}
                       marginTop="12px"
                     />
                   )}
