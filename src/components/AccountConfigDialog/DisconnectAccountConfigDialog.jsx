@@ -355,12 +355,7 @@ const Run = ({
   );
 };
 
-const Check = ({
-  status,
-  instance,
-  fetchClickedInstanceDetails,
-  setClickedInstance,
-}) => {
+const Check = ({ status, fetchClickedInstanceDetails, setClickedInstance }) => {
   usePolling(fetchClickedInstanceDetails, setClickedInstance, "DISCONNECTED");
 
   return (
@@ -542,7 +537,6 @@ function DisconnectAccountConfigDialog(props) {
           {disconnectState === stateAccountConfigStepper.check && (
             <Check
               status={instance?.status}
-              instance={instance}
               fetchClickedInstanceDetails={fetchClickedInstanceDetails}
               setClickedInstance={setClickedInstance}
             />

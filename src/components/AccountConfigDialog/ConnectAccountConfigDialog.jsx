@@ -356,12 +356,7 @@ const Run = ({
   );
 };
 
-const Check = ({
-  status,
-  instance,
-  fetchClickedInstanceDetails,
-  setClickedInstance,
-}) => {
+const Check = ({ status, fetchClickedInstanceDetails, setClickedInstance }) => {
   usePolling(fetchClickedInstanceDetails, setClickedInstance, "READY");
 
   return (
@@ -540,7 +535,6 @@ function ConnectAccountConfigDialog(props) {
           {connectState === stateAccountConfigStepper.check && (
             <Check
               status={instance?.status}
-              instance={instance}
               fetchClickedInstanceDetails={fetchClickedInstanceDetails}
               setClickedInstance={setClickedInstance}
             />
