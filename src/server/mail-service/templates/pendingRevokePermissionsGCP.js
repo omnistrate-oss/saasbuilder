@@ -30,7 +30,7 @@ async function getPendingRevokePermissionsMailContentGCP(
     user_name: userName,
     logo_url: orgLogoURL,
     support_email: orgSupportEmail,
-    disconnect_cloud_formation_url: disconnectCloudFormationURL,
+    gcp_disconnect_bash_script: disconnectCloudFormationURL,
     bottom_bg_image_url: `${baseURL}/mail/bottom-bg.png`,
     hero_banner: `${baseURL}/mail/cloud-hero-section.png`,
     disconnected_confirmation: `${baseURL}/mail/disconnected_confirmation.png`,

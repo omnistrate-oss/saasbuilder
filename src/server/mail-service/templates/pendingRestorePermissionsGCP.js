@@ -10,7 +10,7 @@ async function getPendingRestorePermissionsMailContentGCP(
   const userName = pendingRestorePermissionsEventObj.eventPayload.user_name;
   const email = pendingRestorePermissionsEventObj.eventPayload.user_email;
   const accountId = pendingRestorePermissionsEventObj.eventPayload.account_id;
-  const gcpDisconnectBashScript =
+  const gcpConnectBashScript =
     pendingRestorePermissionsEventObj.eventPayload.gcp_connect_bash_script;
   const orgName = pendingRestorePermissionsEventObj.orgName;
   const subject = `Action Required: Connect GCP Account ${accountId} to ${orgName}`;
@@ -30,7 +30,7 @@ async function getPendingRestorePermissionsMailContentGCP(
     user_name: userName,
     logo_url: orgLogoURL,
     support_email: orgSupportEmail,
-    gcp_disconnect_bash_script: gcpDisconnectBashScript,
+    gcp_connect_bash_script: gcpConnectBashScript,
     bottom_bg_image_url: `${baseURL}/mail/bottom-bg.png`,
     hero_banner: `${baseURL}/mail/cloud-hero-section.png`,
     connected_confirmation: `${baseURL}/mail/connected_confirmation.png`,
