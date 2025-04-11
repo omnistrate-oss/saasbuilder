@@ -162,7 +162,23 @@ const BillingPage = () => {
                   <DisplayText size="small" weight="semibold">
                     ${invoicesTotalAmount}
                   </DisplayText>
-                  <Link href={paymentURL} target="_blank">
+                  {paymentURL ? (
+                    <Link href={paymentURL} target="_blank">
+                      <Button
+                        variant="contained"
+                        endIcon={
+                          <ArrowOutwardIcon
+                            sx={{
+                              fontSize: "18px",
+                            }}
+                          />
+                        }
+                        disabled={!paymentURL}
+                      >
+                        Pay Now
+                      </Button>
+                    </Link>
+                  ) : (
                     <Button
                       variant="contained"
                       endIcon={
@@ -176,7 +192,7 @@ const BillingPage = () => {
                     >
                       Pay Now
                     </Button>
-                  </Link>
+                  )}
                 </Stack>
               </Card>
               <Card sx={{ boxShadow: "0px 1px 2px 0px #0A0D120D" }}>
@@ -215,10 +231,25 @@ const BillingPage = () => {
                     category={paymentConfigured === true ? "success" : "failed"}
                     sx={{ alignSelf: "center" }}
                   />
-                  <Link
-                    href={billingDetails?.paymentInfoPortalURL ?? ""}
-                    target="_blank"
-                  >
+                  {billingDetails?.paymentInfoPortalURL ? (
+                    <Link
+                      href={billingDetails?.paymentInfoPortalURL}
+                      target="_blank"
+                    >
+                      <Button
+                        variant="contained"
+                        endIcon={
+                          <ArrowOutwardIcon
+                            sx={{
+                              fontSize: "18px",
+                            }}
+                          />
+                        }
+                      >
+                        Configure
+                      </Button>
+                    </Link>
+                  ) : (
                     <Button
                       variant="contained"
                       endIcon={
@@ -231,7 +262,7 @@ const BillingPage = () => {
                     >
                       Configure
                     </Button>
-                  </Link>
+                  )}
                 </Stack>
               </Card>
             </Box>
