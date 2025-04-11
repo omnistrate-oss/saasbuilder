@@ -173,7 +173,6 @@ const BillingPage = () => {
                             }}
                           />
                         }
-                        disabled={!paymentURL}
                       >
                         Pay Now
                       </Button>
@@ -259,6 +258,7 @@ const BillingPage = () => {
                           }}
                         />
                       }
+                      disabled
                     >
                       Configure
                     </Button>
