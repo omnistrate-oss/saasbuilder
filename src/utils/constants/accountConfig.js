@@ -18,7 +18,8 @@ export const CLOUD_PROVIDER_DEFAULT_CREATION_METHOD = {
 };
 
 export const getAccountConfigStatusBasedHeader = (
-  status
+  status,
+  cloud_provider_account_config_id = ""
   // accountCreationMethod,
   // cloudprovider
 ) => {
@@ -34,7 +35,9 @@ export const getAccountConfigStatusBasedHeader = (
   //     return "This account has already been configured successfully. However if you need to reconfigure for any reason, choose one of the options provided below (GCP Cloud Shell or Terraform):";
   //   }
   // }
-
+  if (cloud_provider_account_config_id && status === "FAILED") {
+    return "The account configuration verification failed. Please review the instructions below to retry the setup and resolve any issues:";
+  }
   if (status === "VERIFYING" || status === "PENDING") {
     return "To complete the account configuration setup:";
   }
