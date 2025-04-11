@@ -36,13 +36,20 @@ function CostExplorerPage() {
   const {
     data: usagePerDayData,
     isFetching: isFetchingUsagePerDay,
-    isLoading,
+    isLoading: isLoadingUsagePerDay,
   } = useConsumptionUsagePerDay({
     startDate: dateRange.startDate,
     endDate: filterEndDate,
     subscriptionID:
       selectedSubscriptionId.trim() !== "" ? selectedSubscriptionId : undefined,
   });
+
+  //show page spinner only on initial load
+  const isInitialLoad =
+    isLoadingUsagePerDay &&
+    !selectedSubscriptionId.trim() &&
+    dateRange.startDate === defaultDailyDateRange.startDate &&
+    dateRange.endDate === defaultDailyDateRange.endDate;
 
   return (
     <div>
@@ -54,7 +61,7 @@ function CostExplorerPage() {
         <PageTitle icon={CostExplorerIcon} className="mb-6">
           Cost Explorer
         </PageTitle>
-        {isLoading ? (
+        {isInitialLoad ? (
           <LoadingSpinner />
         ) : (
           <UsageOverview
