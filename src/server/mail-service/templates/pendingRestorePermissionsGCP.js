@@ -2,24 +2,24 @@ const ejs = require("ejs");
 const path = require("path");
 const { getSaaSDomainURL } = require("../../utils/getSaaSDomainURL");
 
-async function getPendingRevokePermissionsMailContent(
-  pendingRevokePermissionsEventObj,
+async function getPendingRestorePermissionsMailContentGCP(
+  pendingRestorePermissionsEventObj,
   orgLogoURL,
   orgSupportEmail
 ) {
-  const userName = pendingRevokePermissionsEventObj.eventPayload.user_name;
-  const email = pendingRevokePermissionsEventObj.eventPayload.user_email;
-  const accountId = pendingRevokePermissionsEventObj.eventPayload.account_id;
-  const disconnectCloudFormationURL =
-    pendingRevokePermissionsEventObj.eventPayload.disconnect_cfn_url;
-  const orgName = pendingRevokePermissionsEventObj.orgName;
-  const subject = `Action Required: Disconnect AWS Account ${accountId} from ${orgName}`;
+  const userName = pendingRestorePermissionsEventObj.eventPayload.user_name;
+  const email = pendingRestorePermissionsEventObj.eventPayload.user_email;
+  const accountId = pendingRestorePermissionsEventObj.eventPayload.account_id;
+  const gcpConnectBashScript =
+    pendingRestorePermissionsEventObj.eventPayload.gcp_connect_bash_script;
+  const orgName = pendingRestorePermissionsEventObj.orgName;
+  const subject = `Action Required: Connect GCP Account ${accountId} to ${orgName}`;
 
   const templatePath = path.resolve(
     __dirname,
     "..",
     "ejsTemplates",
-    "pendingRevokePermissions.ejs"
+    "pendingRestorePermissionsGCP.ejs"
   );
 
   const baseURL = getSaaSDomainURL();
@@ -30,10 +30,10 @@ async function getPendingRevokePermissionsMailContent(
     user_name: userName,
     logo_url: orgLogoURL,
     support_email: orgSupportEmail,
-    disconnect_cloud_formation_url: disconnectCloudFormationURL,
+    gcp_connect_bash_script: gcpConnectBashScript,
     bottom_bg_image_url: `${baseURL}/mail/bottom-bg.png`,
     hero_banner: `${baseURL}/mail/cloud-hero-section.png`,
-    disconnected_confirmation: `${baseURL}/mail/disconnected_confirmation.png`,
+    connected_confirmation: `${baseURL}/mail/connected_confirmation.png`,
   });
 
   const recepientEmail = email;
@@ -52,5 +52,5 @@ async function getPendingRevokePermissionsMailContent(
 }
 
 module.exports = {
-  getPendingRevokePermissionsMailContent,
+  getPendingRestorePermissionsMailContentGCP,
 };

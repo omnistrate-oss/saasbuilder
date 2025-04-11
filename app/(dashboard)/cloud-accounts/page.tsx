@@ -108,9 +108,8 @@ const CloudAccountsPage = () => {
     refetch: refetchInstances,
   } = useInstances();
 
-  const { data: billingConfig } =
-  useBillingDetails();
-const isPaymentConfigured = Boolean(billingConfig?.paymentConfigured);
+  const { data: billingConfig } = useBillingDetails();
+  const isPaymentConfigured = Boolean(billingConfig?.paymentConfigured);
 
   // Open the Create Form Overlay when serviceId, servicePlanId and subscriptionId are present in the URL
   useEffect(() => {

@@ -1,8 +1,7 @@
 import { createColumnHelper } from "@tanstack/react-table";
-import useConsumptionInvoices from "../hooks/useConsumptionInvoices";
 import { Invoice } from "src/types/consumption";
 import DataTable from "src/components/DataTable/DataTable";
-import { useMemo } from "react";
+import { FC, useMemo } from "react";
 import { Text } from "src/components/Typography/Typography";
 import GridCellExpand from "src/components/GridCellExpand/GridCellExpand";
 import InvoiceIcon from "src/components/Icons/Invoice/Invoice";
@@ -25,10 +24,11 @@ const TableHeader = () => {
   );
 };
 
-function InvoicesTable() {
-  const { data: invoicesData } = useConsumptionInvoices();
-  const invoices = invoicesData?.invoices || [];
+type InvoicesTableProps = {
+  invoices: Invoice[] | undefined;
+};
 
+const InvoicesTable: FC<InvoicesTableProps> = ({ invoices = [] }) => {
   const columns = useMemo(() => {
     return [
       //@ts-ignore
@@ -53,6 +53,21 @@ function InvoicesTable() {
           );
         },
       }),
+      columnHelper.accessor("paymentTerms", {
+        id: "paymentTerms",
+        header: "Payment Term",
+        meta: {
+          minWidth: 240,
+        },
+        cell: (data) => {
+          const paymentTerms = data.row.original.paymentTerms;
+          return (
+            <Text size="small" weight="regular" color="#475467" ellipsis>
+              {paymentTerms}
+            </Text>
+          );
+        },
+      }),
       columnHelper.accessor("invoiceDate", {
         id: "invoiceDate",
         header: "Invoice Date",
@@ -62,6 +77,22 @@ function InvoicesTable() {
         cell: (data) => {
           const invoiceDate = data.row.original.invoiceDate;
           const formattedDate = dayjs.utc(invoiceDate).format("YYYY-MM-DD");
+          return (
+            <Text size="small" weight="regular" color="#475467" ellipsis>
+              {formattedDate}
+            </Text>
+          );
+        },
+      }),
+      columnHelper.accessor("dueDate", {
+        id: "dueDate",
+        header: "Due Date",
+        meta: {
+          minWidth: 240,
+        },
+        cell: (data) => {
+          const dueDate = data.row.original.dueDate;
+          const formattedDate = dayjs.utc(dueDate).format("YYYY-MM-DD");
           return (
             <Text size="small" weight="regular" color="#475467" ellipsis>
               {formattedDate}
@@ -83,34 +114,6 @@ function InvoicesTable() {
           );
         },
       }),
-      //   columnHelper.accessor("totalAmountWithoutTax", {
-      //     id: "totalAmountWithoutTax",
-      //     header: "Total Amount Without Tax ",
-      //     cell: (data) => {
-      //       const totalAmountWithoutTax = data.row.original.totalAmountWithoutTax;
-      //       return (
-      //         <Text size="small" weight="regular" color="#475467" ellipsis>
-      //           {`$${totalAmountWithoutTax}`}
-      //         </Text>
-      //       );
-      //     },
-      //     meta: {
-      //       minWidth: 200,
-      //     },
-      //   }),
-      //   columnHelper.accessor("taxAmount", {
-      //     id: "taxAmount",
-      //     header: "Tax Amount",
-      //     cell: (data) => {
-      //       const taxAmount = data.row.original.taxAmount;
-      //       return (
-      //         <Text size="small" weight="regular" color="#475467" ellipsis>
-      //           {`$${taxAmount}`}
-      //         </Text>
-      //       );
-      //     },
-      //     meta: { minWidth: 150 },
-      //   }),
       columnHelper.accessor("totalAmount", {
         id: "totalAmount",
         header: "Total Amount (USD)",
@@ -143,6 +146,6 @@ function InvoicesTable() {
       tableStyles={{ marginTop: "12px" }}
     />
   );
-}
+};
 
 export default InvoicesTable;

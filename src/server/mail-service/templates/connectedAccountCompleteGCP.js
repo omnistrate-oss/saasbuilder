@@ -2,7 +2,7 @@ const ejs = require("ejs");
 const path = require("path");
 const { getSaaSDomainURL } = require("../../utils/getSaaSDomainURL");
 
-async function getConnectedAccountCompleteMailContent(
+async function getConnectedAccountCompleteMailContentGCP(
   connectedAccountCompleteEventObj,
   orgLogoURL,
   orgSupportEmail
@@ -12,13 +12,13 @@ async function getConnectedAccountCompleteMailContent(
   const accountId = connectedAccountCompleteEventObj.eventPayload.account_id;
   const orgName = connectedAccountCompleteEventObj.orgName;
 
-  const subject = `Success: AWS Account ${accountId} Connected to ${orgName}`;
+  const subject = `Success: GCP Account ${accountId} Connected to ${orgName}`;
 
   const templatePath = path.resolve(
     __dirname,
     "..",
     "ejsTemplates",
-    "connectedAccountComplete.ejs"
+    "connectedAccountCompleteGCP.ejs"
   );
 
   const baseURL = getSaaSDomainURL();
@@ -50,5 +50,5 @@ async function getConnectedAccountCompleteMailContent(
 }
 
 module.exports = {
-  getConnectedAccountCompleteMailContent,
+  getConnectedAccountCompleteMailContentGCP,
 };
