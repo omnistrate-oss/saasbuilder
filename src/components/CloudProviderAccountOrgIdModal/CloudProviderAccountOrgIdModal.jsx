@@ -472,7 +472,7 @@ const NonCreationTimeInstructions = (props) => {
                       </BodyText>
                     </Box>
                   </>
-                ) : (
+                ) : viewInstructionsItem?.status === "FAILED" ? (
                   <Box display={"flex"} flexDirection={"column"} gap={"10px"}>
                     <BodyText>
                       You may delete this failed configuration and retry adding
@@ -483,6 +483,11 @@ const NonCreationTimeInstructions = (props) => {
                       assistance.
                     </BodyText>
                   </Box>
+                ) : (
+                  <BodyText>
+                    Your account details are being configured. Please check back
+                    shortly for detailed setup instructions.
+                  </BodyText>
                 )}
               </ListItem>
             )}
@@ -513,7 +518,7 @@ const NonCreationTimeInstructions = (props) => {
                         {shellScriptGuide}.
                       </BodyText>
                     </Box>
-                  ) : (
+                  ) : viewInstructionsItem?.status === "FAILED" ? (
                     <Box display={"flex"} flexDirection={"column"} gap={"10px"}>
                       <BodyText>
                         You may delete this failed configuration and retry
@@ -525,6 +530,11 @@ const NonCreationTimeInstructions = (props) => {
                         assistance.
                       </BodyText>
                     </Box>
+                  ) : (
+                    <BodyText>
+                      Your account details are being configured. Please check
+                      back shortly for detailed setup instructions.
+                    </BodyText>
                   )}
                 </ListItem>
                 {/*  )} */}
