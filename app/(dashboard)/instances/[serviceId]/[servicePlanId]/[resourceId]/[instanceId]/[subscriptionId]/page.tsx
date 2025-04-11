@@ -264,6 +264,7 @@ const InstanceDetailsPage = ({
           const isDisabled = disabledTabs?.includes(key);
           return (
             <Tab
+              data-testid={`${value?.replace(" ", "-").toLowerCase()}-tab`}
               key={key}
               label={value}
               value={value}

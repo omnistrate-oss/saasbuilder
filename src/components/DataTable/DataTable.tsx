@@ -183,6 +183,7 @@ const DataTable = <TData,>(props: DataTableProps<TData>): ReactNode => {
     },
     getSubRows: getSubRows,
     paginateExpandedRows: false,
+    getRowId: (row) => String(row[rowId]),
   });
 
   const rowData = table.getRowModel().rows;
@@ -347,6 +348,7 @@ const DataTable = <TData,>(props: DataTableProps<TData>): ReactNode => {
                         }
                         return (
                           <TableCell
+                            data-testid={cell.column.id}
                             key={cell.id}
                             align={columnAlignment}
                             title={isBrowerTooltipDisabled ? "" : title}

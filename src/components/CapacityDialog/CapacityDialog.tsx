@@ -217,6 +217,7 @@ const CapacityDialog: FC<CapacityDialogProps> = ({
           )}
 
           <TextField
+            data-testid="capacity-input"
             //@ts-ignore
             id="count"
             name="count"
@@ -252,6 +253,7 @@ const CapacityDialog: FC<CapacityDialogProps> = ({
             Cancel
           </Button>
           <Button
+            data-testid="capacity-submit-button"
             type="submit"
             variant="contained"
             sx={{ height: "40px !important", padding: "10px 14px !important" }}
