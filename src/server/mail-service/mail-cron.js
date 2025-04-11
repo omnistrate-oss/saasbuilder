@@ -194,12 +194,15 @@ function startMailServiceCron() {
                   orgLogoURL,
                   orgSupportEmail
                 );
-              }
-              if (event?.eventPayload?.connect_cfn_url) {
+              } else if (event?.eventPayload?.connect_cfn_url) {
                 mailContent = await getPendingRestorePermissionsMailContentAWS(
                   event,
                   orgLogoURL,
                   orgSupportEmail
+                );
+              } else {
+                console.warn(
+                  `Connection event missing cloud provider signature: ${event.eventID}`
                 );
               }
               break;
@@ -211,12 +214,15 @@ function startMailServiceCron() {
                   orgLogoURL,
                   orgSupportEmail
                 );
-              }
-              if (event?.eventPayload?.disconnect_cfn_url) {
+              } else if (event?.eventPayload?.disconnect_cfn_url) {
                 mailContent = await getPendingRevokePermissionsMailContentAWS(
                   event,
                   orgLogoURL,
                   orgSupportEmail
+                );
+              } else {
+                console.warn(
+                  `Connection event missing cloud provider signature: ${event.eventID}`
                 );
               }
               break;
@@ -229,14 +235,17 @@ function startMailServiceCron() {
                     orgLogoURL,
                     orgSupportEmail
                   );
-              }
-              if (event?.eventPayload?.disconnect_cfn_url) {
+              } else if (event?.eventPayload?.disconnect_cfn_url) {
                 mailContent =
                   await getDisconnectedAccountCompleteMailContentAWS(
                     event,
                     orgLogoURL,
                     orgSupportEmail
                   );
+              } else {
+                console.warn(
+                  `Connection event missing cloud provider signature: ${event.eventID}`
+                );
               }
               break;
             }
@@ -248,12 +257,15 @@ function startMailServiceCron() {
                   orgLogoURL,
                   orgSupportEmail
                 );
-              }
-              if (event?.eventPayload?.connect_cfn_url) {
+              } else if (event?.eventPayload?.connect_cfn_url) {
                 mailContent = await getConnectedAccountCompleteMailContentAWS(
                   event,
                   orgLogoURL,
                   orgSupportEmail
+                );
+              } else {
+                console.warn(
+                  `Connection event missing cloud provider signature: ${event.eventID}`
                 );
               }
               break;
