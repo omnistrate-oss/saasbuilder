@@ -32,6 +32,7 @@ import {
   stepsConnectRunAccountConfig,
 } from "../Stepper/utils";
 import useSnackbar from "src/hooks/useSnackbar";
+import { TextContainerToCopy } from "../CloudProviderAccountOrgIdModal/CloudProviderAccountOrgIdModal";
 
 const StyledForm = styled(Box)({
   position: "fixed",
@@ -263,7 +264,9 @@ const Run = ({
   return (
     <Box width={"100%"} display={"flex"} flexDirection={"column"} gap="10px">
       <Stepper activeStep={activeStepRun} orientation="vertical">
-        {stepsConnectRunAccountConfig.map((step, index) => {
+        {stepsConnectRunAccountConfig(
+          instance?.result_params?.aws_account_id ? "aws" : "gcp"
+        ).map((step, index) => {
           return (
             <Step key={index}>
               <StepLabel
@@ -290,18 +293,44 @@ const Run = ({
             borderRadius: "12px",
           }}
         >
-          <Text size="small" weight="semibold" color="#414651">
-            Run{" "}
-            <StyledLink
-              target="_blank"
-              rel="noopener noreferrer"
-              href={`${instance?.result_params?.connect_cloudformation_url}`}
-            >
-              this
-            </StyledLink>
-             CloudFormation template to grant {`${serviceProviderName}`} the required
-            permissions.
-          </Text>
+          {instance?.result_params?.aws_account_id ? (
+            <Text size="small" weight="semibold" color="#414651">
+              {" "}
+              Run{" "}
+              <StyledLink
+                target="_blank"
+                rel="noopener noreferrer"
+                href={`${instance?.result_params?.connect_cloudformation_url}`}
+              >
+                this
+              </StyledLink>
+               CloudFormation template to grant {`${serviceProviderName}`} the
+              required permissions.
+            </Text>
+          ) : (
+            <Box>
+              <Text size="medium" weight="regular" color="#374151">
+                {/* <b>Using GCP Cloud Shell:</b>  */}
+                Please open the Google Cloud Shell environment using the
+                following link:
+                <StyledLink
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  href="https://shell.cloud.google.com/?cloudshell_ephemeral=true&show=terminal"
+                >
+                  Google Cloud Shell
+                </StyledLink>
+                . Once the terminal is open, execute the following command:
+              </Text>
+              {instance?.result_params?.gcp_bootstrap_shell_script && (
+                <TextContainerToCopy
+                  text={instance?.result_params?.gcp_bootstrap_shell_script}
+                  marginTop="12px"
+                />
+              )}
+            </Box>
+          )}
+
           <Chip
             label={
               <Stack direction="row" alignItems="center" gap="6px">
@@ -327,12 +356,7 @@ const Run = ({
   );
 };
 
-const Check = ({
-  status,
-  instance,
-  fetchClickedInstanceDetails,
-  setClickedInstance,
-}) => {
+const Check = ({ status, fetchClickedInstanceDetails, setClickedInstance }) => {
   usePolling(fetchClickedInstanceDetails, setClickedInstance, "READY");
 
   return (
@@ -393,18 +417,6 @@ const Check = ({
               <Text size="small" weight="semibold" color="#414651">
                 Once the verification is complete, the lifecycle status will
                 change to Ready.
-              </Text>
-            </ListItem>
-            <ListItem>
-              <Text size="small" weight="semibold" color="#414651">
-                If you need to update the CloudFormation stack configuration{" "}
-                <StyledLink
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  href={`${instance?.result_params?.connect_cloudformation_url}`}
-                >
-                  click here.
-                </StyledLink>
               </Text>
             </ListItem>
           </List>
@@ -504,7 +516,10 @@ function ConnectAccountConfigDialog(props) {
         </Header>
         <Content>
           {connectState === stateAccountConfigStepper.trigger && (
-            <Trigger formData={formik} serviceProviderName={serviceProviderName} />
+            <Trigger
+              formData={formik}
+              serviceProviderName={serviceProviderName}
+            />
           )}
           {connectState === stateAccountConfigStepper.run && (
             <Run
@@ -520,7 +535,6 @@ function ConnectAccountConfigDialog(props) {
           {connectState === stateAccountConfigStepper.check && (
             <Check
               status={instance?.status}
-              instance={instance}
               fetchClickedInstanceDetails={fetchClickedInstanceDetails}
               setClickedInstance={setClickedInstance}
             />

@@ -108,22 +108,29 @@ export const stepsDisconnectRunAccountConfig = [
   },
 ];
 
-export const stepsConnectRunAccountConfig = [
-  {
-    label: (
-      <Text size="small" weight="semibold" color="#414651">
-        Validating Your Request
-      </Text>
-    ),
-  },
-  {
-    label: (
-      <Text size="small" weight="semibold" color="#414651">
-        Action Required: Please run the CloudFormation template to proceed.
-      </Text>
-    ),
-  },
-];
+export const stepsConnectRunAccountConfig = (cloudProvider: "aws" | "gcp") => {
+  const actionText =
+    cloudProvider === "aws"
+      ? "Action Required: Please run the CloudFormation template to proceed."
+      : "Action Required: Please run the Google Cloud Shell Script to proceed.";
+
+  return [
+    {
+      label: (
+        <Text size="small" weight="semibold" color="#414651">
+          Validating Your Request
+        </Text>
+      ),
+    },
+    {
+      label: (
+        <Text size="small" weight="semibold" color="#414651">
+          {actionText}
+        </Text>
+      ),
+    },
+  ];
+};
 
 export const CustomStepIcon = (props) => {
   const { active, completed } = props;

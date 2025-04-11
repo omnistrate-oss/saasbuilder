@@ -2,7 +2,7 @@ const ejs = require("ejs");
 const path = require("path");
 const { getSaaSDomainURL } = require("../../utils/getSaaSDomainURL");
 
-async function getPendingRestorePermissionsMailContent(
+async function getPendingRestorePermissionsMailContentAWS(
   pendingRestorePermissionsEventObj,
   orgLogoURL,
   orgSupportEmail
@@ -19,7 +19,7 @@ async function getPendingRestorePermissionsMailContent(
     __dirname,
     "..",
     "ejsTemplates",
-    "pendingRestorePermissions.ejs"
+    "pendingRestorePermissionsAWS.ejs"
   );
 
   const baseURL = getSaaSDomainURL();
@@ -52,5 +52,5 @@ async function getPendingRestorePermissionsMailContent(
 }
 
 module.exports = {
-  getPendingRestorePermissionsMailContent,
+  getPendingRestorePermissionsMailContentAWS,
 };

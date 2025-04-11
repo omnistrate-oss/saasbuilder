@@ -4,13 +4,6 @@ import CopyToClipboardButton from "../CopyClipboardButton/CopyClipboardButton";
 import Link from "next/link";
 import ArrowOutwardIcon from "@mui/icons-material/ArrowOutward";
 
-// function isOverflown(element) {
-//   return (
-//     element.scrollHeight > element.clientHeight ||
-//     element.scrollWidth > element.clientWidth
-//   );
-// }
-
 type GridCellExpandProps = {
   width?: any;
   value: string;
@@ -23,6 +16,7 @@ type GridCellExpandProps = {
   target?: "_self" | "_blank";
   justifyContent?: string;
   externalLinkArrow?: boolean;
+  disabled?: boolean;
 };
 
 const GridCellExpand = React.memo(function GridCellExpand(
@@ -40,43 +34,18 @@ const GridCellExpand = React.memo(function GridCellExpand(
     target = "_self",
     justifyContent = "start",
     externalLinkArrow,
+    disabled = false,
   } = props;
+
   const wrapper = React.useRef(null);
   const cellDiv = React.useRef(null);
   const cellValue = React.useRef(null);
-  // const [anchorEl, setAnchorEl] = React.useState(null);
-  // const [showFullCell, setShowFullCell] = React.useState(false);
-  // const [showPopper, setShowPopper] = React.useState(false);
 
-  // const handleMouseEnter = () => {
-  //   const isCurrentlyOverflown = isOverflown(cellValue.current);
-  //   setShowPopper(isCurrentlyOverflown);
-  //   setAnchorEl(cellDiv.current);
-  //   setShowFullCell(true);
-  // };
-
-  // const handleMouseLeave = () => {
-  //   setShowFullCell(false);
-  // };
-
-  // React.useEffect(() => {
-  //   if (!showFullCell) {
-  //     return undefined;
-  //   }
-
-  //   function handleKeyDown(nativeEvent) {
-  //     // IE11, Edge (prior to using Bink?) use 'Esc'
-  //     if (nativeEvent.key === "Escape" || nativeEvent.key === "Esc") {
-  //       setShowFullCell(false);
-  //     }
-  //   }
-
-  //   document.addEventListener("keydown", handleKeyDown);
-
-  //   return () => {
-  //     document.removeEventListener("keydown", handleKeyDown);
-  //   };
-  // }, [setShowFullCell, showFullCell]);
+  const handleClick = () => {
+    if (!disabled && onClick) {
+      onClick();
+    }
+  };
 
   const CellValue = (
     <Box
@@ -89,46 +58,50 @@ const GridCellExpand = React.memo(function GridCellExpand(
         alignItems: "center",
         justifyContent: "center",
         gap: "6px",
+        color: disabled ? "#A4A7AE" : "inherit", // Apply disabled color
+        cursor: disabled ? "not-allowed" : "pointer",
       }}
     >
-      <Box
-        component="span"
-        sx={{
-          "& *": {
-            display: "block",
-          },
-        }}
-      >
-        {startIcon}
-        {Boolean(copyButton && value) && (
-          <CopyToClipboardButton
-            text={value}
-            size="small"
-            buttonStyles={{ marginLeft: "10px" }}
-          />
-        )}
-      </Box>
+      {startIcon && (
+        <Box component="span" sx={{ display: "flex", alignItems: "center" }}>
+          {startIcon}
+          {Boolean(copyButton && value) && (
+            <CopyToClipboardButton
+              text={value}
+              buttonStyles={{ marginLeft: "10px" }}
+              disabled={disabled}
+            />
+          )}
+        </Box>
+      )}
+
       <Box
         textOverflow="ellipsis"
         overflow="hidden"
         ref={cellValue}
-        sx={{ ...(href ? { color: "#6941C6" } : {}), ...textStyles }}
-        onClick={onClick}
+        sx={{
+          ...(href && !disabled ? { color: "#6941C6" } : {}),
+          ...(disabled ? { color: "#A4A7AE" } : {}),
+          ...textStyles,
+        }}
+        onClick={handleClick}
         title={value}
       >
         {value}
       </Box>
+
       {endIcon}
       {!endIcon && externalLinkArrow && (
         <ArrowOutwardIcon
           fontSize="small"
           sx={{
-            color: "#7F56D9",
+            color: disabled ? "#A4A7AE" : "#7F56D9",
           }}
         />
       )}
     </Box>
   );
+
   return (
     <Box
       ref={wrapper}
@@ -152,13 +125,16 @@ const GridCellExpand = React.memo(function GridCellExpand(
           top: 0,
         }}
       />
-      {href ? (
+
+      {href && !disabled ? (
         <Link
           style={{
             display: "flex",
             alignItems: "center",
             justifyContent: justifyContent,
             width: "100%",
+            color: disabled ? "#A4A7AE" : "inherit",
+            pointerEvents: disabled ? "none" : "auto",
           }}
           href={href}
           target={target}
@@ -166,39 +142,21 @@ const GridCellExpand = React.memo(function GridCellExpand(
           {CellValue}
         </Link>
       ) : (
-        CellValue
-      )}
-
-      {/* {showPopper && (
-        <Popper
-          open={showFullCell && anchorEl !== null}
-          anchorEl={anchorEl}
-          style={{ width, marginLeft: -17 }}
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: justifyContent,
+            width: "100%",
+            color: disabled ? "#A4A7AE" : "inherit",
+            pointerEvents: disabled ? "none" : "auto",
+          }}
         >
-          <Paper
-            elevation={1}
-            style={{ minHeight: wrapper.current.offsetHeight - 3 }}
-          >
-            <Typography
-              variant="body2"
-              sx={{ padding: "8px", fontSize: "14px" }}
-            >
-              {value}
-            </Typography>
-          </Paper>
-        </Popper>
-      )} */}
+          {CellValue}
+        </Box>
+      )}
     </Box>
   );
 });
 
 export default GridCellExpand;
-
-export function renderCellExpand(params) {
-  return (
-    <GridCellExpand
-      value={params.value || ""}
-      width={params.colDef.computedWidth}
-    />
-  );
-}
