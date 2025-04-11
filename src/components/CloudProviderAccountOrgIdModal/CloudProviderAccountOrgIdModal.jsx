@@ -445,75 +445,130 @@ const NonCreationTimeInstructions = (props) => {
         </BodyText>
 
         <List>
-          {accountInstructionDetails?.awsAccountID && (
-            <ListItem>
-              <ListItemIcon>
-                <ArrowBulletSmall />
-              </ListItemIcon>
-              {cloudFormationTemplateUrl ? (
-                <>
-                  <Box display={"flex"} flexDirection={"column"} gap={"10px"}>
-                    <BodyText>
-                      Please create your CloudFormation Stack using the provided
-                      template {cloudformationlink}.
-                    </BodyText>
-                    <BodyText>
-                      If an existing AWSLoadBalancerControllerIAMPolicy policy
-                      causes an error while creating the CloudFormation stack,
-                      set the parameter CreateLoadBalancerPolicy to
-                      &quot;false&quot;.
-                    </BodyText>
-                    <BodyText>
-                      For guidance, our instructional video is available{" "}
-                      {cloudFormationGuide}.
-                    </BodyText>
-                  </Box>
-                </>
-              ) : (
-                <BodyText>
-                  Your CloudFormation Stack is being configured. Please check
-                  back shortly for detailed setup instructions.
-                </BodyText>
-              )}
-            </ListItem>
-          )}
-          {accountInstructionDetails?.gcpProjectID && (
+          {selectedAccountConfig?.status === "FAILED" && (
             <>
-              {/* {(!accountConfigMethod ||
+              {accountInstructionDetails?.awsAccountID && (
+                <>
+                  <ListItem>
+                    <ListItemIcon>
+                      <ArrowBulletSmall />
+                    </ListItemIcon>
+                    <BodyText>
+                      You may delete this failed configuration and retry adding
+                      it after carefully verifying the AWS Account ID
+                    </BodyText>
+                  </ListItem>
+                  <ListItem>
+                    <ListItemIcon>
+                      <ArrowBulletSmall />
+                    </ListItemIcon>
+                    <BodyText>
+                      If the issue persists, please contact Support for
+                      assistance.
+                    </BodyText>
+                  </ListItem>
+                </>
+              )}
+              {accountInstructionDetails?.gcpProjectID && (
+                <>
+                  <ListItem>
+                    <ListItemIcon>
+                      <ArrowBulletSmall />
+                    </ListItemIcon>
+                    <BodyText>
+                      You may delete this failed configuration and retry adding
+                      it after carefully verifying the GCP Project ID and
+                      Project Number.
+                    </BodyText>
+                  </ListItem>
+                  <ListItem>
+                    <ListItemIcon>
+                      <ArrowBulletSmall />
+                    </ListItemIcon>
+                    <BodyText>
+                      If the issue persists, please contact Support for
+                      assistance.
+                    </BodyText>
+                  </ListItem>
+                </>
+              )}
+            </>
+          )}
+          {selectedAccountConfig?.status !== "FAILED" && (
+            <>
+              {accountInstructionDetails?.awsAccountID && (
+                <ListItem>
+                  <ListItemIcon>
+                    <ArrowBulletSmall />
+                  </ListItemIcon>
+                  {cloudFormationTemplateUrl ? (
+                    <>
+                      <Box
+                        display={"flex"}
+                        flexDirection={"column"}
+                        gap={"10px"}
+                      >
+                        <BodyText>
+                          Please create your CloudFormation Stack using the
+                          provided template {cloudformationlink}.
+                        </BodyText>
+                        <BodyText>
+                          If an existing AWSLoadBalancerControllerIAMPolicy
+                          policy causes an error while creating the
+                          CloudFormation stack, set the parameter
+                          CreateLoadBalancerPolicy to &quot;false&quot;.
+                        </BodyText>
+                        <BodyText>
+                          For guidance, our instructional video is available{" "}
+                          {cloudFormationGuide}.
+                        </BodyText>
+                      </Box>
+                    </>
+                  ) : (
+                    <BodyText>
+                      Your CloudFormation Stack is being configured. Please
+                      check back shortly for detailed setup instructions.
+                    </BodyText>
+                  )}
+                </ListItem>
+              )}
+              {accountInstructionDetails?.gcpProjectID && (
+                <>
+                  {/* {(!accountConfigMethod ||
                 accountConfigMethod ===
                   ACCOUNT_CREATION_METHODS.GCP_SCRIPT) && ( */}
-              <ListItem>
-                <ListItemIcon>
-                  <ArrowBulletSmall />
-                </ListItemIcon>
+                  <ListItem>
+                    <ListItemIcon>
+                      <ArrowBulletSmall />
+                    </ListItemIcon>
 
-                {gcpBootstrapShellCommand ? (
-                  <Box flex={1} overflow={"hidden"}>
-                    <BodyText>
-                      Please open the Google Cloud Shell environment using the
-                      following link {gcpCloudShellLink} and execute the command
-                      below.
-                    </BodyText>
+                    {gcpBootstrapShellCommand ? (
+                      <Box flex={1} overflow={"hidden"}>
+                        <BodyText>
+                          Please open the Google Cloud Shell environment using
+                          the following link {gcpCloudShellLink} and execute the
+                          command below.
+                        </BodyText>
 
-                    <TextContainerToCopy
-                      text={gcpBootstrapShellCommand}
-                      marginTop="12px"
-                    />
-                    <BodyText sx={{ marginTop: "20px" }}>
-                      For guidance our instructional video is {shellScriptGuide}
-                      .
-                    </BodyText>
-                  </Box>
-                ) : (
-                  <BodyText flex={1} overflow={"hidden"}>
-                    Your Google cloud script is being configured. Please check
-                    back shortly for detailed setup instructions.
-                  </BodyText>
-                )}
-              </ListItem>
-              {/*  )} */}
+                        <TextContainerToCopy
+                          text={gcpBootstrapShellCommand}
+                          marginTop="12px"
+                        />
+                        <BodyText sx={{ marginTop: "20px" }}>
+                          For guidance our instructional video is{" "}
+                          {shellScriptGuide}.
+                        </BodyText>
+                      </Box>
+                    ) : (
+                      <BodyText flex={1} overflow={"hidden"}>
+                        Your Google cloud script is being configured. Please
+                        check back shortly for detailed setup instructions.
+                      </BodyText>
+                    )}
+                  </ListItem>
+                  {/*  )} */}
 
-              {/* {(!accountConfigMethod ||
+                  {/* {(!accountConfigMethod ||
                 accountConfigMethod === ACCOUNT_CREATION_METHODS.TERRAFORM) && (
                 <ListItem>
                   <ListItemIcon>
@@ -540,6 +595,8 @@ const NonCreationTimeInstructions = (props) => {
                   )}
                 </ListItem>
               )} */}
+                </>
+              )}
             </>
           )}
         </List>
