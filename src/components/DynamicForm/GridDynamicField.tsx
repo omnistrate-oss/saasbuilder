@@ -51,8 +51,11 @@ const GridDynamicField: React.FC<GridDynamicFieldProps> = ({
   }
 
   return (
-    <div className="flex gap-8">
-      <div style={{ width: "250px" }}>
+    <div
+      className="grid grid-cols-6"
+      style={{ gridTemplateColumns: "repeat(6, minmax(0, 1fr))" }}
+    >
+      <div className="col-span-2" style={{ paddingRight: "32px" }}>
         <FieldLabel
           required={field.required}
           sx={{ color: "#414651", fontWeight: "600" }}
@@ -64,7 +67,7 @@ const GridDynamicField: React.FC<GridDynamicFieldProps> = ({
         </FieldDescription>
       </div>
 
-      <div className="flex-1" style={{ maxWidth: "596px" }}>
+      <div className="col-span-4">
         {Field}
         {field.description && field.description}
         <FieldError marginTop="4px">

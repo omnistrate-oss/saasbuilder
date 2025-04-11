@@ -81,7 +81,13 @@ const InstanceIdContainer = (props) => {
           alignItems: "center",
         }}
       >
-        <Text size="medium" weight="medium" color="#667085" ellipsis>
+        <Text
+          data-testid="instance-id"
+          size="medium"
+          weight="medium"
+          color="#667085"
+          ellipsis
+        >
           {instanceId}
         </Text>
 

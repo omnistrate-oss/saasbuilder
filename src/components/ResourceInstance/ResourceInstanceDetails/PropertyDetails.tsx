@@ -16,6 +16,7 @@ import JSONViewModal from "./JSONViewModal";
 import Tooltip from "src/components/Tooltip/Tooltip";
 
 export type Row = {
+  dataTestId?: string;
   label: string;
   description?: string;
   value: any;
@@ -383,6 +384,7 @@ const PropertyDetails: FC<PropertyTableProps> = ({ rows, ...otherProps }) => {
 
           return (
             <Box
+              data-testid={row.dataTestId || ""}
               key={index}
               p="4px 24px 14px 24px"
               display="flex"

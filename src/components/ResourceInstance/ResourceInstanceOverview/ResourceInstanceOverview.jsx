@@ -42,6 +42,7 @@ function ResourceInstanceOverview(props) {
 
   return (
     <div
+      data-testid="resource-instance-overview"
       className="grid rounded-xl overflow-hidden border border-[#E4E7EC]"
       style={{
         gridTemplateColumns: `repeat(7, minmax(0, 1fr))`,
