@@ -469,6 +469,17 @@ const NonCreationTimeInstructions = (props) => {
                     </BodyText>
                   </Box>
                 </>
+              ) : selectedAccountConfig?.status === "FAILED" ? (
+                <Box flex={1} overflow={"hidden"}>
+                  <BodyText>
+                    You may delete this failed configuration and retry adding it
+                    after carefully verifying the AWS Account ID
+                  </BodyText>
+                  <BodyText>
+                    If the issue persists, please contact Support for
+                    assistance.
+                  </BodyText>
+                </Box>
               ) : (
                 <BodyText>
                   Your CloudFormation Stack is being configured. Please check
@@ -502,6 +513,18 @@ const NonCreationTimeInstructions = (props) => {
                     <BodyText sx={{ marginTop: "20px" }}>
                       For guidance our instructional video is {shellScriptGuide}
                       .
+                    </BodyText>
+                  </Box>
+                ) : selectedAccountConfig?.status === "FAILED" ? (
+                  <Box flex={1} overflow={"hidden"}>
+                    <BodyText>
+                      You may delete this failed configuration and retry adding
+                      it after carefully verifying the GCP Project ID and
+                      Project Number.
+                    </BodyText>
+                    <BodyText>
+                      If the issue persists, please contact Support for
+                      assistance.
                     </BodyText>
                   </Box>
                 ) : (
