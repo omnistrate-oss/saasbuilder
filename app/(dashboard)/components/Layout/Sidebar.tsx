@@ -33,6 +33,7 @@ import {
   getNotificationsRoute,
   getBillingRoute,
   getSettingsRoute,
+  getCostExplorerRoute,
 } from "src/utils/routes";
 import useBillingStatus from "app/(dashboard)/billing/hooks/useBillingStatus";
 
@@ -190,6 +191,7 @@ const Sidebar = () => {
         "Account Management": [
           getSettingsRoute(),
           getBillingRoute(),
+          getCostExplorerRoute(),
           getSubscriptionsRoute({}),
         ].includes(currentPath),
       }));
@@ -311,6 +313,11 @@ const Sidebar = () => {
           {
             name: "Billing",
             href: getBillingRoute(),
+            isHidden: !isBillingEnabled,
+          },
+          {
+            name: "Cost Explorer",
+            href: getCostExplorerRoute(),
             isHidden: !isBillingEnabled,
           },
           { name: "Subscriptions", href: getSubscriptionsRoute({}) },

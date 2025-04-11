@@ -20,45 +20,43 @@ import ConsumptionUsage from "./components/ConsumptionUsage";
 import InvoicesTable from "./components/InvoicesTable";
 import useConsumptionUsage from "./hooks/useConsumptionUsage";
 import StatusChip from "src/components/StatusChip/StatusChip";
-import useConsumptionUsagePerDay from "./hooks/useConsumptionUsagePerDay";
-import UsageOverview from "./components/UsageOverview";
-import { useState } from "react";
-import { DateRange } from "src/components/DateRangePicker/DateTimeRangePickerStatic";
-import { getEndOfCurrentUTCDay, getFirstDayOfUTCMonth } from "src/utils/time";
-import dayjs from "dayjs";
-import utc from "dayjs/plugin/utc";
-
-dayjs.extend(utc);
-
-const defaultDailyDateRange = {
-  startDate: getFirstDayOfUTCMonth(),
-  endDate: getEndOfCurrentUTCDay(),
-};
+import useConsumptionInvoices from "./hooks/useConsumptionInvoices";
+import { useEffect, useMemo, useState } from "react";
 
 const BillingPage = () => {
   const selectUser = useSelector(selectUserrootData);
-  const { isLoading, data: billingDetails, error } = useBillingDetails();
-  const [dateRange, setDateRange] = useState<DateRange>(defaultDailyDateRange);
-  const [selectedSubscriptionId, setSelectedSubscriptionId] =
-    useState<string>("");
+  const {
+    isLoading: isLoadingBillingDetails,
+    data: billingDetails,
+    error,
+  } = useBillingDetails();
+
   const { data: consumptionUsageData, isLoading: isLoadingConsumptionData } =
     useConsumptionUsage();
 
-  let filterEndDate;
-  if (dateRange.endDate) {
-    //add 1 day to end date to get data, otherwise backend doesn't send the data for last date
-    filterEndDate = dayjs.utc(dateRange.endDate).add(1, "day").toISOString();
-  }
+  const { data: invoicesData, isLoading: isLoadingInvoices } =
+    useConsumptionInvoices();
 
-  const { data: usagePerDayData, isFetching: isFetchingUsagePerDay } =
-    useConsumptionUsagePerDay({
-      startDate: dateRange.startDate,
-      endDate: filterEndDate,
-      subscriptionID:
-        selectedSubscriptionId.trim() !== ""
-          ? selectedSubscriptionId
-          : undefined,
-    });
+  const invoices = useMemo(() => invoicesData?.invoices || [], [invoicesData]);
+
+  const [paymentURL, setPaymentURL] = useState("");
+
+  useEffect(() => {
+    const firstOpenInvoice = invoices.find(
+      (invoice) => invoice.invoiceStatus === "open"
+    );
+    const paymentURL = firstOpenInvoice?.invoiceUrl;
+    if (paymentURL) {
+      setPaymentURL(paymentURL);
+    }
+  }, [invoices]);
+
+  const invoicesTotalAmount = invoices.reduce((acc, invoice) => {
+    if (invoice.invoiceStatus === "open") {
+      acc = acc + (invoice.totalAmount || 0);
+    }
+    return acc;
+  }, 0);
 
   const paymentConfigured = billingDetails?.paymentConfigured;
   let errorDisplayText = "";
@@ -97,6 +95,11 @@ const BillingPage = () => {
     }
   }
 
+  const isLoading =
+    isLoadingBillingDetails || isLoadingConsumptionData || isLoadingInvoices;
+
+  if (isLoading) return <LoadingSpinner />;
+
   return (
     <div>
       <AccountManagementHeader
@@ -108,7 +111,7 @@ const BillingPage = () => {
           Billing
         </PageTitle>
 
-        {isLoading || isLoadingConsumptionData ? (
+        {isLoading ? (
           <LoadingSpinner />
         ) : isStaticBillingEnabled(selectUser) ? (
           <StaticBilling />
@@ -128,55 +131,114 @@ const BillingPage = () => {
           </Stack>
         ) : (
           <>
-            <Card sx={{ mt: 3 }}>
-              <Stack
-                direction="row"
-                justifyContent="space-between"
-                alignItems="center"
-              >
-                <Box>
-                  <Text size="large">Payment Method</Text>
+            <Box display="grid" gap="24px" gridTemplateColumns="1fr 1fr">
+              <Card sx={{ boxShadow: "0px 1px 2px 0px #0A0D120D" }}>
+                <Stack
+                  direction="row"
+                  justifyContent="space-between"
+                  alignItems="center"
+                >
+                  <Box>
+                    <Text size="large" weight="semibold" color="#181D27">
+                      Balance
+                    </Text>
+                    <Text
+                      size="small"
+                      weight="regular"
+                      color="#535862"
+                      marginTop="2px"
+                    >
+                      Pay open invoices amount
+                    </Text>
+                  </Box>
+                </Stack>
+                <Stack
+                  direction="row"
+                  gap="24px"
+                  justifyContent="space-between"
+                  marginTop="10px"
+                >
+                  {/*@ts-ignore */}
+                  <DisplayText size="small" weight="semibold">
+                    ${invoicesTotalAmount}
+                  </DisplayText>
+                  <Link href={paymentURL} target="_blank">
+                    <Button
+                      variant="contained"
+                      endIcon={
+                        <ArrowOutwardIcon
+                          sx={{
+                            fontSize: "18px",
+                          }}
+                        />
+                      }
+                      disabled={!paymentURL}
+                    >
+                      Pay Now
+                    </Button>
+                  </Link>
+                </Stack>
+              </Card>
+              <Card sx={{ boxShadow: "0px 1px 2px 0px #0A0D120D" }}>
+                <Stack
+                  direction="row"
+                  justifyContent="space-between"
+                  alignItems="center"
+                >
+                  <Box>
+                    <Text size="large" weight="semibold" color="#181D27">
+                      Payment Method
+                    </Text>
+                    <Text
+                      size="small"
+                      weight="regular"
+                      color="#535862"
+                      marginTop="2px"
+                    >
+                      Change how you pay for your plan
+                    </Text>
+                  </Box>
+                </Stack>
+
+                <Stack
+                  direction="row"
+                  gap="24px"
+                  justifyContent="space-between"
+                  marginTop="10px"
+                >
                   <StatusChip
                     label={
                       paymentConfigured === true
                         ? "Configured"
                         : "Not Configured"
                     }
-                    category={
-                      paymentConfigured === true ? "success" : "pending"
-                    }
+                    category={paymentConfigured === true ? "success" : "failed"}
+                    sx={{ alignSelf: "center" }}
                   />
-                </Box>
-                <Link
-                  href={billingDetails?.paymentInfoPortalURL ?? ""}
-                  target="_blank"
-                >
-                  <Button variant="outlined">
-                    Configure Payment Method
-                    <ArrowOutwardIcon
-                      sx={{
-                        marginLeft: "6px",
-                        fontSize: "18px",
-                      }}
-                    />
-                  </Button>
-                </Link>
-              </Stack>
-            </Card>
-            <ConsumptionUsage
-              consumptionUsageData={consumptionUsageData}
-              //consumptionUsagePerDayData={consumptionUsagePerDayData}
-            />
-            <UsageOverview
-              consumptionUsagePerDayData={usagePerDayData}
-              isFetchingUsagePerDay={isFetchingUsagePerDay}
-              dateRange={dateRange}
-              setDateRange={setDateRange}
-              initialDateRangeState={defaultDailyDateRange}
-              selectedSubscriptionId={selectedSubscriptionId}
-              setSelectedSubscriptionId={setSelectedSubscriptionId}
-            />
-            <InvoicesTable />
+                  <Link
+                    href={billingDetails?.paymentInfoPortalURL ?? ""}
+                    target="_blank"
+                  >
+                    <Button
+                      variant="contained"
+                      endIcon={
+                        <ArrowOutwardIcon
+                          sx={{
+                            fontSize: "18px",
+                          }}
+                        />
+                      }
+                    >
+                      Configure
+                    </Button>
+                  </Link>
+                </Stack>
+              </Card>
+            </Box>
+
+            <ConsumptionUsage consumptionUsageData={consumptionUsageData} />
+
+            <InvoicesTable invoices={invoices} />
           </>
         )}
       </PageContainer>
