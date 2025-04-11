@@ -40,7 +40,7 @@ export const getAccountConfigStatusBasedHeader = (
   }
 
   if (status === "FAILED") {
-    return "The account configuration verification failed. Please review the instructions below to retry the setup and resolve any issues:";
+    return "The account configuration verification failed.";
   }
   if (status === "READY") {
     return "This account has already been configured successfully. However if you need to reconfigure for any reason, the instructions are provided below:";
