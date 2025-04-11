@@ -157,7 +157,7 @@ export default function NodesTable(props) {
           setDashboardEndpoint(
             row.kubernetesDashboardEndpoint?.dashboardEndpoint
           );
-
+          const isDisconnected = resourceInstancestatus === "DISCONNECTED";
           if (!dashboardEndpointRow) {
             return "-";
           }
@@ -168,6 +168,7 @@ export default function NodesTable(props) {
               href={"https://" + dashboardEndpointRow}
               target="_blank"
               externalLinkArrow
+              disabled={isDisconnected}
             />
           );
         },
