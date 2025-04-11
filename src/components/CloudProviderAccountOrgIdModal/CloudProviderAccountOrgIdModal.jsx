@@ -537,7 +537,6 @@ const NonCreationTimeInstructions = (props) => {
                     </BodyText>
                   )}
                 </ListItem>
-                {/*  )} */}
 
                 {/* {(!accountConfigMethod ||
                 accountConfigMethod === ACCOUNT_CREATION_METHODS.TERRAFORM) && (
