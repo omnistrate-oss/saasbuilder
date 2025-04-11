@@ -74,6 +74,10 @@ export const getBillingRoute = () => {
   return "/billing";
 };
 
+export const getCostExplorerRoute = () => {
+  return "/cost-explorer";
+};
+
 export const getSettingsRoute = () => {
   return "/settings";
 };

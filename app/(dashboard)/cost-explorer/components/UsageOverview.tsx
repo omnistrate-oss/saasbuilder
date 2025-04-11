@@ -3,7 +3,7 @@ import { Text } from "src/components/Typography/Typography";
 import { ConsumptionUsagePerDay } from "src/types/consumption";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
-import ConsumptionUsageChart from "./ConsumptionUsageChart";
+import ConsumptionUsageChart from "../../billing/components/ConsumptionUsageChart";
 import {
   DateRange,
   DateTimePickerPopover,
@@ -129,13 +129,13 @@ const UsageOverview: FC<UsageOverviewProps> = (props) => {
       style={{ boxShadow: "0px 1px 2px 0px #0A0D120D" }}
     >
       <div className="py-[20px] px-[24px]">
-        <div className="flex flex-row items-center justify-between">
+        <div className="flex flex-row items-center justify-between gap-4">
           <div>
             <Text size="large" weight="semibold" color="#181D27">
-              Consumption Usage Overview
+              Cost and usage graph{" "}
             </Text>
             <Text size="xsmall" weight="medium" color="#414651">
-              Per day usage overview
+              Memory, storage, and CPU usage by service or subscription plan.{" "}
             </Text>
           </div>
           <div className="flex items-center gap-[12px] items-center">

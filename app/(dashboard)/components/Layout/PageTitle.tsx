@@ -17,7 +17,7 @@ const PageTitle: FC<PageTitleProps> = ({
     <div className={clsx("flex items-center gap-2", className)} {...otherProps}>
       <Icon />
       {/* @ts-ignore */}
-      <DisplayText size="small" weight="semibold" color="#181D27">
+      <DisplayText size="xsmall" weight="semibold" color="#181D27">
         {children}
       </DisplayText>
     </div>
