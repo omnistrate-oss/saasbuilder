@@ -131,6 +131,7 @@ const CustomNetworksPage = () => {
 
   const deleteCustomNetworkMutation = useMutation(deleteCustomNetwork, {
     onSuccess: async () => {
+      setSelectedRows([]);
       refetchCustomNetworks();
       setIsOverlayOpen(false);
       snackbar.showSuccess("Custom Network deleted successfully");
