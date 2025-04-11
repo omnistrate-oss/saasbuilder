@@ -472,7 +472,7 @@ const NonCreationTimeInstructions = (props) => {
                       </BodyText>
                     </Box>
                   </>
-                ) : viewInstructionsItem?.status === "FAILED" ? (
+                ) : selectedAccountConfig?.status === "FAILED" ? (
                   <Box display={"flex"} flexDirection={"column"} gap={"10px"}>
                     <BodyText>
                       You may delete this failed configuration and retry adding
@@ -518,7 +518,7 @@ const NonCreationTimeInstructions = (props) => {
                         {shellScriptGuide}.
                       </BodyText>
                     </Box>
-                  ) : viewInstructionsItem?.status === "FAILED" ? (
+                  ) : selectedAccountConfig?.status === "FAILED" ? (
                     <Box display={"flex"} flexDirection={"column"} gap={"10px"}>
                       <BodyText>
                         You may delete this failed configuration and retry
