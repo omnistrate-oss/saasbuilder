@@ -463,15 +463,8 @@ const NonCreationTimeInstructions = (props) => {
                       <ArrowBulletSmall />
                     </ListItemIcon>
                     <BodyText>
-                      If the issue persists, please contact{" "}
-                      <StyledLink
-                        href="/support"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        Omnistrate Support
-                      </StyledLink>{" "}
-                      for assistance.
+                      If the issue persists, please contact Support for
+                      assistance.
                     </BodyText>
                   </ListItem>
                 </>
@@ -493,15 +486,8 @@ const NonCreationTimeInstructions = (props) => {
                       <ArrowBulletSmall />
                     </ListItemIcon>
                     <BodyText>
-                      If the issue persists, please contact{" "}
-                      <StyledLink
-                        href="/support"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        Omnistrate Support
-                      </StyledLink>{" "}
-                      for assistance.
+                      If the issue persists, please contact Support for
+                      assistance.
                     </BodyText>
                   </ListItem>
                 </>
