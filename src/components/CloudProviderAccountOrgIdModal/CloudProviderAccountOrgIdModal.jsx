@@ -445,7 +445,7 @@ const NonCreationTimeInstructions = (props) => {
         </BodyText>
 
         <List>
-          {viewInstructionsItem?.status === "FAILED" &&
+          {selectedAccountConfig?.status === "FAILED" &&
             (accountInstructionDetails?.awsAccountID ? (
               <>
                 <ListItem>
@@ -505,7 +505,7 @@ const NonCreationTimeInstructions = (props) => {
               </>
             ))}
           {accountInstructionDetails?.awsAccountID &&
-            viewInstructionsItem?.status !== "FAILED" && (
+            selectedAccountConfig?.status !== "FAILED" && (
               <ListItem>
                 <ListItemIcon>
                   <ArrowBulletSmall />
@@ -538,7 +538,7 @@ const NonCreationTimeInstructions = (props) => {
               </ListItem>
             )}
           {accountInstructionDetails?.gcpProjectID &&
-            viewInstructionsItem?.status !== "FAILED" && (
+            selectedAccountConfig?.status !== "FAILED" && (
               <>
                 {/* {(!accountConfigMethod ||
                 accountConfigMethod ===
