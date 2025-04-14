@@ -101,7 +101,7 @@ const InstancesPage = () => {
     return [
       columnHelper.accessor("id", {
         id: "id",
-        header: "Deployment ID",
+        header: "Instance ID",
         cell: (data) => {
           const {
             id: instanceId,
@@ -556,7 +556,7 @@ const InstancesPage = () => {
         setSelectedRows([]);
         refetchInstances();
         setIsOverlayOpen(false);
-        snackbar.showSuccess("Deleting resource instance...");
+        snackbar.showSuccess("Deleting deployment instance...");
       },
     }
   );

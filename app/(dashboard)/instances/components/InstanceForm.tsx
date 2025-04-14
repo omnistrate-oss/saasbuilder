@@ -93,7 +93,7 @@ const InstanceForm = ({
     onSuccess: () => {
       refetchInstances();
       formData.resetForm();
-      snackbar.showSuccess("Updated Resource Instance");
+      snackbar.showSuccess("Updated Deployment Instance");
       setIsOverlayOpen(false);
     },
   });

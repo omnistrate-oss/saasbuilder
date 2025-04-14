@@ -66,7 +66,7 @@ const InstancesTableHeader = ({
     onSuccess: async () => {
       refetchInstances();
       setSelectedRows([]);
-      snackbar.showSuccess("Stopping resource instance...");
+      snackbar.showSuccess("Stopping deployment instance...");
     },
   });
 
@@ -74,7 +74,7 @@ const InstancesTableHeader = ({
     onSuccess: async () => {
       refetchInstances();
       setSelectedRows([]);
-      snackbar.showSuccess("Starting resource instance...");
+      snackbar.showSuccess("Starting deployment instance...");
     },
   });
 
@@ -82,7 +82,7 @@ const InstancesTableHeader = ({
     onSuccess: async () => {
       refetchInstances();
       setSelectedRows([]);
-      snackbar.showSuccess("Rebooting resource instance...");
+      snackbar.showSuccess("Rebooting deployment instance...");
     },
   });
 

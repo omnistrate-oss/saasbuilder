@@ -83,7 +83,7 @@ function ResourceInstanceDetails(props) {
     const res = [
       {
         dataTestId: "deployment-id",
-        label: "Deployment ID",
+        label: "Instance ID",
         value: resourceInstanceId,
       },
       {
@@ -381,7 +381,7 @@ function ResourceInstanceDetails(props) {
         data-testid="resource-instance-details-table"
         rows={{
           title: "Instance Info",
-          desc: "Basic information about this resource instance",
+          desc: "Basic information about this deployment instance",
           rows: instanceInfoData,
           flexWrap: true,
         }}

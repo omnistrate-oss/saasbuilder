@@ -186,7 +186,7 @@ function Connectivity(props) {
       <PropertyDetails
         rows={{
           title: "Connectivity Details",
-          desc: "Information about the resource instance connectivity options and network settings",
+          desc: "Information about the deployment instance connectivity options and network settings",
           rows: connectivitySummaryData,
           flexWrap: true,
         }}
