@@ -1,10 +1,7 @@
 import Link from "next/link";
 import { Field } from "src/components/DynamicForm/types";
 import { productTierTypes } from "src/constants/servicePlan";
-import {
-  cloudProviderLogoMap,
-  cloudProviderLongLogoMap,
-} from "src/constants/cloudProviders";
+import { cloudProviderLongLogoMap } from "src/constants/cloudProviders";
 import {
   getCustomNetworksMenuItems,
   getRegionMenuItems,

@@ -7,8 +7,6 @@ import {
   styled,
 } from "@mui/material";
 import { FC } from "react";
-import AWSIcon from "src/components/Icons/CloudProviders/AWSLogo";
-import GcpIcon from "src/components/Icons/CloudProviders/GCPLogo";
 import RegionIcon from "src/components/Region/RegionIcon";
 import { Text } from "src/components/Typography/Typography";
 import { cloudProviderLogoMap } from "src/constants/cloudProviders";
