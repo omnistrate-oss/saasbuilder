@@ -1,6 +1,4 @@
 import { styled } from "@mui/material";
-import AwsLogo from "../../Logos/AwsLogo/AwsLogo";
-import GcpLogo from "../../Logos/GcpLogo/GcpLogo";
 import { Text } from "../../Typography/Typography";
 import RegionIcon from "../../Region/RegionIcon";
 import { getResourceInstanceStatusStylesAndLabel } from "src/constants/statusChipStyles/resourceInstanceStatus";
@@ -9,6 +7,7 @@ import InstanceHealthStatusChip, {
   getInstanceHealthStatus,
 } from "src/components/InstanceHealthStatusChip/InstanceHealthStatusChip";
 import { colors } from "src/themeConfig";
+import { cloudProviderLongLogoMap } from "src/constants/cloudProviders";
 
 const ServiceLogoImg = styled("img")({
   height: "40px",
@@ -145,9 +144,9 @@ function ResourceInstanceOverview(props) {
         style={{ padding: "14px" }}
         className="flex items-center justify-center"
       >
-        {cloudProvider === "aws" && <AwsLogo />}
-        {cloudProvider === "gcp" && <GcpLogo />}
-        {!cloudProvider && (
+        {cloudProvider ? (
+          cloudProviderLongLogoMap[cloudProvider]
+        ) : (
           <Text
             size="small"
             weight="regular"

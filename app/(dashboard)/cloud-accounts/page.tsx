@@ -9,11 +9,8 @@ import { createColumnHelper } from "@tanstack/react-table";
 
 import Tooltip from "components/Tooltip/Tooltip";
 import DataTable from "components/DataTable/DataTable";
-import AwsLogo from "components/Logos/AwsLogo/AwsLogo";
-import GcpLogo from "components/Logos/GcpLogo/GcpLogo";
 import StatusChip from "components/StatusChip/StatusChip";
 import DataGridText from "components/DataGrid/DataGridText";
-import AzureLogo from "components/Logos/AzureLogo/AzureLogo";
 import ServiceNameWithLogo from "components/ServiceNameWithLogo/ServiceNameWithLogo";
 import ViewInstructionsIcon from "components/Icons/AccountConfig/ViewInstrcutionsIcon";
 import CloudProviderAccountOrgIdModal from "components/CloudProviderAccountOrgIdModal/CloudProviderAccountOrgIdModal";
@@ -46,6 +43,8 @@ import {
 import DisconnectAccountConfigDialog from "src/components/AccountConfigDialog/DisconnectAccountConfigDialog";
 import ConnectAccountConfigDialog from "src/components/AccountConfigDialog/ConnectAccountConfigDialog";
 import useBillingDetails from "../billing/hooks/useBillingDetails";
+import { cloudProviderLongLogoMap } from "src/constants/cloudProviders";
+import { CloudProvider } from "src/types/common/enums";
 
 const columnHelper = createColumnHelper<ResourceInstance>();
 
@@ -321,24 +320,35 @@ const CloudAccountsPage = () => {
 
       columnHelper.accessor(
         // @ts-ignore
-        (row) => row.cloud_provider || row.result_params?.cloud_provider || "-",
+        (row) => {
+          let cloudProvider: CloudProvider | undefined;
+          const result_params = row.result_params;
+          // @ts-ignore
+          if (result_params?.aws_account_id) cloudProvider = "aws";
+          // @ts-ignore
+          else if (result_params?.gcp_project_id) cloudProvider = "gcp";
+          // @ts-ignore
+          else if (result_params?.azure_subscription_id)
+            cloudProvider = "azure";
+          return cloudProvider;
+        },
         {
           id: "cloud_provider",
           header: "Provider",
           cell: (data) => {
-            const cloudProvider =
-              // @ts-ignore
-              data.row.original.result_params?.gcp_project_id ? "gcp" : "aws";
+            let cloudProvider: CloudProvider | undefined;
+            const result_params = data.row.original.result_params;
+            // @ts-ignore
+            if (result_params?.aws_account_id) cloudProvider = "aws";
+            // @ts-ignore
+            else if (result_params?.gcp_project_id) cloudProvider = "gcp";
+            // @ts-ignore
+            else if (result_params?.azure_subscription_id)
+              cloudProvider = "azure";
 
-            return cloudProvider === "aws" ? (
-              <AwsLogo />
-            ) : cloudProvider === "gcp" ? (
-              <GcpLogo />
-            ) : cloudProvider === "azure" ? (
-              <AzureLogo />
-            ) : (
-              "-"
-            );
+            return cloudProvider
+              ? cloudProviderLongLogoMap[cloudProvider]
+              : "-";
           },
         }
       ),

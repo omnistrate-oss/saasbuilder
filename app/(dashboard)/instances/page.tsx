@@ -30,12 +30,9 @@ import { useGlobalData } from "src/providers/GlobalDataProvider";
 import { deleteResourceInstance } from "src/api/resourceInstance";
 import { getResourceInstanceStatusStylesAndLabel } from "src/constants/statusChipStyles/resourceInstanceStatus";
 import RegionIcon from "components/Region/RegionIcon";
-import AwsLogo from "components/Logos/AwsLogo/AwsLogo";
-import GcpLogo from "components/Logos/GcpLogo/GcpLogo";
 import DataTable from "components/DataTable/DataTable";
 import StatusChip from "components/StatusChip/StatusChip";
 import DataGridText from "components/DataGrid/DataGridText";
-import AzureLogo from "components/Logos/AzureLogo/AzureLogo";
 import GridCellExpand from "components/GridCellExpand/GridCellExpand";
 import CapacityDialog from "components/CapacityDialog/CapacityDialog";
 import GenerateTokenDialog from "components/GenerateToken/GenerateTokenDialog";
@@ -57,6 +54,7 @@ import LoadIndicatorHigh from "src/components/Icons/LoadIndicator/LoadIndicatorH
 import StatusCell from "./components/StatusCell";
 import { getResourceInstanceDetailsStatusStylesAndLabel } from "src/constants/statusChipStyles/resourceInstanceDetailsStatus";
 import useBillingDetails from "../billing/hooks/useBillingDetails";
+import { cloudProviderLongLogoMap } from "src/constants/cloudProviders";
 
 const columnHelper = createColumnHelper<ResourceInstance>();
 type Overlay =
@@ -383,15 +381,7 @@ const InstancesPage = () => {
         cell: (data) => {
           const cloudProvider = data.row.original.cloud_provider;
 
-          return cloudProvider === "aws" ? (
-            <AwsLogo />
-          ) : cloudProvider === "gcp" ? (
-            <GcpLogo />
-          ) : cloudProvider === "azure" ? (
-            <AzureLogo />
-          ) : (
-            "-"
-          );
+          return cloudProvider ? cloudProviderLongLogoMap[cloudProvider] : "-";
         },
         meta: {
           minWidth: 100,

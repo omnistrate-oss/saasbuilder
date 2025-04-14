@@ -191,8 +191,8 @@ const InstanceForm = ({
           }
         }
 
-        // Remove cloud_provider_native_network_id if cloudProvider is GCP
-        if (data.cloudProvider === "GCP") {
+        // Remove cloud_provider_native_network_id if cloudProvider is gcp or azure
+        if (data.cloudProvider === "gcp" || data.cloudProvider === "azure") {
           delete data.requestParams.cloud_provider_native_network_id;
         }
 
@@ -417,6 +417,8 @@ const InstanceForm = ({
             return values.cloudProvider === "gcp";
           } else if (instance.result_params?.aws_account_id) {
             return values.cloudProvider === "aws";
+          } else if (instance.result_params?.azure_subscription_id) {
+            return values.cloudProvider === "azure";
           }
         })
         .filter((instance) => ["READY", "RUNNING"].includes(instance.status))
@@ -424,7 +426,9 @@ const InstanceForm = ({
           ...instance,
           label: instance.result_params?.gcp_project_id
             ? `${instance.id} (Project ID - ${instance.result_params?.gcp_project_id})`
-            : `${instance.id} (Account ID - ${instance.result_params?.aws_account_id})`,
+            : instance.result_params?.aws_account_id
+              ? `${instance.id} (Account ID - ${instance.result_params?.aws_account_id})`
+              : `${instance.id} (Subscription ID - ${instance.result_params?.azure_subscription_id})`,
         })),
     [instances, values.cloudProvider]
   );

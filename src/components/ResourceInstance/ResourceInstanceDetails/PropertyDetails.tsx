@@ -9,11 +9,9 @@ import { PasswordWithOutBorderField } from "src/components/FormElementsv2/Passwo
 import JsonIcon from "src/components/Icons/RestoreInstance/JsonIcon";
 import ArrayIcon from "src/components/Icons/RestoreInstance/ArrayIcon";
 import ResourceInstanceDialog from "./ResourceInstanceDialog";
-import AwsLogo from "src/components/Logos/AwsLogo/AwsLogo";
-import GcpLogo from "src/components/Logos/GcpLogo/GcpLogo";
-import AzureLogo from "src/components/Logos/AzureLogo/AzureLogo";
 import JSONViewModal from "./JSONViewModal";
 import Tooltip from "src/components/Tooltip/Tooltip";
+import { cloudProviderLongLogoMap } from "src/constants/cloudProviders";
 
 export type Row = {
   dataTestId?: string;
@@ -358,16 +356,7 @@ const PropertyDetails: FC<PropertyTableProps> = ({ rows, ...otherProps }) => {
               </>
             );
           } else if (valueType === "cloudProvider") {
-            value =
-              row.value === "aws" ? (
-                <AwsLogo />
-              ) : row.value === "gcp" ? (
-                <GcpLogo />
-              ) : row.value === "azure" ? (
-                <AzureLogo />
-              ) : (
-                "-"
-              );
+            value = row.value ? cloudProviderLongLogoMap[row.value] : "-";
           } else {
             // Custom value type
             value = (

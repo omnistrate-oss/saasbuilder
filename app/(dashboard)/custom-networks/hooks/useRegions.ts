@@ -8,13 +8,13 @@ const useRegions = (queryOptions = {}) => {
       const res: any[] = [];
       const gcpRegions = getRegions("gcp");
       const awsRegions = getRegions("aws");
+      const azureRegions = getRegions("azure");
 
-      const [gcpRegionsResponse, awsRegionsResponse] = await Promise.all([
-        gcpRegions,
-        awsRegions,
-      ]);
+      const [azureRegionsResponse, gcpRegionsResponse, awsRegionsResponse] =
+        await Promise.all([azureRegions, gcpRegions, awsRegions]);
 
       const regionIds = [
+        ...azureRegionsResponse.data.ids,
         ...gcpRegionsResponse.data.ids,
         ...awsRegionsResponse.data.ids,
       ];
