@@ -26,10 +26,7 @@ import useSnackbar from "src/hooks/useSnackbar";
 import { CustomNetwork } from "src/types/customNetwork";
 import { deleteCustomNetwork } from "src/api/customNetworks";
 import useRegions from "./hooks/useRegions";
-import {
-  cloudProviderLogoMap,
-  cloudProviderLongLogoMap,
-} from "src/constants/cloudProviders";
+import { cloudProviderLongLogoMap } from "src/constants/cloudProviders";
 import { getCustomNetworksRoute } from "src/utils/routes";
 
 const columnHelper = createColumnHelper<CustomNetwork>();
