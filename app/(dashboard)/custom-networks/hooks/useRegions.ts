@@ -1,23 +1,27 @@
 import { useQuery } from "@tanstack/react-query";
+import { getCloudProviders } from "src/api/cloudProvider";
 import { getRegionById, getRegions } from "src/api/region";
 
 const useRegions = (queryOptions = {}) => {
   const regionsQuery = useQuery(
     ["cloud-regions"],
     async () => {
+      const cloudProvidersRes = await getCloudProviders();
+      const cloudProviders: string[] = cloudProvidersRes?.data?.map(
+        (cloudProvider) => cloudProvider?.name
+      );
       const res: any[] = [];
-      const gcpRegions = getRegions("gcp");
-      const awsRegions = getRegions("aws");
-      const azureRegions = getRegions("azure");
 
-      const [azureRegionsResponse, gcpRegionsResponse, awsRegionsResponse] =
-        await Promise.all([azureRegions, gcpRegions, awsRegions]);
+      const regionIds: string[] = [];
 
-      const regionIds = [
-        ...azureRegionsResponse.data.ids,
-        ...gcpRegionsResponse.data.ids,
-        ...awsRegionsResponse.data.ids,
-      ];
+      await Promise.all(
+        cloudProviders?.map((cloud) =>
+          getRegions(cloud).then((regionsRes) => {
+            if (regionsRes.data.ids?.length)
+              regionIds.push(...regionsRes.data.ids);
+          })
+        )
+      );
 
       await Promise.all(
         regionIds.map((regionId) => {

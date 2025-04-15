@@ -108,7 +108,7 @@ const CustomNetworksPage = () => {
         header: "Provider",
         cell: (data) => {
           const cloudProvider = data.row.original.cloudProviderName;
-          return cloudProviderLogoMap[cloudProvider] || "-";
+          return cloudProviderLongLogoMap[cloudProvider] || "-";
         },
       }),
       columnHelper.accessor("cloudProviderRegion", {

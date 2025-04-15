@@ -46,6 +46,7 @@ const ListItem: FC<ListItemProps> = ({ title, value, icon }) => {
   return (
     <Stack
       direction="row"
+      gap="8px"
       alignItems="center"
       justifyContent="space-between"
       p="16px"
@@ -59,7 +60,14 @@ const ListItem: FC<ListItemProps> = ({ title, value, icon }) => {
 
       <Box display="flex" alignItems="center" gap="8px">
         {icon && icon}
-        <Text size="small" weight="semibold" color="#475467">
+        <Text
+          size="small"
+          weight="semibold"
+          color="#475467"
+          ellipsis
+          title={value}
+          maxWidth="180px"
+        >
           {value}
         </Text>
         <CopyButton text={value} />

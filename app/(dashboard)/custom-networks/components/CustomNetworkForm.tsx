@@ -14,7 +14,7 @@ import {
   createCustomNetwork,
   updateCustomNetwork,
 } from "src/api/customNetworks";
-import { cloudProviderLogoMap } from "src/constants/cloudProviders";
+import { cloudProviderLongLogoMap } from "src/constants/cloudProviders";
 import { UpdateCustomNetworkRequestBody } from "src/types/customNetwork";
 import CloudProviderRadio from "app/(dashboard)/components/CloudProviderRadio/CloudProviderRadio";
 
@@ -144,7 +144,7 @@ const CustomNetworkForm = ({
               previewValue: formData.values.cloudProviderName
                 ? () => {
                     const cloudProvider = formData.values.cloudProviderName;
-                    return cloudProviderLogoMap[cloudProvider] || "-";
+                    return cloudProviderLongLogoMap[cloudProvider] || "-";
                   }
                 : null,
             },
