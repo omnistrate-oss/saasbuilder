@@ -1,4 +1,4 @@
-import { FC, useMemo } from "react";
+import { FC, useMemo, useState } from "react";
 import { Text } from "src/components/Typography/Typography";
 import UsageDimensionCard from "./UsageDimensionCard";
 import {
@@ -7,6 +7,15 @@ import {
 } from "src/types/consumption";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
+import SubscriptionUsageTable, {
+  SubscriptionUsageRow,
+} from "./SubscriptionUsageTable";
+import { Collapse } from "@mui/material";
+import AddIcon from "@mui/icons-material/Add";
+import RemoveIcon from "@mui/icons-material/Remove";
+import Button from "src/components/Button/Button";
+import useMultiSubscriptionUsage from "../hooks/useMultiSubscriptionUsage";
+import { useGlobalData } from "src/providers/GlobalDataProvider";
 
 dayjs.extend(utc);
 
@@ -17,6 +26,7 @@ type ConsumptionUsageProps = {
 
 const ConsumptionUsage: FC<ConsumptionUsageProps> = (props) => {
   const { consumptionUsageData } = props;
+  const [showUsageBreakdown, setShowUsageBreakdown] = useState(false);
 
   const aggregatedConsumptionDataHash = useMemo(() => {
     const hash: Record<
@@ -56,62 +66,57 @@ const ConsumptionUsage: FC<ConsumptionUsageProps> = (props) => {
     return hash;
   }, [consumptionUsageData]);
 
-  //   const aggregatedConsumptionDataHash = useMemo(() => {
-  //     const hash: Record<
-  //       UsageDimension,
-  //       {
-  //         total: number;
-  //         dailyUsageData: { startTime: string; endTime: string; value: number }[];
-  //       }
-  //     > = {
-  //       "Memory GiB hours": {
-  //         total: 0,
-  //         dailyUsageData: [],
-  //       },
-  //       "Storage GiB hours": {
-  //         total: 0,
-  //         dailyUsageData: [],
-  //       },
-  //       "CPU core hours": {
-  //         total: 0,
-  //         dailyUsageData: [],
-  //       },
-  //     };
+  const { subscriptions } = useGlobalData();
 
-  //     const usage = consumptionUsagePerDayData?.usage || [];
+  const rootSubscriptions = useMemo(() => {
+    return subscriptions
+      .filter((subscription) => {
+        return subscription.roleType === "root";
+      })
+      .sort((subscriptionA, subscriptionB) =>
+        subscriptionA.productTierName.toLowerCase() <
+        subscriptionB.productTierName.toLowerCase()
+          ? -1
+          : 1
+      );
+  }, [subscriptions]);
 
-  //     usage.forEach((usageDatapoint) => {
-  //       const { dimension, endTime, startTime, total } = usageDatapoint;
-  //       if (dimension) {
-  //         if (hash[dimension]) {
-  //           hash[dimension] = {
-  //             total: hash[dimension].total + (total !== undefined ? total : 0),
-  //             dailyUsageData: [
-  //               ...hash[dimension].dailyUsageData,
-  //               {
-  //                 startTime: startTime as string,
-  //                 endTime: endTime as string,
-  //                 value: total !== undefined ? total : 0,
-  //               },
-  //             ],
-  //           };
-  //         } else {
-  //           hash[usageDatapoint.dimension as string] = {
-  //             total: total !== undefined ? total : 0,
-  //             dailyUsageData: [
-  //               {
-  //                 startTime: startTime as string,
-  //                 endTime: endTime as string,
-  //                 value: total !== undefined ? total : 0,
-  //               },
-  //             ],
-  //           };
-  //         }
-  //       }
-  //     });
+  const subscriptionIds = useMemo(
+    () => rootSubscriptions.map((subscription) => subscription.id),
+    [rootSubscriptions]
+  );
 
-  //     return hash;
-  //   }, [consumptionUsagePerDayData]);
+  const {
+    data: subscriptionUsageHashmap,
+    isFetched: isSubscriptionUsageFetched,
+    isLoading: isLoadingSubscriptionsUsage,
+  } = useMultiSubscriptionUsage({
+    subscriptionIds,
+  });
+
+  const rows = useMemo(() => {
+    let rows: SubscriptionUsageRow[] = [];
+    if (isSubscriptionUsageFetched && subscriptionUsageHashmap) {
+      rows = rootSubscriptions.map((subscription) => {
+        const { id, serviceName, serviceLogoURL, productTierName, serviceId } =
+          subscription;
+        const usageData = subscriptionUsageHashmap[id];
+        const rowData: SubscriptionUsageRow = {
+          subcriptionId: id,
+          serviceId: serviceId,
+          cpuCoreHours: usageData.cpuCoreHours,
+          memoryGiBHours: usageData.memoryGiBHours,
+          storageGiBHours: usageData.memoryGiBHours,
+          serviceName: serviceName,
+          subscriptionPlanName: productTierName,
+          serviceLogoURL: serviceLogoURL,
+        };
+        return rowData;
+      });
+    }
+
+    return rows;
+  }, [isSubscriptionUsageFetched, subscriptionUsageHashmap, rootSubscriptions]);
 
   return (
     <div
@@ -119,7 +124,7 @@ const ConsumptionUsage: FC<ConsumptionUsageProps> = (props) => {
       style={{ boxShadow: "0px 1px 2px 0px var(#0A0D120D)" }}
     >
       <div className="py-[20px] px-[24px]">
-        <div className="flex flex-row items-center">
+        <div className="flex flex-row items-center justify-between">
           <div>
             <Text size="large" weight="semibold" color="#181D27">
               Current Usage
@@ -132,6 +137,15 @@ const ConsumptionUsage: FC<ConsumptionUsageProps> = (props) => {
                   .format("MMM DD, YYYY, HH:mm:ss")} UTC)`}
             </Text>
           </div>
+          <Button
+            variant="outlined"
+            startIcon={showUsageBreakdown ? <RemoveIcon /> : <AddIcon />}
+            onClick={() => {
+              setShowUsageBreakdown((prev) => !prev);
+            }}
+          >
+            {showUsageBreakdown ? "Hide" : "Show"} Usage Breakdown
+          </Button>
         </div>
       </div>
       <div className="border-t border-[#E9EAEB] py-3 px-6">
@@ -153,6 +167,12 @@ const ConsumptionUsage: FC<ConsumptionUsageProps> = (props) => {
           />
         </div>
       </div>
+      <Collapse in={showUsageBreakdown}>
+        <SubscriptionUsageTable
+          rows={rows}
+          isLoadingSubscriptionsUsage={isLoadingSubscriptionsUsage}
+        />
+      </Collapse>
     </div>
   );
 };
