@@ -9,7 +9,7 @@ import ServiceNameWithLogo from "src/components/ServiceNameWithLogo/ServiceNameW
 dayjs.extend(utc);
 
 export type SubscriptionUsageRow = {
-  subcriptionId: string;
+  subscriptionId: string;
   serviceId: string;
   serviceName: string;
   subscriptionPlanName: string;
@@ -40,7 +40,6 @@ const SubscriptionUsageTable: FC<SubscriptionUsageTableProps> = ({
           minWidth: 320,
         },
         cell: (data) => {
-          //@ts-ignore
           const { serviceName, serviceLogoURL } = data.row.original;
 
           return (
