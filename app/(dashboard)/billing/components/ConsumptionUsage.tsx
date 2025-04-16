@@ -100,13 +100,13 @@ const ConsumptionUsage: FC<ConsumptionUsageProps> = (props) => {
       rows = rootSubscriptions.map((subscription) => {
         const { id, serviceName, serviceLogoURL, productTierName, serviceId } =
           subscription;
-        const usageData = subscriptionUsageHashmap[id];
+        const usageData = subscriptionUsageHashmap[id] || { cpuCoreHours: 0, memoryGiBHours: 0, storageGiBHours: 0 }
         const rowData: SubscriptionUsageRow = {
-          subcriptionId: id,
+          subscriptionId: id,
           serviceId: serviceId,
           cpuCoreHours: usageData.cpuCoreHours,
           memoryGiBHours: usageData.memoryGiBHours,
-          storageGiBHours: usageData.memoryGiBHours,
+          storageGiBHours: usageData.storageGiBHours,
           serviceName: serviceName,
           subscriptionPlanName: productTierName,
           serviceLogoURL: serviceLogoURL,
