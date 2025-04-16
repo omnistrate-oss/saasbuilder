@@ -7,11 +7,12 @@ import {
 
 const invoiceStatusMap: Record<string, { category: Category; label: string }> =
   {
-    draft: { category: "inProgress", label: "Draft" },
-    open: { category: "inProgress", label: "Open" },
+    draft: { category: "unknown", label: "Draft" },
+    open: { category: "info", label: "Open" },
     paid: { category: "success", label: "Paid" },
     uncollectible: { category: "unknown", label: "Uncollectible" },
     void: { category: "unknown", label: "Void" },
+    pastDue: { category : "failed", label : "Past Due"}
   };
 
 export const getInvoiceStatusStylesAndLabel = (
