@@ -79,7 +79,7 @@ const EventsTable = ({
       }),
       deploymentId: columnHelper.accessor("resourceInstanceId", {
         id: "resourceInstanceId",
-        header: "Deployment ID",
+        header: "Instance ID",
         meta: {
           minWidth: 200,
         },

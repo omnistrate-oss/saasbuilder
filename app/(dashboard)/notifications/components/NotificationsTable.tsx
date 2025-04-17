@@ -59,7 +59,7 @@ const NotificationsTable = () => {
     return [
       columnHelper.accessor("id", {
         id: "id",
-        header: "Deployment ID",
+        header: "Instance ID",
         meta: {
           minWidth: 200,
         },

@@ -186,7 +186,7 @@ const InstanceDetailsPage = ({
             size="xsmall"
             sx={{ wordBreak: "break-word", textAlign: "center", maxWidth: 900 }}
           >
-            Resource Instance not found
+            Deployment Instance not found
           </DisplayText>
         </Stack>
       </PageContainer>
