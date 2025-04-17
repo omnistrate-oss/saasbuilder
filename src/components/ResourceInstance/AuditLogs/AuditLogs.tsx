@@ -68,7 +68,7 @@ const AuditLogsTableHeader: FC<AuditLogsTableHeaderProps> = (props) => {
     >
       <DataGridHeaderTitle
         title="List of Events"
-        desc="Detailed audit trail of user actions performed on resource instances"
+        desc="Detailed audit trail of user actions performed on deployment instances"
         count={count}
         units={{
           singular: "Event",

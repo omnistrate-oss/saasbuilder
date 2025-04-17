@@ -42,7 +42,7 @@ function RestoreInstanceSuccessStep({ handleClose, restoredInstanceID }) {
           </Text>
 
           <Text size="medium" weight="regular" color="344054" mt={0.1}>
-            The deployment ID is{"  "}
+            The Instance ID is{"  "}
             <Box
               sx={{
                 color: "#7F56D9",

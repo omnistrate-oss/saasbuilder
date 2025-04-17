@@ -214,7 +214,7 @@ const EventsTable: FC<EventsTableProps> = (props) => {
       }),
       columnHelper.accessor("resourceInstanceId", {
         id: "resourceInstanceId",
-        header: "Resource Instance ID",
+        header: "Instance ID",
       }),
       ...(!hideTypeColumn
         ? [

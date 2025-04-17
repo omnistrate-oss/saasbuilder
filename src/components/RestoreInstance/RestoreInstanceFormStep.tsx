@@ -37,7 +37,7 @@ function RestoreInstanceFormStep({
           <Box>
             <Text size="medium">Restore Your Instance from a Backup</Text>
             <Text size="small" weight="normal" color="#475467">
-              Create a new resource instance from a specific point in time
+              Create a new deployment instance from a specific point in time
               backup
             </Text>
           </Box>
