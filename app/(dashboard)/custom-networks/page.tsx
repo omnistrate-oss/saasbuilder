@@ -17,8 +17,6 @@ import PeeringInfoDialog, {
 } from "./components/PeeringInfoDialog";
 
 import RegionIcon from "components/Region/RegionIcon";
-import GcpLogo from "components/Logos/GcpLogo/GcpLogo";
-import AwsLogo from "components/Logos/AwsLogo/AwsLogo";
 import DataTable from "components/DataTable/DataTable";
 import DataGridText from "components/DataGrid/DataGridText";
 import GridCellExpand from "components/GridCellExpand/GridCellExpand";
@@ -28,7 +26,10 @@ import useSnackbar from "src/hooks/useSnackbar";
 import { CustomNetwork } from "src/types/customNetwork";
 import { deleteCustomNetwork } from "src/api/customNetworks";
 import useRegions from "./hooks/useRegions";
-import { cloudProviderLogoMap } from "src/constants/cloudProviders";
+import {
+  cloudProviderLogoMap,
+  cloudProviderLongLogoMap,
+} from "src/constants/cloudProviders";
 import { getCustomNetworksRoute } from "src/utils/routes";
 
 const columnHelper = createColumnHelper<CustomNetwork>();
@@ -107,7 +108,7 @@ const CustomNetworksPage = () => {
         header: "Provider",
         cell: (data) => {
           const cloudProvider = data.row.original.cloudProviderName;
-          return cloudProviderLogoMap[cloudProvider] || "-";
+          return cloudProviderLongLogoMap[cloudProvider] || "-";
         },
       }),
       columnHelper.accessor("cloudProviderRegion", {
@@ -153,17 +154,30 @@ const CustomNetworksPage = () => {
       res.push({
         title: "Account ID",
         value: networkInstance.awsAccountID,
-        icon: <AwsLogo />,
+        icon: cloudProviderLogoMap.aws,
       });
     } else if (networkInstance.gcpProjectID) {
       res.push({
         title: "Project ID",
         value: networkInstance.gcpProjectID,
-        icon: <GcpLogo />,
+        icon: cloudProviderLogoMap.gcp,
       });
       res.push({
         title: "Project Number",
         value: networkInstance.gcpProjectNumber,
+      });
+      //@ts-ignore
+    } else if (networkInstance.azureSubscriptionID) {
+      res.push({
+        title: "Subscription ID",
+        //@ts-ignore
+        value: networkInstance.azureSubscriptionID,
+        icon: cloudProviderLogoMap.azure,
+      });
+      res.push({
+        title: "Tenant ID",
+        //@ts-ignore
+        value: networkInstance.azureTenantID,
       });
     }
 

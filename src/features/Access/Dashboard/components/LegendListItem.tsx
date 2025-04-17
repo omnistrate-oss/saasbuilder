@@ -7,10 +7,9 @@ import {
   styled,
 } from "@mui/material";
 import { FC } from "react";
-import AWSIcon from "src/components/Icons/CloudProviders/AWSLogo";
-import GcpIcon from "src/components/Icons/CloudProviders/GCPLogo";
 import RegionIcon from "src/components/Region/RegionIcon";
 import { Text } from "src/components/Typography/Typography";
+import { cloudProviderLogoMap } from "src/constants/cloudProviders";
 import { CloudProvider } from "src/types/common/enums";
 
 type LegendListItemProps = {
@@ -38,15 +37,7 @@ const StyledProgressBar = styled(LinearProgress, {
 const LegendListItem: FC<LegendListItemProps> = (props) => {
   const { color, cloudProvider, numInstances, percent, region } = props;
 
-  let icon = <RegionIcon />;
-
-  if (cloudProvider === "aws") {
-    icon = <AWSIcon />;
-  }
-
-  if (cloudProvider === "gcp") {
-    icon = <GcpIcon />;
-  }
+  const icon = cloudProviderLogoMap[cloudProvider] ?? <RegionIcon />;
 
   return (
     <Stack direction="row" gap="16px" alignItems="center">

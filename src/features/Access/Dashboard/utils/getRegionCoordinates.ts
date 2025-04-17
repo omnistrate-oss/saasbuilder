@@ -355,6 +355,165 @@ export const GCP_REGION_COORDINATES = {
   },
 };
 
+export const AZURE_REGION_COORDINATES = {
+  eastus: {
+    name: "(US) East US",
+    latitude: 37.3719,
+    longitude: -79.8164,
+  },
+  eastus2: {
+    name: "(US) East US 2",
+    latitude: 36.6681,
+    longitude: -78.3889,
+  },
+  southcentralus: {
+    name: "(US) South Central US",
+    latitude: 29.4167,
+    longitude: -98.5,
+  },
+  westus2: {
+    name: "(US) West US 2",
+    latitude: 47.6062,
+    longitude: -122.3321,
+  },
+  westus3: {
+    name: "(US) West US 3",
+    latitude: 33.4484,
+    longitude: -112.074,
+  },
+  australiaeast: {
+    name: "(Asia Pacific) Australia East",
+    latitude: -33.8688,
+    longitude: 151.2093,
+  },
+  southeastasia: {
+    name: "(Asia Pacific) Southeast Asia",
+    latitude: 1.283,
+    longitude: 103.833,
+  },
+  northeurope: {
+    name: "(Europe) North Europe",
+    latitude: 53.3478,
+    longitude: -6.2597,
+  },
+  swedencentral: {
+    name: "(Europe) Sweden Central",
+    latitude: 59.3293,
+    longitude: 18.0686,
+  },
+  uksouth: {
+    name: "(Europe) UK South",
+    latitude: 51.5074,
+    longitude: -0.1278,
+  },
+  westeurope: {
+    name: "(Europe) West Europe",
+    latitude: 52.3667,
+    longitude: 4.9,
+  },
+  centralus: {
+    name: "(US) Central US",
+    latitude: 41.5908,
+    longitude: -93.6208,
+  },
+  southafricanorth: {
+    name: "(Africa) South Africa North",
+    latitude: -25.7313,
+    longitude: 28.2184,
+  },
+  centralindia: {
+    name: "(Asia Pacific) Central India",
+    latitude: 18.5204,
+    longitude: 73.8567,
+  },
+  eastasia: {
+    name: "(Asia Pacific) East Asia",
+    latitude: 22.267,
+    longitude: 114.188,
+  },
+  japaneast: {
+    name: "(Asia Pacific) Japan East",
+    latitude: 35.6895,
+    longitude: 139.6917,
+  },
+  koreacentral: {
+    name: "(Asia Pacific) Korea Central",
+    latitude: 37.5665,
+    longitude: 126.978,
+  },
+  canadacentral: {
+    name: "(Canada) Canada Central",
+    latitude: 43.653,
+    longitude: -79.383,
+  },
+  francecentral: {
+    name: "(Europe) France Central",
+    latitude: 46.3772,
+    longitude: 2.373,
+  },
+  germanywestcentral: {
+    name: "(Europe) Germany West Central",
+    latitude: 50.1109,
+    longitude: 8.6821,
+  },
+  italynorth: {
+    name: "(Europe) Italy North",
+    latitude: 45.4642,
+    longitude: 9.19,
+  },
+  norwayeast: {
+    name: "(Europe) Norway East",
+    latitude: 59.9139,
+    longitude: 10.7522,
+  },
+  polandcentral: {
+    name: "(Europe) Poland Central",
+    latitude: 52.2297,
+    longitude: 21.0122,
+  },
+  spaincentral: {
+    name: "(Europe) Spain Central",
+    latitude: 40.4168,
+    longitude: -3.7038,
+  },
+  switzerlandnorth: {
+    name: "(Europe) Switzerland North",
+    latitude: 47.3769,
+    longitude: 8.5417,
+  },
+  mexicocentral: {
+    name: "(Mexico) Mexico Central",
+    latitude: 19.4326,
+    longitude: -99.1332,
+  },
+  uaenorth: {
+    name: "(Middle East) UAE North",
+    latitude: 25.276987,
+    longitude: 55.296249,
+  },
+  brazilsouth: {
+    name: "(South America) Brazil South",
+    latitude: -23.5505,
+    longitude: -46.6333,
+  },
+  israelcentral: {
+    name: "(Middle East) Israel Central",
+    latitude: 31.7683,
+    longitude: 35.2137,
+  },
+  qatarcentral: {
+    name: "(Middle East) Qatar Central",
+    latitude: 25.276987,
+    longitude: 51.52,
+  },
+};
+
+export const REGION_COORDINATES = {
+  aws: AWS_REGION_COORDINATES,
+  gcp: GCP_REGION_COORDINATES,
+  azure: AZURE_REGION_COORDINATES,
+};
+
 export function getRegionCoordinates(
   cloudProvider: CloudProvider,
   region: string
@@ -363,12 +522,5 @@ export function getRegionCoordinates(
   latitude: number;
   longitude: number;
 } {
-  let regionData;
-  if (cloudProvider === "aws") {
-    regionData = AWS_REGION_COORDINATES[region];
-  } else if (cloudProvider === "gcp") {
-    regionData = GCP_REGION_COORDINATES[region];
-  }
-
-  return regionData;
+  return REGION_COORDINATES[cloudProvider]?.[region];
 }

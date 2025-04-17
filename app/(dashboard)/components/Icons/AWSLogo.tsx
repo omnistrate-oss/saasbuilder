@@ -1,4 +1,4 @@
-const AWSLogo = () => {
+const AWSLogo = (props) => {
   return (
     <svg
       width="68"
@@ -6,6 +6,7 @@ const AWSLogo = () => {
       viewBox="0 0 68 40"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
+      {...props}
     >
       <g clipPath="url(#clip0_7055_3330)">
         <path

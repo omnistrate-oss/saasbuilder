@@ -1,10 +1,9 @@
 import { Stack, styled } from "@mui/material";
 import { FC, ReactElement } from "react";
-import AWSIcon from "src/components/Icons/CloudProviders/AWSLogo";
 import { Text } from "src/components/Typography/Typography";
 import MuiTooltip, { tooltipClasses } from "@mui/material/Tooltip";
 import { CloudProvider } from "src/types/common/enums";
-import GcpLogo from "src/components/Logos/GcpLogo/GcpLogo";
+import { cloudProviderLongLogoMap } from "src/constants/cloudProviders";
 
 type TooltipContentProps = {
   cloudProvider: CloudProvider;
@@ -50,10 +49,7 @@ export const StyledTooltip = styled(({ className, ...props }) => (
 
 const RegionTootlip: FC<TooltipContentProps> = (props) => {
   const { cloudProvider, region, children } = props;
-  let CloudProviderIcon = AWSIcon;
-  if (cloudProvider === "gcp") {
-    CloudProviderIcon = GcpLogo;
-  }
+  const CloudProviderIcon = cloudProviderLongLogoMap[cloudProvider];
 
   return (
     /*@ts-ignore */
@@ -68,7 +64,7 @@ const RegionTootlip: FC<TooltipContentProps> = (props) => {
           alignItems="center"
           gap="8px"
         >
-          <CloudProviderIcon />
+          {CloudProviderIcon}
           <Text size="xsmall" color="#344054">
             {region}
           </Text>

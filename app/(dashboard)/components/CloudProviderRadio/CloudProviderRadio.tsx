@@ -8,6 +8,13 @@ import { cloudProviderLabels } from "src/constants/cloudProviders";
 
 import AWSLogo from "../Icons/AWSLogo";
 import GCPFullLogo from "../Icons/GCPFullLogo";
+import AzureFullLogo from "../Icons/AzureFullLogo";
+
+export const cloudProviderFullLogoMap = {
+  aws: <AWSLogo height="36px" width="auto" />,
+  gcp: <GCPFullLogo height="26px" width="auto" />,
+  azure: <AzureFullLogo height="34px" width="auto" />,
+};
 
 const CloudProviderCard = ({
   cloudProvider,
@@ -33,7 +40,7 @@ const CloudProviderCard = ({
         }
       }}
     >
-      {cloudProvider === "aws" ? <AWSLogo /> : <GCPFullLogo />}
+      {cloudProviderFullLogoMap[cloudProvider]}
       <Text
         size="small"
         weight="medium"

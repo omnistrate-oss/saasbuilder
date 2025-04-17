@@ -58,6 +58,8 @@ const ClusterLocations: FC<ClusterLocationsProps> = (props) => {
       ) {
         if (resultParams.gcp_project_id) {
           cloudProvider = "gcp";
+        } else if (resultParams.azure_subscription_id) {
+          cloudProvider = "azure";
         } else {
           cloudProvider = "aws";
         }
