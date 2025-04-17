@@ -769,7 +769,7 @@ function CloudProviderAccountOrgIdModal(props) {
           <Button
             variant="contained"
             onClick={handleClose}
-            data-testid="close-button"
+            data-testid="close-instructions-button"
             fullWidth
           >
             Close

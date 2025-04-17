@@ -3,10 +3,11 @@ import Card from "components/Card/Card";
 import { Text } from "components/Typography/Typography";
 
 function MetricCard(props) {
-  const { title = "", value = "", unit = "" } = props;
+  const { title = "", value = "", unit = "", dataTestId = "" } = props;
 
   return (
     <Card
+      data-testid={dataTestId}
       flex="1"
       sx={{
         padding: "18px",

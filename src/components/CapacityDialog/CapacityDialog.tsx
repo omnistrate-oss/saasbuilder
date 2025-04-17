@@ -217,7 +217,10 @@ const CapacityDialog: FC<CapacityDialogProps> = ({
           )}
 
           <TextField
-            data-testid="capacity-input"
+            //@ts-ignore
+            inputProps={{
+              "data-testid": "capacity-input",
+            }}
             //@ts-ignore
             id="count"
             name="count"
