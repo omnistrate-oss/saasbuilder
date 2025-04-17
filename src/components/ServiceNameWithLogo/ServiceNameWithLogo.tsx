@@ -1,16 +1,18 @@
-import { Box } from "@mui/material";
+import { Box, SxProps } from "@mui/material";
 import GridCellExpand from "../GridCellExpand/GridCellExpand";
 
 type ServiceNameWithLogoProps = {
   serviceName?: string;
   serviceLogoURL?: string;
   onClick?: () => void;
+  textStyles?: SxProps;
 };
 
 const ServiceNameWithLogo: React.FC<ServiceNameWithLogoProps> = ({
   serviceName,
   serviceLogoURL,
   onClick = () => {},
+  textStyles = {},
 }) => {
   return (
     <GridCellExpand
@@ -20,6 +22,7 @@ const ServiceNameWithLogo: React.FC<ServiceNameWithLogoProps> = ({
         fontSize: "14px",
         fontWeight: 500,
         lineHeight: "20px",
+        ...textStyles,
       }}
       onClick={onClick}
       startIcon={
