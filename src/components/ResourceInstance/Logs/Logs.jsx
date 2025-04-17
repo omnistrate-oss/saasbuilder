@@ -55,11 +55,12 @@ const LogsContainer = styled(Box)(() => ({
   color: "#FFFFFF",
 }));
 
-const IconButton = ({ direction, divRef, titleText }) => {
+const IconButton = ({ direction, divRef, titleText, dataTestId }) => {
   const position = direction === "up" ? { top: "20px" } : { bottom: "20px" };
 
   return (
     <MuiIconButton
+      data-testid={dataTestId}
       onClick={() => divRef.current.scrollIntoView({ behavior: "smooth" })}
       sx={{
         position: "absolute",
@@ -267,7 +268,7 @@ function Logs(props) {
         alignItems="center"
       >
         <DataGridHeaderTitle
-          title={`Logs`}
+          title="Logs"
           desc="Detailed logs for monitoring and troubleshooting"
         />
         {nodes?.length > 0 && (
@@ -306,7 +307,7 @@ function Logs(props) {
         <JobCompleted />
       ) : (
         <Box position="relative">
-          <LogsContainer className="sleek-scroll">
+          <LogsContainer data-testid="logs-container" className="sleek-scroll">
             <div
               ref={startDivRef}
               style={{ visibility: "hidden", height: "24px" }}
@@ -334,12 +335,14 @@ function Logs(props) {
           {isLogsDataLoaded && (
             <>
               <IconButton
-                titleText={"Navigate to top"}
+                dataTestId="scroll-to-top-button"
+                titleText="Navigate to top"
                 direction="up"
                 divRef={startDivRef}
               />
               <IconButton
-                titleText={"Navigate to bottom"}
+                dataTestId="scroll-to-bottom-button"
+                titleText="Navigate to bottom"
                 direction="down"
                 divRef={endDivRef}
               />

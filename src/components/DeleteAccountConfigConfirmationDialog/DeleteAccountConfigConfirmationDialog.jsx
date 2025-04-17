@@ -289,6 +289,7 @@ function DeleteAccountConfigConfirmationDialog(props) {
             Cancel
           </Button>
           <Button
+            data-testid="delete-submit-button"
             type="submit"
             variant="contained"
             sx={{ height: "40px !important", padding: "10px 14px !important" }}

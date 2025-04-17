@@ -870,28 +870,46 @@ function Metrics(props) {
         <>
           <Box display="flex" alignItems="stretch" gap={"12px"} mt={2.5}>
             <MetricCard
+              dataTestId="cpu-usage-card"
               title="CPU Usage"
               value={cpuUsageData.current}
               unit="%"
             />
             {productTierType !== "OMNISTRATE_MULTI_TENANCY" && (
-              <MetricCard title="Load average" value={loadAverage.current} />
+              <MetricCard
+                dataTestId="load-average-card"
+                title="Load average"
+                value={loadAverage.current}
+              />
             )}
             {selectedNode?.storageSize && (
               <MetricCard
+                dataTestId="storage-card"
                 title="Storage"
                 value={selectedNode?.storageSize}
                 unit="GiB"
               />
             )}
-            <MetricCard title="Total RAM" value={totalMemoryGiB} unit="GiB" />
-            <MetricCard title="Used RAM" value={memoryUsageGiB} unit="GiB" />
             <MetricCard
+              dataTestId="total-ram-card"
+              title="Total RAM"
+              value={totalMemoryGiB}
+              unit="GiB"
+            />
+            <MetricCard
+              dataTestId="used-ram-card"
+              title="Used RAM"
+              value={memoryUsageGiB}
+              unit="GiB"
+            />
+            <MetricCard
+              dataTestId="ram-usage-card"
               title="RAM Usage (%)"
               value={memoryUsagePercent}
               unit="%"
             />
             <MetricCard
+              dataTestId="system-uptime-card"
               title="System Uptime"
               value={systemUptimeHours}
               unit="hrs"
