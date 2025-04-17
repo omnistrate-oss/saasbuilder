@@ -508,6 +508,12 @@ export const AZURE_REGION_COORDINATES = {
   },
 };
 
+export const REGION_COORDINATES = {
+  aws: AWS_REGION_COORDINATES,
+  gcp: GCP_REGION_COORDINATES,
+  azure: AZURE_REGION_COORDINATES,
+};
+
 export function getRegionCoordinates(
   cloudProvider: CloudProvider,
   region: string
@@ -516,14 +522,5 @@ export function getRegionCoordinates(
   latitude: number;
   longitude: number;
 } {
-  let regionData;
-  if (cloudProvider === "aws") {
-    regionData = AWS_REGION_COORDINATES[region];
-  } else if (cloudProvider === "gcp") {
-    regionData = GCP_REGION_COORDINATES[region];
-  } else if (cloudProvider === "azure") {
-    regionData = AZURE_REGION_COORDINATES[region];
-  }
-
-  return regionData;
+  return REGION_COORDINATES[cloudProvider]?.[region];
 }

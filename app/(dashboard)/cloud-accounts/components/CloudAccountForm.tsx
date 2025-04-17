@@ -23,7 +23,7 @@ import { ServiceOffering } from "src/types/serviceOffering";
 import { selectUserrootData } from "src/slices/userDataSlice";
 import {
   CLOUD_PROVIDERS,
-  cloudProviderLogoMap,
+  cloudProviderLongLogoMap,
 } from "src/constants/cloudProviders";
 
 import { getServiceMenuItems } from "app/(dashboard)/instances/utils";
@@ -464,7 +464,7 @@ const CloudAccountForm = ({
                 ? null
                 : () => {
                     const cloudProvider = values.cloudProvider;
-                    return cloudProviderLogoMap[cloudProvider];
+                    return cloudProviderLongLogoMap[cloudProvider];
                   },
             },
             {

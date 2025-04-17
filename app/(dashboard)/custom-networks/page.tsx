@@ -26,7 +26,10 @@ import useSnackbar from "src/hooks/useSnackbar";
 import { CustomNetwork } from "src/types/customNetwork";
 import { deleteCustomNetwork } from "src/api/customNetworks";
 import useRegions from "./hooks/useRegions";
-import { cloudProviderLongLogoMap } from "src/constants/cloudProviders";
+import {
+  cloudProviderLogoMap,
+  cloudProviderLongLogoMap,
+} from "src/constants/cloudProviders";
 import { getCustomNetworksRoute } from "src/utils/routes";
 
 const columnHelper = createColumnHelper<CustomNetwork>();
@@ -151,13 +154,13 @@ const CustomNetworksPage = () => {
       res.push({
         title: "Account ID",
         value: networkInstance.awsAccountID,
-        icon: cloudProviderLongLogoMap.aws,
+        icon: cloudProviderLogoMap.aws,
       });
     } else if (networkInstance.gcpProjectID) {
       res.push({
         title: "Project ID",
         value: networkInstance.gcpProjectID,
-        icon: cloudProviderLongLogoMap.gcp,
+        icon: cloudProviderLogoMap.gcp,
       });
       res.push({
         title: "Project Number",
@@ -169,7 +172,7 @@ const CustomNetworksPage = () => {
         title: "Subscription ID",
         //@ts-ignore
         value: networkInstance.azureSubscriptionID,
-        icon: cloudProviderLongLogoMap.azure,
+        icon: cloudProviderLogoMap.azure,
       });
       res.push({
         title: "Tenant ID",
