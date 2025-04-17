@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { Field } from "src/components/DynamicForm/types";
 import { productTierTypes } from "src/constants/servicePlan";
-import { cloudProviderLogoMap } from "src/constants/cloudProviders";
+import { cloudProviderLongLogoMap } from "src/constants/cloudProviders";
 import {
   getCustomNetworksMenuItems,
   getRegionMenuItems,
@@ -303,7 +303,7 @@ export const getStandardInformationFields = (
       previewValue: values.cloudProvider
         ? () => {
             const cloudProvider = values.cloudProvider;
-            return cloudProviderLogoMap[cloudProvider];
+            return cloudProviderLongLogoMap[cloudProvider];
           }
         : null,
     });
@@ -448,7 +448,8 @@ export const getNetworkConfigurationFields = (
   if (
     cloudProviderNativeNetworkIdFieldExists &&
     cloudProviderFieldExists &&
-    values.cloudProvider !== "gcp"
+    values.cloudProvider !== "gcp" &&
+    values.cloudProvider !== "azure"
   ) {
     const param = inputParametersObj["cloud_provider_native_network_id"];
     fields.push({
