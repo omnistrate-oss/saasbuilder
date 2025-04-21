@@ -16,8 +16,9 @@ import PageContainer from "../components/Layout/PageContainer";
 import { colors } from "src/themeConfig";
 import useUserData from "src/hooks/usersData";
 import { selectUserrootData } from "src/slices/userDataSlice";
+import DeleteAccount from "./components/DeleteAccount";
 
-type CurrentTab = "profile" | "billingAddress" | "password";
+type CurrentTab = "profile" | "deleteAccount" | "password";
 
 const SettingsPage = () => {
   const selectUser = useSelector(selectUserrootData);
@@ -61,11 +62,27 @@ const SettingsPage = () => {
               },
             }}
           />
-    
+
           <Tab
             label={tabLabels.password}
             value={"password"}
             onClick={() => setCurrentTab("password")}
+            sx={{
+              paddingY: "12px !important",
+              paddingX: "16px !important",
+              minWidth: "0px",
+              textTransform: "none",
+              fontWeight: "600",
+              "&.Mui-selected": {
+                color: colors.purple700,
+              },
+            }}
+          />
+
+          <Tab
+            label={tabLabels.deleteAccount}
+            value={"deleteAccount"}
+            onClick={() => setCurrentTab("deleteAccount")}
             sx={{
               paddingY: "12px !important",
               paddingX: "16px !important",
@@ -86,9 +103,13 @@ const SettingsPage = () => {
             isLoadingUserData={isLoadingUserData}
           />
         )}
-    
+
         {currentTab === "password" && (
           <PasswordForm email={selectUser?.email} />
+        )}
+
+        {currentTab === "deleteAccount" && (
+          <DeleteAccount />
         )}
       </PageContainer>
     </div>
