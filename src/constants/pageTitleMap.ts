@@ -18,4 +18,5 @@ export const PAGE_TITLE_MAP = {
   "/settings": "Profile Settings",
   "/billing": "Billing",
   "/subscriptions": "Subscriptions",
+  "/cost-explorer": "Cost Explorer",
 };
