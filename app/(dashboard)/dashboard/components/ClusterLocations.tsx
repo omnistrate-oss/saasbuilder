@@ -4,7 +4,7 @@ import ClusterLocationsIcon from "src/components/Icons/Dashboard/ClusterLocation
 import { Text } from "src/components/Typography/Typography";
 import { ResourceInstance } from "src/types/resourceInstance";
 import dynamic from "next/dynamic";
-const DottedWorldMap = dynamic(() => import("./components/DottedWorldMap"), {
+const DottedWorldMap = dynamic(() => import("./DottedWorldMap"), {
   ssr: false,
 });
 import { CloudProvider } from "src/types/common/enums";

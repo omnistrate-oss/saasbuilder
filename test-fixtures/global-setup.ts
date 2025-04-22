@@ -1,0 +1,43 @@
+import { yamlTemplates } from "constants/yaml-templates";
+import { GlobalStateManager } from "test-utils/global-state-manager";
+import { ProviderAPIClient } from "test-utils/provider-api-client";
+
+async function globalSetup() {
+  console.log("Running Global Setup...");
+
+  const apiClient = new ProviderAPIClient();
+  let token = GlobalStateManager.getToken("provider");
+
+  if (!token) {
+    token = await apiClient.providerLogin(process.env.PROVIDER_EMAIL!, process.env.PROVIDER_PASSWORD!);
+    GlobalStateManager.setState({ providerToken: token });
+  }
+
+  console.log("Provider Auth Successful");
+  const date = `${Date.now()}`;
+
+  await Promise.all([
+    apiClient.createServiceFromComposeSpec(
+      `Playwright Postgres DT - ${date}`,
+      "Playwright Postgres DT Service + Provider Hosted",
+      yamlTemplates.postgresProviderHostedDT
+    ),
+    apiClient.createServiceFromComposeSpec(
+      `Playwright Supabase DT BYOA - ${date}`,
+      "Playwright Supabase DT Service + BYOA Hosted",
+      yamlTemplates.supabaseBYOAHostedDT
+    ),
+    apiClient.createServiceFromServicePlanSpec(
+      `Playwright Redis Helm - ${date}`,
+      "Playwright Redis Helm Service + Provider Hosted",
+      yamlTemplates.redisHelmProviderHosted
+    ),
+  ]);
+
+  // Used when Deleting Services
+  GlobalStateManager.setState({ date });
+
+  console.log("Global Setup Successful");
+}
+
+export default globalSetup;

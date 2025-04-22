@@ -1,0 +1,25 @@
+{
+  "cookies": [
+    {
+      "name": "token",
+      "value": "eyJhbGciOiJFZERTQSIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NDU0MDYwMzEsImlhdCI6MTc0NTMxOTYzMSwiaXNzIjoib21uaXN0cmF0ZS5jb20iLCJsYXN0TG9nb3V0Q291bnRlciI6NCwicm9sZSI6ImFkbWluIiwidG9rZW5JRCI6ImRiMTk3NzIxLTYyMWMtNGZhMS1hNjRlLWU0MTA0M2UxMGVmYyIsInVzZXJJRCI6InVzZXItbXRqVE9id2haMSJ9.ghM3jymxDOdJWCxKWeboj_TkpiOaG9DcoFYcGagu2799xBYuq9p6TIkfqhR9TD727glCYVUC_jK21QDJdLwgAw",
+      "domain": "localhost",
+      "path": "/",
+      "expires": -1,
+      "httpOnly": false,
+      "secure": true,
+      "sameSite": "Lax"
+    }
+  ],
+  "origins": [
+    {
+      "origin": "http://localhost:3000",
+      "localStorage": [
+        {
+          "name": "cookieConsent",
+          "value": "{\"consentGiven\":false,\"categories\":[{\"category\":\"necessary\",\"services\":[{\"type\":\"auth\",\"name\":\"token\",\"cookies\":[\"token\"]},{\"type\":\"OAuth_providers\",\"name\":\"OAuth\"}],\"hide\":false,\"editable\":false,\"enabled\":true},{\"category\":\"analytics\",\"services\":[{\"type\":\"script\",\"src\":\"https://www.googletagmanager.com/gtag/js?id=G-V37M9E3PK3\",\"name\":\"googletagmanager\",\"consent-category\":\"analytics\",\"gtag\":\"G-V37M9E3PK3\",\"cookies\":[\"_ga\",\"_ga_*\",\"_gid\"],\"handleEnable\":\"addGoogleAnalytics\",\"handleDisable\":\"removeGoogleAnalyticsScriptsAndCookies\"}],\"hide\":false,\"editable\":true,\"enabled\":false}]}"
+        }
+      ]
+    }
+  ]
+}

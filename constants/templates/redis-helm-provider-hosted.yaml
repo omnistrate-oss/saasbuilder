@@ -1,0 +1,287 @@
+version: "3.9"
+name: "Pro Tier"
+deployment:
+  hostedDeployment:
+    AwsAccountId: "{{AWS_ACCOUNT_ID}}"
+    AwsBootstrapRoleAccountArn: "arn:aws:iam::{{AWS_ACCOUNT_ID}}:role/omnistrate-bootstrap-role"
+    GcpProjectId: "{{GCP_PROJECT_ID}}"
+    GcpProjectNumber: "{{GCP_PROJECT_NUMBER}}"
+    GcpServiceAccountEmail: "omnistrate-bootstrap@{{GCP_PROJECT_ID}}.iam.gserviceaccount.com"
+
+features:
+  INTERNAL:
+    logs: # Omnistrate native
+  CUSTOMER:
+    logs: # Omnistrate native
+    licensing: # Omnistrate licensing with default values
+
+services:
+  - name: Redis Cluster
+    dependsOn:
+      - Postgres Database
+    compute:
+      instanceTypes:
+        - name: t4g.small
+          cloudProvider: aws
+          configurationOverrides:
+            InstanceLifecycleType: Spot
+        - apiParam: instanceType
+          cloudProvider: gcp
+    network:
+      ports:
+        - 6379
+    endpointConfiguration:
+      redisCluster:
+        host: "$sys.network.externalClusterEndpoint"
+        ports:
+          - 6379
+        primary: true
+        networkingType: PUBLIC
+        disableMonitoring: false
+    helmChartConfiguration:
+      chartName: redis
+      chartVersion: 19.6.2
+      chartRepoName: bitnami
+      chartRepoURL: https://charts.bitnami.com/bitnami
+      chartValues:
+        master:
+          podLabels:
+            omnistrate.com/schedule-mode: exclusive
+          persistence:
+            enabled: false
+          service:
+            type: LoadBalancer
+            annotations:
+              external-dns.alpha.kubernetes.io/hostname: $sys.network.externalClusterEndpoint
+
+          resources:
+            requests:
+              cpu: 100m
+              memory: 128Mi
+            limits:
+              cpu: 150m
+              memory: 256Mi
+          affinity:
+            nodeAffinity:
+              requiredDuringSchedulingIgnoredDuringExecution:
+                nodeSelectorTerms:
+                  - matchExpressions:
+                      - key: omnistrate.com/managed-by
+                        operator: In
+                        values:
+                          - omnistrate
+                      - key: topology.kubernetes.io/region
+                        operator: In
+                        values:
+                          - $sys.deploymentCell.region
+                      - key: node.kubernetes.io/instance-type
+                        operator: In
+                        values:
+                          - $sys.compute.node.instanceType
+                      - key: omnistrate.com/resource
+                        operator: In
+                        values:
+                          - $sys.deployment.resourceID
+            podAntiAffinity:
+              requiredDuringSchedulingIgnoredDuringExecution:
+                - labelSelector:
+                    matchExpressions:
+                      - key: omnistrate.com/schedule-mode
+                        operator: In
+                        values:
+                          - exclusive
+                  namespaceSelector: {}
+                  topologyKey: kubernetes.io/hostname
+        replica:
+          podLabels:
+            omnistrate.com/schedule-mode: exclusive
+          persistence:
+            enabled: false
+          replicaCount: $var.numReplicas
+          resources:
+            requests:
+              cpu: 100m
+              memory: 128Mi
+            limits:
+              cpu: 150m
+              memory: 256Mi
+          affinity:
+            nodeAffinity:
+              requiredDuringSchedulingIgnoredDuringExecution:
+                nodeSelectorTerms:
+                  - matchExpressions:
+                      - key: omnistrate.com/managed-by
+                        operator: In
+                        values:
+                          - omnistrate
+                      - key: topology.kubernetes.io/region
+                        operator: In
+                        values:
+                          - $sys.deploymentCell.region
+                      - key: node.kubernetes.io/instance-type
+                        operator: In
+                        values:
+                          - $sys.compute.node.instanceType
+                      - key: omnistrate.com/resource
+                        operator: In
+                        values:
+                          - $sys.deployment.resourceID
+            podAntiAffinity:
+              requiredDuringSchedulingIgnoredDuringExecution:
+                - labelSelector:
+                    matchExpressions:
+                      - key: omnistrate.com/schedule-mode
+                        operator: In
+                        values:
+                          - exclusive
+                  namespaceSelector: {}
+                  topologyKey: kubernetes.io/hostname
+    apiParameters:
+      - key: numReplicas
+        description: Number of Replicas
+        name: Replica Count
+        type: Float64
+        modifiable: true
+        required: false
+        export: true
+        defaultValue: "1"
+      - key: instanceType
+        description: Instance Type
+        name: Instance Type
+        type: String
+        modifiable: true
+        required: false
+        export: true
+        defaultValue: "t4g.small"
+      - key: postgresUsername
+        description: Postgres Username
+        name: Postgres Username
+        type: String
+        modifiable: false
+        required: false
+        export: true
+        defaultValue: "postgres"
+        parameterDependencyMap:
+          Postgres Database: postgresUsername
+      - key: postgresPassword
+        description: Postgres Password
+        name: Postgres Password
+        type: Password
+        modifiable: false
+        required: true
+        export: true
+        parameterDependencyMap:
+          Postgres Database: postgresPassword
+      - key: postgresDatabase
+        description: Postgres Database
+        name: Postgres Database
+        type: String
+        modifiable: false
+        required: false
+        export: true
+        defaultValue: "postgres"
+        parameterDependencyMap:
+          Postgres Database: postgresDatabase
+      - key: postgresInstanceType
+        description: Postgres Instance Type
+        name: Postgres Instance Type
+        type: String
+        modifiable: true
+        required: false
+        export: true
+        defaultValue: "t4g.small"
+        parameterDependencyMap:
+          Postgres Database: postgresInstanceType
+  - name: Postgres Database
+    internal: false
+    compute:
+      instanceTypes:
+        - apiParam: postgresInstanceType
+          cloudProvider: aws
+        - apiParam: postgresInstanceType
+          cloudProvider: gcp
+    network:
+      ports:
+        - 5432
+    helmChartConfiguration:
+      chartName: postgresql
+      chartVersion: 15.5.36
+      chartRepoName: bitnami
+      chartRepoURL: https://charts.bitnami.com/bitnami
+      chartValues:
+        auth:
+          database: $var.postgresDatabase
+          username: $var.postgresUsername
+          password: $var.postgresPassword
+        primary:
+          persistence:
+            enabled: false
+          resources:
+            requests:
+              cpu: 100m
+              memory: 128Mi
+            limits:
+              cpu: 1000m
+              memory: 1024Mi
+          affinity:
+            nodeAffinity:
+              requiredDuringSchedulingIgnoredDuringExecution:
+                nodeSelectorTerms:
+                  - matchExpressions:
+                      - key: omnistrate.com/managed-by
+                        operator: In
+                        values:
+                          - omnistrate
+                      - key: topology.kubernetes.io/region
+                        operator: In
+                        values:
+                          - $sys.deploymentCell.region
+                      - key: node.kubernetes.io/instance-type
+                        operator: In
+                        values:
+                          - $sys.compute.node.instanceType
+                      - key: omnistrate.com/resource
+                        operator: In
+                        values:
+                          - $sys.deployment.resourceID
+            podAntiAffinity:
+              requiredDuringSchedulingIgnoredDuringExecution:
+                - labelSelector:
+                    matchExpressions:
+                      - key: omnistrate.com/schedule-mode
+                        operator: In
+                        values:
+                          - exclusive
+                  namespaceSelector: {}
+                  topologyKey: kubernetes.io/hostname
+        readReplicas:
+          replicaCount: 0
+    apiParameters:
+      - key: postgresUsername
+        description: Postgres Username
+        name: Postgres Username
+        type: String
+        modifiable: true
+        required: true
+        export: true
+      - key: postgresPassword
+        description: Postgres Password
+        name: Postgres Password
+        type: String
+        modifiable: true
+        required: true
+        export: true
+      - key: postgresDatabase
+        description: Postgres Database
+        name: Postgres Database
+        type: String
+        modifiable: true
+        required: true
+        export: true
+      - key: postgresInstanceType
+        description: Postgres Instance Type
+        name: Postgres Instance Type
+        type: String
+        modifiable: true
+        required: true
+        export: true
