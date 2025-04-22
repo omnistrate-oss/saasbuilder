@@ -93,17 +93,17 @@ export default defineConfig({
   ],
 
   /* Run your local dev server before starting the tests */
-  webServer: {
-    command: "yarn dev",
-    url: "http://localhost:3000",
-    reuseExistingServer: !process.env.CI,
-    env: {
-      PROVIDER_EMAIL: process.env.PROVIDER_EMAIL as string,
-      PROVIDER_PASSWORD: process.env.PROVIDER_PASSWORD as string,
-      NEXT_PUBLIC_BACKEND_BASE_DOMAIN: "https://api.omnistrate.dev",
-      ENVIRONMENT_TYPE: "DEV",
-      MAIL_USER_EMAIL: process.env.MAIL_USER_EMAIL as string,
-      MAIL_USER_PASSWORD: process.env.MAIL_USER_PASSWORD as string,
-    },
-  },
+  // webServer: {
+  //   command: "yarn dev",
+  //   url: "http://localhost:3000",
+  //   reuseExistingServer: !process.env.CI,
+  //   env: {
+  //     PROVIDER_EMAIL: process.env.PROVIDER_EMAIL as string,
+  //     PROVIDER_PASSWORD: process.env.PROVIDER_PASSWORD as string,
+  //     NEXT_PUBLIC_BACKEND_BASE_DOMAIN: "https://api.omnistrate.dev",
+  //     ENVIRONMENT_TYPE: "DEV",
+  //     MAIL_USER_EMAIL: process.env.MAIL_USER_EMAIL as string,
+  //     MAIL_USER_PASSWORD: process.env.MAIL_USER_PASSWORD as string,
+  //   },
+  // },
 });

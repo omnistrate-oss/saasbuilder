@@ -57,6 +57,7 @@ test.describe("Instances Page - Specialized Tests", () => {
 
     const date = GlobalStateManager.getDate();
     await page.getByRole("option", { name: `Playwright Supabase DT BYOA - ${date}` }).click();
+    await page.waitForLoadState("networkidle");
 
     await page.getByTestId(dataTestIds.cloudAccountSelect).click();
     await page.getByRole("option", { name: `${cloudAccountInstanceId} (Account` }).click();

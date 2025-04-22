@@ -1,9 +1,7 @@
 name: Playwright Tests
 on:
   push:
-    branches: [ master ]
-  pull_request:
-    branches: [ master ]
+    branches: [ master, feat/playwright-test-setup ]
   workflow_dispatch:
     inputs:
       reason:
@@ -27,23 +25,33 @@ jobs:
     - name: Install Playwright Browsers
       run: yarn playwright install --with-deps
 
+    - name: Setup and start saasbuilder server
+      run: |
+        yarn build
+        yarn start & sleep 15
+      env:
+        PROVIDER_EMAIL: ${{ secrets.PROVIDER_EMAIL }}
+        PROVIDER_PASSWORD: ${{ secrets.PROVIDER_PASSWORD }}
+        NEXT_PUBLIC_BACKEND_BASE_DOMAIN: https://api.omnistrate.dev
+        ENVIRONMENT_TYPE: DEV
+        MAIL_USER_EMAIL: ${{ secrets.MAIL_USER_EMAIL }}
+        MAIL_USER_PASSWORD: ${{ secrets.MAIL_USER_PASSWORD }}
+
     - name: Run Playwright tests
       run: yarn playwright test
       env: 
-        YOUR_SAAS_DOMAIN_URL: http://localhost:3000
+        YOUR_SAAS_DOMAIN_URL: http://localhost:8080
         USER_EMAIL: ${{ secrets.USER_EMAIL }}
         USER_PASSWORD: ${{ secrets.USER_PASSWORD }}
         AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
         GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
         GCP_PROJECT_NUMBER: ${{ secrets.GCP_PROJECT_NUMBER }}
+        BYOA_AWS_ACCOUNT_ID: ${{ secrets.BYOA_AWS_ACCOUNT_ID }}
 
         NEXT_PUBLIC_BACKEND_BASE_DOMAIN: "https://api.omnistrate.dev"
-        ENVIRONMENT_TYPE: "DEV"
+        ENVIRONMENT_TYPE: DEV
         PROVIDER_EMAIL: ${{ secrets.PROVIDER_EMAIL }}
         PROVIDER_PASSWORD: ${{ secrets.PROVIDER_PASSWORD }}
-
-        MAIL_USER_EMAIL: ${{ secrets.MAIL_USER_EMAIL }}
-        MAIL_USER_PASSWORD: ${{ secrets.MAIL_USER_PASSWORD }}
 
     - uses: actions/upload-artifact@v4
       if: ${{ !cancelled() }}

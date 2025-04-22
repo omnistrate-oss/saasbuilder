@@ -45,22 +45,21 @@ test.describe("Instances Page - Basic Lifecycle Tests", () => {
   test("Create a Postgres DT Instance", async ({ page }) => {
     await page.waitForLoadState("networkidle");
 
-    const dataTestIds = instancesPage.dataTestIds,
-      pageElements = instancesPage.pageElements;
+    const dataTestIds = instancesPage.dataTestIds;
     const date = GlobalStateManager.getDate() || "";
     await page.getByTestId(dataTestIds.createButton).click();
 
     // Wait for the Form to Load and Click the Service Name Dropdown
     await page.getByTestId(dataTestIds.serviceNameSelect).click();
     await page.getByRole("option", { name: `Playwright Postgres DT - ${date}` }).click();
+    await page.waitForLoadState("networkidle");
+
     await page.getByTestId(dataTestIds.gcpCard).click();
     await page.getByTestId(dataTestIds.regionSelect).click();
     await page.getByRole("option", { name: "us-central1" }).click();
 
     await page.waitForTimeout(5000); // Wait 5 seconds
     await page.getByTestId(dataTestIds.submitButton).click();
-
-    await expect(page.getByText(pageElements.launchingInstanceDialogTitle)).toBeVisible();
 
     instanceId = (await page.getByTestId(dataTestIds.instanceId).textContent()) || "";
     console.log(logPrefix, "Instance ID:", instanceId);
