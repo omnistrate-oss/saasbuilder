@@ -36,9 +36,12 @@ export const updatePassword = (payload) => {
   return axios.post(`/update-password`, payload);
 };
 
-
 export const getAllSubscriptionUsers = (
   params = {}
 ): Promise<AxiosResponse<ListAllSubscriptionUsersSuccessResponse>> => {
   return axios.get(`/resource-instance/subscription-users`, { params });
+};
+
+export const deleteUser = (): Promise<AxiosResponse<any>> => {
+  return axios.delete(`/customer-delete-user`);
 };
