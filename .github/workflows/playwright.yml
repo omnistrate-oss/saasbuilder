@@ -42,6 +42,9 @@ jobs:
         PROVIDER_EMAIL: ${{ secrets.PROVIDER_EMAIL }}
         PROVIDER_PASSWORD: ${{ secrets.PROVIDER_PASSWORD }}
 
+        MAIL_USER_EMAIL: ${{ secrets.MAIL_USER_EMAIL }}
+        MAIL_USER_PASSWORD: ${{ secrets.MAIL_USER_PASSWORD }}
+
     - uses: actions/upload-artifact@v4
       if: ${{ !cancelled() }}
       with:
