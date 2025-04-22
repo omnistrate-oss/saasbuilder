@@ -135,16 +135,16 @@ const SignupPage = (props) => {
     const updatedValues = {};
 
     if (org) {
-      updatedValues.legalcompanyname = decodeURIComponent(org);
+      updatedValues.legalcompanyname = decodeURIComponent(org).trim();
     }
     if (orgUrl) {
-      updatedValues.companyurl = orgUrl;
+      updatedValues.companyurl = decodeURIComponent(orgUrl).trim();
     }
     if (email) {
-      updatedValues.email = decodeURIComponent(email);
+      updatedValues.email = decodeURIComponent(email).trim();
     }
     if (userSource) {
-      updatedValues.userSource = userSource;
+      updatedValues.userSource = userSource.trim();
     }
 
     formik.setValues((values) => ({
@@ -207,13 +207,13 @@ const SignupPage = (props) => {
   const invitationInfo = {};
   if (email || org || orgUrl) {
     if (email) {
-      invitationInfo.invitedEmail = decodeURIComponent(email);
+      invitationInfo.invitedEmail = decodeURIComponent(email).trim();
     }
     if (org) {
-      invitationInfo.legalCompanyName = decodeURIComponent(org);
+      invitationInfo.legalCompanyName = decodeURIComponent(org).trim();
     }
     if (orgUrl) {
-      invitationInfo.companyUrl = decodeURIComponent(orgUrl);
+      invitationInfo.companyUrl = decodeURIComponent(orgUrl).trim();
     }
   }
 
