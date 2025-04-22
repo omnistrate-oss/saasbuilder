@@ -139,6 +139,7 @@ const InstancesTableHeader = ({
       isDisabled:
         !selectedInstance ||
         status !== "RUNNING" ||
+        status === "DISCONNECTED" ||
         isComplexResource ||
         isProxyResource ||
         !isUpdateAllowedByRBAC,
@@ -153,11 +154,13 @@ const InstancesTableHeader = ({
         ? "Please select an instance"
         : status !== "RUNNING"
           ? "Instance must be running to stop it"
-          : isComplexResource || isProxyResource
-            ? "System manages instances cannot be stopped"
-            : !isUpdateAllowedByRBAC
-              ? "Unauthorized to stop instances"
-              : "",
+          : status === "DISCONNECTED"
+            ? "Instance is disconnected"
+            : isComplexResource || isProxyResource
+              ? "System manages instances cannot be stopped"
+              : !isUpdateAllowedByRBAC
+                ? "Unauthorized to stop instances"
+                : "",
     });
 
     actions.push({
@@ -168,6 +171,7 @@ const InstancesTableHeader = ({
       isDisabled:
         !selectedInstance ||
         status !== "STOPPED" ||
+        status === "DISCONNECTED" ||
         isComplexResource ||
         isProxyResource ||
         !isUpdateAllowedByRBAC,
@@ -182,11 +186,13 @@ const InstancesTableHeader = ({
         ? "Please select an instance"
         : status !== "STOPPED"
           ? "Instances must be stopped before starting"
-          : isComplexResource || isProxyResource
-            ? "System managed instances cannot be started"
-            : !isUpdateAllowedByRBAC
-              ? "Unauthorized to start instances"
-              : "",
+          : status === "DISCONNECTED"
+            ? "Instance is disconnected"
+            : isComplexResource || isProxyResource
+              ? "System managed instances cannot be started"
+              : !isUpdateAllowedByRBAC
+                ? "Unauthorized to start instances"
+                : "",
     });
 
     actions.push({
@@ -198,6 +204,7 @@ const InstancesTableHeader = ({
         (status !== "RUNNING" &&
           status !== "FAILED" &&
           status !== "COMPLETE") ||
+        status === "DISCONNECTED" ||
         isProxyResource ||
         !isUpdateAllowedByRBAC,
       onClick: () => {
@@ -210,11 +217,13 @@ const InstancesTableHeader = ({
         ? "Please select an instance"
         : status !== "RUNNING" && status !== "FAILED"
           ? "Instance must be running or failed to modify"
-          : isProxyResource
-            ? "System managed instances cannot be modified"
-            : !isUpdateAllowedByRBAC
-              ? "Unauthorized to modify instances"
-              : "",
+          : status === "DISCONNECTED"
+            ? "Instance is disconnected"
+            : isProxyResource
+              ? "System managed instances cannot be modified"
+              : !isUpdateAllowedByRBAC
+                ? "Unauthorized to modify instances"
+                : "",
     });
 
     actions.push({
@@ -238,7 +247,7 @@ const InstancesTableHeader = ({
         : status === "DELETING"
           ? "Instance deletion is already in progress"
           : status === "DISCONNECTED"
-            ? "Cloud account is disconnected"
+            ? "Instance is disconnected"
             : isProxyResource
               ? "System managed instances cannot be deleted"
               : !isDeleteAllowedByRBAC
