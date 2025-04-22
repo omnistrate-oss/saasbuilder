@@ -45,7 +45,11 @@ function DeleteAccount() {
         snackbar.showSuccess("Your account has been successfully deleted");
         handleLogout();
       },
-      onError: () => {},
+      onError: () => {
+        snackbar.showError(
+          "Failed to delete your account. Please try again or contact support"
+        );
+      },
     }
   );
 
