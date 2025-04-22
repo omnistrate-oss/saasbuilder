@@ -58,7 +58,7 @@ test.describe("Instances Page - Basic Lifecycle Tests", () => {
     await page.getByRole("option", { name: "us-central1" }).click();
 
     await page.waitForTimeout(5000); // Wait 5 seconds
-    await page.getByTestId("submit-button").click();
+    await page.getByTestId(dataTestIds.submitButton).click();
 
     await expect(page.getByText(pageElements.launchingInstanceDialogTitle)).toBeVisible();
 
@@ -69,7 +69,7 @@ test.describe("Instances Page - Basic Lifecycle Tests", () => {
   });
 
   test("Wait for Running Instance -> Test Running State", async ({ page }) => {
-    await instancesPage.waitForStatus(instanceId, "Running");
+    await instancesPage.waitForStatus(instanceId, "Running", logPrefix);
     await instancesPage.navigateToInstanceDetails(instanceId);
 
     // Intercept Data from Instance Details Request
@@ -91,7 +91,7 @@ test.describe("Instances Page - Basic Lifecycle Tests", () => {
 
   test("Stop Instance -> Test Stopped State", async ({ page }) => {
     await instancesPage.stopInstance(instanceId);
-    await instancesPage.waitForStatus(instanceId, "Stopped");
+    await instancesPage.waitForStatus(instanceId, "Stopped", logPrefix);
     await instancesPage.navigateToInstanceDetails(instanceId);
 
     // Intercept Data from Instance Details Request
@@ -113,6 +113,6 @@ test.describe("Instances Page - Basic Lifecycle Tests", () => {
 
   test("Delete Instance", async () => {
     await instancesPage.deleteInstance(instanceId);
-    await instancesPage.waitForStatus(instanceId, "Deleting");
+    await instancesPage.waitForStatus(instanceId, "Deleting", logPrefix);
   });
 });

@@ -1,5 +1,7 @@
 import {
+  getCloudAccountsRoute,
   getCookiePolicyRoute,
+  getCustomNetworksRoute,
   getInstancesRoute,
   getPrivacyPolicyRoute,
   getResetPasswordRoute,
@@ -18,4 +20,6 @@ export const PageURLs = {
 
   // Inner Pages
   instances: getInstancesRoute(),
+  cloudAccounts: getCloudAccountsRoute({}),
+  customNetworks: getCustomNetworksRoute({}),
 };

@@ -36,7 +36,6 @@ async function globalSetup() {
 
   // Used when Deleting Services
   GlobalStateManager.setState({ date });
-
   console.log("Global Setup Successful");
 }
 

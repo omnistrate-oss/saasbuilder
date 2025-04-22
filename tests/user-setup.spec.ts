@@ -6,7 +6,7 @@ import { SigninPage } from "page-objects/signin-page";
 import { UserAPIClient } from "test-utils/user-api-client";
 import { GlobalStateManager } from "test-utils/global-state-manager";
 
-const authFile = path.join(__dirname, "../playwright/.auth/user.json");
+const authFile = path.join(__dirname, "../playwright/auth/user.json");
 
 setup("Authenticate User", async ({ page }) => {
   console.log("Authenticating user");

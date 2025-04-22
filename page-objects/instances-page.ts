@@ -28,6 +28,7 @@ export class InstancesPage {
     gcpCard: "gcp-card",
     azureCard: "azure-card",
     cloudAccountSelect: "cloud_provider_account_config_id-select",
+    submitButton: "submit-button",
 
     // Launching Instance Dialog
     instanceId: "instance-id",
@@ -53,6 +54,7 @@ export class InstancesPage {
   async waitForStatus(
     instanceId: string,
     targetStatus: string,
+    logPrefix: string,
     options = {
       timeout: 10 * 60 * 1000, // 10 Minutes Max Timeout
       pollingInterval: 15000, // 15 Seconds
@@ -62,12 +64,12 @@ export class InstancesPage {
 
     while (Date.now() - startTime < options.timeout) {
       await this.page.getByTestId(this.dataTestIds.refreshButton).click();
-      await this.page.waitForRequest((request) => request.url().includes("/api/action?endpoint=%2Fresource-instance"));
+      await this.page.waitForLoadState("networkidle");
 
       // The Status is Inside Row Element with Test ID of the Instance ID
       const row = await this.page.getByTestId(instanceId);
       const status = await row.getByTestId("status").textContent();
-      console.log(`Instance ${instanceId} Status: ${status}`);
+      console.log(logPrefix, `Instance ${instanceId} Status: ${status}`);
 
       if (status === targetStatus) {
         return true;
@@ -85,6 +87,7 @@ export class InstancesPage {
 
   async waitForDelete(
     instanceId: string,
+    logPrefix: string,
     options = {
       timeout: 10 * 60 * 1000, // 10 Minutes Max Timeout
       pollingInterval: 15000, // 15 Seconds
@@ -94,13 +97,13 @@ export class InstancesPage {
 
     while (Date.now() - startTime < options.timeout) {
       await this.page.getByTestId(this.dataTestIds.refreshButton).click();
-      await this.page.waitForRequest((request) => request.url().includes("/api/action?endpoint=%2Fresource-instance"));
+      await this.page.waitForLoadState("networkidle");
 
-      const row = this.page.getByTestId(instanceId);
+      const row = await this.page.getByTestId(instanceId);
 
       // Check if the Row is Visible
       const isVisible = await row.isVisible();
-      console.log(`Instance ${instanceId} Visibility: ${isVisible}`);
+      console.log(logPrefix, `Instance ${instanceId} Visibility: ${isVisible}`);
 
       if (!isVisible) {
         return true;

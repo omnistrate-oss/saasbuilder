@@ -1,7 +1,15 @@
 name: Playwright Tests
 on:
   push:
-    branches: [ main, master ]
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+  workflow_dispatch:
+    inputs:
+      reason:
+        description: "Reason for running tests"
+        required: false
+        default: "Manual trigger"
 jobs:
   test:
     timeout-minutes: 60

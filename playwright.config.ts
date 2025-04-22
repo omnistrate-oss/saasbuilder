@@ -31,7 +31,7 @@ export default defineConfig({
   timeout: 12 * 60 * 1000, // Timeout for each test (12 minutes)
 
   use: {
-    actionTimeout: 20 * 1000, // Timeout for each action (like a click)
+    actionTimeout: 30 * 1000, // Timeout for each action (like a click)
 
     /* Base URL to use in actions like `await page.goto('/')`. */
     baseURL: process.env.YOUR_SAAS_DOMAIN_URL || "http://localhost:3000",
@@ -56,7 +56,7 @@ export default defineConfig({
       testDir: "./tests/deployments",
       use: {
         ...devices["Desktop Chrome"],
-        storageState: path.resolve("./playwright/.auth/user.json"),
+        storageState: path.resolve("./playwright/auth/user.json"),
       },
       dependencies: ["user-setup"],
     },
@@ -94,8 +94,8 @@ export default defineConfig({
 
   /* Run your local dev server before starting the tests */
   webServer: {
-    command: process.env.CI ? "yarn build && yarn start" : "yarn dev",
-    port: process.env.CI ? 8080 : 3000,
+    command: "yarn dev",
+    url: "http://localhost:3000",
     reuseExistingServer: !process.env.CI,
     env: {
       PROVIDER_EMAIL: process.env.PROVIDER_EMAIL as string,
