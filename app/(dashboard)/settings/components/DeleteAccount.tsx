@@ -62,8 +62,7 @@ function DeleteAccount() {
             color="#535862"
             sx={{ marginTop: "2px" }}
           >
-            Permanently delete your account and associated data from
-            {orgName}
+            Permanently delete your account and associated data from {orgName}
           </Text>
         </div>
         <div>
@@ -100,7 +99,6 @@ function DeleteAccount() {
             </div>
           </div>
           <div className="ml-5 mr-5 p-5 border-t border-[#E9EAEB] flex justify-end gap-3">
-            <Button variant="outlined">Cancel</Button>
             <Button
               bgColor="#D92D20"
               variant="contained"
