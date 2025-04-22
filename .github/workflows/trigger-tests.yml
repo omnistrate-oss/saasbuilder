@@ -1,0 +1,15 @@
+name: Trigger Tests
+on:
+  push:
+    branches: [master]
+jobs:
+  trigger:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger Tests
+        run: |
+          curl -X POST \
+          -H "Authorization: token ${{ secrets.REPO_ACCESS_TOKEN }}" \
+          -H "Accept: application/vnd.github.v3+json" \
+          https://api.github.com/repos/omnistrate/saasbuilder-tests/dispatches \
+          -d '{"event_type":"saasbuilder_push"}'

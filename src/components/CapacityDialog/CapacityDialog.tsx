@@ -188,7 +188,11 @@ const CapacityDialog: FC<CapacityDialogProps> = ({
                 {labelObj.title}
               </Text>
             </Stack>
-            <IconButton onClick={handleClose} sx={{ alignSelf: "flex-start" }}>
+            <IconButton
+              data-testid="dialog-close-button"
+              onClick={handleClose}
+              sx={{ alignSelf: "flex-start" }}
+            >
               <CloseIcon />
             </IconButton>
           </Stack>
