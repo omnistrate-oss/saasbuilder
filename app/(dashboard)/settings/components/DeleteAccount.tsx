@@ -45,7 +45,7 @@ function DeleteAccount() {
         snackbar.showSuccess("Your account has been successfully deleted");
         handleLogout();
       },
-      onError: (error) => {},
+      onError: () => {},
     }
   );
 

@@ -1,6 +1,5 @@
 "use client";
 
-import { useFormik } from "formik";
 import CloseIcon from "@mui/icons-material/Close";
 import {
   Dialog as MuiDialog,
@@ -19,7 +18,7 @@ import LoadingSpinnerSmall from "src/components/CircularProgress/CircularProgres
 import ArrowBulletIcon from "src/components/Icons/ArrowIcon/ArrowBulletIcon";
 import { useProviderOrgDetails } from "src/providers/ProviderOrgDetailsProvider";
 import CustomCheckbox from "src/components/Checkbox/Checkbox";
-import { useState } from "react";
+import { FC, useState } from "react";
 
 const Dialog = styled(MuiDialog)(() => ({
   [`& .MuiPaper-root `]: {
@@ -61,15 +60,17 @@ const ListItem = styled("li")({
   gap: "10px",
 });
 
-const DeleteAccountConfirmationDialog = (props) => {
-  const {
-    open = false,
-    handleClose,
-    buttonLabel = "Delete",
-    isLoading,
-    IconComponent = DeleteOutlinedIcon,
-    handleSubmit,
-  } = props;
+type DeleteAccountConfirmationDialogProps = {
+  open: boolean;
+  handleClose: () => void;
+  isLoading: boolean;
+  handleSubmit: () => void;
+};
+
+const DeleteAccountConfirmationDialog: FC<
+  DeleteAccountConfirmationDialogProps
+> = (props) => {
+  const { open = false, handleClose, isLoading, handleSubmit } = props;
   const { orgName } = useProviderOrgDetails();
   const [checked, setChecked] = useState(false);
 
@@ -89,9 +90,9 @@ const DeleteAccountConfirmationDialog = (props) => {
             justifyContent="space-between"
           >
             <Stack direction="row" alignItems="center" gap="16px">
-              <IconComponent />
+              <DeleteOutlinedIcon />
               <Text size="large" weight="bold">
-                You're about to delete your account{" "}
+                You&apos;re about to delete your account{" "}
               </Text>
             </Stack>
             <IconButton onClick={onClose} sx={{ alignSelf: "flex-start" }}>
@@ -158,7 +159,7 @@ const DeleteAccountConfirmationDialog = (props) => {
             bgColor="#D92D20"
             fontColor="#FFFFFF"
           >
-            {buttonLabel} {isLoading && <LoadingSpinnerSmall />}
+            Delete {isLoading && <LoadingSpinnerSmall />}
           </Button>
         </DialogActions>
       </Form>
