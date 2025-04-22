@@ -8,6 +8,9 @@ import { useMutation } from "@tanstack/react-query";
 import { deleteUser } from "src/api/users";
 import useLogout from "src/hooks/useLogout";
 import useSnackbar from "src/hooks/useSnackbar";
+import useInstances from "app/(dashboard)/instances/hooks/useInstances";
+import Tooltip from "src/components/Tooltip/Tooltip";
+import LoadingSpinner from "src/components/LoadingSpinner/LoadingSpinner";
 
 const List = styled("ul")({
   listStyleType: "disc",
@@ -28,6 +31,9 @@ function DeleteAccount() {
   const [confirmationDialogOpen, setConfirmationDialogOpen] = useState(false);
   const { handleLogout } = useLogout();
   const snackbar = useSnackbar();
+
+  const { data: instances = [], isLoading: isLoadingInstances } =
+    useInstances();
 
   function handleDialogOpen() {
     setConfirmationDialogOpen(true);
@@ -52,6 +58,8 @@ function DeleteAccount() {
       },
     }
   );
+
+  if (isLoadingInstances) return <LoadingSpinner />;
 
   return (
     <>
@@ -103,13 +111,22 @@ function DeleteAccount() {
             </div>
           </div>
           <div className="ml-5 mr-5 p-5 border-t border-[#E9EAEB] flex justify-end gap-3">
-            <Button
-              bgColor="#D92D20"
-              variant="contained"
-              onClick={handleDialogOpen}
+            <Tooltip
+              isVisible={instances.length > 0}
+              placement="top"
+              title="Please delete all instances to continue with account deletion"
             >
-              Delete Account
-            </Button>
+              <span>
+                <Button
+                  bgColor="#D92D20"
+                  variant="contained"
+                  onClick={handleDialogOpen}
+                  disabled={instances.length > 0}
+                >
+                  Delete Account
+                </Button>
+              </span>
+            </Tooltip>
           </div>
         </div>
       </div>
