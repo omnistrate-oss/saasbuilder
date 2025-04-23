@@ -21,6 +21,11 @@ const deleteInstances = async (instances: ResourceInstance[], serviceOfferings: 
         continue;
       }
 
+      if (!instance.id || !instance.subscriptionId) {
+        console.error(`Instance is missing required ID or subscription ID`);
+        continue;
+      }
+
       const resourceInstance = await userAPIClient.describeResourceInstance(
         serviceOffering.serviceProviderId,
         serviceOffering.serviceURLKey,
@@ -29,8 +34,8 @@ const deleteInstances = async (instances: ResourceInstance[], serviceOfferings: 
         serviceOffering.serviceModelURLKey,
         serviceOffering.productTierURLKey,
         instance.resourceID?.startsWith("r-injected") ? "omnistrateCloudAccountConfig" : param.urlKey,
-        instance.id as string,
-        instance.subscriptionId as string
+        instance.id,
+        instance.subscriptionId
       );
 
       if (resourceInstance.status === "DELETING") {
@@ -46,8 +51,8 @@ const deleteInstances = async (instances: ResourceInstance[], serviceOfferings: 
         serviceOffering.serviceModelURLKey,
         serviceOffering.productTierURLKey,
         instance.resourceID?.startsWith("r-injected") ? "omnistrateCloudAccountConfig" : param.urlKey,
-        instance.id as string,
-        instance.subscriptionId as string
+        instance.id,
+        instance.subscriptionId
       );
 
       console.log("Deleting Resource Instance: ", resourceInstance);

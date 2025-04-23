@@ -46,7 +46,7 @@ test.describe("Instances Page - Operational Tests", () => {
         serviceModelURLKey,
         productTierURLKey,
         resourceParameters?.[0].urlKey,
-        subscription?.id as string,
+        subscription?.id || "",
         {
           cloud_provider: "aws",
           network_type: "PUBLIC",
@@ -63,14 +63,22 @@ test.describe("Instances Page - Operational Tests", () => {
   });
 
   test("Wait for Running Instance -> Reboot an Instance", async () => {
-    await instancesPage.waitForStatus(instance.id as string, "Running", logPrefix);
-    await instancesPage.rebootInstance(instance.id as string);
-    await instancesPage.waitForStatus(instance.id as string, "Restarting", logPrefix);
+    if (!instance.id) {
+      throw new Error(`${logPrefix} Instance ID is not present`);
+    }
+
+    await instancesPage.waitForStatus(instance.id, "Running", logPrefix);
+    await instancesPage.rebootInstance(instance.id);
+    await instancesPage.waitForStatus(instance.id, "Restarting", logPrefix);
   });
 
   test("Wait for Running Instance -> Modify an Instance", async ({ page }) => {
-    await instancesPage.waitForStatus(instance.id as string, "Running", logPrefix);
-    await instancesPage.selectInstance(instance.id as string);
+    if (!instance.id) {
+      throw new Error(`${logPrefix} Instance ID is not present`);
+    }
+
+    await instancesPage.waitForStatus(instance.id, "Running", logPrefix);
+    await instancesPage.selectInstance(instance.id);
 
     await page.getByTestId("modify-button").click();
     await page.waitForLoadState("networkidle");
@@ -81,6 +89,6 @@ test.describe("Instances Page - Operational Tests", () => {
     await page.waitForTimeout(5000); // Wait 5 seconds
     await page.getByTestId("submit-button").click();
 
-    await instancesPage.waitForStatus(instance.id as string, "Deploying", logPrefix);
+    await instancesPage.waitForStatus(instance.id, "Deploying", logPrefix);
   });
 });

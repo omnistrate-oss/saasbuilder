@@ -95,9 +95,9 @@ export class UserAPIClient {
         const offeringData = {
           ...service,
           ...offering,
+          offerings: undefined,
         };
 
-        delete offeringData.offerings;
         serviceOfferings.push(offeringData);
       });
     });

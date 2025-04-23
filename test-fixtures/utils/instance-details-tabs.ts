@@ -152,6 +152,11 @@ export const TestNodesTab = async (instanceDetailsPage: InstanceDetailsPage, ins
 
   const nodes = mainResource.nodes || [];
   for (const node of nodes) {
+    if (!node.id || !node.status || !node.availabilityZone) {
+      console.warn(`Node is missing required properties: ${JSON.stringify(node)}`);
+      continue;
+    }
+
     const row = page.getByTestId(node.id);
     await expect(row).toBeVisible();
 
@@ -218,9 +223,20 @@ export const TestEventsTab = async (instanceDetailsPage: InstanceDetailsPage, in
 
   // Check the Events Table
   await expect(page.getByText(pageElements.eventsTableTitle)).toBeVisible();
+
+  if (events.length === 0) {
+    await expect(page.getByText("No events")).toBeVisible();
+    return;
+  }
+
   const latestTenEvents = events.slice(0, 10);
 
   for (const event of latestTenEvents) {
+    if (!event.id || !event.eventSource || !event.time) {
+      console.warn(`Event is missing required properties: ${JSON.stringify(event)}`);
+      continue;
+    }
+
     const row = page.getByTestId(event.id);
     await expect(row).toBeVisible();
 

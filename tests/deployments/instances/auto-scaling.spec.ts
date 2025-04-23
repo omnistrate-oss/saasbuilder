@@ -50,7 +50,7 @@ test.describe("Instances Page - Capacity Scaling Tests", () => {
         serviceModelURLKey,
         productTierURLKey,
         resourceParameters?.[0].urlKey,
-        subscription?.id as string,
+        subscription?.id || "",
         {
           cloud_provider: "aws",
           network_type: "PUBLIC",
@@ -67,9 +67,13 @@ test.describe("Instances Page - Capacity Scaling Tests", () => {
   });
 
   test("Wait for Running Instance -> Add Capacity to Instance", async () => {
-    await instancesPage.waitForStatus(instance.id as string, "Running", logPrefix);
-    await instancesPage.changeCapacity("add", instance.id as string, 1);
-    await instancesPage.waitForStatus(instance.id as string, "Scaling Up", logPrefix);
+    if (!instance.id) {
+      throw new Error(`${logPrefix} Instance ID is not present`);
+    }
+
+    await instancesPage.waitForStatus(instance.id, "Running", logPrefix);
+    await instancesPage.changeCapacity("add", instance.id, 1);
+    await instancesPage.waitForStatus(instance.id, "Scaling Up", logPrefix);
   });
 
   // TODO: Fix this Test

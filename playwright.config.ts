@@ -11,6 +11,7 @@ dotenv.config({ path: path.resolve(__dirname, ".env.local") });
 /**
  * See https://playwright.dev/docs/test-configuration.
  */
+
 export default defineConfig({
   globalSetup: require.resolve("./test-fixtures/global-setup"),
   globalTeardown: require.resolve("./test-fixtures/global-teardown"),

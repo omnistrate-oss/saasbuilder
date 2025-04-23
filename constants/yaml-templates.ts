@@ -16,13 +16,13 @@ const replaceAccountCredentials = (yaml: string) => {
 };
 
 export const yamlTemplates = {
-  postgresProviderHostedDT: btoa(
+  postgresProviderHostedDT: Buffer.from(
     replaceAccountCredentials(readFileSync(`${__dirname}/templates/postgres-provider-hosted-dt.yaml`, "utf8"))
-  ),
-  supabaseBYOAHostedDT: btoa(
+  ).toString("base64"),
+  supabaseBYOAHostedDT: Buffer.from(
     replaceAccountCredentials(readFileSync(`${__dirname}/templates/supabase-byoa-hosted-dt.yaml`, "utf8"))
-  ),
-  redisHelmProviderHosted: btoa(
+  ).toString("base64"),
+  redisHelmProviderHosted: Buffer.from(
     replaceAccountCredentials(readFileSync(`${__dirname}/templates/redis-helm-provider-hosted.yaml`, "utf8"))
-  ),
+  ).toString("base64"),
 };
