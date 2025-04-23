@@ -1,9 +1,13 @@
 import { readFileSync } from "fs";
 
 const replaceAccountCredentials = (yaml: string) => {
-  const accountId = process.env.AWS_ACCOUNT_ID!;
-  const gcpProjectId = process.env.GCP_PROJECT_ID!;
-  const gcpProjectNumber = process.env.GCP_PROJECT_NUMBER!;
+  const accountId = process.env.AWS_ACCOUNT_ID;
+  const gcpProjectId = process.env.GCP_PROJECT_ID;
+  const gcpProjectNumber = process.env.GCP_PROJECT_NUMBER;
+
+  if (!accountId || !gcpProjectId || !gcpProjectNumber) {
+    throw new Error("Missing required environment variables for account credentials");
+  }
 
   return yaml
     .replace(/{{AWS_ACCOUNT_ID}}/g, accountId)

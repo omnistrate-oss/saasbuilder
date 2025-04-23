@@ -9,7 +9,14 @@ async function globalSetup() {
   let token = GlobalStateManager.getToken("provider");
 
   if (!token) {
-    token = await apiClient.providerLogin(process.env.PROVIDER_EMAIL!, process.env.PROVIDER_PASSWORD!);
+    const email = process.env.PROVIDER_EMAIL;
+    const password = process.env.PROVIDER_PASSWORD;
+
+    if (!email || !password) {
+      throw new Error("Missing provider credentials in environment variables");
+    }
+
+    token = await apiClient.providerLogin(email, password);
     GlobalStateManager.setState({ providerToken: token });
   }
 
