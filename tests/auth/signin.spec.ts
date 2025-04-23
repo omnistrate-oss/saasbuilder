@@ -60,7 +60,7 @@ test.describe("Signin Page", () => {
     await page.waitForURL(PageURLs.instances);
   });
 
-  test("Cookie Settings Banner and Page", async ({ page }) => {
+  test("Cookie Settings Banner", async ({ page }) => {
     const dataTestIds = signinPage.dataTestIds,
       pageElements = signinPage.pageElements;
 
