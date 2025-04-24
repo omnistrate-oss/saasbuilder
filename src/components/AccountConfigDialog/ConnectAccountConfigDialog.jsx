@@ -1,14 +1,6 @@
 import Button from "components/Button/Button";
 import TextField from "components/FormElements/TextField/TextField";
-import {
-  Stack,
-  styled,
-  Box,
-  Dialog,
-  Stepper,
-  Step,
-  StepLabel,
-} from "@mui/material";
+import { Stack, styled, Box, Dialog } from "@mui/material";
 import LoadingSpinnerSmall from "components/CircularProgress/CircularProgress";
 import { Text } from "components/Typography/Typography";
 import Link from "next/link";
@@ -25,12 +17,7 @@ import { useFormik } from "formik";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { disconnected } from "src/api/resourceInstance";
 import ConnectIcon from "../Icons/Connect/Connect";
-import {
-  CustomStepIcon,
-  getStepperProps,
-  stateAccountConfigStepper,
-  stepsConnectRunAccountConfig,
-} from "../Stepper/utils";
+import { getStepperProps, stateAccountConfigStepper } from "../Stepper/utils";
 import useSnackbar from "src/hooks/useSnackbar";
 import { TextContainerToCopy } from "../CloudProviderAccountOrgIdModal/CloudProviderAccountOrgIdModal";
 
@@ -228,140 +215,17 @@ const Trigger = ({ formData, serviceProviderName }) => {
   );
 };
 
-const Run = ({
-  activeStepRun,
-  setActiveStepRun,
+const Check = ({
   instance,
   fetchClickedInstanceDetails,
   setClickedInstance,
   serviceProviderName,
 }) => {
-  useEffect(() => {
-    let timer = null;
-
-    // Timer logic for activeStepRun === 0
-    if (activeStepRun === 0) {
-      timer = setTimeout(() => {
-        setActiveStepRun(1);
-      }, 1000);
-    }
-
-    // Handle instance status updates
-    if (instance?.status === "CONNECTING") {
-      setActiveStepRun(1);
-    }
-
-    // Cleanup the timer to avoid memory leaks
-    return () => {
-      if (timer) {
-        clearTimeout(timer);
-      }
-    };
-  }, [activeStepRun, setActiveStepRun, instance?.status]);
-
-  usePolling(fetchClickedInstanceDetails, setClickedInstance, "CONNECTING");
-
-  return (
-    <Box width={"100%"} display={"flex"} flexDirection={"column"} gap="10px">
-      <Stepper activeStep={activeStepRun} orientation="vertical">
-        {stepsConnectRunAccountConfig(
-          instance?.result_params?.aws_account_id ? "aws" : "gcp"
-        ).map((step, index) => {
-          return (
-            <Step key={index}>
-              <StepLabel
-                StepIconComponent={CustomStepIcon}
-                sx={{
-                  "& .MuiStepLabel-label": {
-                    cursor: "default !important",
-                  },
-                }}
-              >
-                {step.label}
-              </StepLabel>
-            </Step>
-          );
-        })}
-      </Stepper>
-      {activeStepRun === 1 && (
-        <Box
-          sx={{
-            padding: "12px",
-            background: "white",
-            border: "1px solid #D9E0E8",
-            boxShadow: "0px 1px 2px 0px #0A0D120D",
-            borderRadius: "12px",
-          }}
-        >
-          {instance?.result_params?.aws_account_id ? (
-            <Text size="small" weight="semibold" color="#414651">
-              {" "}
-              Run{" "}
-              <StyledLink
-                target="_blank"
-                rel="noopener noreferrer"
-                href={`${instance?.result_params?.connect_cloudformation_url}`}
-              >
-                this
-              </StyledLink>
-               CloudFormation template to grant {`${serviceProviderName}`} the
-              required permissions.
-            </Text>
-          ) : (
-            <Box>
-              <Text size="medium" weight="regular" color="#374151">
-                {/* <b>Using GCP Cloud Shell:</b>  */}
-                Please open the Google Cloud Shell environment using the
-                following link:
-                <StyledLink
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  href="https://shell.cloud.google.com/?cloudshell_ephemeral=true&show=terminal"
-                >
-                  Google Cloud Shell
-                </StyledLink>
-                . Once the terminal is open, execute the following command:
-              </Text>
-              {instance?.result_params?.gcp_bootstrap_shell_script && (
-                <TextContainerToCopy
-                  text={instance?.result_params?.gcp_bootstrap_shell_script}
-                  marginTop="12px"
-                />
-              )}
-            </Box>
-          )}
-
-          <Chip
-            label={
-              <Stack direction="row" alignItems="center" gap="6px">
-                <AlertTriangle />
-                <Text size="xsmall" weight="medium" color="#B54708">
-                  This is a mandatory step to fully establish the cloud account
-                  connection.
-                </Text>
-              </Stack>
-            }
-            fontColor="#B54708"
-            bgColor="#FFFAEB"
-            sx={{
-              marginTop: "6px",
-              display: "inline-block",
-              padding: "2px 8px",
-              border: "1px solid #FEDF89",
-            }}
-          />
-        </Box>
-      )}
-    </Box>
-  );
-};
-
-const Check = ({ status, fetchClickedInstanceDetails, setClickedInstance }) => {
   usePolling(fetchClickedInstanceDetails, setClickedInstance, "READY");
 
   return (
     <Box width={"100%"} display={"flex"} flexDirection={"column"} gap="10px">
-      {status === "READY" ? (
+      {instance?.status === "READY" ? (
         <Box
           sx={{
             padding: "12px",
@@ -406,20 +270,69 @@ const Check = ({ status, fetchClickedInstanceDetails, setClickedInstance }) => {
               {"Verification is in progress..."}
             </Text>
           </Stack>
-          <List>
-            <ListItem>
+          <Box display={"flex"} flexDirection={"column"} mt={"24px"}>
+            {instance?.result_params?.aws_account_id ? (
               <Text size="small" weight="semibold" color="#414651">
-                The verification process is running in the background, you can
-                close this popup by clicking Close.
+                {" "}
+                Run{" "}
+                <StyledLink
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  href={`${instance?.result_params?.connect_cloudformation_url}`}
+                >
+                  this
+                </StyledLink>
+                 CloudFormation template to grant {`${serviceProviderName}`} the
+                required permissions.
               </Text>
-            </ListItem>
-            <ListItem>
-              <Text size="small" weight="semibold" color="#414651">
-                Once the verification is complete, the lifecycle status will
-                change to Ready.
-              </Text>
-            </ListItem>
-          </List>
+            ) : (
+              <Box>
+                <Text size="medium" weight="regular" color="#374151">
+                  {/* <b>Using GCP Cloud Shell:</b>  */}
+                  Please open the Google Cloud Shell environment using the
+                  following link:
+                  <StyledLink
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    href="https://shell.cloud.google.com/?cloudshell_ephemeral=true&show=terminal"
+                  >
+                    Google Cloud Shell
+                  </StyledLink>
+                  . Once the terminal is open, execute the following command:
+                </Text>
+                {instance?.result_params?.gcp_bootstrap_shell_script && (
+                  <TextContainerToCopy
+                    text={instance?.result_params?.gcp_bootstrap_shell_script}
+                    marginTop="12px"
+                  />
+                )}
+              </Box>
+            )}
+
+            <Chip
+              label={
+                <Stack direction="row" alignItems="center" gap="6px">
+                  <AlertTriangle />
+                  <Text size="xsmall" weight="medium" color="#B54708">
+                    This is a mandatory step to fully establish the cloud
+                    account connection.
+                  </Text>
+                </Stack>
+              }
+              fontColor="#B54708"
+              bgColor="#FFFAEB"
+              sx={{
+                marginTop: "6px",
+                display: "inline-block",
+                padding: "2px 8px",
+                border: "1px solid #FEDF89",
+              }}
+            />
+          </Box>
+          <Text size="small" weight="semibold" color="#414651" mt="24px">
+            Once the verification is complete, the lifecycle status will change
+            to Ready.
+          </Text>
         </Box>
       )}
     </Box>
@@ -443,19 +356,16 @@ function ConnectAccountConfigDialog(props) {
   const [connectState, setConnectState] = useState(
     stateAccountConfigStepper.trigger
   );
-  const [activeStepRun, setActiveStepRun] = useState(0);
 
   useEffect(() => {
-    if (instance?.status === "CONNECTING" && activeStepRun < 1) {
-      setConnectState(stateAccountConfigStepper.run);
-    } else if (
+    if (
       instance?.status === "READY" ||
-      instance?.status === "ATTACHING"
+      instance?.status === "ATTACHING" ||
+      instance?.status === "CONNECTING"
     ) {
       setConnectState(stateAccountConfigStepper.check);
     } else if (instance?.status === "DISCONNECTED") {
       setConnectState(stateAccountConfigStepper.trigger);
-      setActiveStepRun(0);
     }
   }, [connectState, setConnectState, instance?.status]);
 
@@ -473,7 +383,7 @@ function ConnectAccountConfigDialog(props) {
       onSuccess: () => {
         refetchInstances();
         snackbar.showSuccess("Connecting cloud account");
-        setConnectState(stateAccountConfigStepper.run);
+        setConnectState(stateAccountConfigStepper.check);
         // eslint-disable-next-line no-use-before-define
         formik.resetForm();
       },
@@ -494,10 +404,6 @@ function ConnectAccountConfigDialog(props) {
     },
     validateOnChange: false,
   });
-
-  const connectStatechange = (step) => {
-    setConnectState(step);
-  };
 
   const handleCancel = () => {
     formik.resetForm();
@@ -521,22 +427,13 @@ function ConnectAccountConfigDialog(props) {
               serviceProviderName={serviceProviderName}
             />
           )}
-          {connectState === stateAccountConfigStepper.run && (
-            <Run
-              activeStepRun={activeStepRun}
-              setActiveStepRun={setActiveStepRun}
+
+          {connectState === stateAccountConfigStepper.check && (
+            <Check
               instance={instance}
               fetchClickedInstanceDetails={fetchClickedInstanceDetails}
               setClickedInstance={setClickedInstance}
               serviceProviderName={serviceProviderName}
-            />
-          )}
-
-          {connectState === stateAccountConfigStepper.check && (
-            <Check
-              status={instance?.status}
-              fetchClickedInstanceDetails={fetchClickedInstanceDetails}
-              setClickedInstance={setClickedInstance}
             />
           )}
         </Content>
@@ -565,23 +462,6 @@ function ConnectAccountConfigDialog(props) {
               {"Connect"}{" "}
               {isFetching ||
                 (accountConfigMutation.isLoading && <LoadingSpinnerSmall />)}
-            </Button>
-          )}
-          {connectState === stateAccountConfigStepper.run && (
-            <Button
-              type="submit"
-              variant="contained"
-              sx={{
-                height: "40px !important",
-                padding: "10px 14px !important",
-              }}
-              disabled={activeStepRun !== 1 || instance?.status === "ATTACHING"}
-              bgColor={buttonColor}
-              onClick={() => {
-                connectStatechange(stateAccountConfigStepper.check);
-              }}
-            >
-              {"Confirm"} {isFetching && <LoadingSpinnerSmall />}
             </Button>
           )}
           {connectState === stateAccountConfigStepper.check && (
