@@ -17,6 +17,7 @@ import { colors } from "src/themeConfig";
 import useUserData from "src/hooks/usersData";
 import { selectUserrootData } from "src/slices/userDataSlice";
 import DeleteAccount from "./components/DeleteAccount";
+import useEnvironmentType from "src/hooks/useEnvironmentType";
 
 type CurrentTab = "profile" | "deleteAccount" | "password";
 
@@ -25,6 +26,9 @@ const SettingsPage = () => {
   const { refetch: refetchUserData, isLoading: isLoadingUserData } =
     useUserData();
   const [currentTab, setCurrentTab] = useState<CurrentTab>("profile");
+  const environmentType = useEnvironmentType();
+
+  const isProduction = environmentType === "PROD";
 
   return (
     <div>
@@ -78,22 +82,23 @@ const SettingsPage = () => {
               },
             }}
           />
-
-          <Tab
-            label={tabLabels.deleteAccount}
-            value={"deleteAccount"}
-            onClick={() => setCurrentTab("deleteAccount")}
-            sx={{
-              paddingY: "12px !important",
-              paddingX: "16px !important",
-              minWidth: "0px",
-              textTransform: "none",
-              fontWeight: "600",
-              "&.Mui-selected": {
-                color: colors.purple700,
-              },
-            }}
-          />
+          {isProduction && (
+            <Tab
+              label={tabLabels.deleteAccount}
+              value={"deleteAccount"}
+              onClick={() => setCurrentTab("deleteAccount")}
+              sx={{
+                paddingY: "12px !important",
+                paddingX: "16px !important",
+                minWidth: "0px",
+                textTransform: "none",
+                fontWeight: "600",
+                "&.Mui-selected": {
+                  color: colors.purple700,
+                },
+              }}
+            />
+          )}
         </Tabs>
 
         {currentTab === "profile" && (
@@ -108,9 +113,7 @@ const SettingsPage = () => {
           <PasswordForm email={selectUser?.email} />
         )}
 
-        {currentTab === "deleteAccount" && (
-          <DeleteAccount />
-        )}
+        {currentTab === "deleteAccount" && isProduction && <DeleteAccount />}
       </PageContainer>
     </div>
   );
