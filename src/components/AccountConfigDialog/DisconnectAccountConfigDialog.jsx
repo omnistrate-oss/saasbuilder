@@ -234,7 +234,6 @@ const Check = ({
   serviceProviderName,
 }) => {
   useEffect(() => {
-    let timer = null;
     setActiveStepRun(0);
     // Handle instance status updates separately
     if (
@@ -245,13 +244,6 @@ const Check = ({
     } else if (instance?.status === "DISCONNECTING") {
       setActiveStepRun(1);
     }
-
-    // Cleanup the timer to avoid memory leaks
-    return () => {
-      if (timer) {
-        clearTimeout(timer);
-      }
-    };
   }, [activeStepRun, setActiveStepRun, instance?.status]);
   usePolling(fetchClickedInstanceDetails, setClickedInstance, "DISCONNECTED");
 
