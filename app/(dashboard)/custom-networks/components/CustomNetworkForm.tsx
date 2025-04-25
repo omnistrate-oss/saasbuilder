@@ -30,7 +30,7 @@ const CustomNetworkForm = ({
   const createCustomNetworkMutation = useMutation(createCustomNetwork, {
     onSuccess: async () => {
       onClose();
-      snackbar.showSuccess("Custom Network created successfully");
+      snackbar.showSuccess("Customer Network created successfully");
       refetchCustomNetworks();
     },
   });
@@ -41,7 +41,7 @@ const CustomNetworkForm = ({
     {
       onSuccess: async () => {
         onClose();
-        snackbar.showSuccess("Custom Network updated successfully");
+        snackbar.showSuccess("Customer Network updated successfully");
         refetchCustomNetworks();
       },
     }
@@ -98,12 +98,12 @@ const CustomNetworkForm = ({
   const formConfiguration: FormConfiguration = useMemo(() => {
     return {
       title: {
-        create: "Create Custom Network",
-        modify: "Modify Custom Network",
+        create: "Create Customer Network",
+        modify: "Modify Customer Network",
       },
       description: {
-        create: "Create new custom network with the specified details",
-        modify: "Update the custom network",
+        create: "Create new customer network with the specified details",
+        modify: "Update the customer network",
       },
       footer: {
         submitButton: {
@@ -119,7 +119,7 @@ const CustomNetworkForm = ({
               dataTestId: "name-input",
               label: "Name",
               subLabel:
-                "The unique name for the custom network for easy reference",
+                "The unique name for the customer network for easy reference",
               name: "name",
               type: "text",
               required: true,
@@ -190,7 +190,7 @@ const CustomNetworkForm = ({
         createCustomNetworkMutation.isLoading ||
         updateCustomNetworkMutation.isLoading
       }
-      previewCardTitle="Custom Network Summary"
+      previewCardTitle="Customer Network Summary"
     />
   );
 };
