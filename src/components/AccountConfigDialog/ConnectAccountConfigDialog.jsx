@@ -406,7 +406,6 @@ function ConnectAccountConfigDialog(props) {
     formik.resetForm();
     handleClose();
     setConnectState(stateAccountConfigStepper.trigger);
-    setActiveStepRun(0);
   };
 
   return (
