@@ -401,9 +401,6 @@ function DisconnectAccountConfigDialog(props) {
       instance?.status === "DISCONNECTED"
     ) {
       setDisconnectState(stateAccountConfigStepper.check);
-    } else if (instance?.status === "READY") {
-      setDisconnectState(stateAccountConfigStepper.trigger);
-      setActiveStepRun(0);
     }
   }, [disconnectState, setDisconnectState, instance?.status]);
 

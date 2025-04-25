@@ -364,8 +364,6 @@ function ConnectAccountConfigDialog(props) {
       instance?.status === "CONNECTING"
     ) {
       setConnectState(stateAccountConfigStepper.check);
-    } else if (instance?.status === "DISCONNECTED") {
-      setConnectState(stateAccountConfigStepper.trigger);
     }
   }, [connectState, setConnectState, instance?.status]);
 
