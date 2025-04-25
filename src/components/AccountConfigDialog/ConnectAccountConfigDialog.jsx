@@ -414,9 +414,7 @@ function ConnectAccountConfigDialog(props) {
     <Dialog open={open} onClose={handleClose}>
       <StyledForm>
         <Header>
-          <StepStepper
-            {...getStepperProps(connectState, roundNumberToTwoDecimals(100))}
-          />
+          <StepStepper {...getStepperProps(connectState)} />
         </Header>
         <Content>
           {connectState === stateAccountConfigStepper.trigger && (
