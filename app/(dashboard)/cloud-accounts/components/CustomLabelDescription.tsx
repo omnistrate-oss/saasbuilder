@@ -41,7 +41,12 @@ export const StyledListItem: FC<StyledListItemProps> = (props) => {
 
 const CustomLabelDescription: FC<{
   hideLinks?: boolean;
-  variant: "aws" | "gcpProjectNumber" | "gcpProjectId";
+  variant:
+    | "aws"
+    | "gcpProjectNumber"
+    | "gcpProjectId"
+    | "azureSubscriptionId"
+    | "azureTenantId";
 }> = ({ hideLinks, variant }) => {
   return (
     <Box mt="8px">
@@ -69,11 +74,34 @@ const CustomLabelDescription: FC<{
               link="https://cloud.google.com/resource-manager/docs/creating-managing-projects#identifying_projects"
             />
           </>
-        ) : (
+        ) : variant === "gcpProjectNumber" ? (
           <StyledListItem
             text="Can't find GCP Project Number?"
             link="https://cloud.google.com/resource-manager/docs/creating-managing-projects#identifying_projects"
           />
+        ) : variant === "azureSubscriptionId" ? (
+          <>
+            <StyledListItem
+              text="Can’t find Subscription ID?"
+              link={
+                "https://learn.microsoft.com/en-us/azure/azure-portal/get-subscription-tenant-id#find-your-azure-active-directory-tenant-id"
+              }
+            />
+
+            <StyledListItem
+              text="Don't have Azure Account?"
+              link={"https://signup.azure.com/"}
+            />
+          </>
+        ) : (
+          <>
+            <StyledListItem
+              text="Can't find Azure Tenant ID?"
+              link={
+                "https://learn.microsoft.com/en-us/azure/azure-portal/get-subscription-tenant-id#find-your-azure-active-directory-tenant-id"
+              }
+            />
+          </>
         ))}
     </Box>
   );

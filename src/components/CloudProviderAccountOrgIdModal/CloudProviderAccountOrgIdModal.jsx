@@ -143,9 +143,12 @@ const CreationTimeInstructions = (props) => {
     gcpBootstrapShellCommand,
     gcpCloudShellLink,
     shellScriptGuide,
+    azureCloudShellLink,
+    azureShellScriptGuide,
+    azureBootstrapShellCommand,
     accountInstructionDetails,
     // orgId,
-    accountConfigMethod,
+    // accountConfigMethod,
     // terraformlink,
     // terraformGuide,
     fetchClickedInstanceDetails,
@@ -216,8 +219,10 @@ const CreationTimeInstructions = (props) => {
 
   useEffect(() => {
     if (
-      // accountConfigMethod === ACCOUNT_CREATION_METHODS.GCP_SCRIPT &&
-      !gcpBootstrapShellCommand
+      (accountInstructionDetails?.gcpProjectID && !gcpBootstrapShellCommand) ||
+      (accountInstructionDetails?.azureSubscriptionID &&
+        !azureBootstrapShellCommand) ||
+      (accountInstructionDetails?.awsAccountID && !cloudFormationTemplateUrl)
     ) {
       startPolling();
     } else {
@@ -291,15 +296,6 @@ const CreationTimeInstructions = (props) => {
       </>
     );
   } else if (accountInstructionDetails?.gcpProjectID) {
-    if (!accountConfigMethod) {
-      return (
-        <BodyText>
-          Your account details are being configured. Please check back shortly
-          for detailed setup instructions.
-        </BodyText>
-      );
-    }
-
     return (
       <>
         <Stack direction={"row"} alignItems={"flex-start"} gap="12px">
@@ -319,7 +315,6 @@ const CreationTimeInstructions = (props) => {
           </Box>
         </Stack>
 
-        {/* {accountConfigMethod === ACCOUNT_CREATION_METHODS.GCP_SCRIPT && ( */}
         <>
           {gcpBootstrapShellCommand ? (
             <>
@@ -341,27 +336,49 @@ const CreationTimeInstructions = (props) => {
             </BodyText>
           )}
         </>
-        {/* )} */}
-        {/* 
-        {accountConfigMethod === ACCOUNT_CREATION_METHODS.TERRAFORM && (
-          <>
-            {terraformlink ? (
-              <>
-                <BodyText sx={{ marginTop: "20px" }}>
-                  Execute the Terraform scripts available {terraformlink}, by
-                  using the Account Config Identity ID below. For guidance our
-                  Terraform instructional video is {terraformGuide}.
-                </BodyText>
-                <TextContainerToCopy text={orgId} />
-              </>
-            ) : (
+      </>
+    );
+  } else if (accountInstructionDetails?.azureSubscriptionID) {
+    return (
+      <>
+        <Stack direction={"row"} alignItems={"flex-start"} gap="12px">
+          <Box flex={1} maxWidth={"50%"}>
+            <BodyText weight="medium">Azure Subscription ID</BodyText>
+            <TextContainerToCopy
+              text={accountInstructionDetails?.azureSubscriptionID}
+              marginTop="6px"
+            />
+          </Box>
+          <Box flex={1} maxWidth={"50%"}>
+            <BodyText weight="medium">Azure Tenant ID</BodyText>
+            <TextContainerToCopy
+              text={accountInstructionDetails?.azureTenantID}
+              marginTop="6px"
+            />
+          </Box>
+        </Stack>
+
+        <>
+          {azureBootstrapShellCommand ? (
+            <>
               <BodyText sx={{ marginTop: "20px" }}>
-                You Terraform details are being configured. Please check back
-                shortly for detailed setup instructions.
+                Please open the Azure Cloud Shell environment using the
+                following link {azureCloudShellLink} and execute the below
+                command.
               </BodyText>
-            )}
-          </>
-        )} */}
+              <TextContainerToCopy text={azureBootstrapShellCommand} />
+              <BodyText sx={{ marginTop: "20px" }}>
+                For guidance, our instructional video is available{" "}
+                {azureShellScriptGuide}.
+              </BodyText>
+            </>
+          ) : (
+            <BodyText sx={{ marginTop: "20px" }}>
+              Your Azure shell script is being configured. Please check back
+              shortly for detailed setup instructions.
+            </BodyText>
+          )}
+        </>
       </>
     );
   } else {
@@ -382,17 +399,17 @@ const NonCreationTimeInstructions = (props) => {
     cloudFormationTemplateUrl,
     gcpBootstrapShellCommand,
     gcpCloudShellLink,
-    shellScriptGuide,
+    gcpShellScriptGuide,
+    azureCloudShellLink,
+    azureBootstrapShellCommand,
+    azureShellScriptGuide,
     accountInstructionDetails,
-    // orgId,
-    // accountConfigMethod,
-    // terraformlink,
-    // terraformGuide,
   } = props;
 
   if (
     !accountInstructionDetails?.awsAccountID &&
-    !accountInstructionDetails?.gcpProjectID
+    !accountInstructionDetails?.gcpProjectID &&
+    !accountInstructionDetails?.azureSubscriptionID
   ) {
     return (
       <BodyText>
@@ -428,6 +445,25 @@ const NonCreationTimeInstructions = (props) => {
               <BodyText weight="medium">GCP Project Number</BodyText>
               <TextContainerToCopy
                 text={accountInstructionDetails?.gcpProjectNumber}
+                marginTop="6px"
+              />
+            </Box>
+          </Stack>
+        )}
+
+        {accountInstructionDetails?.azureSubscriptionID && (
+          <Stack direction={"row"} alignItems={"flex-start"} gap="12px">
+            <Box flex={1} maxWidth={"50%"}>
+              <BodyText weight="medium">Azure Subscription ID</BodyText>
+              <TextContainerToCopy
+                text={accountInstructionDetails?.azureSubscriptionID}
+                marginTop="6px"
+              />
+            </Box>
+            <Box flex={1} maxWidth={"50%"}>
+              <BodyText weight="medium">Azure Tenant ID</BodyText>
+              <TextContainerToCopy
+                text={accountInstructionDetails?.azureTenantID}
                 marginTop="6px"
               />
             </Box>
@@ -493,9 +529,6 @@ const NonCreationTimeInstructions = (props) => {
             )}
             {accountInstructionDetails?.gcpProjectID && (
               <>
-                {/* {(!accountConfigMethod ||
-                accountConfigMethod ===
-                  ACCOUNT_CREATION_METHODS.GCP_SCRIPT) && ( */}
                 <ListItem>
                   <ListItemIcon>
                     <ArrowBulletSmall />
@@ -515,7 +548,7 @@ const NonCreationTimeInstructions = (props) => {
                       />
                       <BodyText sx={{ marginTop: "20px" }}>
                         For guidance our instructional video is{" "}
-                        {shellScriptGuide}.
+                        {gcpShellScriptGuide}.
                       </BodyText>
                     </Box>
                   ) : selectedAccountConfig?.status === "FAILED" ? (
@@ -537,35 +570,51 @@ const NonCreationTimeInstructions = (props) => {
                     </BodyText>
                   )}
                 </ListItem>
-
-                {/* {(!accountConfigMethod ||
-                accountConfigMethod === ACCOUNT_CREATION_METHODS.TERRAFORM) && (
-                <ListItem>
-                  <ListItemIcon>
-                    <ArrowBulletSmall />
-                  </ListItemIcon>
-
-                  {terraformlink ? (
-                    <Box flex={1} overflow={"hidden"}>
-                      <BodyText>
-                        <b>Using Terraform:</b> Execute the Terraform scripts
-                        available {terraformlink}, by using the Account Config
-                        Identity ID below. For guidance our Terraform
-                        instructional video is {terraformGuide}.
-                      </BodyText>
-
-                      <TextContainerToCopy text={orgId} marginTop="12px" />
-                    </Box>
-                  ) : (
-                    <BodyText flex={1} overflow={"hidden"}>
-                      <b>Using Terraform:</b> You Terraform details are being
-                      configured. Please check back shortly for detailed setup
-                      instructions.
-                    </BodyText>
-                  )}
-                </ListItem>
-              )} */}
               </>
+            )}
+
+            {accountInstructionDetails?.azureSubscriptionID && (
+              <ListItem>
+                <ListItemIcon>
+                  <ArrowBulletSmall />
+                </ListItemIcon>
+
+                {azureBootstrapShellCommand ? (
+                  <Box flex={1} overflow={"hidden"}>
+                    <BodyText>
+                      Please open the Azure Cloud Shell environment using the
+                      following link {azureCloudShellLink} and execute the
+                      command below.
+                    </BodyText>
+
+                    <TextContainerToCopy
+                      text={azureBootstrapShellCommand}
+                      marginTop="12px"
+                    />
+                    <BodyText sx={{ marginTop: "20px" }}>
+                      For guidance our instructional video is{" "}
+                      {azureShellScriptGuide}.
+                    </BodyText>
+                  </Box>
+                ) : selectedAccountConfig?.status === "FAILED" ? (
+                  <Box display={"flex"} flexDirection={"column"} gap={"10px"}>
+                    <BodyText>
+                      You may delete this failed configuration and retry adding
+                      it after carefully verifying the Azure Subscription ID and
+                      Tenant ID.
+                    </BodyText>
+                    <BodyText>
+                      If the issue persists, please contact Support for
+                      assistance.
+                    </BodyText>
+                  </Box>
+                ) : (
+                  <BodyText flex={1} overflow={"hidden"}>
+                    Your account details are being configured. Please check back
+                    shortly for detailed setup instructions.
+                  </BodyText>
+                )}
+              </ListItem>
             )}
           </>
         </List>
@@ -576,7 +625,6 @@ const NonCreationTimeInstructions = (props) => {
 
 function CloudProviderAccountOrgIdModal(props) {
   const {
-    // orgId,
     open,
     handleClose,
     isAccountCreation,
@@ -585,9 +633,9 @@ function CloudProviderAccountOrgIdModal(props) {
     accountConfigId,
     selectedAccountConfig,
     gcpBootstrapShellCommand,
+    azureBootstrapShellCommand,
     accountInstructionDetails,
     accountConfigMethod,
-    // downloadTerraformKitMutation,
     fetchClickedInstanceDetails,
     setClickedInstance,
   } = props;
@@ -609,6 +657,16 @@ function CloudProviderAccountOrgIdModal(props) {
       rel="noopener noreferrer"
     >
       here
+    </StyledLink>
+  );
+
+  const azureCloudShellLink = (
+    <StyledLink
+      href="https://portal.azure.com/#cloudshell/"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      Azure Cloud Shell
     </StyledLink>
   );
 
@@ -643,8 +701,25 @@ function CloudProviderAccountOrgIdModal(props) {
   // );
 
   // links pointing to guides for different methods
+  const azureShellScriptGuide = isAccessPage ? (
+    <StyledLink
+      href="https://youtu.be/7A9WbZjuXgQ?si=y-AvMmtdFIycqzOS"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      here
+    </StyledLink>
+  ) : (
+    <StyledLink
+      href="https://youtu.be/7A9WbZjuXgQ?si=y-AvMmtdFIycqzOS"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      here
+    </StyledLink>
+  );
 
-  const shellScriptGuide = isAccessPage ? (
+  const gcpShellScriptGuide = isAccessPage ? (
     <StyledLink
       href="https://youtu.be/isTGi8tQA2w?si=a12mJXnlA-y2ipVC"
       target="_blank"
@@ -740,7 +815,10 @@ function CloudProviderAccountOrgIdModal(props) {
               cloudFormationTemplateUrl={cloudFormationTemplateUrl}
               gcpBootstrapShellCommand={gcpBootstrapShellCommand}
               gcpCloudShellLink={gcpCloudShellLink}
-              shellScriptGuide={shellScriptGuide}
+              gcpShellScriptGuide={gcpShellScriptGuide}
+              azureCloudShellLink={azureCloudShellLink}
+              azureShellScriptGuide={azureShellScriptGuide}
+              azureBootstrapShellCommand={azureBootstrapShellCommand}
               accountInstructionDetails={accountInstructionDetails}
               accountConfigMethod={accountConfigMethod}
               // terraformlink={terraformlink}
@@ -757,11 +835,14 @@ function CloudProviderAccountOrgIdModal(props) {
               cloudFormationTemplateUrl={cloudFormationTemplateUrl}
               gcpBootstrapShellCommand={gcpBootstrapShellCommand}
               gcpCloudShellLink={gcpCloudShellLink}
-              shellScriptGuide={shellScriptGuide}
+              gcpShellScriptGuide={gcpShellScriptGuide}
               accountInstructionDetails={accountInstructionDetails}
               accountConfigMethod={accountConfigMethod}
               // terraformlink={terraformlink}
               // terraformGuide={terraformGuide}
+              azureCloudShellLink={azureCloudShellLink}
+              azureShellScriptGuide={azureShellScriptGuide}
+              azureBootstrapShellCommand={azureBootstrapShellCommand}
             />
           )}
         </Content>
