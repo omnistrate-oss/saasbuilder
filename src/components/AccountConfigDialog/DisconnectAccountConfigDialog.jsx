@@ -253,7 +253,7 @@ const Check = ({
       }
     };
   }, [activeStepRun, setActiveStepRun, instance?.status]);
-  usePolling(fetchClickedInstanceDetails, setClickedInstance, "DISCONNECTING");
+  usePolling(fetchClickedInstanceDetails, setClickedInstance, "DISCONNECTED");
 
   return (
     <Box width={"100%"} display={"flex"} flexDirection={"column"} gap="10px">
