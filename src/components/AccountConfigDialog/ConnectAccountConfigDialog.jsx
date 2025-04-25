@@ -5,7 +5,6 @@ import LoadingSpinnerSmall from "components/CircularProgress/CircularProgress";
 import { Text } from "components/Typography/Typography";
 import Link from "next/link";
 
-import { roundNumberToTwoDecimals } from "src/utils/formatNumber";
 import StepStepper from "../Stepper/StepStepper";
 import { useEffect, useRef, useState } from "react";
 import sandClock from "public/assets/images/cloud-account/sandclock.gif";
