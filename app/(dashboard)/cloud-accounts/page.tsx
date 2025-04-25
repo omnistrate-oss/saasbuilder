@@ -37,6 +37,8 @@ import { getResourceInstanceStatusStylesAndLabel } from "src/constants/statusChi
 import { getCloudAccountsRoute } from "src/utils/routes";
 import { isCloudAccountInstance } from "src/utils/access/byoaResource";
 import {
+  getAzureBootstrapShellCommand,
+  getAzureShellScriptOffboardCommand,
   getGcpBootstrapShellCommand,
   getGcpShellScriptOffboardCommand,
 } from "src/utils/accountConfig/accountConfig";
@@ -84,6 +86,15 @@ const CloudAccountsPage = () => {
     }
   }, [clickedInstance]);
 
+  const azureBootstrapShellCommand = useMemo(() => {
+    const result_params: any = clickedInstance?.result_params;
+    if (result_params?.cloud_provider_account_config_id) {
+      return getAzureBootstrapShellCommand(
+        result_params?.cloud_provider_account_config_id
+      );
+    }
+  }, [clickedInstance]);
+
   const accountInstructionDetails = useMemo(() => {
     const result_params: any = clickedInstance?.result_params;
     let details = {};
@@ -95,6 +106,11 @@ const CloudAccountsPage = () => {
       details = {
         gcpProjectID: result_params?.gcp_project_id,
         gcpProjectNumber: result_params?.gcp_project_number,
+      };
+    } else if (result_params?.azure_subscription_id) {
+      details = {
+        azureSubscriptionID: result_params?.azure_subscription_id,
+        azureTenantID: result_params?.azure_tenant_id,
       };
     }
     return details;
@@ -139,6 +155,10 @@ const CloudAccountsPage = () => {
           // @ts-ignore
           instance.result_params?.aws_account_id
             ?.toLowerCase()
+            .includes(searchText.toLowerCase()) ||
+          // @ts-ignore
+          instance.result_params?.azure_subscription_id
+            ?.toLowerCase()
             .includes(searchText.toLowerCase())
       );
     }
@@ -154,6 +174,8 @@ const CloudAccountsPage = () => {
           row.result_params?.gcp_project_id ||
           // @ts-ignore
           row.result_params?.aws_account_id ||
+          // @ts-ignore
+          row.result_params?.azure_subscription_id ||
           "-",
         {
           id: "account_id",
@@ -164,6 +186,8 @@ const CloudAccountsPage = () => {
               data.row.original.result_params?.gcp_project_id ||
               // @ts-ignore
               data.row.original.result_params?.aws_account_id ||
+              // @ts-ignore
+              data.row.original.result_params?.azure_subscription_id ||
               "-";
 
             return (
@@ -395,6 +419,16 @@ const CloudAccountsPage = () => {
       };
       if (result_params?.cloud_provider_account_config_id) {
         details.gcpOffboardCommand = getGcpShellScriptOffboardCommand(
+          result_params?.cloud_provider_account_config_id
+        );
+      }
+    } else if (result_params?.azure_subscription_id) {
+      details = {
+        azureSubscriptionID: result_params?.azure_subscription_id,
+        azureTenantID: result_params?.azure_tenant_id,
+      };
+      if (result_params?.cloud_provider_account_config_id) {
+        details.azureOffboardCommand = getAzureShellScriptOffboardCommand(
           result_params?.cloud_provider_account_config_id
         );
       }
@@ -657,6 +691,7 @@ const CloudAccountsPage = () => {
         }
         isAccountCreation={isAccountCreation}
         gcpBootstrapShellCommand={gcpBootstrapShellCommand}
+        azureBootstrapShellCommand={azureBootstrapShellCommand}
         accountInstructionDetails={accountInstructionDetails}
         // downloadTerraformKitMutation={downloadTerraformKitMutation}
         // orgId={clickedInstanceSubscription?.accountConfigIdentityId}

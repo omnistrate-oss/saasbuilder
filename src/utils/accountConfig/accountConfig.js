@@ -36,3 +36,24 @@ export const getGcpShellScriptOffboardCommand = (accountId) => {
     baseURL
   ).replace("<ACCOUNT_CONFIG_ID>", accountId);
 };
+
+//azure utilities
+export const AZURE_BOOTSTRAP_SHELL_COMMAND =
+  'bash -c "$(curl -fsSL <BASE_URL>/account-setup/azure-bootstrap.sh?account_config_id=<ACCOUNT_CONFIG_ID>)"';
+
+export const getAzureBootstrapShellCommand = (accountId) => {
+  return AZURE_BOOTSTRAP_SHELL_COMMAND.replace("<BASE_URL>", baseURL).replace(
+    "<ACCOUNT_CONFIG_ID>",
+    accountId
+  );
+};
+
+export const AZURE_SHELL_SCRIPT_OFFBOARD_COMMAND =
+  'bash -c "$(curl -fsSL <BASE_URL>/account-setup/azure-offboard.sh?account_config_id=<ACCOUNT_CONFIG_ID>)"';
+
+export const getAzureShellScriptOffboardCommand = (accountId) => {
+  return AZURE_SHELL_SCRIPT_OFFBOARD_COMMAND.replace(
+    "<BASE_URL>",
+    baseURL
+  ).replace("<ACCOUNT_CONFIG_ID>", accountId);
+};
