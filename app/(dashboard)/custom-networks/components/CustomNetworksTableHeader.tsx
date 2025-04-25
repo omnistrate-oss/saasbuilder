@@ -22,12 +22,12 @@ const CustomNetworksTableHeader = ({
   return (
     <div className="py-5 px-6 flex items justify-between gap-4">
       <DataGridHeaderTitle
-        title="List of Custom Networks"
-        desc="List of configured custom networks"
+        title="List of Customer Networks"
+        desc="List of configured customer networks"
         count={count}
         units={{
-          singular: "Custom Network",
-          plural: "Custom Networks",
+          singular: "Customer Network",
+          plural: "Customer Networks",
         }}
       />
 
@@ -48,7 +48,7 @@ const CustomNetworksTableHeader = ({
           disabled={selectedRows.length !== 1}
           onClick={onModifyClick}
           startIcon={<EditIcon disabled={selectedRows.length !== 1} />}
-          disabledMessage="Please select a custom network"
+          disabledMessage="Please select a customer network"
         >
           Modify
         </Button>
@@ -58,7 +58,7 @@ const CustomNetworksTableHeader = ({
           disabled={selectedRows.length !== 1}
           onClick={onDeleteClick}
           startIcon={<DeleteIcon disabled={selectedRows.length !== 1} />}
-          disabledMessage="Please select a custom network"
+          disabledMessage="Please select a customer network"
         >
           Delete
         </Button>
@@ -68,7 +68,7 @@ const CustomNetworksTableHeader = ({
           disabled={selectedRows.length !== 1}
           onClick={onPeeringInfoClick}
           startIcon={<PeeringInfoIcon disabled={selectedRows.length !== 1} />}
-          disabledMessage="Please select a custom network"
+          disabledMessage="Please select a customer network"
         >
           Peering Info
         </Button>

@@ -419,8 +419,8 @@ export const getNetworkConfigurationFields = (
   if (customNetworkFieldExists) {
     fields.push({
       dataTestId: "custom-network-id-select",
-      label: "Custom Network ID",
-      subLabel: "Select the custom network ID",
+      label: "Customer Network ID",
+      subLabel: "Select the customer network ID",
       description: <CustomNetworkDescription overlay="create" />,
       name: "requestParams.custom_network_id",
       value: values.requestParams.custom_network_id || "",
@@ -437,7 +437,7 @@ export const getNetworkConfigurationFields = (
             : offering.azureRegions || [],
         values.region
       ),
-      emptyMenuText: "No custom networks available",
+      emptyMenuText: "No customer networks available",
       isLoading: isFetchingCustomNetworks,
       previewValue: customNetworks.find(
         (network) => network.id === values.requestParams.custom_network_id
