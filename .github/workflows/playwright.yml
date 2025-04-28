@@ -8,6 +8,13 @@ on:
         description: "Reason for running tests"
         required: false
         default: "Manual trigger"
+
+permissions:
+  contents: read
+  actions: read
+  checks: write
+  id-token: read
+
 jobs:
   test:
     timeout-minutes: 60
