@@ -38,7 +38,7 @@ export class ProviderAPIClient {
     });
   }
 
-  async listPlaywrightServices() {
+  async listSaaSBuilderServices() {
     const context = await this.createProviderRequest();
     const response = await context.get(`/${this.apiVersion}/service`);
 
@@ -48,7 +48,7 @@ export class ProviderAPIClient {
     }
 
     const services: Service[] = (await response.json()).services;
-    return services.filter((service) => service.name.startsWith("Playwright "));
+    return services.filter((service) => service.name.startsWith("SaaSBuilder "));
   }
 
   async createServiceFromComposeSpec(

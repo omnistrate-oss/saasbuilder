@@ -25,18 +25,18 @@ async function globalSetup() {
 
   await Promise.all([
     apiClient.createServiceFromComposeSpec(
-      `Playwright Postgres DT - ${date}`,
-      "Playwright Postgres DT Service + Provider Hosted",
+      `SaaSBuilder Postgres DT - ${date}`,
+      "SaaSBuilder Postgres DT Service + Provider Hosted",
       yamlTemplates.postgresProviderHostedDT
     ),
     apiClient.createServiceFromComposeSpec(
-      `Playwright Supabase DT BYOA - ${date}`,
-      "Playwright Supabase DT Service + BYOA Hosted",
+      `SaaSBuilder Supabase DT BYOA - ${date}`,
+      "SaaSBuilder Supabase DT Service + BYOA Hosted",
       yamlTemplates.supabaseBYOAHostedDT
     ),
     apiClient.createServiceFromServicePlanSpec(
-      `Playwright Redis Helm - ${date}`,
-      "Playwright Redis Helm Service + Provider Hosted",
+      `SaaSBuilder Redis Helm - ${date}`,
+      "SaaSBuilder Redis Helm Service + Provider Hosted",
       yamlTemplates.redisHelmProviderHosted
     ),
   ]);

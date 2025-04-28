@@ -106,9 +106,9 @@ async function globalTeardown() {
   );
   await waitForDeletion("cloudAccount");
 
-  // Delete Created Services and Services Older than 3 Days
+  // Delete Created Services and Services Older than 2 Days
   const providerAPIClient = new ProviderAPIClient();
-  const services = await providerAPIClient.listPlaywrightServices();
+  const services = await providerAPIClient.listSaaSBuilderServices();
   const twoDaysAgo = Date.now() - 2 * 24 * 60 * 60 * 1000;
   const date = GlobalStateManager.getDate();
 

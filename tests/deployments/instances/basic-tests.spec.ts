@@ -51,7 +51,7 @@ test.describe("Instances Page - Basic Lifecycle Tests", () => {
 
     // Wait for the Form to Load and Click the Service Name Dropdown
     await page.getByTestId(dataTestIds.serviceNameSelect).click();
-    await page.getByRole("option", { name: `Playwright Postgres DT - ${date}` }).click();
+    await page.getByRole("option", { name: `SaaSBuilder Postgres DT - ${date}` }).click();
     await page.waitForLoadState("networkidle");
 
     await page.getByTestId(dataTestIds.gcpCard).click();

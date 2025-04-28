@@ -17,7 +17,7 @@ test.describe("Instances Page - Operational Tests", () => {
       const apiClient = instancesPage.apiClient;
       const serviceOfferings = GlobalStateManager.getServiceOfferings();
       const serviceOffering = serviceOfferings.find((offering) =>
-        offering.serviceName.startsWith("Playwright Postgres DT - ")
+        offering.serviceName.startsWith("SaaSBuilder Postgres DT - ")
       );
       const subscriptions = GlobalStateManager.getSubscriptions();
       const subscription = subscriptions.find(

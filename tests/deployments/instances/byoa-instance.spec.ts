@@ -27,7 +27,7 @@ test.describe("Instances Page - Specialized Tests", () => {
     await page.getByTestId(dataTestIds.createButton).click();
     await page.getByTestId(dataTestIds.serviceNameSelect).click();
     const date = GlobalStateManager.getDate();
-    await page.getByRole("option", { name: `Playwright Supabase DT BYOA - ${date}` }).click();
+    await page.getByRole("option", { name: `SaaSBuilder Supabase DT BYOA - ${date}` }).click();
     await page.getByTestId(dataTestIds.awsAccountIdInput).fill(process.env.BYOA_AWS_ACCOUNT_ID!);
     await page.getByTestId(dataTestIds.submitButton).click();
 
@@ -56,7 +56,7 @@ test.describe("Instances Page - Specialized Tests", () => {
     await page.getByTestId(dataTestIds.serviceNameSelect).click();
 
     const date = GlobalStateManager.getDate();
-    await page.getByRole("option", { name: `Playwright Supabase DT BYOA - ${date}` }).click();
+    await page.getByRole("option", { name: `SaaSBuilder Supabase DT BYOA - ${date}` }).click();
     await page.waitForLoadState("networkidle");
 
     await page.getByTestId(dataTestIds.cloudAccountSelect).click();

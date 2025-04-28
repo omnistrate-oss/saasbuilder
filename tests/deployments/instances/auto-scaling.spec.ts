@@ -20,7 +20,7 @@ test.describe("Instances Page - Capacity Scaling Tests", () => {
 
       const date = GlobalStateManager.getDate();
       const serviceOffering = serviceOfferings.find(
-        (offering) => offering.serviceName === `Playwright Postgres DT - ${date}`
+        (offering) => offering.serviceName === `SaaSBuilder Postgres DT - ${date}`
       );
 
       const subscriptions = GlobalStateManager.getSubscriptions();

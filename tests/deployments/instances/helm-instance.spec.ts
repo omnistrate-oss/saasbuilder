@@ -34,7 +34,7 @@ test.describe("Instances Page - Specialized Tests", () => {
     await page.getByTestId(dataTestIds.serviceNameSelect).click();
 
     const date = GlobalStateManager.getDate();
-    await page.getByRole("option", { name: `Playwright Redis Helm - ${date}` }).click();
+    await page.getByRole("option", { name: `SaaSBuilder Redis Helm - ${date}` }).click();
     await page.getByTestId(dataTestIds.resourceTypeSelect).click();
     await page.getByRole("option", { name: "Redis Cluster" }).click();
 
