@@ -135,7 +135,7 @@ const CustomNetworksPage = () => {
       setSelectedRows([]);
       refetchCustomNetworks();
       setIsOverlayOpen(false);
-      snackbar.showSuccess("Custom Network deleted successfully");
+      snackbar.showSuccess("Customer Network deleted successfully");
     },
   });
 
@@ -198,14 +198,14 @@ const CustomNetworksPage = () => {
   return (
     <PageContainer>
       <PageTitle icon={CustomNetworksIcon} className="mb-6">
-        Custom Networks
+        Customer Networks
       </PageTitle>
 
       <div>
         <DataTable
           columns={dataTableColumns}
           rows={filteredCustomNetworks}
-          noRowsText="No custom networks"
+          noRowsText="No customer networks"
           HeaderComponent={CustomNetworksTableHeader}
           headerProps={{
             count: filteredCustomNetworks.length,
@@ -240,8 +240,8 @@ const CustomNetworksPage = () => {
       </div>
 
       <FullScreenDrawer
-        title="Create Custom Network"
-        description="Create a new custom network with the specified details"
+        title="Create Customer Network"
+        description="Create a new customer network with the specified details"
         open={
           isOverlayOpen &&
           ["create-custom-network", "modify-custom-network"].includes(
@@ -272,7 +272,7 @@ const CustomNetworksPage = () => {
           if (!selectedRows.length) return;
           await deleteCustomNetworkMutation.mutateAsync(selectedRows[0]);
         }}
-        title="Delete Custom Network"
+        title="Delete Customer Network"
         subtitle={`Are you sure you want to delete - ${selectedRows[0]}?`}
         message="To confirm deletion, please enter <b>deleteme</b>, in the field below:"
         isLoading={deleteCustomNetworkMutation.isLoading}

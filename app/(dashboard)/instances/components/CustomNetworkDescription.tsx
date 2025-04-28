@@ -6,7 +6,7 @@ const CustomNetworkDescription = ({ overlay }) => {
   return (
     <Box mt="8px">
       <StyledListItem
-        text="Don't have a Custom Network?"
+        text="Don't have a Customer Network?"
         link={getCustomNetworksRoute({
           overlay,
         })}
