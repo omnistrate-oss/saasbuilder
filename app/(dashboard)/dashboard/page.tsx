@@ -3,7 +3,7 @@
 import PageTitle from "../components/Layout/PageTitle";
 import DashboardIcon from "../components/Icons/DashboardIcon";
 import PageContainer from "../components/Layout/PageContainer";
-import ClusterLocations from "src/features/Access/Dashboard/ClusterLocations";
+import ClusterLocations from "./components/ClusterLocations";
 
 import useInstances from "../instances/hooks/useInstances";
 import DashboardLogsTableHeader from "./components/DashboardLogsTableHeader";

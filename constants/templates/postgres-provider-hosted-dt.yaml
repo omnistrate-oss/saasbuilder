@@ -1,0 +1,65 @@
+version: "3.9"
+x-omnistrate-service-plan:
+  name: "Pro Tier"
+  tenancyType: "OMNISTRATE_DEDICATED_TENANCY"
+  deployment:
+    hostedDeployment:
+      AwsAccountId: "{{AWS_ACCOUNT_ID}}"
+      AwsBootstrapRoleAccountArn: "arn:aws:iam::{{AWS_ACCOUNT_ID}}:role/omnistrate-bootstrap-role"
+      GcpProjectId: "{{GCP_PROJECT_ID}}"
+      GcpProjectNumber: "{{GCP_PROJECT_NUMBER}}"
+      GcpServiceAccountEmail: "omnistrate-bootstrap@{{GCP_PROJECT_ID}}.iam.gserviceaccount.com"
+
+x-omnistrate-integrations:
+  - omnistrateMetrics
+  - omnistrateLogging
+
+services:
+  Postgres:
+    image: postgres
+    ports:
+      - "5432:5432"
+    x-omnistrate-api-params:
+      - key: password
+        description: Postgres user password
+        name: Password
+        type: Password
+        modifiable: true
+        required: true
+        export: false
+        defaultValue: a_secure_password
+      - key: username
+        description: Postgres user name
+        name: Username
+        type: String
+        modifiable: true
+        required: true
+        export: true
+        defaultValue: username
+    x-omnistrate-capabilities:
+      autoscaling:
+        minReplicas: 1
+        maxReplicas: 5
+        idleMinutesBeforeScalingDown: 5
+        idleThreshold: 30
+        overUtilizedMinutesBeforeScalingUp: 5
+        overUtilizedThreshold: 80
+    environment:
+      - SECURITY_CONTEXT_USER_ID=999
+      - SECURITY_CONTEXT_GROUP_ID=999
+      - POSTGRES_USER=$var.username
+      - POSTGRES_PASSWORD=$var.password
+      - PGDATA=/var/lib/postgresql/data/dbdata
+    volumes:
+      - source: ./data
+        target: /var/lib/postgresql/data
+        type: bind
+        x-omnistrate-storage:
+          aws:
+            instanceStorageType: AWS::EBS_GP3
+            instanceStorageSizeGi: 10
+            instanceStorageIOPS: 3000
+            instanceStorageThroughputMiBps: 125
+          gcp:
+            instanceStorageType: GCP::PD_BALANCED
+            instanceStorageSizeGi: 10
