@@ -8,11 +8,10 @@ import sandClock from "public/assets/images/cloud-account/sandclock.gif";
 
 export const stateAccountConfigStepper = {
   trigger: "trigger",
-  run: "run",
   check: "check",
 };
 
-type StepperSetpStatusProps = "trigger" | "run" | "check";
+type StepperSetpStatusProps = "trigger" | "check";
 
 export const getStepperProps = (
   StepperSetpStatus: StepperSetpStatusProps
@@ -23,28 +22,8 @@ export const getStepperProps = (
         title: "Trigger",
         icon: <StepperInProgressIcon />,
       },
-      step2: {
-        title: "Run",
-        icon: <StepperDefaultIcon />,
-      },
-      step3: {
-        title: "Check",
-        icon: <StepperDefaultIcon />,
-      },
-    };
-  }
 
-  if (StepperSetpStatus === stateAccountConfigStepper.run) {
-    return {
-      step1: {
-        title: "Trigger",
-        icon: <StepperSuccessIcon />,
-      },
       step2: {
-        title: "Run",
-        icon: <StepperInProgressIcon />,
-      },
-      step3: {
         title: "Check",
         icon: <StepperDefaultIcon />,
       },
@@ -58,10 +37,6 @@ export const getStepperProps = (
         icon: <StepperSuccessIcon />,
       },
       step2: {
-        title: "Run",
-        icon: <StepperSuccessIcon />,
-      },
-      step3: {
         title: "Check",
         icon: <StepperInProgressIcon />,
       },
@@ -73,11 +48,8 @@ export const getStepperProps = (
       title: "Trigger",
       icon: <StepperDefaultIcon />,
     },
+
     step2: {
-      title: "Run",
-      icon: <StepperDefaultIcon />,
-    },
-    step3: {
       title: "Check",
       icon: <StepperDefaultIcon />,
     },
@@ -85,13 +57,6 @@ export const getStepperProps = (
 };
 
 export const stepsDisconnectRunAccountConfig = [
-  {
-    label: (
-      <Text size="small" weight="semibold" color="#414651">
-        Validating Your Request
-      </Text>
-    ),
-  },
   {
     label: (
       <Text size="small" weight="semibold" color="#414651">
@@ -107,30 +72,6 @@ export const stepsDisconnectRunAccountConfig = [
     ),
   },
 ];
-
-export const stepsConnectRunAccountConfig = (cloudProvider: "aws" | "gcp") => {
-  const actionText =
-    cloudProvider === "aws"
-      ? "Action Required: Please run the CloudFormation template to proceed."
-      : "Action Required: Please run the Google Cloud Shell Script to proceed.";
-
-  return [
-    {
-      label: (
-        <Text size="small" weight="semibold" color="#414651">
-          Validating Your Request
-        </Text>
-      ),
-    },
-    {
-      label: (
-        <Text size="small" weight="semibold" color="#414651">
-          {actionText}
-        </Text>
-      ),
-    },
-  ];
-};
 
 export const CustomStepIcon = (props) => {
   const { active, completed } = props;

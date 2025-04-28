@@ -283,7 +283,7 @@ const Sidebar = () => {
         subItems: [
           { name: "Instances", href: getInstancesRoute() },
           {
-            name: "Custom Networks",
+            name: "Customer Networks",
             href: getCustomNetworksRoute({}),
             isHidden: !showCustomNetworksPage,
           },

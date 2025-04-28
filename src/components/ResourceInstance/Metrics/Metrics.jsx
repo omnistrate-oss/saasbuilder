@@ -22,6 +22,7 @@ import Select from "src/components/FormElementsv2/Select/Select";
 import MenuItem from "src/components/FormElementsv2/MenuItem/MenuItem";
 import _ from "lodash";
 import JobCompleted from "src/components/JobResource/JobCompleted";
+import DataUnavailableMessage from "../DataUnavailableMessage";
 
 const initialCpuUsage = {
   current: "",
@@ -686,6 +687,16 @@ function Metrics(props) {
   useEffect(() => {
     initialiseCustomMetricsData();
   }, [initialiseCustomMetricsData]);
+
+  if (instanceStatus === "DISCONNECTED") {
+    return (
+      <DataUnavailableMessage
+        title="Metrics Unavailable"
+        description="Please connect the cloud account to view metrics"
+      />
+    );
+  }
+
   if (instanceStatus !== "COMPLETE" && selectedNode?.isJob !== true) {
     if (
       !metricsSocketEndpoint ||

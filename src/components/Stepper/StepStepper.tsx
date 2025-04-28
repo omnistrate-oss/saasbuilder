@@ -17,20 +17,14 @@ export type StepStepperProps = {
     descriptionColor?: string;
     icon?: React.ReactNode;
   };
-  step3: {
-    title: string;
-    titleColor?: string;
-    description?: string;
-    descriptionColor?: string;
-    icon?: React.ReactNode;
-  };
+
   stepperColor?: string;
 };
 
 const StepStepper: React.FC<StepStepperProps> = ({
   step1,
   step2,
-  step3,
+
   stepperColor,
 }) => {
   return (
@@ -41,15 +35,16 @@ const StepStepper: React.FC<StepStepperProps> = ({
       alignItems="center"
       width="100%"
       mx="auto"
+      sx={{ px: "104px" }} // <-- Add horizontal padding here
     >
       {/* Connector Line */}
       <Box
         height="2px"
         bgcolor={stepperColor || "#E9EAEB"}
         position="absolute"
-        width="calc(100% - 68px)" // Covers from step1 to step3
-        left="34px" // Start at step1's center
-        right="24px"
+        width="calc(100% - 244px)" // Covers from step1 to step2
+        left="124px" // Start at step1's center
+        right="144px"
         top="11px" // Align with icon center
         zIndex={1}
       />
@@ -88,39 +83,6 @@ const StepStepper: React.FC<StepStepperProps> = ({
         </Text>
       </Stack>
 
-      {/* Step 2 */}
-      <Stack flex="1" alignItems="center">
-        <Box
-          zIndex="10"
-          width="24px"
-          height="24px"
-          display="flex"
-          justifyContent="center"
-          sx={{
-            background: "white",
-            borderRadius: "50%",
-          }}
-        >
-          {step2.icon || <StepperDefaultIcon />}
-        </Box>
-        <Text
-          size="small"
-          weight="semibold"
-          color={step2.titleColor || "#414651"}
-          sx={{ textAlign: "center", mt: "12px" }}
-        >
-          {step2.title}
-        </Text>
-        <Text
-          size="small"
-          weight="regular"
-          color={step2.descriptionColor || "#535862"}
-          sx={{ textAlign: "center" }}
-        >
-          {step2.description}
-        </Text>
-      </Stack>
-
       {/* Step 3 */}
       <Stack flex="1" alignItems="flex-end">
         <Box
@@ -135,23 +97,23 @@ const StepStepper: React.FC<StepStepperProps> = ({
             borderRadius: "50%",
           }}
         >
-          {step3.icon || <StepperDefaultIcon />}
+          {step2.icon || <StepperDefaultIcon />}
         </Box>
         <Text
           size="small"
           weight="semibold"
-          color={step3.titleColor || "#414651"}
+          color={step2.titleColor || "#414651"}
           sx={{ textAlign: "right", mt: "12px" }}
         >
-          {step3.title}
+          {step2.title}
         </Text>
         <Text
           size="small"
           weight="regular"
-          color={step3.descriptionColor || "#535862"}
+          color={step2.descriptionColor || "#535862"}
           sx={{ textAlign: "right" }}
         >
-          {step3.description}
+          {step2.description}
         </Text>
       </Stack>
     </Stack>

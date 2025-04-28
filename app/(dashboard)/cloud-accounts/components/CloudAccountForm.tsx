@@ -37,7 +37,8 @@ import {
 } from "../utils";
 import {
   ACCOUNT_CREATION_METHOD_LABELS,
-  ACCOUNT_CREATION_METHODS,
+  CLOUD_ACCOUNT_CREATION_METHOD_OPTIONS,
+  CLOUD_PROVIDER_DEFAULT_CREATION_METHOD,
 } from "src/utils/constants/accountConfig";
 import { ResourceInstance } from "src/types/resourceInstance";
 
@@ -163,6 +164,9 @@ const CloudAccountForm = ({
             values.gcpProjectId,
             selectUser?.orgId.toLowerCase()
           );
+        } else if (values.cloudProvider === "azure") {
+          result_params.azure_subscription_id = values.azureSubscriptionId;
+          result_params.azure_tenant_id = values.azureTenantId;
         }
 
         return {
@@ -190,10 +194,15 @@ const CloudAccountForm = ({
             ? {
                 aws_account_id: values.awsAccountId,
               }
-            : {
-                gcp_project_id: values.gcpProjectId,
-                gcp_project_number: values.gcpProjectNumber,
-              }),
+            : values.cloudProvider === CLOUD_PROVIDERS.gcp
+              ? {
+                  gcp_project_id: values.gcpProjectId,
+                  gcp_project_number: values.gcpProjectNumber,
+                }
+              : {
+                  azure_subscription_id: values.azureSubscriptionId,
+                  azure_tenant_id: values.azureTenantId,
+                }),
         },
       });
       setOverlayType("view-instructions-dialog");
@@ -225,7 +234,7 @@ const CloudAccountForm = ({
           account_configuration_method: values.accountConfigurationMethod,
           aws_bootstrap_role_arn: getAwsBootstrapArn(values.awsAccountId),
         };
-      } else {
+      } else if (values.cloudProvider === "gcp") {
         requestParams = {
           cloud_provider: values.cloudProvider,
           gcp_project_id: values.gcpProjectId,
@@ -235,6 +244,13 @@ const CloudAccountForm = ({
             values.gcpProjectId,
             selectUser?.orgId.toLowerCase()
           ),
+        };
+      } else {
+        requestParams = {
+          cloud_provider: values.cloudProvider,
+          azure_subscription_id: values.azureSubscriptionId,
+          azure_tenant_id: values.azureTenantId,
+          account_configuration_method: values.accountConfigurationMethod,
         };
       }
 
@@ -274,13 +290,7 @@ const CloudAccountForm = ({
     );
 
     const accountConfigurationMethods =
-      values.cloudProvider === "aws"
-        ? [ACCOUNT_CREATION_METHODS.CLOUDFORMATION]
-        : [
-            ACCOUNT_CREATION_METHODS.GCP_SCRIPT,
-            // ACCOUNT_CREATION_METHODS.TERRAFORM,
-          ];
-
+      CLOUD_ACCOUNT_CREATION_METHOD_OPTIONS[values.cloudProvider] ?? [];
     return {
       footer: {
         submitButton: {
@@ -370,9 +380,7 @@ const CloudAccountForm = ({
                     setFieldValue("cloudProvider", cloudProvider);
                     setFieldValue(
                       "accountConfigurationMethod",
-                      cloudProvider === "aws"
-                        ? ACCOUNT_CREATION_METHODS.CLOUDFORMATION
-                        : ACCOUNT_CREATION_METHODS.GCP_SCRIPT
+                      CLOUD_PROVIDER_DEFAULT_CREATION_METHOD[cloudProvider]
                     );
 
                     const filteredSubscriptions = byoaSubscriptions.filter(
@@ -452,9 +460,7 @@ const CloudAccountForm = ({
                   onChange={(cloudProvider: string) => {
                     setFieldValue(
                       "accountConfigurationMethod",
-                      cloudProvider === "aws"
-                        ? ACCOUNT_CREATION_METHODS.CLOUDFORMATION
-                        : ACCOUNT_CREATION_METHODS.GCP_SCRIPT
+                      CLOUD_PROVIDER_DEFAULT_CREATION_METHOD[cloudProvider]
                     );
                   }}
                   disabled={formMode !== "create"}
@@ -526,6 +532,35 @@ const CloudAccountForm = ({
               isHidden: values.cloudProvider !== "gcp",
               previewValue:
                 cloudProvider === "gcp" ? values.gcpProjectNumber : null,
+            },
+
+            {
+              dataTestId: "azure-subscription-id-input",
+              label: "Azure Subscription ID",
+              subLabel: "Azure Subscription ID to use for the account",
+              description: (
+                <CustomLabelDescription variant="azureSubscriptionId" />
+              ),
+              name: "azureSubscriptionId",
+              type: "text",
+              required: true,
+              disabled: formMode !== "create",
+              isHidden: values.cloudProvider !== "azure",
+              previewValue:
+                cloudProvider === "azure" ? values.azureSubscriptionId : null,
+            },
+            {
+              dataTestId: "azure-tenant-id-input",
+              label: "Azure Tenant ID",
+              subLabel: "Azure Tenant ID to use for the account",
+              description: <CustomLabelDescription variant="azureTenantId" />,
+              name: "azureTenantId",
+              type: "text",
+              required: true,
+              disabled: formMode !== "create",
+              isHidden: values.cloudProvider !== "azure",
+              previewValue:
+                cloudProvider === "azure" ? values.azureTenantId : null,
             },
           ],
         },
