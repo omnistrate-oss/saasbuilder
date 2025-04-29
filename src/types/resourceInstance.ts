@@ -41,3 +41,5 @@ export type UpgradeStatus =
   | "FAILED"
   | "PAUSED"
   | "CANCELLED";
+
+export type InstanceLicenseStatus = "ACTIVE" | "EXPIRED" | "EXPIRING_SOON";
