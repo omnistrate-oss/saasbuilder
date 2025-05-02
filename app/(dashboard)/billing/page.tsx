@@ -20,29 +20,28 @@ import useConsumptionUsage from "./hooks/useConsumptionUsage";
 import StatusChip from "src/components/StatusChip/StatusChip";
 import useConsumptionInvoices from "./hooks/useConsumptionInvoices";
 import { useEffect, useMemo, useState } from "react";
+import useBillingStatus from "./hooks/useBillingStatus";
 
 const BillingPage = () => {
   const selectUser = useSelector(selectUserrootData);
-  const {
-    isLoading: isLoadingBillingDetails,
-    data: billingDetails,
-    error,
-  } = useBillingDetails();
 
-  const { data: consumptionUsageData, isLoading: isLoadingConsumptionData } =
-    useConsumptionUsage();
+  // Prefetch Billing Data
+  const billingStatusQuery = useBillingStatus();
 
-  const { data: invoicesData, isLoading: isLoadingInvoices } =
-    useConsumptionInvoices();
+  const isBillingEnabled = Boolean(billingStatusQuery.data?.enabled);
+
+  const { isLoading: isLoadingBillingDetails, data: billingDetails, error } = useBillingDetails(isBillingEnabled);
+
+  const { data: consumptionUsageData, isLoading: isLoadingConsumptionData } = useConsumptionUsage();
+
+  const { data: invoicesData, isLoading: isLoadingInvoices } = useConsumptionInvoices();
 
   const invoices = useMemo(() => invoicesData?.invoices || [], [invoicesData]);
 
   const [paymentURL, setPaymentURL] = useState("");
 
   useEffect(() => {
-    const firstOpenInvoice = invoices.find(
-      (invoice) => invoice.invoiceStatus === "open"
-    );
+    const firstOpenInvoice = invoices.find((invoice) => invoice.invoiceStatus === "open");
     const paymentURL = firstOpenInvoice?.invoiceUrl;
     if (paymentURL) {
       setPaymentURL(paymentURL);
@@ -67,24 +66,17 @@ const BillingPage = () => {
 
     if (errorMessage) {
       if (
-        errorMessage ===
-          "Your provider has not enabled billing for the user." ||
-        errorMessage ===
-          "Your provider has not enabled billing for the services."
+        errorMessage === "Your provider has not enabled billing for the user." ||
+        errorMessage === "Your provider has not enabled billing for the services."
       ) {
-        errorDisplayText =
-          "Billing has not been configured. Please contact support for assistance";
+        errorDisplayText = "Billing has not been configured. Please contact support for assistance";
       }
 
       if (errorMessage === "You have not been subscribed to a service yet.") {
-        errorDisplayText =
-          "Please subscribe to a service to start using billing";
+        errorDisplayText = "Please subscribe to a service to start using billing";
       }
 
-      if (
-        errorMessage ===
-        "You have not been enrolled in a service plan with a billing plan yet."
-      ) {
+      if (errorMessage === "You have not been enrolled in a service plan with a billing plan yet.") {
         errorDisplayText =
           "You have not been enrolled in a service plan with a billing plan. Please contact support for assistance";
       } else {
@@ -93,17 +85,13 @@ const BillingPage = () => {
     }
   }
 
-  const isLoading =
-    isLoadingBillingDetails || isLoadingConsumptionData || isLoadingInvoices;
+  const isLoading = isLoadingBillingDetails || isLoadingConsumptionData || isLoadingInvoices;
 
   if (isLoading) return <LoadingSpinner />;
 
   return (
     <div>
-      <AccountManagementHeader
-        userName={selectUser?.name}
-        userEmail={selectUser?.email}
-      />
+      <AccountManagementHeader userName={selectUser?.name} userEmail={selectUser?.email} />
       <PageContainer>
         <PageTitle icon={BillingIcon} className="mb-6">
           Billing
@@ -129,31 +117,17 @@ const BillingPage = () => {
           <>
             <Box display="grid" gap="24px" gridTemplateColumns="1fr 1fr">
               <Card sx={{ boxShadow: "0px 1px 2px 0px #0A0D120D" }}>
-                <Stack
-                  direction="row"
-                  justifyContent="space-between"
-                  alignItems="center"
-                >
+                <Stack direction="row" justifyContent="space-between" alignItems="center">
                   <Box>
                     <Text size="large" weight="semibold" color="#181D27">
                       Balance
                     </Text>
-                    <Text
-                      size="small"
-                      weight="regular"
-                      color="#535862"
-                      marginTop="2px"
-                    >
+                    <Text size="small" weight="regular" color="#535862" marginTop="2px">
                       Pay open invoices amount
                     </Text>
                   </Box>
                 </Stack>
-                <Stack
-                  direction="row"
-                  gap="24px"
-                  justifyContent="space-between"
-                  marginTop="10px"
-                >
+                <Stack direction="row" gap="24px" justifyContent="space-between" marginTop="10px">
                   {/*@ts-ignore */}
                   <DisplayText size="small" weight="semibold">
                     ${invoicesTotalAmount}
@@ -191,46 +165,25 @@ const BillingPage = () => {
                 </Stack>
               </Card>
               <Card sx={{ boxShadow: "0px 1px 2px 0px #0A0D120D" }}>
-                <Stack
-                  direction="row"
-                  justifyContent="space-between"
-                  alignItems="center"
-                >
+                <Stack direction="row" justifyContent="space-between" alignItems="center">
                   <Box>
                     <Text size="large" weight="semibold" color="#181D27">
                       Payment Method
                     </Text>
-                    <Text
-                      size="small"
-                      weight="regular"
-                      color="#535862"
-                      marginTop="2px"
-                    >
+                    <Text size="small" weight="regular" color="#535862" marginTop="2px">
                       Change how you pay for your plan
                     </Text>
                   </Box>
                 </Stack>
 
-                <Stack
-                  direction="row"
-                  gap="24px"
-                  justifyContent="space-between"
-                  marginTop="10px"
-                >
+                <Stack direction="row" gap="24px" justifyContent="space-between" marginTop="10px">
                   <StatusChip
-                    label={
-                      paymentConfigured === true
-                        ? "Configured"
-                        : "Not Configured"
-                    }
+                    label={paymentConfigured === true ? "Configured" : "Not Configured"}
                     category={paymentConfigured === true ? "success" : "failed"}
                     sx={{ alignSelf: "center" }}
                   />
                   {billingDetails?.paymentInfoPortalURL ? (
-                    <Link
-                      href={billingDetails?.paymentInfoPortalURL}
-                      target="_blank"
-                    >
+                    <Link href={billingDetails?.paymentInfoPortalURL} target="_blank">
                       <Button
                         variant="contained"
                         endIcon={
