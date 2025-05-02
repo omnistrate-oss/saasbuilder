@@ -49,9 +49,9 @@ import LoadIndicatorIdle from "src/components/Icons/LoadIndicator/LoadIndicatorI
 import LoadIndicatorNormal from "src/components/Icons/LoadIndicator/LoadIndicatorNormal";
 import LoadIndicatorHigh from "src/components/Icons/LoadIndicator/LoadIndicatorHigh";
 import StatusCell from "./components/StatusCell";
-import { getResourceInstanceDetailsStatusStylesAndLabel } from "src/constants/statusChipStyles/resourceInstanceDetailsStatus";
 import useBillingDetails from "../billing/hooks/useBillingDetails";
 import { cloudProviderLongLogoMap } from "src/constants/cloudProviders";
+import InstanceLicenseStatusChip from "src/components/InstanceLicenseStatusChip/InstanceLicenseStatusChip";
 import useBillingStatus from "../billing/hooks/useBillingStatus";
 
 const columnHelper = createColumnHelper<ResourceInstance>();
@@ -285,27 +285,13 @@ const InstancesPage = () => {
         header: "License Status",
         cell: (data) => {
           const licenseDetails = data.cell.getValue();
-
-          const isExpired = licenseDetails?.expirationDate
-            ? new Date(licenseDetails.expirationDate).getTime() < new Date().getTime()
-            : false;
-
-          const licenseStatus = isExpired ? "Expired" : "Active";
-
-          const statusSytlesAndLabel = getResourceInstanceDetailsStatusStylesAndLabel(licenseStatus);
-
-          if (!licenseDetails?.expirationDate) {
-            return (
-              <Stack direction="row" alignItems="center" gap="6px" minWidth="94px" justifyContent="space-between">
-                {"-"}
-              </Stack>
-            );
-          }
+          const licenseExpirationDate = licenseDetails?.expirationDate;
 
           return (
-            <Stack direction="row" alignItems="center" gap="6px" minWidth="94px" justifyContent="space-between">
-              <StatusChip status={licenseStatus} {...statusSytlesAndLabel} />
-            </Stack>
+            <InstanceLicenseStatusChip
+              expirationDate={licenseExpirationDate}
+              showExpirationDateTooltip={true}
+            />
           );
         },
       }),

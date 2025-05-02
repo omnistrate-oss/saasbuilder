@@ -3,12 +3,12 @@ import { Box } from "@mui/material";
 import formatDateUTC from "src/utils/formatDateUTC";
 import { Base64 } from "js-base64";
 import LoadingSpinner from "components/LoadingSpinner/LoadingSpinner";
-
 import TerraformDownloadURL from "./TerraformDownloadURL";
 import NonOmnistrateIntegrationRow from "./NonOmnistrateIntegrationRow";
 import { INTEGRATION_TYPE_LABEL_MAP } from "src/constants/productTierFeatures";
 import PropertyDetails from "./PropertyDetails";
 import UpgradeScheduledNotificationBar from "./UpgradeScheduledNotificationBar";
+import InstanceLicenseStatusChip from "src/components/InstanceLicenseStatusChip/InstanceLicenseStatusChip";
 
 function ResourceInstanceDetails(props) {
   const {
@@ -133,15 +133,16 @@ function ResourceInstanceDetails(props) {
   ]);
 
   const licenseData = useMemo(() => {
-    const isExpired = licenseDetails?.expirationDate
-      ? new Date(licenseDetails.expirationDate).getTime() < new Date().getTime()
-      : false;
 
     const res = [
       {
         label: "License Status",
-        value: isExpired ? "Expired" : "Active",
-        valueType: "boolean",
+        valueType: "custom",
+        value: (
+          <InstanceLicenseStatusChip
+            expirationDate={licenseDetails?.expirationDate}
+          />
+        ),
       },
       {
         label: "License Expiry Date",
