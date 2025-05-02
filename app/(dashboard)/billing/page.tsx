@@ -25,7 +25,6 @@ import useBillingStatus from "./hooks/useBillingStatus";
 const BillingPage = () => {
   const selectUser = useSelector(selectUserrootData);
 
-  // Prefetch Billing Data
   const billingStatusQuery = useBillingStatus();
 
   const isBillingEnabled = Boolean(billingStatusQuery.data?.enabled);

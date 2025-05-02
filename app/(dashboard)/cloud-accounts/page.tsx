@@ -47,6 +47,7 @@ import ConnectAccountConfigDialog from "src/components/AccountConfigDialog/Conne
 import useBillingDetails from "../billing/hooks/useBillingDetails";
 import { cloudProviderLongLogoMap } from "src/constants/cloudProviders";
 import { CloudProvider } from "src/types/common/enums";
+import useBillingStatus from "../billing/hooks/useBillingStatus";
 
 const columnHelper = createColumnHelper<ResourceInstance>();
 
@@ -123,7 +124,11 @@ const CloudAccountsPage = () => {
     refetch: refetchInstances,
   } = useInstances();
 
-  const { data: billingConfig } = useBillingDetails();
+  const billingStatusQuery = useBillingStatus();
+
+  const isBillingEnabled = Boolean(billingStatusQuery.data?.enabled);
+
+  const { data: billingConfig } = useBillingDetails(isBillingEnabled);
   const isPaymentConfigured = Boolean(billingConfig?.paymentConfigured);
 
   // Open the Create Form Overlay when serviceId, servicePlanId and subscriptionId are present in the URL
