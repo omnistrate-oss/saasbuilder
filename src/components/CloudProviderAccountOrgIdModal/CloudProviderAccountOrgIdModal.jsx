@@ -142,7 +142,7 @@ const CreationTimeInstructions = (props) => {
     cloudFormationTemplateUrl,
     gcpBootstrapShellCommand,
     gcpCloudShellLink,
-    shellScriptGuide,
+    gcpShellScriptGuide,
     azureCloudShellLink,
     azureShellScriptGuide,
     azureBootstrapShellCommand,
@@ -326,7 +326,7 @@ const CreationTimeInstructions = (props) => {
               <TextContainerToCopy text={gcpBootstrapShellCommand} />
               <BodyText sx={{ marginTop: "20px" }}>
                 For guidance, our instructional video is available{" "}
-                {shellScriptGuide}.
+                {gcpShellScriptGuide}.
               </BodyText>
             </>
           ) : (
