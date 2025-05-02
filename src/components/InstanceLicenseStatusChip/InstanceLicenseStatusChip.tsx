@@ -30,7 +30,7 @@ const InstanceLicenseStatusChip: FC<LicenseStatusChipProps> = ({
       </Stack>
     );
 
-  const numDaysBeforeExpirationWarning = 7;
+  const numDaysBeforeExpirationWarning = 5;
 
   let shouldShowExpirationWarning = false;
 
