@@ -30,6 +30,7 @@ import { CircularProgress, menuClasses } from "@mui/material";
 import InstanceFilters from "src/components/InstanceFilters/InstanceFilters";
 import LoadingSpinnerSmall from "src/components/CircularProgress/CircularProgress";
 import { colors } from "src/themeConfig";
+import useBillingStatus from "app/(dashboard)/billing/hooks/useBillingStatus";
 
 type Action = {
   dataTestId?: string;
@@ -61,6 +62,9 @@ const InstancesTableHeader = ({
   isLoadingPaymentConfiguration,
 }) => {
   const snackbar = useSnackbar();
+  const billingStatusQuery = useBillingStatus();
+
+  const isBillingEnabled = Boolean(billingStatusQuery.data?.enabled);
 
   const stopInstanceMutation = useMutation(stopResourceInstance, {
     onSuccess: async () => {
@@ -259,7 +263,7 @@ const InstancesTableHeader = ({
       dataTestId: "create-button",
       label: "Create",
       actionType: "primary",
-      isDisabled: isLoadingInstances || isLoadingPaymentConfiguration,
+      isDisabled: isLoadingInstances || (isBillingEnabled && isLoadingPaymentConfiguration),
       onClick: () => {
         setSelectedRows([]); // To make selectedInstance becomes undefined. See page.tsx
         setOverlayType("create-instance-form");
