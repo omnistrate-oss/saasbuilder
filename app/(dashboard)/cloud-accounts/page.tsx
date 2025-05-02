@@ -37,6 +37,8 @@ import { getResourceInstanceStatusStylesAndLabel } from "src/constants/statusChi
 import { getCloudAccountsRoute } from "src/utils/routes";
 import { isCloudAccountInstance } from "src/utils/access/byoaResource";
 import {
+  getAzureBootstrapShellCommand,
+  getAzureShellScriptOffboardCommand,
   getGcpBootstrapShellCommand,
   getGcpShellScriptOffboardCommand,
 } from "src/utils/accountConfig/accountConfig";
@@ -45,6 +47,7 @@ import ConnectAccountConfigDialog from "src/components/AccountConfigDialog/Conne
 import useBillingDetails from "../billing/hooks/useBillingDetails";
 import { cloudProviderLongLogoMap } from "src/constants/cloudProviders";
 import { CloudProvider } from "src/types/common/enums";
+import useBillingStatus from "../billing/hooks/useBillingStatus";
 
 const columnHelper = createColumnHelper<ResourceInstance>();
 
@@ -84,6 +87,15 @@ const CloudAccountsPage = () => {
     }
   }, [clickedInstance]);
 
+  const azureBootstrapShellCommand = useMemo(() => {
+    const result_params: any = clickedInstance?.result_params;
+    if (result_params?.cloud_provider_account_config_id) {
+      return getAzureBootstrapShellCommand(
+        result_params?.cloud_provider_account_config_id
+      );
+    }
+  }, [clickedInstance]);
+
   const accountInstructionDetails = useMemo(() => {
     const result_params: any = clickedInstance?.result_params;
     let details = {};
@@ -96,6 +108,11 @@ const CloudAccountsPage = () => {
         gcpProjectID: result_params?.gcp_project_id,
         gcpProjectNumber: result_params?.gcp_project_number,
       };
+    } else if (result_params?.azure_subscription_id) {
+      details = {
+        azureSubscriptionID: result_params?.azure_subscription_id,
+        azureTenantID: result_params?.azure_tenant_id,
+      };
     }
     return details;
   }, [clickedInstance]);
@@ -107,7 +124,11 @@ const CloudAccountsPage = () => {
     refetch: refetchInstances,
   } = useInstances();
 
-  const { data: billingConfig } = useBillingDetails();
+  const billingStatusQuery = useBillingStatus();
+
+  const isBillingEnabled = Boolean(billingStatusQuery.data?.enabled);
+
+  const { data: billingConfig } = useBillingDetails(isBillingEnabled);
   const isPaymentConfigured = Boolean(billingConfig?.paymentConfigured);
 
   // Open the Create Form Overlay when serviceId, servicePlanId and subscriptionId are present in the URL
@@ -139,6 +160,10 @@ const CloudAccountsPage = () => {
           // @ts-ignore
           instance.result_params?.aws_account_id
             ?.toLowerCase()
+            .includes(searchText.toLowerCase()) ||
+          // @ts-ignore
+          instance.result_params?.azure_subscription_id
+            ?.toLowerCase()
             .includes(searchText.toLowerCase())
       );
     }
@@ -154,6 +179,8 @@ const CloudAccountsPage = () => {
           row.result_params?.gcp_project_id ||
           // @ts-ignore
           row.result_params?.aws_account_id ||
+          // @ts-ignore
+          row.result_params?.azure_subscription_id ||
           "-",
         {
           id: "account_id",
@@ -164,6 +191,8 @@ const CloudAccountsPage = () => {
               data.row.original.result_params?.gcp_project_id ||
               // @ts-ignore
               data.row.original.result_params?.aws_account_id ||
+              // @ts-ignore
+              data.row.original.result_params?.azure_subscription_id ||
               "-";
 
             return (
@@ -395,6 +424,16 @@ const CloudAccountsPage = () => {
       };
       if (result_params?.cloud_provider_account_config_id) {
         details.gcpOffboardCommand = getGcpShellScriptOffboardCommand(
+          result_params?.cloud_provider_account_config_id
+        );
+      }
+    } else if (result_params?.azure_subscription_id) {
+      details = {
+        azureSubscriptionID: result_params?.azure_subscription_id,
+        azureTenantID: result_params?.azure_tenant_id,
+      };
+      if (result_params?.cloud_provider_account_config_id) {
+        details.azureOffboardCommand = getAzureShellScriptOffboardCommand(
           result_params?.cloud_provider_account_config_id
         );
       }
@@ -657,6 +696,7 @@ const CloudAccountsPage = () => {
         }
         isAccountCreation={isAccountCreation}
         gcpBootstrapShellCommand={gcpBootstrapShellCommand}
+        azureBootstrapShellCommand={azureBootstrapShellCommand}
         accountInstructionDetails={accountInstructionDetails}
         // downloadTerraformKitMutation={downloadTerraformKitMutation}
         // orgId={clickedInstanceSubscription?.accountConfigIdentityId}

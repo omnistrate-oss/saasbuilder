@@ -220,15 +220,15 @@ function ResourceInstanceDetails(props) {
   const customNetworkData = useMemo(() => {
     const res = [
       {
-        label: "Custom Network ID",
+        label: "Customer Network ID",
         value: customNetworkDetails?.id,
       },
       {
-        label: "Custom Network Name",
+        label: "Customer Network Name",
         value: customNetworkDetails?.name,
       },
       {
-        label: "Custom Network CIDR",
+        label: "Customer Network CIDR",
         value: customNetworkDetails?.cidr,
       },
     ];
@@ -419,8 +419,8 @@ function ResourceInstanceDetails(props) {
         <PropertyDetails
           data-testid="resource-instance-details-table"
           rows={{
-            title: "Custom Network",
-            desc: "Custom network details",
+            title: "Customer Network",
+            desc: "Customer network details",
             rows: customNetworkData,
             flexWrap: true,
           }}

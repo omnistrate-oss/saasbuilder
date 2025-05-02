@@ -16,8 +16,6 @@ import DisconnectIcon from "../Icons/Disconnect/Disconnect";
 import { roundNumberToTwoDecimals } from "src/utils/formatNumber";
 import StepStepper from "../Stepper/StepStepper";
 import { useEffect, useRef, useState } from "react";
-import sandClock from "public/assets/images/cloud-account/sandclock.gif";
-import Image from "next/image";
 import Chip from "../Chip/Chip";
 import AlertTriangle from "../Icons/AlertTriangle/AlertTriangle";
 import StepperSuccessIcon from "../Stepper/StepperSuccessIcon";
@@ -227,7 +225,7 @@ const Trigger = ({ formData, serviceProviderName }) => {
   );
 };
 
-const Run = ({
+const Check = ({
   activeStepRun,
   setActiveStepRun,
   instance,
@@ -236,131 +234,22 @@ const Run = ({
   serviceProviderName,
 }) => {
   useEffect(() => {
-    let timer = null;
-
-    // Timer logic only runs once when activeStepRun is 0
-    if (activeStepRun === 0 && !timer) {
-      timer = setTimeout(() => {
-        setActiveStepRun(1);
-      }, 1000);
-    }
-
+    setActiveStepRun(0);
     // Handle instance status updates separately
     if (
       instance?.status === "DETACHING" ||
       instance?.status === "PENDING_DETACHING"
     ) {
-      setActiveStepRun(1);
+      setActiveStepRun(0);
     } else if (instance?.status === "DISCONNECTING") {
-      setActiveStepRun(2);
+      setActiveStepRun(1);
     }
-
-    // Cleanup the timer to avoid memory leaks
-    return () => {
-      if (timer) {
-        clearTimeout(timer);
-      }
-    };
   }, [activeStepRun, setActiveStepRun, instance?.status]);
-
-  usePolling(fetchClickedInstanceDetails, setClickedInstance, "DISCONNECTING");
-
-  return (
-    <Box width={"100%"} display={"flex"} flexDirection={"column"} gap="10px">
-      <Stepper activeStep={activeStepRun} orientation="vertical">
-        {stepsDisconnectRunAccountConfig.map((step, index) => (
-          <Step key={index}>
-            <StepLabel
-              StepIconComponent={CustomStepIcon}
-              sx={{
-                "& .MuiStepLabel-label": {
-                  cursor: "default !important",
-                },
-              }}
-            >
-              {step.label}
-            </StepLabel>
-          </Step>
-        ))}
-      </Stepper>
-
-      {activeStepRun === 2 && (
-        <Box
-          sx={{
-            padding: "12px",
-            background: "white",
-            border: "1px solid #D9E0E8",
-            boxShadow: "0px 1px 2px 0px #0A0D120D",
-            borderRadius: "12px",
-          }}
-        >
-          {instance?.result_params?.aws_account_id ? (
-            <Text size="small" weight="semibold" color="#414651">
-              Run{" "}
-              <StyledLink
-                target="_blank"
-                rel="noopener noreferrer"
-                href={`${instance?.result_params?.disconnect_cloudformation_url}`}
-              >
-                this
-              </StyledLink>
-               CloudFormation template to revoke all {`${serviceProviderName}`}{" "}
-              permissions from your account.
-            </Text>
-          ) : (
-            <Box>
-              <Text size="medium" weight="regular" color="#374151">
-                {/* <b>Using GCP Cloud Shell:</b>  */}
-                Please open the Google Cloud Shell environment using the
-                following link:
-                <StyledLink
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  href="https://shell.cloud.google.com/?cloudshell_ephemeral=true&show=terminal"
-                >
-                  Google Cloud Shell
-                </StyledLink>
-                . Once the terminal is open, execute the following command:
-              </Text>
-              {instance?.result_params?.gcp_disconnect_shell_script && (
-                <TextContainerToCopy
-                  text={instance?.result_params?.gcp_disconnect_shell_script}
-                  marginTop="12px"
-                />
-              )}
-            </Box>
-          )}
-          <Chip
-            label={
-              <Stack direction="row" alignItems="center" gap="6px">
-                <AlertTriangle />
-                <Text size="xsmall" weight="medium" color="#B54708">
-                  This is a mandatory step to fully disconnect your cloud
-                  account.
-                </Text>
-              </Stack>
-            }
-            fontColor="#B54708"
-            bgColor="#FFFAEB"
-            sx={{
-              marginTop: "6px",
-              display: "inline-block",
-              padding: "2px 8px",
-              border: "1px solid #FEDF89",
-            }}
-          />
-        </Box>
-      )}
-    </Box>
-  );
-};
-
-const Check = ({ status, fetchClickedInstanceDetails, setClickedInstance }) => {
   usePolling(fetchClickedInstanceDetails, setClickedInstance, "DISCONNECTED");
 
   return (
     <Box width={"100%"} display={"flex"} flexDirection={"column"} gap="10px">
-      {status === "DISCONNECTED" ? (
+      {instance?.status === "DISCONNECTED" ? (
         <Box
           sx={{
             padding: "12px",
@@ -384,42 +273,94 @@ const Check = ({ status, fetchClickedInstanceDetails, setClickedInstance }) => {
           </Stack>
         </Box>
       ) : (
-        <Box
-          sx={{
-            padding: "12px",
-            background: "white",
-            border: "1px solid #E9EAEB",
-            boxShadow: "0px 1px 2px 0px #0A0D120D",
-            borderRadius: "12px",
-          }}
-        >
-          {" "}
-          <Stack
-            direction="row"
-            justifyContent={"center"}
-            alignItems="center"
-            gap="16px"
-          >
-            <Image src={sandClock} alt="sandwatch" width={26} />
-            <Text size="large" weight="semibold" color="#101828">
-              {"Verification is in progress..."}
-            </Text>
-          </Stack>
-          <List>
-            <ListItem>
-              <Text size="small" weight="semibold" color="#414651">
-                The verification process is running in the background, you can
-                close this popup by clicking Close.
-              </Text>
-            </ListItem>
-            <ListItem>
-              <Text size="small" weight="semibold" color="#414651">
-                Once the verification is complete, the lifecycle status will
-                change to Disconnected.
-              </Text>
-            </ListItem>
-          </List>
-        </Box>
+        <>
+          <Stepper activeStep={activeStepRun} orientation="vertical">
+            {stepsDisconnectRunAccountConfig.map((step, index) => (
+              <Step key={index}>
+                <StepLabel
+                  StepIconComponent={CustomStepIcon}
+                  sx={{
+                    "& .MuiStepLabel-label": {
+                      cursor: "default !important",
+                    },
+                  }}
+                >
+                  {step.label}
+                </StepLabel>
+              </Step>
+            ))}
+          </Stepper>
+
+          {activeStepRun === 1 && (
+            <Box
+              sx={{
+                padding: "12px",
+                background: "white",
+                border: "1px solid #D9E0E8",
+                boxShadow: "0px 1px 2px 0px #0A0D120D",
+                borderRadius: "12px",
+              }}
+            >
+              {instance?.result_params?.aws_account_id ? (
+                <Text size="small" weight="semibold" color="#414651">
+                  Run{" "}
+                  <StyledLink
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    href={`${instance?.result_params?.disconnect_cloudformation_url}`}
+                  >
+                    this
+                  </StyledLink>
+                   CloudFormation template to revoke all{" "}
+                  {`${serviceProviderName}`} permissions from your account.
+                </Text>
+              ) : (
+                <Box>
+                  <Text size="medium" weight="regular" color="#374151">
+                    {/* <b>Using GCP Cloud Shell:</b>  */}
+                    Please open the Google Cloud Shell environment using the
+                    following link:
+                    <StyledLink
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      href="https://shell.cloud.google.com/?cloudshell_ephemeral=true&show=terminal"
+                    >
+                      Google Cloud Shell
+                    </StyledLink>
+                    . Once the terminal is open, execute the following command:
+                  </Text>
+                  {instance?.result_params?.gcp_disconnect_shell_script && (
+                    <TextContainerToCopy
+                      text={
+                        instance?.result_params?.gcp_disconnect_shell_script
+                      }
+                      marginTop="12px"
+                    />
+                  )}
+                </Box>
+              )}
+              <Chip
+                label={
+                  <Stack direction="row" alignItems="center" gap="6px">
+                    <AlertTriangle />
+                    <Text size="xsmall" weight="medium" color="#B54708">
+                      This is a mandatory step to fully disconnect your cloud
+                      account.
+                    </Text>
+                  </Stack>
+                }
+                fontColor="#B54708"
+                bgColor="#FFFAEB"
+                sx={{
+                  marginTop: "6px",
+                  display: "inline-block",
+                  padding: "2px 8px",
+                  border: "1px solid #FEDF89",
+                }}
+              />
+            </Box>
+          )}
+        </>
       )}
     </Box>
   );
@@ -446,20 +387,12 @@ function DisconnectAccountConfigDialog(props) {
 
   useEffect(() => {
     if (
-      (instance?.status === "DETACHING" ||
-        instance?.status === "PENDING_DETACHING" ||
-        instance?.status === "DISCONNECTING") &&
-      activeStepRun < 2
-    ) {
-      setDisconnectState(stateAccountConfigStepper.run);
-    } else if (
-      instance?.status === "DISCONNECTED" ||
-      instance?.status === "DISCONNECTING"
+      instance?.status === "DETACHING" ||
+      instance?.status === "PENDING_DETACHING" ||
+      instance?.status === "DISCONNECTING" ||
+      instance?.status === "DISCONNECTED"
     ) {
       setDisconnectState(stateAccountConfigStepper.check);
-    } else if (instance?.status === "READY") {
-      setDisconnectState(stateAccountConfigStepper.trigger);
-      setActiveStepRun(0);
     }
   }, [disconnectState, setDisconnectState, instance?.status]);
 
@@ -477,7 +410,7 @@ function DisconnectAccountConfigDialog(props) {
       onSuccess: () => {
         refetchInstances();
         snackbar.showSuccess("Disconnecting cloud account");
-        setDisconnectState(stateAccountConfigStepper.run);
+        setDisconnectState(stateAccountConfigStepper.check);
         // eslint-disable-next-line no-use-before-define
         formik.resetForm();
       },
@@ -499,13 +432,10 @@ function DisconnectAccountConfigDialog(props) {
     validateOnChange: false,
   });
 
-  const connectStatechange = (step) => {
-    setDisconnectState(step);
-  };
-
   const handleCancel = () => {
     formik.resetForm();
     handleClose();
+    setDisconnectState(stateAccountConfigStepper.trigger);
   };
 
   return (
@@ -523,22 +453,14 @@ function DisconnectAccountConfigDialog(props) {
               serviceProviderName={serviceProviderName}
             />
           )}
-          {disconnectState === stateAccountConfigStepper.run && (
-            <Run
+          {disconnectState === stateAccountConfigStepper.check && (
+            <Check
               activeStepRun={activeStepRun}
               setActiveStepRun={setActiveStepRun}
               instance={instance}
               fetchClickedInstanceDetails={fetchClickedInstanceDetails}
               setClickedInstance={setClickedInstance}
               serviceProviderName={serviceProviderName}
-            />
-          )}
-
-          {disconnectState === stateAccountConfigStepper.check && (
-            <Check
-              status={instance?.status}
-              fetchClickedInstanceDetails={fetchClickedInstanceDetails}
-              setClickedInstance={setClickedInstance}
             />
           )}
         </Content>
@@ -567,23 +489,6 @@ function DisconnectAccountConfigDialog(props) {
               {"Disconnect"}{" "}
               {isFetching ||
                 (accountConfigMutation.isLoading && <LoadingSpinnerSmall />)}
-            </Button>
-          )}
-          {disconnectState === stateAccountConfigStepper.run && (
-            <Button
-              type="submit"
-              variant="contained"
-              sx={{
-                height: "40px !important",
-                padding: "10px 14px !important",
-              }}
-              disabled={activeStepRun !== 2 || instance?.status === "DETACHING"}
-              bgColor={buttonColor}
-              onClick={() => {
-                connectStatechange(stateAccountConfigStepper.check);
-              }}
-            >
-              {"Confirm"} {isFetching && <LoadingSpinnerSmall />}
             </Button>
           )}
           {disconnectState === stateAccountConfigStepper.check && (

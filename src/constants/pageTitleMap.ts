@@ -11,7 +11,7 @@ export const PAGE_TITLE_MAP = {
   "/dashboard": "Dashboard",
   "/instances": "Instances",
   "/cloud-accounts": "Cloud Accounts",
-  "/custom-networks": "Custom Networks",
+  "/custom-networks": "Customer Networks",
   "/access-control": "Access Control",
   "/events": "Events",
   "/notifications": "Notifications",

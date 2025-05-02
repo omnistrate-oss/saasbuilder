@@ -1,9 +1,7 @@
 import { Subscription } from "src/types/subscription";
 import { ServiceOffering } from "src/types/serviceOffering";
 import { ResourceInstance } from "src/types/resourceInstance";
-import { ACCOUNT_CREATION_METHODS } from "src/utils/constants/accountConfig";
-
-
+import { CLOUD_PROVIDER_DEFAULT_CREATION_METHOD } from "src/utils/constants/accountConfig";
 
 export const getValidSubscriptionForInstanceCreation = (
   serviceOfferings: ServiceOffering[],
@@ -14,7 +12,6 @@ export const getValidSubscriptionForInstanceCreation = (
   serviceID?: string,
   skipInstanceQuotaCheck = true
 ): Subscription | undefined => {
-
   const productTierInstanceLimitHash: Record<string, number> = {};
   const productTierPaymentRequirementHash: Record<string, boolean> = {};
   const subscriptionInstancesNumHash: Record<string, number> = {};
@@ -79,7 +76,9 @@ export const getValidSubscriptionForInstanceCreation = (
     const instancesLimit = productTierInstanceLimitHash[productTierID];
     if (
       (requiresPaymentConfig && !isPaymentConfigured) ||
-      (instancesLimit > -1 && numInstances >= instancesLimit && !skipInstanceQuotaCheck)
+      (instancesLimit > -1 &&
+        numInstances >= instancesLimit &&
+        !skipInstanceQuotaCheck)
     )
       return false;
 
@@ -120,8 +119,8 @@ export const getInitialValues = (
   byoaSubscriptions: Subscription[],
   byoaServiceOfferingsObj: Record<string, Record<string, ServiceOffering>>,
   byoaServiceOfferings: ServiceOffering[],
-  instances : ResourceInstance[],
-  isPaymentConfigured : boolean,
+  instances: ResourceInstance[],
+  isPaymentConfigured: boolean
 ) => {
   if (selectedInstance) {
     const subscription = byoaSubscriptions.find(
@@ -134,7 +133,10 @@ export const getInitialValues = (
       // @ts-ignore
       cloudProvider: selectedInstance.result_params?.gcp_project_id
         ? "gcp"
-        : "aws",
+        : //@ts-ignore
+          selectedInstance.result_params?.azure_subscription_id
+          ? "azure"
+          : "aws",
       accountConfigurationMethod:
         // @ts-ignore
         selectedInstance.result_params?.account_configuration_method,
@@ -144,6 +146,11 @@ export const getInitialValues = (
       gcpProjectId: selectedInstance.result_params?.gcp_project_id,
       // @ts-ignore
       gcpProjectNumber: selectedInstance.result_params?.gcp_project_number,
+      azureSubscriptionId:
+        // @ts-ignore
+        selectedInstance.result_params?.azure_subscription_id,
+      //@ts-ignore
+      azureTenantId: selectedInstance.result_params?.azure_tenant_id,
     };
   }
 
@@ -167,9 +174,7 @@ export const getInitialValues = (
       ...initialFormValues,
       cloudProvider,
       accountConfigurationMethod:
-        cloudProvider === "aws"
-          ? ACCOUNT_CREATION_METHODS.CLOUDFORMATION
-          : ACCOUNT_CREATION_METHODS.GCP_SCRIPT,
+        CLOUD_PROVIDER_DEFAULT_CREATION_METHOD[cloudProvider],
     };
   }
 
@@ -189,14 +194,12 @@ export const getInitialValues = (
     );
 
   const serviceId =
-  selectedSubscription?.serviceId ||
+    selectedSubscription?.serviceId ||
     filteredSubscriptions[0]?.serviceId ||
     byoaServiceOfferings[0]?.serviceId ||
     "";
 
-  const servicePlanId =
-    selectedSubscription?.productTierId ||
-    "";
+  const servicePlanId = selectedSubscription?.productTierId || "";
 
   const cloudProvider =
     byoaServiceOfferingsObj[serviceId]?.[servicePlanId]?.cloudProviders?.[0] ||
@@ -208,9 +211,7 @@ export const getInitialValues = (
     subscriptionId: selectedSubscription?.id || "",
     cloudProvider,
     accountConfigurationMethod:
-      cloudProvider === "aws"
-        ? ACCOUNT_CREATION_METHODS.CLOUDFORMATION
-        : ACCOUNT_CREATION_METHODS.GCP_SCRIPT,
+      CLOUD_PROVIDER_DEFAULT_CREATION_METHOD[cloudProvider],
     awsAccountId: "",
     gcpProjectId: "",
     gcpProjectNumber: "",

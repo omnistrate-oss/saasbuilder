@@ -99,3 +99,27 @@ export const getSubscriptionsRoute = ({
   }
   return "/subscriptions";
 };
+
+export const getSigninRoute = () => {
+  return "/signin";
+};
+
+export const getSignupRoute = () => {
+  return "/signup";
+};
+
+export const getResetPasswordRoute = () => {
+  return "/reset-password";
+};
+
+export const getTermsOfUseRoute = () => {
+  return "/terms-of-use";
+};
+
+export const getPrivacyPolicyRoute = () => {
+  return "/privacy-policy";
+};
+
+export const getCookiePolicyRoute = () => {
+  return "/cookie-policy";
+};
