@@ -5,14 +5,12 @@ import Link from "next/link";
 import { ReactNode, useMemo, useState } from "react";
 import { ArrowOutward } from "@mui/icons-material";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-
 import Button from "components/Button/Button";
 import Tooltip from "components/Tooltip/Tooltip";
 import { Text } from "components/Typography/Typography";
 import ClockIcon from "components/Icons/ServicePlanCard/ClockIcon";
 import CirclePlusIcon from "components/Icons/ServicePlanCard/CirclePlusIcon";
 import CircleCheckIcon from "components/Icons/ServicePlanCard/CircleCheckIcon";
-
 import { colors } from "src/themeConfig";
 import useSnackbar from "src/hooks/useSnackbar";
 import { createSubscriptions } from "src/api/subscriptions";
@@ -128,7 +126,7 @@ const SubscriptionPlanCard = ({
         )}
       </div>
 
-      {isPlanSelectionDisabled && (
+      {isPlanSelectionDisabled && disabledReasonText && (
         <div className="mt-2 mb-1 flex items-center gap-2">
           <AlertTriangle height="15px" width="15px" color="#DC6803" style={{ flexShrink: 0 }} />
           <Text weight="medium" size="xsmall" color="#DC6803">
