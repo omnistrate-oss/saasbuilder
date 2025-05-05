@@ -18,9 +18,7 @@ import Link from "next/link";
 import { CLI_MANAGED_RESOURCES } from "src/constants/resource";
 import _ from "lodash";
 
-function getInstanceNodes(
-  detailedNetworkTopology: Record<string, ResourceInstanceNetworkTopology> = {}
-) {
+function getInstanceNodes(detailedNetworkTopology: Record<string, ResourceInstanceNetworkTopology> = {}) {
   let nodes: ResourceInstanceNode[] = [];
 
   Object.entries(detailedNetworkTopology).forEach(([, topologyDetails]) => {
@@ -46,9 +44,7 @@ export function getComplexInstanceHealthStatus(
   //use both node health status and additional endpoint health status to calculate aggregated health status
 
   //stores addtional endpoints for all resources in detailedNetworkTopology
-  const nodes: ResourceInstanceNode[] = getInstanceNodes(
-    detailedNetworkTopology
-  );
+  const nodes: ResourceInstanceNode[] = getInstanceNodes(detailedNetworkTopology);
 
   //stores addtional endpoints for all resources in detailedNetworkTopology
   const allAdditionalEndpoints: (ResourceNetworkTopologyAdditionalEndpoint & {
@@ -57,14 +53,12 @@ export function getComplexInstanceHealthStatus(
 
   Object.values(detailedNetworkTopology).forEach((topologyDetails) => {
     const additionalEndpoints = topologyDetails.additionalEndpoints || {};
-    Object.entries(additionalEndpoints).forEach(
-      ([endpointName, endpointDetails]) => {
-        allAdditionalEndpoints.push({
-          ...endpointDetails,
-          endpointName,
-        });
-      }
-    );
+    Object.entries(additionalEndpoints).forEach(([endpointName, endpointDetails]) => {
+      allAdditionalEndpoints.push({
+        ...endpointDetails,
+        endpointName,
+      });
+    });
   });
 
   const healthStatusEntities: {
@@ -96,9 +90,7 @@ export function getComplexInstanceHealthStatus(
     const unknownHealthEntities = healthStatusEntities.filter(
       (entity) => entity.healthStatus?.toUpperCase() === "UNKNOWN"
     );
-    const naHealthEntities = healthStatusEntities.filter(
-      (entity) => entity.healthStatus?.toUpperCase() === "N/A"
-    );
+    const naHealthEntities = healthStatusEntities.filter((entity) => entity.healthStatus?.toUpperCase() === "N/A");
 
     //health status is UNKNOWN if all entities have UNKNOWN health status
     if (unknownHealthEntities.length === healthStatusEntities.length) {
@@ -109,30 +101,19 @@ export function getComplexInstanceHealthStatus(
       computedHealthStatus = "UNKNOWN";
 
       //health status is UNKNOWN if all entities have either UNKNOWN or N/A health status
-    } else if (
-      unknownHealthEntities.length + naHealthEntities.length ===
-      healthStatusEntities.length
-    ) {
+    } else if (unknownHealthEntities.length + naHealthEntities.length === healthStatusEntities.length) {
       computedHealthStatus = "UNKNOWN";
     } else {
       //ignore UNKNOWN, N/A entities and calculate health status
       const nonUnknownHealthEntities = healthStatusEntities.filter(
-        (node) =>
-          node.healthStatus?.toUpperCase() !== "UNKNOWN" &&
-          node.healthStatus?.toUpperCase() !== "N/A"
+        (node) => node.healthStatus?.toUpperCase() !== "UNKNOWN" && node.healthStatus?.toUpperCase() !== "N/A"
       );
       //healhy if all entities are healthy
-      if (
-        nonUnknownHealthEntities.every(
-          (entity) => entity.healthStatus === "HEALTHY"
-        )
-      ) {
+      if (nonUnknownHealthEntities.every((entity) => entity.healthStatus === "HEALTHY")) {
         computedHealthStatus = "HEALTHY";
       } else if (
         //unhealhy if all entities are unhealthy
-        nonUnknownHealthEntities.every(
-          (entity) => entity.healthStatus === "UNHEALTHY"
-        )
+        nonUnknownHealthEntities.every((entity) => entity.healthStatus === "UNHEALTHY")
       ) {
         computedHealthStatus = "UNHEALTHY";
       } else {
@@ -149,29 +130,27 @@ export function getInstanceHealthStatus(
   instanceLifecycleStatus: string | undefined
 ): InstanceComputedHealthStatus {
   let isCLIManagedResource = false;
+  let l7LoadBalancer = false;
 
   if (detailedNetworkTopology) {
     const mainResource = Object.values(detailedNetworkTopology).find(
       (topologyDetails) => topologyDetails.main === true
     );
 
-    if (
-      mainResource &&
-      CLI_MANAGED_RESOURCES.includes(mainResource.resourceType as string)
-    ) {
+    if (mainResource && CLI_MANAGED_RESOURCES.includes(mainResource.resourceType as string)) {
       isCLIManagedResource = true;
+    }
+    if (mainResource && mainResource.resourceType === "l7LoadBalancer") {
+      l7LoadBalancer = true;
     }
   }
 
-  if (isCLIManagedResource)
-    return getComplexInstanceHealthStatus(detailedNetworkTopology);
+  if (isCLIManagedResource || l7LoadBalancer) return getComplexInstanceHealthStatus(detailedNetworkTopology);
 
   //return N/A for Stopped instances
   if (instanceLifecycleStatus === "STOPPED") return "UNKNOWN";
 
-  const nodes: ResourceInstanceNode[] = getInstanceNodes(
-    detailedNetworkTopology
-  );
+  const nodes: ResourceInstanceNode[] = getInstanceNodes(detailedNetworkTopology);
 
   let computedHealthStatus: InstanceComputedHealthStatus = "UNKNOWN";
 
@@ -182,28 +161,19 @@ export function getInstanceHealthStatus(
       //
     } else {
       //ignore unknown nodes and calculate health status
-      const nonUnknownHealthNodes = nodes.filter(
-        (node) => node.healthStatus !== "UNKNOWN"
-      );
+      const nonUnknownHealthNodes = nodes.filter((node) => node.healthStatus !== "UNKNOWN");
 
       //healhy if all nodes are healthy
-      if (
-        nonUnknownHealthNodes.every((node) => node.healthStatus === "HEALTHY")
-      ) {
+      if (nonUnknownHealthNodes.every((node) => node.healthStatus === "HEALTHY")) {
         computedHealthStatus = "HEALTHY";
-      } else if (
-        nonUnknownHealthNodes.every((node) => node.healthStatus === "UNHEALTHY")
-      ) {
+      } else if (nonUnknownHealthNodes.every((node) => node.healthStatus === "UNHEALTHY")) {
         computedHealthStatus = "UNHEALTHY";
       } else {
         computedHealthStatus = "DEGRADED";
       }
     }
   } else {
-    if (
-      instanceLifecycleStatus === "RUNNING" ||
-      instanceLifecycleStatus === "READY"
-    ) {
+    if (instanceLifecycleStatus === "RUNNING" || instanceLifecycleStatus === "READY") {
       computedHealthStatus = "HEALTHY";
     }
   }
@@ -248,8 +218,7 @@ const InstanceHealthStatusChip: FC<InstanceHealthStatusChipProps> = (props) => {
 
   const nodes = getInstanceNodes(detailedNetworkTopology);
 
-  const chipStylesAndLabel =
-    getResourceInstanceChipStylesAndLabel(computedHealthStatus);
+  const chipStylesAndLabel = getResourceInstanceChipStylesAndLabel(computedHealthStatus);
 
   let startIcon: ReactNode = "";
   if (computedHealthStatus === "DEGRADED") {
@@ -272,33 +241,20 @@ const InstanceHealthStatusChip: FC<InstanceHealthStatusChipProps> = (props) => {
     );
   }
 
-  if (
-    computedHealthStatus === "DEGRADED" ||
-    computedHealthStatus === "UNHEALTHY"
-  ) {
+  if (computedHealthStatus === "DEGRADED" || computedHealthStatus === "UNHEALTHY") {
     const numNodesToDisplay = 3;
     let shouldShowEllipsis = false;
     //all nodes are
-    const unhealthyNodes = nodes.filter(
-      (node) => node.healthStatus === "UNHEALTHY"
-    );
+    const unhealthyNodes = nodes.filter((node) => node.healthStatus === "UNHEALTHY");
     let visibleNodes = unhealthyNodes;
 
     if (unhealthyNodes.length > numNodesToDisplay) {
       shouldShowEllipsis = true;
-      visibleNodes = visibleNodes.filter(
-        (node, index) => index < numNodesToDisplay
-      );
+      visibleNodes = visibleNodes.filter((node, index) => index < numNodesToDisplay);
     }
 
     const viewAllNodesButton = (
-      <Stack
-        display="inline-flex"
-        direction="row"
-        alignItems="center"
-        marginTop="12px"
-        sx={{ cursor: "pointer" }}
-      >
+      <Stack display="inline-flex" direction="row" alignItems="center" marginTop="12px" sx={{ cursor: "pointer" }}>
         <Text
           size="xsmall"
           weight="medium"
@@ -330,10 +286,7 @@ const InstanceHealthStatusChip: FC<InstanceHealthStatusChipProps> = (props) => {
 
         {/* {unhealthyNodes.length > numNodesToDisplay && ( */}
         {viewNodesLink ? (
-          <UnstyledLink
-            href={viewNodesLink}
-            target={openLinkInSameTab ? "_self" : "_blank"}
-          >
+          <UnstyledLink href={viewNodesLink} target={openLinkInSameTab ? "_self" : "_blank"}>
             {viewAllNodesButton}
           </UnstyledLink>
         ) : (
@@ -361,10 +314,7 @@ const InstanceHealthStatusChip: FC<InstanceHealthStatusChipProps> = (props) => {
       (topologyDetails) => topologyDetails.main === true
     );
 
-    if (
-      mainResource &&
-      CLI_MANAGED_RESOURCES.includes(mainResource.resourceType as string)
-    ) {
+    if (mainResource && CLI_MANAGED_RESOURCES.includes(mainResource.resourceType as string)) {
       isCLIManagedResource = true;
     }
   }
