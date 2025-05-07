@@ -36,7 +36,7 @@ const CLIManagedConnectivityDetails: FC<CLIManagedConnectivityDetailsProps> = ({
     return (
       <ContainerCard
         title={resourceName}
-        statusChips={<StatusChip {...chipStylesAndLabel} />}
+        statusChip={<StatusChip {...chipStylesAndLabel} />}
         key={resourceName}
         marginTop="32px"
         contentBoxProps={{ padding: "12px 16px" }}

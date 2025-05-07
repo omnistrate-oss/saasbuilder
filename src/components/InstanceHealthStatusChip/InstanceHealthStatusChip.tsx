@@ -130,7 +130,7 @@ export function getInstanceHealthStatus(
   instanceLifecycleStatus: string | undefined
 ): InstanceComputedHealthStatus {
   let isCLIManagedResource = false;
-  let l7LoadBalancer = false;
+  let isL7LoadBalancer = false;
 
   if (detailedNetworkTopology) {
     const mainResource = Object.values(detailedNetworkTopology).find(
@@ -141,11 +141,11 @@ export function getInstanceHealthStatus(
       isCLIManagedResource = true;
     }
     if (mainResource && mainResource.resourceType === "l7LoadBalancer") {
-      l7LoadBalancer = true;
+      isL7LoadBalancer = true;
     }
   }
 
-  if (isCLIManagedResource || l7LoadBalancer) return getComplexInstanceHealthStatus(detailedNetworkTopology);
+  if (isCLIManagedResource || isL7LoadBalancer) return getComplexInstanceHealthStatus(detailedNetworkTopology);
 
   //return N/A for Stopped instances
   if (instanceLifecycleStatus === "STOPPED") return "UNKNOWN";

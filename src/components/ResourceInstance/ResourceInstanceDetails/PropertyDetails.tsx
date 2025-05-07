@@ -88,11 +88,11 @@ type ConatainerCardProps = {
   description?: string;
   children?: ReactNode;
   contentBoxProps?: BoxProps;
-  statusChips?: ReactNode;
+  statusChip?: ReactNode;
 };
 
 export const ContainerCard: FC<ConatainerCardProps & BoxProps> = (props) => {
-  const { title, description, children, statusChips, contentBoxProps = {}, ...restProps } = props;
+  const { title, description, children, statusChip, contentBoxProps = {}, ...restProps } = props;
 
   return (
     <Box borderRadius="8px" border="1px solid #E9EAEB" boxShadow="0px 1px 2px 0px #0A0D120D" {...restProps}>
@@ -110,7 +110,7 @@ export const ContainerCard: FC<ConatainerCardProps & BoxProps> = (props) => {
             {title}
           </Text>
 
-          {statusChips && statusChips}
+          {statusChip && statusChip}
         </Box>
         <Text size="small" weight="regular" color="#535862" marginTop="2px">
           {description}
