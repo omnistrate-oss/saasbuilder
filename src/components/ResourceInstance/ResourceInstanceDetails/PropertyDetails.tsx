@@ -57,15 +57,7 @@ type License = {
   Version: number;
 };
 
-const textType = [
-  "String",
-  "string",
-  "text",
-  "float64",
-  "Float64",
-  "Secret",
-  "secret",
-];
+const textType = ["String", "string", "text", "float64", "Float64", "Secret", "secret"];
 
 type PropertyTableProps = {
   rows: { rows: Row[]; title: string; desc: string; flexWrap: boolean };
@@ -96,24 +88,14 @@ type ConatainerCardProps = {
   description?: string;
   children?: ReactNode;
   contentBoxProps?: BoxProps;
+  statusChip?: ReactNode;
 };
 
 export const ContainerCard: FC<ConatainerCardProps & BoxProps> = (props) => {
-  const {
-    title,
-    description,
-    children,
-    contentBoxProps = {},
-    ...restProps
-  } = props;
+  const { title, description, children, statusChip, contentBoxProps = {}, ...restProps } = props;
 
   return (
-    <Box
-      borderRadius="8px"
-      border="1px solid #E9EAEB"
-      boxShadow="0px 1px 2px 0px #0A0D120D"
-      {...restProps}
-    >
+    <Box borderRadius="8px" border="1px solid #E9EAEB" boxShadow="0px 1px 2px 0px #0A0D120D" {...restProps}>
       <Stack
         sx={{
           flexDirection: "column",
@@ -123,9 +105,13 @@ export const ContainerCard: FC<ConatainerCardProps & BoxProps> = (props) => {
         alignItems="left"
         padding="20px 24px"
       >
-        <Text size="small" weight="bold" color="#7F56D9">
-          {title}
-        </Text>
+        <Box display="flex" alignItems="center" gap="8px">
+          <Text size="small" weight="bold" color="#7F56D9">
+            {title}
+          </Text>
+
+          {statusChip && statusChip}
+        </Box>
         <Text size="small" weight="regular" color="#535862" marginTop="2px">
           {description}
         </Text>
@@ -154,14 +140,7 @@ const PropertyDetails: FC<PropertyTableProps> = ({ rows, ...otherProps }) => {
         padding="12px 0"
         rowGap="12px"
       >
-        <Box
-          position={"absolute"}
-          right={0}
-          height={"100%"}
-          width={"2px"}
-          bgcolor={"white"}
-          bottom={5}
-        />
+        <Box position={"absolute"} right={0} height={"100%"} width={"2px"} bgcolor={"white"} bottom={5} />
 
         {rows?.rows?.map((row, index) => {
           const valueType = row.valueType || "text";
@@ -171,12 +150,7 @@ const PropertyDetails: FC<PropertyTableProps> = ({ rows, ...otherProps }) => {
           let isJSONData = false;
           let jsonData: JsonDataType;
 
-          if (
-            value !== null &&
-            value !== undefined &&
-            typeof value === "object" &&
-            valueType !== "custom"
-          ) {
+          if (value !== null && value !== undefined && typeof value === "object" && valueType !== "custom") {
             try {
               if (value.constructor === {}.constructor) {
                 jsonData = value;
@@ -221,10 +195,7 @@ const PropertyDetails: FC<PropertyTableProps> = ({ rows, ...otherProps }) => {
 
                     if (typeof licenseData === "string") {
                       try {
-                        parsedData = JSON.parse(licenseData) as Record<
-                          string,
-                          any
-                        >;
+                        parsedData = JSON.parse(licenseData) as Record<string, any>;
                         const license: License = parsedData?.License as License;
                         instanceID = license?.InstanceID ?? instanceID;
                       } catch (error) {
@@ -235,10 +206,7 @@ const PropertyDetails: FC<PropertyTableProps> = ({ rows, ...otherProps }) => {
                       const license: License = parsedData?.License as License;
                       instanceID = license?.InstanceID ?? instanceID;
                     }
-                    const data =
-                      typeof licenseData === "string"
-                        ? licenseData
-                        : JSON.stringify(licenseData, null, 2);
+                    const data = typeof licenseData === "string" ? licenseData : JSON.stringify(licenseData, null, 2);
                     const blob = new Blob([data], {
                       type: "text/plain",
                     });
@@ -301,10 +269,7 @@ const PropertyDetails: FC<PropertyTableProps> = ({ rows, ...otherProps }) => {
           } else if (valueType === "link") {
             value = (
               <>
-                <Link
-                  href={row.linkProps?.href || "#"}
-                  target={row.linkProps?.target || "_self"}
-                >
+                <Link href={row.linkProps?.href || "#"} target={row.linkProps?.target || "_self"}>
                   {row.value}
                 </Link>
                 <CopyButton
@@ -317,13 +282,7 @@ const PropertyDetails: FC<PropertyTableProps> = ({ rows, ...otherProps }) => {
           } else if (valueType === "link-box") {
             value = (
               <>
-                <Text
-                  size="small"
-                  weight="regular"
-                  color="#6941C6"
-                  ellipsis
-                  sx={{ flex: 1, wordBreak: "break-word" }}
-                >
+                <Text size="small" weight="regular" color="#6941C6" ellipsis sx={{ flex: 1, wordBreak: "break-word" }}>
                   {row.value}
                 </Text>
                 <CopyButton
@@ -334,15 +293,12 @@ const PropertyDetails: FC<PropertyTableProps> = ({ rows, ...otherProps }) => {
               </>
             );
           } else if (valueType === "boolean" || valueType === "Boolean") {
-            const statusStylesAndMap =
-              getResourceInstanceDetailsStatusStylesAndLabel(row.value);
+            const statusStylesAndMap = getResourceInstanceDetailsStatusStylesAndLabel(row.value);
             value = <StatusChip {...statusStylesAndMap} />;
           } else if (valueType === "password" || valueType === "Password") {
             value = (
               <>
-                <PasswordWithOutBorderField>
-                  {row.value}
-                </PasswordWithOutBorderField>
+                <PasswordWithOutBorderField>{row.value}</PasswordWithOutBorderField>
                 <CopyButton
                   text={row.value}
                   iconProps={{
@@ -386,22 +342,12 @@ const PropertyDetails: FC<PropertyTableProps> = ({ rows, ...otherProps }) => {
             >
               <Tooltip title={row.label} placement="top">
                 <Box maxWidth="100%">
-                  <Text
-                    ellipsis
-                    size="xsmall"
-                    weight="semibold"
-                    color="#414651"
-                  >
+                  <Text ellipsis size="xsmall" weight="semibold" color="#414651">
                     {row.label}
                   </Text>
                 </Box>
               </Tooltip>
-              <Box
-                flex="1 1 auto"
-                display="flex"
-                alignItems="center"
-                maxWidth="100%"
-              >
+              <Box flex="1 1 auto" display="flex" alignItems="center" maxWidth="100%">
                 {value}
               </Box>
             </Box>
