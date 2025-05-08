@@ -4,11 +4,8 @@ import AuditLogsEventFilterDropdown from "src/components/ResourceInstance/AuditL
 import { SetState } from "src/types/common/reactGenerics";
 import { EventType } from "src/types/event";
 import { ServiceOffering } from "src/types/serviceOffering";
-import {
-  DateTimePickerPopover,
-  DateRange,
-} from "src/components/DateRangePicker/DateTimeRangePickerStatic";
-import ServiceFilter from "app/(dashboard)/events/components/ServiceFilter";
+import { DateTimePickerPopover, DateRange } from "src/components/DateRangePicker/DateTimeRangePickerStatic";
+import ServiceFilter from "app/(dashboard)/audit-logs/components/ServiceFilter";
 
 type NotificationsTableHeaderProps = {
   refetchNotifications: () => void;
@@ -35,20 +32,11 @@ const NotificationsTableHeader: React.FC<NotificationsTableHeaderProps> = ({
 }) => {
   return (
     <div className="flex items-center justify-between gap-4 py-5 px-6">
-      <DataGridHeaderTitle
-        title="List of Notifications"
-        desc="Notifications related to system activities"
-      />
+      <DataGridHeaderTitle title="List of Notifications" desc="Notifications related to system activities" />
 
       <div className="flex justify-end items-center gap-4 flex-wrap flex-grow">
-        <RefreshWithToolTip
-          refetch={refetchNotifications}
-          disabled={isFetchingNotifications}
-        />
-        <DateTimePickerPopover
-          dateRange={selectedDateRange}
-          setDateRange={setSelectedDateRange}
-        />
+        <RefreshWithToolTip refetch={refetchNotifications} disabled={isFetchingNotifications} />
+        <DateTimePickerPopover dateRange={selectedDateRange} setDateRange={setSelectedDateRange} />
         <AuditLogsEventFilterDropdown
           selectedEventTypes={selectedEventTypes}
           setSelectedEventTypes={setSelectedEventTypes}

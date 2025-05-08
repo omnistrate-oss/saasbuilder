@@ -34,8 +34,7 @@ function ResourceInstanceDetails(props) {
     licenseDetails,
   } = props;
 
-  const isResourceBYOA =
-    resultParameters.gcp_project_id || resultParameters.aws_account_id;
+  const isResourceBYOA = resultParameters.gcp_project_id || resultParameters.aws_account_id;
 
   const resultParametersWithDescription = useMemo(() => {
     const result = Object.keys(resultParameters)
@@ -58,13 +57,7 @@ function ResourceInstanceDetails(props) {
 
         if (isResourceBYOA) {
           if (resultParameters.cloud_provider === "aws") {
-            filterArr.push(
-              ...[
-                "gcp_project_id",
-                "gcp_project_number",
-                "gcp_service_account_email",
-              ]
-            );
+            filterArr.push(...["gcp_project_id", "gcp_project_number", "gcp_service_account_email"]);
           } else if (resultParameters.cloud_provider === "gcp") {
             filterArr.push(...["aws_account_id", "aws_bootstrap_role_arn"]);
           }
@@ -133,16 +126,11 @@ function ResourceInstanceDetails(props) {
   ]);
 
   const licenseData = useMemo(() => {
-
     const res = [
       {
         label: "License Status",
         valueType: "custom",
-        value: (
-          <InstanceLicenseStatusChip
-            expirationDate={licenseDetails?.expirationDate}
-          />
-        ),
+        value: <InstanceLicenseStatusChip expirationDate={licenseDetails?.expirationDate} />,
       },
       {
         label: "License Expiry Date",
@@ -150,9 +138,7 @@ function ResourceInstanceDetails(props) {
       },
       {
         label: "Download License",
-        value: licenseDetails?.licenseBase64
-          ? Base64.decode(licenseDetails?.licenseBase64)
-          : "",
+        value: licenseDetails?.licenseBase64 ? Base64.decode(licenseDetails?.licenseBase64) : "",
         valueType: "download",
       },
     ];
@@ -171,16 +157,12 @@ function ResourceInstanceDetails(props) {
       },
       {
         label: "Earliest Restore Time",
-        value: backupStatus?.earliestRestoreTime
-          ? formatDateUTC(backupStatus?.earliestRestoreTime)
-          : "-",
+        value: backupStatus?.earliestRestoreTime ? formatDateUTC(backupStatus?.earliestRestoreTime) : "-",
         valueType: backupStatus?.earliestRestoreTime ? "text" : "custom",
       },
       {
         label: "Last Backup Time",
-        value: backupStatus?.lastBackupTime
-          ? formatDateUTC(backupStatus?.lastBackupTime)
-          : "-",
+        value: backupStatus?.lastBackupTime ? formatDateUTC(backupStatus?.lastBackupTime) : "-",
         valueType: backupStatus?.lastBackupTime ? "text" : "custom",
       },
       {
@@ -237,15 +219,10 @@ function ResourceInstanceDetails(props) {
 
   const outputParameterData = useMemo(() => {
     const res = [];
-    if (
-      serviceOffering &&
-      subscriptionId &&
-      resultParameters.account_configuration_method === "Terraform"
-    ) {
+    if (serviceOffering && subscriptionId && resultParameters.account_configuration_method === "Terraform") {
       res.push({
         label: "Terraform Download URL",
-        description:
-          "Terraform Kit URL to configure access to an AWS/GCP account",
+        description: "Terraform Kit URL to configure access to an AWS/GCP account",
         value: (
           <TerraformDownloadURL
             serviceOffering={serviceOffering}
@@ -258,26 +235,16 @@ function ResourceInstanceDetails(props) {
     }
     if (nonOmnistrateInternalMetrics?.Url) {
       res.push({
-        label:
-          INTEGRATION_TYPE_LABEL_MAP[nonOmnistrateInternalMetrics.featureName],
-        value: (
-          <NonOmnistrateIntegrationRow
-            integration={nonOmnistrateInternalMetrics}
-          />
-        ),
+        label: INTEGRATION_TYPE_LABEL_MAP[nonOmnistrateInternalMetrics.featureName],
+        value: <NonOmnistrateIntegrationRow integration={nonOmnistrateInternalMetrics} />,
         valueType: "custom",
       });
     }
 
     if (nonOmnistrateInternalLogs?.Url) {
       res.push({
-        label:
-          INTEGRATION_TYPE_LABEL_MAP[nonOmnistrateInternalLogs.featureName],
-        value: (
-          <NonOmnistrateIntegrationRow
-            integration={nonOmnistrateInternalLogs}
-          />
-        ),
+        label: INTEGRATION_TYPE_LABEL_MAP[nonOmnistrateInternalLogs.featureName],
+        value: <NonOmnistrateIntegrationRow integration={nonOmnistrateInternalLogs} />,
         valueType: "custom",
       });
     }
@@ -299,10 +266,7 @@ function ResourceInstanceDetails(props) {
           },
         });
       }
-      if (
-        param.key === "cloudformation_url_no_lb" ||
-        param.key === "cloudformation_url"
-      ) {
+      if (param.key === "cloudformation_url_no_lb" || param.key === "cloudformation_url") {
         return res.push({
           label: param.displayName || param.key,
           description: param.description,
@@ -318,8 +282,7 @@ function ResourceInstanceDetails(props) {
           label: param.displayName || param.key,
           description: param.description,
           value: param.value,
-          valueType:
-            param.key === "cloud_provider" ? "cloudProvider" : param.type,
+          valueType: param.key === "cloud_provider" ? "cloudProvider" : param.type,
         });
       }
     });
@@ -373,9 +336,7 @@ function ResourceInstanceDetails(props) {
       {hasPendingUpgrades && (
         <UpgradeScheduledNotificationBar
           upgradeStatus={maintenanceTasks.upgrade_paths[0].upgrade_status}
-          upgradeDate={
-            maintenanceTasks.upgrade_paths?.[0]?.upgrade_path_scheduled_at
-          }
+          upgradeDate={maintenanceTasks.upgrade_paths?.[0]?.upgrade_path_scheduled_at}
         />
       )}
       <PropertyDetails
@@ -405,10 +366,10 @@ function ResourceInstanceDetails(props) {
           rows={{
             title: CloudPRoviderInstance?.isCloudPRoviderInstance
               ? `${CloudPRoviderInstance?.cloudProviderName === "aws" ? "AWS" : "GCP"} Cloud account config`
-              : "Output Parameter",
+              : "Parameter",
             desc: CloudPRoviderInstance?.isCloudPRoviderInstance
               ? `${CloudPRoviderInstance?.cloudProviderName === "aws" ? "AWS" : "GCP"} account configuration details`
-              : "Output parameters for this instance",
+              : "Parameters for this instance",
             rows: outputParameterData,
             flexWrap: true,
           }}

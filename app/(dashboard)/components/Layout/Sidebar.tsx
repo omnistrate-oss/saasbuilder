@@ -77,25 +77,14 @@ const SingleNavItem = ({
     >
       <Icon />
 
-      <Text
-        size="medium"
-        weight="semibold"
-        className="group-hover:text-success-500 transition-colors select-none"
-      >
+      <Text size="medium" weight="semibold" className="group-hover:text-success-500 transition-colors select-none">
         {name}
       </Text>
     </div>
   );
 };
 
-const ExpandibleNavItem = ({
-  name,
-  icon: Icon,
-  subItems,
-  isExpanded,
-  setExpandedMenus,
-  currentPath,
-}) => {
+const ExpandibleNavItem = ({ name, icon: Icon, subItems, isExpanded, setExpandedMenus, currentPath }) => {
   return (
     <div>
       <div
@@ -109,11 +98,7 @@ const ExpandibleNavItem = ({
       >
         <Icon />
 
-        <Text
-          size="medium"
-          weight="semibold"
-          className="group-hover:text-success-500 transition-colors select-none"
-        >
+        <Text size="medium" weight="semibold" className="group-hover:text-success-500 transition-colors select-none">
           {name}
         </Text>
 
@@ -140,11 +125,7 @@ const ExpandibleNavItem = ({
               <Text
                 size="medium"
                 weight="semibold"
-                color={
-                  currentPath?.startsWith(item.href)
-                    ? colors.success500
-                    : colors.gray700
-                }
+                color={currentPath?.startsWith(item.href) ? colors.success500 : colors.gray700}
                 className="group-hover:text-success-500 transition-colors"
               >
                 {item.name}
@@ -157,12 +138,7 @@ const ExpandibleNavItem = ({
   );
 };
 
-type Overlay =
-  | "plan-details"
-  | "documentation"
-  | "pricing"
-  | "support"
-  | "api-documentation";
+type Overlay = "plan-details" | "documentation" | "pricing" | "support" | "api-documentation";
 
 const Sidebar = () => {
   const currentPath = usePathname();
@@ -180,14 +156,9 @@ const Sidebar = () => {
       setExpandedMenus((prev) => ({
         ...prev,
         Deployments:
-          [getCustomNetworksRoute({}), getCloudAccountsRoute({})].includes(
-            currentPath
-          ) || currentPath.startsWith("/instances"),
-        "Governance Hub": [
-          getAccessControlRoute(),
-          getEventsRoute(),
-          getNotificationsRoute(),
-        ].includes(currentPath),
+          [getCustomNetworksRoute({}), getCloudAccountsRoute({})].includes(currentPath) ||
+          currentPath.startsWith("/instances"),
+        "Governance Hub": [getAccessControlRoute(), getEventsRoute(), getNotificationsRoute()].includes(currentPath),
         "Account Management": [
           getSettingsRoute(),
           getBillingRoute(),
@@ -201,20 +172,14 @@ const Sidebar = () => {
   const showCloudProvidersPage = useMemo(() => {
     return Boolean(
       serviceOfferings.find(
-        (offering) =>
-          offering.serviceModelType === "BYOA" ||
-          offering.serviceModelType === "ON_PREM_COPILOT"
+        (offering) => offering.serviceModelType === "BYOA" || offering.serviceModelType === "ON_PREM_COPILOT"
       )
     );
   }, [serviceOfferings]);
 
   const showCustomNetworksPage = useMemo(() => {
     return Boolean(
-      serviceOfferings.some((offering) =>
-        offering.serviceModelFeatures?.find(
-          (el) => el.feature === "CUSTOM_NETWORKS"
-        )
-      )
+      serviceOfferings.some((offering) => offering.serviceModelFeatures?.find((el) => el.feature === "CUSTOM_NETWORKS"))
     );
   }, [serviceOfferings]);
 
@@ -300,8 +265,8 @@ const Sidebar = () => {
         isExpandible: true,
         subItems: [
           { name: "Access Control", href: getAccessControlRoute() },
-          { name: "Events", href: getEventsRoute() },
-          { name: "Notifications", href: getNotificationsRoute() },
+          { name: "Audit Logs", href: getEventsRoute() },
+          { name: "Alerts", href: getNotificationsRoute() },
         ],
       },
       {
@@ -345,11 +310,7 @@ const Sidebar = () => {
               {...item}
             />
           ) : (
-            <SingleNavItem
-              key={item.name}
-              currentPath={currentPath}
-              {...item}
-            />
+            <SingleNavItem key={item.name} currentPath={currentPath} {...item} />
           )
         )}
       </div>

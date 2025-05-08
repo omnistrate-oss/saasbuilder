@@ -16,8 +16,7 @@ import { EventType } from "src/types/event";
 
 const EventsPage = () => {
   const [pageIndex, setPageIndex] = useState(0);
-  const [selectedDateRange, setSelectedDateRange] =
-    useState<DateRange>(initialRangeState);
+  const [selectedDateRange, setSelectedDateRange] = useState<DateRange>(initialRangeState);
   const [selectedServiceId, setSelectedServiceId] = useState<string>("");
   const [selectedEventTypes, setSelectedEventTypes] = useState<EventType[]>([]);
 
@@ -33,9 +32,7 @@ const EventsPage = () => {
   } = useAuditLogs({
     startDate: selectedDateRange.startDate ?? undefined,
     endDate: selectedDateRange.endDate ?? undefined,
-    eventSourceTypes: selectedEventTypes?.length
-      ? selectedEventTypes
-      : ["Customer", "Infra", "Maintenance"],
+    eventSourceTypes: selectedEventTypes?.length ? selectedEventTypes : ["Customer", "Infra", "Maintenance"],
     serviceID: selectedServiceId,
   });
 
@@ -46,7 +43,7 @@ const EventsPage = () => {
   return (
     <PageContainer>
       <PageTitle icon={AuditLogsIcon} className="mb-6">
-        Events
+        Audit Logs
       </PageTitle>
 
       <div>

@@ -8,7 +8,7 @@ import ClusterLocations from "./components/ClusterLocations";
 import useInstances from "../instances/hooks/useInstances";
 import DashboardLogsTableHeader from "./components/DashboardLogsTableHeader";
 import EventsTable from "../components/EventsTable/EventsTable";
-import useAuditLogs from "../events/hooks/useAuditLogs";
+import useAuditLogs from "../audit-logs/hooks/useAuditLogs";
 import { useGlobalData } from "src/providers/GlobalDataProvider";
 // import ChartCard from "./components/ChartCard";
 // import LifecycleStatusChart from "./charts/LifecycleStatusChart";
@@ -16,15 +16,13 @@ import { useGlobalData } from "src/providers/GlobalDataProvider";
 // import CloudProvidersChart from "./charts/CloudProvidersChart";
 
 const DashboardPage = () => {
-  const { data: instances = [], isLoading: isLoadingInstances } =
-    useInstances();
+  const { data: instances = [], isLoading: isLoadingInstances } = useInstances();
   const { isFetchingSubscriptions } = useGlobalData();
 
-  const { data: dashboardLogs, isFetching: isFetchingDashboardLogs } =
-    useAuditLogs({
-      pageSize: 5,
-      eventSourceTypes: "Customer",
-    });
+  const { data: dashboardLogs, isFetching: isFetchingDashboardLogs } = useAuditLogs({
+    pageSize: 5,
+    eventSourceTypes: "Customer",
+  });
 
   return (
     <PageContainer>
@@ -32,10 +30,7 @@ const DashboardPage = () => {
         Dashboard
       </PageTitle>
 
-      <ClusterLocations
-        resourceInstances={instances}
-        isFetchingInstances={isLoadingInstances}
-      />
+      <ClusterLocations resourceInstances={instances} isFetchingInstances={isLoadingInstances} />
 
       <div className="mt-8">
         <EventsTable

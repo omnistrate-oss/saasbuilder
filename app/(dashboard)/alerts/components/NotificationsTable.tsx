@@ -73,17 +73,10 @@ const NotificationsTable = () => {
           id: "serviceName",
           header: "Service Name",
           cell: (data) => {
-            const { serviceLogoURL, serviceName } =
-              subscriptionsObj[data.row.original.subscriptionId as string] ||
-              {};
+            const { serviceLogoURL, serviceName } = subscriptionsObj[data.row.original.subscriptionId as string] || {};
             if (!serviceName) return "-";
 
-            return (
-              <ServiceNameWithLogo
-                serviceName={serviceName}
-                serviceLogoURL={serviceLogoURL}
-              />
-            );
+            return <ServiceNameWithLogo serviceName={serviceName} serviceLogoURL={serviceLogoURL} />;
           },
           meta: {
             minWidth: 230,
@@ -93,13 +86,8 @@ const NotificationsTable = () => {
       columnHelper.accessor(
         (row) => {
           const subscription = subscriptionsObj[row.subscriptionId as string];
-          const offering =
-            serviceOfferingsObj[subscription?.serviceId]?.[
-              subscription?.productTierId
-            ];
-          const resource = offering?.resourceParameters?.find(
-            (resource) => resource.resourceId === row.resourceID
-          );
+          const offering = serviceOfferingsObj[subscription?.serviceId]?.[subscription?.productTierId];
+          const resource = offering?.resourceParameters?.find((resource) => resource.resourceId === row.resourceID);
           return resource?.name || "-";
         },
         {
@@ -121,11 +109,7 @@ const NotificationsTable = () => {
         id: "message",
         header: "Message",
         cell: (data) => {
-          return data.row.original.message ? (
-            <EventMessageChip message={data.row.original.message} />
-          ) : (
-            "-"
-          );
+          return data.row.original.message ? <EventMessageChip message={data.row.original.message} /> : "-";
         },
         meta: {
           flex: 1.5,
@@ -133,10 +117,7 @@ const NotificationsTable = () => {
       }),
       columnHelper.accessor(
         (row) => {
-          return (
-            subscriptionsObj[row.subscriptionId as string]?.productTierName ||
-            "-"
-          );
+          return subscriptionsObj[row.subscriptionId as string]?.productTierName || "-";
         },
         {
           id: "servicePlanName",
@@ -150,7 +131,7 @@ const NotificationsTable = () => {
     <DataTable
       columns={dataTableColumns}
       rows={rows}
-      noRowsText="No notifications"
+      noRowsText="No alerts"
       HeaderComponent={NotificationsTableHeader}
       headerProps={{
         refetchNotifications: refetchInstances,
