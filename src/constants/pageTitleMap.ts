@@ -1,3 +1,6 @@
+import { getNotificationsRoute } from "src/utils/route/access/accessRoute";
+import { getEventsRoute } from "src/utils/routes";
+
 export const PAGE_TITLE_MAP = {
   "/signin": "Sign In",
   "/signup": "Sign Up",
@@ -13,8 +16,8 @@ export const PAGE_TITLE_MAP = {
   "/cloud-accounts": "Cloud Accounts",
   "/custom-networks": "Customer Networks",
   "/access-control": "Access Control",
-  "/events": "Events",
-  "/notifications": "Notifications",
+  [getEventsRoute()]: "Audit Logs",
+  [getNotificationsRoute()]: "Alerts",
   "/settings": "Profile Settings",
   "/billing": "Billing",
   "/subscriptions": "Subscriptions",

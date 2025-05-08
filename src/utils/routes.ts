@@ -63,11 +63,11 @@ export const getAccessControlRoute = (userId?: string) => {
 };
 
 export const getEventsRoute = () => {
-  return "/events";
+  return "/audit-logs";
 };
 
 export const getNotificationsRoute = () => {
-  return "/notifications";
+  return "/alerts";
 };
 
 export const getBillingRoute = () => {

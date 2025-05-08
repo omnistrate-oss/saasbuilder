@@ -20,7 +20,7 @@ const DashboardLogsTableHeader = () => {
         target="_blank"
         endIcon={<ArrowOutward />}
       >
-        View all events
+        View all audit logs
       </Button>
     </div>
   );

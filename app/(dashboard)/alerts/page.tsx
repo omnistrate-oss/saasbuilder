@@ -10,7 +10,7 @@ const NotificationsPage = () => {
   return (
     <PageContainer>
       <PageTitle icon={NotificationsIcon} className="mb-6">
-        Notifications
+        Alerts
       </PageTitle>
 
       <div>

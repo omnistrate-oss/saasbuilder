@@ -13,19 +13,11 @@ const NotificationsTableHeader: React.FC<NotificationsTableHeaderProps> = ({
 }) => {
   return (
     <div className="flex items-center justify-between gap-4 py-5 px-6">
-      <DataGridHeaderTitle
-        title="List of Notifications"
-        desc="Notifications related to system activities"
-      />
+      <DataGridHeaderTitle title="List of Alerts" desc="Alerts related to system activities" />
 
       <div className="flex justify-end items-center gap-4 flex-wrap flex-grow">
-        <div className="flex items-center">
-          {isFetchingNotifications && <CircularProgress size={20} />}
-        </div>
-        <RefreshWithToolTip
-          refetch={refetchNotifications}
-          disabled={isFetchingNotifications}
-        />
+        <div className="flex items-center">{isFetchingNotifications && <CircularProgress size={20} />}</div>
+        <RefreshWithToolTip refetch={refetchNotifications} disabled={isFetchingNotifications} />
       </div>
     </div>
   );
