@@ -71,28 +71,24 @@ const CloudAccountsPage = () => {
   const [initialFormValues, setInitialFormValues] = useState<any>();
   const [searchText, setSearchText] = useState("");
   const [selectedRows, setSelectedRows] = useState<string[]>([]);
-  const [overlayType, setOverlayType] = useState<Overlay>(
-    "create-instance-form"
-  );
+  const [overlayType, setOverlayType] = useState<Overlay>("create-instance-form");
   const [isOverlayOpen, setIsOverlayOpen] = useState(false);
   const [isAccountCreation, setIsAccountCreation] = useState(false);
   const [clickedInstance, setClickedInstance] = useState<ResourceInstance>();
 
   const gcpBootstrapShellCommand = useMemo(() => {
     const result_params: any = clickedInstance?.result_params;
-    if (result_params?.cloud_provider_account_config_id) {
-      return getGcpBootstrapShellCommand(
-        result_params?.cloud_provider_account_config_id
-      );
+    if (result_params?.gcp_bootstrap_shell_script) {
+      return result_params?.gcp_bootstrap_shell_script;
+    } else if (result_params?.cloud_provider_account_config_id) {
+      return getGcpBootstrapShellCommand(result_params?.cloud_provider_account_config_id);
     }
   }, [clickedInstance]);
 
   const azureBootstrapShellCommand = useMemo(() => {
     const result_params: any = clickedInstance?.result_params;
     if (result_params?.cloud_provider_account_config_id) {
-      return getAzureBootstrapShellCommand(
-        result_params?.cloud_provider_account_config_id
-      );
+      return getAzureBootstrapShellCommand(result_params?.cloud_provider_account_config_id);
     }
   }, [clickedInstance]);
 
@@ -146,25 +142,17 @@ const CloudAccountsPage = () => {
   }, [serviceId, servicePlanId, subscriptionId]);
 
   const byoaInstances = useMemo(() => {
-    const res = instances.filter((instance) =>
-      isCloudAccountInstance(instance)
-    );
+    const res = instances.filter((instance) => isCloudAccountInstance(instance));
 
     if (searchText) {
       return res.filter(
         (instance) =>
           // @ts-ignore
-          instance.result_params?.gcp_project_id
-            ?.toLowerCase()
-            .includes(searchText.toLowerCase()) ||
+          instance.result_params?.gcp_project_id?.toLowerCase().includes(searchText.toLowerCase()) ||
           // @ts-ignore
-          instance.result_params?.aws_account_id
-            ?.toLowerCase()
-            .includes(searchText.toLowerCase()) ||
+          instance.result_params?.aws_account_id?.toLowerCase().includes(searchText.toLowerCase()) ||
           // @ts-ignore
-          instance.result_params?.azure_subscription_id
-            ?.toLowerCase()
-            .includes(searchText.toLowerCase())
+          instance.result_params?.azure_subscription_id?.toLowerCase().includes(searchText.toLowerCase())
       );
     }
 
@@ -216,9 +204,7 @@ const CloudAccountsPage = () => {
         header: "Lifecycle Status",
         cell: (data) => {
           const status = data.row.original.status;
-          const statusSytlesAndLabel = getResourceInstanceStatusStylesAndLabel(
-            status as string
-          );
+          const statusSytlesAndLabel = getResourceInstanceStatusStylesAndLabel(status as string);
           const showInstructions = [
             "VERIFYING",
             "PENDING",
@@ -229,30 +215,17 @@ const CloudAccountsPage = () => {
             "FAILED",
           ].includes(status as string);
 
-          const showDisconnectInstructions = [
-            "PENDING_DETACHING",
-            "DETACHING",
-            "DISCONNECTING",
-          ].includes(status as string);
-
-          const showConnectInstructions = ["CONNECTING", "ATTACHING"].includes(
+          const showDisconnectInstructions = ["PENDING_DETACHING", "DETACHING", "DISCONNECTING"].includes(
             status as string
           );
 
+          const showConnectInstructions = ["CONNECTING", "ATTACHING"].includes(status as string);
+
           return (
-            <Stack
-              direction="row"
-              alignItems="center"
-              gap="6px"
-              width="104px"
-              justifyContent="space-between"
-            >
+            <Stack direction="row" alignItems="center" gap="6px" width="104px" justifyContent="space-between">
               <StatusChip status={status} {...statusSytlesAndLabel} />
               {showInstructions && (
-                <Tooltip
-                  title="View account configuration instructions"
-                  placement="top"
-                >
+                <Tooltip title="View account configuration instructions" placement="top">
                   <Box
                     sx={{
                       cursor: "pointer",
@@ -321,15 +294,8 @@ const CloudAccountsPage = () => {
           id: "serviceName",
           header: "Service Name",
           cell: (data) => {
-            const { serviceLogoURL, serviceName } =
-              subscriptionsObj[data.row.original.subscriptionId as string] ||
-              {};
-            return (
-              <ServiceNameWithLogo
-                serviceName={serviceName}
-                serviceLogoURL={serviceLogoURL}
-              />
-            );
+            const { serviceLogoURL, serviceName } = subscriptionsObj[data.row.original.subscriptionId as string] || {};
+            return <ServiceNameWithLogo serviceName={serviceName} serviceLogoURL={serviceLogoURL} />;
           },
           meta: {
             minWidth: 230,
@@ -357,8 +323,7 @@ const CloudAccountsPage = () => {
           // @ts-ignore
           else if (result_params?.gcp_project_id) cloudProvider = "gcp";
           // @ts-ignore
-          else if (result_params?.azure_subscription_id)
-            cloudProvider = "azure";
+          else if (result_params?.azure_subscription_id) cloudProvider = "azure";
           return cloudProvider;
         },
         {
@@ -372,12 +337,9 @@ const CloudAccountsPage = () => {
             // @ts-ignore
             else if (result_params?.gcp_project_id) cloudProvider = "gcp";
             // @ts-ignore
-            else if (result_params?.azure_subscription_id)
-              cloudProvider = "azure";
+            else if (result_params?.azure_subscription_id) cloudProvider = "azure";
 
-            return cloudProvider
-              ? cloudProviderLongLogoMap[cloudProvider]
-              : "-";
+            return cloudProvider ? cloudProviderLongLogoMap[cloudProvider] : "-";
           },
         }
       ),
@@ -395,9 +357,7 @@ const CloudAccountsPage = () => {
         id: "created_at",
         header: "Created On",
         cell: (data) => {
-          return data.row.original.created_at
-            ? formatDateUTC(data.row.original.created_at)
-            : "-";
+          return data.row.original.created_at ? formatDateUTC(data.row.original.created_at) : "-";
         },
         meta: {
           minWidth: 225,
@@ -423,9 +383,7 @@ const CloudAccountsPage = () => {
         gcpProjectNumber: result_params?.gcp_project_number,
       };
       if (result_params?.cloud_provider_account_config_id) {
-        details.gcpOffboardCommand = getGcpShellScriptOffboardCommand(
-          result_params?.cloud_provider_account_config_id
-        );
+        details.gcpOffboardCommand = getGcpShellScriptOffboardCommand(result_params?.cloud_provider_account_config_id);
       }
     } else if (result_params?.azure_subscription_id) {
       details = {
@@ -465,8 +423,7 @@ const CloudAccountsPage = () => {
         serviceProviderId: selectedInstanceOffering?.serviceProviderId,
         serviceKey: selectedInstanceOffering?.serviceURLKey,
         serviceAPIVersion: selectedInstanceOffering?.serviceAPIVersion,
-        serviceEnvironmentKey:
-          selectedInstanceOffering?.serviceEnvironmentURLKey,
+        serviceEnvironmentKey: selectedInstanceOffering?.serviceEnvironmentURLKey,
         serviceModelKey: selectedInstanceOffering?.serviceModelURLKey,
         productTierKey: selectedInstanceOffering?.productTierURLKey,
         resourceKey: selectedResource?.urlKey,
@@ -617,11 +574,7 @@ const CloudAccountsPage = () => {
       <FullScreenDrawer
         title="Cloud Account"
         description="Create a new cloud account"
-        open={
-          isOverlayOpen &&
-          (overlayType === "create-instance-form" ||
-            overlayType === "view-instance-form")
-        }
+        open={isOverlayOpen && (overlayType === "create-instance-form" || overlayType === "view-instance-form")}
         closeDrawer={() => {
           setIsOverlayOpen(false);
           setClickedInstance(undefined);
@@ -691,9 +644,7 @@ const CloudAccountsPage = () => {
         }}
         accountConfigId={clickedInstance?.id}
         selectedAccountConfig={clickedInstance}
-        cloudFormationTemplateUrl={
-          clickedInstanceOffering?.assets?.cloudFormationURL
-        }
+        cloudFormationTemplateUrl={clickedInstanceOffering?.assets?.cloudFormationURL}
         isAccountCreation={isAccountCreation}
         gcpBootstrapShellCommand={gcpBootstrapShellCommand}
         azureBootstrapShellCommand={azureBootstrapShellCommand}
