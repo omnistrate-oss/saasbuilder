@@ -33,10 +33,7 @@ export default async function handleResetPassword(nextRequest, nextResponse) {
     } catch (error) {
       const defaultErrorMessage = "Something went wrong. Please retry";
 
-      if (
-        error.name === "ProviderAuthError" ||
-        error?.response?.status === undefined
-      ) {
+      if (error.name === "ProviderAuthError" || error?.response?.status === undefined) {
         nextResponse.status(500).send({
           message: defaultErrorMessage,
         });

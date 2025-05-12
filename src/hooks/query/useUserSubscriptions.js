@@ -1,9 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 
-import {
-  getServiceOffering,
-  getServiceOfferingIds,
-} from "src/api/serviceOffering";
+import { getServiceOffering, getServiceOfferingIds } from "src/api/serviceOffering";
 import { listSubscriptions } from "src/api/subscriptions";
 
 import useEnvironmentType from "../useEnvironmentType";
@@ -17,17 +14,10 @@ const useUserSubscriptions = (queryParams = {}, queryOptions = {}) => {
       const response = await listSubscriptions({ serviceId, environmentType });
       const subscriptions = response.data.subscriptions || [];
       if (serviceId) {
-        const serviceOfferingRes = await getServiceOffering(
-          serviceId,
-          environmentType
-        );
+        const serviceOfferingRes = await getServiceOffering(serviceId, environmentType);
 
-        const existingProductTierIds = serviceOfferingRes?.data?.offerings?.map(
-          (offering) => offering?.productTierID
-        );
-        return subscriptions?.filter((subscription) =>
-          existingProductTierIds?.includes(subscription?.productTierId)
-        );
+        const existingProductTierIds = serviceOfferingRes?.data?.offerings?.map((offering) => offering?.productTierID);
+        return subscriptions?.filter((subscription) => existingProductTierIds?.includes(subscription?.productTierId));
       } else {
         const servicesRes = await getServiceOfferingIds();
         const services = servicesRes?.data?.services;
@@ -35,10 +25,7 @@ const useUserSubscriptions = (queryParams = {}, queryOptions = {}) => {
           services?.find(
             (service) =>
               service?.serviceId === subscription?.serviceId &&
-              service?.offerings?.find(
-                (offering) =>
-                  offering?.productTierID === subscription.productTierId
-              )
+              service?.offerings?.find((offering) => offering?.productTierID === subscription.productTierId)
           )
         );
       }

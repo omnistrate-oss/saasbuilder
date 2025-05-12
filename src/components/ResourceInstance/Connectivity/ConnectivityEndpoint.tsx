@@ -2,7 +2,7 @@ import { FC, useMemo, useState } from "react";
 import Image from "next/image";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
-import { Box, Stack,styled, SxProps, Theme } from "@mui/material";
+import { Box, Stack, styled, SxProps, Theme } from "@mui/material";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import MuiTableCell from "@mui/material/TableCell";

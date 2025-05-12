@@ -38,261 +38,153 @@ const viewEnum = {
 function isOperationAllowedByRBAC(operation, role, view) {
   switch (true) {
     // Admin - BillingPricing
-    case operation === operationEnum.Read &&
-      role === roleEnum.Admin &&
-      view === viewEnum.BillingPricing:
+    case operation === operationEnum.Read && role === roleEnum.Admin && view === viewEnum.BillingPricing:
       return true;
-    case operation === operationEnum.List &&
-      role === roleEnum.Admin &&
-      view === viewEnum.BillingPricing:
+    case operation === operationEnum.List && role === roleEnum.Admin && view === viewEnum.BillingPricing:
       return true;
 
     // Root - BillingPricing
-    case operation === operationEnum.Read &&
-      role === roleEnum.Root &&
-      view === viewEnum.BillingPricing:
+    case operation === operationEnum.Read && role === roleEnum.Root && view === viewEnum.BillingPricing:
       return true;
-    case operation === operationEnum.List &&
-      role === roleEnum.Root &&
-      view === viewEnum.BillingPricing:
+    case operation === operationEnum.List && role === roleEnum.Root && view === viewEnum.BillingPricing:
       return true;
-    case operation === operationEnum.Create &&
-      role === roleEnum.Root &&
-      view === viewEnum.BillingPricing:
+    case operation === operationEnum.Create && role === roleEnum.Root && view === viewEnum.BillingPricing:
       return true;
-    case operation === operationEnum.Update &&
-      role === roleEnum.Root &&
-      view === viewEnum.BillingPricing:
+    case operation === operationEnum.Update && role === roleEnum.Root && view === viewEnum.BillingPricing:
       return true;
-    case operation === operationEnum.Delete &&
-      role === roleEnum.Root &&
-      view === viewEnum.BillingPricing:
+    case operation === operationEnum.Delete && role === roleEnum.Root && view === viewEnum.BillingPricing:
       return true;
 
     // AccessService -  Root
-    case operation === operationEnum.List &&
-      role === roleEnum.Root &&
-      view === viewEnum.AccessService:
+    case operation === operationEnum.List && role === roleEnum.Root && view === viewEnum.AccessService:
       return true;
-    case operation === operationEnum.Read &&
-      role === roleEnum.Root &&
-      view === viewEnum.AccessService:
+    case operation === operationEnum.Read && role === roleEnum.Root && view === viewEnum.AccessService:
       return true;
-    case operation === operationEnum.Create &&
-      role === roleEnum.Root &&
-      view === viewEnum.AccessService:
+    case operation === operationEnum.Create && role === roleEnum.Root && view === viewEnum.AccessService:
       return true;
-    case operation === operationEnum.Update &&
-      role === roleEnum.Root &&
-      view === viewEnum.AccessService:
+    case operation === operationEnum.Update && role === roleEnum.Root && view === viewEnum.AccessService:
       return true;
-    case operation === operationEnum.Delete &&
-      role === roleEnum.Root &&
-      view === viewEnum.AccessService:
+    case operation === operationEnum.Delete && role === roleEnum.Root && view === viewEnum.AccessService:
       return true;
 
     // AccessService -  Admin
-    case operation === operationEnum.List &&
-      role === roleEnum.Admin &&
-      view === viewEnum.AccessService:
+    case operation === operationEnum.List && role === roleEnum.Admin && view === viewEnum.AccessService:
       return true;
-    case operation === operationEnum.Read &&
-      role === roleEnum.Admin &&
-      view === viewEnum.AccessService:
+    case operation === operationEnum.Read && role === roleEnum.Admin && view === viewEnum.AccessService:
       return true;
-    case operation === operationEnum.Create &&
-      role === roleEnum.Admin &&
-      view === viewEnum.AccessService:
+    case operation === operationEnum.Create && role === roleEnum.Admin && view === viewEnum.AccessService:
       return true;
-    case operation === operationEnum.Update &&
-      role === roleEnum.Admin &&
-      view === viewEnum.AccessService:
+    case operation === operationEnum.Update && role === roleEnum.Admin && view === viewEnum.AccessService:
       return true;
-    case operation === operationEnum.Delete &&
-      role === roleEnum.Admin &&
-      view === viewEnum.AccessService:
+    case operation === operationEnum.Delete && role === roleEnum.Admin && view === viewEnum.AccessService:
       return true;
 
     // AccessService -  Service Editor
-    case operation === operationEnum.List &&
-      role === roleEnum.Service_Editor &&
-      view === viewEnum.AccessService:
+    case operation === operationEnum.List && role === roleEnum.Service_Editor && view === viewEnum.AccessService:
       return true;
-    case operation === operationEnum.Read &&
-      role === roleEnum.Service_Editor &&
-      view === viewEnum.AccessService:
+    case operation === operationEnum.Read && role === roleEnum.Service_Editor && view === viewEnum.AccessService:
       return true;
-    case operation === operationEnum.Create &&
-      role === roleEnum.Service_Editor &&
-      view === viewEnum.AccessService:
+    case operation === operationEnum.Create && role === roleEnum.Service_Editor && view === viewEnum.AccessService:
       return true;
-    case operation === operationEnum.Update &&
-      role === roleEnum.Service_Editor &&
-      view === viewEnum.AccessService:
+    case operation === operationEnum.Update && role === roleEnum.Service_Editor && view === viewEnum.AccessService:
       return true;
-    case operation === operationEnum.Delete &&
-      role === roleEnum.Service_Editor &&
-      view === viewEnum.AccessService:
+    case operation === operationEnum.Delete && role === roleEnum.Service_Editor && view === viewEnum.AccessService:
       return true;
 
     // AccessService -  Service Reader
-    case operation === operationEnum.List &&
-      role === roleEnum.Service_Reader &&
-      view === viewEnum.AccessService:
+    case operation === operationEnum.List && role === roleEnum.Service_Reader && view === viewEnum.AccessService:
       return true;
-    case operation === operationEnum.Read &&
-      role === roleEnum.Service_Reader &&
-      view === viewEnum.AccessService:
+    case operation === operationEnum.Read && role === roleEnum.Service_Reader && view === viewEnum.AccessService:
       return true;
-    case operation === operationEnum.Create &&
-      role === roleEnum.Service_Reader &&
-      view === viewEnum.AccessService:
+    case operation === operationEnum.Create && role === roleEnum.Service_Reader && view === viewEnum.AccessService:
       return true;
-    case operation === operationEnum.Update &&
-      role === roleEnum.Service_Reader &&
-      view === viewEnum.AccessService:
+    case operation === operationEnum.Update && role === roleEnum.Service_Reader && view === viewEnum.AccessService:
       return true;
-    case operation === operationEnum.Delete &&
-      role === roleEnum.Service_Reader &&
-      view === viewEnum.AccessService:
+    case operation === operationEnum.Delete && role === roleEnum.Service_Reader && view === viewEnum.AccessService:
       return true;
 
     // AccessService -  Service Operator
-    case operation === operationEnum.List &&
-      role === roleEnum.Service_Operator &&
-      view === viewEnum.AccessService:
+    case operation === operationEnum.List && role === roleEnum.Service_Operator && view === viewEnum.AccessService:
       return true;
-    case operation === operationEnum.Read &&
-      role === roleEnum.Service_Operator &&
-      view === viewEnum.AccessService:
+    case operation === operationEnum.Read && role === roleEnum.Service_Operator && view === viewEnum.AccessService:
       return true;
-    case operation === operationEnum.Create &&
-      role === roleEnum.Service_Operator &&
-      view === viewEnum.AccessService:
+    case operation === operationEnum.Create && role === roleEnum.Service_Operator && view === viewEnum.AccessService:
       return true;
-    case operation === operationEnum.Update &&
-      role === roleEnum.Service_Operator &&
-      view === viewEnum.AccessService:
+    case operation === operationEnum.Update && role === roleEnum.Service_Operator && view === viewEnum.AccessService:
       return true;
-    case operation === operationEnum.Delete &&
-      role === roleEnum.Service_Operator &&
-      view === viewEnum.AccessService:
+    case operation === operationEnum.Delete && role === roleEnum.Service_Operator && view === viewEnum.AccessService:
       return true;
 
     // Access_AccessControl -  Root
-    case operation === operationEnum.List &&
-      role === roleEnum.Root &&
-      view === viewEnum.Access_AccessControl:
+    case operation === operationEnum.List && role === roleEnum.Root && view === viewEnum.Access_AccessControl:
       return true;
-    case operation === operationEnum.Invite &&
-      role === roleEnum.Root &&
-      view === viewEnum.Access_AccessControl:
+    case operation === operationEnum.Invite && role === roleEnum.Root && view === viewEnum.Access_AccessControl:
       return true;
-    case operation === operationEnum.UnInvite &&
-      role === roleEnum.Root &&
-      view === viewEnum.Access_AccessControl:
+    case operation === operationEnum.UnInvite && role === roleEnum.Root && view === viewEnum.Access_AccessControl:
       return true;
 
     // Access_AccessControl -  Admin
-    case operation === operationEnum.List &&
-      role === roleEnum.Admin &&
-      view === viewEnum.Access_AccessControl:
+    case operation === operationEnum.List && role === roleEnum.Admin && view === viewEnum.Access_AccessControl:
       return true;
 
     // Access_Resources - Root
-    case operation === operationEnum.Create &&
-      role === roleEnum.Root &&
-      view === viewEnum.Access_Resources:
+    case operation === operationEnum.Create && role === roleEnum.Root && view === viewEnum.Access_Resources:
       return true;
 
-    case operation === operationEnum.Update &&
-      role === roleEnum.Root &&
-      view === viewEnum.Access_Resources:
+    case operation === operationEnum.Update && role === roleEnum.Root && view === viewEnum.Access_Resources:
       return true;
 
-    case operation === operationEnum.Delete &&
-      role === roleEnum.Root &&
-      view === viewEnum.Access_Resources:
+    case operation === operationEnum.Delete && role === roleEnum.Root && view === viewEnum.Access_Resources:
       return true;
 
     // Access_Resources - Admin
-    case operation === operationEnum.Create &&
-      role === roleEnum.Admin &&
-      view === viewEnum.Access_Resources:
+    case operation === operationEnum.Create && role === roleEnum.Admin && view === viewEnum.Access_Resources:
       return true;
 
-    case operation === operationEnum.Update &&
-      role === roleEnum.Admin &&
-      view === viewEnum.Access_Resources:
+    case operation === operationEnum.Update && role === roleEnum.Admin && view === viewEnum.Access_Resources:
       return true;
 
-    case operation === operationEnum.Delete &&
-      role === roleEnum.Admin &&
-      view === viewEnum.Access_Resources:
+    case operation === operationEnum.Delete && role === roleEnum.Admin && view === viewEnum.Access_Resources:
       return true;
 
     // Access_Resources - Service_Editor
-    case operation === operationEnum.Create &&
-      role === roleEnum.Service_Editor &&
-      view === viewEnum.Access_Resources:
+    case operation === operationEnum.Create && role === roleEnum.Service_Editor && view === viewEnum.Access_Resources:
       return true;
 
-    case operation === operationEnum.Update &&
-      role === roleEnum.Service_Editor &&
-      view === viewEnum.Access_Resources:
+    case operation === operationEnum.Update && role === roleEnum.Service_Editor && view === viewEnum.Access_Resources:
       return true;
 
-    case operation === operationEnum.Delete &&
-      role === roleEnum.Service_Editor &&
-      view === viewEnum.Access_Resources:
+    case operation === operationEnum.Delete && role === roleEnum.Service_Editor && view === viewEnum.Access_Resources:
       return true;
 
     // Access_Resources - Editor
-    case operation === operationEnum.Create &&
-      role === roleEnum.Editor &&
-      view === viewEnum.Access_Resources:
+    case operation === operationEnum.Create && role === roleEnum.Editor && view === viewEnum.Access_Resources:
       return true;
 
-    case operation === operationEnum.Update &&
-      role === roleEnum.Editor &&
-      view === viewEnum.Access_Resources:
+    case operation === operationEnum.Update && role === roleEnum.Editor && view === viewEnum.Access_Resources:
       return true;
 
-    case operation === operationEnum.Delete &&
-      role === roleEnum.Editor &&
-      view === viewEnum.Access_Resources:
+    case operation === operationEnum.Delete && role === roleEnum.Editor && view === viewEnum.Access_Resources:
       return true;
 
     // Access_Resources - Service_Operator
-    case operation === operationEnum.Create &&
-      role === roleEnum.Service_Operator &&
-      view === viewEnum.Access_Resources:
+    case operation === operationEnum.Create && role === roleEnum.Service_Operator && view === viewEnum.Access_Resources:
       return true;
 
-    case operation === operationEnum.Update &&
-      role === roleEnum.Service_Operator &&
-      view === viewEnum.Access_Resources:
+    case operation === operationEnum.Update && role === roleEnum.Service_Operator && view === viewEnum.Access_Resources:
       return true;
 
-    case operation === operationEnum.Delete &&
-      role === roleEnum.Service_Operator &&
-      view === viewEnum.Access_Resources:
+    case operation === operationEnum.Delete && role === roleEnum.Service_Operator && view === viewEnum.Access_Resources:
       return true;
 
     // Access_Resources - Service_Reader
-    case operation === operationEnum.Create &&
-      role === roleEnum.Service_Reader &&
-      view === viewEnum.Access_Resources:
+    case operation === operationEnum.Create && role === roleEnum.Service_Reader && view === viewEnum.Access_Resources:
       return true;
 
-    case operation === operationEnum.Update &&
-      role === roleEnum.Service_Reader &&
-      view === viewEnum.Access_Resources:
+    case operation === operationEnum.Update && role === roleEnum.Service_Reader && view === viewEnum.Access_Resources:
       return true;
 
-    case operation === operationEnum.Delete &&
-      role === roleEnum.Service_Reader &&
-      view === viewEnum.Access_Resources:
+    case operation === operationEnum.Delete && role === roleEnum.Service_Reader && view === viewEnum.Access_Resources:
       return true;
 
     default:
@@ -331,11 +223,4 @@ function getEnumFromUserRoleString(role) {
   }
 }
 
-export {
-  getEnumFromUserRoleString,
-  isOperationAllowedByRBAC,
-  isPermittedByRBAC,
-  operationEnum,
-  roleEnum,
-  viewEnum,
-};
+export { getEnumFromUserRoleString, isOperationAllowedByRBAC, isPermittedByRBAC, operationEnum, roleEnum, viewEnum };

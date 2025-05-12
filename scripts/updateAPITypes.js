@@ -9,13 +9,7 @@ const externalAPIUrl = "https://api.omnistrate.dev/docs/external/";
 
 const downloadPath = path.join(__dirname);
 const jsonOutputPath = path.join(downloadPath, "openapi.json");
-const externalAPIOutputPath = path.join(
-  __dirname,
-  "..",
-  "src",
-  "types",
-  "schema.ts"
-);
+const externalAPIOutputPath = path.join(__dirname, "..", "src", "types", "schema.ts");
 
 async function downloadOpenAPISpec() {
   console.log("Launching browser to download OpenAPI spec...");
@@ -70,14 +64,9 @@ async function downloadOpenAPISpec() {
 function convertToTypeScript() {
   console.log("Converting OpenAPI spec to TypeScript...");
   try {
-    execSync(
-      `npx openapi-typescript ${jsonOutputPath} -o ${
-        externalAPIOutputPath
-      } --yes`,
-      {
-        stdio: "inherit",
-      }
-    );
+    execSync(`npx openapi-typescript ${jsonOutputPath} -o ${externalAPIOutputPath} --yes`, {
+      stdio: "inherit",
+    });
     console.log(`TypeScript definitions saved to ${externalAPIOutputPath}`);
 
     // Clean up the JSON file
@@ -86,10 +75,7 @@ function convertToTypeScript() {
 
     return true;
   } catch (error) {
-    console.error(
-      "Failed to convert OpenAPI spec to TypeScript:",
-      error.message
-    );
+    console.error("Failed to convert OpenAPI spec to TypeScript:", error.message);
     return false;
   }
 }
@@ -103,9 +89,7 @@ async function run() {
 
   const externalAPISuccess = convertToTypeScript();
   if (!externalAPISuccess) {
-    console.error(
-      "Failed to convert External OpenAPI spec to TypeScript. Exiting."
-    );
+    console.error("Failed to convert External OpenAPI spec to TypeScript. Exiting.");
     process.exit(1);
   }
 

@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import { Box,Stack, SxProps, Theme, useTheme } from "@mui/material";
+import { Box, Stack, SxProps, Theme, useTheme } from "@mui/material";
 
 import { Text } from "../Typography/Typography";
 

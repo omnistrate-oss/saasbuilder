@@ -1,5 +1,5 @@
 import React, { FC, ReactNode } from "react";
-import { Box, chipClasses, ChipProps as MuiChipProps,Stack, SxProps, Theme } from "@mui/material";
+import { Box, chipClasses, ChipProps as MuiChipProps, Stack, SxProps, Theme } from "@mui/material";
 import _ from "lodash";
 
 import { Category, chipCategoryColors } from "src/constants/statusChipStyles/index";

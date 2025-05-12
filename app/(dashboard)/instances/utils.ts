@@ -12,7 +12,7 @@ dayjs.extend(utc);
 import { SxProps } from "@mui/material";
 
 import { instaceHealthStatusMap } from "src/constants/statusChipStyles/resourceInstanceHealthStatus";
-import { InstanceComputedHealthStatus,ResourceInstance } from "src/types/resourceInstance";
+import { InstanceComputedHealthStatus, ResourceInstance } from "src/types/resourceInstance";
 
 export const getServiceMenuItems = (serviceOfferings: ServiceOffering[]) => {
   const menuItems: MenuItem[] = [];

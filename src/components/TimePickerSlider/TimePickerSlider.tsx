@@ -1,7 +1,7 @@
 import * as React from "react";
 import { IconButton, Stack } from "@mui/material";
 import Box from "@mui/material/Box";
-import Slider, { sliderClasses,SliderThumb } from "@mui/material/Slider";
+import Slider, { sliderClasses, SliderThumb } from "@mui/material/Slider";
 import { styled } from "@mui/material/styles";
 import dayjs, { Dayjs } from "dayjs";
 import utc from "dayjs/plugin/utc";

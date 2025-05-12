@@ -1,10 +1,6 @@
 import axios from "../axios";
 
-export function getRegionIdsByCloudProviderWithParams(
-  serviceId,
-  productTierId,
-  cloudProviderName
-) {
+export function getRegionIdsByCloudProviderWithParams(serviceId, productTierId, cloudProviderName) {
   const queryParams = {};
   if (serviceId && productTierId) {
     queryParams["serviceId"] = serviceId;

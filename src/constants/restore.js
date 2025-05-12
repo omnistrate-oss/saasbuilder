@@ -15,9 +15,7 @@ export const restoreFormikSchema = yup.object({
     })
     .test("is-future-time", "Can't select time in future", function (time) {
       const earliestRestoreTime = dayjs.utc(this.parent.earliestRestoreTime);
-      const selectedDate = this.parent.date
-        ? dayjs.utc(this.parent.date)
-        : null;
+      const selectedDate = this.parent.date ? dayjs.utc(this.parent.date) : null;
       if (!time || !selectedDate) return true;
 
       const now = dayjs.utc();
@@ -25,13 +23,9 @@ export const restoreFormikSchema = yup.object({
       const isSelectedSameAsToday = now.isSame(selectedDate, "day");
       if (!isSelectedSameAsToday) return true;
 
-      const currentDateTimeOption = dayjs.utc(
-        selectedDateString + "T" + time + "Z"
-      );
+      const currentDateTimeOption = dayjs.utc(selectedDateString + "T" + time + "Z");
 
-      const isSelectedSameAsEarliest = earliestRestoreTime
-        ? selectedDate.isSame(selectedDate, "day")
-        : false;
+      const isSelectedSameAsEarliest = earliestRestoreTime ? selectedDate.isSame(selectedDate, "day") : false;
 
       //this check is required to allow one condition where the earliest date, current date and selected date are all same and
       //selected date time falls within an hour after earliest time and
@@ -47,28 +41,17 @@ export const restoreFormikSchema = yup.object({
 
       return currentDateTimeOption.isSameOrBefore(now);
     })
-    .test(
-      "is-time-past-earliest-restore-time",
-      "No snapshot available on or before selected time",
-      function (time) {
-        const earliestRestoreTime = dayjs.utc(this.parent.earliestRestoreTime);
-        const selectedDate = this.parent.date
-          ? dayjs.utc(this.parent.date)
-          : null;
-        if (!time || !selectedDate) return true;
+    .test("is-time-past-earliest-restore-time", "No snapshot available on or before selected time", function (time) {
+      const earliestRestoreTime = dayjs.utc(this.parent.earliestRestoreTime);
+      const selectedDate = this.parent.date ? dayjs.utc(this.parent.date) : null;
+      if (!time || !selectedDate) return true;
 
-        const selectedDateString = selectedDate.format("YYYY-MM-DD");
-        const isSelectedSameAsEarliest = earliestRestoreTime.isSame(
-          selectedDate,
-          "day"
-        );
-        if (!isSelectedSameAsEarliest) return true;
-        const currentDateTimeOption = dayjs.utc(
-          selectedDateString + "T" + time + "Z"
-        );
+      const selectedDateString = selectedDate.format("YYYY-MM-DD");
+      const isSelectedSameAsEarliest = earliestRestoreTime.isSame(selectedDate, "day");
+      if (!isSelectedSameAsEarliest) return true;
+      const currentDateTimeOption = dayjs.utc(selectedDateString + "T" + time + "Z");
 
-        return currentDateTimeOption.isSameOrAfter(earliestRestoreTime);
-      }
-    )
+      return currentDateTimeOption.isSameOrAfter(earliestRestoreTime);
+    })
     .nullable(),
 });

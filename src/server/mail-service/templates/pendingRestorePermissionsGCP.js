@@ -10,17 +10,11 @@ async function getPendingRestorePermissionsMailContentGCP(
   const userName = pendingRestorePermissionsEventObj.eventPayload.user_name;
   const email = pendingRestorePermissionsEventObj.eventPayload.user_email;
   const accountId = pendingRestorePermissionsEventObj.eventPayload.account_id;
-  const gcpConnectBashScript =
-    pendingRestorePermissionsEventObj.eventPayload.gcp_connect_bash_script;
+  const gcpConnectBashScript = pendingRestorePermissionsEventObj.eventPayload.gcp_connect_bash_script;
   const orgName = pendingRestorePermissionsEventObj.orgName;
   const subject = `Action Required: Connect GCP Account ${accountId} to ${orgName}`;
 
-  const templatePath = path.resolve(
-    __dirname,
-    "..",
-    "ejsTemplates",
-    "pendingRestorePermissionsGCP.ejs"
-  );
+  const templatePath = path.resolve(__dirname, "..", "ejsTemplates", "pendingRestorePermissionsGCP.ejs");
 
   const baseURL = getSaaSDomainURL();
 

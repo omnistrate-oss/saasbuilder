@@ -1,6 +1,6 @@
 import ServiceFilter from "app/(dashboard)/audit-logs/components/ServiceFilter";
 
-import { DateRange,DateTimePickerPopover } from "src/components/DateRangePicker/DateTimeRangePickerStatic";
+import { DateRange, DateTimePickerPopover } from "src/components/DateRangePicker/DateTimeRangePickerStatic";
 import DataGridHeaderTitle from "src/components/Headers/DataGridHeaderTitle";
 import RefreshWithToolTip from "src/components/RefreshWithTooltip/RefreshWithToolTip";
 import AuditLogsEventFilterDropdown from "src/components/ResourceInstance/AuditLogs/components/AuditLogsEventFilterDropdown";

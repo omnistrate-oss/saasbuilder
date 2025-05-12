@@ -10,17 +10,11 @@ async function getPendingRevokePermissionsMailContentAWS(
   const userName = pendingRevokePermissionsEventObj.eventPayload.user_name;
   const email = pendingRevokePermissionsEventObj.eventPayload.user_email;
   const accountId = pendingRevokePermissionsEventObj.eventPayload.account_id;
-  const disconnectCloudFormationURL =
-    pendingRevokePermissionsEventObj.eventPayload.disconnect_cfn_url;
+  const disconnectCloudFormationURL = pendingRevokePermissionsEventObj.eventPayload.disconnect_cfn_url;
   const orgName = pendingRevokePermissionsEventObj.orgName;
   const subject = `Action Required: Disconnect AWS Account ${accountId} from ${orgName}`;
 
-  const templatePath = path.resolve(
-    __dirname,
-    "..",
-    "ejsTemplates",
-    "pendingRevokePermissionsAWS.ejs"
-  );
+  const templatePath = path.resolve(__dirname, "..", "ejsTemplates", "pendingRevokePermissionsAWS.ejs");
 
   const baseURL = getSaaSDomainURL();
 

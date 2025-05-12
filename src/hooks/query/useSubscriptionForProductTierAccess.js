@@ -1,10 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 
 import { getSubscriptions, listSubscriptions } from "src/api/subscriptions";
-import {
-  checkSubscriptionIsForProductTier,
-  findSubscriptionByPriority,
-} from "src/utils/access/findSubscription";
+import { checkSubscriptionIsForProductTier, findSubscriptionByPriority } from "src/utils/access/findSubscription";
 
 function fetchSubscriptionDetails({ subscriptionId, serviceId }) {
   if (subscriptionId) {
@@ -18,11 +15,7 @@ function fetchSubscriptionDetails({ subscriptionId, serviceId }) {
   }
 }
 
-function useSubscriptionForProductTierAccess(
-  serviceId,
-  productTierId,
-  subscriptionId
-) {
+function useSubscriptionForProductTierAccess(serviceId, productTierId, subscriptionId) {
   const isQueryEnabled = Boolean(productTierId && serviceId);
   const query = useQuery(
     ["user-subscription", productTierId, serviceId, subscriptionId],
@@ -37,11 +30,7 @@ function useSubscriptionForProductTierAccess(
       refetchOnWindowFocus: false,
       select: (response) => {
         if (subscriptionId) {
-          const isSubscriptionValid = checkSubscriptionIsForProductTier(
-            response?.data,
-            serviceId,
-            productTierId
-          );
+          const isSubscriptionValid = checkSubscriptionIsForProductTier(response?.data, serviceId, productTierId);
           if (isSubscriptionValid) {
             return response.data;
           } else {
@@ -49,11 +38,7 @@ function useSubscriptionForProductTierAccess(
           }
         } else {
           const subscriptionsList = response?.data?.subscriptions;
-          return findSubscriptionByPriority(
-            subscriptionsList,
-            serviceId,
-            productTierId
-          );
+          return findSubscriptionByPriority(subscriptionsList, serviceId, productTierId);
         }
       },
     }

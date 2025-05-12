@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import { Stack, SxProps, Theme,useTheme } from "@mui/material";
+import { Stack, SxProps, Theme, useTheme } from "@mui/material";
 
 import AlertTriangle from "src/components/Icons/AlertTriangle/AlertTriangle";
 import { Text } from "src/components/Typography/Typography";

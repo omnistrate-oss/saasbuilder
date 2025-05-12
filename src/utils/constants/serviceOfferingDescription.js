@@ -8,20 +8,7 @@ export const getServiceOfferingDesciption = (value) => {
 };
 
 const isBlockLevel = (element) => {
-  const blockLevelElements = [
-    "p",
-    "h1",
-    "h2",
-    "h3",
-    "h4",
-    "h5",
-    "h6",
-    "div",
-    "ul",
-    "ol",
-    "li",
-    "blockquote",
-  ];
+  const blockLevelElements = ["p", "h1", "h2", "h3", "h4", "h5", "h6", "div", "ul", "ol", "li", "blockquote"];
   return blockLevelElements.includes(element.tagName.toLowerCase());
 };
 

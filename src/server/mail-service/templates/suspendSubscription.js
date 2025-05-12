@@ -2,24 +2,15 @@ const ejs = require("ejs");
 const path = require("path");
 const { getSaaSDomainURL } = require("../../utils/getSaaSDomainURL");
 
-async function getSubscriptionSuspendedMailContent(
-  suspendSubscriptionEventObj,
-  orgLogoURL
-) {
+async function getSubscriptionSuspendedMailContent(suspendSubscriptionEventObj, orgLogoURL) {
   const orgName = suspendSubscriptionEventObj.orgName;
   const email = suspendSubscriptionEventObj.userEmail;
   const serviceName = suspendSubscriptionEventObj.eventPayload.service_name;
-  const servicePlanName =
-    suspendSubscriptionEventObj.eventPayload.product_tier_name;
+  const servicePlanName = suspendSubscriptionEventObj.eventPayload.product_tier_name;
 
   const subject = `Your ${serviceName} - ${servicePlanName} subscription suspended`;
 
-  const templatePath = path.resolve(
-    __dirname,
-    "..",
-    "ejsTemplates",
-    "suspendSubscription.ejs"
-  );
+  const templatePath = path.resolve(__dirname, "..", "ejsTemplates", "suspendSubscription.ejs");
 
   const baseURL = getSaaSDomainURL();
 

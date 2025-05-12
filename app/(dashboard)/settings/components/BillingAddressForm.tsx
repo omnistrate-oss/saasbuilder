@@ -16,7 +16,7 @@ import TextField from "components/FormElementsv2/TextField/TextField";
 
 import { countriesAlpha3 } from "../constants";
 
-import { BillingAddressValidationSchema,FieldCell, FieldTitleCell } from "./Common";
+import { BillingAddressValidationSchema, FieldCell, FieldTitleCell } from "./Common";
 import FormHeader from "./FormHeader";
 
 type BillingAddressFormProps = {

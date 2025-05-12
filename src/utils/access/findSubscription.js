@@ -10,60 +10,40 @@ const ROLE_TYPES = {
 //else find subscription with editor role
 //else find subscription with reader role
 
-export const findSubscriptionByPriority = (
-  subscriptions,
-  serviceId,
-  productTierId
-) => {
+export const findSubscriptionByPriority = (subscriptions, serviceId, productTierId) => {
   if (!subscriptions || !subscriptions?.length) {
     return null;
   }
 
   const filteredList = subscriptions?.filter(
-    (item) =>
-      item?.serviceId === serviceId && item?.productTierId === productTierId
+    (item) => item?.serviceId === serviceId && item?.productTierId === productTierId
   );
 
   if (!filteredList?.length) {
     return null;
   }
 
-  const defaultSubscription = filteredList?.find(
-    (item) => item?.defaultSubscription
-  );
+  const defaultSubscription = filteredList?.find((item) => item?.defaultSubscription);
   if (defaultSubscription) {
     return defaultSubscription;
   }
 
-  const rootSubscription = filteredList?.find(
-    (item) => item?.roleType === ROLE_TYPES.ROOT
-  );
+  const rootSubscription = filteredList?.find((item) => item?.roleType === ROLE_TYPES.ROOT);
   if (rootSubscription) {
     return rootSubscription;
   }
 
-  const editorSubscription = filteredList?.find(
-    (item) => item?.roleType === ROLE_TYPES.EDITOR
-  );
+  const editorSubscription = filteredList?.find((item) => item?.roleType === ROLE_TYPES.EDITOR);
   if (editorSubscription) {
     return editorSubscription;
   }
 
-  const readerSubscription = filteredList?.find(
-    (item) => item?.roleType === ROLE_TYPES.READER
-  );
+  const readerSubscription = filteredList?.find((item) => item?.roleType === ROLE_TYPES.READER);
   if (readerSubscription) {
     return readerSubscription;
   }
 };
 
-export const checkSubscriptionIsForProductTier = (
-  subscription,
-  serviceId,
-  productTierId
-) => {
-  return (
-    subscription?.serviceId === serviceId &&
-    subscription?.productTierId === productTierId
-  );
+export const checkSubscriptionIsForProductTier = (subscription, serviceId, productTierId) => {
+  return subscription?.serviceId === serviceId && subscription?.productTierId === productTierId;
 };

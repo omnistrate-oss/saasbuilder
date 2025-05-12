@@ -1,4 +1,4 @@
-import { useQuery, UseQueryOptions,UseQueryResult } from "@tanstack/react-query";
+import { useQuery, UseQueryOptions, UseQueryResult } from "@tanstack/react-query";
 import { AxiosResponse } from "axios";
 
 import { getInstanceRestoreAccess } from "src/api/resourceInstance";

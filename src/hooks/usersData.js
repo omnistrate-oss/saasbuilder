@@ -37,10 +37,7 @@ function useUserData() {
 
   return {
     loadingStatus: loadingStatus,
-    isLoading: Boolean(
-      loadingStatus === loadingStatuses.idle ||
-        loadingStatus === loadingStatuses.loading
-    ),
+    isLoading: Boolean(loadingStatus === loadingStatuses.idle || loadingStatus === loadingStatuses.loading),
     userData: userData,
     refetch: query.refetch,
     query: query,

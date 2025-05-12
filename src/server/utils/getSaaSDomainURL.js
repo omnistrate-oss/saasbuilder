@@ -7,11 +7,7 @@ function getSaaSDomainURL() {
     saasURL = process.env.YOUR_SAAS_DOMAIN_URL;
   }
   //If the URL does not start with http:// or https://, prepend https:// to the URL
-  if (
-    saasURL &&
-    !saasURL.startsWith("http://") &&
-    !saasURL.startsWith("https://")
-  ) {
+  if (saasURL && !saasURL.startsWith("http://") && !saasURL.startsWith("https://")) {
     saasURL = "https://" + saasURL;
   }
 

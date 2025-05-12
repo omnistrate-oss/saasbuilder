@@ -10,19 +10,12 @@ async function getResetPasswordMailContent(resetPasswordEventObj, orgLogoURL) {
   const saasDomainURL = getSaaSDomainURL();
 
   const resetPasswordPageURL = encodeURI(
-    `${saasDomainURL}/change-password?email=${encodeURIComponent(
-      email
-    )}&token=${encodeURIComponent(token)}`
+    `${saasDomainURL}/change-password?email=${encodeURIComponent(email)}&token=${encodeURIComponent(token)}`
   );
 
   const subject = `Reset Password request for your ${orgName} account`;
 
-  const templatePath = path.resolve(
-    __dirname,
-    "..",
-    "ejsTemplates",
-    "forgotPassword.ejs"
-  );
+  const templatePath = path.resolve(__dirname, "..", "ejsTemplates", "forgotPassword.ejs");
 
   const baseURL = saasDomainURL;
 

@@ -1,7 +1,7 @@
 import React, { FC, useMemo } from "react";
 import { Box, Stack } from "@mui/material";
 import dayjs from "dayjs";
-import { Bar, CartesianGrid, ComposedChart, Line, ResponsiveContainer,Tooltip, XAxis, YAxis } from "recharts";
+import { Bar, CartesianGrid, ComposedChart, Line, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 
 import LoadingSpinner from "src/components/LoadingSpinner/LoadingSpinner";
 import ReChartContainer from "src/components/ReChartContainer/ReChartContainer";

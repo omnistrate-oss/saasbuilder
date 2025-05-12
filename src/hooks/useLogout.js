@@ -51,10 +51,7 @@ function useLogout() {
           try {
             logoutBroadcastChannel.postMessage("logout");
           } catch (error) {
-            console.error(
-              "Failed to post message on broadcast channel:",
-              error
-            );
+            console.error("Failed to post message on broadcast channel:", error);
           }
         }
       });

@@ -44,8 +44,7 @@ export default async function handleSignIn(nextRequest, nextResponse) {
       nextResponse.status(200).send({ ...responseData });
     } catch (error) {
       console.error("Error in sign in", error);
-      const defaultErrorMessage =
-        "Failed to sign in. Either the credentials are incorrect or the user does not exist";
+      const defaultErrorMessage = "Failed to sign in. Either the credentials are incorrect or the user does not exist";
 
       //Wait for a random duration b/w 0ms and 150ms to mask the difference b/w response times of api when a user is present vs not present
       const delayInMilliseconds = _.random(0, 150);
@@ -55,16 +54,11 @@ export default async function handleSignIn(nextRequest, nextResponse) {
         }, delayInMilliseconds);
       });
 
-      if (
-        error.name === "ProviderAuthError" ||
-        error?.response?.status === undefined
-      ) {
+      if (error.name === "ProviderAuthError" || error?.response?.status === undefined) {
         nextResponse.status(500).send({
           message: defaultErrorMessage,
         });
-      } else if (
-        error.response?.data?.message === "wrong user email or password"
-      ) {
+      } else if (error.response?.data?.message === "wrong user email or password") {
         nextResponse.status(400).send({
           message: defaultErrorMessage,
         });

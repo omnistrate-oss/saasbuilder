@@ -1,67 +1,31 @@
 const cron = require("node-cron");
 const nodemailer = require("nodemailer");
 const { getSignUpMailContent } = require("./templates/signupTemplate");
-const {
-  getOrgInviteUserMailContent,
-} = require("./templates/orgInviteUserTemplate");
-const {
-  getOrgRevokeUserMailContent,
-} = require("./templates/orgRevokeUserTemplate");
+const { getOrgInviteUserMailContent } = require("./templates/orgInviteUserTemplate");
+const { getOrgRevokeUserMailContent } = require("./templates/orgRevokeUserTemplate");
 const { eventTypes } = require("./constants");
 const { getEventsList, acknowledgeEvent } = require("../api/events");
-const {
-  getResetPasswordMailContent,
-} = require("./templates/forgotPasswordTemplate");
-const {
-  getApproveSubscriptionMailContent,
-} = require("./templates/approveSubscriptionRequest");
-const {
-  getDenySubscriptionMailContent,
-} = require("./templates/denySubscriptionRequest");
-const {
-  getSubscriptionResumedMailContent,
-} = require("./templates/resumeSubscription");
-const {
-  getSubscriptionSuspendedMailContent,
-} = require("./templates/suspendSubscription");
-const {
-  getSubscriptionTerminateMailContent,
-} = require("./templates/terminateSubscription");
-const {
-  getInvoiceCreatedTemplate,
-} = require("./templates/invoiceCreatedTemplate");
-const {
-  getUpgradeNotificationMailContent,
-} = require("./templates/upgradeNotification");
+const { getResetPasswordMailContent } = require("./templates/forgotPasswordTemplate");
+const { getApproveSubscriptionMailContent } = require("./templates/approveSubscriptionRequest");
+const { getDenySubscriptionMailContent } = require("./templates/denySubscriptionRequest");
+const { getSubscriptionResumedMailContent } = require("./templates/resumeSubscription");
+const { getSubscriptionSuspendedMailContent } = require("./templates/suspendSubscription");
+const { getSubscriptionTerminateMailContent } = require("./templates/terminateSubscription");
+const { getInvoiceCreatedTemplate } = require("./templates/invoiceCreatedTemplate");
+const { getUpgradeNotificationMailContent } = require("./templates/upgradeNotification");
 
 const { getProviderOrgDetails } = require("../api/customer-user");
 const { getNodeMailerConfig } = require("./mail-config");
 const { getEnvironmentType } = require("../utils/getEnvironmentType");
-const {
-  getDisconnectedAccountCompleteMailContentAWS,
-} = require("./templates/disconnectedAccountcompleteAWS");
-const {
-  getConnectedAccountCompleteMailContentAWS,
-} = require("./templates/connectedAccountCompleteAWS");
-const {
-  getPendingRevokePermissionsMailContentAWS,
-} = require("./templates/pendingRevokePermissionsAWS");
-const {
-  getPendingRestorePermissionsMailContentAWS,
-} = require("./templates/pendingRestorePermissionsAWS");
+const { getDisconnectedAccountCompleteMailContentAWS } = require("./templates/disconnectedAccountcompleteAWS");
+const { getConnectedAccountCompleteMailContentAWS } = require("./templates/connectedAccountCompleteAWS");
+const { getPendingRevokePermissionsMailContentAWS } = require("./templates/pendingRevokePermissionsAWS");
+const { getPendingRestorePermissionsMailContentAWS } = require("./templates/pendingRestorePermissionsAWS");
 
-const {
-  getDisconnectedAccountCompleteMailContentGCP,
-} = require("./templates/disconnectedAccountcompleteGCP");
-const {
-  getConnectedAccountCompleteMailContentGCP,
-} = require("./templates/connectedAccountCompleteGCP");
-const {
-  getPendingRevokePermissionsMailContentGCP,
-} = require("./templates/pendingRevokePermissionsGCP");
-const {
-  getPendingRestorePermissionsMailContentGCP,
-} = require("./templates/pendingRestorePermissionsGCP");
+const { getDisconnectedAccountCompleteMailContentGCP } = require("./templates/disconnectedAccountcompleteGCP");
+const { getConnectedAccountCompleteMailContentGCP } = require("./templates/connectedAccountCompleteGCP");
+const { getPendingRevokePermissionsMailContentGCP } = require("./templates/pendingRevokePermissionsGCP");
+const { getPendingRestorePermissionsMailContentGCP } = require("./templates/pendingRestorePermissionsGCP");
 
 let isRunning = false;
 
@@ -99,66 +63,42 @@ function startMailServiceCron() {
             }
 
             case eventTypes.InviteUser: {
-              mailContent = await getOrgInviteUserMailContent(
-                event,
-                orgLogoURL
-              );
+              mailContent = await getOrgInviteUserMailContent(event, orgLogoURL);
               break;
             }
 
             case eventTypes.RevokeUserRole: {
-              mailContent = await getOrgRevokeUserMailContent(
-                event,
-                orgLogoURL
-              );
+              mailContent = await getOrgRevokeUserMailContent(event, orgLogoURL);
               break;
             }
 
             case eventTypes.ResetPassword: {
-              mailContent = await getResetPasswordMailContent(
-                event,
-                orgLogoURL
-              );
+              mailContent = await getResetPasswordMailContent(event, orgLogoURL);
               break;
             }
 
             case eventTypes.ApproveSubscriptionRequest: {
-              mailContent = await getApproveSubscriptionMailContent(
-                event,
-                orgLogoURL
-              );
+              mailContent = await getApproveSubscriptionMailContent(event, orgLogoURL);
               break;
             }
 
             case eventTypes.DenySubscriptionRequest: {
-              mailContent = await getDenySubscriptionMailContent(
-                event,
-                orgLogoURL
-              );
+              mailContent = await getDenySubscriptionMailContent(event, orgLogoURL);
               break;
             }
 
             case eventTypes.ResumeSubscription: {
-              mailContent = await getSubscriptionResumedMailContent(
-                event,
-                orgLogoURL
-              );
+              mailContent = await getSubscriptionResumedMailContent(event, orgLogoURL);
               break;
             }
 
             case eventTypes.SuspendSubscription: {
-              mailContent = await getSubscriptionSuspendedMailContent(
-                event,
-                orgLogoURL
-              );
+              mailContent = await getSubscriptionSuspendedMailContent(event, orgLogoURL);
               break;
             }
 
             case eventTypes.TerminateSubscription: {
-              mailContent = await getSubscriptionTerminateMailContent(
-                event,
-                orgLogoURL
-              );
+              mailContent = await getSubscriptionTerminateMailContent(event, orgLogoURL);
               break;
             }
 
@@ -189,84 +129,42 @@ function startMailServiceCron() {
 
             case eventTypes.PendingRestorePermissions: {
               if (event?.eventPayload?.gcp_connect_bash_script) {
-                mailContent = await getPendingRestorePermissionsMailContentGCP(
-                  event,
-                  orgLogoURL,
-                  orgSupportEmail
-                );
+                mailContent = await getPendingRestorePermissionsMailContentGCP(event, orgLogoURL, orgSupportEmail);
               } else if (event?.eventPayload?.connect_cfn_url) {
-                mailContent = await getPendingRestorePermissionsMailContentAWS(
-                  event,
-                  orgLogoURL,
-                  orgSupportEmail
-                );
+                mailContent = await getPendingRestorePermissionsMailContentAWS(event, orgLogoURL, orgSupportEmail);
               } else {
-                console.warn(
-                  `Connection event missing cloud provider signature: ${event.eventID}`
-                );
+                console.warn(`Connection event missing cloud provider signature: ${event.eventID}`);
               }
               break;
             }
             case eventTypes.PendingRevokePermissions: {
               if (event?.eventPayload?.gcp_disconnect_bash_script) {
-                mailContent = await getPendingRevokePermissionsMailContentGCP(
-                  event,
-                  orgLogoURL,
-                  orgSupportEmail
-                );
+                mailContent = await getPendingRevokePermissionsMailContentGCP(event, orgLogoURL, orgSupportEmail);
               } else if (event?.eventPayload?.disconnect_cfn_url) {
-                mailContent = await getPendingRevokePermissionsMailContentAWS(
-                  event,
-                  orgLogoURL,
-                  orgSupportEmail
-                );
+                mailContent = await getPendingRevokePermissionsMailContentAWS(event, orgLogoURL, orgSupportEmail);
               } else {
-                console.warn(
-                  `Connection event missing cloud provider signature: ${event.eventID}`
-                );
+                console.warn(`Connection event missing cloud provider signature: ${event.eventID}`);
               }
               break;
             }
             case eventTypes.DisconnectAccountComplete: {
               if (event?.eventPayload?.gcp_disconnect_bash_script) {
-                mailContent =
-                  await getDisconnectedAccountCompleteMailContentGCP(
-                    event,
-                    orgLogoURL,
-                    orgSupportEmail
-                  );
+                mailContent = await getDisconnectedAccountCompleteMailContentGCP(event, orgLogoURL, orgSupportEmail);
               } else if (event?.eventPayload?.disconnect_cfn_url) {
-                mailContent =
-                  await getDisconnectedAccountCompleteMailContentAWS(
-                    event,
-                    orgLogoURL,
-                    orgSupportEmail
-                  );
+                mailContent = await getDisconnectedAccountCompleteMailContentAWS(event, orgLogoURL, orgSupportEmail);
               } else {
-                console.warn(
-                  `Connection event missing cloud provider signature: ${event.eventID}`
-                );
+                console.warn(`Connection event missing cloud provider signature: ${event.eventID}`);
               }
               break;
             }
 
             case eventTypes.ConnectAccountComplete: {
               if (event?.eventPayload?.gcp_connect_bash_script) {
-                mailContent = await getConnectedAccountCompleteMailContentGCP(
-                  event,
-                  orgLogoURL,
-                  orgSupportEmail
-                );
+                mailContent = await getConnectedAccountCompleteMailContentGCP(event, orgLogoURL, orgSupportEmail);
               } else if (event?.eventPayload?.connect_cfn_url) {
-                mailContent = await getConnectedAccountCompleteMailContentAWS(
-                  event,
-                  orgLogoURL,
-                  orgSupportEmail
-                );
+                mailContent = await getConnectedAccountCompleteMailContentAWS(event, orgLogoURL, orgSupportEmail);
               } else {
-                console.warn(
-                  `Connection event missing cloud provider signature: ${event.eventID}`
-                );
+                console.warn(`Connection event missing cloud provider signature: ${event.eventID}`);
               }
               break;
             }
@@ -277,8 +175,7 @@ function startMailServiceCron() {
 
           if (mailContent) {
             //use address configured in MAIL_FROM. If not configured fallback to MAIL_USER_EMAIL
-            const fromEmailAddress =
-              process.env.MAIL_FROM || process.env.MAIL_USER_EMAIL;
+            const fromEmailAddress = process.env.MAIL_FROM || process.env.MAIL_USER_EMAIL;
 
             const mailPromise = mailTransporter
               .sendMail({

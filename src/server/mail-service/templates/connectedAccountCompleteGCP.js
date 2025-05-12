@@ -14,12 +14,7 @@ async function getConnectedAccountCompleteMailContentGCP(
 
   const subject = `Success: GCP Account ${accountId} Connected to ${orgName}`;
 
-  const templatePath = path.resolve(
-    __dirname,
-    "..",
-    "ejsTemplates",
-    "connectedAccountCompleteGCP.ejs"
-  );
+  const templatePath = path.resolve(__dirname, "..", "ejsTemplates", "connectedAccountCompleteGCP.ejs");
 
   const baseURL = getSaaSDomainURL();
 

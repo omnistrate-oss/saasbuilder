@@ -2,10 +2,7 @@ import rawAxios from "axios"; //unconfigured axios to make calls to next js serv
 
 import axios from "../axios";
 
-export const getCloudProviderIds = (
-  serviceId = null,
-  serviceModelId = null
-) => {
+export const getCloudProviderIds = (serviceId = null, serviceModelId = null) => {
   const queryParams = {};
   if (serviceId && serviceModelId) {
     queryParams.serviceId = serviceId;

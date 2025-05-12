@@ -6,11 +6,7 @@ import { saveBlob } from "../utils/saveBlob";
 function useDownloadCLI() {
   const downloadCLIMutation = useMutation(
     (data) => {
-      return downloadCLI(
-        data.serviceId,
-        data.serviceApiId,
-        data.subscriptionId
-      );
+      return downloadCLI(data.serviceId, data.serviceApiId, data.subscriptionId);
     },
     {
       onSuccess: (response) => {

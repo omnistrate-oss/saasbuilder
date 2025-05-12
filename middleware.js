@@ -11,11 +11,7 @@ export async function middleware(request) {
   const authToken = request.cookies.get("token");
   const path = request.nextUrl.pathname;
 
-  if (
-    path.startsWith("/signup") ||
-    path.startsWith("/reset-password") ||
-    path.startsWith("/change-password")
-  ) {
+  if (path.startsWith("/signup") || path.startsWith("/reset-password") || path.startsWith("/change-password")) {
     if (environmentType === "PROD") return;
   }
 
