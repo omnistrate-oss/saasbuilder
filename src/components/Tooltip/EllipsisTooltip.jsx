@@ -1,5 +1,5 @@
-import { Box } from "@mui/material";
 import React, { useEffect, useRef, useState } from "react";
+import { Box } from "@mui/material";
 
 function EllipsisTooltipText({ text, sx, ...restProps }) {
   const textElementRef = useRef(null);

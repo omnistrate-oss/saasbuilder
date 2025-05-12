@@ -1,5 +1,6 @@
-import { Box, useTheme } from "@mui/material";
 import React from "react";
+import { Box, useTheme } from "@mui/material";
+
 import { Text } from "src/components/Typography/Typography";
 
 const RequiredAsterisk = (props) => (

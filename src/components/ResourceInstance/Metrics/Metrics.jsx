@@ -1,7 +1,8 @@
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Box, CircularProgress, Stack, styled } from "@mui/material";
 import _ from "lodash";
-import { useCallback, useEffect, useRef, useState } from "react";
 import useWebSocket from "react-use-websocket";
+
 import MenuItem from "src/components/FormElementsv2/MenuItem/MenuItem";
 import Select from "src/components/FormElementsv2/Select/Select";
 import DataGridHeaderTitle from "src/components/Headers/DataGridHeaderTitle";
@@ -13,6 +14,7 @@ import Card from "../../Card/Card";
 import LoadingSpinner from "../../LoadingSpinner/LoadingSpinner";
 import { Text } from "../../Typography/Typography";
 import DataUnavailableMessage from "../DataUnavailableMessage";
+
 import CpuUsageChart from "./CpuUsageChart";
 import DiskIOPSReadChart from "./DiskIOPSReadChart";
 import DiskIOPSWriteChart from "./DiskIOPSWriteChart";

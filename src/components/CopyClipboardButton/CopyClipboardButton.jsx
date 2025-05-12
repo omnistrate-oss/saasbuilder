@@ -1,6 +1,6 @@
+import { useState } from "react";
 import { IconButton } from "@mui/material";
 import clipboard from "clipboardy";
-import { useState } from "react";
 
 import DataGridCopyIcon from "../Icons/CopyIcon/DataGridCopyIcon";
 import Tooltip from "../Tooltip/Tooltip";

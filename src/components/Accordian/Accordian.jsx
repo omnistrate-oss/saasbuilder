@@ -4,6 +4,7 @@ import { Box, IconButton, Stack, styled } from "@mui/material";
 import MuiAccordion from "@mui/material/Accordion";
 import MuiAccordionDetails from "@mui/material/AccordionDetails";
 import MuiAccordionSummary, { accordionSummaryClasses } from "@mui/material/AccordionSummary";
+
 import AccordionEditIcon from "src/components/Icons/AccordionEdit/AccordionEdit";
 import AccordionErrorIcon from "src/components/Icons/AccordionError/AccordionError";
 import AccordionValidIcon from "src/components/Icons/AccordionValid/AccordionValid";

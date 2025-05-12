@@ -1,5 +1,6 @@
-import { InputAdornment, Stack, Typography } from "@mui/material";
 import { useState } from "react";
+import { InputAdornment, Stack, Typography } from "@mui/material";
+
 import Tooltip from "src/components/Tooltip/Tooltip";
 import { Text } from "src/components/Typography/Typography";
 

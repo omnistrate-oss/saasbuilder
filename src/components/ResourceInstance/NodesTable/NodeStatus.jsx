@@ -1,4 +1,5 @@
 import { Box } from "@mui/material";
+
 import StatusChip, { getChipStyles } from "src/components/StatusChip/StatusChip";
 
 import NodeStatusTooltip from "./NodeStatusTooltip";

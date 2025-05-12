@@ -43,7 +43,7 @@
   },
   "overrides": [
     {
-      "files": ["**/*.js", "**/*.ts", "**/*.tsx"],
+      "files": ["**/*.js", "**/*.ts", "**/*.tsx", "**/*.jsx"],
       "rules": {
         "simple-import-sort/imports": [
           "warn",

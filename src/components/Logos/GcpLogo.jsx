@@ -1,5 +1,6 @@
-import { styled } from "@mui/material";
 import NextImage from "next/image";
+import { styled } from "@mui/material";
+
 import gcpIcon from "public/assets/images/logos/gcp.svg";
 
 const Image = styled(NextImage)(() => ({}));

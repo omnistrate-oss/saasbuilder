@@ -1,10 +1,12 @@
-import { Box } from "@mui/material";
 import { useRouter } from "next/navigation";
-import GithubLoginIcon from "src/components/Icons/GithubLogin/GithubLogin";
-import Tooltip from "src/components/Tooltip/Tooltip";
+import { Box } from "@mui/material";
 import { v4 as uuidv4 } from "uuid";
 
+import GithubLoginIcon from "src/components/Icons/GithubLogin/GithubLogin";
+import Tooltip from "src/components/Tooltip/Tooltip";
+
 import { IDENTITY_PROVIDER_TYPES } from "../constants";
+
 import SSOLoginButton from "./SSOLoginButton";
 
 function GithubLogin(props) {

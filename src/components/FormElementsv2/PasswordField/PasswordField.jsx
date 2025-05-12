@@ -1,6 +1,7 @@
+import { useState } from "react";
 import { Box,InputAdornment } from "@mui/material";
 import Generator from "generate-password";
-import { useState } from "react";
+
 import KeyIcon from "src/components/Icons/Key/KeyIcon";
 import Tooltip from "src/components/Tooltip/Tooltip";
 import { Text } from "src/components/Typography/Typography";

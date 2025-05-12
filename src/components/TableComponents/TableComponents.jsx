@@ -4,6 +4,7 @@ import MuiTableBody from "@mui/material/TableBody";
 import MuiTableCell from "@mui/material/TableCell";
 import MuiTableHead from "@mui/material/TableHead";
 import MuiTableRow from "@mui/material/TableRow";
+
 import { DisplayText, Text } from "components/Typography/Typography";
 
 export const TableContainer = styled(Box)({

@@ -1,9 +1,21 @@
 "use client";
 
+import { useEffect, useRef, useState } from "react";
+import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { Box, Stack, styled,Typography } from "@mui/material";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import { useMutation } from "@tanstack/react-query";
 import { IDENTITY_PROVIDER_STATUS_TYPES } from "app/(public)/(main-image)/signin/constants";
+import { useFormik } from "formik";
+import ReCAPTCHA from "react-google-recaptcha";
+import * as Yup from "yup";
+
+import { customerUserSignup } from "src/api/customer-user";
+import Logo from "src/components/NonDashboardComponents/Logo";
+import useSnackbar from "src/hooks/useSnackbar";
+import { useProviderOrgDetails } from "src/providers/ProviderOrgDetailsProvider";
+import { passwordRegex, passwordText } from "src/utils/passwordRegex";
 import FieldError from "components/FormElementsv2/FieldError/FieldError";
 import DisplayHeading from "components/NonDashboardComponents/DisplayHeading";
 import FieldContainer from "components/NonDashboardComponents/FormElementsV2/FieldContainer";
@@ -12,17 +24,6 @@ import PasswordField from "components/NonDashboardComponents/FormElementsV2/Pass
 import SubmitButton from "components/NonDashboardComponents/FormElementsV2/SubmitButton";
 import TextField from "components/NonDashboardComponents/FormElementsV2/TextField";
 import SuccessBox from "components/SuccessBox/SuccessBox";
-import { useFormik } from "formik";
-import Link from "next/link";
-import { useSearchParams } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
-import ReCAPTCHA from "react-google-recaptcha";
-import { customerUserSignup } from "src/api/customer-user";
-import Logo from "src/components/NonDashboardComponents/Logo";
-import useSnackbar from "src/hooks/useSnackbar";
-import { useProviderOrgDetails } from "src/providers/ProviderOrgDetailsProvider";
-import { passwordRegex, passwordText } from "src/utils/passwordRegex";
-import * as Yup from "yup";
 
 import GithubLogin from "../../signin/components/GitHubLogin";
 import GoogleLogin from "../../signin/components/GoogleLogin";

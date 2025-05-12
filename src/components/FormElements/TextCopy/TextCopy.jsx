@@ -1,8 +1,9 @@
+import { useState } from "react";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import { Box, ButtonBase, styled } from "@mui/material";
 import MuiInputAdornment from "@mui/material/InputAdornment";
 import clipboard from "clipboardy";
-import { useState } from "react";
+
 import Tooltip from "src/components/Tooltip/Tooltip";
 
 import { Text } from "../../Typography/Typography";

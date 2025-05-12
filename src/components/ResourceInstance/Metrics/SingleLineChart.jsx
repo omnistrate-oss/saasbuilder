@@ -1,4 +1,5 @@
 import { Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
+
 import ReChartContainer from "src/components/ReChartContainer/ReChartContainer";
 
 function SingleLineChart(props) {

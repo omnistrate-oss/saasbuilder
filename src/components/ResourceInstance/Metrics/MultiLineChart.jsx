@@ -1,4 +1,5 @@
 import { Area, AreaChart, CartesianGrid, Legend, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
+
 import ReChartContainer from "src/components/ReChartContainer/ReChartContainer";
 import lineChartColorPalette from "src/utils/constants/lineChartColorPalette";
 

@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 
 import PropertyDetails from "../ResourceInstanceDetails/PropertyDetails";
+
 import CLIManagedConnectivityDetails from "./CLIManagedConnectivityDetails";
 import ResourceConnectivityEndpoint from "./ConnectivityEndpoint";
 

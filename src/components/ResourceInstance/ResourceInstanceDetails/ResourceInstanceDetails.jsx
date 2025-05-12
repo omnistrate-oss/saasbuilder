@@ -1,10 +1,11 @@
-import { Box } from "@mui/material";
-import LoadingSpinner from "components/LoadingSpinner/LoadingSpinner";
-import { Base64 } from "js-base64";
 import { useMemo } from "react";
+import { Box } from "@mui/material";
+import { Base64 } from "js-base64";
+
 import InstanceLicenseStatusChip from "src/components/InstanceLicenseStatusChip/InstanceLicenseStatusChip";
 import { INTEGRATION_TYPE_LABEL_MAP } from "src/constants/productTierFeatures";
 import formatDateUTC from "src/utils/formatDateUTC";
+import LoadingSpinner from "components/LoadingSpinner/LoadingSpinner";
 
 import NonOmnistrateIntegrationRow from "./NonOmnistrateIntegrationRow";
 import PropertyDetails from "./PropertyDetails";

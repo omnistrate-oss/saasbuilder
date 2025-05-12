@@ -1,16 +1,18 @@
+import { useEffect, useRef, useState } from "react";
+import Image from "next/image";
+import Link from "next/link";
 import { Box, Dialog,Stack, styled } from "@mui/material";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useFormik } from "formik";
+
+import { disconnected } from "src/api/resourceInstance";
+import useSnackbar from "src/hooks/useSnackbar";
 import Button from "components/Button/Button";
 import LoadingSpinnerSmall from "components/CircularProgress/CircularProgress";
 import TextField from "components/FormElements/TextField/TextField";
 import { Text } from "components/Typography/Typography";
-import { useFormik } from "formik";
-import Image from "next/image";
-import Link from "next/link";
+
 import sandClock from "public/assets/images/cloud-account/sandclock.gif";
-import { useEffect, useRef, useState } from "react";
-import { disconnected } from "src/api/resourceInstance";
-import useSnackbar from "src/hooks/useSnackbar";
 
 import Chip from "../Chip/Chip";
 import { TextContainerToCopy } from "../CloudProviderAccountOrgIdModal/CloudProviderAccountOrgIdModal";

@@ -1,7 +1,8 @@
-import { Box } from "@mui/material";
-import Image from "next/image";
-import marketplaceIcon from "public/assets/images/dashboard/marketplace.svg";
 import React from "react";
+import Image from "next/image";
+import { Box } from "@mui/material";
+
+import marketplaceIcon from "public/assets/images/dashboard/marketplace.svg";
 
 import Card from "../Card/Card";
 

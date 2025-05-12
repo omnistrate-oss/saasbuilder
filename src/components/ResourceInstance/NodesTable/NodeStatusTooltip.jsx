@@ -1,8 +1,9 @@
 import { Box, Stack, styled,Tooltip, tooltipClasses } from "@mui/material";
+
+import QuestionIcon from "src/components/Icons/Question/QuestionIcon";
 import CircleCheckIcon from "components/Icons/CircleCheck/CircleCheckIcon";
 import CircleCrossIcon from "components/Icons/CircleCross/CircleCrossIcon";
 import { Text } from "components/Typography/Typography";
-import QuestionIcon from "src/components/Icons/Question/QuestionIcon";
 
 const CustomTooltip = styled(({ className, ...props }) => <Tooltip {...props} classes={{ popper: className }} />)({
   [`& .${tooltipClasses.tooltip}`]: {

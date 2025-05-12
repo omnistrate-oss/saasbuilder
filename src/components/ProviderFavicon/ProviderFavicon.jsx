@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+
 import useProviderOrgDetails from "src/hooks/query/useProviderOrgDetails";
 
 function ProviderFavicon() {

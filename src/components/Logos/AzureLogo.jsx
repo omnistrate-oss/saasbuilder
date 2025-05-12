@@ -1,5 +1,6 @@
-import { styled } from "@mui/material";
 import NextImage from "next/image";
+import { styled } from "@mui/material";
+
 import azureIcon from "public/assets/images/logos/azure.svg";
 
 const Image = styled(NextImage)(() => ({}));
