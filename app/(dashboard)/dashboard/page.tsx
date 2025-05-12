@@ -1,15 +1,16 @@
 "use client";
 
-import PageTitle from "../components/Layout/PageTitle";
+import { useGlobalData } from "src/providers/GlobalDataProvider";
+
+import useAuditLogs from "../audit-logs/hooks/useAuditLogs";
+import EventsTable from "../components/EventsTable/EventsTable";
 import DashboardIcon from "../components/Icons/DashboardIcon";
 import PageContainer from "../components/Layout/PageContainer";
-import ClusterLocations from "./components/ClusterLocations";
-
+import PageTitle from "../components/Layout/PageTitle";
 import useInstances from "../instances/hooks/useInstances";
+
+import ClusterLocations from "./components/ClusterLocations";
 import DashboardLogsTableHeader from "./components/DashboardLogsTableHeader";
-import EventsTable from "../components/EventsTable/EventsTable";
-import useAuditLogs from "../audit-logs/hooks/useAuditLogs";
-import { useGlobalData } from "src/providers/GlobalDataProvider";
 // import ChartCard from "./components/ChartCard";
 // import LifecycleStatusChart from "./charts/LifecycleStatusChart";
 // import DeploymentsByLoad from "./charts/DeploymentsByLoadChart";

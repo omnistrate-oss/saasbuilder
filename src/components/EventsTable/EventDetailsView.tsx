@@ -1,8 +1,9 @@
 import { Box } from "@mui/material";
-import JSONView from "../JSONView/JSONView";
 import { OnCopyProps } from "react-json-view";
 
 import { AuditEvent } from "src/types/auditEvent";
+
+import JSONView from "../JSONView/JSONView";
 
 const EventDetailsView = (props: { rowData: AuditEvent }) => {
   const { rowData: event } = props;

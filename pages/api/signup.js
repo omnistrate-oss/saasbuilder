@@ -1,11 +1,11 @@
 import { customerUserSignUp } from "src/server/api/customer-user";
+import CaptchaVerificationError from "src/server/errors/CaptchaVerificationError";
+import { checkReCaptchaSetup } from "src/server/utils/checkReCaptchaSetup";
+import { verifyRecaptchaToken } from "src/server/utils/verifyRecaptchaToken";
 import {
   passwordRegex,
   passwordText as passwordRegexFailText,
 } from "src/utils/passwordRegex";
-import { verifyRecaptchaToken } from "src/server/utils/verifyRecaptchaToken";
-import { checkReCaptchaSetup } from "src/server/utils/checkReCaptchaSetup";
-import CaptchaVerificationError from "src/server/errors/CaptchaVerificationError";
 
 export default async function handleSignup(nextRequest, nextResponse) {
   if (nextRequest.method === "POST") {

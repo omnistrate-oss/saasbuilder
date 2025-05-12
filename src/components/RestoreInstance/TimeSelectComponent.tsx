@@ -3,33 +3,30 @@ import { FC, useEffect } from "react";
 //   StyledTextField,
 // } from "../FormElementsv2/AutoComplete/AutoComplete";
 import { Box, InputAdornment } from "@mui/material";
+import dayjs, { Dayjs } from "dayjs";
+
+import { dateToTimeString } from "src/utils/time";
+
+import FieldError from "../FormElementsv2/FieldError/FieldError";
+import TextField from "../FormElementsv2/TextField/TextField";
 import ClockIcon from "../Icons/RestoreInstance/ClockIcon";
-import { Text } from "../Typography/Typography";
 // import { getFilteredTimeOptions } from "src/utils/restore";
 import TimePickerSlider from "../TimePickerSlider/TimePickerSlider";
-import { dateToTimeString } from "src/utils/time";
-import dayjs, { Dayjs } from "dayjs";
-import TextField from "../FormElementsv2/TextField/TextField";
-import FieldError from "../FormElementsv2/FieldError/FieldError";
+import { Text } from "../Typography/Typography";
 
 type TimeSelectComponentProps = {
   formData: any;
   earliestRestoreTime: string;
 };
 
-const TimeSelectComponent: FC<TimeSelectComponentProps> = ({
-  formData,
-  earliestRestoreTime,
-}) => {
+const TimeSelectComponent: FC<TimeSelectComponentProps> = ({ formData, earliestRestoreTime }) => {
   const { values, errors, touched, setFieldValue, setFieldTouched } = formData;
   // const [filteredTimeOptions, setFilteredTimeOptions] = useState<string[]>([]);
 
   useEffect(() => {
     //whenever date changes reset time
     if (values.time) {
-      const date = dayjs(new Date(earliestRestoreTime))
-        .add(1, "minute")
-        .toDate();
+      const date = dayjs(new Date(earliestRestoreTime)).add(1, "minute").toDate();
 
       setFieldValue("time", dateToTimeString(date));
       // setFieldTouched("time", false);
@@ -47,9 +44,7 @@ const TimeSelectComponent: FC<TimeSelectComponentProps> = ({
 
   function getLeftButtonDisableState() {
     const selectedDate: Dayjs = values.date;
-    return selectedDate
-      .subtract(1, "day")
-      .isBefore(new Date(earliestRestoreTime), "day");
+    return selectedDate.subtract(1, "day").isBefore(new Date(earliestRestoreTime), "day");
   }
 
   function getRightButtonDisableState() {
@@ -112,10 +107,7 @@ const TimeSelectComponent: FC<TimeSelectComponentProps> = ({
         placeholder={"hh:mm"}
         InputProps={{
           startAdornment: (
-            <InputAdornment
-              position="start"
-              sx={{ borderLeft: "none !important" }}
-            >
+            <InputAdornment position="start" sx={{ borderLeft: "none !important" }}>
               <Box
                 sx={{
                   display: "flex",
@@ -144,9 +136,9 @@ const TimeSelectComponent: FC<TimeSelectComponentProps> = ({
         id="time"
         error={!!touched.time && !!errors.time}
         value={values.time}
-        onChange={(
-          e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
-        ) => setFieldValue("time", e.target.value)}
+        onChange={(e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) =>
+          setFieldValue("time", e.target.value)
+        }
         onBlur={() => setFieldTouched("time", true)}
       />
       <FieldError marginTop="12px" sx={{ position: "absolute" }}>

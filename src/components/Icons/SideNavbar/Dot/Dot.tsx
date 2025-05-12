@@ -1,4 +1,5 @@
 import { styleConfig } from "src/providerConfig";
+
 import Dot from "../../../Dot/Dot";
 
 export default function SidebarDotIcon(props) {

@@ -1,31 +1,26 @@
 "use client";
 
-import { useSelector } from "react-redux";
 import { useEffect, useMemo, useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useSelector } from "react-redux";
 
+import { createSubscriptionRequest } from "src/api/subscriptionRequests";
+import { createSubscriptions, deleteSubscription } from "src/api/subscriptions";
+import useSnackbar from "src/hooks/useSnackbar";
+import { useGlobalData } from "src/providers/GlobalDataProvider";
+import { selectUserrootData } from "src/slices/userDataSlice";
+import { Subscription } from "src/types/subscription";
 import CardWithTitle from "components/Card/CardWithTitle";
-import Select from "components/FormElementsv2/Select/Select";
-import MenuItem from "components/FormElementsv2/MenuItem/MenuItem";
-import LoadingSpinner from "components/LoadingSpinner/LoadingSpinner";
+import FieldDescription from "components/FormElementsv2/FieldDescription/FieldDescription";
 import FieldTitle from "components/FormElementsv2/FieldTitle/FieldTitle";
+import MenuItem from "components/FormElementsv2/MenuItem/MenuItem";
+import Select from "components/FormElementsv2/Select/Select";
+import LoadingSpinner from "components/LoadingSpinner/LoadingSpinner";
 import ServicePlanCard from "components/ServicePlanCard/ServicePlanCard";
 import ServicePlanDetails from "components/ServicePlanDetails/ServicePlanDetails";
-import FieldDescription from "components/FormElementsv2/FieldDescription/FieldDescription";
 import TextConfirmationDialog from "components/TextConfirmationDialog/TextConfirmationDialog";
 
-import useSnackbar from "src/hooks/useSnackbar";
-import { createSubscriptions, deleteSubscription } from "src/api/subscriptions";
-import { useGlobalData } from "src/providers/GlobalDataProvider";
-import { createSubscriptionRequest } from "src/api/subscriptionRequests";
-import { Subscription } from "src/types/subscription";
-import { selectUserrootData } from "src/slices/userDataSlice";
-
-const ManageSubscriptionsForm = ({
-  defaultServiceId,
-  defaultServicePlanId,
-  isFetchingServiceOfferings,
-}) => {
+const ManageSubscriptionsForm = ({ defaultServiceId, defaultServicePlanId, isFetchingServiceOfferings }) => {
   const {
     serviceOfferings,
     serviceOfferingsObj,
@@ -39,9 +34,7 @@ const ManageSubscriptionsForm = ({
   const queryClient = useQueryClient();
   const selectUser = useSelector(selectUserrootData);
   const [isUnsubscribeDialogOpen, setIsUnsubscribeDialogOpen] = useState(false);
-  const [subscriptionIdToDelete, setSubscriptionIdToDelete] = useState<
-    string | undefined
-  >("");
+  const [subscriptionIdToDelete, setSubscriptionIdToDelete] = useState<string | undefined>("");
 
   const services = useMemo(() => {
     const servicesObj = serviceOfferings?.reduce((acc, offering) => {
@@ -61,8 +54,8 @@ const ManageSubscriptionsForm = ({
 
   // Plans for the Selected Service
   const servicePlans = useMemo(() => {
-    return Object.values(serviceOfferingsObj[selectedServiceId] || {}).sort(
-      (a, b) => a?.productTierName.localeCompare(b?.productTierName)
+    return Object.values(serviceOfferingsObj[selectedServiceId] || {}).sort((a, b) =>
+      a?.productTierName.localeCompare(b?.productTierName)
     );
   }, [selectedServiceId, serviceOfferingsObj]);
 
@@ -74,8 +67,7 @@ const ManageSubscriptionsForm = ({
   // Object of Root Subscriptions and Subscription Requests
   const subscriptionsObj = useMemo(() => {
     return subscriptions?.reduce((acc, subscription) => {
-      if (subscription.roleType === "root")
-        acc[subscription.productTierId] = subscription;
+      if (subscription.roleType === "root") acc[subscription.productTierId] = subscription;
       return acc;
     }, {});
   }, [subscriptions]);
@@ -109,12 +101,8 @@ const ManageSubscriptionsForm = ({
         return {
           ...oldData,
           data: {
-            ids: oldData.data.ids.filter(
-              (id: string) => id !== subscriptionIdToDelete
-            ),
-            subscriptions: oldData.data.subscriptions.filter(
-              (sub: Subscription) => sub.id !== subscriptionIdToDelete
-            ),
+            ids: oldData.data.ids.filter((id: string) => id !== subscriptionIdToDelete),
+            subscriptions: oldData.data.subscriptions.filter((sub: Subscription) => sub.id !== subscriptionIdToDelete),
           },
         };
       });
@@ -135,11 +123,7 @@ const ManageSubscriptionsForm = ({
 
   const selectedPlan = serviceOfferingsObj[selectedServiceId]?.[selectedPlanId];
 
-  if (
-    isFetchingServiceOfferings ||
-    isFetchingSubscriptions ||
-    isFetchingSubscriptionRequests
-  ) {
+  if (isFetchingServiceOfferings || isFetchingSubscriptions || isFetchingSubscriptionRequests) {
     return <LoadingSpinner />;
   }
 
@@ -152,11 +136,7 @@ const ManageSubscriptionsForm = ({
             <FieldDescription>Select Service</FieldDescription>
           </div>
           <div className="col-span-4">
-            <Select
-              value={selectedServiceId}
-              onChange={(e) => setSelectedServiceId(e.target.value)}
-              sx={{ mt: 0 }}
-            >
+            <Select value={selectedServiceId} onChange={(e) => setSelectedServiceId(e.target.value)} sx={{ mt: 0 }}>
               {services.map((service: any) => (
                 <MenuItem key={service.serviceId} value={service.serviceId}>
                   {service.serviceName}
@@ -189,74 +169,66 @@ const ManageSubscriptionsForm = ({
                   const id = Object.values(res?.data || {}).join("");
 
                   if (id.startsWith("subr")) {
-                    snackbar.showSuccess(
-                      "Subscription Request sent successfully"
-                    );
+                    snackbar.showSuccess("Subscription Request sent successfully");
 
-                    queryClient.setQueryData(
-                      ["subscription-requests"],
-                      (oldData: any) => {
-                        return {
-                          ...oldData,
-                          data: {
-                            ids: [...(oldData.data.ids || []), id],
-                            subscriptionRequests: [
-                              ...(oldData.data.subscriptionRequests || []),
-                              {
-                                id,
-                                serviceId: plan.serviceId,
-                                serviceName: plan.serviceName,
-                                productTierId: plan.productTierID,
-                                productTierName: plan.productTierName,
-                                rootUserId: selectUser.id,
-                                rootUserEmail: selectUser.email,
-                                rootUserName: selectUser.name,
-                                status: "PENDING",
-                                createdAt: new Date().toISOString(),
-                                updatedAt: new Date().toISOString(),
-                                updatedByUserId: "",
-                                updatedByUserName: "",
-                              },
-                            ],
-                          },
-                        };
-                      }
-                    );
+                    queryClient.setQueryData(["subscription-requests"], (oldData: any) => {
+                      return {
+                        ...oldData,
+                        data: {
+                          ids: [...(oldData.data.ids || []), id],
+                          subscriptionRequests: [
+                            ...(oldData.data.subscriptionRequests || []),
+                            {
+                              id,
+                              serviceId: plan.serviceId,
+                              serviceName: plan.serviceName,
+                              productTierId: plan.productTierID,
+                              productTierName: plan.productTierName,
+                              rootUserId: selectUser.id,
+                              rootUserEmail: selectUser.email,
+                              rootUserName: selectUser.name,
+                              status: "PENDING",
+                              createdAt: new Date().toISOString(),
+                              updatedAt: new Date().toISOString(),
+                              updatedByUserId: "",
+                              updatedByUserName: "",
+                            },
+                          ],
+                        },
+                      };
+                    });
                   } else if (id.startsWith("sub")) {
                     snackbar.showSuccess("Subscribed successfully");
 
-                    queryClient.setQueryData(
-                      ["user-subscriptions"],
-                      (oldData: any) => {
-                        return {
-                          ...oldData,
-                          data: {
-                            ids: [...(oldData.data.ids || []), id],
-                            subscriptions: [
-                              ...(oldData.data.subscriptions || []),
-                              {
-                                id,
-                                rootUserId: selectUser.id,
-                                serviceId: plan.serviceId,
-                                productTierId: plan.productTierID,
-                                serviceOrgId: plan.serviceOrgId,
-                                serviceOrgName: plan.serviceProviderName,
-                                roleType: "root",
-                                createdAt: new Date().toISOString(),
-                                subscriptionOwnerName: selectUser.name,
-                                serviceName: plan.serviceName,
-                                serviceLogoURL: plan.serviceLogoURL,
-                                cloudProviderNames: plan.cloudProviders,
-                                defaultSubscription: false,
-                                productTierName: plan.productTierName,
-                                accountConfigIdentityId: selectUser.orgId,
-                                status: "ACTIVE",
-                              },
-                            ],
-                          },
-                        };
-                      }
-                    );
+                    queryClient.setQueryData(["user-subscriptions"], (oldData: any) => {
+                      return {
+                        ...oldData,
+                        data: {
+                          ids: [...(oldData.data.ids || []), id],
+                          subscriptions: [
+                            ...(oldData.data.subscriptions || []),
+                            {
+                              id,
+                              rootUserId: selectUser.id,
+                              serviceId: plan.serviceId,
+                              productTierId: plan.productTierID,
+                              serviceOrgId: plan.serviceOrgId,
+                              serviceOrgName: plan.serviceProviderName,
+                              roleType: "root",
+                              createdAt: new Date().toISOString(),
+                              subscriptionOwnerName: selectUser.name,
+                              serviceName: plan.serviceName,
+                              serviceLogoURL: plan.serviceLogoURL,
+                              cloudProviderNames: plan.cloudProviders,
+                              defaultSubscription: false,
+                              productTierName: plan.productTierName,
+                              accountConfigIdentityId: selectUser.orgId,
+                              status: "ACTIVE",
+                            },
+                          ],
+                        },
+                      };
+                    });
                   }
                 } catch (error) {
                   console.error(error);
@@ -281,9 +253,7 @@ const ManageSubscriptionsForm = ({
             return snackbar.showError("Please select a plan");
           }
           setSubscriptionIdToDelete(subscriptionsObj[selectedPlanId].id);
-          await unSubscribeMutation.mutateAsync(
-            subscriptionsObj[selectedPlanId].id
-          );
+          await unSubscribeMutation.mutateAsync(subscriptionsObj[selectedPlanId].id);
         }}
         confirmationText="unsubscribe"
         title="Unsubscribe Service"

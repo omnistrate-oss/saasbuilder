@@ -1,7 +1,9 @@
-import useServiceApiDocsData from "src/hooks/useServiceApiDocsData";
-import CardWithTitle from "../Card/CardWithTitle";
 // import SwaggerDocs from "../SwaggerDocs/SwaggerDocs";
 import dynamic from "next/dynamic";
+
+import useServiceApiDocsData from "src/hooks/useServiceApiDocsData";
+
+import CardWithTitle from "../Card/CardWithTitle";
 const SwaggerDocs = dynamic(() => import("../SwaggerDocs/SwaggerDocs"), {
   ssr: false,
 });
@@ -13,12 +15,8 @@ type APIDocumentationProps = {
   serviceAPIID: string;
 };
 
-const APIDocumentation: React.FC<APIDocumentationProps> = ({
-  serviceId,
-  serviceAPIID,
-}) => {
-  const { data: serviceAPIDocs, isFetching: isFetchingAPIDocs } =
-    useServiceApiDocsData(serviceId, serviceAPIID);
+const APIDocumentation: React.FC<APIDocumentationProps> = ({ serviceId, serviceAPIID }) => {
+  const { data: serviceAPIDocs, isFetching: isFetchingAPIDocs } = useServiceApiDocsData(serviceId, serviceAPIID);
 
   if (!serviceAPIID) return null;
 
@@ -27,10 +25,7 @@ const APIDocumentation: React.FC<APIDocumentationProps> = ({
       {isFetchingAPIDocs ? (
         <LoadingSpinner />
       ) : !serviceAPIDocs ? (
-        <div
-          className="flex items-center justify-center"
-          style={{ minHeight: "250px" }}
-        >
+        <div className="flex items-center justify-center" style={{ minHeight: "250px" }}>
           <Text size="medium" weight="semibold" sx={{ textAlign: "center" }}>
             API Documentation not available
           </Text>

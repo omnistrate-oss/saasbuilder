@@ -10,9 +10,5 @@ export default function EnvironmentTypeProvider(props) {
     setEnvironmentType(envType);
   }, [envType]);
 
-  return (
-    <EnvironmentTypeContext.Provider value={environmentType}>
-      {children}
-    </EnvironmentTypeContext.Provider>
-  );
+  return <EnvironmentTypeContext.Provider value={environmentType}>{children}</EnvironmentTypeContext.Provider>;
 }

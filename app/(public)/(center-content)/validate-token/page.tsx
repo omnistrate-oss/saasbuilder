@@ -1,15 +1,15 @@
 "use client";
 
-import Image from "next/image";
 import { useEffect } from "react";
-import { Stack, styled, Typography } from "@mui/material";
+import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
-
-import PageHeading from "components/NonDashboardComponents/PageHeading";
-import ValidateTokenImg from "public/assets/images/non-dashboard/validate-token-main.svg";
+import { Stack, styled, Typography } from "@mui/material";
 
 import axios from "src/axios";
 import useSnackbar from "src/hooks/useSnackbar";
+import PageHeading from "components/NonDashboardComponents/PageHeading";
+
+import ValidateTokenImg from "public/assets/images/non-dashboard/validate-token-main.svg";
 
 const StyledImage = styled(Image)({
   "@keyframes pulse": {
@@ -51,21 +51,10 @@ const ValidateTokenPage = () => {
 
   return (
     <>
-      <StyledImage
-        src={ValidateTokenImg}
-        alt="Validate Token"
-        width={300}
-        height={300}
-      />
+      <StyledImage src={ValidateTokenImg} alt="Validate Token" width={300} height={300} />
       <Stack gap="16px">
         <PageHeading>Just a moment!..</PageHeading>
-        <Typography
-          fontWeight="700"
-          fontSize="25px"
-          lineHeight="34px"
-          color="#111827"
-          textAlign="center"
-        >
+        <Typography fontWeight="700" fontSize="25px" lineHeight="34px" color="#111827" textAlign="center">
           {email && token
             ? "We're in the process of verifying your credentials..."
             : "Missing account activation details. Please check your email and click the confirmation link to retry"}

@@ -1,26 +1,29 @@
 "use client";
 
+import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
-import { useSelector } from "react-redux";
-import { Box, Stack } from "@mui/material";
 import ArrowOutwardIcon from "@mui/icons-material/ArrowOutward";
-import PageTitle from "../components/Layout/PageTitle";
+import { Box, Stack } from "@mui/material";
+import { useSelector } from "react-redux";
+
+import StatusChip from "src/components/StatusChip/StatusChip";
+import { selectUserrootData } from "src/slices/userDataSlice";
+import Button from "components/Button/Button";
+import Card from "components/Card/Card";
+import LoadingSpinner from "components/LoadingSpinner/LoadingSpinner";
+import { DisplayText, Text } from "components/Typography/Typography";
+
+import AccountManagementHeader from "../components/AccountManagement/AccountManagementHeader";
 import BillingIcon from "../components/Icons/BillingIcon";
 import PageContainer from "../components/Layout/PageContainer";
-import AccountManagementHeader from "../components/AccountManagement/AccountManagementHeader";
-import { selectUserrootData } from "src/slices/userDataSlice";
-import Card from "components/Card/Card";
-import Button from "components/Button/Button";
-import { DisplayText, Text } from "components/Typography/Typography";
-import LoadingSpinner from "components/LoadingSpinner/LoadingSpinner";
-import useBillingDetails from "./hooks/useBillingDetails";
+import PageTitle from "../components/Layout/PageTitle";
+
 import ConsumptionUsage from "./components/ConsumptionUsage";
 import InvoicesTable from "./components/InvoicesTable";
-import useConsumptionUsage from "./hooks/useConsumptionUsage";
-import StatusChip from "src/components/StatusChip/StatusChip";
-import useConsumptionInvoices from "./hooks/useConsumptionInvoices";
-import { useEffect, useMemo, useState } from "react";
+import useBillingDetails from "./hooks/useBillingDetails";
 import useBillingStatus from "./hooks/useBillingStatus";
+import useConsumptionInvoices from "./hooks/useConsumptionInvoices";
+import useConsumptionUsage from "./hooks/useConsumptionUsage";
 
 const BillingPage = () => {
   const selectUser = useSelector(selectUserrootData);

@@ -42,19 +42,7 @@ const Inner = styled("div", {
 }));
 
 function Container(props) {
-  const {
-    children,
-    bgImg,
-    bgColor,
-    mt,
-    mb,
-    pt,
-    pb,
-    maxWidth,
-    fontColor,
-    noBottomBorder = true,
-    ...restProps
-  } = props;
+  const { children, bgImg, bgColor, mt, mb, pt, pb, maxWidth, fontColor, noBottomBorder = true, ...restProps } = props;
 
   return (
     <Outer

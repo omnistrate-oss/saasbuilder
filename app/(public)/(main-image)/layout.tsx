@@ -1,8 +1,8 @@
 "use client";
 
 import Image from "next/image";
-import { Box } from "@mui/material";
 import { usePathname } from "next/navigation";
+import { Box } from "@mui/material";
 
 import Footer from "src/components/NonDashboardComponents/Footer";
 

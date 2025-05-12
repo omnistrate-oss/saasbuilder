@@ -1,15 +1,15 @@
 "use client";
 
 import { useMemo } from "react";
-import formatDateUTC from "src/utils/formatDateUTC";
 
-import StatusChip from "components/StatusChip/StatusChip";
+import formatDateUTC from "src/utils/formatDateUTC";
 import DetailsTable from "components/DetailsTable/DetailsTable";
 import GridCellExpand from "components/GridCellExpand/GridCellExpand";
-import ServicePlanDetails from "components/ServicePlanDetails/ServicePlanDetails";
-import ServiceNameWithLogo from "components/ServiceNameWithLogo/ServiceNameWithLogo";
 import SubscriptionTypeDirectIcon from "components/Icons/SubscriptionType/SubscriptionTypeDirectIcon";
 import SubscriptionTypeInvitedIcon from "components/Icons/SubscriptionType/SubscriptionTypeInvitedIcon";
+import ServiceNameWithLogo from "components/ServiceNameWithLogo/ServiceNameWithLogo";
+import ServicePlanDetails from "components/ServicePlanDetails/ServicePlanDetails";
+import StatusChip from "components/StatusChip/StatusChip";
 
 const SubscriptionDetails = ({ subscription, serviceOfferingsObj }) => {
   const columns = useMemo(
@@ -17,17 +17,13 @@ const SubscriptionDetails = ({ subscription, serviceOfferingsObj }) => {
       {
         title: "Service Name",
         content: (
-          <ServiceNameWithLogo
-            serviceName={subscription?.serviceName}
-            serviceLogoURL={subscription?.serviceLogoURL}
-          />
+          <ServiceNameWithLogo serviceName={subscription?.serviceName} serviceLogoURL={subscription?.serviceLogoURL} />
         ),
       },
       {
         title: "Role",
         content: subscription?.roleType
-          ? subscription.roleType.charAt(0).toUpperCase() +
-            subscription.roleType.slice(1)
+          ? subscription.roleType.charAt(0).toUpperCase() + subscription.roleType.slice(1)
           : "-",
       },
       {
@@ -40,9 +36,7 @@ const SubscriptionDetails = ({ subscription, serviceOfferingsObj }) => {
       },
       {
         title: "Subscription Date",
-        content: subscription?.createdAt
-          ? formatDateUTC(subscription.createdAt)
-          : "-",
+        content: subscription?.createdAt ? formatDateUTC(subscription.createdAt) : "-",
       },
       {
         title: "Subscription Owner",
@@ -50,11 +44,7 @@ const SubscriptionDetails = ({ subscription, serviceOfferingsObj }) => {
           <GridCellExpand
             value={subscription?.subscriptionOwnerName}
             startIcon={
-              subscription?.roleType === "root" ? (
-                <SubscriptionTypeDirectIcon />
-              ) : (
-                <SubscriptionTypeInvitedIcon />
-              )
+              subscription?.roleType === "root" ? <SubscriptionTypeDirectIcon /> : <SubscriptionTypeInvitedIcon />
             }
           />
         ),
@@ -64,8 +54,7 @@ const SubscriptionDetails = ({ subscription, serviceOfferingsObj }) => {
   );
 
   if (!subscription) return null;
-  const selectedPlan =
-    serviceOfferingsObj[subscription.serviceId]?.[subscription.productTierId];
+  const selectedPlan = serviceOfferingsObj[subscription.serviceId]?.[subscription.productTierId];
 
   return (
     <>

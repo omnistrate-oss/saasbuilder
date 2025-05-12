@@ -3,6 +3,7 @@
 import { Box, Stack } from "@mui/material";
 
 import Footer from "components/NonDashboardComponents/Footer";
+
 import BackgroundImg from "public/assets/images/non-dashboard/wave-background.svg";
 
 const CenterContentLayout = ({ children }) => {

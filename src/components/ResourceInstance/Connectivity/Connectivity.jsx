@@ -21,32 +21,31 @@ function Connectivity(props) {
   const primaryResourceEndpoint = globalEndpoints?.primary?.endpoint;
   const primaryResourcePorts = ports?.[0];
 
-  const [otherResourceFilteredPorts, otherResourceFilteredEndpoints] =
-    useMemo(() => {
-      const otherResourcePorts = ports?.slice(1) ?? [];
-      const otherEndpoints = globalEndpoints?.others;
+  const [otherResourceFilteredPorts, otherResourceFilteredEndpoints] = useMemo(() => {
+    const otherResourcePorts = ports?.slice(1) ?? [];
+    const otherEndpoints = globalEndpoints?.others;
 
-      const otherResourceFilteredPorts = [];
-      const otherResourceFilteredEndpoints = [];
+    const otherResourceFilteredPorts = [];
+    const otherResourceFilteredEndpoints = [];
 
-      otherEndpoints?.forEach((endpointData) => {
-        const { resourceName, endpoint } = endpointData;
-        if (resourceName && endpoint) {
-          const matchingResourcePort = otherResourcePorts.find(
-            (port) => port.resourceName === resourceName && port.ports
-          );
-          if (matchingResourcePort) {
-            // filter out omnistrate observability
-            if (resourceName === "Omnistrate Observability") {
-              return;
-            }
-            otherResourceFilteredPorts.push(matchingResourcePort);
-            otherResourceFilteredEndpoints.push(endpointData);
+    otherEndpoints?.forEach((endpointData) => {
+      const { resourceName, endpoint } = endpointData;
+      if (resourceName && endpoint) {
+        const matchingResourcePort = otherResourcePorts.find(
+          (port) => port.resourceName === resourceName && port.ports
+        );
+        if (matchingResourcePort) {
+          // filter out omnistrate observability
+          if (resourceName === "Omnistrate Observability") {
+            return;
           }
+          otherResourceFilteredPorts.push(matchingResourcePort);
+          otherResourceFilteredEndpoints.push(endpointData);
         }
-      });
-      return [otherResourceFilteredPorts, otherResourceFilteredEndpoints];
-    }, [ports, globalEndpoints]);
+      }
+    });
+    return [otherResourceFilteredPorts, otherResourceFilteredEndpoints];
+  }, [ports, globalEndpoints]);
 
   useEffect(() => {
     let availabilityZone = "";
@@ -84,13 +83,7 @@ function Connectivity(props) {
 
     if (otherResourceFilteredEndpoints?.length > 0) {
       otherResourceFilteredEndpoints.forEach(
-        ({
-          resourceName,
-          endpoint,
-          resourceId,
-          customDNSEndpoint,
-          publiclyAccessible,
-        }) => {
+        ({ resourceName, endpoint, resourceId, customDNSEndpoint, publiclyAccessible }) => {
           if (resourceName && endpoint && otherResourceFilteredPorts) {
             res.push(
               <ResourceConnectivityEndpoint
@@ -161,24 +154,14 @@ function Connectivity(props) {
     }
 
     return dataFields;
-  }, [
-    networkType,
-    availabilityZones,
-    publiclyAccessible,
-    privateNetworkCIDR,
-    privateNetworkId,
-  ]);
+  }, [networkType, availabilityZones, publiclyAccessible, privateNetworkCIDR, privateNetworkId]);
 
   useEffect(() => {
     refetchInstance();
   }, []);
 
   if (additionalEndpoints.some((el) => el.additionalEndpoints)) {
-    return (
-      <CLIManagedConnectivityDetails
-        additionalEndpoints={additionalEndpoints}
-      />
-    );
+    return <CLIManagedConnectivityDetails additionalEndpoints={additionalEndpoints} />;
   }
 
   return (

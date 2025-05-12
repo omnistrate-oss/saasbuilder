@@ -1,8 +1,8 @@
 import { request } from "@playwright/test";
 
-import { GlobalStateManager } from "./global-state-manager";
-
 import { Service } from "src/types/service";
+
+import { GlobalStateManager } from "./global-state-manager";
 
 export class ProviderAPIClient {
   baseURL = `${process.env.NEXT_PUBLIC_BACKEND_BASE_DOMAIN}`;

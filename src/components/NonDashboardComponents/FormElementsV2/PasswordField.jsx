@@ -6,14 +6,7 @@ import KeyIcon from "src/components/Icons/Key/KeyIcon";
 import { Text } from "src/components/Typography/Typography";
 
 const PasswordField = (props) => {
-  const {
-    disabled = false,
-    value,
-    dataCy,
-    showPasswordGenerator,
-    sx = {},
-    ...restProps
-  } = props;
+  const { disabled = false, value, dataCy, showPasswordGenerator, sx = {}, ...restProps } = props;
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
   return (

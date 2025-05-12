@@ -1,13 +1,7 @@
 import { colors } from "src/themeConfig";
 
 const RefreshIcon = (props) => {
-  const {
-    color = colors.gray600,
-    disabled,
-    width = 20,
-    height = 20,
-    ...restProps
-  } = props;
+  const { color = colors.gray600, disabled, width = 20, height = 20, ...restProps } = props;
 
   return (
     <svg

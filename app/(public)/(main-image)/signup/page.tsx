@@ -1,11 +1,12 @@
 import { Metadata } from "next";
 
-import SignupPage from "./components/SignupPage";
+import { getIdentityProvidersList } from "src/server/api/identity-provider";
+import { checkReCaptchaSetup } from "src/server/utils/checkReCaptchaSetup";
+import { getSaaSDomainURL } from "src/server/utils/getSaaSDomainURL";
+
 import { IDENTITY_PROVIDER_TYPES } from "../signin/constants";
 
-import { getSaaSDomainURL } from "src/server/utils/getSaaSDomainURL";
-import { checkReCaptchaSetup } from "src/server/utils/checkReCaptchaSetup";
-import { getIdentityProvidersList } from "src/server/api/identity-provider";
+import SignupPage from "./components/SignupPage";
 
 export const metadata: Metadata = {
   title: "Sign up",
@@ -18,18 +19,12 @@ const Page = async () => {
 
   const response = await getIdentityProvidersList();
   const providers = response.data.identityProviders || [];
-  const googleIDP = providers.find(
-    (provider) =>
-      provider.identityProviderName === IDENTITY_PROVIDER_TYPES.Google
-  );
+  const googleIDP = providers.find((provider) => provider.identityProviderName === IDENTITY_PROVIDER_TYPES.Google);
   if (googleIDP) {
     googleIdentityProvider = googleIDP;
   }
 
-  const githubIDP = providers.find(
-    (provider) =>
-      provider.identityProviderName === IDENTITY_PROVIDER_TYPES.GitHub
-  );
+  const githubIDP = providers.find((provider) => provider.identityProviderName === IDENTITY_PROVIDER_TYPES.GitHub);
   if (githubIDP) {
     githubIdentityProvider = githubIDP;
   }

@@ -1,9 +1,10 @@
-import { Stack, styled } from "@mui/material";
 import { FC, ReactElement } from "react";
-import { Text } from "src/components/Typography/Typography";
+import { Stack, styled } from "@mui/material";
 import MuiTooltip, { tooltipClasses } from "@mui/material/Tooltip";
-import { CloudProvider } from "src/types/common/enums";
+
+import { Text } from "src/components/Typography/Typography";
 import { cloudProviderLongLogoMap } from "src/constants/cloudProviders";
+import { CloudProvider } from "src/types/common/enums";
 
 type TooltipContentProps = {
   cloudProvider: CloudProvider;
@@ -57,13 +58,7 @@ const RegionTootlip: FC<TooltipContentProps> = (props) => {
       arrow
       placement="top"
       title={
-        <Stack
-          borderRadius="8px"
-          padding="12px 16px"
-          bgcolor="white"
-          alignItems="center"
-          gap="8px"
-        >
+        <Stack borderRadius="8px" padding="12px 16px" bgcolor="white" alignItems="center" gap="8px">
           {CloudProviderIcon}
           <Text size="xsmall" color="#344054">
             {region}

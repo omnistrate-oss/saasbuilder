@@ -25,25 +25,16 @@ const colors = [
   "#ffcfd2",
 ];
 
-export function getRegionHexColor(
-  cloudProvider: string,
-  region: string,
-  inUseProviderRegionsList: string[]
-) {
+export function getRegionHexColor(cloudProvider: string, region: string, inUseProviderRegionsList: string[]) {
   let resultColor = "";
   let regionColorHash: Record<string, string> = {};
 
   if (region && cloudProvider && inUseProviderRegionsList.length > 0) {
     const key = `${cloudProvider}-${region}`;
 
-    const regionColorHashString = localStorage.getItem(
-      "regionColorHash"
-    ) as LocalStorageRegionColorHash;
+    const regionColorHashString = localStorage.getItem("regionColorHash") as LocalStorageRegionColorHash;
     try {
-      if (
-        regionColorHashString &&
-        typeof JSON.parse(regionColorHashString) === "object"
-      ) {
+      if (regionColorHashString && typeof JSON.parse(regionColorHashString) === "object") {
         regionColorHash = JSON.parse(regionColorHashString);
 
         const usedColors = Object.values(regionColorHash);
@@ -60,16 +51,13 @@ export function getRegionHexColor(
           } else {
             //if not color is available, check if there is some region from which color can be unassigned. Unassign and use the first available color
             const setProviderRegionList = Object.keys(regionColorHash);
-            const unusedProviderRegions = setProviderRegionList.filter(
-              (providerRegion) => {
-                const match = inUseProviderRegionsList.find(
-                  (inUseProviderRegion) =>
-                    providerRegion === inUseProviderRegion
-                );
+            const unusedProviderRegions = setProviderRegionList.filter((providerRegion) => {
+              const match = inUseProviderRegionsList.find(
+                (inUseProviderRegion) => providerRegion === inUseProviderRegion
+              );
 
-                return !Boolean(match);
-              }
-            );
+              return !Boolean(match);
+            });
             if (unusedProviderRegions.length > 0) {
               resultColor = regionColorHash[unusedProviderRegions[0]];
 

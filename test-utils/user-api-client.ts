@@ -1,10 +1,10 @@
 import { request } from "@playwright/test";
 
-import { GlobalStateManager } from "./global-state-manager";
-
-import { Subscription } from "src/types/subscription";
-import { ServiceOffering } from "src/types/serviceOffering";
 import { CreateResourceInstancePayload, ResourceInstance } from "src/types/resourceInstance";
+import { ServiceOffering } from "src/types/serviceOffering";
+import { Subscription } from "src/types/subscription";
+
+import { GlobalStateManager } from "./global-state-manager";
 
 export class UserAPIClient {
   baseURL = `${process.env.NEXT_PUBLIC_BACKEND_BASE_DOMAIN}`;

@@ -2,17 +2,8 @@ import { FC } from "react";
 
 const NodeIcon: FC = (props) => {
   return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      width={38}
-      height={38}
-      fill="none"
-      {...props}
-    >
-      <path
-        fill="#F9F5FF"
-        d="M0 19C0 8.507 8.507 0 19 0s19 8.507 19 19-8.507 19-19 19S0 29.493 0 19Z"
-      />
+    <svg xmlns="http://www.w3.org/2000/svg" width={38} height={38} fill="none" {...props}>
+      <path fill="#F9F5FF" d="M0 19C0 8.507 8.507 0 19 0s19 8.507 19 19-8.507 19-19 19S0 29.493 0 19Z" />
       <path
         fill="#7F56D9"
         fillRule="evenodd"

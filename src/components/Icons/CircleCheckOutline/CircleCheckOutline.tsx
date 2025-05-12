@@ -1,14 +1,9 @@
 import { FC } from "react";
+
 import { SVGIconProps } from "src/types/common/generalTypes";
 
 const CircleCheckOutlineIcon: FC<SVGIconProps> = (props) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width={12}
-    height={12}
-    fill="none"
-    {...props}
-  >
+  <svg xmlns="http://www.w3.org/2000/svg" width={12} height={12} fill="none" {...props}>
     <g clipPath="url(#a)">
       <path
         stroke="#17B26A"

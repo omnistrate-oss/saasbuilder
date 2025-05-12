@@ -1,4 +1,5 @@
 import { Box, SxProps } from "@mui/material";
+
 import GridCellExpand from "../GridCellExpand/GridCellExpand";
 
 type ServiceNameWithLogoProps = {
@@ -41,10 +42,7 @@ const ServiceNameWithLogo: React.FC<ServiceNameWithLogoProps> = ({
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             style={{ objectFit: "cover", objectPosition: "center" }}
-            src={
-              serviceLogoURL ||
-              "/assets/images/dashboard/service/servicePlaceholder.png"
-            }
+            src={serviceLogoURL || "/assets/images/dashboard/service/servicePlaceholder.png"}
             alt={serviceName}
           />
         </Box>

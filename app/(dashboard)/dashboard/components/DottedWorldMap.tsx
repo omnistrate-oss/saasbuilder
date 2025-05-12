@@ -1,15 +1,18 @@
-import mapJSON from "../utils/map.json";
-import DottedMap from "dotted-map/without-countries";
 import { FC } from "react";
-import { CloudProvider } from "src/types/common/enums";
-import { getRegionCoordinates } from "../utils/getRegionCoordinates";
 import { Box, Stack } from "@mui/material";
-import SVGMap from "./Map";
+import DottedMap from "dotted-map/without-countries";
+
 import RippleCircle from "src/components/Ripple/Ripple";
-import RegionTootlip from "./RegionToolip";
-import { getRegionHexColor } from "../utils/getRegionColor";
-import LegendListItem from "./LegendListItem";
+import { CloudProvider } from "src/types/common/enums";
 import { getPercent } from "src/utils/calculatePercentage";
+
+import { getRegionHexColor } from "../utils/getRegionColor";
+import { getRegionCoordinates } from "../utils/getRegionCoordinates";
+import mapJSON from "../utils/map.json";
+
+import LegendListItem from "./LegendListItem";
+import SVGMap from "./Map";
+import RegionTootlip from "./RegionToolip";
 
 type DottedWorldMapProps = {
   regionsWithInstanceCount: {
@@ -25,8 +28,7 @@ const DottedWorldMap: FC<DottedWorldMapProps> = (props) => {
   const map = new DottedMap({ map: mapJSON });
 
   const inUseProviderRegions = regionsWithInstanceCount.map(
-    (regionsWithInstanceCount) =>
-      `${regionsWithInstanceCount.cloudProvider}-${regionsWithInstanceCount.region}`
+    (regionsWithInstanceCount) => `${regionsWithInstanceCount.cloudProvider}-${regionsWithInstanceCount.region}`
   );
 
   const totalInstanceCount = regionsWithInstanceCount.reduce((acc, curr) => {
@@ -45,21 +47,14 @@ const DottedWorldMap: FC<DottedWorldMapProps> = (props) => {
       <Box position="relative">
         <SVGMap>
           {regionsWithInstanceCount.map((location, index) => {
-            const coordinates = getRegionCoordinates(
-              location.cloudProvider,
-              location.region
-            );
+            const coordinates = getRegionCoordinates(location.cloudProvider, location.region);
             if (coordinates) {
               const pin = map.getPin({
                 lat: coordinates.latitude,
                 lng: coordinates.longitude,
               });
 
-              const colorRGBNumbers = getRegionHexColor(
-                location.cloudProvider,
-                location.region,
-                inUseProviderRegions
-              );
+              const colorRGBNumbers = getRegionHexColor(location.cloudProvider, location.region, inUseProviderRegions);
 
               return (
                 <>
@@ -74,10 +69,7 @@ const DottedWorldMap: FC<DottedWorldMapProps> = (props) => {
                       transform: "translate(-3px, -3px)",
                     }}
                   >
-                    <RegionTootlip
-                      cloudProvider={location.cloudProvider}
-                      region={location.region}
-                    >
+                    <RegionTootlip cloudProvider={location.cloudProvider} region={location.region}>
                       <Box
                         sx={{
                           transform: "translate(2px, 2px)",
@@ -87,11 +79,7 @@ const DottedWorldMap: FC<DottedWorldMapProps> = (props) => {
                           cursor: "pointer",
                         }}
                       >
-                        <RippleCircle
-                          size={2}
-                          colorHex={colorRGBNumbers}
-                          animationName={location.region}
-                        />
+                        <RippleCircle size={2} colorHex={colorRGBNumbers} animationName={location.region} />
                       </Box>
                     </RegionTootlip>
                   </foreignObject>
@@ -103,26 +91,13 @@ const DottedWorldMap: FC<DottedWorldMapProps> = (props) => {
           })}
         </SVGMap>
         {/* eslint-disable-next-line */}
-        <img
-          src={`data:image/svg+xml;utf8,${encodeURIComponent(svgMap)}`}
-          alt=""
-        />
+        <img src={`data:image/svg+xml;utf8,${encodeURIComponent(svgMap)}`} alt="" />
       </Box>
-      <Stack
-        direction="row"
-        justifyContent="center"
-        columnGap="58px"
-        rowGap="8px"
-        marginTop="48px"
-        flexWrap="wrap"
-      >
+      <Stack direction="row" justifyContent="center" columnGap="58px" rowGap="8px" marginTop="48px" flexWrap="wrap">
         {regionsWithInstanceCount.map((regionWithInstanceCount) => {
           let color;
 
-          if (
-            regionWithInstanceCount.cloudProvider &&
-            regionWithInstanceCount.region
-          ) {
+          if (regionWithInstanceCount.cloudProvider && regionWithInstanceCount.region) {
             color = getRegionHexColor(
               regionWithInstanceCount.cloudProvider,
               regionWithInstanceCount.region,
@@ -139,10 +114,7 @@ const DottedWorldMap: FC<DottedWorldMapProps> = (props) => {
               region={regionWithInstanceCount.region}
               color={color}
               numInstances={regionWithInstanceCount.instanceCount}
-              percent={getPercent(
-                regionWithInstanceCount.instanceCount,
-                totalInstanceCount
-              )}
+              percent={getPercent(regionWithInstanceCount.instanceCount, totalInstanceCount)}
             />
           );
         })}

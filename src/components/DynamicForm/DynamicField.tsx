@@ -2,9 +2,10 @@ import { FC } from "react";
 import { SxProps, Theme } from "@mui/material";
 
 import FieldLabel from "components/FormElements/FieldLabel/FieldLabel";
-import FieldError from "components/FormElementsv2/FieldError/FieldError";
 import FieldContainer from "components/FormElementsv2/FieldContainer/FieldContainer";
 import FieldDescription from "components/FormElementsv2/FieldDescription/FieldDescription";
+import FieldError from "components/FormElementsv2/FieldError/FieldError";
+
 import {
   MultiSelectAutocomplete,
   PasswordInput,

@@ -1,11 +1,12 @@
 import { FC } from "react";
+import { SelectChangeEvent, Stack, styled } from "@mui/material";
 import MuiMenuItem, { menuItemClasses } from "@mui/material/MenuItem";
-import Select from "src/components/FormElementsv2/Select/Select";
-import { EventType } from "src/types/event";
+
 import Checkbox from "src/components/Checkbox/Checkbox";
 import EventTypeChip from "src/components/EventsTable/EventTypeChip";
-import { SelectChangeEvent, Stack, styled } from "@mui/material";
+import Select from "src/components/FormElementsv2/Select/Select";
 import { SetState } from "src/types/common/reactGenerics";
+import { EventType } from "src/types/event";
 
 const MenuItem = styled(MuiMenuItem)({
   borderRadius: 6,
@@ -33,11 +34,7 @@ type DropdownProps = {
 };
 
 const AuditLogsEventFilterDropdown: FC<DropdownProps> = (props) => {
-  const {
-    selectedEventTypes,
-    setSelectedEventTypes,
-    filterEventTypes = ["Customer", "Infra", "Maintenance"],
-  } = props;
+  const { selectedEventTypes, setSelectedEventTypes, filterEventTypes = ["Customer", "Infra", "Maintenance"] } = props;
 
   const handleChange = (event: SelectChangeEvent<string>) => {
     const {

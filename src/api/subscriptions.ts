@@ -1,6 +1,8 @@
 import { AxiosResponse } from "axios";
-import axios from "../axios";
+
 import { ListSubscriptionsSuccessResponse } from "src/types/subscription";
+
+import axios from "../axios";
 
 export const getSubscriptionIds = (orgId) => {
   return axios.get(`/subscription/org/${orgId}`);
@@ -20,9 +22,7 @@ export const createSubscriptions = (payload, ignoreError = false) => {
   });
 };
 
-export const getSubscriptions = (
-  params = {}
-): Promise<AxiosResponse<ListSubscriptionsSuccessResponse>> => {
+export const getSubscriptions = (params = {}): Promise<AxiosResponse<ListSubscriptionsSuccessResponse>> => {
   return axios.get(`/subscription`, {
     params,
   });

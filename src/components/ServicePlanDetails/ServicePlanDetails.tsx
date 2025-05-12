@@ -1,26 +1,20 @@
 "use client";
 
 import { useState } from "react";
-import DOMPurify from "isomorphic-dompurify";
 import { Tab, Tabs } from "@mui/material";
-
-import CardWithTitle from "../Card/CardWithTitle";
-import APIDocumentation from "../APIDocumentation/APIDocumentation";
-import LoadingSpinnerSmall from "../CircularProgress/CircularProgress";
+import DOMPurify from "isomorphic-dompurify";
 
 import useDownloadCLI from "src/hooks/useDownloadCLI";
-import { ServiceOffering } from "src/types/serviceOffering";
-import Button from "../Button/Button";
-import DownloadCLIIcon from "../Icons/DownloadCLI/DownloadCLIIcon";
 import { colors } from "src/themeConfig";
+import { ServiceOffering } from "src/types/serviceOffering";
 
-type CurrentTab =
-  | "plan-details"
-  | "documentation"
-  | "pricing"
-  | "support"
-  | "api-documentation"
-  | "download-cli";
+import APIDocumentation from "../APIDocumentation/APIDocumentation";
+import Button from "../Button/Button";
+import CardWithTitle from "../Card/CardWithTitle";
+import LoadingSpinnerSmall from "../CircularProgress/CircularProgress";
+import DownloadCLIIcon from "../Icons/DownloadCLI/DownloadCLIIcon";
+
+type CurrentTab = "plan-details" | "documentation" | "pricing" | "support" | "api-documentation" | "download-cli";
 
 type ServicePlanDetailsProps = {
   serviceOffering?: ServiceOffering;
@@ -35,10 +29,7 @@ const tabLabels = {
   "api-documentation": "API Documentation",
 };
 
-const ServicePlanDetails: React.FC<ServicePlanDetailsProps> = ({
-  serviceOffering,
-  startingTab = "plan-details",
-}) => {
+const ServicePlanDetails: React.FC<ServicePlanDetailsProps> = ({ serviceOffering, startingTab = "plan-details" }) => {
   const { downloadCLI, isDownloading } = useDownloadCLI();
   const [currentTab, setCurrentTab] = useState<CurrentTab>(startingTab);
 
@@ -59,10 +50,7 @@ const ServicePlanDetails: React.FC<ServicePlanDetailsProps> = ({
   );
 
   return (
-    <CardWithTitle
-      title={serviceOffering.productTierName}
-      actionButton={actionButton}
-    >
+    <CardWithTitle title={serviceOffering.productTierName} actionButton={actionButton}>
       <Tabs
         value={currentTab}
         centered
@@ -98,13 +86,8 @@ const ServicePlanDetails: React.FC<ServicePlanDetailsProps> = ({
         ))}
       </Tabs>
 
-      {["plan-details", "documentation", "pricing", "support"].includes(
-        currentTab
-      ) && (
-        <CardWithTitle
-          title={tabLabels[currentTab]}
-          style={{ minHeight: "500px" }}
-        >
+      {["plan-details", "documentation", "pricing", "support"].includes(currentTab) && (
+        <CardWithTitle title={tabLabels[currentTab]} style={{ minHeight: "500px" }}>
           <div className="ql-snow">
             <div
               className={"ql-editor"}
@@ -129,10 +112,7 @@ const ServicePlanDetails: React.FC<ServicePlanDetailsProps> = ({
       )}
 
       {currentTab === "api-documentation" && (
-        <APIDocumentation
-          serviceId={serviceOffering.serviceId}
-          serviceAPIID={serviceOffering.serviceAPIID}
-        />
+        <APIDocumentation serviceId={serviceOffering.serviceId} serviceAPIID={serviceOffering.serviceAPIID} />
       )}
     </CardWithTitle>
   );

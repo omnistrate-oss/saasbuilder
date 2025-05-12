@@ -4,10 +4,7 @@ const ReChartContainer = (props) => {
   const { height = 300, sx = {}, children, ...restProps } = props;
 
   return (
-    <Box
-      sx={{ width: "100%", height: height, position: "relative", ...sx }}
-      {...restProps}
-    >
+    <Box sx={{ width: "100%", height: height, position: "relative", ...sx }} {...restProps}>
       <Box
         sx={{
           width: "100%",

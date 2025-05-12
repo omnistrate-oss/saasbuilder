@@ -7,13 +7,9 @@ function ProviderFavicon() {
 
   useEffect(() => {
     if (providerOrgDetails && providerOrgDetails.providerOrgFaviconURL) {
-      const providerFaviconLinkElement =
-        document.getElementById("provider-favicon");
+      const providerFaviconLinkElement = document.getElementById("provider-favicon");
       if (providerFaviconLinkElement) {
-        providerFaviconLinkElement.setAttribute(
-          "href",
-          providerOrgDetails.providerOrgFaviconURL
-        );
+        providerFaviconLinkElement.setAttribute("href", providerOrgDetails.providerOrgFaviconURL);
       }
     }
   }, [providerOrgDetails]);

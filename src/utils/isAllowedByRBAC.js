@@ -332,10 +332,10 @@ function getEnumFromUserRoleString(role) {
 }
 
 export {
+  getEnumFromUserRoleString,
+  isOperationAllowedByRBAC,
+  isPermittedByRBAC,
   operationEnum,
   roleEnum,
   viewEnum,
-  isOperationAllowedByRBAC,
-  isPermittedByRBAC,
-  getEnumFromUserRoleString,
 };

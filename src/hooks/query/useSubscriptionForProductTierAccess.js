@@ -1,4 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
+
 import { getSubscriptions, listSubscriptions } from "src/api/subscriptions";
 import {
   checkSubscriptionIsForProductTier,

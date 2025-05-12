@@ -10,15 +10,11 @@ async function verifyRecaptchaToken(token: string) {
   let isVerified = false;
 
   try {
-    const googleAPIResponse = await axios.post(
-      "https://www.google.com/recaptcha/api/siteverify",
-      formData,
-      {
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
-        },
-      }
-    );
+    const googleAPIResponse = await axios.post("https://www.google.com/recaptcha/api/siteverify", formData, {
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+    });
     // console.log("Google Response", googleAPIResponse.data);
     if (googleAPIResponse?.data?.success === true) isVerified = true;
     else isVerified = false;

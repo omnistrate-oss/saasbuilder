@@ -16,8 +16,7 @@ const StyledForm = styled(Form)({
   transform: "translateX(50%) translateY(-50%)",
   background: "white",
   borderRadius: "12px",
-  boxShadow:
-    "0px 8px 8px -4px rgba(16, 24, 40, 0.03), 0px 20px 24px -4px rgba(16, 24, 40, 0.08)",
+  boxShadow: "0px 8px 8px -4px rgba(16, 24, 40, 0.03), 0px 20px 24px -4px rgba(16, 24, 40, 0.08)",
   padding: "24px",
   width: "100%",
   maxWidth: "550px",
@@ -73,14 +72,7 @@ const ListItemIcon = styled(Box)({
 });
 
 const ArrowBullet = (props) => (
-  <svg
-    width={24}
-    height={24}
-    viewBox="0 0 24 24"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-    {...props}
-  >
+  <svg width={24} height={24} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
     <path
       fillRule="evenodd"
       clipRule="evenodd"
@@ -98,65 +90,40 @@ const DeleteInstructions = ({ accountInstructionDetails }) => {
           <Text size="small" weight="semibold" color="#374151">
             AWS Account ID
           </Text>
-          <TextContainerToCopy
-            text={accountInstructionDetails?.awsAccountID}
-            marginTop="6px"
-          />
+          <TextContainerToCopy text={accountInstructionDetails?.awsAccountID} marginTop="6px" />
         </Box>
       )}
 
       {accountInstructionDetails?.gcpProjectID && (
-        <Stack
-          direction={"row"}
-          alignItems={"flex-start"}
-          gap="12px"
-          marginBottom={"20px"}
-        >
+        <Stack direction={"row"} alignItems={"flex-start"} gap="12px" marginBottom={"20px"}>
           <Box flex={1} maxWidth={"50%"}>
             <Text size="small" weight="semibold" color="#374151">
               GCP Project ID
             </Text>
-            <TextContainerToCopy
-              text={accountInstructionDetails?.gcpProjectID}
-              marginTop="6px"
-            />
+            <TextContainerToCopy text={accountInstructionDetails?.gcpProjectID} marginTop="6px" />
           </Box>
           <Box flex={1} maxWidth={"50%"}>
             <Text size="small" weight="semibold" color="#374151">
               GCP Project Number
             </Text>
-            <TextContainerToCopy
-              text={accountInstructionDetails?.gcpProjectNumber}
-              marginTop="6px"
-            />
+            <TextContainerToCopy text={accountInstructionDetails?.gcpProjectNumber} marginTop="6px" />
           </Box>
         </Stack>
       )}
 
       {accountInstructionDetails?.azureSubscriptionID && (
-        <Stack
-          direction={"row"}
-          alignItems={"flex-start"}
-          gap="12px"
-          marginBottom={"20px"}
-        >
+        <Stack direction={"row"} alignItems={"flex-start"} gap="12px" marginBottom={"20px"}>
           <Box flex={1} maxWidth={"50%"}>
             <Text size="small" weight="semibold" color="#374151">
               Azure Subscription ID
             </Text>
-            <TextContainerToCopy
-              text={accountInstructionDetails?.azureSubscriptionID}
-              marginTop="6px"
-            />
+            <TextContainerToCopy text={accountInstructionDetails?.azureSubscriptionID} marginTop="6px" />
           </Box>
           <Box flex={1} maxWidth={"50%"}>
             <Text size="small" weight="semibold" color="#374151">
               Azure Tenant ID
             </Text>
-            <TextContainerToCopy
-              text={accountInstructionDetails?.azureTenantID}
-              marginTop="6px"
-            />
+            <TextContainerToCopy text={accountInstructionDetails?.azureTenantID} marginTop="6px" />
           </Box>
         </Stack>
       )}
@@ -172,9 +139,8 @@ const DeleteInstructions = ({ accountInstructionDetails }) => {
           </ListItemIcon>
 
           <Text size="medium" weight="regular" color="#374151">
-            To off-board this cloud account, first delete this cloud account
-            instance. If this cloud account is used for other services, delete
-            those cloud account instances too before proceeding to the next step
+            To off-board this cloud account, first delete this cloud account instance. If this cloud account is used for
+            other services, delete those cloud account instances too before proceeding to the next step
           </Text>
         </ListItem>
         {accountInstructionDetails?.awsAccountID && (
@@ -214,14 +180,11 @@ const DeleteInstructions = ({ accountInstructionDetails }) => {
                 >
                   Google Cloud Shell
                 </StyledLink>
-                . Once the terminal is open, execute the following command to
-                complete the off-boarding process and revoke our access.
+                . Once the terminal is open, execute the following command to complete the off-boarding process and
+                revoke our access.
               </Text>
               {accountInstructionDetails?.gcpOffboardCommand && (
-                <TextContainerToCopy
-                  text={accountInstructionDetails?.gcpOffboardCommand}
-                  marginTop="12px"
-                />
+                <TextContainerToCopy text={accountInstructionDetails?.gcpOffboardCommand} marginTop="12px" />
               )}
             </Box>
           </ListItem>
@@ -237,22 +200,15 @@ const DeleteInstructions = ({ accountInstructionDetails }) => {
               <Text size="medium" weight="regular" color="#374151">
                 {/* <b>Using GCP Cloud Shell:</b>  */}
                 Open the Azure Cloud Shell environment using the following link{" "}
-                <StyledLink
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  href="https://portal.azure.com/#cloudshell/"
-                >
+                <StyledLink target="_blank" rel="noopener noreferrer" href="https://portal.azure.com/#cloudshell/">
                   Azure Cloud Shell
                 </StyledLink>
-                . Once the terminal is open, execute the following command to
-                complete the off-boarding process and revoke our access.
+                . Once the terminal is open, execute the following command to complete the off-boarding process and
+                revoke our access.
               </Text>
 
               {accountInstructionDetails?.azureOffboardCommand && (
-                <TextContainerToCopy
-                  text={accountInstructionDetails?.azureOffboardCommand}
-                  marginTop="12px"
-                />
+                <TextContainerToCopy text={accountInstructionDetails?.azureOffboardCommand} marginTop="12px" />
               )}
             </Box>
           </ListItem>
@@ -312,17 +268,9 @@ function DeleteAccountConfigConfirmationDialog(props) {
           </IconButton>
         </Header>
         <Content>
-          <DeleteInstructions
-            accountInstructionDetails={accountInstructionDetails}
-          />
+          <DeleteInstructions accountInstructionDetails={accountInstructionDetails} />
 
-          <Text
-            size="small"
-            weight="medium"
-            color="#344054"
-            mt="9px"
-            dangerouslySetInnerHTML={{ __html: message }}
-          />
+          <Text size="small" weight="medium" color="#344054" mt="9px" dangerouslySetInnerHTML={{ __html: message }} />
           <TextField
             id="deleteme"
             name="deleteme"

@@ -1,22 +1,21 @@
-import FieldContainer from "../FormElementsv2/FieldContainer/FieldContainer";
-import FieldTitle from "../FormElementsv2/FieldTitle/FieldTitle";
-import DateSelectComponent from "./DateSelectComponent";
-import FieldError from "../FormElementsv2/FieldError/FieldError";
-import { Box } from "@mui/material";
-import TimeSelectComponent from "./TimeSelectComponent";
-import FieldDescription from "../FormElementsv2/FieldDescription/FieldDescription";
 import { FC } from "react";
+import { Box } from "@mui/material";
+
 import AlertText from "../AlertText/AlertText";
+import FieldContainer from "../FormElementsv2/FieldContainer/FieldContainer";
+import FieldDescription from "../FormElementsv2/FieldDescription/FieldDescription";
+import FieldError from "../FormElementsv2/FieldError/FieldError";
+import FieldTitle from "../FormElementsv2/FieldTitle/FieldTitle";
+
+import DateSelectComponent from "./DateSelectComponent";
+import TimeSelectComponent from "./TimeSelectComponent";
 
 type ResourceInstanceDateTimeProps = {
   formData: any;
   earliestRestoreTime: string;
 };
 
-const RestoreInstanceDateTime: FC<ResourceInstanceDateTimeProps> = ({
-  formData,
-  earliestRestoreTime,
-}) => {
+const RestoreInstanceDateTime: FC<ResourceInstanceDateTimeProps> = ({ formData, earliestRestoreTime }) => {
   const { errors, touched } = formData;
 
   return (
@@ -35,17 +34,13 @@ const RestoreInstanceDateTime: FC<ResourceInstanceDateTimeProps> = ({
         <FieldDescription sx={{ marginBottom: "6px" }}>
           Specify the exact time to restore your instance
         </FieldDescription>
-        <TimeSelectComponent
-          formData={formData}
-          earliestRestoreTime={earliestRestoreTime}
-        />
+        <TimeSelectComponent formData={formData} earliestRestoreTime={earliestRestoreTime} />
       </FieldContainer>
 
       <Box sx={{ marginTop: "48px" }}>
         <AlertText>
-          <strong>Note : </strong> Creating a new instance from a backup may
-          take a few minutes. However this process will not affect your current
-          instance.
+          <strong>Note : </strong> Creating a new instance from a backup may take a few minutes. However this process
+          will not affect your current instance.
         </AlertText>
       </Box>
     </Box>

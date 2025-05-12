@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
+
 import { getConsumptionInvoices } from "src/api/consumption";
 
 dayjs.extend(utc);
@@ -17,8 +18,7 @@ function useConsumptionInvoices() {
         const dueDate = invoice.dueDate;
         let isPastDueDate = false;
         if (dueDate && status) {
-          isPastDueDate =
-            status === "open" && dayjs.utc().isAfter(dayjs.utc(dueDate));
+          isPastDueDate = status === "open" && dayjs.utc().isAfter(dayjs.utc(dueDate));
         }
         const invoiceCopy = { ...invoice };
         if (isPastDueDate) {

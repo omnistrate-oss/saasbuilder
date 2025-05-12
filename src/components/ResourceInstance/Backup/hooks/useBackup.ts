@@ -1,10 +1,8 @@
-import {
-  useQuery,
-  UseQueryResult,
-  UseQueryOptions,
-} from "@tanstack/react-query";
+import { useQuery, UseQueryOptions,UseQueryResult } from "@tanstack/react-query";
 import { AxiosResponse } from "axios";
+
 import { getInstanceRestoreAccess } from "src/api/resourceInstance";
+
 import { accessQueryParams } from "../Backup";
 
 type QueryParams = {
@@ -31,11 +29,7 @@ export type RestoreResponse = AccessSnapshot;
 
 function useBackup(
   queryParams: QueryParams = {},
-  queryOptions: UseQueryOptions<
-    AxiosResponse<{ snapshots: RestoreResponse[] }>,
-    unknown,
-    RestoreResponse[]
-  > = {}
+  queryOptions: UseQueryOptions<AxiosResponse<{ snapshots: RestoreResponse[] }>, unknown, RestoreResponse[]> = {}
 ) {
   const { instanceId, accessQueryParams, isEnable } = queryParams;
 

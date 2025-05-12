@@ -50,8 +50,7 @@ const StyledAutoComplete = styled(MuiAutocomplete, {
   },
   ".MuiOutlinedInput-root.Mui-error.Mui-focused": {
     [`& .MuiOutlinedInput-notchedOutline`]: {
-      boxShadow:
-        "0px 0px 0px 4px #FEE4E2, 0px 1px 2px 0px rgba(16, 24, 40, 0.05)",
+      boxShadow: "0px 0px 0px 4px #FEE4E2, 0px 1px 2px 0px rgba(16, 24, 40, 0.05)",
     },
   },
   ".MuiOutlinedInput-root.Mui-disabled": {
@@ -125,22 +124,13 @@ const StyledDoneIcon = styled(DoneIcon)(({ theme }) => ({
 // Example: if option is of format {label:"string", value:"string"}, then to display label in options and tags getOptionLabel = (option)=>option.label;
 
 function Autocomplete(props) {
-  const {
-    marginTop = "6px",
-    placeholder,
-    getOptionLabel = (option) => option,
-    disabled,
-    error,
-    ...restProps
-  } = props;
+  const { marginTop = "6px", placeholder, getOptionLabel = (option) => option, disabled, error, ...restProps } = props;
   return (
     <StyledAutoComplete
       marginTop={marginTop}
       getOptionLabel={getOptionLabel}
       disabled={disabled}
-      renderInput={(params) => (
-        <StyledTextField {...params} placeholder={placeholder} error={error} />
-      )}
+      renderInput={(params) => <StyledTextField {...params} placeholder={placeholder} error={error} />}
       renderTags={(value, getTagProps) =>
         value.map((option, index) => (
           <StyledTag
@@ -156,9 +146,7 @@ function Autocomplete(props) {
       renderOption={(props, option) => {
         return (
           <StyledListOption {...props}>
-            <StyledListOptionText>
-              {getOptionLabel(option)}
-            </StyledListOptionText>
+            <StyledListOptionText>{getOptionLabel(option)}</StyledListOptionText>
             {props["aria-selected"] && <StyledDoneIcon />}
           </StyledListOption>
         );

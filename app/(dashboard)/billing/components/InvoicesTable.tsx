@@ -1,14 +1,15 @@
-import { createColumnHelper } from "@tanstack/react-table";
-import { Invoice } from "src/types/consumption";
-import DataTable from "src/components/DataTable/DataTable";
 import { FC, useMemo } from "react";
-import { Text } from "src/components/Typography/Typography";
+import { createColumnHelper } from "@tanstack/react-table";
+import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
+
+import DataTable from "src/components/DataTable/DataTable";
 import GridCellExpand from "src/components/GridCellExpand/GridCellExpand";
 import InvoiceIcon from "src/components/Icons/Invoice/Invoice";
 import StatusChip from "src/components/StatusChip/StatusChip";
+import { Text } from "src/components/Typography/Typography";
 import { getInvoiceStatusStylesAndLabel } from "src/constants/statusChipStyles/invoiceStatus";
-import dayjs from "dayjs";
-import utc from "dayjs/plugin/utc";
+import { Invoice } from "src/types/consumption";
 
 dayjs.extend(utc);
 
@@ -109,9 +110,7 @@ const InvoicesTable: FC<InvoicesTableProps> = ({ invoices = [] }) => {
         cell: (data) => {
           const status = data.row.original.invoiceStatus;
 
-          return (
-            <StatusChip {...getInvoiceStatusStylesAndLabel(status as string)} />
-          );
+          return <StatusChip {...getInvoiceStatusStylesAndLabel(status as string)} />;
         },
       }),
       columnHelper.accessor("totalAmount", {
@@ -119,8 +118,7 @@ const InvoicesTable: FC<InvoicesTableProps> = ({ invoices = [] }) => {
         header: "Total Amount (USD)",
         cell: (data) => {
           const totalAmount = data.row.original.totalAmount;
-          let formattedAmount: string =
-            totalAmount !== undefined ? totalAmount?.toString() : "";
+          let formattedAmount: string = totalAmount !== undefined ? totalAmount?.toString() : "";
           if (totalAmount !== undefined) {
             formattedAmount = totalAmount?.toFixed(2);
           }

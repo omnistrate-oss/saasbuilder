@@ -1,13 +1,7 @@
 import * as React from "react";
 
 const SubscriptionsIcon = (props) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width={14}
-    height={16}
-    fill="none"
-    {...props}
-  >
+  <svg xmlns="http://www.w3.org/2000/svg" width={14} height={16} fill="none" {...props}>
     <path
       stroke="#344054"
       strokeLinecap="round"

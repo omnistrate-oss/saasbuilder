@@ -1,13 +1,5 @@
 import React from "react";
-import {
-  Area,
-  AreaChart,
-  CartesianGrid,
-  ResponsiveContainer,
-  Tooltip,
-  XAxis,
-  YAxis,
-} from "recharts";
+import { Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import ReChartContainer from "../../ReChartContainer/ReChartContainer";
 
 function LoadAverageChart(props) {

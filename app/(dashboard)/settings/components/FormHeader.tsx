@@ -1,4 +1,5 @@
 import React from "react";
+
 import { Text } from "src/components/Typography/Typography";
 
 type FormHeaderProps = {
@@ -6,11 +7,7 @@ type FormHeaderProps = {
   description: string;
 } & React.HTMLAttributes<HTMLDivElement>;
 
-const FormHeader: React.FC<FormHeaderProps> = ({
-  title,
-  description,
-  ...otherProps
-}) => {
+const FormHeader: React.FC<FormHeaderProps> = ({ title, description, ...otherProps }) => {
   return (
     <div {...otherProps}>
       <Text size="large" weight="semibold" color="#181D27">

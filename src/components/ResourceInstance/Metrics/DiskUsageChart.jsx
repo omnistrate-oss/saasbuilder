@@ -1,14 +1,5 @@
 import React from "react";
-import {
-  Area,
-  AreaChart,
-  CartesianGrid,
-  Legend,
-  ResponsiveContainer,
-  Tooltip,
-  XAxis,
-  YAxis,
-} from "recharts";
+import { Area, AreaChart, CartesianGrid, Legend, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import ReChartContainer from "../../ReChartContainer/ReChartContainer";
 import lineChartColorPalette from "../../../utils/constants/lineChartColorPalette";
 

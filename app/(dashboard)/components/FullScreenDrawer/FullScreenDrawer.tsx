@@ -1,6 +1,7 @@
 import React from "react";
 import { Dialog, Slide } from "@mui/material";
 import { TransitionProps } from "@mui/material/transitions";
+
 import FullScreenDrawerNavbar from "./FullScreenDrawerNavbar";
 
 const Transition = React.forwardRef(function Transition(
@@ -20,13 +21,7 @@ type FullScreenDrawerProps = {
   description?: string;
 };
 
-const FullScreenDrawer: React.FC<FullScreenDrawerProps> = ({
-  open,
-  closeDrawer,
-  RenderUI,
-  title,
-  description,
-}) => {
+const FullScreenDrawer: React.FC<FullScreenDrawerProps> = ({ open, closeDrawer, RenderUI, title, description }) => {
   return (
     <Dialog
       fullScreen
@@ -40,14 +35,8 @@ const FullScreenDrawer: React.FC<FullScreenDrawerProps> = ({
         },
       }}
     >
-      <FullScreenDrawerNavbar
-        title={title}
-        description={description}
-        closeDrawer={closeDrawer}
-      />
-      <div className="px-4 pt-6 py-20 max-w-[84rem] w-full mx-auto">
-        {RenderUI}
-      </div>
+      <FullScreenDrawerNavbar title={title} description={description} closeDrawer={closeDrawer} />
+      <div className="px-4 pt-6 py-20 max-w-[84rem] w-full mx-auto">{RenderUI}</div>
     </Dialog>
   );
 };

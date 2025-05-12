@@ -1,11 +1,5 @@
 const FlagWithBackground = () => (
-  <svg
-    width={52}
-    height={53}
-    viewBox="0 0 52 53"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-  >
+  <svg width={52} height={53} viewBox="0 0 52 53" fill="none" xmlns="http://www.w3.org/2000/svg">
     <g filter="url(#filter0_dii_10108_1692)">
       <path
         d="M2 11.5439C2 6.0211 6.47715 1.54395 12 1.54395H40C45.5229 1.54395 50 6.0211 50 11.5439V39.5439C50 45.0668 45.5228 49.5439 40 49.5439H12C6.47715 49.5439 2 45.0668 2 39.5439V11.5439Z"
@@ -44,21 +38,9 @@ const FlagWithBackground = () => (
         <feOffset dy={1} />
         <feGaussianBlur stdDeviation={1} />
         <feComposite in2="hardAlpha" operator="out" />
-        <feColorMatrix
-          type="matrix"
-          values="0 0 0 0 0.0392157 0 0 0 0 0.0496732 0 0 0 0 0.0705882 0 0 0 0.05 0"
-        />
-        <feBlend
-          mode="normal"
-          in2="BackgroundImageFix"
-          result="effect1_dropShadow_10108_1692"
-        />
-        <feBlend
-          mode="normal"
-          in="SourceGraphic"
-          in2="effect1_dropShadow_10108_1692"
-          result="shape"
-        />
+        <feColorMatrix type="matrix" values="0 0 0 0 0.0392157 0 0 0 0 0.0496732 0 0 0 0 0.0705882 0 0 0 0.05 0" />
+        <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_10108_1692" />
+        <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_10108_1692" result="shape" />
         <feColorMatrix
           in="SourceAlpha"
           type="matrix"
@@ -67,38 +49,19 @@ const FlagWithBackground = () => (
         />
         <feOffset dy={-2} />
         <feComposite in2="hardAlpha" operator="arithmetic" k2={-1} k3={1} />
-        <feColorMatrix
-          type="matrix"
-          values="0 0 0 0 0.0392157 0 0 0 0 0.0496732 0 0 0 0 0.0705882 0 0 0 0.05 0"
-        />
-        <feBlend
-          mode="normal"
-          in2="shape"
-          result="effect2_innerShadow_10108_1692"
-        />
+        <feColorMatrix type="matrix" values="0 0 0 0 0.0392157 0 0 0 0 0.0496732 0 0 0 0 0.0705882 0 0 0 0.05 0" />
+        <feBlend mode="normal" in2="shape" result="effect2_innerShadow_10108_1692" />
         <feColorMatrix
           in="SourceAlpha"
           type="matrix"
           values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
           result="hardAlpha"
         />
-        <feMorphology
-          radius={1}
-          operator="erode"
-          in="SourceAlpha"
-          result="effect3_innerShadow_10108_1692"
-        />
+        <feMorphology radius={1} operator="erode" in="SourceAlpha" result="effect3_innerShadow_10108_1692" />
         <feOffset />
         <feComposite in2="hardAlpha" operator="arithmetic" k2={-1} k3={1} />
-        <feColorMatrix
-          type="matrix"
-          values="0 0 0 0 0.0392157 0 0 0 0 0.0496732 0 0 0 0 0.0705882 0 0 0 0.18 0"
-        />
-        <feBlend
-          mode="normal"
-          in2="effect2_innerShadow_10108_1692"
-          result="effect3_innerShadow_10108_1692"
-        />
+        <feColorMatrix type="matrix" values="0 0 0 0 0.0392157 0 0 0 0 0.0496732 0 0 0 0 0.0705882 0 0 0 0.18 0" />
+        <feBlend mode="normal" in2="effect2_innerShadow_10108_1692" result="effect3_innerShadow_10108_1692" />
       </filter>
       <linearGradient
         id="paint0_linear_10108_1692"

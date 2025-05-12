@@ -1,8 +1,10 @@
-import { FC, useState, useEffect, useRef } from "react";
-import { IconButton, InputAdornment } from "@mui/material";
-import SearchLens from "components/Icons/SearchLens/SearchLens";
-import TextField from "components/FormElementsv2/TextField/TextField";
+import { FC, useEffect, useRef,useState } from "react";
 import ClearIcon from "@mui/icons-material/Clear";
+import { IconButton, InputAdornment } from "@mui/material";
+
+import TextField from "components/FormElementsv2/TextField/TextField";
+import SearchLens from "components/Icons/SearchLens/SearchLens";
+
 import Tooltip from "../Tooltip/Tooltip";
 
 type SearchInputProps = {
@@ -12,12 +14,7 @@ type SearchInputProps = {
   width?: string;
 };
 
-const SearchInput: FC<SearchInputProps> = ({
-  placeholder,
-  searchText,
-  setSearchText,
-  width = "250px",
-}) => {
+const SearchInput: FC<SearchInputProps> = ({ placeholder, searchText, setSearchText, width = "250px" }) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const searchRef = useRef<HTMLInputElement>(null); // Reference for the TextField input
@@ -41,11 +38,7 @@ const SearchInput: FC<SearchInputProps> = ({
   // Close on outside click if searchText is empty
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (
-        containerRef.current &&
-        !containerRef.current.contains(event.target as Node) &&
-        !searchText
-      ) {
+      if (containerRef.current && !containerRef.current.contains(event.target as Node) && !searchText) {
         setIsExpanded(false);
       }
     };
@@ -57,10 +50,7 @@ const SearchInput: FC<SearchInputProps> = ({
   }, [searchText, containerRef]);
 
   return (
-    <div
-      ref={containerRef}
-      style={{ position: "relative", display: "inline-block" }}
-    >
+    <div ref={containerRef} style={{ position: "relative", display: "inline-block" }}>
       <TextField
         data-testid="search-input"
         inputRef={searchRef} // Attach the ref to the TextField

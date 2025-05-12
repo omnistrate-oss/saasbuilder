@@ -1,14 +1,5 @@
 import React from "react";
-import {
-  Area,
-  AreaChart,
-  CartesianGrid,
-  Legend,
-  ResponsiveContainer,
-  Tooltip,
-  XAxis,
-  YAxis,
-} from "recharts";
+import { Area, AreaChart, CartesianGrid, Legend, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import ReChartContainer from "../../ReChartContainer/ReChartContainer";
 import lineChartColorPalette from "../../../utils/constants/lineChartColorPalette";
 
@@ -32,16 +23,10 @@ function NetworkThroughputChart(props) {
           <XAxis dataKey="time" tickFormatter={() => ""} tickLine={false} />
           <YAxis
             tickFormatter={(value) => `${value} MiB/s`}
-            domain={([, datamax]) => [
-              0,
-              datamax > 0 ? Math.round(datamax + 1) : 1,
-            ]}
+            domain={([, datamax]) => [0, datamax > 0 ? Math.round(datamax + 1) : 1]}
             style={{ fontSize: 14 }}
           />
-          <Tooltip
-            isAnimationActive={false}
-            formatter={(value) => `${value} MiB/s`}
-          />
+          <Tooltip isAnimationActive={false} formatter={(value) => `${value} MiB/s`} />
           <Legend />
           {labels.map((labelName, index) => {
             return (

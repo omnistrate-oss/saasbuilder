@@ -1,11 +1,11 @@
-import Tooltip from "src/components/Tooltip/Tooltip";
-import Select from "src/components/FormElementsv2/Select/Select";
-import MenuItem from "src/components/FormElementsv2/MenuItem/MenuItem";
 import { Field } from "src/components/DynamicForm/types";
-import { Subscription } from "src/types/subscription";
+import MenuItem from "src/components/FormElementsv2/MenuItem/MenuItem";
+import Select from "src/components/FormElementsv2/Select/Select";
 import SubscriptionTypeDirectIcon from "src/components/Icons/SubscriptionType/SubscriptionTypeDirectIcon";
 import SubscriptionTypeInvitedIcon from "src/components/Icons/SubscriptionType/SubscriptionTypeInvitedIcon";
+import Tooltip from "src/components/Tooltip/Tooltip";
 import { Text } from "src/components/Typography/Typography";
+import { Subscription } from "src/types/subscription";
 
 type SubscriptionMenuProps = {
   formData: any;
@@ -44,12 +44,9 @@ const SubscriptionMenu: React.FC<SubscriptionMenuProps> = ({
     >
       {subscriptions?.length > 0 ? (
         subscriptions.map((subscription) => {
-          const isQuotaLimitReached = !isCloudAccountForm &&
-          subscriptionQuotaLimitHash[subscription.id] || false;
+          const isQuotaLimitReached = (!isCloudAccountForm && subscriptionQuotaLimitHash[subscription.id]) || false;
 
-          const isDisabled =
-            !["editor", "root"].includes(subscription.roleType) ||
-            isQuotaLimitReached;
+          const isDisabled = !["editor", "root"].includes(subscription.roleType) || isQuotaLimitReached;
 
           let disabledMessage = "";
           if (isQuotaLimitReached) {
@@ -62,19 +59,10 @@ const SubscriptionMenu: React.FC<SubscriptionMenuProps> = ({
           const role = subscription.roleType;
 
           const menuItem = (
-            <MenuItem
-              key={subscription.id}
-              value={subscription.id}
-              disabled={isDisabled}
-            >
+            <MenuItem key={subscription.id} value={subscription.id} disabled={isDisabled}>
               <div className="flex items-center gap-2">
-                {role === "root" ? (
-                  <SubscriptionTypeDirectIcon />
-                ) : (
-                  <SubscriptionTypeInvitedIcon />
-                )}
-                {subscription.id} (
-                {role && role.charAt(0).toUpperCase() + role.slice(1)})
+                {role === "root" ? <SubscriptionTypeDirectIcon /> : <SubscriptionTypeInvitedIcon />}
+                {subscription.id} ({role && role.charAt(0).toUpperCase() + role.slice(1)})
                 {isDisabled && (
                   <Text size="small" weight="regular" color="#DC6803">
                     {" "}
@@ -87,11 +75,7 @@ const SubscriptionMenu: React.FC<SubscriptionMenuProps> = ({
 
           if (isDisabled && disabledMessage) {
             return (
-              <Tooltip
-                title={disabledMessage}
-                key={subscription.id}
-                placement="top"
-              >
+              <Tooltip title={disabledMessage} key={subscription.id} placement="top">
                 <span>{menuItem}</span>
               </Tooltip>
             );

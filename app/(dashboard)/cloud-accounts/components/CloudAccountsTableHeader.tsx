@@ -1,14 +1,13 @@
 import AddIcon from "@mui/icons-material/Add";
-
-import Button from "components/Button/Button";
-import DeleteIcon from "components/Icons/Delete/Delete";
-import SearchInput from "components/DataGrid/SearchInput";
-import DataGridHeaderTitle from "components/Headers/DataGridHeaderTitle";
-import RefreshWithToolTip from "components/RefreshWithTooltip/RefreshWithToolTip";
-
 import { CircularProgress } from "@mui/material";
+
 import ConnectIcon from "src/components/Icons/Connect/Connect";
 import DisconnectIcon from "src/components/Icons/Disconnect/Disconnect";
+import Button from "components/Button/Button";
+import SearchInput from "components/DataGrid/SearchInput";
+import DataGridHeaderTitle from "components/Headers/DataGridHeaderTitle";
+import DeleteIcon from "components/Icons/Delete/Delete";
+import RefreshWithToolTip from "components/RefreshWithTooltip/RefreshWithToolTip";
 
 const CloudAccountsTableHeader = ({
   count,
@@ -37,12 +36,7 @@ const CloudAccountsTableHeader = ({
   const isDeleting = selectedInstance?.status === "DELETING";
 
   const isDisconnectDisabled =
-    !selectedInstance ||
-    isAttaching ||
-    isConnecting ||
-    isDisconnected ||
-    isDeploying ||
-    !isOnPremCopilot;
+    !selectedInstance || isAttaching || isConnecting || isDisconnected || isDeploying || !isOnPremCopilot;
 
   const isConnectDisabled =
     !selectedInstance ||
@@ -99,19 +93,10 @@ const CloudAccountsTableHeader = ({
       />
 
       <div className="flex items-center gap-4">
-        <div className="flex items-center mr-6">
-          {isFetchingInstances && <CircularProgress size={20} />}
-        </div>
+        <div className="flex items-center mr-6">{isFetchingInstances && <CircularProgress size={20} />}</div>
 
-        <SearchInput
-          placeholder="Search by ID"
-          searchText={searchText}
-          setSearchText={setSearchText}
-        />
-        <RefreshWithToolTip
-          refetch={refetchInstances}
-          disabled={isFetchingInstances}
-        />
+        <SearchInput placeholder="Search by ID" searchText={searchText} setSearchText={setSearchText} />
+        <RefreshWithToolTip refetch={refetchInstances} disabled={isFetchingInstances} />
 
         <Button
           data-testid="delete-button"
@@ -143,12 +128,7 @@ const CloudAccountsTableHeader = ({
         >
           Connect
         </Button>
-        <Button
-          data-testid="create-button"
-          variant="contained"
-          onClick={onCreateClick}
-          startIcon={<AddIcon />}
-        >
+        <Button data-testid="create-button" variant="contained" onClick={onCreateClick} startIcon={<AddIcon />}>
           Create
         </Button>
       </div>

@@ -1,12 +1,13 @@
-import Cookies from "js-cookie";
 import { useEffect } from "react";
-import { useDispatch } from "react-redux";
 import { usePathname, useRouter } from "next/navigation";
 import { useQueryClient } from "@tanstack/react-query";
+import Cookies from "js-cookie";
+import { useDispatch } from "react-redux";
+
+import { logoutBroadcastChannel } from "src/broadcastChannel";
+import { initialiseUserData } from "src/slices/userDataSlice";
 
 import axios from "../axios";
-import { initialiseUserData } from "src/slices/userDataSlice";
-import { logoutBroadcastChannel } from "src/broadcastChannel";
 
 function useLogout() {
   const router = useRouter();

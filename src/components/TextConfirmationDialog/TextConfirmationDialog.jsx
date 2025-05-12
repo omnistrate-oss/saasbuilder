@@ -85,11 +85,7 @@ const TextConfirmationDialog = (props) => {
     >
       <Form onSubmit={formData.handleSubmit}>
         <DialogTitle>
-          <Stack
-            direction="row"
-            alignItems="center"
-            justifyContent="space-between"
-          >
+          <Stack direction="row" alignItems="center" justifyContent="space-between">
             <Stack direction="row" alignItems="center" gap="16px">
               <IconComponent />
               <Text size="large" weight="bold">
@@ -105,13 +101,7 @@ const TextConfirmationDialog = (props) => {
           <Text size="medium" weight="semibold" mt="20px">
             {subtitle}
           </Text>
-          <Text
-            size="small"
-            weight="medium"
-            color="#344054"
-            mt="9px"
-            dangerouslySetInnerHTML={{ __html: message }}
-          />
+          <Text size="small" weight="medium" color="#344054" mt="9px" dangerouslySetInnerHTML={{ __html: message }} />
           <TextField
             id="confirmationText"
             name="confirmationText"
@@ -127,12 +117,7 @@ const TextConfirmationDialog = (props) => {
           />
         </DialogContent>
         <DialogActions>
-          <Button
-            variant="outlined"
-            size="large"
-            disabled={isLoading}
-            onClick={handleClose}
-          >
+          <Button variant="outlined" size="large" disabled={isLoading} onClick={handleClose}>
             Cancel
           </Button>
           <Button

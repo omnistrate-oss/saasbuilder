@@ -1,22 +1,24 @@
 import { FC, ReactNode } from "react";
+import Link from "next/link";
+import ChevronRightIcon from "@mui/icons-material/ChevronRight";
+import { Box, Stack, styled } from "@mui/material";
+import _ from "lodash";
+
+import { CLI_MANAGED_RESOURCES } from "src/constants/resource";
+import { chipCategoryColors } from "src/constants/statusChipStyles";
+import { getResourceInstanceChipStylesAndLabel } from "src/constants/statusChipStyles/resourceInstanceHealthStatus";
 import {
   InstanceComputedHealthStatus,
-  ResourceInstanceNode,
   ResourceInstanceNetworkTopology,
+  ResourceInstanceNode,
   ResourceNetworkTopologyAdditionalEndpoint,
 } from "src/types/resourceInstance";
-import StatusChip from "../StatusChip/StatusChip";
-import { getResourceInstanceChipStylesAndLabel } from "src/constants/statusChipStyles/resourceInstanceHealthStatus";
+
 import AlertTriangle from "../Icons/AlertTriangle/AlertTriangle";
-import { chipCategoryColors } from "src/constants/statusChipStyles";
-import { BlackTooltip } from "../Tooltip/Tooltip";
-import { Box, Stack, styled } from "@mui/material";
 import CircleCheckOutlineIcon from "../Icons/CircleCheckOutline/CircleCheckOutline";
+import StatusChip from "../StatusChip/StatusChip";
+import { BlackTooltip } from "../Tooltip/Tooltip";
 import { Text } from "../Typography/Typography";
-import ChevronRightIcon from "@mui/icons-material/ChevronRight";
-import Link from "next/link";
-import { CLI_MANAGED_RESOURCES } from "src/constants/resource";
-import _ from "lodash";
 
 function getInstanceNodes(detailedNetworkTopology: Record<string, ResourceInstanceNetworkTopology> = {}) {
   let nodes: ResourceInstanceNode[] = [];

@@ -44,8 +44,7 @@ const DataGrid = styled(
 )(({ enableSelectAll = false }) => ({
   borderRadius: "12px",
   background: "white",
-  boxShadow:
-    "0px 1px 3px rgba(16, 24, 40, 0.1), 0px 1px 2px rgba(16, 24, 40, 0.06)",
+  boxShadow: "0px 1px 3px rgba(16, 24, 40, 0.1), 0px 1px 2px rgba(16, 24, 40, 0.06)",
   border: "1px solid #EAECF0",
   "& .MuiDataGrid-main": {
     minHeight: "540px",
@@ -102,11 +101,7 @@ const DataGrid = styled(
 }));
 
 // Utility method to select one particular row in the data grid
-export function selectSingleItem(
-  newSelection,
-  selectionModel,
-  selectionModelSetter
-) {
+export function selectSingleItem(newSelection, selectionModel, selectionModelSetter) {
   if (newSelection.length > 0) {
     const selectionSet = new Set(selectionModel);
     const newSelectedItem = newSelection.filter((s) => !selectionSet.has(s));

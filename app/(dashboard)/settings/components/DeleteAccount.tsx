@@ -1,16 +1,18 @@
-import { styled } from "@mui/material";
 import { useState } from "react";
-import Button from "src/components/Button/Button";
-import { Text } from "src/components/Typography/Typography";
-import { useProviderOrgDetails } from "src/providers/ProviderOrgDetailsProvider";
-import DeleteAccountConfigConfirmationDialog from "./DeleteAccountConfirmationDialog";
+import { styled } from "@mui/material";
 import { useMutation } from "@tanstack/react-query";
+import useInstances from "app/(dashboard)/instances/hooks/useInstances";
+
 import { deleteUser } from "src/api/users";
+import Button from "src/components/Button/Button";
+import LoadingSpinner from "src/components/LoadingSpinner/LoadingSpinner";
+import Tooltip from "src/components/Tooltip/Tooltip";
+import { Text } from "src/components/Typography/Typography";
 import useLogout from "src/hooks/useLogout";
 import useSnackbar from "src/hooks/useSnackbar";
-import useInstances from "app/(dashboard)/instances/hooks/useInstances";
-import Tooltip from "src/components/Tooltip/Tooltip";
-import LoadingSpinner from "src/components/LoadingSpinner/LoadingSpinner";
+import { useProviderOrgDetails } from "src/providers/ProviderOrgDetailsProvider";
+
+import DeleteAccountConfigConfirmationDialog from "./DeleteAccountConfirmationDialog";
 
 const List = styled("ul")({
   listStyleType: "disc",
@@ -32,8 +34,7 @@ function DeleteAccount() {
   const { handleLogout } = useLogout();
   const snackbar = useSnackbar();
 
-  const { data: instances = [], isLoading: isLoadingInstances } =
-    useInstances();
+  const { data: instances = [], isLoading: isLoadingInstances } = useInstances();
 
   function handleDialogOpen() {
     setConfirmationDialogOpen(true);
@@ -52,9 +53,7 @@ function DeleteAccount() {
         handleLogout();
       },
       onError: () => {
-        snackbar.showError(
-          "Failed to delete your account. Please try again or contact support"
-        );
+        snackbar.showError("Failed to delete your account. Please try again or contact support");
       },
     }
   );
@@ -68,12 +67,7 @@ function DeleteAccount() {
           <Text size="large" weight="semibold" color="#181D27">
             Delete Account
           </Text>
-          <Text
-            size="small"
-            weight="regular"
-            color="#535862"
-            sx={{ marginTop: "2px" }}
-          >
+          <Text size="small" weight="regular" color="#535862" sx={{ marginTop: "2px" }}>
             Permanently delete your account and associated data from {orgName}
           </Text>
         </div>
@@ -82,17 +76,10 @@ function DeleteAccount() {
             <Text size="medium" weight="medium" color="#181D27">
               Delete Account
             </Text>
-            <Text
-              size="medium"
-              weight="regular"
-              color="#535862"
-              sx={{ marginTop: "12px" }}
-            >
+            <Text size="medium" weight="regular" color="#535862" sx={{ marginTop: "12px" }}>
               Upon deletion, the following data will be permanently removed:
               <List sx={{ marginTop: "20px" }}>
-                <ListItem>
-                  Your profile information (name, email, login credentials)
-                </ListItem>
+                <ListItem>Your profile information (name, email, login credentials)</ListItem>
                 <ListItem>Access tokens, and CLI configurations </ListItem>
                 <ListItem>Activity logs associated with your account</ListItem>
               </List>
@@ -103,10 +90,7 @@ function DeleteAccount() {
               </Text>
               <List sx={{ marginTop: "12px" }}>
                 <ListItem>This action is irreversible.</ListItem>
-                <ListItem>
-                  You will lose access to {orgName} subscriptions immediately
-                  after deletion.
-                </ListItem>
+                <ListItem>You will lose access to {orgName} subscriptions immediately after deletion.</ListItem>
               </List>
             </div>
           </div>

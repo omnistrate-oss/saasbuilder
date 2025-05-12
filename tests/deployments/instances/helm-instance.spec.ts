@@ -1,5 +1,4 @@
 import test from "@playwright/test";
-
 import { InstancesPage } from "page-objects/instances-page";
 import { GlobalStateManager } from "test-utils/global-state-manager";
 // import { InstanceDetailsPage } from "page-objects/instance-details-page";

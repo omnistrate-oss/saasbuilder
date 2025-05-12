@@ -1,4 +1,5 @@
 import { Page } from "@playwright/test";
+
 import { getSigninRoute } from "src/utils/routes";
 
 export class SigninPage {

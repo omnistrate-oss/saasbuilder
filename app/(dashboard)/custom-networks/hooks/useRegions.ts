@@ -1,4 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
+
 import { getCloudProviders } from "src/api/cloudProvider";
 import { getRegionById, getRegions } from "src/api/region";
 
@@ -7,9 +8,7 @@ const useRegions = (queryOptions = {}) => {
     ["cloud-regions"],
     async () => {
       const cloudProvidersRes = await getCloudProviders();
-      const cloudProviders: string[] = cloudProvidersRes?.data?.map(
-        (cloudProvider) => cloudProvider?.name
-      );
+      const cloudProviders: string[] = cloudProvidersRes?.data?.map((cloudProvider) => cloudProvider?.name);
       const res: any[] = [];
 
       const regionIds: string[] = [];
@@ -17,8 +16,7 @@ const useRegions = (queryOptions = {}) => {
       await Promise.all(
         cloudProviders?.map((cloud) =>
           getRegions(cloud).then((regionsRes) => {
-            if (regionsRes.data.ids?.length)
-              regionIds.push(...regionsRes.data.ids);
+            if (regionsRes.data.ids?.length) regionIds.push(...regionsRes.data.ids);
           })
         )
       );

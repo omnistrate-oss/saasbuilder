@@ -1,36 +1,24 @@
 "use client";
 
-import {
-  getServiceMenuItems,
-  getServicePlanMenuItems,
-} from "app/(dashboard)/instances/utils";
 import { useEffect, useMemo, useState } from "react";
-
-import CardWithTitle from "components/Card/CardWithTitle";
-import Select from "components/FormElementsv2/Select/Select";
-import MenuItem from "components/FormElementsv2/MenuItem/MenuItem";
-import LoadingSpinner from "components/LoadingSpinner/LoadingSpinner";
-import FieldLabel from "components/FormElements/FieldLabel/FieldLabel";
-import ServicePlanDetails from "components/ServicePlanDetails/ServicePlanDetails";
-import FieldDescription from "components/FormElementsv2/FieldDescription/FieldDescription";
+import { getServiceMenuItems, getServicePlanMenuItems } from "app/(dashboard)/instances/utils";
 
 import { useGlobalData } from "src/providers/GlobalDataProvider";
+import CardWithTitle from "components/Card/CardWithTitle";
+import FieldLabel from "components/FormElements/FieldLabel/FieldLabel";
+import FieldDescription from "components/FormElementsv2/FieldDescription/FieldDescription";
+import MenuItem from "components/FormElementsv2/MenuItem/MenuItem";
+import Select from "components/FormElementsv2/Select/Select";
+import LoadingSpinner from "components/LoadingSpinner/LoadingSpinner";
+import ServicePlanDetails from "components/ServicePlanDetails/ServicePlanDetails";
 
 const PlanDetails = ({ startingTab }) => {
-  const { serviceOfferings, serviceOfferingsObj, isFetchingServiceOfferings } =
-    useGlobalData();
+  const { serviceOfferings, serviceOfferingsObj, isFetchingServiceOfferings } = useGlobalData();
 
-  const serviceMenuItems = useMemo(
-    () => getServiceMenuItems(serviceOfferings),
-    [serviceOfferings]
-  );
+  const serviceMenuItems = useMemo(() => getServiceMenuItems(serviceOfferings), [serviceOfferings]);
 
-  const [selectedServiceId, setSelectedServiceId] = useState(
-    serviceOfferings?.[0]?.serviceId || ""
-  );
-  const [selectedPlanId, setSelectedPlanId] = useState(
-    serviceOfferings?.[0]?.productTierID || ""
-  );
+  const [selectedServiceId, setSelectedServiceId] = useState(serviceOfferings?.[0]?.serviceId || "");
+  const [selectedPlanId, setSelectedPlanId] = useState(serviceOfferings?.[0]?.productTierID || "");
 
   const servicePlanMenuItems = useMemo(
     () => getServicePlanMenuItems(serviceOfferings, selectedServiceId),
@@ -50,12 +38,7 @@ const PlanDetails = ({ startingTab }) => {
     if (planIds?.length && !planIds?.includes(selectedPlanId)) {
       setSelectedPlanId(planIds[0]);
     }
-  }, [
-    serviceOfferings,
-    selectedServiceId,
-    serviceOfferingsObj,
-    selectedPlanId,
-  ]);
+  }, [serviceOfferings, selectedServiceId, serviceOfferingsObj, selectedPlanId]);
 
   const selectedPlan = serviceOfferingsObj[selectedServiceId]?.[selectedPlanId];
 
@@ -70,22 +53,13 @@ const PlanDetails = ({ startingTab }) => {
               <FieldLabel required sx={{ color: "#414651", fontWeight: "600" }}>
                 Service Name
               </FieldLabel>
-              <FieldDescription sx={{ mt: 0, color: "#535862" }}>
-                Select the service
-              </FieldDescription>
+              <FieldDescription sx={{ mt: 0, color: "#535862" }}>Select the service</FieldDescription>
             </div>
 
-            <Select
-              value={selectedServiceId}
-              onChange={(e) => setSelectedServiceId(e.target.value)}
-              sx={{ mt: 0 }}
-            >
+            <Select value={selectedServiceId} onChange={(e) => setSelectedServiceId(e.target.value)} sx={{ mt: 0 }}>
               {serviceMenuItems?.length ? (
                 serviceMenuItems.map((item) => (
-                  <MenuItem
-                    key={item.value as string}
-                    value={item.value as string}
-                  >
+                  <MenuItem key={item.value as string} value={item.value as string}>
                     {item.label}
                   </MenuItem>
                 ))
@@ -102,22 +76,13 @@ const PlanDetails = ({ startingTab }) => {
               <FieldLabel required sx={{ color: "#414651", fontWeight: "600" }}>
                 Subscription Plan
               </FieldLabel>
-              <FieldDescription sx={{ mt: 0, color: "#535862" }}>
-                Select the subscription plan
-              </FieldDescription>
+              <FieldDescription sx={{ mt: 0, color: "#535862" }}>Select the subscription plan</FieldDescription>
             </div>
 
-            <Select
-              value={selectedPlanId}
-              onChange={(e) => setSelectedPlanId(e.target.value)}
-              sx={{ mt: 0 }}
-            >
+            <Select value={selectedPlanId} onChange={(e) => setSelectedPlanId(e.target.value)} sx={{ mt: 0 }}>
               {servicePlanMenuItems?.length ? (
                 servicePlanMenuItems.map((item) => (
-                  <MenuItem
-                    key={item.value as string}
-                    value={item.value as string}
-                  >
+                  <MenuItem key={item.value as string} value={item.value as string}>
                     {item.label}
                   </MenuItem>
                 ))
@@ -131,10 +96,7 @@ const PlanDetails = ({ startingTab }) => {
         </div>
       </CardWithTitle>
 
-      <ServicePlanDetails
-        serviceOffering={selectedPlan}
-        startingTab={startingTab}
-      />
+      <ServicePlanDetails serviceOffering={selectedPlan} startingTab={startingTab} />
     </div>
   );
 };

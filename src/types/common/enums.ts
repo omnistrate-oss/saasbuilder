@@ -2,19 +2,10 @@ export type CloudProvider = "aws" | "gcp" | "azure";
 
 export type FormMode = "view" | "modify" | "create" | "delete";
 
-export type ResourceType =
-  | "OperatorCRD"
-  | "Kustomize"
-  | "HelmChart"
-  | "Terraform"
-  | "PortsBasedProxy";
+export type ResourceType = "OperatorCRD" | "Kustomize" | "HelmChart" | "Terraform" | "PortsBasedProxy";
 
 // Network Types
-export type NetworkType =
-  | "PUBLIC"
-  | "PRIVATE_VPC_PEERING"
-  | "PRIVATE_LINK"
-  | "INTERNAL";
+export type NetworkType = "PUBLIC" | "PRIVATE_VPC_PEERING" | "PRIVATE_LINK" | "INTERNAL";
 
 export type InstanceStatus =
   | "FAILED"
@@ -30,10 +21,4 @@ export type InstanceStatus =
   | "DELETING"
   | "UNKNOWN";
 
-export type EnvironmentType =
-  | "DEV"
-  | "PROD"
-  | "CANARY"
-  | "QA"
-  | "STAGING"
-  | "PRIVATE";
+export type EnvironmentType = "DEV" | "PROD" | "CANARY" | "QA" | "STAGING" | "PRIVATE";

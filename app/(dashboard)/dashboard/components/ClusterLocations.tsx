@@ -1,9 +1,10 @@
-import { Box, Stack, styled } from "@mui/material";
 import { FC } from "react";
+import dynamic from "next/dynamic";
+import { Box, Stack, styled } from "@mui/material";
+
 import ClusterLocationsIcon from "src/components/Icons/Dashboard/ClusterLocations";
 import { Text } from "src/components/Typography/Typography";
 import { ResourceInstance } from "src/types/resourceInstance";
-import dynamic from "next/dynamic";
 const DottedWorldMap = dynamic(() => import("./DottedWorldMap"), {
   ssr: false,
 });
@@ -53,8 +54,7 @@ const ClusterLocations: FC<ClusterLocationsProps> = (props) => {
       //check if instance of type cloud provider account and set cloud provider
       if (
         resultParams &&
-        ((resultParams.gcp_project_id && resultParams.gcp_project_number) ||
-          resultParams.aws_account_id)
+        ((resultParams.gcp_project_id && resultParams.gcp_project_number) || resultParams.aws_account_id)
       ) {
         if (resultParams.gcp_project_id) {
           cloudProvider = "gcp";
@@ -85,23 +85,17 @@ const ClusterLocations: FC<ClusterLocationsProps> = (props) => {
     {}
   );
 
-  const regionsWithInstanceCount = Object.entries(
-    regionProviderInstancesHash
-  ).map(([, { instanceCount, cloudProvider, region }]) => ({
-    region,
-    instanceCount,
-    cloudProvider,
-  }));
+  const regionsWithInstanceCount = Object.entries(regionProviderInstancesHash).map(
+    ([, { instanceCount, cloudProvider, region }]) => ({
+      region,
+      instanceCount,
+      cloudProvider,
+    })
+  );
 
   return (
     <ContainerCard>
-      <Stack
-        paddingBottom="20px"
-        borderBottom="1px solid #E4E7EC"
-        direction="row"
-        alignItems="center"
-        gap="16px"
-      >
+      <Stack paddingBottom="20px" borderBottom="1px solid #E4E7EC" direction="row" alignItems="center" gap="16px">
         <ClusterLocationsIcon />
         <Text size="large" weight="semibold">
           Cluster Locations

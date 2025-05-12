@@ -1,5 +1,6 @@
-import UsageDimensionIcon from "app/(dashboard)/components/Icons/UsageDimension";
 import { FC } from "react";
+import UsageDimensionIcon from "app/(dashboard)/components/Icons/UsageDimension";
+
 import { Text } from "src/components/Typography/Typography";
 import { UsageDimension } from "src/types/consumption";
 

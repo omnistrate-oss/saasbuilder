@@ -1,8 +1,4 @@
-import {
-  DialogContent,
-  DialogFooter,
-  DialogHeader,
-} from "../Dialog/InformationDialogTopCenter";
+import { DialogContent, DialogFooter, DialogHeader } from "../Dialog/InformationDialogTopCenter";
 import { Box, IconButton, Stack } from "@mui/material";
 import { Text } from "../Typography/Typography";
 import Button from "../Button/Button";
@@ -14,12 +10,7 @@ function RestoreInstanceSuccessStep({ handleClose, restoredInstanceID }) {
   return (
     <>
       <DialogHeader>
-        <Stack
-          direction={"row"}
-          justifyContent={"flex-start"}
-          alignItems={"center"}
-          gap="8px"
-        >
+        <Stack direction={"row"} justifyContent={"flex-start"} alignItems={"center"} gap="8px">
           <Box sx={{ flexShrink: 0 }}>
             <SuccessIcon />
           </Box>
@@ -55,14 +46,9 @@ function RestoreInstanceSuccessStep({ handleClose, restoredInstanceID }) {
             {restoredInstanceID && <CopyButton text={restoredInstanceID} />}
           </Text>
 
-          <Text
-            size="small"
-            weight="medium"
-            color="#344054"
-            sx={{ marginTop: "24px" }}
-          >
-            <strong> Note:- </strong>The new instance is currently being set up
-            and will be available for use in a few minutes.
+          <Text size="small" weight="medium" color="#344054" sx={{ marginTop: "24px" }}>
+            <strong> Note:- </strong>The new instance is currently being set up and will be available for use in a few
+            minutes.
           </Text>
         </Box>
       </DialogContent>

@@ -1,21 +1,21 @@
+import { useState } from "react";
 import Image from "next/image";
 import { Box } from "@mui/material";
 
-import Button from "../Button/Button";
-import { Text } from "../Typography/Typography";
-import StatusChip from "../StatusChip/StatusChip";
-import ClockIcon from "../Icons/ServicePlanCard/ClockIcon";
-import CirclePlusIcon from "../Icons/ServicePlanCard/CirclePlusIcon";
-import CircleCheckIcon from "../Icons/ServicePlanCard/CircleCheckIcon";
-import ServicePlanCardIcon from "../Icons/ServicePlanCard/ServicePlanCardIcon";
-
 import { colors } from "src/themeConfig";
 import { SetState } from "src/types/common/reactGenerics";
-
-import CardCircleBg from "./CardCircleBg.png";
 import { Subscription } from "src/types/subscription";
 import { SubscriptionRequest } from "src/types/subscriptionRequest";
-import { useState } from "react";
+
+import Button from "../Button/Button";
+import CircleCheckIcon from "../Icons/ServicePlanCard/CircleCheckIcon";
+import CirclePlusIcon from "../Icons/ServicePlanCard/CirclePlusIcon";
+import ClockIcon from "../Icons/ServicePlanCard/ClockIcon";
+import ServicePlanCardIcon from "../Icons/ServicePlanCard/ServicePlanCardIcon";
+import StatusChip from "../StatusChip/StatusChip";
+import { Text } from "../Typography/Typography";
+
+import CardCircleBg from "./CardCircleBg.png";
 
 type ServicePlanCardProps = {
   isSelected?: boolean;
@@ -37,9 +37,7 @@ const ServicePlanCard: React.FC<ServicePlanCardProps> = ({
   onUnsubscribeClick,
 }) => {
   const isAutoApprove = servicePlan.AutoApproveSubscription;
-  const isUnsubscribeAllowed =
-    !rootSubscription?.defaultSubscription &&
-    rootSubscription?.roleType === "root";
+  const isUnsubscribeAllowed = !rootSubscription?.defaultSubscription && rootSubscription?.roleType === "root";
   const [isSubscribing, setIsSubscribing] = useState(false);
 
   return (
@@ -65,30 +63,10 @@ const ServicePlanCard: React.FC<ServicePlanCardProps> = ({
           right: "12px",
         }}
         capitalize={false}
-        color={
-          isAutoApprove
-            ? colors.lightBlue700
-            : rootSubscription
-              ? colors.success700
-              : colors.error700
-        }
-        bgColor={
-          isAutoApprove
-            ? colors.lightBlue50
-            : rootSubscription
-              ? colors.success50
-              : colors.error50
-        }
-        borderColor={
-          isAutoApprove ? "#B2DDFF" : rootSubscription ? "#ABEFC6" : "#F9DBAF"
-        }
-        status={
-          isAutoApprove
-            ? "Auto Approval"
-            : rootSubscription
-              ? "Approved"
-              : "Approval Required"
-        }
+        color={isAutoApprove ? colors.lightBlue700 : rootSubscription ? colors.success700 : colors.error700}
+        bgColor={isAutoApprove ? colors.lightBlue50 : rootSubscription ? colors.success50 : colors.error50}
+        borderColor={isAutoApprove ? "#B2DDFF" : rootSubscription ? "#ABEFC6" : "#F9DBAF"}
+        status={isAutoApprove ? "Auto Approval" : rootSubscription ? "Approved" : "Approval Required"}
       />
 
       <Image
@@ -138,13 +116,7 @@ const ServicePlanCard: React.FC<ServicePlanCardProps> = ({
         <Button
           variant="contained"
           disabled={isSubscribing || servicePlan.serviceModelStatus !== "READY"}
-          startIcon={
-            <CirclePlusIcon
-              disabled={
-                isSubscribing || servicePlan.serviceModelStatus !== "READY"
-              }
-            />
-          }
+          startIcon={<CirclePlusIcon disabled={isSubscribing || servicePlan.serviceModelStatus !== "READY"} />}
           onClick={async () => {
             try {
               setIsSubscribing(true);
@@ -155,11 +127,7 @@ const ServicePlanCard: React.FC<ServicePlanCardProps> = ({
               setIsSubscribing(false);
             }
           }}
-          disabledMessage={
-            servicePlan.serviceModelStatus !== "READY"
-              ? "Service not available at the moment"
-              : ""
-          }
+          disabledMessage={servicePlan.serviceModelStatus !== "READY" ? "Service not available at the moment" : ""}
         >
           Subscribe
         </Button>

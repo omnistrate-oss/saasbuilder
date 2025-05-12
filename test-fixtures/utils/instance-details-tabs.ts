@@ -1,10 +1,10 @@
-import _ from "lodash";
 import { expect } from "@playwright/test";
-
-import formatDateUTC from "src/utils/formatDateUTC";
-import { UserAPIClient } from "test-utils/user-api-client";
-import { ResourceInstance } from "src/types/resourceInstance";
+import _ from "lodash";
 import { InstanceDetailsPage } from "page-objects/instance-details-page";
+import { UserAPIClient } from "test-utils/user-api-client";
+
+import { ResourceInstance } from "src/types/resourceInstance";
+import formatDateUTC from "src/utils/formatDateUTC";
 
 export const TestInstanceOverview = async (instanceDetailsPage: InstanceDetailsPage, instance: ResourceInstance) => {
   const page = instanceDetailsPage.page;

@@ -98,15 +98,10 @@ const paragraphWeights = {
 
 export const P = styled("p", {
   shouldForwardProp: (prop) => prop !== "size" && prop !== "weight",
-})(
-  ({
-    size = paragraphSizeTypes.medium,
-    weight = paragraphWeightTypes.medium,
-  }) => ({
-    ...paragraphSizes[size],
-    fontWeight: paragraphWeights[weight],
-  })
-);
+})(({ size = paragraphSizeTypes.medium, weight = paragraphWeightTypes.medium }) => ({
+  ...paragraphSizes[size],
+  fontWeight: paragraphWeights[weight],
+}));
 
 const displayTextSizeTypes = {
   xsmall: "xsmall",
@@ -140,8 +135,7 @@ const displayTextSizes = {
 };
 
 export const DisplayText = styled("h2", {
-  shouldForwardProp: (prop) =>
-    !["size", "weight", "sx", "color", "mt", "mb", "pt", "pb"].includes(prop),
+  shouldForwardProp: (prop) => !["size", "weight", "sx", "color", "mt", "mb", "pt", "pb"].includes(prop),
 })(({ size = displayTextSizeTypes.small, weight = weightTypes.semibold }) => ({
   ...displayTextSizes[size],
   fontWeight: weights[weight],

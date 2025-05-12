@@ -1,26 +1,26 @@
 import * as React from "react";
-import Slider, { SliderThumb, sliderClasses } from "@mui/material/Slider";
-import { styled } from "@mui/material/styles";
-import Box from "@mui/material/Box";
 import { IconButton, Stack } from "@mui/material";
-import ArrowLeftCircleBrokenIcon from "../Icons/ArrowLeftCircleBroken/ArrowLeftCircleBroken";
-import ArrowRightCircleBrokenIcon from "../Icons/ArrowRightCircleBroken/ArrowRightCircleBrokenIcon";
+import Box from "@mui/material/Box";
+import Slider, { sliderClasses,SliderThumb } from "@mui/material/Slider";
+import { styled } from "@mui/material/styles";
+import dayjs, { Dayjs } from "dayjs";
+import utc from "dayjs/plugin/utc";
+
+import { getPercent } from "src/utils/calculatePercentage";
 import {
   checkHHMMFormatting,
   dateToUTCMinutes,
-  minutesToFormattedTimeString,
   formattedTimeStringToMinutes,
+  minutesToFormattedTimeString,
 } from "src/utils/time";
-import { getPercent } from "src/utils/calculatePercentage";
-import dayjs, { Dayjs } from "dayjs";
-import utc from "dayjs/plugin/utc";
+
+import ArrowLeftCircleBrokenIcon from "../Icons/ArrowLeftCircleBroken/ArrowLeftCircleBroken";
+import ArrowRightCircleBrokenIcon from "../Icons/ArrowRightCircleBroken/ArrowRightCircleBrokenIcon";
 
 dayjs.extend(utc);
 
 function getCustomMarkStyles() {
-  const customMarksIndexes = [
-    1, 2, 3, 4, 5, 7, 8, 9, 10, 11, 13, 14, 15, 16, 17, 19, 20, 21, 22, 23,
-  ];
+  const customMarksIndexes = [1, 2, 3, 4, 5, 7, 8, 9, 10, 11, 13, 14, 15, 16, 17, 19, 20, 21, 22, 23];
   const styles: Record<string, object> = {};
 
   customMarksIndexes.forEach((index) => {
@@ -233,9 +233,7 @@ const TimePickerSlider: React.FC<TimePickerSliderProps> = (props) => {
     selectedDate,
   } = props;
 
-  const [utcMinutes, setUTCMinutes] = React.useState(
-    dateToUTCMinutes(new Date())
-  );
+  const [utcMinutes, setUTCMinutes] = React.useState(dateToUTCMinutes(new Date()));
 
   const earliestTimeMinutes = React.useMemo(() => {
     return dateToUTCMinutes(new Date(earliestRestoreTime));
@@ -293,24 +291,14 @@ const TimePickerSlider: React.FC<TimePickerSliderProps> = (props) => {
 
   function checkIfTimeInputIsValid(timeInput: string): boolean | undefined {
     function checkIfMinutesAreValid(minutes: number) {
-      if (!isSelectedDateSameAsEarliestTimeDate && !isSelectedDateSameAsToday)
-        return true;
-      else if (
-        isSelectedDateSameAsEarliestTimeDate &&
-        isSelectedDateSameAsToday
-      ) {
+      if (!isSelectedDateSameAsEarliestTimeDate && !isSelectedDateSameAsToday) return true;
+      else if (isSelectedDateSameAsEarliestTimeDate && isSelectedDateSameAsToday) {
         if (minutes > earliestTimeMinutes && minutes <= utcMinutes) {
           return true;
         }
-      } else if (
-        isSelectedDateSameAsEarliestTimeDate &&
-        !isSelectedDateSameAsToday
-      ) {
+      } else if (isSelectedDateSameAsEarliestTimeDate && !isSelectedDateSameAsToday) {
         return minutes > earliestTimeMinutes;
-      } else if (
-        !isSelectedDateSameAsEarliestTimeDate &&
-        isSelectedDateSameAsToday
-      ) {
+      } else if (!isSelectedDateSameAsEarliestTimeDate && isSelectedDateSameAsToday) {
         return minutes <= utcMinutes;
       }
       return false;
@@ -345,9 +333,7 @@ const TimePickerSlider: React.FC<TimePickerSliderProps> = (props) => {
               : earliestTimeMinutes
           }
           onChange={(e, newValue) => {
-            const newTimeValue = minutesToFormattedTimeString(
-              newValue as number
-            );
+            const newTimeValue = minutesToFormattedTimeString(newValue as number);
             if (checkIfTimeInputIsValid(newTimeValue)) {
               setTimeValue(newTimeValue);
             }

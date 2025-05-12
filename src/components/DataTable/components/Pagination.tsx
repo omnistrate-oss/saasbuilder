@@ -1,9 +1,10 @@
-import { usePagination } from "@mui/lab";
 import React, { FC } from "react";
-import Button from "src/components/Button/Button";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+import { usePagination } from "@mui/lab";
 import { Box, List } from "@mui/material";
+
+import Button from "src/components/Button/Button";
 import { Text } from "src/components/Typography/Typography";
 import { colors } from "src/themeConfig";
 
@@ -32,9 +33,7 @@ const Pagination: FC<PaginationProps> = (props) => {
 
   const { items } = usePagination({ count: pageCount, page: pageIndex + 1 });
 
-  const filteredItems = items?.filter(
-    (item) => item.type !== "previous" && item.type !== "next"
-  );
+  const filteredItems = items?.filter((item) => item.type !== "previous" && item.type !== "next");
 
   return (
     <Box
@@ -72,13 +71,7 @@ const Pagination: FC<PaginationProps> = (props) => {
             let children: React.ReactNode | null = null;
 
             if (type === "start-ellipsis" || type === "end-ellipsis") {
-              children = (
-                <Box
-                  sx={{ display: "flex", alignItems: "center", height: "100%" }}
-                >
-                  …
-                </Box>
-              );
+              children = <Box sx={{ display: "flex", alignItems: "center", height: "100%" }}>…</Box>;
             } else if (type === "page") {
               children = (
                 <Button

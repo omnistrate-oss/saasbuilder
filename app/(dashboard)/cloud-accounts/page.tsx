@@ -1,40 +1,25 @@
 "use client";
 
-import { useFormik } from "formik";
-import { Box, Stack } from "@mui/material";
-import { useSearchParams, useRouter } from "next/navigation";
-import { useMutation } from "@tanstack/react-query";
 import { useEffect, useMemo, useState } from "react";
+import { useRouter,useSearchParams } from "next/navigation";
+import { Box, Stack } from "@mui/material";
+import { useMutation } from "@tanstack/react-query";
 import { createColumnHelper } from "@tanstack/react-table";
+import { useFormik } from "formik";
 
-import Tooltip from "components/Tooltip/Tooltip";
-import DataTable from "components/DataTable/DataTable";
-import StatusChip from "components/StatusChip/StatusChip";
-import DataGridText from "components/DataGrid/DataGridText";
-import ServiceNameWithLogo from "components/ServiceNameWithLogo/ServiceNameWithLogo";
-import ViewInstructionsIcon from "components/Icons/AccountConfig/ViewInstrcutionsIcon";
-import CloudProviderAccountOrgIdModal from "components/CloudProviderAccountOrgIdModal/CloudProviderAccountOrgIdModal";
-import DeleteAccountConfigConfirmationDialog from "components/DeleteAccountConfigConfirmationDialog/DeleteAccountConfigConfirmationDialog";
-
-import PageTitle from "../components/Layout/PageTitle";
-import useInstances from "../instances/hooks/useInstances";
-import CloudAccountForm from "./components/CloudAccountForm";
-import PageContainer from "../components/Layout/PageContainer";
-import CloudAccountsIcon from "../components/Icons/CloudAccountsIcon";
-import CloudAccountsTableHeader from "./components/CloudAccountsTableHeader";
-import FullScreenDrawer from "../components/FullScreenDrawer/FullScreenDrawer";
-
-import useSnackbar from "src/hooks/useSnackbar";
-import formatDateUTC from "src/utils/formatDateUTC";
-import { ResourceInstance } from "src/types/resourceInstance";
-import { useGlobalData } from "src/providers/GlobalDataProvider";
 import {
   deleteResourceInstance,
   getResourceInstanceDetails,
   // getTerraformKit,
 } from "src/api/resourceInstance";
+import ConnectAccountConfigDialog from "src/components/AccountConfigDialog/ConnectAccountConfigDialog";
+import DisconnectAccountConfigDialog from "src/components/AccountConfigDialog/DisconnectAccountConfigDialog";
+import { cloudProviderLongLogoMap } from "src/constants/cloudProviders";
 import { getResourceInstanceStatusStylesAndLabel } from "src/constants/statusChipStyles/resourceInstanceStatus";
-import { getCloudAccountsRoute } from "src/utils/routes";
+import useSnackbar from "src/hooks/useSnackbar";
+import { useGlobalData } from "src/providers/GlobalDataProvider";
+import { CloudProvider } from "src/types/common/enums";
+import { ResourceInstance } from "src/types/resourceInstance";
 import { isCloudAccountInstance } from "src/utils/access/byoaResource";
 import {
   getAzureBootstrapShellCommand,
@@ -42,12 +27,27 @@ import {
   getGcpBootstrapShellCommand,
   getGcpShellScriptOffboardCommand,
 } from "src/utils/accountConfig/accountConfig";
-import DisconnectAccountConfigDialog from "src/components/AccountConfigDialog/DisconnectAccountConfigDialog";
-import ConnectAccountConfigDialog from "src/components/AccountConfigDialog/ConnectAccountConfigDialog";
+import formatDateUTC from "src/utils/formatDateUTC";
+import { getCloudAccountsRoute } from "src/utils/routes";
+import CloudProviderAccountOrgIdModal from "components/CloudProviderAccountOrgIdModal/CloudProviderAccountOrgIdModal";
+import DataGridText from "components/DataGrid/DataGridText";
+import DataTable from "components/DataTable/DataTable";
+import DeleteAccountConfigConfirmationDialog from "components/DeleteAccountConfigConfirmationDialog/DeleteAccountConfigConfirmationDialog";
+import ViewInstructionsIcon from "components/Icons/AccountConfig/ViewInstrcutionsIcon";
+import ServiceNameWithLogo from "components/ServiceNameWithLogo/ServiceNameWithLogo";
+import StatusChip from "components/StatusChip/StatusChip";
+import Tooltip from "components/Tooltip/Tooltip";
+
 import useBillingDetails from "../billing/hooks/useBillingDetails";
-import { cloudProviderLongLogoMap } from "src/constants/cloudProviders";
-import { CloudProvider } from "src/types/common/enums";
 import useBillingStatus from "../billing/hooks/useBillingStatus";
+import FullScreenDrawer from "../components/FullScreenDrawer/FullScreenDrawer";
+import CloudAccountsIcon from "../components/Icons/CloudAccountsIcon";
+import PageContainer from "../components/Layout/PageContainer";
+import PageTitle from "../components/Layout/PageTitle";
+import useInstances from "../instances/hooks/useInstances";
+
+import CloudAccountForm from "./components/CloudAccountForm";
+import CloudAccountsTableHeader from "./components/CloudAccountsTableHeader";
 
 const columnHelper = createColumnHelper<ResourceInstance>();
 

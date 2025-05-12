@@ -1,8 +1,9 @@
-import { httpRequestMethods } from "src/server/utils/constants/httpsRequestMethods";
 import Axios from "axios";
 import Qs from "qs";
+
 //omnistrate backend base url
 import { baseURL } from "src/axios";
+import { httpRequestMethods } from "src/server/utils/constants/httpsRequestMethods";
 import {
   passwordRegex,
   passwordText as passwordRegexFailText,

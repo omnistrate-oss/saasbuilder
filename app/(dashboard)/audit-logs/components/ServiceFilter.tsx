@@ -1,18 +1,12 @@
+import { useMemo } from "react";
 import { SelectChangeEvent, Typography } from "@mui/material";
 import { getServiceMenuItems } from "app/(dashboard)/instances/utils";
-import { useMemo } from "react";
+
 import MenuItem from "src/components/FormElementsv2/MenuItem/MenuItem";
 import Select from "src/components/FormElementsv2/Select/Select";
 
-const ServiceFilter = ({
-  selectedServiceId,
-  setSelectedServiceId,
-  serviceOfferings,
-}) => {
-  const serviceOptions = useMemo(
-    () => getServiceMenuItems(serviceOfferings),
-    [serviceOfferings]
-  );
+const ServiceFilter = ({ selectedServiceId, setSelectedServiceId, serviceOfferings }) => {
+  const serviceOptions = useMemo(() => getServiceMenuItems(serviceOfferings), [serviceOfferings]);
 
   const handleChange = (e: SelectChangeEvent) => {
     setSelectedServiceId(e.target.value);
@@ -23,10 +17,7 @@ const ServiceFilter = ({
       name={"service-options"}
       value={selectedServiceId}
       renderValue={() => {
-        return (
-          serviceOptions?.find((option) => option.value == selectedServiceId)
-            ?.label ?? "Filter by Service"
-        );
+        return serviceOptions?.find((option) => option.value == selectedServiceId)?.label ?? "Filter by Service";
       }}
       sx={{
         minWidth: "auto",
@@ -57,11 +48,7 @@ const ServiceFilter = ({
           </MenuItem>,
           ...serviceOptions.map((option) => {
             const menuItem = (
-              <MenuItem
-                key={option.value as string}
-                value={option.value as string}
-                disabled={option.disabled}
-              >
+              <MenuItem key={option.value as string} value={option.value as string} disabled={option.disabled}>
                 <Typography variant="inherit" noWrap>
                   {option.label}
                 </Typography>

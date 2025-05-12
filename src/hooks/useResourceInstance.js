@@ -1,8 +1,10 @@
-import _ from "lodash";
 import { useQuery } from "@tanstack/react-query";
+import _ from "lodash";
+
+import { calculateInstanceHealthPercentage } from "src/utils/instanceHealthPercentage";
+
 import { getResourceInstanceDetails } from "../api/resourceInstance";
 import processClusterPorts from "../utils/processClusterPorts";
-import { calculateInstanceHealthPercentage } from "src/utils/instanceHealthPercentage";
 
 export default function useResourceInstance(
   serviceProviderId,

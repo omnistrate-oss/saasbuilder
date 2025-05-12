@@ -1,20 +1,19 @@
 import { useMemo } from "react";
-import { IconButton } from "@mui/material";
-import { createColumnHelper } from "@tanstack/react-table";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
+import { IconButton } from "@mui/material";
+import { createColumnHelper } from "@tanstack/react-table";
 
 import DataGridText from "src/components/DataGrid/DataGridText";
-import EventTypeChip from "src/components/EventsTable/EventTypeChip";
+import CursorPaginatedDataTable from "src/components/DataTable/CursorPaginatedDataTable";
 import EventDetailsView from "src/components/EventsTable/EventDetailsView";
 import EventMessageChip from "src/components/EventsTable/EventMessageChip";
+import EventTypeChip from "src/components/EventsTable/EventTypeChip";
 import ServiceNameWithLogo from "src/components/ServiceNameWithLogo/ServiceNameWithLogo";
-import CursorPaginatedDataTable from "src/components/DataTable/CursorPaginatedDataTable";
-
-import { EventType } from "src/types/event";
-import { AuditEvent } from "src/types/auditEvent";
-import formatDateUTC from "src/utils/formatDateUTC";
 import { useGlobalData } from "src/providers/GlobalDataProvider";
+import { AuditEvent } from "src/types/auditEvent";
+import { EventType } from "src/types/event";
+import formatDateUTC from "src/utils/formatDateUTC";
 import { getAccessControlRoute } from "src/utils/route/access/accessRoute";
 
 const columnHelper = createColumnHelper<AuditEvent>();
@@ -94,16 +93,10 @@ const EventsTable = ({
           id: "serviceName",
           header: "Service Name",
           cell: (data) => {
-            const { serviceLogoURL, serviceName } =
-              subscriptionsObj[data.row.original.subscriptionId] || {};
+            const { serviceLogoURL, serviceName } = subscriptionsObj[data.row.original.subscriptionId] || {};
             if (!serviceName) return "-";
 
-            return (
-              <ServiceNameWithLogo
-                serviceName={serviceName}
-                serviceLogoURL={serviceLogoURL}
-              />
-            );
+            return <ServiceNameWithLogo serviceName={serviceName} serviceLogoURL={serviceLogoURL} />;
           },
           meta: {
             minWidth: 230,
@@ -119,8 +112,7 @@ const EventsTable = ({
       time: columnHelper.accessor((row) => formatDateUTC(row.time), {
         id: "time",
         header: "Time",
-        cell: (data) =>
-          data.row.original.time ? formatDateUTC(data.row.original.time) : "-",
+        cell: (data) => (data.row.original.time ? formatDateUTC(data.row.original.time) : "-"),
         meta: {
           minWidth: 200,
         },
@@ -131,9 +123,7 @@ const EventsTable = ({
         header: "Type",
         cell: (data) => {
           return data.row.original.eventSource ? (
-            <EventTypeChip
-              eventType={data.row.original.eventSource as EventType}
-            />
+            <EventTypeChip eventType={data.row.original.eventSource as EventType} />
           ) : (
             "-"
           );
@@ -147,11 +137,7 @@ const EventsTable = ({
         id: "message",
         header: "Message",
         cell: (data) => {
-          return data.row.original.message ? (
-            <EventMessageChip message={data.row.original.message} />
-          ) : (
-            "-"
-          );
+          return data.row.original.message ? <EventMessageChip message={data.row.original.message} /> : "-";
         },
         meta: {
           flex: 2,
@@ -166,21 +152,15 @@ const EventsTable = ({
           const userName = data.row.original.userName;
           const orgName = data.row.original.orgName;
 
-          const isUserOmnistrateSystem =
-            userName === "System" && orgName === "System";
+          const isUserOmnistrateSystem = userName === "System" && orgName === "System";
 
           // Special Case for Disabling the Link
           // When the Logged in User Doesn't Have "root" Role for a Subscription, They Don't Have Read Access for Access Control Page.
-          const subscription =
-            subscriptionsObj[data.row.original.subscriptionId];
+          const subscription = subscriptionsObj[data.row.original.subscriptionId];
 
           let pageLink = "",
             props = {};
-          if (
-            !isUserOmnistrateSystem &&
-            userId &&
-            subscription?.roleType === "root"
-          ) {
+          if (!isUserOmnistrateSystem && userId && subscription?.roleType === "root") {
             pageLink = getAccessControlRoute(userId);
             props = {
               color: "primary",
@@ -207,9 +187,7 @@ const EventsTable = ({
       ),
       subscriptionOwner: columnHelper.accessor(
         (row) => {
-          return (
-            subscriptionsObj[row.subscriptionId]?.subscriptionOwnerName || "-"
-          );
+          return subscriptionsObj[row.subscriptionId]?.subscriptionOwnerName || "-";
         },
         {
           id: "subscriptionOwnerName",
@@ -233,9 +211,7 @@ const EventsTable = ({
       data={data}
       renderDetailsComponent={EventDetailsView}
       noRowsText={noRowsText || "No events"}
-      getRowCanExpand={(rowData) =>
-        Number(rowData.original.workflowFailures?.length) > 0
-      }
+      getRowCanExpand={(rowData) => Number(rowData.original.workflowFailures?.length) > 0}
       HeaderComponent={HeaderComponent}
       headerProps={HeaderProps}
       isLoading={isLoading}

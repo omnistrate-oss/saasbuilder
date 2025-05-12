@@ -61,9 +61,7 @@ export function getFirstDayOfUTCMonth(): string {
   const now = new Date();
 
   // Create a new date for the first day of the current month in UTC
-  const firstDay = new Date(
-    Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), 1, 0, 0, 0, 0)
-  );
+  const firstDay = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), 1, 0, 0, 0, 0));
 
   // Return the ISO string representation
   return firstDay.toISOString();
@@ -78,17 +76,7 @@ export function getEndOfCurrentUTCDay(): string {
 
   // Create a new date for the end of the current day in UTC
   // Setting hours to 23, minutes to 59, seconds to 59, milliseconds to 999
-  const endOfDay = new Date(
-    Date.UTC(
-      now.getUTCFullYear(),
-      now.getUTCMonth(),
-      now.getUTCDate(),
-      23,
-      59,
-      59,
-      999
-    )
-  );
+  const endOfDay = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), 23, 59, 59, 999));
 
   // Return the ISO string representation
   return endOfDay.toISOString();
@@ -99,9 +87,7 @@ export function secondsPassedInCurrentUTCMonth(): number {
   const now = new Date();
 
   // Create a date for the first day of the current month in UTC
-  const firstDayOfMonth = new Date(
-    Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), 1, 0, 0, 0, 0)
-  );
+  const firstDayOfMonth = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), 1, 0, 0, 0, 0));
 
   // Calculate the difference in milliseconds
   const millisecondsPassed = now.getTime() - firstDayOfMonth.getTime();

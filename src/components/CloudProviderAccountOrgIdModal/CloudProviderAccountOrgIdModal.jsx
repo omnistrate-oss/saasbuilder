@@ -31,8 +31,7 @@ const StyledContainer = styled(Box)({
   transform: "translateX(50%) translateY(-50%)",
   background: "white",
   borderRadius: "12px",
-  boxShadow:
-    "0px 8px 8px -4px rgba(16, 24, 40, 0.03), 0px 20px 24px -4px rgba(16, 24, 40, 0.08)",
+  boxShadow: "0px 8px 8px -4px rgba(16, 24, 40, 0.03), 0px 20px 24px -4px rgba(16, 24, 40, 0.08)",
   padding: "24px",
   width: "100%",
   maxWidth: "550px",
@@ -118,13 +117,7 @@ export const TextContainerToCopy = (props) => {
           alignItems: "center",
         }}
       >
-        <Text
-          size="medium"
-          weight="regular"
-          color="#667085"
-          ellipsis
-          title={text}
-        >
+        <Text size="medium" weight="regular" color="#667085" ellipsis title={text}>
           {text}
         </Text>
 
@@ -220,8 +213,7 @@ const CreationTimeInstructions = (props) => {
   useEffect(() => {
     if (
       (accountInstructionDetails?.gcpProjectID && !gcpBootstrapShellCommand) ||
-      (accountInstructionDetails?.azureSubscriptionID &&
-        !azureBootstrapShellCommand) ||
+      (accountInstructionDetails?.azureSubscriptionID && !azureBootstrapShellCommand) ||
       (accountInstructionDetails?.awsAccountID && !cloudFormationTemplateUrl)
     ) {
       startPolling();
@@ -252,9 +244,8 @@ const CreationTimeInstructions = (props) => {
   if (accountConfigStatus === "FAILED") {
     return (
       <BodyText>
-        The account configuration could not be saved because of system error.
-        Please try again. If the issue continues, reach out to support for
-        assistance.{" "}
+        The account configuration could not be saved because of system error. Please try again. If the issue continues,
+        reach out to support for assistance.{" "}
       </BodyText>
     );
   }
@@ -263,34 +254,27 @@ const CreationTimeInstructions = (props) => {
     return (
       <>
         <BodyText weight="medium">AWS Account ID</BodyText>
-        <TextContainerToCopy
-          text={accountInstructionDetails?.awsAccountID}
-          marginTop="6px"
-        />
+        <TextContainerToCopy text={accountInstructionDetails?.awsAccountID} marginTop="6px" />
 
         {cloudFormationTemplateUrl ? (
           <>
             <BodyText sx={{ marginTop: "20px" }}>
-              Your account details have been saved. To complete the setup please
-              create your CloudFormation Stack using the provided template{" "}
-              {cloudformationlink}.
+              Your account details have been saved. To complete the setup please create your CloudFormation Stack using
+              the provided template {cloudformationlink}.
             </BodyText>
 
             <BodyText sx={{ marginTop: "20px" }}>
-              If an existing AWSLoadBalancerControllerIAMPolicy policy causes an
-              error while creating the CloudFormation stack, set the parameter
-              CreateLoadBalancerPolicy to &quot;false&quot;.
+              If an existing AWSLoadBalancerControllerIAMPolicy policy causes an error while creating the CloudFormation
+              stack, set the parameter CreateLoadBalancerPolicy to &quot;false&quot;.
             </BodyText>
 
             <BodyText sx={{ marginTop: "20px" }}>
-              For guidance, our instructional video is available{" "}
-              {cloudFormationGuide}.
+              For guidance, our instructional video is available {cloudFormationGuide}.
             </BodyText>
           </>
         ) : (
           <BodyText sx={{ marginTop: "20px" }}>
-            Your CloudFormation Stack is being configured. Please check back
-            shortly for detailed setup instructions.
+            Your CloudFormation Stack is being configured. Please check back shortly for detailed setup instructions.
           </BodyText>
         )}
       </>
@@ -301,17 +285,11 @@ const CreationTimeInstructions = (props) => {
         <Stack direction={"row"} alignItems={"flex-start"} gap="12px">
           <Box flex={1} maxWidth={"50%"}>
             <BodyText weight="medium">GCP Project ID</BodyText>
-            <TextContainerToCopy
-              text={accountInstructionDetails?.gcpProjectID}
-              marginTop="6px"
-            />
+            <TextContainerToCopy text={accountInstructionDetails?.gcpProjectID} marginTop="6px" />
           </Box>
           <Box flex={1} maxWidth={"50%"}>
             <BodyText weight="medium">GCP Project Number</BodyText>
-            <TextContainerToCopy
-              text={accountInstructionDetails?.gcpProjectNumber}
-              marginTop="6px"
-            />
+            <TextContainerToCopy text={accountInstructionDetails?.gcpProjectNumber} marginTop="6px" />
           </Box>
         </Stack>
 
@@ -319,20 +297,17 @@ const CreationTimeInstructions = (props) => {
           {gcpBootstrapShellCommand ? (
             <>
               <BodyText sx={{ marginTop: "20px" }}>
-                Please open the Google Cloud Shell environment using the
-                following link {gcpCloudShellLink} and execute the below
-                command.
+                Please open the Google Cloud Shell environment using the following link {gcpCloudShellLink} and execute
+                the below command.
               </BodyText>
               <TextContainerToCopy text={gcpBootstrapShellCommand} />
               <BodyText sx={{ marginTop: "20px" }}>
-                For guidance, our instructional video is available{" "}
-                {gcpShellScriptGuide}.
+                For guidance, our instructional video is available {gcpShellScriptGuide}.
               </BodyText>
             </>
           ) : (
             <BodyText sx={{ marginTop: "20px" }}>
-              Your GCP shell script is being configured. Please check back
-              shortly for detailed setup instructions.
+              Your GCP shell script is being configured. Please check back shortly for detailed setup instructions.
             </BodyText>
           )}
         </>
@@ -344,17 +319,11 @@ const CreationTimeInstructions = (props) => {
         <Stack direction={"row"} alignItems={"flex-start"} gap="12px">
           <Box flex={1} maxWidth={"50%"}>
             <BodyText weight="medium">Azure Subscription ID</BodyText>
-            <TextContainerToCopy
-              text={accountInstructionDetails?.azureSubscriptionID}
-              marginTop="6px"
-            />
+            <TextContainerToCopy text={accountInstructionDetails?.azureSubscriptionID} marginTop="6px" />
           </Box>
           <Box flex={1} maxWidth={"50%"}>
             <BodyText weight="medium">Azure Tenant ID</BodyText>
-            <TextContainerToCopy
-              text={accountInstructionDetails?.azureTenantID}
-              marginTop="6px"
-            />
+            <TextContainerToCopy text={accountInstructionDetails?.azureTenantID} marginTop="6px" />
           </Box>
         </Stack>
 
@@ -362,20 +331,17 @@ const CreationTimeInstructions = (props) => {
           {azureBootstrapShellCommand ? (
             <>
               <BodyText sx={{ marginTop: "20px" }}>
-                Please open the Azure Cloud Shell environment using the
-                following link {azureCloudShellLink} and execute the below
-                command.
+                Please open the Azure Cloud Shell environment using the following link {azureCloudShellLink} and execute
+                the below command.
               </BodyText>
               <TextContainerToCopy text={azureBootstrapShellCommand} />
               <BodyText sx={{ marginTop: "20px" }}>
-                For guidance, our instructional video is available{" "}
-                {azureShellScriptGuide}.
+                For guidance, our instructional video is available {azureShellScriptGuide}.
               </BodyText>
             </>
           ) : (
             <BodyText sx={{ marginTop: "20px" }}>
-              Your Azure shell script is being configured. Please check back
-              shortly for detailed setup instructions.
+              Your Azure shell script is being configured. Please check back shortly for detailed setup instructions.
             </BodyText>
           )}
         </>
@@ -384,8 +350,7 @@ const CreationTimeInstructions = (props) => {
   } else {
     return (
       <BodyText>
-        Your account details are being configured. Please check back shortly for
-        detailed setup instructions.
+        Your account details are being configured. Please check back shortly for detailed setup instructions.
       </BodyText>
     );
   }
@@ -413,8 +378,7 @@ const NonCreationTimeInstructions = (props) => {
   ) {
     return (
       <BodyText>
-        Your account details are being configured. Please check back shortly for
-        detailed setup instructions.
+        Your account details are being configured. Please check back shortly for detailed setup instructions.
       </BodyText>
     );
   }
@@ -425,10 +389,7 @@ const NonCreationTimeInstructions = (props) => {
         {accountInstructionDetails?.awsAccountID && (
           <>
             <BodyText weight="medium">AWS Account ID</BodyText>
-            <TextContainerToCopy
-              text={accountInstructionDetails?.awsAccountID}
-              marginTop="6px"
-            />
+            <TextContainerToCopy text={accountInstructionDetails?.awsAccountID} marginTop="6px" />
           </>
         )}
 
@@ -436,17 +397,11 @@ const NonCreationTimeInstructions = (props) => {
           <Stack direction={"row"} alignItems={"flex-start"} gap="12px">
             <Box flex={1} maxWidth={"50%"}>
               <BodyText weight="medium">GCP Project ID</BodyText>
-              <TextContainerToCopy
-                text={accountInstructionDetails?.gcpProjectID}
-                marginTop="6px"
-              />
+              <TextContainerToCopy text={accountInstructionDetails?.gcpProjectID} marginTop="6px" />
             </Box>
             <Box flex={1} maxWidth={"50%"}>
               <BodyText weight="medium">GCP Project Number</BodyText>
-              <TextContainerToCopy
-                text={accountInstructionDetails?.gcpProjectNumber}
-                marginTop="6px"
-              />
+              <TextContainerToCopy text={accountInstructionDetails?.gcpProjectNumber} marginTop="6px" />
             </Box>
           </Stack>
         )}
@@ -455,17 +410,11 @@ const NonCreationTimeInstructions = (props) => {
           <Stack direction={"row"} alignItems={"flex-start"} gap="12px">
             <Box flex={1} maxWidth={"50%"}>
               <BodyText weight="medium">Azure Subscription ID</BodyText>
-              <TextContainerToCopy
-                text={accountInstructionDetails?.azureSubscriptionID}
-                marginTop="6px"
-              />
+              <TextContainerToCopy text={accountInstructionDetails?.azureSubscriptionID} marginTop="6px" />
             </Box>
             <Box flex={1} maxWidth={"50%"}>
               <BodyText weight="medium">Azure Tenant ID</BodyText>
-              <TextContainerToCopy
-                text={accountInstructionDetails?.azureTenantID}
-                marginTop="6px"
-              />
+              <TextContainerToCopy text={accountInstructionDetails?.azureTenantID} marginTop="6px" />
             </Box>
           </Stack>
         )}
@@ -473,8 +422,7 @@ const NonCreationTimeInstructions = (props) => {
         <BodyText sx={{ marginTop: "20px", fontWeight: 600 }}>
           {getAccountConfigStatusBasedHeader(
             selectedAccountConfig?.status,
-            selectedAccountConfig?.result_params
-              ?.cloud_provider_account_config_id
+            selectedAccountConfig?.result_params?.cloud_provider_account_config_id
             // accountConfigMethod,
             // accountInstructionDetails?.gcpProjectID
             //   ? CLOUD_PROVIDERS.gcp
@@ -493,36 +441,27 @@ const NonCreationTimeInstructions = (props) => {
                   <>
                     <Box display={"flex"} flexDirection={"column"} gap={"10px"}>
                       <BodyText>
-                        Please create your CloudFormation Stack using the
-                        provided template {cloudformationlink}.
+                        Please create your CloudFormation Stack using the provided template {cloudformationlink}.
                       </BodyText>
                       <BodyText>
-                        If an existing AWSLoadBalancerControllerIAMPolicy policy
-                        causes an error while creating the CloudFormation stack,
-                        set the parameter CreateLoadBalancerPolicy to
-                        &quot;false&quot;.
+                        If an existing AWSLoadBalancerControllerIAMPolicy policy causes an error while creating the
+                        CloudFormation stack, set the parameter CreateLoadBalancerPolicy to &quot;false&quot;.
                       </BodyText>
-                      <BodyText>
-                        For guidance, our instructional video is available{" "}
-                        {cloudFormationGuide}.
-                      </BodyText>
+                      <BodyText>For guidance, our instructional video is available {cloudFormationGuide}.</BodyText>
                     </Box>
                   </>
                 ) : selectedAccountConfig?.status === "FAILED" ? (
                   <Box display={"flex"} flexDirection={"column"} gap={"10px"}>
                     <BodyText>
-                      You may delete this failed configuration and retry adding
-                      it after carefully verifying the AWS Account ID
+                      You may delete this failed configuration and retry adding it after carefully verifying the AWS
+                      Account ID
                     </BodyText>
-                    <BodyText>
-                      If the issue persists, please contact Support for
-                      assistance.
-                    </BodyText>
+                    <BodyText>If the issue persists, please contact Support for assistance.</BodyText>
                   </Box>
                 ) : (
                   <BodyText>
-                    Your account details are being configured. Please check back
-                    shortly for detailed setup instructions.
+                    Your account details are being configured. Please check back shortly for detailed setup
+                    instructions.
                   </BodyText>
                 )}
               </ListItem>
@@ -537,36 +476,27 @@ const NonCreationTimeInstructions = (props) => {
                   {gcpBootstrapShellCommand ? (
                     <Box flex={1} overflow={"hidden"}>
                       <BodyText>
-                        Please open the Google Cloud Shell environment using the
-                        following link {gcpCloudShellLink} and execute the
-                        command below.
+                        Please open the Google Cloud Shell environment using the following link {gcpCloudShellLink} and
+                        execute the command below.
                       </BodyText>
 
-                      <TextContainerToCopy
-                        text={gcpBootstrapShellCommand}
-                        marginTop="12px"
-                      />
+                      <TextContainerToCopy text={gcpBootstrapShellCommand} marginTop="12px" />
                       <BodyText sx={{ marginTop: "20px" }}>
-                        For guidance our instructional video is{" "}
-                        {gcpShellScriptGuide}.
+                        For guidance our instructional video is {gcpShellScriptGuide}.
                       </BodyText>
                     </Box>
                   ) : selectedAccountConfig?.status === "FAILED" ? (
                     <Box display={"flex"} flexDirection={"column"} gap={"10px"}>
                       <BodyText>
-                        You may delete this failed configuration and retry
-                        adding it after carefully verifying the GCP Project ID
-                        and Project Number.
+                        You may delete this failed configuration and retry adding it after carefully verifying the GCP
+                        Project ID and Project Number.
                       </BodyText>
-                      <BodyText>
-                        If the issue persists, please contact Support for
-                        assistance.
-                      </BodyText>
+                      <BodyText>If the issue persists, please contact Support for assistance.</BodyText>
                     </Box>
                   ) : (
                     <BodyText>
-                      Your account details are being configured. Please check
-                      back shortly for detailed setup instructions.
+                      Your account details are being configured. Please check back shortly for detailed setup
+                      instructions.
                     </BodyText>
                   )}
                 </ListItem>
@@ -582,36 +512,27 @@ const NonCreationTimeInstructions = (props) => {
                 {azureBootstrapShellCommand ? (
                   <Box flex={1} overflow={"hidden"}>
                     <BodyText>
-                      Please open the Azure Cloud Shell environment using the
-                      following link {azureCloudShellLink} and execute the
-                      command below.
+                      Please open the Azure Cloud Shell environment using the following link {azureCloudShellLink} and
+                      execute the command below.
                     </BodyText>
 
-                    <TextContainerToCopy
-                      text={azureBootstrapShellCommand}
-                      marginTop="12px"
-                    />
+                    <TextContainerToCopy text={azureBootstrapShellCommand} marginTop="12px" />
                     <BodyText sx={{ marginTop: "20px" }}>
-                      For guidance our instructional video is{" "}
-                      {azureShellScriptGuide}.
+                      For guidance our instructional video is {azureShellScriptGuide}.
                     </BodyText>
                   </Box>
                 ) : selectedAccountConfig?.status === "FAILED" ? (
                   <Box display={"flex"} flexDirection={"column"} gap={"10px"}>
                     <BodyText>
-                      You may delete this failed configuration and retry adding
-                      it after carefully verifying the Azure Subscription ID and
-                      Tenant ID.
+                      You may delete this failed configuration and retry adding it after carefully verifying the Azure
+                      Subscription ID and Tenant ID.
                     </BodyText>
-                    <BodyText>
-                      If the issue persists, please contact Support for
-                      assistance.
-                    </BodyText>
+                    <BodyText>If the issue persists, please contact Support for assistance.</BodyText>
                   </Box>
                 ) : (
                   <BodyText flex={1} overflow={"hidden"}>
-                    Your account details are being configured. Please check back
-                    shortly for detailed setup instructions.
+                    Your account details are being configured. Please check back shortly for detailed setup
+                    instructions.
                   </BodyText>
                 )}
               </ListItem>
@@ -651,21 +572,13 @@ function CloudProviderAccountOrgIdModal(props) {
   );
 
   const cloudformationlink = (
-    <StyledLink
-      href={cloudFormationTemplateUrl ?? ""}
-      target="_blank"
-      rel="noopener noreferrer"
-    >
+    <StyledLink href={cloudFormationTemplateUrl ?? ""} target="_blank" rel="noopener noreferrer">
       here
     </StyledLink>
   );
 
   const azureCloudShellLink = (
-    <StyledLink
-      href="https://portal.azure.com/#cloudshell/"
-      target="_blank"
-      rel="noopener noreferrer"
-    >
+    <StyledLink href="https://portal.azure.com/#cloudshell/" target="_blank" rel="noopener noreferrer">
       Azure Cloud Shell
     </StyledLink>
   );
@@ -702,55 +615,31 @@ function CloudProviderAccountOrgIdModal(props) {
 
   // links pointing to guides for different methods
   const azureShellScriptGuide = isAccessPage ? (
-    <StyledLink
-      href="https://youtu.be/7A9WbZjuXgQ?si=y-AvMmtdFIycqzOS"
-      target="_blank"
-      rel="noopener noreferrer"
-    >
+    <StyledLink href="https://youtu.be/7A9WbZjuXgQ?si=y-AvMmtdFIycqzOS" target="_blank" rel="noopener noreferrer">
       here
     </StyledLink>
   ) : (
-    <StyledLink
-      href="https://youtu.be/7A9WbZjuXgQ?si=y-AvMmtdFIycqzOS"
-      target="_blank"
-      rel="noopener noreferrer"
-    >
+    <StyledLink href="https://youtu.be/7A9WbZjuXgQ?si=y-AvMmtdFIycqzOS" target="_blank" rel="noopener noreferrer">
       here
     </StyledLink>
   );
 
   const gcpShellScriptGuide = isAccessPage ? (
-    <StyledLink
-      href="https://youtu.be/isTGi8tQA2w?si=a12mJXnlA-y2ipVC"
-      target="_blank"
-      rel="noopener noreferrer"
-    >
+    <StyledLink href="https://youtu.be/isTGi8tQA2w?si=a12mJXnlA-y2ipVC" target="_blank" rel="noopener noreferrer">
       here
     </StyledLink>
   ) : (
-    <StyledLink
-      href="https://youtu.be/isTGi8tQA2w?si=a12mJXnlA-y2ipVC"
-      target="_blank"
-      rel="noopener noreferrer"
-    >
+    <StyledLink href="https://youtu.be/isTGi8tQA2w?si=a12mJXnlA-y2ipVC" target="_blank" rel="noopener noreferrer">
       here
     </StyledLink>
   );
 
   const cloudFormationGuide = isAccessPage ? (
-    <StyledLink
-      href="https://youtu.be/c3HNnM8UJBE"
-      target="_blank"
-      rel="noopener noreferrer"
-    >
+    <StyledLink href="https://youtu.be/c3HNnM8UJBE" target="_blank" rel="noopener noreferrer">
       {isAccountCreation ? "here" : "guide"}
     </StyledLink>
   ) : (
-    <StyledLink
-      href="https://youtu.be/Mu-4jppldwk"
-      target="_blank"
-      rel="noopener noreferrer"
-    >
+    <StyledLink href="https://youtu.be/Mu-4jppldwk" target="_blank" rel="noopener noreferrer">
       {isAccountCreation ? "here" : "guide"}
     </StyledLink>
   );
@@ -781,8 +670,7 @@ function CloudProviderAccountOrgIdModal(props) {
             <Box
               sx={{
                 border: "1px solid #E4E7EC",
-                boxShadow:
-                  "0px 1px 2px 0px #1018280D, 0px -2px 0px 0px #1018280D,0px 0px 0px 1px #1018282E",
+                boxShadow: "0px 1px 2px 0px #1018280D, 0px -2px 0px 0px #1018280D,0px 0px 0px 1px #1018282E",
                 borderRadius: "10px",
                 width: "48px",
                 height: "48px",
@@ -794,8 +682,7 @@ function CloudProviderAccountOrgIdModal(props) {
               <InstructionsModalIcon />
             </Box>
             <Text size="large" weight="semibold">
-              {isAccountCreation ||
-              !STATUS_TITLE_MAP[selectedAccountConfig?.status]
+              {isAccountCreation || !STATUS_TITLE_MAP[selectedAccountConfig?.status]
                 ? "Account Configuration Instructions"
                 : STATUS_TITLE_MAP[selectedAccountConfig?.status]}
             </Text>
@@ -847,12 +734,7 @@ function CloudProviderAccountOrgIdModal(props) {
           )}
         </Content>
         <Footer>
-          <Button
-            variant="contained"
-            onClick={handleClose}
-            data-testid="close-instructions-button"
-            fullWidth
-          >
+          <Button variant="contained" onClick={handleClose} data-testid="close-instructions-button" fullWidth>
             Close
           </Button>
         </Footer>

@@ -1,8 +1,8 @@
 import fs from "fs";
 import path from "path";
 
-import { Subscription } from "src/types/subscription";
 import { ServiceOffering } from "src/types/serviceOffering";
+import { Subscription } from "src/types/subscription";
 
 export type GlobalState = {
   // Provider Data

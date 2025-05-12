@@ -1,19 +1,18 @@
 import { FC, useMemo, useState } from "react";
-import { Text } from "src/components/Typography/Typography";
-import { ConsumptionUsagePerDay } from "src/types/consumption";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
-import ConsumptionUsageChart from "../../billing/components/ConsumptionUsageChart";
-import {
-  DateRange,
-  DateTimePickerPopover,
-} from "src/components/DateRangePicker/DateTimeRangePickerStatic";
-import { SetState } from "src/types/common/reactGenerics";
-import { useGlobalData } from "src/providers/GlobalDataProvider";
 import _ from "lodash";
-import { ServiceOffering } from "src/types/serviceOffering";
-import Select from "src/components/FormElementsv2/Select/Select";
+
+import { DateRange, DateTimePickerPopover } from "src/components/DateRangePicker/DateTimeRangePickerStatic";
 import MenuItem from "src/components/FormElementsv2/MenuItem/MenuItem";
+import Select from "src/components/FormElementsv2/Select/Select";
+import { Text } from "src/components/Typography/Typography";
+import { useGlobalData } from "src/providers/GlobalDataProvider";
+import { SetState } from "src/types/common/reactGenerics";
+import { ConsumptionUsagePerDay } from "src/types/consumption";
+import { ServiceOffering } from "src/types/serviceOffering";
+
+import ConsumptionUsageChart from "../../billing/components/ConsumptionUsageChart";
 
 dayjs.extend(utc);
 
@@ -40,48 +39,38 @@ const UsageOverview: FC<UsageOverviewProps> = (props) => {
   const [selectedServiceId, setSelectedServiceId] = useState("");
   const { subscriptions, serviceOfferings } = useGlobalData();
 
-  const servicePlansGroupedByServiceId: Record<
-    string,
-    (ServiceOffering & { subscriptionId: string })[]
-  > = useMemo(() => {
-    const rootSubscriptions = subscriptions
-      .filter((subscription) => {
-        return subscription.roleType === "root";
-      })
-      .sort((subscriptionA, subscriptionB) =>
-        subscriptionA.productTierName.toLowerCase() <
-        subscriptionB.productTierName.toLowerCase()
-          ? -1
-          : 1
-      );
+  const servicePlansGroupedByServiceId: Record<string, (ServiceOffering & { subscriptionId: string })[]> =
+    useMemo(() => {
+      const rootSubscriptions = subscriptions
+        .filter((subscription) => {
+          return subscription.roleType === "root";
+        })
+        .sort((subscriptionA, subscriptionB) =>
+          subscriptionA.productTierName.toLowerCase() < subscriptionB.productTierName.toLowerCase() ? -1 : 1
+        );
 
-    const servicePlansGroupedByServiceId: Record<
-      string,
-      (ServiceOffering & { subscriptionId: string })[]
-    > = {};
+      const servicePlansGroupedByServiceId: Record<string, (ServiceOffering & { subscriptionId: string })[]> = {};
 
-    rootSubscriptions.forEach((subscription) => {
-      const serviceOffering = serviceOfferings.find(
-        (offering) => offering.productTierID === subscription.productTierId
-      );
+      rootSubscriptions.forEach((subscription) => {
+        const serviceOffering = serviceOfferings.find(
+          (offering) => offering.productTierID === subscription.productTierId
+        );
 
-      const serviceId = subscription.serviceId;
-      if (serviceOffering) {
-        if (serviceId in servicePlansGroupedByServiceId) {
-          servicePlansGroupedByServiceId[serviceId].push({
-            ...serviceOffering,
-            subscriptionId: subscription.id,
-          });
-        } else {
-          servicePlansGroupedByServiceId[serviceId] = [
-            { ...serviceOffering, subscriptionId: subscription.id },
-          ];
+        const serviceId = subscription.serviceId;
+        if (serviceOffering) {
+          if (serviceId in servicePlansGroupedByServiceId) {
+            servicePlansGroupedByServiceId[serviceId].push({
+              ...serviceOffering,
+              subscriptionId: subscription.id,
+            });
+          } else {
+            servicePlansGroupedByServiceId[serviceId] = [{ ...serviceOffering, subscriptionId: subscription.id }];
+          }
         }
-      }
-    });
+      });
 
-    return servicePlansGroupedByServiceId;
-  }, [subscriptions, serviceOfferings]);
+      return servicePlansGroupedByServiceId;
+    }, [subscriptions, serviceOfferings]);
 
   const rootSubscriptionServices: { serviceId; serviceName }[] = useMemo(() => {
     const rootSubscriptionServices = subscriptions
@@ -96,31 +85,20 @@ const UsageOverview: FC<UsageOverviewProps> = (props) => {
     const deduplicated = _.uniqBy(rootSubscriptionServices, "serviceId");
 
     const services = deduplicated
-      .filter((service) =>
-        service.serviceId in servicePlansGroupedByServiceId ? true : false
-      )
-      .sort((serviceA, serviceB) =>
-        serviceA.serviceName.toLowerCase() < serviceB.serviceName.toLowerCase()
-          ? -1
-          : 1
-      );
+      .filter((service) => (service.serviceId in servicePlansGroupedByServiceId ? true : false))
+      .sort((serviceA, serviceB) => (serviceA.serviceName.toLowerCase() < serviceB.serviceName.toLowerCase() ? -1 : 1));
 
     return services;
   }, [subscriptions, servicePlansGroupedByServiceId]);
 
-  const serviceOptions = [
-    { serviceName: "All Services", serviceId: "" },
-    ...rootSubscriptionServices,
-  ];
+  const serviceOptions = [{ serviceName: "All Services", serviceId: "" }, ...rootSubscriptionServices];
 
   let servicePlanOptions = [{ label: "All Subscription Plans", value: "" }];
   if (selectedServiceId) {
-    servicePlanOptions = servicePlansGroupedByServiceId[selectedServiceId].map(
-      (servicePlan) => ({
-        label: servicePlan.productTierName,
-        value: servicePlan.subscriptionId,
-      })
-    );
+    servicePlanOptions = servicePlansGroupedByServiceId[selectedServiceId].map((servicePlan) => ({
+      label: servicePlan.productTierName,
+      value: servicePlan.subscriptionId,
+    }));
   }
 
   return (
@@ -158,8 +136,7 @@ const UsageOverview: FC<UsageOverviewProps> = (props) => {
                   setSelectedSubscriptionId("");
                 } else {
                   //select first available subscription
-                  const subscriptionId =
-                    servicePlansGroupedByServiceId[serviceId][0].subscriptionId;
+                  const subscriptionId = servicePlansGroupedByServiceId[serviceId][0].subscriptionId;
                   setSelectedSubscriptionId(subscriptionId);
                 }
               }}

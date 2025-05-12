@@ -35,5 +35,5 @@ export const Tab = styled(MuiTab)({
   [`&.${tabClasses.selected}`]: {
     borderBottom: `2px solid ${styleConfig.secondaryColor}`,
     color: colors.purple800,
-  }
+  },
 });

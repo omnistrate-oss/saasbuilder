@@ -16,11 +16,7 @@ const DetailsTable: React.FC<DetailsTableProps> = ({ columns }) => {
       }}
     >
       {columns.map((column, index) => (
-        <div
-          key={index}
-          className="bg-gray-50 border-b border-gray-200"
-          style={{ padding: "12px 24px" }}
-        >
+        <div key={index} className="bg-gray-50 border-b border-gray-200" style={{ padding: "12px 24px" }}>
           <Text size="xsmall" weight="semibold" color="#717680">
             {column.title}
           </Text>
@@ -28,11 +24,7 @@ const DetailsTable: React.FC<DetailsTableProps> = ({ columns }) => {
       ))}
 
       {columns.map((column, index) => (
-        <div
-          key={index}
-          className="flex items-center px-6 bg-[#FFFFFF]"
-          style={{ height: "48px" }}
-        >
+        <div key={index} className="flex items-center px-6 bg-[#FFFFFF]" style={{ height: "48px" }}>
           {typeof column.content === "string" ? (
             <Text
               size="small"

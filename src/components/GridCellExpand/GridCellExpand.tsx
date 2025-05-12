@@ -1,8 +1,9 @@
-import Box from "@mui/material/Box";
 import React from "react";
-import CopyToClipboardButton from "../CopyClipboardButton/CopyClipboardButton";
 import Link from "next/link";
 import ArrowOutwardIcon from "@mui/icons-material/ArrowOutward";
+import Box from "@mui/material/Box";
+
+import CopyToClipboardButton from "../CopyClipboardButton/CopyClipboardButton";
 
 type GridCellExpandProps = {
   width?: any;
@@ -19,9 +20,7 @@ type GridCellExpandProps = {
   disabled?: boolean;
 };
 
-const GridCellExpand = React.memo(function GridCellExpand(
-  props: GridCellExpandProps
-) {
+const GridCellExpand = React.memo(function GridCellExpand(props: GridCellExpandProps) {
   const {
     width,
     value,
@@ -66,11 +65,7 @@ const GridCellExpand = React.memo(function GridCellExpand(
         <Box component="span" sx={{ display: "flex", alignItems: "center" }}>
           {startIcon}
           {Boolean(copyButton && value) && (
-            <CopyToClipboardButton
-              text={value}
-              buttonStyles={{ marginLeft: "10px" }}
-              disabled={disabled}
-            />
+            <CopyToClipboardButton text={value} buttonStyles={{ marginLeft: "10px" }} disabled={disabled} />
           )}
         </Box>
       )}

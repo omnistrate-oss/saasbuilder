@@ -17,13 +17,8 @@ export type DescribeConsumptionBillingDetailsSuccessResponse =
 
 export type Invoice = components["schemas"]["Invoice"];
 
-export type ConsumptionUsagePerDay =
-  components["schemas"]["GetConsumptionUsageResult"];
+export type ConsumptionUsagePerDay = components["schemas"]["GetConsumptionUsageResult"];
 
-export type ConsumptionUsage =
-  components["schemas"]["GetConsumptionUsageResult"];
+export type ConsumptionUsage = components["schemas"]["GetConsumptionUsageResult"];
 
-export type UsageDimension =
-  | "Memory GiB hours"
-  | "Storage GiB hours"
-  | "CPU core hours";
+export type UsageDimension = "Memory GiB hours" | "Storage GiB hours" | "CPU core hours";

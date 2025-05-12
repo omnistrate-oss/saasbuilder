@@ -1,4 +1,5 @@
 import React, { FC, useMemo } from "react";
+import CloseIcon from "@mui/icons-material/Close";
 import {
   Dialog as MuiDialog,
   DialogActions as MuiDialogActions,
@@ -8,22 +9,21 @@ import {
   Stack,
   styled,
 } from "@mui/material";
-import CloseIcon from "@mui/icons-material/Close";
+import { useMutation } from "@tanstack/react-query";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { useMutation } from "@tanstack/react-query";
-import {
-  addCapacityResourceInstanceAccess,
-  removeCapacityResourceInstanceAccess,
-} from "src/api/resourceInstance";
+
+import { addCapacityResourceInstanceAccess, removeCapacityResourceInstanceAccess } from "src/api/resourceInstance";
 import useSnackbar from "src/hooks/useSnackbar";
 import Button from "components/Button/Button";
-import TextField from "components/FormElements/TextField/TextField";
 import Form from "components/FormElements/Form/Form";
-import { Text } from "../Typography/Typography";
+import TextField from "components/FormElements/TextField/TextField";
+
 import LoadingSpinnerSmall from "../CircularProgress/CircularProgress";
-import { AccessCapacityDataType, CapacityAction, ContextType } from "./enums";
 import CapacityIcon from "../Icons/Capacity/CapacityIcon";
+import { Text } from "../Typography/Typography";
+
+import { AccessCapacityDataType, CapacityAction, ContextType } from "./enums";
 
 // Styled Components
 const Dialog = styled(MuiDialog)(() => ({
@@ -103,15 +103,11 @@ const CapacityDialog: FC<CapacityDialogProps> = ({
     if (currentCapacityAction === "add") {
       return maxReplicas - currentReplicas === 0
         ? `Error: Replicas already at maximum, cannot add capacity.`
-        : `Error: Number of replicas must be between 1 and ${
-            maxReplicas - currentReplicas
-          }`;
+        : `Error: Number of replicas must be between 1 and ${maxReplicas - currentReplicas}`;
     } else {
       return minReplicas - currentReplicas === 0
         ? `Error: Replicas already at minimum, cannot reduce capacity.`
-        : `Error: Number of replicas must be between 1 and ${
-            currentReplicas - minReplicas
-          }`;
+        : `Error: Number of replicas must be between 1 and ${currentReplicas - minReplicas}`;
     }
   }, [currentCapacityAction, currentReplicas, minReplicas, maxReplicas]);
 
@@ -131,10 +127,7 @@ const CapacityDialog: FC<CapacityDialogProps> = ({
               return this.createError({ message: errorMessage });
             }
           } else {
-            if (
-              currentReplicas - value < minReplicas ||
-              currentReplicas - value < 0
-            ) {
+            if (currentReplicas - value < minReplicas || currentReplicas - value < 0) {
               return this.createError({ message: errorMessage });
             }
           }
@@ -150,9 +143,7 @@ const CapacityDialog: FC<CapacityDialogProps> = ({
     const isAddingCapacity = currentCapacityAction === "add";
 
     const title = isAddingCapacity ? "Add Capacity" : "Remove Capacity";
-    const subtitle = isAddingCapacity
-      ? "Number of Replicas to Add"
-      : "Number of Replicas to Remove";
+    const subtitle = isAddingCapacity ? "Number of Replicas to Add" : "Number of Replicas to Remove";
 
     const buttonLabel = isAddingCapacity ? "Add" : "Remove";
     const buttonColor = isAddingCapacity ? "#7F56D9" : "#D92D20";
@@ -177,11 +168,7 @@ const CapacityDialog: FC<CapacityDialogProps> = ({
         onSubmit={capacityFormik.handleSubmit}
       >
         <DialogTitle>
-          <Stack
-            direction="row"
-            alignItems="center"
-            justifyContent="space-between"
-          >
+          <Stack direction="row" alignItems="center" justifyContent="space-between">
             <Stack direction="row" alignItems="center" gap="16px">
               <CapacityIcon />
               <Text size="large" weight="bold">
@@ -228,13 +215,8 @@ const CapacityDialog: FC<CapacityDialogProps> = ({
             value={capacityFormik.values.count}
             onChange={capacityFormik.handleChange}
             onBlur={capacityFormik.handleBlur}
-            error={
-              capacityFormik.touched.count &&
-              Boolean(capacityFormik.errors.count)
-            }
-            helperText={
-              capacityFormik.touched.count && capacityFormik.errors.count
-            }
+            error={capacityFormik.touched.count && Boolean(capacityFormik.errors.count)}
+            helperText={capacityFormik.touched.count && capacityFormik.errors.count}
             sx={{
               marginTop: "16px",
               [`& .Mui-focused .MuiOutlinedInput-notchedOutline`]: {

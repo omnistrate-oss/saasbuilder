@@ -1,23 +1,18 @@
-import { Subscription } from "src/types/subscription";
-import { CloudProvider } from "src/types/common/enums";
-import { CustomNetwork } from "src/types/customNetwork";
-import { MenuItem } from "src/types/common/generalTypes";
-import { ServiceOffering } from "src/types/serviceOffering";
-import { resourceInstanceStatusMap } from "src/constants/statusChipStyles/resourceInstanceStatus";
-
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
-import {
-  DateRange,
-  initialRangeState,
-} from "src/components/DateRangePicker/DateTimeRangePickerStatic";
+
+import { DateRange, initialRangeState } from "src/components/DateRangePicker/DateTimeRangePickerStatic";
+import { resourceInstanceStatusMap } from "src/constants/statusChipStyles/resourceInstanceStatus";
+import { CloudProvider } from "src/types/common/enums";
+import { MenuItem } from "src/types/common/generalTypes";
+import { CustomNetwork } from "src/types/customNetwork";
+import { ServiceOffering } from "src/types/serviceOffering";
+import { Subscription } from "src/types/subscription";
 dayjs.extend(utc);
-import {
-  ResourceInstance,
-  InstanceComputedHealthStatus,
-} from "src/types/resourceInstance";
 import { SxProps } from "@mui/material";
+
 import { instaceHealthStatusMap } from "src/constants/statusChipStyles/resourceInstanceHealthStatus";
+import { InstanceComputedHealthStatus,ResourceInstance } from "src/types/resourceInstance";
 
 export const getServiceMenuItems = (serviceOfferings: ServiceOffering[]) => {
   const menuItems: MenuItem[] = [];
@@ -39,10 +34,7 @@ export const getServiceMenuItems = (serviceOfferings: ServiceOffering[]) => {
   return menuItems.sort((a, b) => a.label.localeCompare(b.label));
 };
 
-export const getServicePlanMenuItems = (
-  serviceOfferings: ServiceOffering[],
-  serviceId: string
-) => {
+export const getServicePlanMenuItems = (serviceOfferings: ServiceOffering[], serviceId: string) => {
   const menuItems: MenuItem[] = [];
   if (!serviceOfferings?.length) {
     return menuItems;
@@ -81,10 +73,7 @@ export const getResourceMenuItems = (offering: ServiceOffering) => {
   return menuItems.sort((a, b) => a.label.localeCompare(b.label));
 };
 
-export const getRegionMenuItems = (
-  offering: ServiceOffering,
-  cloudProvider: CloudProvider
-) => {
+export const getRegionMenuItems = (offering: ServiceOffering, cloudProvider: CloudProvider) => {
   const menuItems: MenuItem[] = [];
 
   if (!offering || !cloudProvider) {
@@ -147,17 +136,12 @@ export const getCustomNetworksMenuItems = (
   }));
 };
 
-export const getMainResourceFromInstance = (
-  instance?: ResourceInstance,
-  offering?: ServiceOffering
-) => {
+export const getMainResourceFromInstance = (instance?: ResourceInstance, offering?: ServiceOffering) => {
   if (!instance || !offering) {
     return null;
   }
 
-  const mainResource = offering.resourceParameters.find(
-    (resource) => resource.resourceId === instance.resourceID
-  );
+  const mainResource = offering.resourceParameters.find((resource) => resource.resourceId === instance.resourceID);
 
   return mainResource;
 };
@@ -176,9 +160,7 @@ export const getValidSubscriptionForInstanceCreation = (
 
   serviceOfferings.forEach((serviceOffering) => {
     productTierInstanceLimitHash[serviceOffering.productTierID] =
-      serviceOffering.maxNumberOfInstances !== undefined
-        ? serviceOffering.maxNumberOfInstances
-        : -1;
+      serviceOffering.maxNumberOfInstances !== undefined ? serviceOffering.maxNumberOfInstances : -1;
 
     productTierPaymentRequirementHash[serviceOffering.productTierID] = !Boolean(
       serviceOffering.allowCreatesWhenPaymentNotConfigured
@@ -195,29 +177,19 @@ export const getValidSubscriptionForInstanceCreation = (
   });
 
   let filteredSubscriptions = subscriptions.filter(
-    (sub) =>
-      serviceOfferingsObj[sub.serviceId]?.[sub.productTierId] &&
-      ["root", "editor"].includes(sub.roleType)
+    (sub) => serviceOfferingsObj[sub.serviceId]?.[sub.productTierId] && ["root", "editor"].includes(sub.roleType)
   );
 
   //if serviceID has been provided, look for subscriptions within the serviceID
   if (serviceID) {
-    filteredSubscriptions = filteredSubscriptions.filter(
-      (subscription) => subscription.serviceId === serviceID
-    );
+    filteredSubscriptions = filteredSubscriptions.filter((subscription) => subscription.serviceId === serviceID);
   }
 
-  const sortedSubscriptionsByName = filteredSubscriptions.sort((a, b) =>
-    a.serviceName.localeCompare(b.serviceName)
-  );
+  const sortedSubscriptionsByName = filteredSubscriptions.sort((a, b) => a.serviceName.localeCompare(b.serviceName));
 
-  const rootSubscriptions = sortedSubscriptionsByName.filter(
-    (sub) => sub.roleType === "root"
-  );
+  const rootSubscriptions = sortedSubscriptionsByName.filter((sub) => sub.roleType === "root");
 
-  const editorSubscriptions = sortedSubscriptionsByName.filter(
-    (sub) => sub.roleType === "editor"
-  );
+  const editorSubscriptions = sortedSubscriptionsByName.filter((sub) => sub.roleType === "editor");
 
   let selectedSubscription: Subscription | undefined;
 
@@ -228,14 +200,10 @@ export const getValidSubscriptionForInstanceCreation = (
     //-> if plan requires valid payment config, check that payment is configured
     //-> if plan has max instance limit set, check that the limit has not been met
     const productTierID = subsription.productTierId;
-    const requiresPaymentConfig =
-      productTierPaymentRequirementHash[productTierID];
+    const requiresPaymentConfig = productTierPaymentRequirementHash[productTierID];
     const numInstances = subscriptionInstancesNumHash[subsription.id] || 0;
     const instancesLimit = productTierInstanceLimitHash[productTierID];
-    if (
-      (requiresPaymentConfig && !isPaymentConfigured) ||
-      (instancesLimit > -1 && numInstances >= instancesLimit)
-    )
+    if ((requiresPaymentConfig && !isPaymentConfigured) || (instancesLimit > -1 && numInstances >= instancesLimit))
       return false;
 
     return true;
@@ -248,14 +216,10 @@ export const getValidSubscriptionForInstanceCreation = (
       //-> if plan requires valid payment config, check that payment is configured
       //-> if plan has max instance limit set, check that the limit has not been met
       const productTierID = subsription.productTierId;
-      const requiresPaymentConfig =
-        productTierPaymentRequirementHash[productTierID];
+      const requiresPaymentConfig = productTierPaymentRequirementHash[productTierID];
       const numInstances = subscriptionInstancesNumHash[subsription.id] || 0;
       const instancesLimit = productTierInstanceLimitHash[productTierID];
-      if (
-        (requiresPaymentConfig && !isPaymentConfigured) ||
-        (instancesLimit > -1 && numInstances >= instancesLimit)
-      )
+      if ((requiresPaymentConfig && !isPaymentConfigured) || (instancesLimit > -1 && numInstances >= instancesLimit))
         return false;
 
       return true;
@@ -274,9 +238,7 @@ export const getInitialValues = (
   isPaymentConfigured: boolean
 ) => {
   if (instance) {
-    const subscription = subscriptions.find(
-      (sub) => sub.id === instance?.subscriptionId
-    );
+    const subscription = subscriptions.find((sub) => sub.id === instance?.subscriptionId);
 
     const requestParams: any = { ...(instance.result_params as object) };
     if (instance.network_type) {
@@ -302,31 +264,23 @@ export const getInitialValues = (
   }
 
   const filteredSubscriptions = subscriptions.filter(
-    (sub) =>
-      serviceOfferingsObj[sub.serviceId]?.[sub.productTierId] &&
-      ["root", "editor"].includes(sub.roleType)
+    (sub) => serviceOfferingsObj[sub.serviceId]?.[sub.productTierId] && ["root", "editor"].includes(sub.roleType)
   );
 
-  const sortedSubscriptionsByName = filteredSubscriptions.sort((a, b) =>
-    a.serviceName.localeCompare(b.serviceName)
-  );
+  const sortedSubscriptionsByName = filteredSubscriptions.sort((a, b) => a.serviceName.localeCompare(b.serviceName));
 
   //choose first subscription from which user can create an instance
 
-  const selectedSubscription: Subscription | undefined =
-    getValidSubscriptionForInstanceCreation(
-      serviceOfferings,
-      serviceOfferingsObj,
-      subscriptions,
-      instances,
-      isPaymentConfigured
-    );
+  const selectedSubscription: Subscription | undefined = getValidSubscriptionForInstanceCreation(
+    serviceOfferings,
+    serviceOfferingsObj,
+    subscriptions,
+    instances,
+    isPaymentConfigured
+  );
 
   const serviceId =
-    selectedSubscription?.serviceId ||
-    sortedSubscriptionsByName[0]?.serviceId ||
-    serviceOfferings[0]?.serviceId ||
-    "";
+    selectedSubscription?.serviceId || sortedSubscriptionsByName[0]?.serviceId || serviceOfferings[0]?.serviceId || "";
 
   //dont't select service plan card if a valid subsription (where a user can create an instance) is not found
   const servicePlanId = selectedSubscription?.productTierId || "";
@@ -359,10 +313,7 @@ export const getInitialValues = (
 
 export const getResourceNameFromInstance = (instance: ResourceInstance) => {
   const { detailedNetworkTopology = {} } = instance ?? {};
-  const [, mainResource] =
-    Object.entries(detailedNetworkTopology).find(
-      ([, resource]: any) => resource.main
-    ) || [];
+  const [, mainResource] = Object.entries(detailedNetworkTopology).find(([, resource]: any) => resource.main) || [];
 
   return (mainResource as any)?.resourceName;
 };
@@ -376,10 +327,7 @@ export type FilterCategorySchema = {
   renderOption?: (...args: any) => React.ReactNode;
 };
 
-export const getIntialFiltersObject: () => Record<
-  string,
-  FilterCategorySchema
-> = () => {
+export const getIntialFiltersObject: () => Record<string, FilterCategorySchema> = () => {
   return {
     services: {
       label: "Service Name",
@@ -531,33 +479,25 @@ export const getFilteredInstances = (
 
   //filters based on service
   if (filterOptionsMap.services?.options?.length) {
-    const serviceOptions = new Set(
-      filterOptionsMap.services?.options?.map((option) => option.value)
-    );
+    const serviceOptions = new Set(filterOptionsMap.services?.options?.map((option) => option.value));
     result = result.filter((instance) => {
-      const serviceName =
-        subscriptionsObj[instance.subscriptionId as string]?.serviceName;
+      const serviceName = subscriptionsObj[instance.subscriptionId as string]?.serviceName;
       return serviceName && serviceOptions.has(serviceName);
     });
   }
 
   //filters based on service plan
   if (filterOptionsMap.servicePlans?.options?.length) {
-    const servicePlanOptions = new Set(
-      filterOptionsMap.servicePlans?.options?.map((option) => option.value)
-    );
+    const servicePlanOptions = new Set(filterOptionsMap.servicePlans?.options?.map((option) => option.value));
     result = result.filter((instance) => {
-      const productTierName =
-        subscriptionsObj[instance.subscriptionId as string]?.productTierName;
+      const productTierName = subscriptionsObj[instance.subscriptionId as string]?.productTierName;
       return productTierName && servicePlanOptions.has(productTierName);
     });
   }
 
   //filters based on resource name
   if (filterOptionsMap.resources?.options?.length) {
-    const resourceOptions = new Set(
-      filterOptionsMap.resources?.options?.map((option) => option.value)
-    );
+    const resourceOptions = new Set(filterOptionsMap.resources?.options?.map((option) => option.value));
     result = result.filter((instance) => {
       const resourceName = getResourceNameFromInstance(instance);
       return resourceName && resourceOptions.has(resourceName);
@@ -566,9 +506,7 @@ export const getFilteredInstances = (
 
   //filter based on cloud provider
   if (filterOptionsMap.cloudProviders?.options?.length) {
-    const cloudProviderOptions = new Set(
-      filterOptionsMap.cloudProviders?.options?.map((option) => option.value)
-    );
+    const cloudProviderOptions = new Set(filterOptionsMap.cloudProviders?.options?.map((option) => option.value));
     result = result.filter((instance) => {
       const cloudProvider = instance.cloud_provider;
       return cloudProvider && cloudProviderOptions.has(cloudProvider);
@@ -577,9 +515,7 @@ export const getFilteredInstances = (
 
   //filter based on regions
   if (filterOptionsMap.regions?.options?.length) {
-    const regionOptions = new Set(
-      filterOptionsMap.regions?.options?.map((option) => option.value)
-    );
+    const regionOptions = new Set(filterOptionsMap.regions?.options?.map((option) => option.value));
 
     result = result.filter((instance) => {
       const region = instance.region;
@@ -594,21 +530,14 @@ export const getFilteredInstances = (
     );
 
     result = result.filter((instance) => {
-      const subscriptionOwnerName =
-        subscriptionsObj[instance.subscriptionId as string]
-          ?.subscriptionOwnerName;
-      return (
-        subscriptionOwnerName &&
-        subscriptionOwnerOptions.has(subscriptionOwnerName)
-      );
+      const subscriptionOwnerName = subscriptionsObj[instance.subscriptionId as string]?.subscriptionOwnerName;
+      return subscriptionOwnerName && subscriptionOwnerOptions.has(subscriptionOwnerName);
     });
   }
 
   // filter on lifecycle status
   if (filterOptionsMap.lifecycleStatus?.options?.length) {
-    const statusOptions = new Set(
-      filterOptionsMap.lifecycleStatus?.options?.map((option) => option.value)
-    );
+    const statusOptions = new Set(filterOptionsMap.lifecycleStatus?.options?.map((option) => option.value));
 
     result = result.filter((instance) => {
       const status = instance.status;
@@ -617,17 +546,12 @@ export const getFilteredInstances = (
   }
 
   //filter on created On
-  if (
-    filterOptionsMap.createdOn?.range?.startDate &&
-    filterOptionsMap.createdOn?.range?.endDate
-  ) {
+  if (filterOptionsMap.createdOn?.range?.startDate && filterOptionsMap.createdOn?.range?.endDate) {
     const startDateTime = filterOptionsMap.createdOn.range?.startDate;
     const endDateTime = filterOptionsMap.createdOn.range?.endDate;
 
     result = result.filter((instance) => {
-      const created_at = instance.created_at
-        ? new Date(instance.created_at)
-        : null;
+      const created_at = instance.created_at ? new Date(instance.created_at) : null;
       return (
         created_at &&
         dayjs(created_at).isSameOrAfter(startDateTime, "second") &&
@@ -681,9 +605,7 @@ export const getOfferingPaymentConfigRequiredStatus = (
 ): boolean => {
   let requiresValidPaymentConfig = false;
   const offering = serviceOfferings.find(
-    (offering) =>
-      offering.serviceId === selectedServiceId &&
-      offering.productTierID === selectedProductTierId
+    (offering) => offering.serviceId === selectedServiceId && offering.productTierID === selectedProductTierId
   );
   if (offering && offering.allowCreatesWhenPaymentNotConfigured === false) {
     requiresValidPaymentConfig = true;

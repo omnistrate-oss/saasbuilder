@@ -1,32 +1,35 @@
 import { FC, useMemo, useState } from "react";
-import { Box, IconButton, Stack } from "@mui/material";
-import DataGridHeaderTitle from "components/Headers/DataGridHeaderTitle";
-import formatDateUTC from "src/utils/formatDateUTC";
-import { AccessEvent, EventType } from "src/types/event";
-import EventMessageChip from "src/components/EventsTable/EventMessageChip";
-import SearchInput from "src/components/DataGrid/SearchInput";
-import { createColumnHelper } from "@tanstack/react-table";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
-import DataTable from "src/components/DataTable/DataTable";
-import RefreshWithToolTip from "src/components/RefreshWithTooltip/RefreshWithToolTip";
-import AuditLogsEventFilterDropdown from "./components/AuditLogsEventFilterDropdown";
-import GridCellExpand from "src/components/GridCellExpand/GridCellExpand";
-import { SetState } from "src/types/common/reactGenerics";
+import { Box, IconButton, Stack } from "@mui/material";
+import { createColumnHelper } from "@tanstack/react-table";
 import dayjs from "dayjs";
-import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
 import isSameOrAfter from "dayjs/plugin/isSameOrAfter";
-import useUserData from "src/hooks/usersData";
-import useAccessInstanceAuditLogs from "./hooks/useAccessInstanceAuditLogs";
-import { getAccessControlRoute } from "src/utils/route/access/accessRoute";
-import EventTypeChip from "../../EventsTable/EventTypeChip";
-import JSONView from "src/components/JSONView/JSONView";
+import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
 import { OnCopyProps } from "react-json-view";
+
+import SearchInput from "src/components/DataGrid/SearchInput";
+import DataTable from "src/components/DataTable/DataTable";
 import {
   DateRange,
   DateTimePickerPopover,
   initialRangeState,
 } from "src/components/DateRangePicker/DateTimeRangePickerStatic";
+import EventMessageChip from "src/components/EventsTable/EventMessageChip";
+import GridCellExpand from "src/components/GridCellExpand/GridCellExpand";
+import JSONView from "src/components/JSONView/JSONView";
+import RefreshWithToolTip from "src/components/RefreshWithTooltip/RefreshWithToolTip";
+import useUserData from "src/hooks/usersData";
+import { SetState } from "src/types/common/reactGenerics";
+import { AccessEvent, EventType } from "src/types/event";
+import formatDateUTC from "src/utils/formatDateUTC";
+import { getAccessControlRoute } from "src/utils/route/access/accessRoute";
+import DataGridHeaderTitle from "components/Headers/DataGridHeaderTitle";
+
+import EventTypeChip from "../../EventsTable/EventTypeChip";
+
+import AuditLogsEventFilterDropdown from "./components/AuditLogsEventFilterDropdown";
+import useAccessInstanceAuditLogs from "./hooks/useAccessInstanceAuditLogs";
 
 dayjs.extend(isSameOrBefore);
 dayjs.extend(isSameOrAfter);
@@ -75,14 +78,7 @@ const AuditLogsTableHeader: FC<AuditLogsTableHeaderProps> = (props) => {
           plural: "Events",
         }}
       />
-      <Stack
-        direction="row"
-        justifyContent="flex-end"
-        flexGrow={1}
-        flexWrap={"wrap"}
-        alignItems="center"
-        gap="12px"
-      >
+      <Stack direction="row" justifyContent="flex-end" flexGrow={1} flexWrap={"wrap"} alignItems="center" gap="12px">
         <SearchInput
           searchText={searchText}
           setSearchText={setSearchText}
@@ -90,10 +86,7 @@ const AuditLogsTableHeader: FC<AuditLogsTableHeaderProps> = (props) => {
           width="250px"
         />
         <RefreshWithToolTip refetch={refetchLogs} disabled={isRefetching} />
-        <DateTimePickerPopover
-          dateRange={selectedDateRange}
-          setDateRange={setSelectedDateRange}
-        />
+        <DateTimePickerPopover dateRange={selectedDateRange} setDateRange={setSelectedDateRange} />
         <AuditLogsEventFilterDropdown
           selectedEventTypes={selectedEventTypes}
           setSelectedEventTypes={setSelectedEventTypes}
@@ -135,8 +128,7 @@ function DetailTableRowView(props: { rowData: AccessEvent }) {
 
 const AuditLogs: FC<AuditLogsTabProps> = ({ instanceId, subscriptionId }) => {
   const [searchText, setSearchText] = useState("");
-  const [selectedDateRange, setSelectedDateRange] =
-    useState<DateRange>(initialRangeState);
+  const [selectedDateRange, setSelectedDateRange] = useState<DateRange>(initialRangeState);
   const [selectedEventTypes, setSelectedEventTypes] = useState<EventType[]>([]);
   const data = useUserData();
   const currentUserOrgId = data.userData?.orgId;
@@ -182,28 +174,19 @@ const AuditLogs: FC<AuditLogsTabProps> = ({ instanceId, subscriptionId }) => {
         id: "type",
         header: "Type",
         cell: (data) => {
-          return data.row.original.eventSource ? (
-            <EventTypeChip eventType={data.row.original.eventSource} />
-          ) : (
-            "-"
-          );
+          return data.row.original.eventSource ? <EventTypeChip eventType={data.row.original.eventSource} /> : "-";
         },
       }),
       columnHelper.accessor((row) => formatDateUTC(row.time), {
         id: "time",
         header: "Time",
-        cell: (data) =>
-          data.row.original.time ? formatDateUTC(data.row.original.time) : "-",
+        cell: (data) => (data.row.original.time ? formatDateUTC(data.row.original.time) : "-"),
       }),
       columnHelper.accessor("message", {
         id: "message",
         header: "Message",
         cell: (data) => {
-          return data.row.original.message ? (
-            <EventMessageChip message={data.row.original.message} />
-          ) : (
-            "-"
-          );
+          return data.row.original.message ? <EventMessageChip message={data.row.original.message} /> : "-";
         },
         meta: {
           flex: 1.5,
@@ -217,13 +200,10 @@ const AuditLogs: FC<AuditLogsTabProps> = ({ instanceId, subscriptionId }) => {
           const userName = data.row.original.userName;
           const orgName = data.row.original.orgName;
 
-          const isUserOmnistrateSystem =
-            userName === "System" && orgName === "System";
+          const isUserOmnistrateSystem = userName === "System" && orgName === "System";
 
           const isUserServiceProvider =
-            data.row.original.orgId &&
-            currentUserOrgId !== data.row.original.orgId &&
-            !isUserOmnistrateSystem;
+            data.row.original.orgId && currentUserOrgId !== data.row.original.orgId && !isUserOmnistrateSystem;
 
           let pageLink: string | undefined;
           if (!isUserServiceProvider && !isUserOmnistrateSystem && userId) {
@@ -236,13 +216,7 @@ const AuditLogs: FC<AuditLogsTabProps> = ({ instanceId, subscriptionId }) => {
             userDisplayLabel = `Service Provider`;
           }
 
-          return (
-            <GridCellExpand
-              href={pageLink}
-              target="_blank"
-              value={userDisplayLabel || "-"}
-            />
-          );
+          return <GridCellExpand href={pageLink} target="_blank" value={userDisplayLabel || "-"} />;
         },
       }),
     ];
@@ -255,8 +229,7 @@ const AuditLogs: FC<AuditLogsTabProps> = ({ instanceId, subscriptionId }) => {
       const searchTerm = searchText.toLowerCase().trim();
       filtered = filtered.filter(
         (event) =>
-          event.userName?.toLowerCase().includes(searchTerm) ||
-          event.message.toLowerCase().includes(searchTerm)
+          event.userName?.toLowerCase().includes(searchTerm) || event.message.toLowerCase().includes(searchTerm)
       );
     }
 
@@ -266,21 +239,14 @@ const AuditLogs: FC<AuditLogsTabProps> = ({ instanceId, subscriptionId }) => {
       });
     }
 
-    if (
-      selectedDateRange &&
-      selectedDateRange.startDate &&
-      selectedDateRange.endDate
-    ) {
+    if (selectedDateRange && selectedDateRange.startDate && selectedDateRange.endDate) {
       const startDate = dayjs(selectedDateRange.startDate);
       const endDate = dayjs(selectedDateRange.endDate);
 
       filtered = filtered.filter((event) => {
         const eventDate = dayjs(event.time);
 
-        return (
-          dayjs(eventDate).isSameOrAfter(startDate) &&
-          dayjs(eventDate).isSameOrBefore(endDate)
-        );
+        return dayjs(eventDate).isSameOrAfter(startDate) && dayjs(eventDate).isSameOrBefore(endDate);
       });
     }
 
@@ -294,9 +260,7 @@ const AuditLogs: FC<AuditLogsTabProps> = ({ instanceId, subscriptionId }) => {
         rows={filteredEvents}
         renderDetailsComponent={DetailTableRowView}
         noRowsText="No events"
-        getRowCanExpand={(rowData) =>
-          Boolean(Number(rowData.original.workflowFailures?.length) > 0)
-        }
+        getRowCanExpand={(rowData) => Boolean(Number(rowData.original.workflowFailures?.length) > 0)}
         HeaderComponent={AuditLogsTableHeader}
         headerProps={{
           count: filteredEvents.length,

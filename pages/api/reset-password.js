@@ -1,8 +1,8 @@
+import axios from "src/axios";
 import { customerUserResetPassword } from "src/server/api/customer-user";
-import { verifyRecaptchaToken } from "src/server/utils/verifyRecaptchaToken";
 import CaptchaVerificationError from "src/server/errors/CaptchaVerificationError";
 import { checkReCaptchaSetup } from "src/server/utils/checkReCaptchaSetup";
-import axios from "src/axios";
+import { verifyRecaptchaToken } from "src/server/utils/verifyRecaptchaToken";
 
 export default async function handleResetPassword(nextRequest, nextResponse) {
   if (nextRequest.method === "POST") {

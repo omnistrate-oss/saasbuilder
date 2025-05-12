@@ -60,12 +60,7 @@ export default function SnackbarProvider(props) {
     >
       {props.children}
       <Snackbar open={isOpen} autoHideDuration={6000} onClose={handleClose}>
-        <Alert
-          onClose={handleClose}
-          variant="filled"
-          severity={variant}
-          sx={{ width: "100%", fontWeight: 500 }}
-        >
+        <Alert onClose={handleClose} variant="filled" severity={variant} sx={{ width: "100%", fontWeight: 500 }}>
           {message}
         </Alert>
       </Snackbar>

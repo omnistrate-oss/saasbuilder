@@ -1,4 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
+
 import { getBillingDetails } from "src/api/consumption";
 
 function useBillingDetails(isBillingEnabled = false) {

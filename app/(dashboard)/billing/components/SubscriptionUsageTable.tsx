@@ -1,10 +1,11 @@
-import { createColumnHelper } from "@tanstack/react-table";
-import DataTable from "src/components/DataTable/DataTable";
 import { FC, useMemo } from "react";
-import { Text } from "src/components/Typography/Typography";
+import { createColumnHelper } from "@tanstack/react-table";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
+
+import DataTable from "src/components/DataTable/DataTable";
 import ServiceNameWithLogo from "src/components/ServiceNameWithLogo/ServiceNameWithLogo";
+import { Text } from "src/components/Typography/Typography";
 
 dayjs.extend(utc);
 
@@ -26,10 +27,7 @@ type SubscriptionUsageTableProps = {
   isLoadingSubscriptionsUsage: boolean;
 };
 
-const SubscriptionUsageTable: FC<SubscriptionUsageTableProps> = ({
-  rows,
-  isLoadingSubscriptionsUsage,
-}) => {
+const SubscriptionUsageTable: FC<SubscriptionUsageTableProps> = ({ rows, isLoadingSubscriptionsUsage }) => {
   const columns = useMemo(() => {
     return [
       //@ts-ignore

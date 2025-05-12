@@ -1,7 +1,5 @@
 import { styled } from "@mui/material";
-import MuiFormControlLabel, {
-  formControlLabelClasses,
-} from "@mui/material/FormControlLabel";
+import MuiFormControlLabel, { formControlLabelClasses } from "@mui/material/FormControlLabel";
 
 const FormControlLabel = styled(MuiFormControlLabel)(() => ({
   [`& .${formControlLabelClasses.label}`]: {

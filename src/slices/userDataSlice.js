@@ -1,4 +1,5 @@
 import { createSelector, createSlice } from "@reduxjs/toolkit";
+
 import loadingStatuses from "../utils/constants/loadingStatuses";
 
 const initialState = {

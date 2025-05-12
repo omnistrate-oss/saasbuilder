@@ -1,11 +1,6 @@
 import * as React from "react";
 import Box from "@mui/material/Box";
-import {
-  gridPageCountSelector,
-  GridPagination,
-  useGridApiContext,
-  useGridSelector,
-} from "@mui/x-data-grid";
+import { gridPageCountSelector, GridPagination, useGridApiContext, useGridSelector } from "@mui/x-data-grid";
 import usePagination from "@mui/material/usePagination";
 import Button from "../Button/Button";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
@@ -28,9 +23,7 @@ export function Pagination(props) {
   const prev = items?.find((item) => item.type === "previous");
   const next = items?.find((item) => item.type === "next");
 
-  const filteredItems = items?.filter(
-    (item) => item.type !== "previous" && item.type !== "next"
-  );
+  const filteredItems = items?.filter((item) => item.type !== "previous" && item.type !== "next");
 
   return (
     <Box
@@ -42,12 +35,7 @@ export function Pagination(props) {
         p: "12px 24px",
       }}
     >
-      <Button
-        size="small"
-        variant="outlined"
-        startIcon={<ArrowBackIcon />}
-        {...prev}
-      >
+      <Button size="small" variant="outlined" startIcon={<ArrowBackIcon />} {...prev}>
         Previous
       </Button>
       <List sx={{ display: "flex", px: "20px", gap: "2px" }}>
@@ -55,13 +43,7 @@ export function Pagination(props) {
           let children = null;
 
           if (type === "start-ellipsis" || type === "end-ellipsis") {
-            children = (
-              <Box
-                sx={{ display: "flex", alignItems: "center", height: "100%" }}
-              >
-                …
-              </Box>
-            );
+            children = <Box sx={{ display: "flex", alignItems: "center", height: "100%" }}>…</Box>;
           } else if (type === "page") {
             children = (
               <Button
@@ -87,12 +69,7 @@ export function Pagination(props) {
           return <li key={index}>{children}</li>;
         })}
       </List>
-      <Button
-        size="small"
-        variant="outlined"
-        endIcon={<ArrowForwardIcon />}
-        {...next}
-      >
+      <Button size="small" variant="outlined" endIcon={<ArrowForwardIcon />} {...next}>
         Next
       </Button>{" "}
     </Box>

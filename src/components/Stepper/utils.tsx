@@ -1,10 +1,13 @@
 import Image from "next/image";
+
+import sandClock from "public/assets/images/cloud-account/sandclock.gif";
+
+import { Text } from "../Typography/Typography";
+
 import StepperDefaultIcon from "./StepperDefaultIcon";
 import StepperInProgressIcon from "./StepperInProgressIcon";
 import StepperSuccessIcon from "./StepperSuccessIcon";
 import { StepStepperProps } from "./StepStepper";
-import { Text } from "../Typography/Typography";
-import sandClock from "public/assets/images/cloud-account/sandclock.gif";
 
 export const stateAccountConfigStepper = {
   trigger: "trigger",
@@ -13,9 +16,7 @@ export const stateAccountConfigStepper = {
 
 type StepperSetpStatusProps = "trigger" | "check";
 
-export const getStepperProps = (
-  StepperSetpStatus: StepperSetpStatusProps
-): StepStepperProps => {
+export const getStepperProps = (StepperSetpStatus: StepperSetpStatusProps): StepStepperProps => {
   if (StepperSetpStatus === stateAccountConfigStepper.trigger) {
     return {
       step1: {

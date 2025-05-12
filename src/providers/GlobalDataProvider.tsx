@@ -1,16 +1,15 @@
 "use client";
 
 import { createContext, useContext, useMemo } from "react";
+import Navbar from "app/(dashboard)/components/Layout/Navbar";
 import NoServiceFoundUI from "app/(dashboard)/components/NoServiceFoundUI/NoServiceFoundUI";
 
-import useOrgServiceOfferings from "src/hooks/useOrgServiceOfferings";
 import useSubscriptions from "src/hooks/query/useSubscriptions";
+import useOrgServiceOfferings from "src/hooks/useOrgServiceOfferings";
 import useSubscriptionRequests from "src/hooks/useSubscriptionRequests";
-
+import { ServiceOffering } from "src/types/serviceOffering";
 import { Subscription } from "src/types/subscription";
 import { SubscriptionRequest } from "src/types/subscriptionRequest";
-import { ServiceOffering } from "src/types/serviceOffering";
-import Navbar from "app/(dashboard)/components/Layout/Navbar";
 
 type Context = {
   subscriptions: Subscription[];
@@ -39,9 +38,7 @@ export const useGlobalData = () => {
   const context = useContext(GlobalDataContext);
 
   if (context === undefined) {
-    throw new Error(
-      "useProviderOrgDetails must be used within a ProviderOrgDetailsProvider"
-    );
+    throw new Error("useProviderOrgDetails must be used within a ProviderOrgDetailsProvider");
   }
 
   return context || {};

@@ -1,42 +1,36 @@
 import { useState } from "react";
-import { Box, Stack, styled, Typography } from "@mui/material";
-import FlagWithBackground from "../Icons/Flag/FlagWithBackground";
+import Link from "next/link";
 import CloseIcon from "@mui/icons-material/Close";
-import Button from "../Button/Button";
+import { Box, Stack, styled, Typography } from "@mui/material";
+
 // import CookiePreferenceModal from "./CookiePreferenceModal";
 import { useCookieConsentContext } from "src/context/cookieConsentContext";
-import Link from "next/link";
 
-const StyledConsentContainer = styled(Box)<{ maxWidth?: string }>(
-  ({ maxWidth }) => ({
-    position: "fixed",
-    bottom: "0",
-    right: "50%",
-    transform: "translateX(50%)",
-    background: "#364152",
-    borderRadius: "12px",
-    border: "1px solid #4B5565",
-    boxShadow:
-      "0px 2px 2px -1px #0A0D120A, 0px 4px 6px -2px #0A0D1208, 0px 12px 16px -4px #0A0D1214",
-    padding: "12px",
-    width: "100%",
-    maxWidth: maxWidth,
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "flex-start",
-    zIndex: 1300,
-  })
-);
+import Button from "../Button/Button";
+import FlagWithBackground from "../Icons/Flag/FlagWithBackground";
+
+const StyledConsentContainer = styled(Box)<{ maxWidth?: string }>(({ maxWidth }) => ({
+  position: "fixed",
+  bottom: "0",
+  right: "50%",
+  transform: "translateX(50%)",
+  background: "#364152",
+  borderRadius: "12px",
+  border: "1px solid #4B5565",
+  boxShadow: "0px 2px 2px -1px #0A0D120A, 0px 4px 6px -2px #0A0D1208, 0px 12px 16px -4px #0A0D1214",
+  padding: "12px",
+  width: "100%",
+  maxWidth: maxWidth,
+  display: "flex",
+  flexDirection: "column",
+  justifyContent: "flex-start",
+  zIndex: 1300,
+}));
 
 function CookieConsentModal() {
   const [isPreferenceModalOpen, setIsPreferenceModalOpen] = useState(false);
 
-  const {
-    consentState,
-    updateConsent,
-    isConsentModalOpen,
-    setIsConsentModalOpen,
-  } = useCookieConsentContext();
+  const { consentState, updateConsent, isConsentModalOpen, setIsConsentModalOpen } = useCookieConsentContext();
 
   const closeConsentModal = () => setIsConsentModalOpen(false);
 
@@ -57,9 +51,7 @@ function CookieConsentModal() {
   const handleAllowNecessary = () => {
     updateConsent(
       consentState?.categories?.map((category) =>
-        category.category === "necessary"
-          ? { ...category, enabled: true }
-          : { ...category, enabled: false }
+        category.category === "necessary" ? { ...category, enabled: true } : { ...category, enabled: false }
       )
     );
     closePreferenceModal();
@@ -75,10 +67,7 @@ function CookieConsentModal() {
   return (
     <>
       {isConsentModalOpen && !isPreferenceModalOpen && (
-        <StyledConsentContainer
-          data-testid="cookie-consent-banner"
-          maxWidth={"1216px"}
-        >
+        <StyledConsentContainer data-testid="cookie-consent-banner" maxWidth={"1216px"}>
           <Stack direction="row" justifyContent="space-between">
             <Stack direction="row" alignItems="center" gap="16px">
               <FlagWithBackground />
@@ -90,8 +79,7 @@ function CookieConsentModal() {
                   color: "#ffffff",
                 }}
               >
-                We use third-party cookies in order to personalise your
-                experience.{" "}
+                We use third-party cookies in order to personalise your experience.{" "}
                 <Box component={"span"} sx={{ fontWeight: 400 }}>
                   Read our{" "}
                   <Link
@@ -115,20 +103,10 @@ function CookieConsentModal() {
               >
                 Allow necessary
               </Button>
-              <Button
-                size="large"
-                variant="contained"
-                fontColor="#ffffff"
-                bgColor="#000000"
-                onClick={handleAllowAll}
-              >
+              <Button size="large" variant="contained" fontColor="#ffffff" bgColor="#000000" onClick={handleAllowAll}>
                 Allow all
               </Button>
-              <CloseIcon
-                htmlColor="#ffffff"
-                sx={{ cursor: "pointer" }}
-                onClick={closeConsentModal}
-              />
+              <CloseIcon htmlColor="#ffffff" sx={{ cursor: "pointer" }} onClick={closeConsentModal} />
             </Stack>
           </Stack>
         </StyledConsentContainer>

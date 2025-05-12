@@ -10,12 +10,7 @@ import { Buffer } from "buffer";
 import { flushSync } from "react-dom";
 
 function GoogleLogin(props) {
-  const {
-    disabled,
-    saasBuilderBaseURL,
-    invitationInfo = {},
-    destination,
-  } = props;
+  const { disabled, saasBuilderBaseURL, invitationInfo = {}, destination } = props;
   const [authState, setAuthState] = useState("");
 
   const googleLogin = useGoogleLogin({
@@ -35,10 +30,7 @@ function GoogleLogin(props) {
       destination,
       identityProvider: IDENTITY_PROVIDER_TYPES.Google,
     };
-    const encodedGoogleAuthState = Buffer.from(
-      JSON.stringify(googleAuthState),
-      "utf8"
-    ).toString("base64");
+    const encodedGoogleAuthState = Buffer.from(JSON.stringify(googleAuthState), "utf8").toString("base64");
     //synchronously update state to make immediately available to google login hook
     flushSync(() => {
       setAuthState(encodedGoogleAuthState);
@@ -46,21 +38,14 @@ function GoogleLogin(props) {
 
     const localAuthState = { ...googleAuthState, invitationInfo };
 
-    const encodedLocalAuthState = Buffer.from(
-      JSON.stringify(localAuthState),
-      "utf8"
-    ).toString("base64");
+    const encodedLocalAuthState = Buffer.from(JSON.stringify(localAuthState), "utf8").toString("base64");
 
     sessionStorage.setItem("authState", encodedLocalAuthState);
     googleLogin();
   }
 
   return (
-    <Tooltip
-      isVisible={disabled}
-      title="Temporarily Unavailable"
-      placement="top"
-    >
+    <Tooltip isVisible={disabled} title="Temporarily Unavailable" placement="top">
       <Box>
         <SSOLoginButton
           data-testid="google-signin-button"

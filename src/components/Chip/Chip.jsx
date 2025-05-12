@@ -8,9 +8,7 @@ const Chip = styled(
   },
   {
     shouldForwardProp: (prop) => {
-      return (
-        prop !== "fontColor" && prop !== "bgColor" && prop !== "borderColor"
-      );
+      return prop !== "fontColor" && prop !== "bgColor" && prop !== "borderColor";
     },
   }
 )(({ fontColor, bgColor, borderColor }) => ({

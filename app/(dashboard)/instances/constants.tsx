@@ -1,13 +1,14 @@
 import AddIcon from "@mui/icons-material/Add";
-import PlayIcon from "components/Icons/Play/Play";
-import EditIcon from "components/Icons/Edit/Edit";
-import StopIcon from "components/Icons/Stop/Stop";
-import DeleteIcon from "components/Icons/Delete/Delete";
-import RestartIcon from "components/Icons/Reboot/Reboot";
-import RestoreIcon from "components/Icons/RestoreInstance/RestoreInstanceIcon";
+
 import AddCapacityIcon from "components/Icons/AddCapacity/AddCapacityIcon";
+import DeleteIcon from "components/Icons/Delete/Delete";
+import EditIcon from "components/Icons/Edit/Edit";
 import GenerateTokenIcon from "components/Icons/GenerateToken/GenerateTokenIcon";
+import PlayIcon from "components/Icons/Play/Play";
+import RestartIcon from "components/Icons/Reboot/Reboot";
 import RemoveCapacityIcon from "components/Icons/RemoveCapacity/RemoveCapacityIcon";
+import RestoreIcon from "components/Icons/RestoreInstance/RestoreInstanceIcon";
+import StopIcon from "components/Icons/Stop/Stop";
 
 export const icons = {
   Stop: StopIcon,

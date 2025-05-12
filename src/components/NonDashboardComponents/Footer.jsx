@@ -18,12 +18,7 @@ const Footer = (props) => {
       gap="10px"
       padding={nonFloatingBottomPosition ? "20px" : "0px"}
     >
-      <Typography
-        fontWeight="500"
-        fontSize="14px"
-        lineHeight="22px"
-        color="#A0AEC0"
-      >
+      <Typography fontWeight="500" fontSize="14px" lineHeight="22px" color="#A0AEC0">
         © {new Date().getFullYear()} {orgName}{" "}
         <Box component="span" sx={{ marginLeft: "12px" }}>
           All rights reserved.

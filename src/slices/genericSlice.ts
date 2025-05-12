@@ -18,21 +18,15 @@ const genericSlice = createSlice({
       state.instanceListSummaryVisible = !state.instanceListSummaryVisible;
     },
     toggleInstanceDetailsSummaryVisibility: (state) => {
-      state.instanceDetailsSummaryVisible =
-        !state.instanceDetailsSummaryVisible;
+      state.instanceDetailsSummaryVisible = !state.instanceDetailsSummaryVisible;
     },
   },
 });
 
-export const {
-  toggleInstanceDetailsSummaryVisibility,
-  toggleInstanceListSummaryVisibility,
-} = genericSlice.actions;
+export const { toggleInstanceDetailsSummaryVisibility, toggleInstanceListSummaryVisibility } = genericSlice.actions;
 
 export default genericSlice.reducer;
 
-export const selectInstanceListSummaryVisibility = (state) =>
-  state.generic.instanceListSummaryVisible;
+export const selectInstanceListSummaryVisibility = (state) => state.generic.instanceListSummaryVisible;
 
-export const selectInstanceDetailsSummaryVisibility = (state) =>
-  state.generic.instanceDetailsSummaryVisible;
+export const selectInstanceDetailsSummaryVisibility = (state) => state.generic.instanceDetailsSummaryVisible;

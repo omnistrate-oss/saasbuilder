@@ -1,20 +1,21 @@
 "use client";
 
 import { useState } from "react";
+import { Box, InputAdornment, Stack } from "@mui/material";
 import Generator from "generate-password";
-import { InputAdornment, Box, Stack } from "@mui/material";
 
+import MenuItem from "components/FormElementsv2/MenuItem/MenuItem";
+import Select from "components/FormElementsv2/Select/Select";
+import TextField from "components/FormElementsv2/TextField/TextField";
 import KeyIcon from "components/Icons/Key/KeyIcon";
 import { Text } from "components/Typography/Typography";
-import Select from "components/FormElementsv2/Select/Select";
-import MenuItem from "components/FormElementsv2/MenuItem/MenuItem";
-import TextField from "components/FormElementsv2/TextField/TextField";
+
+import Autocomplete from "../FormElementsv2/AutoComplete/AutoComplete";
+import FormControlLabel from "../FormElementsv2/FormControlLabel/FormControlLabel";
+import Radio, { RadioGroup } from "../FormElementsv2/Radio/Radio";
+import Tooltip from "../Tooltip/Tooltip";
 
 import { Field } from "./types";
-import Tooltip from "../Tooltip/Tooltip";
-import Radio, { RadioGroup } from "../FormElementsv2/Radio/Radio";
-import FormControlLabel from "../FormElementsv2/FormControlLabel/FormControlLabel";
-import Autocomplete from "../FormElementsv2/AutoComplete/AutoComplete";
 
 export const PasswordInput = ({ field, formData }) => {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
@@ -33,9 +34,7 @@ export const PasswordInput = ({ field, formData }) => {
         field.onChange?.(e);
         formData.handleChange(e);
       }}
-      error={Boolean(
-        formData.touched[field.name] && formData.errors[field.name]
-      )}
+      error={Boolean(formData.touched[field.name] && formData.errors[field.name])}
       onBlur={(e) => {
         field.onBlur?.(e);
         formData.handleBlur(e);
@@ -109,13 +108,7 @@ export const PasswordInput = ({ field, formData }) => {
   );
 };
 
-export const TextInput = ({
-  field,
-  formData,
-}: {
-  field: Field;
-  formData: any;
-}) => {
+export const TextInput = ({ field, formData }: { field: Field; formData: any }) => {
   const { values, touched, errors, handleChange, handleBlur } = formData;
   return (
     <TextField
@@ -176,22 +169,14 @@ export const SelectField = ({ field, formData }) => {
       {field.menuItems?.length > 0 ? (
         field.menuItems.map((option) => {
           const menuItem = (
-            <MenuItem
-              key={option.value}
-              value={option.value}
-              disabled={option.disabled}
-            >
+            <MenuItem key={option.value} value={option.value} disabled={option.disabled}>
               {option.label}
             </MenuItem>
           );
 
           if (option.disabled && option.disabledMessage) {
             return (
-              <Tooltip
-                title={option.disabledMessage}
-                key={option.value}
-                placement="top"
-              >
+              <Tooltip title={option.disabledMessage} key={option.value} placement="top">
                 <span>{menuItem}</span>
               </Tooltip>
             );
@@ -227,12 +212,7 @@ export const RadioField = ({ field, formData }) => {
           key={option.value}
           value={option.value}
           label={
-            <Stack
-              direction={"row"}
-              alignItems={"center"}
-              justifyContent={"flex-start"}
-              gap="2px"
-            >
+            <Stack direction={"row"} alignItems={"center"} justifyContent={"flex-start"} gap="2px">
               {option.label}
               {option.labelChips?.map((item) => item)}
             </Stack>
@@ -261,9 +241,7 @@ export const SingleSelectAutocomplete = ({ field, formData }) => {
       }}
       disabled={field.disabled}
       getOptionLabel={(option) => option}
-      error={Boolean(
-        formData.touched[field.name] && formData.errors[field.name]
-      )}
+      error={Boolean(formData.touched[field.name] && formData.errors[field.name])}
     />
   );
 };
@@ -286,9 +264,7 @@ export const MultiSelectAutocomplete = ({ field, formData }) => {
       disabled={field.disabled}
       getOptionLabel={(option) => option.label}
       isOptionEqualToValue={(option, value) => option.value === value.value}
-      error={Boolean(
-        formData.touched[field.name] && formData.errors[field.name]
-      )}
+      error={Boolean(formData.touched[field.name] && formData.errors[field.name])}
     />
   );
 };

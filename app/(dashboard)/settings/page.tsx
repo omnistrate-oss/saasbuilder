@@ -4,27 +4,26 @@ import { useState } from "react";
 import { Tab, Tabs } from "@mui/material";
 import { useSelector } from "react-redux";
 
-import PageTitle from "../components/Layout/PageTitle";
-import SettingsIcon from "../components/Icons/SettingsIcon";
-import AccountManagementHeader from "../components/AccountManagement/AccountManagementHeader";
-
-import { tabLabels } from "./constants";
-import ProfileForm from "./components/ProfileForm";
-import PasswordForm from "./components/PasswordForm";
-import PageContainer from "../components/Layout/PageContainer";
-
-import { colors } from "src/themeConfig";
+import useEnvironmentType from "src/hooks/useEnvironmentType";
 import useUserData from "src/hooks/usersData";
 import { selectUserrootData } from "src/slices/userDataSlice";
+import { colors } from "src/themeConfig";
+
+import AccountManagementHeader from "../components/AccountManagement/AccountManagementHeader";
+import SettingsIcon from "../components/Icons/SettingsIcon";
+import PageContainer from "../components/Layout/PageContainer";
+import PageTitle from "../components/Layout/PageTitle";
+
 import DeleteAccount from "./components/DeleteAccount";
-import useEnvironmentType from "src/hooks/useEnvironmentType";
+import PasswordForm from "./components/PasswordForm";
+import ProfileForm from "./components/ProfileForm";
+import { tabLabels } from "./constants";
 
 type CurrentTab = "profile" | "deleteAccount" | "password";
 
 const SettingsPage = () => {
   const selectUser = useSelector(selectUserrootData);
-  const { refetch: refetchUserData, isLoading: isLoadingUserData } =
-    useUserData();
+  const { refetch: refetchUserData, isLoading: isLoadingUserData } = useUserData();
   const [currentTab, setCurrentTab] = useState<CurrentTab>("profile");
   const environmentType = useEnvironmentType();
 
@@ -32,10 +31,7 @@ const SettingsPage = () => {
 
   return (
     <div>
-      <AccountManagementHeader
-        userName={selectUser?.name}
-        userEmail={selectUser?.email}
-      />
+      <AccountManagementHeader userName={selectUser?.name} userEmail={selectUser?.email} />
       <PageContainer>
         <PageTitle icon={SettingsIcon} className="mb-6">
           Settings
@@ -102,16 +98,10 @@ const SettingsPage = () => {
         </Tabs>
 
         {currentTab === "profile" && (
-          <ProfileForm
-            userData={selectUser}
-            refetchUserData={refetchUserData}
-            isLoadingUserData={isLoadingUserData}
-          />
+          <ProfileForm userData={selectUser} refetchUserData={refetchUserData} isLoadingUserData={isLoadingUserData} />
         )}
 
-        {currentTab === "password" && (
-          <PasswordForm email={selectUser?.email} />
-        )}
+        {currentTab === "password" && <PasswordForm email={selectUser?.email} />}
 
         {currentTab === "deleteAccount" && isProduction && <DeleteAccount />}
       </PageContainer>

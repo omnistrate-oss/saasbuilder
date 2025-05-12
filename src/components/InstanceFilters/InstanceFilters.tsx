@@ -1,8 +1,9 @@
 import { FC } from "react";
 import { Box, Stack, styled } from "@mui/material";
-import { SetState } from "src/types/common/reactGenerics";
 import _ from "lodash";
+
 import { colors } from "src/themeConfig";
+import { SetState } from "src/types/common/reactGenerics";
 
 const Button = styled("button")<{ enabled: boolean }>(({ enabled }) => ({
   fontSize: "14px",
@@ -49,9 +50,7 @@ type InstanceFilterToggleProps = {
   setFilterStatus: SetState<InstanceFilterStatus>;
 };
 
-export function getInitialFilterState(
-  requiredFilters?: FilterType[]
-): InstanceFilterStatus {
+export function getInitialFilterState(requiredFilters?: FilterType[]): InstanceFilterStatus {
   const filterState = {};
 
   if (!requiredFilters || requiredFilters.length === 0) {
@@ -124,14 +123,7 @@ const InstanceFilters: FC<InstanceFiltersProps> = (props) => {
   }));
 
   return (
-    <Stack
-      direction="row"
-      justifyContent="center"
-      display="flex"
-      gap="20px"
-      alignItems="stretch"
-      width="100%"
-    >
+    <Stack direction="row" justifyContent="center" display="flex" gap="20px" alignItems="stretch" width="100%">
       {filters.map((filter) => {
         return (
           <InstanceFilterToggle

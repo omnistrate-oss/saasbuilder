@@ -4,8 +4,7 @@ import { Text } from "../Typography/Typography";
 const Card = styled(Box)(() => ({
   background: "#FFFFFF",
   border: " 1px solid #EAECF0",
-  boxShadow:
-    "0px 1px 2px 0px rgba(16, 24, 40, 0.06), 0px 1px 3px 0px rgba(16, 24, 40, 0.10)",
+  boxShadow: "0px 1px 2px 0px rgba(16, 24, 40, 0.06), 0px 1px 3px 0px rgba(16, 24, 40, 0.10)",
   borderRadius: "12px",
   padding: 24,
 }));

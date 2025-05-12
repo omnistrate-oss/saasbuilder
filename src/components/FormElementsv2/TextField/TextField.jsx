@@ -42,8 +42,7 @@ const StyledTextField = styled(MuiTextField, {
   },
   ".MuiOutlinedInput-root.Mui-error.Mui-focused": {
     [`& .MuiOutlinedInput-notchedOutline`]: {
-      boxShadow:
-        "0px 0px 0px 4px #FEE4E2, 0px 1px 2px 0px rgba(16, 24, 40, 0.05)",
+      boxShadow: "0px 0px 0px 4px #FEE4E2, 0px 1px 2px 0px rgba(16, 24, 40, 0.05)",
     },
   },
   ".MuiOutlinedInput-root.Mui-disabled": {
@@ -82,14 +81,7 @@ const TextField = (props) => {
     );
   }
 
-  return (
-    <StyledTextField
-      fullWidth
-      marginTop={marginTop}
-      {...restProps}
-      InputProps={InputProps}
-    />
-  );
+  return <StyledTextField fullWidth marginTop={marginTop} {...restProps} InputProps={InputProps} />;
 };
 
 export default TextField;

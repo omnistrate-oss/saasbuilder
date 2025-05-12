@@ -1,10 +1,9 @@
-import path from "path";
 import { test as setup } from "@playwright/test";
-
 import { PageURLs } from "page-objects/pages";
 import { SigninPage } from "page-objects/signin-page";
-import { UserAPIClient } from "test-utils/user-api-client";
+import path from "path";
 import { GlobalStateManager } from "test-utils/global-state-manager";
+import { UserAPIClient } from "test-utils/user-api-client";
 
 const authFile = path.join(__dirname, "../playwright/auth/user.json");
 

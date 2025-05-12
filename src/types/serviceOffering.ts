@@ -1,4 +1,4 @@
-import type { paths, components } from "./schema";
+import type { components,paths } from "./schema";
 
 export type ListServiceOfferingSuccessResponse =
   paths["/2022-09-01-00/service-offering"]["get"]["responses"]["200"]["content"]["application/json"];

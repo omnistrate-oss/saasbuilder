@@ -1,10 +1,4 @@
-export type Category =
-  | "success"
-  | "inProgress"
-  | "pending"
-  | "info"
-  | "failed"
-  | "unknown";
+export type Category = "success" | "inProgress" | "pending" | "info" | "failed" | "unknown";
 export type ColorObject = {
   bgColor: string;
   color: string;

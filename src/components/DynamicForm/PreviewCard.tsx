@@ -1,8 +1,10 @@
 import React from "react";
-import { Field, Section } from "./types";
+
+import { colors } from "src/themeConfig";
 
 import { Text } from "../Typography/Typography";
-import { colors } from "src/themeConfig";
+
+import { Field, Section } from "./types";
 
 type PreviewCardProps = {
   sections: Section[];
@@ -85,9 +87,7 @@ const FieldValue = ({ field, formData }: { field: Field; formData: any }) => {
       </div>
       <div className="col-span-3 flex items-baseline">
         <div style={{ margin: "0 8px 0px 0px" }}>:</div>
-        <div style={{ maxWidth: "100%" }}>
-          {previewValue ? renderPreviewValue() : renderValue()}
-        </div>
+        <div style={{ maxWidth: "100%" }}>{previewValue ? renderPreviewValue() : renderValue()}</div>
       </div>
     </>
   );
@@ -101,12 +101,7 @@ const PreviewCard: React.FC<PreviewCardProps> = ({ sections, formData }) => {
 
         return (
           <div key={index}>
-            <Text
-              size="small"
-              weight="semibold"
-              color={colors.purple600}
-              sx={{ mb: "10px" }}
-            >
+            <Text size="small" weight="semibold" color={colors.purple600} sx={{ mb: "10px" }}>
               {section.title}
             </Text>
 
@@ -117,9 +112,7 @@ const PreviewCard: React.FC<PreviewCardProps> = ({ sections, formData }) => {
               }}
             >
               {section.fields.map((field, index) => {
-                return (
-                  <FieldValue key={index} field={field} formData={formData} />
-                );
+                return <FieldValue key={index} field={field} formData={formData} />;
               })}
             </div>
           </div>

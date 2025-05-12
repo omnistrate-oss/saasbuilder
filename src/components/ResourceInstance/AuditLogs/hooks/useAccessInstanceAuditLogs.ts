@@ -1,5 +1,6 @@
 import { QueryOptions, useQuery, UseQueryResult } from "@tanstack/react-query";
 import { AxiosResponse } from "axios";
+
 import { getResourceInstanceEvents } from "src/api/event";
 import { AccessEvent } from "src/types/event";
 
@@ -8,10 +9,7 @@ type QueryParams = {
   subscriptionId?: string;
 };
 
-function useAccessInstanceAuditLogs(
-  queryParams: QueryParams = {},
-  queryOptions: QueryOptions = {}
-) {
+function useAccessInstanceAuditLogs(queryParams: QueryParams = {}, queryOptions: QueryOptions = {}) {
   const { instanceId, subscriptionId } = queryParams;
   const enabled = Boolean(instanceId && subscriptionId);
 

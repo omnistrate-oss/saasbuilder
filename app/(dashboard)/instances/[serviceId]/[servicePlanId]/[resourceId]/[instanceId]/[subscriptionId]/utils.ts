@@ -15,8 +15,7 @@ export const getTabs = (
     connectivity: "Connectivity",
     nodes: "Nodes",
   };
-  if (isMetricsEnabled && !isResourceBYOA && !isCliManagedResource)
-    tabs["metrics"] = "Metrics";
+  if (isMetricsEnabled && !isResourceBYOA && !isCliManagedResource) tabs["metrics"] = "Metrics";
   if (isLogsEnabled && !isResourceBYOA) tabs["logs"] = "Live Logs";
 
   if (!isActive || resourceType === RESOURCE_TYPES.Terraform) {
@@ -36,18 +35,13 @@ export const getTabs = (
 };
 
 export const checkCustomDNSEndpoint = (resources) => {
-  if (
-    resources.primary?.customDNSEndpoint &&
-    resources.primary?.customDNSEndpoint.enabled === true
-  ) {
+  if (resources.primary?.customDNSEndpoint && resources.primary?.customDNSEndpoint.enabled === true) {
     return true;
   }
 
   if (Array.isArray(resources.others)) {
     return resources.others.some(
-      (resource) =>
-        resource.customDNSEndpoint &&
-        resource.customDNSEndpoint.enabled === true
+      (resource) => resource.customDNSEndpoint && resource.customDNSEndpoint.enabled === true
     );
   }
 

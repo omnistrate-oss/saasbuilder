@@ -1,4 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
+
 import { getDeploymentCellToken } from "src/api/resourceInstance";
 
 type QueryParams = {

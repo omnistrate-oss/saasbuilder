@@ -1,21 +1,19 @@
 import { FC, useMemo, useState } from "react";
-import { Text } from "src/components/Typography/Typography";
-import UsageDimensionCard from "./UsageDimensionCard";
-import {
-  ConsumptionUsage as ConsumptionUsageData,
-  UsageDimension,
-} from "src/types/consumption";
-import dayjs from "dayjs";
-import utc from "dayjs/plugin/utc";
-import SubscriptionUsageTable, {
-  SubscriptionUsageRow,
-} from "./SubscriptionUsageTable";
-import { Collapse } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
+import { Collapse } from "@mui/material";
+import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
+
 import Button from "src/components/Button/Button";
-import useMultiSubscriptionUsage from "../hooks/useMultiSubscriptionUsage";
+import { Text } from "src/components/Typography/Typography";
 import { useGlobalData } from "src/providers/GlobalDataProvider";
+import { ConsumptionUsage as ConsumptionUsageData, UsageDimension } from "src/types/consumption";
+
+import useMultiSubscriptionUsage from "../hooks/useMultiSubscriptionUsage";
+
+import SubscriptionUsageTable, { SubscriptionUsageRow } from "./SubscriptionUsageTable";
+import UsageDimensionCard from "./UsageDimensionCard";
 
 dayjs.extend(utc);
 
@@ -74,17 +72,11 @@ const ConsumptionUsage: FC<ConsumptionUsageProps> = (props) => {
         return subscription.roleType === "root";
       })
       .sort((subscriptionA, subscriptionB) =>
-        subscriptionA.productTierName.toLowerCase() <
-        subscriptionB.productTierName.toLowerCase()
-          ? -1
-          : 1
+        subscriptionA.productTierName.toLowerCase() < subscriptionB.productTierName.toLowerCase() ? -1 : 1
       );
   }, [subscriptions]);
 
-  const subscriptionIds = useMemo(
-    () => rootSubscriptions.map((subscription) => subscription.id),
-    [rootSubscriptions]
-  );
+  const subscriptionIds = useMemo(() => rootSubscriptions.map((subscription) => subscription.id), [rootSubscriptions]);
 
   const {
     data: subscriptionUsageHashmap,
@@ -98,9 +90,8 @@ const ConsumptionUsage: FC<ConsumptionUsageProps> = (props) => {
     let rows: SubscriptionUsageRow[] = [];
     if (isSubscriptionUsageFetched && subscriptionUsageHashmap) {
       rows = rootSubscriptions.map((subscription) => {
-        const { id, serviceName, serviceLogoURL, productTierName, serviceId } =
-          subscription;
-        const usageData = subscriptionUsageHashmap[id] || { cpuCoreHours: 0, memoryGiBHours: 0, storageGiBHours: 0 }
+        const { id, serviceName, serviceLogoURL, productTierName, serviceId } = subscription;
+        const usageData = subscriptionUsageHashmap[id] || { cpuCoreHours: 0, memoryGiBHours: 0, storageGiBHours: 0 };
         const rowData: SubscriptionUsageRow = {
           subscriptionId: id,
           serviceId: serviceId,
@@ -132,9 +123,7 @@ const ConsumptionUsage: FC<ConsumptionUsageProps> = (props) => {
             <Text size="xsmall" weight="medium" color="#414651">
               Usage This Month{" "}
               {consumptionUsageData?.endTime &&
-                `(Until ${dayjs
-                  .utc(consumptionUsageData?.endTime)
-                  .format("MMM DD, YYYY, HH:mm:ss")} UTC)`}
+                `(Until ${dayjs.utc(consumptionUsageData?.endTime).format("MMM DD, YYYY, HH:mm:ss")} UTC)`}
             </Text>
           </div>
           <Button
@@ -168,10 +157,7 @@ const ConsumptionUsage: FC<ConsumptionUsageProps> = (props) => {
         </div>
       </div>
       <Collapse in={showUsageBreakdown}>
-        <SubscriptionUsageTable
-          rows={rows}
-          isLoadingSubscriptionsUsage={isLoadingSubscriptionsUsage}
-        />
+        <SubscriptionUsageTable rows={rows} isLoadingSubscriptionsUsage={isLoadingSubscriptionsUsage} />
       </Collapse>
     </div>
   );

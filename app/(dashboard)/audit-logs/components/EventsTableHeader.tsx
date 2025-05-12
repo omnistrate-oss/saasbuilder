@@ -1,12 +1,11 @@
+import { DateRange, DateTimePickerPopover } from "src/components/DateRangePicker/DateTimeRangePickerStatic";
+import AuditLogsEventFilterDropdown from "src/components/ResourceInstance/AuditLogs/components/AuditLogsEventFilterDropdown";
+import { SetState } from "src/types/common/reactGenerics";
+import { EventType } from "src/types/event";
+import { ServiceOffering } from "src/types/serviceOffering";
 import DataGridHeaderTitle from "components/Headers/DataGridHeaderTitle";
 import RefreshWithToolTip from "components/RefreshWithTooltip/RefreshWithToolTip";
 
-import { SetState } from "src/types/common/reactGenerics";
-import { ServiceOffering } from "src/types/serviceOffering";
-
-import { DateRange, DateTimePickerPopover } from "src/components/DateRangePicker/DateTimeRangePickerStatic";
-import AuditLogsEventFilterDropdown from "src/components/ResourceInstance/AuditLogs/components/AuditLogsEventFilterDropdown";
-import { EventType } from "src/types/event";
 import ServiceFilter from "./ServiceFilter";
 
 type EventsTableHeaderProps = {

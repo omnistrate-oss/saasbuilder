@@ -75,8 +75,7 @@ const StyledInput = styled(InputBase)(({ theme }) => ({
 const WrapperRoot = styled(Box)(() => ({}));
 
 export const Input = (props) => {
-  const { errorMsg, label, sx, mt, mb, pt, pb, className, ...restProps } =
-    props;
+  const { errorMsg, label, sx, mt, mb, pt, pb, className, ...restProps } = props;
   const { error } = props;
 
   return (
@@ -94,11 +93,7 @@ export const Input = (props) => {
         </label>
       )}
       <StyledInput {...restProps} />
-      {error ? (
-        <ErrorMessage>{errorMsg ? errorMsg : "Required"}</ErrorMessage>
-      ) : (
-        ""
-      )}
+      {error ? <ErrorMessage>{errorMsg ? errorMsg : "Required"}</ErrorMessage> : ""}
     </WrapperRoot>
   );
 };

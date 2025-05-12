@@ -1,5 +1,7 @@
 import { Box, Stack } from "@mui/material";
+
 import { Text } from "../Typography/Typography";
+
 import StepperDefaultIcon from "./StepperDefaultIcon";
 
 export type StepStepperProps = {
@@ -73,12 +75,7 @@ const StepStepper: React.FC<StepStepperProps> = ({
         >
           {step1.title}
         </Text>
-        <Text
-          size="small"
-          weight="regular"
-          color={step1.descriptionColor || "#535862"}
-          sx={{ textAlign: "left" }}
-        >
+        <Text size="small" weight="regular" color={step1.descriptionColor || "#535862"} sx={{ textAlign: "left" }}>
           {step1.description}
         </Text>
       </Stack>
@@ -107,12 +104,7 @@ const StepStepper: React.FC<StepStepperProps> = ({
         >
           {step2.title}
         </Text>
-        <Text
-          size="small"
-          weight="regular"
-          color={step2.descriptionColor || "#535862"}
-          sx={{ textAlign: "right" }}
-        >
+        <Text size="small" weight="regular" color={step2.descriptionColor || "#535862"} sx={{ textAlign: "right" }}>
           {step2.description}
         </Text>
       </Stack>

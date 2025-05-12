@@ -1,29 +1,26 @@
 "use client";
 
-import * as Yup from "yup";
-import { useFormik } from "formik";
+import { useRouter, useSearchParams } from "next/navigation";
 import { Box, Stack } from "@mui/material";
 import { useMutation } from "@tanstack/react-query";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useFormik } from "formik";
+import * as Yup from "yup";
 
 import axios from "src/axios";
 import useSnackbar from "src/hooks/useSnackbar";
-import { passwordRegex, passwordText } from "src/utils/passwordRegex";
 import { useProviderOrgDetails } from "src/providers/ProviderOrgDetailsProvider";
-
-import Logo from "components/NonDashboardComponents/Logo";
+import { passwordRegex, passwordText } from "src/utils/passwordRegex";
 import FieldError from "components/FormElementsv2/FieldError/FieldError";
 import DisplayHeading from "components/NonDashboardComponents/DisplayHeading";
-import PageDescription from "components/NonDashboardComponents/PageDescription";
-import FieldLabel from "components/NonDashboardComponents/FormElementsV2/FieldLabel";
-import SubmitButton from "components/NonDashboardComponents/FormElementsV2/SubmitButton";
-import PasswordField from "components/NonDashboardComponents/FormElementsV2/PasswordField";
 import FieldContainer from "components/NonDashboardComponents/FormElementsV2/FieldContainer";
+import FieldLabel from "components/NonDashboardComponents/FormElementsV2/FieldLabel";
+import PasswordField from "components/NonDashboardComponents/FormElementsV2/PasswordField";
+import SubmitButton from "components/NonDashboardComponents/FormElementsV2/SubmitButton";
+import Logo from "components/NonDashboardComponents/Logo";
+import PageDescription from "components/NonDashboardComponents/PageDescription";
 
 const changePasswordValidationSchema = Yup.object({
-  password: Yup.string()
-    .required("Password is required")
-    .matches(passwordRegex, passwordText),
+  password: Yup.string().required("Password is required").matches(passwordRegex, passwordText),
   confirmPassword: Yup.string()
     .required("Password is required")
     .oneOf([Yup.ref("password"), null], "Passwords must match"),
@@ -73,11 +70,7 @@ const ChangePasswordPage = () => {
     <>
       <Box textAlign="center">
         {orgLogoURL ? (
-          <Logo
-            src={orgLogoURL}
-            alt={orgName}
-            style={{ width: "120px", height: "auto", maxHeight: "unset" }}
-          />
+          <Logo src={orgLogoURL} alt={orgName} style={{ width: "120px", height: "auto", maxHeight: "unset" }} />
         ) : (
           ""
         )}
@@ -106,9 +99,7 @@ const ChangePasswordPage = () => {
                 onBlur={handleBlur}
                 error={touched.password && errors.password}
               />
-              <FieldError sx={{ paddingLeft: "13px" }}>
-                {touched.password && errors.password}
-              </FieldError>
+              <FieldError sx={{ paddingLeft: "13px" }}>{touched.password && errors.password}</FieldError>
             </FieldContainer>
 
             <FieldContainer>
@@ -122,9 +113,7 @@ const ChangePasswordPage = () => {
                 onBlur={handleBlur}
                 error={touched.confirmPassword && errors.confirmPassword}
               />
-              <FieldError sx={{ paddingLeft: "13px" }}>
-                {touched.confirmPassword && errors.confirmPassword}
-              </FieldError>
+              <FieldError sx={{ paddingLeft: "13px" }}>{touched.confirmPassword && errors.confirmPassword}</FieldError>
             </FieldContainer>
           </Stack>
 

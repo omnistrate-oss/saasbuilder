@@ -1,15 +1,17 @@
-import { createColumnHelper } from "@tanstack/react-table";
 import { useMemo } from "react";
-import DataTable from "src/components/DataTable/DataTable";
-import NotificationsTableHeader from "./NotificationsTableHeader";
-import { useGlobalData } from "src/providers/GlobalDataProvider";
-import ServiceNameWithLogo from "src/components/ServiceNameWithLogo/ServiceNameWithLogo";
-import EventTypeChip from "src/components/EventsTable/EventTypeChip";
-import { EventType } from "src/types/event";
-import EventMessageChip from "src/components/EventsTable/EventMessageChip";
+import { createColumnHelper } from "@tanstack/react-table";
 import useInstances from "app/(dashboard)/instances/hooks/useInstances";
+
+import DataTable from "src/components/DataTable/DataTable";
+import EventMessageChip from "src/components/EventsTable/EventMessageChip";
+import EventTypeChip from "src/components/EventsTable/EventTypeChip";
+import ServiceNameWithLogo from "src/components/ServiceNameWithLogo/ServiceNameWithLogo";
+import { useGlobalData } from "src/providers/GlobalDataProvider";
+import { EventType } from "src/types/event";
 import { ResourceInstance } from "src/types/resourceInstance";
 import formatDateUTC from "src/utils/formatDateUTC";
+
+import NotificationsTableHeader from "./NotificationsTableHeader";
 
 const columnHelper = createColumnHelper<
   ResourceInstance & {

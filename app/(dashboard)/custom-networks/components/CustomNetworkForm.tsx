@@ -1,22 +1,18 @@
 "use client";
 
 import { useMemo } from "react";
-import { useFormik } from "formik";
 import { useMutation } from "@tanstack/react-query";
+import CloudProviderRadio from "app/(dashboard)/components/CloudProviderRadio/CloudProviderRadio";
+import { useFormik } from "formik";
 
-import { FormConfiguration } from "components/DynamicForm/types";
+import { createCustomNetwork, updateCustomNetwork } from "src/api/customNetworks";
+import { cloudProviderLongLogoMap } from "src/constants/cloudProviders";
+import useSnackbar from "src/hooks/useSnackbar";
+import { UpdateCustomNetworkRequestBody } from "src/types/customNetwork";
 import GridDynamicForm from "components/DynamicForm/GridDynamicForm";
+import { FormConfiguration } from "components/DynamicForm/types";
 
 import { CustomNetworkValidationSchema } from "../constants";
-
-import useSnackbar from "src/hooks/useSnackbar";
-import {
-  createCustomNetwork,
-  updateCustomNetwork,
-} from "src/api/customNetworks";
-import { cloudProviderLongLogoMap } from "src/constants/cloudProviders";
-import { UpdateCustomNetworkRequestBody } from "src/types/customNetwork";
-import CloudProviderRadio from "app/(dashboard)/components/CloudProviderRadio/CloudProviderRadio";
 
 const CustomNetworkForm = ({
   formMode,
@@ -36,8 +32,7 @@ const CustomNetworkForm = ({
   });
 
   const updateCustomNetworkMutation = useMutation(
-    (data: UpdateCustomNetworkRequestBody) =>
-      updateCustomNetwork(selectedCustomNetwork.id, data),
+    (data: UpdateCustomNetworkRequestBody) => updateCustomNetwork(selectedCustomNetwork.id, data),
     {
       onSuccess: async () => {
         onClose();
@@ -69,10 +64,7 @@ const CustomNetworkForm = ({
 
   const regionMenuItems = useMemo(() => {
     return regions
-      .filter(
-        (region) =>
-          region.cloudProviderName === formData.values.cloudProviderName
-      )
+      .filter((region) => region.cloudProviderName === formData.values.cloudProviderName)
       .map((region) => {
         return {
           value: region.code,
@@ -118,8 +110,7 @@ const CustomNetworkForm = ({
             {
               dataTestId: "name-input",
               label: "Name",
-              subLabel:
-                "The unique name for the customer network for easy reference",
+              subLabel: "The unique name for the customer network for easy reference",
               name: "name",
               type: "text",
               required: true,
@@ -172,13 +163,7 @@ const CustomNetworkForm = ({
         },
       ],
     };
-  }, [
-    cloudProviders,
-    isFetchingRegions,
-    regionMenuItems,
-    formData.values,
-    formMode,
-  ]);
+  }, [cloudProviders, isFetchingRegions, regionMenuItems, formData.values, formMode]);
 
   return (
     <GridDynamicForm
@@ -186,10 +171,7 @@ const CustomNetworkForm = ({
       formData={formData}
       formMode={formMode}
       onClose={onClose}
-      isFormSubmitting={
-        createCustomNetworkMutation.isLoading ||
-        updateCustomNetworkMutation.isLoading
-      }
+      isFormSubmitting={createCustomNetworkMutation.isLoading || updateCustomNetworkMutation.isLoading}
       previewCardTitle="Customer Network Summary"
     />
   );

@@ -12,14 +12,7 @@ import { Text } from "src/components/Typography/Typography";
 import CloseIcon from "@mui/icons-material/Close";
 
 export default function ResourceInstanceDialog(props) {
-  const {
-    open = false,
-    handleClose,
-    variant = "array",
-    data,
-    title,
-    subtitle,
-  } = props;
+  const { open = false, handleClose, variant = "array", data, title, subtitle } = props;
 
   const isTypeJson = variant === "json";
   const chunkData = (arr, size) => {
@@ -56,20 +49,10 @@ export default function ResourceInstanceDialog(props) {
             <AccordionEditIcon />
           </Box>
           <Box display="flex" flexDirection={"column"} gap="4px" mt="4px">
-            <Text
-              size="small"
-              weight="semibold"
-              color="#101828"
-              sx={{ flex: 1, wordBreak: "break-word" }}
-            >
+            <Text size="small" weight="semibold" color="#101828" sx={{ flex: 1, wordBreak: "break-word" }}>
               {title}
             </Text>
-            <Text
-              size="small"
-              weight="regular"
-              color="#344054"
-              sx={{ flex: 1, wordBreak: "break-word" }}
-            >
+            <Text size="small" weight="regular" color="#344054" sx={{ flex: 1, wordBreak: "break-word" }}>
               {subtitle}
             </Text>
           </Box>
@@ -78,9 +61,7 @@ export default function ResourceInstanceDialog(props) {
       <DialogContent>
         {isTypeJson ? (
           <FieldContainer>
-            <FieldLabel sx={{ mt: "5px", fontSize: "16px" }}>
-              {subtitle}
-            </FieldLabel>
+            <FieldLabel sx={{ mt: "5px", fontSize: "16px" }}>{subtitle}</FieldLabel>
           </FieldContainer>
         ) : (
           <Box width="600px">
@@ -106,12 +87,7 @@ export default function ResourceInstanceDialog(props) {
                     padding="4px 20px"
                     borderLeft={index === 1 ? "1px solid #E4E7EC" : "none"}
                   >
-                    <Text
-                      size="small"
-                      weight="regular"
-                      color="#6941C6"
-                      sx={{ flex: 1, wordBreak: "break-word" }}
-                    >
+                    <Text size="small" weight="regular" color="#6941C6" sx={{ flex: 1, wordBreak: "break-word" }}>
                       {value}
                     </Text>
                     <CopyButton

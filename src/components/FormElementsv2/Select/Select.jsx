@@ -24,8 +24,7 @@ const Select = styled(({ isLoading = false, children, ...props }) => (
         [`& .${menuClasses.paper}`]: {
           marginTop: "4px",
           border: "1px solid #EAECF0",
-          boxShadow:
-            "0px 4px 6px -2px rgba(16, 24, 40, 0.03), 0px 12px 16px -4px rgba(16, 24, 40, 0.08)",
+          boxShadow: "0px 4px 6px -2px rgba(16, 24, 40, 0.03), 0px 12px 16px -4px rgba(16, 24, 40, 0.08)",
           borderRadius: "8px",
         },
         [`& .${menuClasses.list}`]: {
@@ -59,8 +58,7 @@ const Select = styled(({ isLoading = false, children, ...props }) => (
   },
 
   "&.Mui-focused.Mui-error": {
-    boxShadow:
-      "0px 0px 0px 4px #FEE4E2, 0px 1px 2px 0px rgba(16, 24, 40, 0.05)",
+    boxShadow: "0px 0px 0px 4px #FEE4E2, 0px 1px 2px 0px rgba(16, 24, 40, 0.05)",
   },
 
   "&.Mui-disabled": {

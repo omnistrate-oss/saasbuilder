@@ -13,12 +13,7 @@ function FieldTitle(props) {
   const theme = useTheme();
 
   return (
-    <Text
-      size="small"
-      weight="medium"
-      color={theme.palette.gray["700"]}
-      {...restProps}
-    >
+    <Text size="small" weight="medium" color={theme.palette.gray["700"]} {...restProps}>
       {children} {required && <RequiredAsterisk />}
     </Text>
   );

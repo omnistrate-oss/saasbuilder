@@ -1,4 +1,5 @@
 import { createTheme } from "@mui/material/styles";
+
 import { styleConfig } from "src/providerConfig";
 
 export const theme = createTheme({

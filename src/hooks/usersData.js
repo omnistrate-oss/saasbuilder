@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { useDispatch, useSelector } from "react-redux";
-import axios from "../axios";
 
+import axios from "../axios";
 import {
   selectUserDataLoadingStatus,
   selectUserrootData,

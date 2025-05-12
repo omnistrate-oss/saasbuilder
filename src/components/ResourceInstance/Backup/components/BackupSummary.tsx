@@ -1,8 +1,8 @@
 import { FC, useMemo } from "react";
-import PropertyDetails, {
-  Row,
-} from "../../ResourceInstanceDetails/PropertyDetails";
+
 import formatDateUTC from "src/utils/formatDateUTC";
+
+import PropertyDetails, { Row } from "../../ResourceInstanceDetails/PropertyDetails";
 
 export type BackupStatus = {
   backupPeriodInHours: string;
@@ -12,12 +12,7 @@ export type BackupStatus = {
 };
 
 const BackupSummary: FC<BackupStatus> = (props) => {
-  const {
-    backupPeriodInHours,
-    backupRetentionInDays,
-    earliestRestoreTime,
-    lastBackupTime,
-  } = props;
+  const { backupPeriodInHours, backupRetentionInDays, earliestRestoreTime, lastBackupTime } = props;
 
   const backupData: Row[] = useMemo(() => {
     const res: Row[] = [
@@ -49,12 +44,7 @@ const BackupSummary: FC<BackupStatus> = (props) => {
     ];
 
     return res;
-  }, [
-    backupPeriodInHours,
-    backupRetentionInDays,
-    earliestRestoreTime,
-    lastBackupTime,
-  ]);
+  }, [backupPeriodInHours, backupRetentionInDays, earliestRestoreTime, lastBackupTime]);
 
   return (
     <>

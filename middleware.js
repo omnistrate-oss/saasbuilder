@@ -1,5 +1,6 @@
-import { jwtDecode } from "jwt-decode";
 import { NextResponse } from "next/server";
+import { jwtDecode } from "jwt-decode";
+
 import { baseURL } from "src/axios";
 import { PAGE_TITLE_MAP } from "src/constants/pageTitleMap";
 import { getEnvironmentType } from "src/server/utils/getEnvironmentType";

@@ -1,19 +1,8 @@
-import {
-  createContext,
-  ReactNode,
-  useContext,
-  useEffect,
-  useState,
-} from "react";
+import { createContext, ReactNode, useContext, useEffect, useState } from "react";
+
 import CookieConsentModal from "src/components/CookieConsent/CookieConsentModal";
-import {
-  getCookieConsentInitialObject,
-  handleConsentChanges,
-} from "src/cookieConsentManager";
-import {
-  CategoryWithoutServices,
-  CookieConsent,
-} from "src/types/cookieConsent";
+import { getCookieConsentInitialObject, handleConsentChanges } from "src/cookieConsentManager";
+import { CategoryWithoutServices, CookieConsent } from "src/types/cookieConsent";
 
 type CookieConsentContextType = {
   consentState: CookieConsent;
@@ -30,18 +19,14 @@ const defaultContextValue: CookieConsentContextType = {
   setIsConsentModalOpen: () => {},
 };
 
-export const CookieConsentContext =
-  createContext<CookieConsentContextType>(defaultContextValue);
+export const CookieConsentContext = createContext<CookieConsentContextType>(defaultContextValue);
 
 type CookieConsentProviderProps = {
   children: ReactNode;
   googleAnalyticsTagID: string | undefined;
 };
 
-export default function CookieConsentProvider({
-  children,
-  googleAnalyticsTagID,
-}: CookieConsentProviderProps) {
+export default function CookieConsentProvider({ children, googleAnalyticsTagID }: CookieConsentProviderProps) {
   const [consentState, setConsentState] = useState(
     getCookieConsentInitialObject(googleAnalyticsTagID) as CookieConsent
   );
@@ -64,15 +49,9 @@ export default function CookieConsentProvider({
             (settingsObj) => settingsObj.category === "analytics"
           );
           if (analyticsSettings) {
-            const gtagConfig = (analyticsSettings.services || []).find(
-              (config) => config.name === "googletagmanager"
-            );
+            const gtagConfig = (analyticsSettings.services || []).find((config) => config.name === "googletagmanager");
 
-            if (
-              gtagConfig &&
-              gtagConfig.gtag &&
-              gtagConfig.gtag?.toLowerCase() !== "undefined"
-            ) {
+            if (gtagConfig && gtagConfig.gtag && gtagConfig.gtag?.toLowerCase() !== "undefined") {
               isGTagSet = true;
             }
 
@@ -82,8 +61,7 @@ export default function CookieConsentProvider({
               gtagConfig.src = `https://www.googletagmanager.com/gtag/js?id=${googleAnalyticsTagID}`;
             } else if (isGTagSet && !googleAnalyticsTagID) {
               gtagConfig.gtag = undefined;
-              gtagConfig.src =
-                "https://www.googletagmanager.com/gtag/js?id=undefined";
+              gtagConfig.src = "https://www.googletagmanager.com/gtag/js?id=undefined";
             } else if (isGTagSet && gtagConfig.gtag !== googleAnalyticsTagID) {
               gtagConfig.gtag = googleAnalyticsTagID;
               gtagConfig.src = `https://www.googletagmanager.com/gtag/js?id=${googleAnalyticsTagID}`;
@@ -97,10 +75,7 @@ export default function CookieConsentProvider({
         setConsentState(parsedConsent);
       } else {
         //otherwise set the initial object to consent in local storage
-        localStorage.setItem(
-          "cookieConsent",
-          JSON.stringify(getCookieConsentInitialObject(googleAnalyticsTagID))
-        );
+        localStorage.setItem("cookieConsent", JSON.stringify(getCookieConsentInitialObject(googleAnalyticsTagID)));
       }
       if (!parsedConsent?.consentGiven) setIsConsentModalOpen(true);
     } catch {}
@@ -119,12 +94,8 @@ export default function CookieConsentProvider({
 
   const updateConsent = (updatedCategories: CategoryWithoutServices[]) => {
     const newCategories = consentState.categories.map((cat) => {
-      const updatedCategory = updatedCategories.find(
-        (uc) => uc.category === cat.category
-      );
-      return updatedCategory
-        ? { ...cat, enabled: updatedCategory.enabled }
-        : cat;
+      const updatedCategory = updatedCategories.find((uc) => uc.category === cat.category);
+      return updatedCategory ? { ...cat, enabled: updatedCategory.enabled } : cat;
     });
     setConsentState({
       ...consentState,

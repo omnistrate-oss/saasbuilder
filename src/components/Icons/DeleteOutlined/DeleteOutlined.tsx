@@ -1,11 +1,5 @@
 const DeleteOutlinedIcon = (props) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width={52}
-    height={52}
-    fill="none"
-    {...props}
-  >
+  <svg xmlns="http://www.w3.org/2000/svg" width={52} height={52} fill="none" {...props}>
     <g filter="url(#a)">
       <path
         fill="#fff"
@@ -24,60 +18,26 @@ const DeleteOutlinedIcon = (props) => (
       />
     </g>
     <defs>
-      <filter
-        id="a"
-        width={52}
-        height={52}
-        x={0}
-        y={0}
-        colorInterpolationFilters="sRGB"
-        filterUnits="userSpaceOnUse"
-      >
+      <filter id="a" width={52} height={52} x={0} y={0} colorInterpolationFilters="sRGB" filterUnits="userSpaceOnUse">
         <feFlood floodOpacity={0} result="BackgroundImageFix" />
-        <feColorMatrix
-          in="SourceAlpha"
-          result="hardAlpha"
-          values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
-        />
+        <feColorMatrix in="SourceAlpha" result="hardAlpha" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" />
         <feOffset dy={1} />
         <feGaussianBlur stdDeviation={1} />
         <feComposite in2="hardAlpha" operator="out" />
         <feColorMatrix values="0 0 0 0 0.0392157 0 0 0 0 0.0496732 0 0 0 0 0.0705882 0 0 0 0.05 0" />
-        <feBlend
-          in2="BackgroundImageFix"
-          result="effect1_dropShadow_1988_59936"
-        />
-        <feBlend
-          in="SourceGraphic"
-          in2="effect1_dropShadow_1988_59936"
-          result="shape"
-        />
-        <feColorMatrix
-          in="SourceAlpha"
-          result="hardAlpha"
-          values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
-        />
+        <feBlend in2="BackgroundImageFix" result="effect1_dropShadow_1988_59936" />
+        <feBlend in="SourceGraphic" in2="effect1_dropShadow_1988_59936" result="shape" />
+        <feColorMatrix in="SourceAlpha" result="hardAlpha" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" />
         <feOffset dy={-2} />
         <feComposite in2="hardAlpha" k2={-1} k3={1} operator="arithmetic" />
         <feColorMatrix values="0 0 0 0 0.0392157 0 0 0 0 0.0496732 0 0 0 0 0.0705882 0 0 0 0.05 0" />
         <feBlend in2="shape" result="effect2_innerShadow_1988_59936" />
-        <feColorMatrix
-          in="SourceAlpha"
-          result="hardAlpha"
-          values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
-        />
-        <feMorphology
-          in="SourceAlpha"
-          radius={1}
-          result="effect3_innerShadow_1988_59936"
-        />
+        <feColorMatrix in="SourceAlpha" result="hardAlpha" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" />
+        <feMorphology in="SourceAlpha" radius={1} result="effect3_innerShadow_1988_59936" />
         <feOffset />
         <feComposite in2="hardAlpha" k2={-1} k3={1} operator="arithmetic" />
         <feColorMatrix values="0 0 0 0 0.0392157 0 0 0 0 0.0496732 0 0 0 0 0.0705882 0 0 0 0.18 0" />
-        <feBlend
-          in2="effect2_innerShadow_1988_59936"
-          result="effect3_innerShadow_1988_59936"
-        />
+        <feBlend in2="effect2_innerShadow_1988_59936" result="effect3_innerShadow_1988_59936" />
       </filter>
     </defs>
   </svg>

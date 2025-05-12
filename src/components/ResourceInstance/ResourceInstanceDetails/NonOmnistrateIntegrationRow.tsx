@@ -15,18 +15,10 @@ type NonOmnistrateIntegrationRowProps = {
   };
 };
 
-function NonOmnistrateIntegrationRow({
-  integration,
-}: NonOmnistrateIntegrationRowProps) {
+function NonOmnistrateIntegrationRow({ integration }: NonOmnistrateIntegrationRowProps) {
   const { Url } = integration;
   return (
-    <Stack
-      width="100%"
-      direction="row"
-      alignItems="center"
-      justifyContent="flex-end"
-      gap="6px"
-    >
+    <Stack width="100%" direction="row" alignItems="center" justifyContent="flex-end" gap="6px">
       <Link
         style={{
           fontSize: "18px",

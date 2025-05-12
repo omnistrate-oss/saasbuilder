@@ -1,4 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
+
 import { describeServiceOfferingResource } from "../api/serviceOffering";
 
 function useServiceOfferingResourceSchema(

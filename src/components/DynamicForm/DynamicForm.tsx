@@ -1,11 +1,14 @@
+import { FC } from "react";
 import { Box, Stack } from "@mui/material";
-import Form from "../FormElementsv2/Form/Form";
+
 import Accordian from "src/components/Accordion/Accordion";
-import FormTitle from "src/components/FormElements/FormTitle/FormTitle";
 import FormDescription from "src/components/FormElements/FormDescription/FormDescription";
+import FormTitle from "src/components/FormElements/FormTitle/FormTitle";
+
 import Button from "../Button/Button";
 import LoadingSpinnerSmall from "../CircularProgress/CircularProgress";
-import { FC } from "react";
+import Form from "../FormElementsv2/Form/Form";
+
 import DynamicField from "./DynamicField";
 
 type DynamicFormProps = {
@@ -42,9 +45,7 @@ const DynamicForm: FC<DynamicFormProps> = ({
       {/* Header */}
       <Box>
         <FormTitle>{formConfiguration.title[formMode]}</FormTitle>
-        <FormDescription>
-          {formConfiguration.description[formMode]}
-        </FormDescription>
+        <FormDescription>{formConfiguration.description[formMode]}</FormDescription>
       </Box>
 
       {/* Content */}
@@ -63,13 +64,7 @@ const DynamicForm: FC<DynamicFormProps> = ({
                   return null;
                 }
 
-                return (
-                  <DynamicField
-                    key={field.label}
-                    field={field}
-                    formData={formData}
-                  />
-                );
+                return <DynamicField key={field.label} field={field} formData={formData} />;
               })}
             </Accordian>
           );

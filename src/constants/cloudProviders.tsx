@@ -1,10 +1,9 @@
 import AWSIcon from "src/components/Icons/CloudProviders/AWSLogo";
-import GCPIcon from "src/components/Icons/CloudProviders/GCPLogo";
 import AzureIcon from "src/components/Icons/CloudProviders/AzureLogo";
-
+import GCPIcon from "src/components/Icons/CloudProviders/GCPLogo";
 import AwsLogo from "src/components/Logos/AwsLogo";
-import GcpLogo from "src/components/Logos/GcpLogo";
 import AzureLogo from "src/components/Logos/AzureLogo";
+import GcpLogo from "src/components/Logos/GcpLogo";
 
 export const cloudProviderLabels = {
   gcp: "Google Cloud Platform",

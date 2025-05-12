@@ -1,9 +1,9 @@
 import _ from "lodash";
 const { customerUserSignIn } = require("src/server/api/customer-user");
 const { getEnvironmentType } = require("src/server/utils/getEnvironmentType");
-import { verifyRecaptchaToken } from "src/server/utils/verifyRecaptchaToken";
-import { checkReCaptchaSetup } from "src/server/utils/checkReCaptchaSetup";
 import CaptchaVerificationError from "src/server/errors/CaptchaVerificationError";
+import { checkReCaptchaSetup } from "src/server/utils/checkReCaptchaSetup";
+import { verifyRecaptchaToken } from "src/server/utils/verifyRecaptchaToken";
 
 export default async function handleSignIn(nextRequest, nextResponse) {
   if (nextRequest.method === "POST") {

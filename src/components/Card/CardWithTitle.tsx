@@ -1,4 +1,5 @@
 import clsx from "clsx";
+
 import { Text } from "../Typography/Typography";
 
 type CardWithTitleProps = {
@@ -7,19 +8,10 @@ type CardWithTitleProps = {
   children: React.ReactNode;
 } & React.HTMLAttributes<HTMLDivElement>;
 
-const CardWithTitle: React.FC<CardWithTitleProps> = ({
-  title,
-  actionButton,
-  children,
-  className,
-  ...otherProps
-}) => {
+const CardWithTitle: React.FC<CardWithTitleProps> = ({ title, actionButton, children, className, ...otherProps }) => {
   return (
     <div
-      className={clsx(
-        "bg-white rounded-xl border border-gray-200 shadow-[0_1px_2px_0_#0A0D120D]",
-        className
-      )}
+      className={clsx("bg-white rounded-xl border border-gray-200 shadow-[0_1px_2px_0_#0A0D120D]", className)}
       {...otherProps}
     >
       <div className="py-5 px-6 border-b border-gray-200 flex items-center justify-between gap-4">

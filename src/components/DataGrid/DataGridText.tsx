@@ -1,12 +1,13 @@
 import { FC, useCallback, useState } from "react";
 import Link from "next/link";
-import clipboard from "clipboardy";
 import { IconButton, Stack, Typography } from "@mui/material";
+import clipboard from "clipboardy";
 import type * as CSS from "csstype";
+
+import { colors } from "src/themeConfig";
 
 import DataGridCopyIcon from "../Icons/CopyIcon/DataGridCopyIcon";
 import Tooltip from "../Tooltip/Tooltip";
-import { colors } from "src/themeConfig";
 
 type LinkProps = {
   href: string;
@@ -54,9 +55,7 @@ const DataGridText: FC<DataGridTextProps> = ({
     lineHeight: "20px",
     fontWeight: 500,
     color: colorMap[color],
-    textDecoration: isUnderlined
-      ? `underline solid ${colorMap[color]} 1px`
-      : "none",
+    textDecoration: isUnderlined ? `underline solid ${colorMap[color]} 1px` : "none",
   };
 
   const Content = () =>
@@ -64,11 +63,7 @@ const DataGridText: FC<DataGridTextProps> = ({
       <Typography title={children} noWrap style={{ ...textStyles }}>
         <Link
           href={
-            href.startsWith("/") ||
-            href.startsWith("https://") ||
-            href.startsWith("http://")
-              ? href
-              : `https://${href}`
+            href.startsWith("/") || href.startsWith("https://") || href.startsWith("http://") ? href : `https://${href}`
           }
           target={target}
           rel="noopener noreferrer"
@@ -93,13 +88,7 @@ const DataGridText: FC<DataGridTextProps> = ({
     );
 
   return (
-    <Stack
-      direction="row"
-      alignItems="center"
-      justifyContent={justifyContent}
-      gap="4px"
-      width="100%"
-    >
+    <Stack direction="row" alignItems="center" justifyContent={justifyContent} gap="4px" width="100%">
       <Content />
       {children && showCopyButton && (
         <Tooltip title={tooltipText} placement="top">

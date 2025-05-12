@@ -1,29 +1,31 @@
 import React, { FC, ReactNode, useState } from "react";
-import Collapse from "@mui/material/Collapse";
 import { Box, CircularProgress, Stack, SxProps } from "@mui/material";
+import Collapse from "@mui/material/Collapse";
 import {
   ColumnDef,
   ExpandedState,
-  Row,
-  RowData,
   flexRender,
   getCoreRowModel,
   getExpandedRowModel,
   getPaginationRowModel,
   getSortedRowModel,
+  Row,
+  RowData,
   useReactTable,
 } from "@tanstack/react-table";
+
+import { SetState } from "src/types/common/reactGenerics";
+
+import Pagination from "./components/Pagination";
 import {
-  TableContainer,
   DetailViewTableRow,
   Table,
   TableBody,
   TableCell,
+  TableContainer,
   TableHead,
   TableRow,
 } from "./components/styled";
-import Pagination from "./components/Pagination";
-import { SetState } from "src/types/common/reactGenerics";
 
 type InfiniteData<TData> = {
   pages: Array<{
@@ -59,9 +61,7 @@ type CursorPaginatedDataTableProps<TData> = {
 
 const DEFAULT_COLUMN_MIN_WIDTH = 150;
 
-const CursorPaginatedDataTable = <TData,>(
-  props: CursorPaginatedDataTableProps<TData>
-): ReactNode => {
+const CursorPaginatedDataTable = <TData,>(props: CursorPaginatedDataTableProps<TData>): ReactNode => {
   const {
     pageIndex,
     setPageIndex,
@@ -92,10 +92,7 @@ const CursorPaginatedDataTable = <TData,>(
       return [...acc, ...(page.events || [])];
     }, []) || [];
 
-  const currentPageData = rows.slice(
-    pageIndex * pageSize,
-    (pageIndex + 1) * pageSize
-  );
+  const currentPageData = rows.slice(pageIndex * pageSize, (pageIndex + 1) * pageSize);
 
   const table = useReactTable({
     data: currentPageData,
@@ -182,10 +179,7 @@ const CursorPaginatedDataTable = <TData,>(
   return (
     <TableContainer sx={{ borderRadius: "8px", ...tableStyles }}>
       <HeaderComponent {...headerProps} />
-      <Stack
-        minHeight={minHeight ? minHeight : showPagination ? "605px" : "540px"}
-        justifyContent="space-between"
-      >
+      <Stack minHeight={minHeight ? minHeight : showPagination ? "605px" : "540px"} justifyContent="space-between">
         <Box sx={{ overflowX: "auto", flexGrow: 1, position: "relative" }}>
           <Table
             sx={{
@@ -214,17 +208,14 @@ const CursorPaginatedDataTable = <TData,>(
                 <TableRow key={headerGroup.id}>
                   {headerGroup.headers.map((header) => {
                     const sortDirection = header.column.getIsSorted();
-                    const columnAlignment =
-                      header.column.columnDef.meta?.align || "left";
+                    const columnAlignment = header.column.columnDef.meta?.align || "left";
                     return (
                       <TableCell
                         align={columnAlignment}
                         key={header.id}
                         onClick={header.column.getToggleSortingHandler()}
                         sx={{
-                          cursor: header.column.getCanSort()
-                            ? "pointer"
-                            : "auto",
+                          cursor: header.column.getCanSort() ? "pointer" : "auto",
                           "& .MuiIconButton-root": {
                             display: sortDirection ? "inline-flex" : "none",
                           },
@@ -235,16 +226,8 @@ const CursorPaginatedDataTable = <TData,>(
                           },
                         }}
                       >
-                        <Stack
-                          display="inline-flex"
-                          direction="row"
-                          gap="8px"
-                          alignItems="center"
-                        >
-                          {flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
+                        <Stack display="inline-flex" direction="row" gap="8px" alignItems="center">
+                          {flexRender(header.column.columnDef.header, header.getContext())}
                         </Stack>
                       </TableCell>
                     );
@@ -259,14 +242,9 @@ const CursorPaginatedDataTable = <TData,>(
                     <TableRow>
                       {row.getVisibleCells().map((cell) => {
                         const cellValue: any = cell.getValue();
-                        const columnAlignment =
-                          cell.column.columnDef.meta?.align || "left";
+                        const columnAlignment = cell.column.columnDef.meta?.align || "left";
                         let title = "";
-                        if (
-                          ["string", "number", "boolean"].includes(
-                            typeof cellValue
-                          )
-                        ) {
+                        if (["string", "number", "boolean"].includes(typeof cellValue)) {
                           title = cellValue.toString();
                         }
                         return (
@@ -279,10 +257,7 @@ const CursorPaginatedDataTable = <TData,>(
                               fontWeight: "500",
                             }}
                           >
-                            {flexRender(
-                              cell.column.columnDef.cell,
-                              cell.getContext()
-                            )}
+                            {flexRender(cell.column.columnDef.cell, cell.getContext())}
                           </TableCell>
                         );
                       })}
@@ -297,11 +272,7 @@ const CursorPaginatedDataTable = <TData,>(
                           }}
                           colSpan={numsColumns}
                         >
-                          <Collapse
-                            in={row.getIsExpanded()}
-                            timeout="auto"
-                            unmountOnExit
-                          >
+                          <Collapse in={row.getIsExpanded()} timeout="auto" unmountOnExit>
                             {renderDetailsComponent({
                               rowData: row.original,
                             })}
@@ -333,9 +304,7 @@ const CursorPaginatedDataTable = <TData,>(
         {showPagination && (
           <Pagination
             isPreviousDisabled={!table.getCanPreviousPage() || isLoading}
-            isNextDisabled={
-              (!table.getCanNextPage() && !hasNextPage) || isLoading
-            }
+            isNextDisabled={(!table.getCanNextPage() && !hasNextPage) || isLoading}
             handlePrevious={() => {
               setPageIndex(Math.max(0, pageIndex - 1));
             }}
@@ -345,11 +314,7 @@ const CursorPaginatedDataTable = <TData,>(
               const nextPageStartIndex = nextPageIndex * pageSize;
 
               // If we're about to show items we haven't loaded yet and there are more pages
-              if (
-                nextPageStartIndex >= totalLoadedItems &&
-                hasNextPage &&
-                !isFetchingNextPage
-              ) {
+              if (nextPageStartIndex >= totalLoadedItems && hasNextPage && !isFetchingNextPage) {
                 await fetchNextPage?.();
               }
 

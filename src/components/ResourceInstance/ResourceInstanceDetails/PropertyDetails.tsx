@@ -1,17 +1,19 @@
-import { Box, BoxProps, Stack, styled } from "@mui/material";
 import { FC, ReactNode, useState } from "react";
 import NextLink from "next/link";
-import { Text } from "src/components/Typography/Typography";
+import { Box, BoxProps, Stack, styled } from "@mui/material";
+
 import CopyButton from "src/components/Button/CopyButton";
-import StatusChip from "src/components/StatusChip/StatusChip";
-import { getResourceInstanceDetailsStatusStylesAndLabel } from "src/constants/statusChipStyles/resourceInstanceDetailsStatus";
 import { PasswordWithOutBorderField } from "src/components/FormElementsv2/PasswordField/PasswordWithOutBorderField";
-import JsonIcon from "src/components/Icons/RestoreInstance/JsonIcon";
 import ArrayIcon from "src/components/Icons/RestoreInstance/ArrayIcon";
-import ResourceInstanceDialog from "./ResourceInstanceDialog";
-import JSONViewModal from "./JSONViewModal";
+import JsonIcon from "src/components/Icons/RestoreInstance/JsonIcon";
+import StatusChip from "src/components/StatusChip/StatusChip";
 import Tooltip from "src/components/Tooltip/Tooltip";
+import { Text } from "src/components/Typography/Typography";
 import { cloudProviderLongLogoMap } from "src/constants/cloudProviders";
+import { getResourceInstanceDetailsStatusStylesAndLabel } from "src/constants/statusChipStyles/resourceInstanceDetailsStatus";
+
+import JSONViewModal from "./JSONViewModal";
+import ResourceInstanceDialog from "./ResourceInstanceDialog";
 
 export type Row = {
   dataTestId?: string;

@@ -1,4 +1,5 @@
 import CloseIcon from "@mui/icons-material/Close";
+
 import { DisplayText, Text } from "src/components/Typography/Typography";
 import { colors } from "src/themeConfig";
 
@@ -32,22 +33,13 @@ const FullScreenDrawerNavbar: React.FC<FullScreenDrawerNavbarProps> = ({
             {title}
           </DisplayText>
           {description && (
-            <Text
-              data-testid="drawer-description"
-              size="medium"
-              weight="regular"
-              color="#535862"
-            >
+            <Text data-testid="drawer-description" size="medium" weight="regular" color="#535862">
               {description}
             </Text>
           )}
         </div>
 
-        <button
-          data-testid="close-button"
-          className="flex items-center gap-1.5 p-1"
-          onClick={closeDrawer}
-        >
+        <button data-testid="close-button" className="flex items-center gap-1.5 p-1" onClick={closeDrawer}>
           <Text size="small" weight="semibold" color="#414651">
             Close
           </Text>

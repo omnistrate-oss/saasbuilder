@@ -1,30 +1,31 @@
 import { useMemo, useState } from "react";
-import { SetState } from "src/types/common/reactGenerics";
-import { addMilliseconds, addMonths, format, subMonths } from "date-fns";
-import { Box, IconButton, styled } from "@mui/material";
-import { Stack } from "@mui/system";
+import { ChevronLeft } from "@mui/icons-material";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
-import Button from "../Button/Button";
-import { DateRange as ReactDateRange, Range } from "react-date-range";
-import "react-date-range/dist/styles.css"; // main css file
-import { themeConfig } from "src/themeConfig";
-import { ChevronLeft } from "@mui/icons-material";
-import Radio from "../FormElementsv2/Radio/Radio";
-import TextField from "../FormElementsv2/TextField/TextField";
-import { Text } from "../Typography/Typography";
-import { useFormik } from "formik";
-import { timeValidationSchema } from "./constants";
-import FieldError from "../FormElementsv2/FieldError/FieldError";
-import {
-  getISOStringfromDateAndTime,
-  getLocalStartOfDayfromISODateString,
-} from "./utils";
+import { Box, IconButton, styled } from "@mui/material";
+import { Stack } from "@mui/system";
+import { addMilliseconds, addMonths, format, subMonths } from "date-fns";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
-import { PopoverDynamicHeight } from "../Popover/Popover";
-import CalendarIcon from "../Icons/Calendar/Calendar";
+import { useFormik } from "formik";
+import { DateRange as ReactDateRange, Range } from "react-date-range";
+
+import { themeConfig } from "src/themeConfig";
+import { SetState } from "src/types/common/reactGenerics";
 import { secondsPassedInCurrentUTCMonth } from "src/utils/time";
+
+import Button from "../Button/Button";
+import FieldError from "../FormElementsv2/FieldError/FieldError";
+import Radio from "../FormElementsv2/Radio/Radio";
+import TextField from "../FormElementsv2/TextField/TextField";
+import CalendarIcon from "../Icons/Calendar/Calendar";
+import { PopoverDynamicHeight } from "../Popover/Popover";
+import { Text } from "../Typography/Typography";
+
+import { timeValidationSchema } from "./constants";
+import { getISOStringfromDateAndTime, getLocalStartOfDayfromISODateString } from "./utils";
+
+import "react-date-range/dist/styles.css"; // main css file
 dayjs.extend(utc);
 
 const StyledIconCard = styled(Box)({
@@ -47,10 +48,7 @@ const StyledInput = styled(TextField)({
   },
 });
 
-const NavigationRenderer = (
-  currentFocusedDate: Date,
-  setShownDate: (shownDate: Date) => void
-) => {
+const NavigationRenderer = (currentFocusedDate: Date, setShownDate: (shownDate: Date) => void) => {
   return (
     <Box position="relative" width="100%">
       <Stack
@@ -154,10 +152,7 @@ const RelativeRange = ({
       const endDate = new Date();
       const startDate = addMilliseconds(endDate, -selectedValue);
       if (selectionType === "date") {
-        const startDateBeginningOfDay = dayjs(startDate)
-          .utc()
-          .startOf("day")
-          .toISOString();
+        const startDateBeginningOfDay = dayjs(startDate).utc().startOf("day").toISOString();
         const endDateEndOfDay = dayjs(endDate).utc().endOf("day").toISOString();
         setDateRange({
           startDate: startDateBeginningOfDay,
@@ -189,11 +184,7 @@ const RelativeRange = ({
         width: "609px",
       }}
     >
-      <Stack
-        direction="column"
-        alignItems="flex-start"
-        sx={{ paddingBottom: "10px", paddingTop: "4px" }}
-      >
+      <Stack direction="column" alignItems="flex-start" sx={{ paddingBottom: "10px", paddingTop: "4px" }}>
         {relativeRangeOptions?.map((option, i) => (
           <Stack
             direction="row"
@@ -209,10 +200,7 @@ const RelativeRange = ({
             key={i}
             onClick={() => handleSelectOption(option.value)}
           >
-            <Radio
-              sx={{ padding: "0px", marginRight: "8px" }}
-              checked={selectedValue === option.value}
-            />
+            <Radio sx={{ padding: "0px", marginRight: "8px" }} checked={selectedValue === option.value} />
             {option.label}
           </Stack>
         ))}
@@ -232,16 +220,10 @@ const RelativeRange = ({
           key={"custom"}
           onClick={() => handleTabChange("absolute")}
         >
-          <Radio
-            sx={{ padding: "0px", marginRight: "8px", paddingTop: "2px" }}
-          />
+          <Radio sx={{ padding: "0px", marginRight: "8px", paddingTop: "2px" }} />
           <Box>
             Custom
-            <Text
-              size="xsmall"
-              weight="regular"
-              color={themeConfig.colors.gray600}
-            >
+            <Text size="xsmall" weight="regular" color={themeConfig.colors.gray600}>
               Set a custom range in the past
             </Text>
           </Box>
@@ -254,20 +236,10 @@ const RelativeRange = ({
         borderTop={`1px solid ${themeConfig.colors.gray200}`}
         padding="16px"
       >
-        <Button
-          variant="text"
-          fontColor={themeConfig.colors.success600}
-          onClick={onClear}
-          bgColor={"#0794550a"}
-        >
+        <Button variant="text" fontColor={themeConfig.colors.success600} onClick={onClear} bgColor={"#0794550a"}>
           Clear
         </Button>
-        <Stack
-          direction="row"
-          justifyContent="flex-end"
-          alignItems="center"
-          gap="12px"
-        >
+        <Stack direction="row" justifyContent="flex-end" alignItems="center" gap="12px">
           <Button variant="outlined" onClick={handleCancel}>
             Cancel
           </Button>
@@ -315,39 +287,24 @@ const AbsoluteRange = (props: AbsoluteRangeProps) => {
   } = props;
 
   const [selectedStartDate, setSelectedStartDate] = useState(
-    dateRange.startDate
-      ? getLocalStartOfDayfromISODateString(dateRange.startDate)
-      : undefined
+    dateRange.startDate ? getLocalStartOfDayfromISODateString(dateRange.startDate) : undefined
   );
   const [selectedEndDate, setSelectedEndDate] = useState(
-    dateRange.endDate
-      ? getLocalStartOfDayfromISODateString(dateRange.endDate)
-      : undefined
+    dateRange.endDate ? getLocalStartOfDayfromISODateString(dateRange.endDate) : undefined
   );
 
   const timeFormik = useFormik({
     initialValues: {
-      startDate: dateRange.startDate
-        ? getLocalStartOfDayfromISODateString(dateRange.startDate)
-        : undefined,
-      endDate: dateRange.endDate
-        ? getLocalStartOfDayfromISODateString(dateRange.endDate)
-        : undefined,
-      startTime: dateRange.startDate
-        ? dayjs(new Date(dateRange.startDate)).utc().format("HH:mm:ss")
-        : "00:00:00",
-      endTime: dateRange.endDate
-        ? dayjs(new Date(dateRange.endDate)).utc().format("HH:mm:ss")
-        : "23:59:59",
+      startDate: dateRange.startDate ? getLocalStartOfDayfromISODateString(dateRange.startDate) : undefined,
+      endDate: dateRange.endDate ? getLocalStartOfDayfromISODateString(dateRange.endDate) : undefined,
+      startTime: dateRange.startDate ? dayjs(new Date(dateRange.startDate)).utc().format("HH:mm:ss") : "00:00:00",
+      endTime: dateRange.endDate ? dayjs(new Date(dateRange.endDate)).utc().format("HH:mm:ss") : "23:59:59",
     },
     enableReinitialize: true,
     onSubmit: (values) => {
       if (values.startDate && values.endDate) {
         setDateRange({
-          startDate: getISOStringfromDateAndTime(
-            values.startDate,
-            values.startTime
-          ),
+          startDate: getISOStringfromDateAndTime(values.startDate, values.startTime),
           endDate: getISOStringfromDateAndTime(values.endDate, values.endTime),
         });
       } else {
@@ -360,15 +317,7 @@ const AbsoluteRange = (props: AbsoluteRangeProps) => {
     validationSchema: timeValidationSchema,
   });
 
-  const {
-    values,
-    handleChange,
-    handleBlur,
-    touched,
-    errors,
-    setFieldValue,
-    handleSubmit,
-  } = timeFormik;
+  const { values, handleChange, handleBlur, touched, errors, setFieldValue, handleSubmit } = timeFormik;
 
   const dateRanges: Range[] = useMemo(() => {
     return [
@@ -428,25 +377,13 @@ const AbsoluteRange = (props: AbsoluteRangeProps) => {
       />
 
       {selectionType === "date-time" && (
-        <Stack
-          direction="row"
-          gap="12px"
-          alignItems="center"
-          padding="12px 16px"
-        >
+        <Stack direction="row" gap="12px" alignItems="center" padding="12px 16px">
           <Stack direction={"row"} gap="12px" alignItems="center" flex={1}>
             <Box>
               <Text size="small" color={themeConfig.colors.gray600}>
                 Start Date
               </Text>
-              <StyledInput
-                value={
-                  selectedStartDate
-                    ? format(selectedStartDate, "yyyy/MM/dd")
-                    : ""
-                }
-                disabled
-              />
+              <StyledInput value={selectedStartDate ? format(selectedStartDate, "yyyy/MM/dd") : ""} disabled />
               <Box height="18px">
                 <FieldError>{touched.startDate && errors.startDate}</FieldError>
               </Box>
@@ -475,12 +412,7 @@ const AbsoluteRange = (props: AbsoluteRangeProps) => {
               <Text size="small" color={themeConfig.colors.gray600}>
                 End Date
               </Text>
-              <StyledInput
-                value={
-                  selectedEndDate ? format(selectedEndDate, "yyyy/MM/dd") : ""
-                }
-                disabled
-              />
+              <StyledInput value={selectedEndDate ? format(selectedEndDate, "yyyy/MM/dd") : ""} disabled />
               <Box height="18px">
                 <FieldError>{touched.endDate && errors.endDate}</FieldError>
               </Box>
@@ -520,22 +452,12 @@ const AbsoluteRange = (props: AbsoluteRangeProps) => {
           </Stack>
         )}
         {!hideClearButton && (
-          <Button
-            variant="text"
-            fontColor={themeConfig.colors.success600}
-            onClick={onClear}
-            bgColor={"#0794550a"}
-          >
+          <Button variant="text" fontColor={themeConfig.colors.success600} onClick={onClear} bgColor={"#0794550a"}>
             Clear
           </Button>
         )}
 
-        <Stack
-          direction="row"
-          justifyContent="flex-end"
-          alignItems="center"
-          gap="8px"
-        >
+        <Stack direction="row" justifyContent="flex-end" alignItems="center" gap="8px">
           <Button variant="outlined" onClick={handleCancel}>
             Cancel
           </Button>
@@ -560,19 +482,10 @@ type DateRangePickerStaticProps = {
   hideClearButton?: boolean;
 };
 
-export const DateTimeRangePickerStatic = (
-  props: DateRangePickerStaticProps
-) => {
-  const {
-    handleCancel,
-    dateRange,
-    hideBackArrow = false,
-    selectionType = "date-time",
-  } = props;
+export const DateTimeRangePickerStatic = (props: DateRangePickerStaticProps) => {
+  const { handleCancel, dateRange, hideBackArrow = false, selectionType = "date-time" } = props;
 
-  const [tab, setTab] = useState<TabType>(
-    dateRange?.startDate ? "absolute" : "relative"
-  );
+  const [tab, setTab] = useState<TabType>(dateRange?.startDate ? "absolute" : "relative");
 
   const handleTabChange = (value: TabType) => {
     setTab(value);
@@ -698,13 +611,7 @@ type DateTimePickerPopoverProps = {
 };
 
 export const DateTimePickerPopover = (props: DateTimePickerPopoverProps) => {
-  const {
-    dateRange,
-    setDateRange,
-    hideClearButton = false,
-    selectionType = "date-time",
-    initialDateRange,
-  } = props;
+  const { dateRange, setDateRange, hideClearButton = false, selectionType = "date-time", initialDateRange } = props;
 
   const [anchorElem, setAnchorElem] = useState<HTMLElement | null>(null);
 
@@ -764,9 +671,7 @@ export const DateTimePickerPopover = (props: DateTimePickerPopoverProps) => {
     <>
       <Button
         variant="outlined"
-        startIcon={
-          <CalendarIcon color="#414651" style={{ marginLeft: "4px" }} />
-        }
+        startIcon={<CalendarIcon color="#414651" style={{ marginLeft: "4px" }} />}
         onClick={handleButtonClick}
         sx={{
           fontWeight: "500 !important",

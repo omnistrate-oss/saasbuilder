@@ -1,16 +1,15 @@
 import { AxiosResponse } from "axios";
+
 import axios from "src/axios";
 import {
   CreateCustomNetworkRequestBody,
-  ListCustomNetworksSuccessResponse,
-  UpdateCustomNetworkSuccessResponse,
-  UpdateCustomNetworkRequestBody,
   CreateCustomNetworkSuccessResponse,
+  ListCustomNetworksSuccessResponse,
+  UpdateCustomNetworkRequestBody,
+  UpdateCustomNetworkSuccessResponse,
 } from "src/types/customNetwork";
 
-export function getCustomNetworks(
-  params = {}
-): Promise<AxiosResponse<ListCustomNetworksSuccessResponse>> {
+export function getCustomNetworks(params = {}): Promise<AxiosResponse<ListCustomNetworksSuccessResponse>> {
   return axios.get("/resource-instance/custom-network", { params });
 }
 

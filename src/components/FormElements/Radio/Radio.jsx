@@ -1,8 +1,6 @@
 import MuiRadioGroup from "@mui/material/RadioGroup";
 import MuiRadio from "@mui/material/Radio";
-import MuiFormControlLabel, {
-  formControlLabelClasses,
-} from "@mui/material/FormControlLabel";
+import MuiFormControlLabel, { formControlLabelClasses } from "@mui/material/FormControlLabel";
 import { textStyles, weights } from "../../Typography/Typography";
 import { styled } from "@mui/material";
 

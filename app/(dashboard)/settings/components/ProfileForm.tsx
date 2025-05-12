@@ -1,20 +1,19 @@
 "use client";
 
-import { useFormik } from "formik";
 import { useMutation } from "@tanstack/react-query";
+import { useFormik } from "formik";
 
 import { updateProfile } from "src/api/users";
 import useSnackbar from "src/hooks/useSnackbar";
-
 import Button from "components/Button/Button";
-import Form from "components/FormElementsv2/Form/Form";
-import TextField from "components/FormElementsv2/TextField/TextField";
+import LoadingSpinnerSmall from "components/CircularProgress/CircularProgress";
 import FieldError from "components/FormElementsv2/FieldError/FieldError";
 import FieldTitle from "components/FormElementsv2/FieldTitle/FieldTitle";
-import LoadingSpinnerSmall from "components/CircularProgress/CircularProgress";
+import Form from "components/FormElementsv2/Form/Form";
+import TextField from "components/FormElementsv2/TextField/TextField";
 
-import FormHeader from "./FormHeader";
 import { FieldCell, FieldTitleCell, ProfileValidationSchema } from "./Common";
+import FormHeader from "./FormHeader";
 
 type ProfileFormProps = {
   userData: any;
@@ -22,22 +21,15 @@ type ProfileFormProps = {
   refetchUserData: () => void;
 };
 
-const ProfileForm: React.FC<ProfileFormProps> = ({
-  userData,
-  isLoadingUserData,
-  refetchUserData,
-}) => {
+const ProfileForm: React.FC<ProfileFormProps> = ({ userData, isLoadingUserData, refetchUserData }) => {
   const snackbar = useSnackbar();
 
-  const updateProfileMutation = useMutation(
-    (data) => updateProfile(userData?.id, data),
-    {
-      onSuccess: () => {
-        refetchUserData();
-        snackbar.showSuccess("Profile updated successfully");
-      },
-    }
-  );
+  const updateProfileMutation = useMutation((data) => updateProfile(userData?.id, data), {
+    onSuccess: () => {
+      refetchUserData();
+      snackbar.showSuccess("Profile updated successfully");
+    },
+  });
 
   const formData = useFormik({
     initialValues: {
@@ -96,13 +88,7 @@ const ProfileForm: React.FC<ProfileFormProps> = ({
             <FieldTitle required>Organization ID</FieldTitle>
           </FieldTitleCell>
           <FieldCell>
-            <TextField
-              data-testid="organization-id-input"
-              readOnly
-              disabled
-              value={values.orgId}
-              sx={{ mt: 0 }}
-            />
+            <TextField data-testid="organization-id-input" readOnly disabled value={values.orgId} sx={{ mt: 0 }} />
           </FieldCell>
 
           <FieldTitleCell>
@@ -141,18 +127,10 @@ const ProfileForm: React.FC<ProfileFormProps> = ({
         </div>
 
         <div className="flex items-center justify-end gap-4 mt-5">
-          <Button
-            variant="outlined"
-            onClick={() => formData.resetForm()}
-            disabled={updateProfileMutation.isLoading}
-          >
+          <Button variant="outlined" onClick={() => formData.resetForm()} disabled={updateProfileMutation.isLoading}>
             Cancel
           </Button>
-          <Button
-            type="submit"
-            variant="contained"
-            disabled={updateProfileMutation.isLoading}
-          >
+          <Button type="submit" variant="contained" disabled={updateProfileMutation.isLoading}>
             Save
             {updateProfileMutation.isLoading && <LoadingSpinnerSmall />}
           </Button>

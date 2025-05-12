@@ -1,18 +1,19 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import useAuditLogs from "./hooks/useAuditLogs";
-import PageTitle from "../components/Layout/PageTitle";
+
+import { DateRange } from "src/components/DateRangePicker/DateTimeRangePickerStatic";
+import { useGlobalData } from "src/providers/GlobalDataProvider";
+import { EventType } from "src/types/event";
+import { initialRangeState } from "components/DateRangePicker/DateTimeRangePickerStatic";
+
+import EventsTable from "../components/EventsTable/EventsTable";
 import AuditLogsIcon from "../components/Icons/AuditLogsIcon";
 import PageContainer from "../components/Layout/PageContainer";
+import PageTitle from "../components/Layout/PageTitle";
+
 import EventsTableHeader from "./components/EventsTableHeader";
-
-import { useGlobalData } from "src/providers/GlobalDataProvider";
-
-import { initialRangeState } from "components/DateRangePicker/DateTimeRangePickerStatic";
-import { DateRange } from "src/components/DateRangePicker/DateTimeRangePickerStatic";
-import EventsTable from "../components/EventsTable/EventsTable";
-import { EventType } from "src/types/event";
+import useAuditLogs from "./hooks/useAuditLogs";
 
 const EventsPage = () => {
   const [pageIndex, setPageIndex] = useState(0);

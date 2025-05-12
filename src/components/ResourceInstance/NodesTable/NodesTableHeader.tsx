@@ -1,4 +1,5 @@
 import { CircularProgress, Stack } from "@mui/material";
+
 import Button from "src/components/Button/Button";
 import LoadingSpinnerSmall from "src/components/CircularProgress/CircularProgress";
 import SearchInput from "src/components/DataGrid/SearchInput";
@@ -61,9 +62,7 @@ const NodesTableHeader: React.FC<NodesTableHeaderProps> = ({
           }}
         />
         <div className="flex items-center gap-4">
-          <div className="flex items-center mr-6">
-            {isRefetching && <CircularProgress size={20} />}
-          </div>
+          <div className="flex items-center mr-6">{isRefetching && <CircularProgress size={20} />}</div>
           <SearchInput
             searchText={searchText}
             setSearchText={setSearchText}
@@ -89,9 +88,7 @@ const NodesTableHeader: React.FC<NodesTableHeaderProps> = ({
               }}
             >
               Failover
-              {failoverMutation.isLoading && (
-                <LoadingSpinnerSmall sx={{ marginLeft: "12px" }} />
-              )}
+              {failoverMutation.isLoading && <LoadingSpinnerSmall sx={{ marginLeft: "12px" }} />}
             </Button>
           )}
 

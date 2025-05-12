@@ -1,6 +1,8 @@
 import { AxiosResponse } from "axios";
-import axios from "../axios";
+
 import { ListAllAuditEventsSuccessResponse } from "src/types/auditEvent";
+
+import axios from "../axios";
 
 export function getResourceInstanceEvents(resourceInstanceId, subscriptionId) {
   const queryParams: any = {};
@@ -47,9 +49,7 @@ export function getAllEvents(
   );
 }
 
-export const getAllAuditEvents = (
-  params = {}
-): Promise<AxiosResponse<ListAllAuditEventsSuccessResponse>> => {
+export const getAllAuditEvents = (params = {}): Promise<AxiosResponse<ListAllAuditEventsSuccessResponse>> => {
   return axios.get("/resource-instance/audit-events", {
     params,
   });

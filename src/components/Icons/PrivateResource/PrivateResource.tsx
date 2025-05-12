@@ -1,11 +1,5 @@
 const PrivateResourceIcon = (props) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width={42}
-    height={42}
-    fill="none"
-    {...props}
-  >
+  <svg xmlns="http://www.w3.org/2000/svg" width={42} height={42} fill="none" {...props}>
     <path
       fill="#fff"
       d="M10 .5h22a9.5 9.5 0 0 1 9.5 9.5v22a9.5 9.5 0 0 1-9.5 9.5H10A9.5 9.5 0 0 1 .5 32V10A9.5 9.5 0 0 1 10 .5Z"

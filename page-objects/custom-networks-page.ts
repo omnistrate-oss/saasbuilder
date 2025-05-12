@@ -1,4 +1,5 @@
 import { Page } from "@playwright/test";
+
 import { PageURLs } from "./pages";
 
 export class CustomNetworksPage {

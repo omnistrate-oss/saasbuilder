@@ -1,41 +1,41 @@
 "use client";
 
-import clsx from "clsx";
-import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
-import { Collapse } from "@mui/material";
+import Link from "next/link";
 import { usePathname } from "next/navigation";
+import ExpandLessIcon from "@mui/icons-material/ExpandLess";
+import { Collapse } from "@mui/material";
+import useBillingStatus from "app/(dashboard)/billing/hooks/useBillingStatus";
+import clsx from "clsx";
 
-import { Text } from "components/Typography/Typography";
-import ShieldIcon from "components/Icons/SideNavbar/Shield/Shield";
+import { useGlobalData } from "src/providers/GlobalDataProvider";
+import { colors } from "src/themeConfig";
+import {
+  getAccessControlRoute,
+  getBillingRoute,
+  getCloudAccountsRoute,
+  getCostExplorerRoute,
+  getCustomNetworksRoute,
+  getEventsRoute,
+  getInstancesRoute,
+  getNotificationsRoute,
+  getSettingsRoute,
+  getSubscriptionsRoute,
+} from "src/utils/routes";
 import APIDocsIcon from "components/Icons/SideNavbar/APIDocs/APIDocsIcon";
-import SupportIcon from "components/Icons/SideNavbar/Support/SupportIcon";
+import DashboardNavIcon from "components/Icons/SideNavbar/Dashboard/Dashboard";
+import DeveloperDocsIcon from "components/Icons/SideNavbar/DeveloperDocs/DeveloperDocsIcon";
+import DownloadCLIIcon from "components/Icons/SideNavbar/DownloadCLI/DownloadCLIIcon";
+import FileLockIcon from "components/Icons/SideNavbar/FileLock/FileLockIcon";
 import PricingIcon from "components/Icons/SideNavbar/Pricing/PricingIcon";
 import ResourcesIcon from "components/Icons/SideNavbar/Resources/Resources";
-import FileLockIcon from "components/Icons/SideNavbar/FileLock/FileLockIcon";
-import DashboardNavIcon from "components/Icons/SideNavbar/Dashboard/Dashboard";
-import DownloadCLIIcon from "components/Icons/SideNavbar/DownloadCLI/DownloadCLIIcon";
-import DeveloperDocsIcon from "components/Icons/SideNavbar/DeveloperDocs/DeveloperDocsIcon";
+import ShieldIcon from "components/Icons/SideNavbar/Shield/Shield";
+import SupportIcon from "components/Icons/SideNavbar/Support/SupportIcon";
+import { Text } from "components/Typography/Typography";
 
-import ExpandLessIcon from "@mui/icons-material/ExpandLess";
-
-import { colors } from "src/themeConfig";
-import { useGlobalData } from "src/providers/GlobalDataProvider";
 import FullScreenDrawer from "../FullScreenDrawer/FullScreenDrawer";
+
 import PlanDetails from "./PlanDetails";
-import {
-  getCloudAccountsRoute,
-  getCustomNetworksRoute,
-  getInstancesRoute,
-  getAccessControlRoute,
-  getSubscriptionsRoute,
-  getEventsRoute,
-  getNotificationsRoute,
-  getBillingRoute,
-  getSettingsRoute,
-  getCostExplorerRoute,
-} from "src/utils/routes";
-import useBillingStatus from "app/(dashboard)/billing/hooks/useBillingStatus";
 
 const SingleNavItem = ({
   name,

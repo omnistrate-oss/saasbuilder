@@ -2,16 +2,17 @@
 
 import { useEffect, useState } from "react";
 
-import PageTitle from "../components/Layout/PageTitle";
-import useAuditLogs from "../audit-logs/hooks/useAuditLogs";
-import PageContainer from "../components/Layout/PageContainer";
-import NotificationsIcon from "../components/Icons/NotificationsIcon";
-import NotificationsTableHeader from "./components/NotificationsTableHeader";
-
-import { useGlobalData } from "src/providers/GlobalDataProvider";
 import { DateRange, initialRangeState } from "src/components/DateRangePicker/DateTimeRangePickerStatic";
-import EventsTable from "../components/EventsTable/EventsTable";
+import { useGlobalData } from "src/providers/GlobalDataProvider";
 import { EventType } from "src/types/event";
+
+import useAuditLogs from "../audit-logs/hooks/useAuditLogs";
+import EventsTable from "../components/EventsTable/EventsTable";
+import NotificationsIcon from "../components/Icons/NotificationsIcon";
+import PageContainer from "../components/Layout/PageContainer";
+import PageTitle from "../components/Layout/PageTitle";
+
+import NotificationsTableHeader from "./components/NotificationsTableHeader";
 
 const NotificationsPage = () => {
   const [pageIndex, setPageIndex] = useState(0);

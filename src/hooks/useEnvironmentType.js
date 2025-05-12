@@ -1,4 +1,5 @@
 import { useContext } from "react";
+
 import { EnvironmentTypeContext } from "src/context/EnvironmentTypeProvider";
 
 function useEnvironmentType() {

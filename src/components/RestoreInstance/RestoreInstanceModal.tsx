@@ -1,13 +1,16 @@
 import React, { useEffect, useMemo } from "react";
-import InformationDialogTopCenter from "../Dialog/InformationDialogTopCenter";
-import { useFormik } from "formik";
-import RestoreInstanceFormStep from "./RestoreInstanceFormStep";
-import RestoreInstanceSuccessStep from "./RestoreInstanceSuccessStep";
-import { SetState } from "src/types/common/reactGenerics";
-import { restoreFormikSchema } from "src/constants/restore";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
+import { useFormik } from "formik";
+
+import { restoreFormikSchema } from "src/constants/restore";
+import { SetState } from "src/types/common/reactGenerics";
 import { dateToTimeString } from "src/utils/time";
+
+import InformationDialogTopCenter from "../Dialog/InformationDialogTopCenter";
+
+import RestoreInstanceFormStep from "./RestoreInstanceFormStep";
+import RestoreInstanceSuccessStep from "./RestoreInstanceSuccessStep";
 dayjs.extend(utc);
 
 type RestoreInstanceModalProps = {
@@ -33,10 +36,7 @@ function RestoreInstanceModal({
 }: RestoreInstanceModalProps) {
   const initialDateValue = useMemo(() => {
     if (earliestRestoreTime) {
-      const date = dayjs
-        .utc(new Date(earliestRestoreTime))
-        .add(1, "minute")
-        .toDate();
+      const date = dayjs.utc(new Date(earliestRestoreTime)).add(1, "minute").toDate();
       return date;
     }
 
@@ -45,17 +45,14 @@ function RestoreInstanceModal({
 
   const restoreFormik = useFormik({
     initialValues: {
-      earliestRestoreTime: earliestRestoreTime
-        ? dayjs.utc(earliestRestoreTime)
-        : null,
+      earliestRestoreTime: earliestRestoreTime ? dayjs.utc(earliestRestoreTime) : null,
       date: dayjs.utc(initialDateValue).startOf("day"),
       time: dateToTimeString(initialDateValue),
     },
     validationSchema: restoreFormikSchema,
     enableReinitialize: true,
     onSubmit: (values) => {
-      const dateTimeString =
-        values.date.format("YYYY-MM-DD") + "T" + values.time + "Z";
+      const dateTimeString = values.date.format("YYYY-MM-DD") + "T" + values.time + "Z";
       const utcTimeString = dayjs.utc(dateTimeString)?.toISOString();
       restoreMutation.mutate({
         targetRestoreTime: utcTimeString,
@@ -72,13 +69,8 @@ function RestoreInstanceModal({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open]);
 
-
   return (
-    <InformationDialogTopCenter
-      open={open}
-      handleClose={handleClose}
-      maxWidth={step === 1 ? "650px" : "550px"}
-    >
+    <InformationDialogTopCenter open={open} handleClose={handleClose} maxWidth={step === 1 ? "650px" : "550px"}>
       {step === 1 && (
         <RestoreInstanceFormStep
           restoreFormik={restoreFormik}
@@ -87,12 +79,7 @@ function RestoreInstanceModal({
           earliestRestoreTime={earliestRestoreTime}
         />
       )}
-      {step === 2 && (
-        <RestoreInstanceSuccessStep
-          handleClose={handleClose}
-          restoredInstanceID={restoredInstanceID}
-        />
-      )}
+      {step === 2 && <RestoreInstanceSuccessStep handleClose={handleClose} restoredInstanceID={restoredInstanceID} />}
     </InformationDialogTopCenter>
   );
 }

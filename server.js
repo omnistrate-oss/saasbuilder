@@ -18,11 +18,7 @@ app.prepare().then(async () => {
 
   console.log("Environment variables status", envVariablesStatus);
   if (isVerified) {
-    if (
-      process.env.NODE_INDEX === undefined ||
-      process.env.NODE_INDEX === 0 ||
-      process.env.NODE_INDEX === "0"
-    ) {
+    if (process.env.NODE_INDEX === undefined || process.env.NODE_INDEX === 0 || process.env.NODE_INDEX === "0") {
       //start the mail service cron job only if
       //a)NODE_INDEX environment variable is not present
       //b)NODE_INDEX environment variable === 0
@@ -40,7 +36,7 @@ app.prepare().then(async () => {
         });
       }
       await handle(request, response);
-    } catch (error) {
+    } catch {
       response.render("pages/error");
     }
   });

@@ -71,33 +71,23 @@ export default function NodesTable(props) {
     resourceInstancestatus,
   } = props;
 
-  const isCustomTenancy =
-    serviceOffering?.productTierType === productTierTypes.CUSTOM_TENANCY;
+  const isCustomTenancy = serviceOffering?.productTierType === productTierTypes.CUSTOM_TENANCY;
 
   const [searchText, setSearchText] = useState("");
   const [selectionModel, setSelectionModel] = useState([]);
   const [selectedNode, setSelectedNode] = useState(null);
-  const [isGenerateTokenDialogOpen, setIsGenerateTokenDialogOpen] =
-    useState(false);
+  const [isGenerateTokenDialogOpen, setIsGenerateTokenDialogOpen] = useState(false);
   const [dashboardEndpoint, setDashboardEndpoint] = useState("");
 
   const selectUser = useSelector(selectUserrootData);
-  const role = getEnumFromUserRoleString(
-    isAccessSide ? subscriptionData?.roleType : selectUser.roleType
-  );
+  const role = getEnumFromUserRoleString(isAccessSide ? subscriptionData?.roleType : selectUser.roleType);
   const view = viewEnum.Access_Resources;
 
-  const modifyAccessServiceAllowed = isOperationAllowedByRBAC(
-    operationEnum.Update,
-    role,
-    view
-  );
+  const modifyAccessServiceAllowed = isOperationAllowedByRBAC(operationEnum.Update, role, view);
   //remove serverless nodes added on frontend or search by node ID
   const filteredNodes = useMemo(() => {
     let list = nodes.filter((node) => !node.isServerless);
-    list = list?.filter((item) =>
-      item?.nodeId?.toLowerCase()?.includes(searchText?.toLowerCase())
-    );
+    list = list?.filter((item) => item?.nodeId?.toLowerCase()?.includes(searchText?.toLowerCase()));
 
     list = _.uniqBy(list, "id");
 
@@ -148,15 +138,11 @@ export default function NodesTable(props) {
         headerName: "K8s Dashboard Endpoint",
         flex: 1,
         minWidth: 150,
-        valueGetter: (params) =>
-          params.row.kubernetesDashboardEndpoint?.dashboardEndpoint || "-",
+        valueGetter: (params) => params.row.kubernetesDashboardEndpoint?.dashboardEndpoint || "-",
         renderCell: (params) => {
           const { row } = params;
-          const dashboardEndpointRow =
-            row.kubernetesDashboardEndpoint?.dashboardEndpoint;
-          setDashboardEndpoint(
-            row.kubernetesDashboardEndpoint?.dashboardEndpoint
-          );
+          const dashboardEndpointRow = row.kubernetesDashboardEndpoint?.dashboardEndpoint;
+          setDashboardEndpoint(row.kubernetesDashboardEndpoint?.dashboardEndpoint);
           const isDisconnected = resourceInstancestatus === "DISCONNECTED";
           if (!dashboardEndpointRow) {
             return "-";
@@ -215,9 +201,7 @@ export default function NodesTable(props) {
       valueGetter: (params) => params.row.status,
       renderCell: (params) => {
         const status = params.row.status;
-        const statusStylesAndMap = getResourceInstanceStatusStylesAndLabel(
-          status?.toUpperCase()
-        );
+        const statusStylesAndMap = getResourceInstanceStatusStylesAndLabel(status?.toUpperCase());
         return <StatusChip status={status} {...statusStylesAndMap} />;
       },
       minWidth: 200,
@@ -272,9 +256,7 @@ export default function NodesTable(props) {
           if (!endpoint || endpoint === "-internal") {
             return "-";
           }
-          return (
-            <DataGridText showCopyButton>{params.row.endpoint}</DataGridText>
-          );
+          return <DataGridText showCopyButton>{params.row.endpoint}</DataGridText>;
         },
       },
       {
@@ -309,8 +291,7 @@ export default function NodesTable(props) {
         flex: 0.9,
         renderCell: (params) => {
           const status = params.row.status;
-          const statusStylesAndMap =
-            getResourceInstanceStatusStylesAndLabel(status);
+          const statusStylesAndMap = getResourceInstanceStatusStylesAndLabel(status);
           return <StatusChip status={status} {...statusStylesAndMap} />;
         },
         minWidth: 170,
@@ -320,14 +301,11 @@ export default function NodesTable(props) {
         headerName: "Health Status",
         flex: 0.9,
         renderCell: (params) => {
-          const status = params.row.healthStatus
-            ? params.row.healthStatus
-            : "UNKNOWN";
+          const status = params.row.healthStatus ? params.row.healthStatus : "UNKNOWN";
 
           const lifecycleStatus = params.row.status;
           const isJob = params.row.isJob;
-          if (lifecycleStatus === "STOPPED")
-            return <StatusChip category="unknown" label="Unknown" />;
+          if (lifecycleStatus === "STOPPED") return <StatusChip category="unknown" label="Unknown" />;
 
           return params.row?.detailedHealth ? (
             <NodeStatus
@@ -336,10 +314,7 @@ export default function NodesTable(props) {
               isJob={isJob}
             />
           ) : (
-            <StatusChip
-              status={status}
-              {...(status === "HEALTHY" ? { pulsateDot: true } : { dot: true })}
-            />
+            <StatusChip status={status} {...(status === "HEALTHY" ? { pulsateDot: true } : { dot: true })} />
           );
         },
         minWidth: 180,
@@ -431,14 +406,9 @@ export default function NodesTable(props) {
                       ? "Failover in progress"
                       : "",
             selectedNode,
-            showFailoverButton:
-              !isCustomTenancy && (isAccessSide || isInventoryManageInstance),
-            showGenerateTokenButton: Boolean(
-              isCustomTenancy &&
-                nodes.some((node) => node.kubernetesDashboardEndpoint)
-            ),
-            disabledGenerateTokenButton:
-              resourceInstancestatus === "DISCONNECTED",
+            showFailoverButton: !isCustomTenancy && (isAccessSide || isInventoryManageInstance),
+            showGenerateTokenButton: Boolean(isCustomTenancy && nodes.some((node) => node.kubernetesDashboardEndpoint)),
+            disabledGenerateTokenButton: resourceInstancestatus === "DISCONNECTED",
             onGenerateTokenClick: () => setIsGenerateTokenDialogOpen(true),
             handleFailover,
             failoverMutation,
@@ -460,9 +430,7 @@ export default function NodesTable(props) {
         onSelectionModelChange={(newRowSelectionModel) => {
           if (newRowSelectionModel.length > 0) {
             const selectionSet = new Set(selectionModel);
-            const newSelectedItem = newRowSelectionModel.filter(
-              (s) => !selectionSet.has(s)
-            );
+            const newSelectedItem = newRowSelectionModel.filter((s) => !selectionSet.has(s));
             setSelectionModel(newSelectedItem);
           } else {
             setSelectionModel(newRowSelectionModel);

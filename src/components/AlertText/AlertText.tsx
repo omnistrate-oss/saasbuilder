@@ -1,7 +1,8 @@
-import { Stack, SxProps, useTheme, Theme } from "@mui/material";
-import { Text } from "src/components/Typography/Typography";
 import { ReactNode } from "react";
+import { Stack, SxProps, Theme,useTheme } from "@mui/material";
+
 import AlertTriangle from "src/components/Icons/AlertTriangle/AlertTriangle";
+import { Text } from "src/components/Typography/Typography";
 
 type AlertTextProps = {
   children: ReactNode;
@@ -27,16 +28,8 @@ export default function AlertText(props: AlertTextProps) {
         ...containerStyles,
       }}
     >
-      <AlertTriangle
-        color={theme.palette.warning.main}
-        style={{ alignSelf: "normal", flexShrink: 0 }}
-      />
-      <Text
-        color={theme.palette.warning.main}
-        weight="regular"
-        size="small"
-        sx={{ color: "#B54708", ...textStyles }}
-      >
+      <AlertTriangle color={theme.palette.warning.main} style={{ alignSelf: "normal", flexShrink: 0 }} />
+      <Text color={theme.palette.warning.main} weight="regular" size="small" sx={{ color: "#B54708", ...textStyles }}>
         {children}
       </Text>
     </Stack>

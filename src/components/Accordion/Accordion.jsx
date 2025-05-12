@@ -1,8 +1,6 @@
 import MuiAccordion from "@mui/material/Accordion";
 import MuiAccordionDetails from "@mui/material/AccordionDetails";
-import MuiAccordionSummary, {
-  accordionSummaryClasses,
-} from "@mui/material/AccordionSummary";
+import MuiAccordionSummary, { accordionSummaryClasses } from "@mui/material/AccordionSummary";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import { Box, IconButton, Stack, styled } from "@mui/material";
@@ -36,19 +34,10 @@ export default function Accordion(props) {
   } = props;
 
   let IconComponent = AccordionEditIcon;
-  if (iconVariant === ACCORDION_ICON_VARIANTS.checked)
-    IconComponent = AccordionValidIcon;
-  if (iconVariant === ACCORDION_ICON_VARIANTS.error)
-    IconComponent = AccordionErrorIcon;
+  if (iconVariant === ACCORDION_ICON_VARIANTS.checked) IconComponent = AccordionValidIcon;
+  if (iconVariant === ACCORDION_ICON_VARIANTS.error) IconComponent = AccordionErrorIcon;
 
-  let ToggleIcon = (
-    <Switch
-      disabled={disabled}
-      checked={expanded}
-      onChange={toggleExpand}
-      data-cy="accordion-toggle"
-    />
-  );
+  let ToggleIcon = <Switch disabled={disabled} checked={expanded} onChange={toggleExpand} data-cy="accordion-toggle" />;
 
   if (arrowToggle)
     ToggleIcon = (
@@ -58,31 +47,19 @@ export default function Accordion(props) {
     );
 
   return (
-    <AccordionContainer
-      expanded={expanded}
-      disableToggle={disableToggle}
-      {...restProps}
-    >
+    <AccordionContainer expanded={expanded} disableToggle={disableToggle} {...restProps}>
       <AccordionSummary expandIcon={!disableToggle && ToggleIcon}>
         <Stack direction="row" gap="10px" alignItems="center">
           {customIconComponent ? (
             customIconComponent
           ) : (
-            <IconComponent
-              style={{ alignSelf: "flex-start", marginTop: "4px" }}
-            />
+            <IconComponent style={{ alignSelf: "flex-start", marginTop: "4px" }} />
           )}
           <Box>
             <Text size="medium" weight="medium">
               {title}
             </Text>
-            <Text
-              size="small"
-              weight="regular"
-              color="#6f7174"
-              mt="4px"
-              mr="48px"
-            >
+            <Text size="small" weight="regular" color="#6f7174" mt="4px" mr="48px">
               {description}
             </Text>
           </Box>
@@ -131,10 +108,9 @@ export const AccordionSummary = styled(MuiAccordionSummary)(() => ({
   [`& .${accordionSummaryClasses.content}`]: {
     margin: "0px",
   },
-  [`& .${accordionSummaryClasses.content}.${accordionSummaryClasses.expanded}`]:
-    {
-      margin: "0px",
-    },
+  [`& .${accordionSummaryClasses.content}.${accordionSummaryClasses.expanded}`]: {
+    margin: "0px",
+  },
 }));
 
 export const AccordionDetails = styled(MuiAccordionDetails)(() => ({

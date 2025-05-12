@@ -14,10 +14,7 @@ const TextCopy = (props) => {
   if (copyButton) {
     endAdornment = (
       <InputAdornment position="end">
-        <CopyButton
-          sx={{ width: "24px", height: "24px" }}
-          textToCopy={textToCopy}
-        />
+        <CopyButton sx={{ width: "24px", height: "24px" }} textToCopy={textToCopy} />
       </InputAdornment>
     );
   }

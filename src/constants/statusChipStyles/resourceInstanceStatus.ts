@@ -1,14 +1,6 @@
-import {
-  Category,
-  ColorObject,
-  chipCategoryColors,
-  defaultChipStyles,
-} from "./index";
+import { Category, chipCategoryColors, ColorObject, defaultChipStyles } from "./index";
 
-export const resourceInstanceStatusMap: Record<
-  string,
-  { category: Category; label: string }
-> = {
+export const resourceInstanceStatusMap: Record<string, { category: Category; label: string }> = {
   FAILED: { category: "failed", label: "Failed" },
   CANCELLED: { category: "failed", label: "Cancelled" },
   PENDING_DEPENDENCY: { category: "pending", label: "Pending Dependency" },
@@ -37,9 +29,7 @@ export const resourceInstanceStatusMap: Record<
   ATTACHING: { category: "pending", label: "Attaching" },
 };
 
-export const getResourceInstanceStatusStylesAndLabel = (
-  status: string
-): ColorObject & { label?: string } => {
+export const getResourceInstanceStatusStylesAndLabel = (status: string): ColorObject & { label?: string } => {
   const category = resourceInstanceStatusMap[status]?.category;
   const label = resourceInstanceStatusMap[status]?.label;
   return {

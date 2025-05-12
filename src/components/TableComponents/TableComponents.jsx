@@ -14,9 +14,7 @@ export const TableContainer = styled(Box)({
   padding: 20,
 });
 
-export const TableTitle = styled((props) => (
-  <DisplayText {...props} size="xsmall" />
-))({});
+export const TableTitle = styled((props) => <DisplayText {...props} size="xsmall" />)({});
 
 export const Table = styled(MuiTable)({ borderRadius: "12px !important" });
 
@@ -51,13 +49,9 @@ export const TableCell = styled(MuiTableCell)({
   borderRadius: "12px",
 });
 
-export const CellTitle = styled((props) => (
-  <Text size="small" weight="medium" color="#101828" {...props} />
-))({});
+export const CellTitle = styled((props) => <Text size="small" weight="medium" color="#101828" {...props} />)({});
 
-export const CellSubtext = styled((props) => (
-  <Text size="small" weight="regular" color="#475467" {...props} />
-))({
+export const CellSubtext = styled((props) => <Text size="small" weight="regular" color="#475467" {...props} />)({
   mt: "2px",
 });
 

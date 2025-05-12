@@ -1,9 +1,10 @@
+import { FC, Fragment } from "react";
 import Link from "next/link";
 import { Box } from "@mui/material";
-import { FC, Fragment } from "react";
-import { Text } from "../Typography/Typography";
+
 import CopyButton from "../Button/CopyButton";
 import Tooltip from "../Tooltip/Tooltip";
+import { Text } from "../Typography/Typography";
 
 export type Row = {
   label: string;
@@ -79,12 +80,7 @@ const PropertyTable: FC<PropertyTableProps> = ({ rows }) => {
               alignItems="center"
               gap="4px"
             >
-              <Text
-                size="small"
-                weight="regular"
-                color="#6941C6"
-                sx={{ flex: 1, wordBreak: "break-word" }}
-              >
+              <Text size="small" weight="regular" color="#6941C6" sx={{ flex: 1, wordBreak: "break-word" }}>
                 {row.value}
               </Text>
               <CopyButton
@@ -102,13 +98,7 @@ const PropertyTable: FC<PropertyTableProps> = ({ rows }) => {
         // If valueType is text or link, add a copy button
         if (!!row.value && (valueType === "text" || valueType === "link")) {
           value = (
-            <Box
-              p="16px 24px"
-              display="flex"
-              gap="8px"
-              justifyContent="flex-end"
-              alignItems="center"
-            >
+            <Box p="16px 24px" display="flex" gap="8px" justifyContent="flex-end" alignItems="center">
               <Tooltip title={row.value} placement="top" arrow>
                 {/* Div is Necessary for the Tooltip */}
                 <div>{value}</div>
@@ -138,12 +128,7 @@ const PropertyTable: FC<PropertyTableProps> = ({ rows }) => {
                 {row.description}
               </Text>
             </Box>
-            <Box
-              borderBottom="1px solid #EAECF0"
-              display="flex"
-              flexDirection="column"
-              justifyContent="center"
-            >
+            <Box borderBottom="1px solid #EAECF0" display="flex" flexDirection="column" justifyContent="center">
               {value}
             </Box>
           </Fragment>

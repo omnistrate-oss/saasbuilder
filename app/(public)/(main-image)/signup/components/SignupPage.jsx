@@ -42,12 +42,8 @@ const FormGrid = styled(Box)(() => ({
 
 const signupValidationSchema = Yup.object({
   name: Yup.string().required("Name is required"),
-  email: Yup.string()
-    .email("Invalid email address")
-    .required("Email is required"),
-  password: Yup.string()
-    .required("Password is required")
-    .matches(passwordRegex, passwordText),
+  email: Yup.string().email("Invalid email address").required("Email is required"),
+  password: Yup.string().required("Password is required").matches(passwordRegex, passwordText),
   confirmPassword: Yup.string()
     .required("Re-enter your password")
     .oneOf([Yup.ref("password"), null], "Passwords must match"),
@@ -232,11 +228,7 @@ const SignupPage = (props) => {
     <>
       <Box textAlign="center">
         {orgLogoURL ? (
-          <Logo
-            src={orgLogoURL}
-            alt={orgName}
-            style={{ width: "120px", height: "auto", maxHeight: "unset" }}
-          />
+          <Logo src={orgLogoURL} alt={orgName} style={{ width: "120px", height: "auto", maxHeight: "unset" }} />
         ) : (
           ""
         )}
@@ -257,9 +249,7 @@ const SignupPage = (props) => {
               onBlur={handleBlur}
               error={touched.name && errors.name}
             />
-            <FieldError sx={{ paddingLeft: "13px" }}>
-              {touched.name && errors.name}
-            </FieldError>
+            <FieldError sx={{ paddingLeft: "13px" }}>{touched.name && errors.name}</FieldError>
           </FieldContainer>
 
           <FieldContainer>
@@ -274,9 +264,7 @@ const SignupPage = (props) => {
               error={touched.email && errors.email}
               disabled={email ? true : false}
             />
-            <FieldError sx={{ paddingLeft: "13px" }}>
-              {touched.email && errors.email}
-            </FieldError>
+            <FieldError sx={{ paddingLeft: "13px" }}>{touched.email && errors.email}</FieldError>
           </FieldContainer>
 
           <FieldContainer>
@@ -291,9 +279,7 @@ const SignupPage = (props) => {
               disabled={org ? true : false}
               error={touched.legalcompanyname && errors.legalcompanyname}
             />
-            <FieldError sx={{ paddingLeft: "13px" }}>
-              {touched.legalcompanyname && errors.legalcompanyname}
-            </FieldError>
+            <FieldError sx={{ paddingLeft: "13px" }}>{touched.legalcompanyname && errors.legalcompanyname}</FieldError>
           </FieldContainer>
 
           <FieldContainer>
@@ -308,9 +294,7 @@ const SignupPage = (props) => {
               error={touched.companyurl && errors.companyurl}
               disabled={orgUrl ? true : false}
             />
-            <FieldError sx={{ paddingLeft: "13px" }}>
-              {touched.companyurl && errors.companyurl}
-            </FieldError>
+            <FieldError sx={{ paddingLeft: "13px" }}>{touched.companyurl && errors.companyurl}</FieldError>
           </FieldContainer>
 
           <FieldContainer>
@@ -325,9 +309,7 @@ const SignupPage = (props) => {
               onBlur={handleBlur}
               error={touched.password && errors.password}
             />
-            <FieldError sx={{ paddingLeft: "13px" }}>
-              {touched.password && errors.password}
-            </FieldError>
+            <FieldError sx={{ paddingLeft: "13px" }}>{touched.password && errors.password}</FieldError>
           </FieldContainer>
 
           <FieldContainer>
@@ -341,9 +323,7 @@ const SignupPage = (props) => {
               onBlur={handleBlur}
               error={touched.confirmPassword && errors.confirmPassword}
             />
-            <FieldError sx={{ paddingLeft: "13px" }}>
-              {touched.confirmPassword && errors.confirmPassword}
-            </FieldError>
+            <FieldError sx={{ paddingLeft: "13px" }}>{touched.confirmPassword && errors.confirmPassword}</FieldError>
           </FieldContainer>
         </FormGrid>
 
@@ -415,36 +395,18 @@ const SignupPage = (props) => {
         </>
       )}
 
-      <Typography
-        mt="22px"
-        fontWeight="500"
-        fontSize="14px"
-        lineHeight="22px"
-        color="#A0AEC0"
-        textAlign="center"
-      >
+      <Typography mt="22px" fontWeight="500" fontSize="14px" lineHeight="22px" color="#A0AEC0" textAlign="center">
         {policyAgreementText}{" "}
         <Link target="_blank" href="/terms-of-use" style={{ color: "#27A376" }}>
           Terms & Conditions
         </Link>{" "}
         and{" "}
-        <Link
-          target="_blank"
-          href="/privacy-policy"
-          style={{ color: "#27A376" }}
-        >
+        <Link target="_blank" href="/privacy-policy" style={{ color: "#27A376" }}>
           Privacy Policy
         </Link>
       </Typography>
       {/* Signup Link */}
-      <Typography
-        mt="20px"
-        fontWeight="500"
-        fontSize="14px"
-        lineHeight="22px"
-        color="#A0AEC0"
-        textAlign="center"
-      >
+      <Typography mt="20px" fontWeight="500" fontSize="14px" lineHeight="22px" color="#A0AEC0" textAlign="center">
         Already have an account?{" "}
         <Link href="/signin" style={{ color: "#27A376" }}>
           Login here
