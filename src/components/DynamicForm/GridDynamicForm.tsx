@@ -1,16 +1,17 @@
 import React from "react";
+
 import { colors } from "src/themeConfig";
 import { FormMode } from "src/types/common/enums";
 
-import PreviewCard from "./PreviewCard";
-import { FormConfiguration } from "./types";
-import GridDynamicField from "./GridDynamicField";
-
 import Button from "../Button/Button";
-import Form from "../FormElementsv2/Form/Form";
-import { Text } from "../Typography/Typography";
 import CardWithTitle from "../Card/CardWithTitle";
 import LoadingSpinnerSmall from "../CircularProgress/CircularProgress";
+import Form from "../FormElementsv2/Form/Form";
+import { Text } from "../Typography/Typography";
+
+import GridDynamicField from "./GridDynamicField";
+import PreviewCard from "./PreviewCard";
+import { FormConfiguration } from "./types";
 
 type GridDynamicFormProps = {
   formData: any;
@@ -47,13 +48,7 @@ const GridDynamicForm: React.FC<GridDynamicFormProps> = ({
             <CardWithTitle key={index} title={section.title}>
               <div className="space-y-6">
                 {section.fields.map((field, index) => {
-                  return (
-                    <GridDynamicField
-                      key={index}
-                      field={field}
-                      formData={formData}
-                    />
-                  );
+                  return <GridDynamicField key={index} field={field} formData={formData} />;
                 })}
               </div>
             </CardWithTitle>

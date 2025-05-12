@@ -1,11 +1,12 @@
+import { forwardRef, useState } from "react";
+import ContentCopyIcon from "@mui/icons-material/ContentCopy";
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import SearchIcon from "@mui/icons-material/Search";
 import { Box, ButtonBase, styled } from "@mui/material";
 import MuiInputAdornment from "@mui/material/InputAdornment";
 import MuiTextField from "@mui/material/TextField";
-import ContentCopyIcon from "@mui/icons-material/ContentCopy";
-import { forwardRef, useState } from "react";
 import clipboard from "clipboardy";
-import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-import SearchIcon from "@mui/icons-material/Search";
+
 import Tooltip from "src/components/Tooltip/Tooltip";
 
 const CopyButton = (props) => {

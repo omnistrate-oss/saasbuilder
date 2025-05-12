@@ -10,17 +10,11 @@ async function getPendingRestorePermissionsMailContentAWS(
   const userName = pendingRestorePermissionsEventObj.eventPayload.user_name;
   const email = pendingRestorePermissionsEventObj.eventPayload.user_email;
   const accountId = pendingRestorePermissionsEventObj.eventPayload.account_id;
-  const connectCloudFormationURL =
-    pendingRestorePermissionsEventObj.eventPayload.connect_cfn_url;
+  const connectCloudFormationURL = pendingRestorePermissionsEventObj.eventPayload.connect_cfn_url;
   const orgName = pendingRestorePermissionsEventObj.orgName;
   const subject = `Action Required: Connect AWS Account ${accountId} to ${orgName}`;
 
-  const templatePath = path.resolve(
-    __dirname,
-    "..",
-    "ejsTemplates",
-    "pendingRestorePermissionsAWS.ejs"
-  );
+  const templatePath = path.resolve(__dirname, "..", "ejsTemplates", "pendingRestorePermissionsAWS.ejs");
 
   const baseURL = getSaaSDomainURL();
 

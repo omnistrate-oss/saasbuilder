@@ -1,14 +1,14 @@
 "use client";
 
 import { cn } from "lib/utils";
+
+import { cloudProviderLabels } from "src/constants/cloudProviders";
+import { colors } from "src/themeConfig";
 import { Text } from "components/Typography/Typography";
 
-import { colors } from "src/themeConfig";
-import { cloudProviderLabels } from "src/constants/cloudProviders";
-
 import AWSLogo from "../Icons/AWSLogo";
-import GCPFullLogo from "../Icons/GCPFullLogo";
 import AzureFullLogo from "../Icons/AzureFullLogo";
+import GCPFullLogo from "../Icons/GCPFullLogo";
 
 export const cloudProviderFullLogoMap = {
   aws: <AWSLogo height="36px" width="auto" />,
@@ -16,12 +16,7 @@ export const cloudProviderFullLogoMap = {
   azure: <AzureFullLogo height="34px" width="auto" />,
 };
 
-const CloudProviderCard = ({
-  cloudProvider,
-  isSelected,
-  onClick,
-  disabled,
-}) => {
+const CloudProviderCard = ({ cloudProvider, isSelected, onClick, disabled }) => {
   return (
     <div
       data-testid={`${cloudProvider}-card`}
@@ -30,9 +25,7 @@ const CloudProviderCard = ({
         disabled ? "cursor-default bg-gray-50" : "cursor-pointer"
       )}
       style={{
-        outline: isSelected
-          ? `2px solid ${colors.success500}`
-          : `1px solid ${colors.gray200}`,
+        outline: isSelected ? `2px solid ${colors.success500}` : `1px solid ${colors.gray200}`,
       }}
       onClick={() => {
         if (!disabled) {
@@ -41,11 +34,7 @@ const CloudProviderCard = ({
       }}
     >
       {cloudProviderFullLogoMap[cloudProvider]}
-      <Text
-        size="small"
-        weight="medium"
-        color={disabled ? "#667085" : "#414651"}
-      >
+      <Text size="small" weight="medium" color={disabled ? "#667085" : "#414651"}>
         {cloudProviderLabels[cloudProvider]}
       </Text>
     </div>
@@ -85,10 +74,7 @@ const CloudProviderRadio: React.FC<CloudProviderRadioProps> = ({
             key={index}
             disabled={disabled}
             cloudProvider={cloudProvider}
-            isSelected={
-              formData.values[name]?.toLowerCase() ===
-              cloudProvider.toLowerCase()
-            }
+            isSelected={formData.values[name]?.toLowerCase() === cloudProvider.toLowerCase()}
             onClick={() => {
               formData.setFieldValue(name, cloudProvider);
               if (formData.values[name] !== cloudProvider) {

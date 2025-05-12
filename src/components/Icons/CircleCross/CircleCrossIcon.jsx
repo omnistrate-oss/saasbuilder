@@ -1,14 +1,7 @@
 const CircleCrossIcon = (props) => {
   const { color = "#F44336" } = props;
   return (
-    <svg
-      width="16"
-      height="16"
-      viewBox="0 0 16 16"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      {...props}
-    >
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
       <path
         d="M8 0.125C-2.40625 0.4625 -2.40625 15.5375 8 15.875C18.4062 15.5375 18.4062 0.4625 8 0.125Z"
         fill={color}

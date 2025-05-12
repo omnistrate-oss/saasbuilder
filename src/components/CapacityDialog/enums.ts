@@ -1,4 +1,3 @@
-
 export type AccessCapacityDataType = {
   serviceProviderId: string;
   serviceKey: string;
@@ -8,7 +7,7 @@ export type AccessCapacityDataType = {
   productTierKey: string;
   resourceKey: string;
   instanceId: string;
-  subscriptionId : string;
+  subscriptionId: string;
 };
 
 export type FleetCapacityDataType = {

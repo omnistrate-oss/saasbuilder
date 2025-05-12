@@ -1,21 +1,13 @@
 import React, { FC, ReactNode } from "react";
-import {
-  Box,
-  Stack,
-  SxProps,
-  Theme,
-  chipClasses,
-  ChipProps as MuiChipProps,
-} from "@mui/material";
+import { Box, chipClasses, ChipProps as MuiChipProps, Stack, SxProps, Theme } from "@mui/material";
 import _ from "lodash";
+
+import { Category, chipCategoryColors } from "src/constants/statusChipStyles/index";
+
 import Chip from "../Chip/Chip";
 import Dot from "../Dot/Dot";
 import TickIcon from "../Icons/Tick/TickIcon";
 import { PulsatingDot } from "../PulsatingDot/PulsatingDot";
-import {
-  Category,
-  chipCategoryColors,
-} from "src/constants/statusChipStyles/index";
 
 export const statuses = {
   FAILED: "Failed",
@@ -239,10 +231,7 @@ const StatusChip: FC<ChipProps & StatusChipProps> = (props) => {
           {dot && <Dot color={fontColor} />}
           {tick && <TickIcon />}
           {startIcon && startIcon}
-          <Box
-            component="span"
-            sx={{ overflow: "hidden", textOverflow: "ellipsis" }}
-          >
+          <Box component="span" sx={{ overflow: "hidden", textOverflow: "ellipsis" }}>
             {label ? label : capitalize ? _.capitalize(status) : status}
           </Box>
         </Stack>

@@ -1,33 +1,35 @@
 import React, { CSSProperties, FC, ReactNode, useMemo, useState } from "react";
+import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
+import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
+import { Box, CircularProgress, Stack, SxProps } from "@mui/material";
 import Collapse from "@mui/material/Collapse";
 import IconButton from "@mui/material/IconButton";
-import { Box, CircularProgress, Stack, SxProps } from "@mui/material";
 import {
   ColumnDef,
   ExpandedState,
-  Row,
-  RowData,
-  SortDirection,
   flexRender,
   getCoreRowModel,
   getExpandedRowModel,
   getPaginationRowModel,
   getSortedRowModel,
+  Row,
+  RowData,
+  SortDirection,
   useReactTable,
 } from "@tanstack/react-table";
+
+import CustomCheckbox from "../Checkbox/Checkbox";
+
+import Pagination from "./components/Pagination";
 import {
-  TableContainer,
   DetailViewTableRow,
   Table,
   TableBody,
   TableCell,
+  TableContainer,
   TableHead,
   TableRow,
 } from "./components/styled";
-import Pagination from "./components/Pagination";
-import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
-import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
-import CustomCheckbox from "../Checkbox/Checkbox";
 
 const sortIcon = {
   asc: ArrowUpwardIcon,
@@ -148,19 +150,8 @@ const DataTable = <TData,>(props: DataTableProps<TData>): ReactNode => {
       },
     };
 
-    return [
-      ...(statusColumn ? [statusColumn] : []),
-      selectionColumn,
-      ...columns,
-    ];
-  }, [
-    statusColumn,
-    columns,
-    selectionMode,
-    onRowSelectionChange,
-    selectedRows,
-    rowId,
-  ]);
+    return [...(statusColumn ? [statusColumn] : []), selectionColumn, ...columns];
+  }, [statusColumn, columns, selectionMode, onRowSelectionChange, selectedRows, rowId]);
 
   const table = useReactTable({
     data: rows,
@@ -275,23 +266,14 @@ const DataTable = <TData,>(props: DataTableProps<TData>): ReactNode => {
                 <TableRow key={headerGroup.id}>
                   {headerGroup.headers.map((header) => {
                     const sortDirection = header.column.getIsSorted();
-                    const columnAlignment =
-                      header.column.columnDef.meta?.align || "left";
+                    const columnAlignment = header.column.columnDef.meta?.align || "left";
                     return (
                       <TableCell
                         align={columnAlignment}
                         key={header.id}
-                        onClick={
-                          header.column.id === "selection"
-                            ? undefined
-                            : header.column.getToggleSortingHandler()
-                        }
+                        onClick={header.column.id === "selection" ? undefined : header.column.getToggleSortingHandler()}
                         sx={{
-                          cursor:
-                            header.column.id === "selection" ||
-                            !header.column.getCanSort()
-                              ? "auto"
-                              : "pointer",
+                          cursor: header.column.id === "selection" || !header.column.getCanSort() ? "auto" : "pointer",
                           "& .MuiIconButton-root": {
                             display: sortDirection ? "inline-flex" : "none",
                           },
@@ -302,20 +284,11 @@ const DataTable = <TData,>(props: DataTableProps<TData>): ReactNode => {
                           },
                         }}
                       >
-                        <Stack
-                          display="inline-flex"
-                          direction="row"
-                          gap="8px"
-                          alignItems="center"
-                        >
-                          {flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
+                        <Stack display="inline-flex" direction="row" gap="8px" alignItems="center">
+                          {flexRender(header.column.columnDef.header, header.getContext())}
+                          {header.column.getCanSort() && header.column.id !== "selection" && (
+                            <SortIcon sortDirection={sortDirection} />
                           )}
-                          {header.column.getCanSort() &&
-                            header.column.id !== "selection" && (
-                              <SortIcon sortDirection={sortDirection} />
-                            )}
                         </Stack>
                       </TableCell>
                     );
@@ -329,23 +302,14 @@ const DataTable = <TData,>(props: DataTableProps<TData>): ReactNode => {
                   <React.Fragment key={row.id}>
                     <TableRow
                       data-testid={row.id || "data-table-row"}
-                      className={
-                        getRowClassName ? getRowClassName(row.original) : ""
-                      }
+                      className={getRowClassName ? getRowClassName(row.original) : ""}
                     >
                       {row.getVisibleCells().map((cell) => {
                         const cellValue: any = cell.getValue();
-                        const columnAlignment =
-                          cell.column.columnDef.meta?.align || "left";
-                        const isBrowerTooltipDisabled =
-                          cell.column.columnDef.meta?.disableBrowserTooltip ||
-                          false;
+                        const columnAlignment = cell.column.columnDef.meta?.align || "left";
+                        const isBrowerTooltipDisabled = cell.column.columnDef.meta?.disableBrowserTooltip || false;
                         let title = "";
-                        if (
-                          ["string", "number", "boolean"].includes(
-                            typeof cellValue
-                          )
-                        ) {
+                        if (["string", "number", "boolean"].includes(typeof cellValue)) {
                           title = cellValue.toString();
                         }
                         return (
@@ -360,10 +324,7 @@ const DataTable = <TData,>(props: DataTableProps<TData>): ReactNode => {
                               ...(cell.column.columnDef.meta?.styles || {}),
                             }}
                           >
-                            {flexRender(
-                              cell.column.columnDef.cell,
-                              cell.getContext()
-                            )}
+                            {flexRender(cell.column.columnDef.cell, cell.getContext())}
                           </TableCell>
                         );
                       })}
@@ -378,11 +339,7 @@ const DataTable = <TData,>(props: DataTableProps<TData>): ReactNode => {
                           }}
                           colSpan={numsColumns}
                         >
-                          <Collapse
-                            in={row.getIsExpanded()}
-                            timeout="auto"
-                            unmountOnExit
-                          >
+                          <Collapse in={row.getIsExpanded()} timeout="auto" unmountOnExit>
                             {renderDetailsComponent({
                               rowData: row.original,
                             })}
@@ -438,6 +395,5 @@ interface ColumnCustomFeatures {
 }
 declare module "@tanstack/react-table" {
   /*eslint-disable-next-line*/
-  interface ColumnMeta<TData extends RowData, TValue>
-    extends ColumnCustomFeatures {}
+  interface ColumnMeta<TData extends RowData, TValue> extends ColumnCustomFeatures {}
 }

@@ -1,15 +1,10 @@
-import { useTheme } from "@mui/material";
 import React from "react";
+import { useTheme } from "@mui/material";
 
 function AlertTriangle(props) {
   const theme = useTheme();
   const mainAlertColor = theme.palette.warning.main;
-  const {
-    height = 16,
-    width = 16,
-    color = mainAlertColor,
-    ...restProps
-  } = props;
+  const { height = 16, width = 16, color = mainAlertColor, ...restProps } = props;
 
   return (
     <svg

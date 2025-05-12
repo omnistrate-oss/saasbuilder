@@ -1,14 +1,14 @@
 import { FC, useState } from "react";
-import { Box, Stack } from "@mui/material";
-import { Text } from "src/components/Typography/Typography";
-import CopyButton from "src/components/Button/CopyButton";
-import Button from "src/components/Button/Button";
-
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
-import StatusChip from "src/components/StatusChip/StatusChip";
-import PublicResourceIcon from "src/components/Icons/PublicResource/PublicResource";
+import { Box, Stack } from "@mui/material";
+
+import Button from "src/components/Button/Button";
+import CopyButton from "src/components/Button/CopyButton";
 import PrivateResourceIcon from "src/components/Icons/PrivateResource/PrivateResource";
+import PublicResourceIcon from "src/components/Icons/PublicResource/PublicResource";
+import StatusChip from "src/components/StatusChip/StatusChip";
+import { Text } from "src/components/Typography/Typography";
 
 type EndpointCardProps = {
   isPrimary?: boolean;
@@ -28,11 +28,7 @@ const EndpointLine = ({ isPrimary, openPort, endpointURL, mt = "0px" }) => {
 
   return (
     <Stack direction="row" gap="6px" alignItems="center" mt={mt}>
-      <Text
-        size="small"
-        weight="regular"
-        color={isPrimary ? "#6941C6" : "#475467"}
-      >
+      <Text size="small" weight="regular" color={isPrimary ? "#6941C6" : "#475467"}>
         {urlWithProtocol.includes("http") ? (
           <a href={urlWithProtocol} target="_blank" rel="noopener noreferrer">
             <span>{urlWithProtocol}</span>
@@ -57,13 +53,7 @@ const EndpointLine = ({ isPrimary, openPort, endpointURL, mt = "0px" }) => {
   );
 };
 
-const EndpointCard: FC<EndpointCardProps> = ({
-  isPrimary,
-  isPublic,
-  endpointName,
-  endpointURL,
-  openPorts,
-}) => {
+const EndpointCard: FC<EndpointCardProps> = ({ isPrimary, isPublic, endpointName, endpointURL, openPorts }) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const shouldShowViewMoreButton = openPorts && openPorts.length > 1;
 
@@ -83,50 +73,23 @@ const EndpointCard: FC<EndpointCardProps> = ({
           <Text size="small" weight="medium" color="#53389E">
             {endpointName}
           </Text>
-          <StatusChip
-            label={isPublic ? "Public" : "Private"}
-            category={isPublic ? "success" : "unknown"}
-          />
-          {isPrimary && (
-            <StatusChip
-              label="Primary"
-              color="#7F56D9"
-              borderColor="#7F56D9"
-              bgColor="#F9F5FF"
-            />
-          )}
+          <StatusChip label={isPublic ? "Public" : "Private"} category={isPublic ? "success" : "unknown"} />
+          {isPrimary && <StatusChip label="Primary" color="#7F56D9" borderColor="#7F56D9" bgColor="#F9F5FF" />}
         </Stack>
 
-        <EndpointLine
-          endpointURL={endpointURL}
-          isPrimary={isPrimary}
-          openPort={openPorts?.[0]}
-          mt="8px"
-        />
+        <EndpointLine endpointURL={endpointURL} isPrimary={isPrimary} openPort={openPorts?.[0]} mt="8px" />
 
         {isExpanded &&
           openPorts?.map((port, index) =>
             index >= 1 ? (
-              <EndpointLine
-                key={index}
-                endpointURL={endpointURL}
-                isPrimary={isPrimary}
-                openPort={port}
-                mt="18px"
-              />
+              <EndpointLine key={index} endpointURL={endpointURL} isPrimary={isPrimary} openPort={port} mt="18px" />
             ) : null
           )}
 
         {shouldShowViewMoreButton && (
           <Button
             sx={{ color: "#6941C6", marginTop: "8px" }}
-            endIcon={
-              isExpanded ? (
-                <RemoveCircleOutlineIcon />
-              ) : (
-                <AddCircleOutlineIcon />
-              )
-            }
+            endIcon={isExpanded ? <RemoveCircleOutlineIcon /> : <AddCircleOutlineIcon />}
             onClick={() => setIsExpanded(!isExpanded)}
           >
             {isExpanded ? "View Less" : "View More"}

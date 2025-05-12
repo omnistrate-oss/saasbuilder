@@ -1,9 +1,10 @@
-import { Box, Dialog, IconButton, Stack, styled } from "@mui/material";
-import Button from "src/components/Button/Button";
-import { Text } from "src/components/Typography/Typography";
 import CloseIcon from "@mui/icons-material/Close";
-import InstructionsModalIcon from "src/components/Icons/AccountConfig/InstructionsModalIcon";
+import { Box, Dialog, IconButton, Stack, styled } from "@mui/material";
+
+import Button from "src/components/Button/Button";
 import CopyToClipboardButton from "src/components/CopyClipboardButton/CopyClipboardButton";
+import InstructionsModalIcon from "src/components/Icons/AccountConfig/InstructionsModalIcon";
+import { Text } from "src/components/Typography/Typography";
 
 const StyledContainer = styled(Box)({
   position: "fixed",
@@ -12,8 +13,7 @@ const StyledContainer = styled(Box)({
   transform: "translateX(50%) translateY(-50%)",
   background: "white",
   borderRadius: "12px",
-  boxShadow:
-    "0px 8px 8px -4px rgba(16, 24, 40, 0.03), 0px 20px 24px -4px rgba(16, 24, 40, 0.08)",
+  boxShadow: "0px 8px 8px -4px rgba(16, 24, 40, 0.03), 0px 20px 24px -4px rgba(16, 24, 40, 0.08)",
   padding: "24px",
   width: "100%",
   maxWidth: "460px",
@@ -81,20 +81,11 @@ const InstanceIdContainer = (props) => {
           alignItems: "center",
         }}
       >
-        <Text
-          data-testid="instance-id"
-          size="medium"
-          weight="medium"
-          color="#667085"
-          ellipsis
-        >
+        <Text data-testid="instance-id" size="medium" weight="medium" color="#667085" ellipsis>
           {instanceId}
         </Text>
 
-        <CopyToClipboardButton
-          text={instanceId}
-          iconProps={{ color: "#98A2B3" }}
-        />
+        <CopyToClipboardButton text={instanceId} iconProps={{ color: "#98A2B3" }} />
       </Box>
     </Box>
   );
@@ -120,8 +111,7 @@ function CreateInstanceModal(props: CreateInstanceModalProps) {
             <Box
               sx={{
                 border: "1px solid #E4E7EC",
-                boxShadow:
-                  "0px 1px 2px 0px #1018280D, 0px -2px 0px 0px #1018280D,0px 0px 0px 1px #1018282E",
+                boxShadow: "0px 1px 2px 0px #1018280D, 0px -2px 0px 0px #1018280D,0px 0px 0px 1px #1018282E",
                 borderRadius: "10px",
                 width: "48px",
                 height: "48px",
@@ -142,29 +132,22 @@ function CreateInstanceModal(props: CreateInstanceModalProps) {
         </Header>
         <Content>
           <BodyText>
-            Your instance is being set up and will be ready shortly (usually
-            within a few minutes). You can track its status in Deployment
-            Instances. Below is the Instance ID for your reference
+            Your instance is being set up and will be ready shortly (usually within a few minutes). You can track its
+            status in Deployment Instances. Below is the Instance ID for your reference
           </BodyText>
           <InstanceIdContainer instanceId={instanceId} />
           <List>
             {isCustomDNS && (
               <BodyText>
-                As you have provided a custom DNS, it will need to be configured
-                with your DNS provider. The configuration details will be
-                available after some time. Please revisit the Custom DNS tab
-                later to access the necessary information.
+                As you have provided a custom DNS, it will need to be configured with your DNS provider. The
+                configuration details will be available after some time. Please revisit the Custom DNS tab later to
+                access the necessary information.
               </BodyText>
             )}
           </List>
         </Content>
         <Footer>
-          <Button
-            variant="contained"
-            onClick={handleClose}
-            data-testid="close-instructions-button"
-            fullWidth
-          >
+          <Button variant="contained" onClick={handleClose} data-testid="close-instructions-button" fullWidth>
             Close
           </Button>
         </Footer>

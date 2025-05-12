@@ -1,14 +1,6 @@
-import {
-  Category,
-  ColorObject,
-  chipCategoryColors,
-  defaultChipStyles,
-} from "./index";
+import { Category, chipCategoryColors, ColorObject, defaultChipStyles } from "./index";
 
-export const resourceInstanceStatusMap: Record<
-  string,
-  { category: Category; label: string }
-> = {
+export const resourceInstanceStatusMap: Record<string, { category: Category; label: string }> = {
   Enabled: { category: "success", label: "Enabled" },
   Disabled: { category: "failed", label: "Disabled" },
   Active: { category: "success", label: "Active" },
@@ -19,9 +11,7 @@ export const resourceInstanceStatusMap: Record<
   false: { category: "failed", label: "False" },
 };
 
-export const getResourceInstanceDetailsStatusStylesAndLabel = (
-  status: string
-): ColorObject & { label?: string } => {
+export const getResourceInstanceDetailsStatusStylesAndLabel = (status: string): ColorObject & { label?: string } => {
   const category = resourceInstanceStatusMap[status]?.category;
   const label = resourceInstanceStatusMap[status]?.label;
   return {

@@ -1,8 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
-import {
-  getConsumptionUsage,
-  GetConsumptionUsageQueryParams,
-} from "src/api/consumption";
+
+import { getConsumptionUsage, GetConsumptionUsageQueryParams } from "src/api/consumption";
 
 function useConsumptionUsage(queryParams: GetConsumptionUsageQueryParams = {}) {
   const { subscriptionID } = queryParams;

@@ -1,6 +1,5 @@
 "use client";
 
-import { useFormik } from "formik";
 import CloseIcon from "@mui/icons-material/Close";
 import {
   Dialog as MuiDialog,
@@ -11,16 +10,16 @@ import {
   Stack,
   styled,
 } from "@mui/material";
+import { useFormik } from "formik";
 
+import useSnackbar from "src/hooks/useSnackbar";
 import Button from "components/Button/Button";
 import Form from "components/FormElements/Form/Form";
 import TextField from "components/FormElements/TextField/TextField";
 
-import { Text } from "../Typography/Typography";
-import DeleteCirleIcon from "../Icons/DeleteCircle/DeleteCirleIcon";
 import LoadingSpinnerSmall from "../CircularProgress/CircularProgress";
-
-import useSnackbar from "src/hooks/useSnackbar";
+import DeleteCirleIcon from "../Icons/DeleteCircle/DeleteCirleIcon";
+import { Text } from "../Typography/Typography";
 
 const Dialog = styled(MuiDialog)(() => ({
   [`& .MuiPaper-root `]: {
@@ -85,11 +84,7 @@ const TextConfirmationDialog = (props) => {
     >
       <Form onSubmit={formData.handleSubmit}>
         <DialogTitle>
-          <Stack
-            direction="row"
-            alignItems="center"
-            justifyContent="space-between"
-          >
+          <Stack direction="row" alignItems="center" justifyContent="space-between">
             <Stack direction="row" alignItems="center" gap="16px">
               <IconComponent />
               <Text size="large" weight="bold">
@@ -105,13 +100,7 @@ const TextConfirmationDialog = (props) => {
           <Text size="medium" weight="semibold" mt="20px">
             {subtitle}
           </Text>
-          <Text
-            size="small"
-            weight="medium"
-            color="#344054"
-            mt="9px"
-            dangerouslySetInnerHTML={{ __html: message }}
-          />
+          <Text size="small" weight="medium" color="#344054" mt="9px" dangerouslySetInnerHTML={{ __html: message }} />
           <TextField
             id="confirmationText"
             name="confirmationText"
@@ -127,12 +116,7 @@ const TextConfirmationDialog = (props) => {
           />
         </DialogContent>
         <DialogActions>
-          <Button
-            variant="outlined"
-            size="large"
-            disabled={isLoading}
-            onClick={handleClose}
-          >
+          <Button variant="outlined" size="large" disabled={isLoading} onClick={handleClose}>
             Cancel
           </Button>
           <Button

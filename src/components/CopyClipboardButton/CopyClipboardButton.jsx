@@ -1,8 +1,9 @@
 import { useState } from "react";
-import clipboard from "clipboardy";
-import Tooltip from "../Tooltip/Tooltip";
 import { IconButton } from "@mui/material";
+import clipboard from "clipboardy";
+
 import DataGridCopyIcon from "../Icons/CopyIcon/DataGridCopyIcon";
+import Tooltip from "../Tooltip/Tooltip";
 
 const CopyToClipboardButton = (props) => {
   const { text = "", iconProps, buttonStyles = {} } = props;

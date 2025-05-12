@@ -1,4 +1,5 @@
 import { useInfiniteQuery } from "@tanstack/react-query";
+
 import { getAllAuditEvents } from "src/api/event";
 import useEnvironmentType from "src/hooks/useEnvironmentType";
 
@@ -12,23 +13,10 @@ type QueryParams = {
 
 const useAuditLogs = (queryParams: QueryParams = {}, queryOptions = {}) => {
   const environmentType = useEnvironmentType();
-  const {
-    startDate,
-    endDate,
-    eventSourceTypes,
-    serviceID,
-    pageSize = 10,
-  } = queryParams;
+  const { startDate, endDate, eventSourceTypes, serviceID, pageSize = 10 } = queryParams;
 
   const query = useInfiniteQuery(
-    [
-      "audit-logs",
-      startDate,
-      endDate,
-      eventSourceTypes,
-      environmentType,
-      serviceID,
-    ],
+    ["audit-logs", startDate, endDate, eventSourceTypes, environmentType, serviceID],
     async ({ pageParam }) => {
       const params: any = {};
 

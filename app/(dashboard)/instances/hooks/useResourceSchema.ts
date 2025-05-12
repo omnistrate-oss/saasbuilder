@@ -1,4 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
+
 import { describeServiceOfferingResource } from "src/api/serviceOffering";
 
 type QueryParams = {
@@ -7,10 +8,7 @@ type QueryParams = {
   instanceId?: string;
 };
 
-const useResourceSchema = (
-  queryParams: QueryParams = {},
-  queryOptions = { enabled: true }
-) => {
+const useResourceSchema = (queryParams: QueryParams = {}, queryOptions = { enabled: true }) => {
   const { serviceId, resourceId, instanceId = "none" } = queryParams;
   const isEnabled = Boolean(serviceId && resourceId);
 

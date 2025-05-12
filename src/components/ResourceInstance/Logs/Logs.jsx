@@ -1,27 +1,24 @@
+import { useEffect, useRef, useState } from "react";
+import styled from "@emotion/styled";
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
+import { Box, CircularProgress, IconButton as MuiIconButton, Stack } from "@mui/material";
 import Ansi from "ansi-to-react";
-import {
-  Box,
-  CircularProgress,
-  IconButton as MuiIconButton,
-  Stack,
-} from "@mui/material";
-import { useRef, useState, useEffect } from "react";
-import { Text } from "../../Typography/Typography";
+import _ from "lodash";
+import InfiniteScroll from "react-infinite-scroller";
+import { useWebSocket } from "react-use-websocket/dist/lib/use-websocket";
+
+import MenuItem from "src/components/FormElementsv2/MenuItem/MenuItem";
+import Select from "src/components/FormElementsv2/Select/Select";
+import DataGridHeaderTitle from "src/components/Headers/DataGridHeaderTitle";
+import JobCompleted from "src/components/JobResource/JobCompleted";
+import LoadingSpinner from "src/components/LoadingSpinner/LoadingSpinner";
+
+import useSnackbar from "../../../hooks/useSnackbar";
 import Card from "../../Card/Card";
 import Divider from "../../Divider/Divider";
-import { useWebSocket } from "react-use-websocket/dist/lib/use-websocket";
-import styled from "@emotion/styled";
-import useSnackbar from "../../../hooks/useSnackbar";
-import InfiniteScroll from "react-infinite-scroller";
-import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
-import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import Tooltip from "../../Tooltip/Tooltip";
-import LoadingSpinner from "src/components/LoadingSpinner/LoadingSpinner";
-import DataGridHeaderTitle from "src/components/Headers/DataGridHeaderTitle";
-import Select from "src/components/FormElementsv2/Select/Select";
-import MenuItem from "src/components/FormElementsv2/MenuItem/MenuItem";
-import _ from "lodash";
-import JobCompleted from "src/components/JobResource/JobCompleted";
+import { Text } from "../../Typography/Typography";
 import DataUnavailableMessage from "../DataUnavailableMessage";
 
 const logsPerPage = 50;
@@ -91,12 +88,7 @@ const IconButton = ({ direction, divRef, titleText, dataTestId }) => {
 };
 
 function Logs(props) {
-  const {
-    nodes: nodesList = [],
-    socketBaseURL,
-    instanceStatus,
-    resourceInstanceId,
-  } = props;
+  const { nodes: nodesList = [], socketBaseURL, instanceStatus, resourceInstanceId } = props;
   const [logs, setLogs] = useState([]);
   let firstNode = null;
 
@@ -118,9 +110,7 @@ function Logs(props) {
   }
 
   const [isLogsDataLoaded, setIsLogsDataLoaded] = useState(false);
-  const [socketConnectionStatus, setConnectionStatus] = useState(
-    connectionStatuses.idle
-  );
+  const [socketConnectionStatus, setConnectionStatus] = useState(connectionStatuses.idle);
   const [hasMoreLogs, setHasMoreLogs] = useState(true);
   const [records, setRecords] = useState(logsPerPage);
   const startDivRef = useRef();
@@ -169,23 +159,17 @@ function Logs(props) {
     },
     onReconnectStop: () => {
       if (isLogsDataLoaded) {
-        snackbar.showError(
-          "Unable to get the latest data. The displayed data might be outdated"
-        );
+        snackbar.showError("Unable to get the latest data. The displayed data might be outdated");
       } else {
         // snackbar.showError("Unable to get the latest data...");
-        setErrorMessage(
-          "Can't access logs data. Please check if the instance is available and logs are enabled."
-        );
+        setErrorMessage("Can't access logs data. Please check if the instance is available and logs are enabled.");
       }
     },
   });
 
   useEffect(() => {
     function handleNetorkDisconnect() {
-      snackbar.showError(
-        "Network disconnected. The displayed data might be outdated"
-      );
+      snackbar.showError("Network disconnected. The displayed data might be outdated");
     }
     window.addEventListener("offline", handleNetorkDisconnect);
     //close the socket on unmount
@@ -200,10 +184,7 @@ function Logs(props) {
 
   if (instanceStatus === "DISCONNECTED") {
     return (
-      <DataUnavailableMessage
-        title="Logs Unavailable"
-        description="Please connect the cloud account to view logs"
-      />
+      <DataUnavailableMessage title="Logs Unavailable" description="Please connect the cloud account to view logs" />
     );
   }
 
@@ -237,12 +218,7 @@ function Logs(props) {
     selectedNode?.isJob !== true
   ) {
     return (
-      <Stack
-        flexDirection={"column"}
-        gap="30px"
-        alignItems="center"
-        sx={{ marginTop: "200px", marginBottom: "200px" }}
-      >
+      <Stack flexDirection={"column"} gap="30px" alignItems="center" sx={{ marginTop: "200px", marginBottom: "200px" }}>
         <CircularProgress />
         <Text size="large" weight="medium">
           Connected to the server, logs will be available shortly
@@ -250,11 +226,7 @@ function Logs(props) {
       </Stack>
     );
   }
-  if (
-    !isLogsDataLoaded &&
-    instanceStatus !== "COMPLETE" &&
-    selectedNode?.isJob !== true
-  ) {
+  if (!isLogsDataLoaded && instanceStatus !== "COMPLETE" && selectedNode?.isJob !== true) {
     return <LoadingSpinner />;
   }
 
@@ -276,10 +248,7 @@ function Logs(props) {
         }}
         alignItems="center"
       >
-        <DataGridHeaderTitle
-          title="Logs"
-          desc="Detailed logs for monitoring and troubleshooting"
-        />
+        <DataGridHeaderTitle title="Logs" desc="Detailed logs for monitoring and troubleshooting" />
         {nodes?.length > 0 && (
           <Box>
             <Text size="small" weight="medium" color="#344054" ml="5px">
@@ -317,16 +286,8 @@ function Logs(props) {
       ) : (
         <Box position="relative">
           <LogsContainer data-testid="logs-container" className="sleek-scroll">
-            <div
-              ref={startDivRef}
-              style={{ visibility: "hidden", height: "24px" }}
-            />
-            <InfiniteScroll
-              pageStart={0}
-              hasMore={hasMoreLogs}
-              loadMore={loadMoreLogs}
-              useWindow={false}
-            >
+            <div ref={startDivRef} style={{ visibility: "hidden", height: "24px" }} />
+            <InfiniteScroll pageStart={0} hasMore={hasMoreLogs} loadMore={loadMoreLogs} useWindow={false}>
               {logs
                 ?.filter((log, index) => index < records)
                 .map((log) => {

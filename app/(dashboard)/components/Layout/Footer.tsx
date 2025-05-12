@@ -56,13 +56,7 @@ const Footer = () => {
         Cookie Settings
       </p>
 
-      <Typography
-        fontWeight="500"
-        fontSize="14px"
-        lineHeight="22px"
-        color="#A0AEC0"
-        ml="auto"
-      >
+      <Typography fontWeight="500" fontSize="14px" lineHeight="22px" color="#A0AEC0" ml="auto">
         © {new Date().getFullYear()} {orgName}
         <span className="ml-4">All rights reserved.</span>
       </Typography>

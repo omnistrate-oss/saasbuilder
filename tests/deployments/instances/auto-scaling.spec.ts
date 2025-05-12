@@ -1,8 +1,8 @@
 import test from "@playwright/test";
-
 import { InstancesPage } from "page-objects/instances-page";
-import { ResourceInstance } from "src/types/resourceInstance";
 import { GlobalStateManager } from "test-utils/global-state-manager";
+
+import { ResourceInstance } from "src/types/resourceInstance";
 
 const logPrefix = "Instances -> Capacity Scaling Tests ->";
 test.describe.configure({ mode: "serial" });

@@ -10,17 +10,11 @@ async function getPendingRevokePermissionsMailContentGCP(
   const userName = pendingRevokePermissionsEventObj.eventPayload.user_name;
   const email = pendingRevokePermissionsEventObj.eventPayload.user_email;
   const accountId = pendingRevokePermissionsEventObj.eventPayload.account_id;
-  const disconnectCloudFormationURL =
-    pendingRevokePermissionsEventObj.eventPayload.gcp_disconnect_bash_script;
+  const disconnectCloudFormationURL = pendingRevokePermissionsEventObj.eventPayload.gcp_disconnect_bash_script;
   const orgName = pendingRevokePermissionsEventObj.orgName;
   const subject = `Action Required: Disconnect GCP Account ${accountId} from ${orgName}`;
 
-  const templatePath = path.resolve(
-    __dirname,
-    "..",
-    "ejsTemplates",
-    "pendingRevokePermissionsGCP.ejs"
-  );
+  const templatePath = path.resolve(__dirname, "..", "ejsTemplates", "pendingRevokePermissionsGCP.ejs");
 
   const baseURL = getSaaSDomainURL();
 

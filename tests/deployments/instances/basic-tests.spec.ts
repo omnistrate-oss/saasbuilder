@@ -1,8 +1,6 @@
 import test, { expect } from "@playwright/test";
-import { InstancesPage } from "page-objects/instances-page";
 import { InstanceDetailsPage } from "page-objects/instance-details-page";
-
-import { ResourceInstance } from "src/types/resourceInstance";
+import { InstancesPage } from "page-objects/instances-page";
 import {
   TestConnectivityTab,
   TestEventsTab,
@@ -13,6 +11,8 @@ import {
   TestNodesTab,
 } from "test-fixtures/utils/instance-details-tabs";
 import { GlobalStateManager } from "test-utils/global-state-manager";
+
+import { ResourceInstance } from "src/types/resourceInstance";
 
 const logPrefix = "Instances -> Basic Tests ->";
 test.describe.configure({ mode: "serial" });

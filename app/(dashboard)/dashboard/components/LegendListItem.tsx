@@ -1,12 +1,6 @@
-import {
-  Box,
-  LinearProgress,
-  LinearProgressProps,
-  Stack,
-  linearProgressClasses,
-  styled,
-} from "@mui/material";
 import { FC } from "react";
+import { Box, LinearProgress, linearProgressClasses, LinearProgressProps, Stack, styled } from "@mui/material";
+
 import RegionIcon from "src/components/Region/RegionIcon";
 import { Text } from "src/components/Typography/Typography";
 import { cloudProviderLogoMap } from "src/constants/cloudProviders";
@@ -49,18 +43,8 @@ const LegendListItem: FC<LegendListItemProps> = (props) => {
           {region || "Global"}
         </Text>
         <Stack direction="row" alignItems="center" gap="12px">
-          <StyledProgressBar
-            barColor={color}
-            variant="determinate"
-            value={percent}
-            sx={{ width: "92px" }}
-          />{" "}
-          <Text
-            size="small"
-            weight="medium"
-            color="#344054"
-            sx={{ whiteSpace: "nowrap" }}
-          >
+          <StyledProgressBar barColor={color} variant="determinate" value={percent} sx={{ width: "92px" }} />{" "}
+          <Text size="small" weight="medium" color="#344054" sx={{ whiteSpace: "nowrap" }}>
             {percent}% ({numInstances})
           </Text>
         </Stack>

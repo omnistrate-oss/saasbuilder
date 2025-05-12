@@ -1,9 +1,6 @@
 import { getProviderOrgDetails } from "src/server/api/customer-user";
 
-export default async function handleGetProviderDetails(
-  nextRequest,
-  nextResponse
-) {
+export default async function handleGetProviderDetails(nextRequest, nextResponse) {
   if (nextRequest.method === "GET") {
     try {
       const response = await getProviderOrgDetails();
@@ -13,10 +10,7 @@ export default async function handleGetProviderDetails(
     } catch (error) {
       const defaultErrorMessage = "Something went wrong. Please retry";
 
-      if (
-        error.name === "ProviderAuthError" ||
-        error?.response?.status === undefined
-      ) {
+      if (error.name === "ProviderAuthError" || error?.response?.status === undefined) {
         nextResponse.status(500).send({
           message: defaultErrorMessage,
         });

@@ -1,6 +1,6 @@
-import { Subscription } from "src/types/subscription";
-import { ServiceOffering } from "src/types/serviceOffering";
 import { ResourceInstance } from "src/types/resourceInstance";
+import { ServiceOffering } from "src/types/serviceOffering";
+import { Subscription } from "src/types/subscription";
 import { CLOUD_PROVIDER_DEFAULT_CREATION_METHOD } from "src/utils/constants/accountConfig";
 
 export const getValidSubscriptionForInstanceCreation = (
@@ -18,9 +18,7 @@ export const getValidSubscriptionForInstanceCreation = (
 
   serviceOfferings.forEach((serviceOffering) => {
     productTierInstanceLimitHash[serviceOffering.productTierID] =
-      serviceOffering.maxNumberOfInstances !== undefined
-        ? serviceOffering.maxNumberOfInstances
-        : -1;
+      serviceOffering.maxNumberOfInstances !== undefined ? serviceOffering.maxNumberOfInstances : -1;
 
     productTierPaymentRequirementHash[serviceOffering.productTierID] = !Boolean(
       serviceOffering.allowCreatesWhenPaymentNotConfigured
@@ -37,29 +35,19 @@ export const getValidSubscriptionForInstanceCreation = (
   });
 
   let filteredSubscriptions = subscriptions.filter(
-    (sub) =>
-      serviceOfferingsObj[sub.serviceId]?.[sub.productTierId] &&
-      ["root", "editor"].includes(sub.roleType)
+    (sub) => serviceOfferingsObj[sub.serviceId]?.[sub.productTierId] && ["root", "editor"].includes(sub.roleType)
   );
 
   //if serviceID has been provided, look for subscriptions within the serviceID
   if (serviceID) {
-    filteredSubscriptions = filteredSubscriptions.filter(
-      (subscription) => subscription.serviceId === serviceID
-    );
+    filteredSubscriptions = filteredSubscriptions.filter((subscription) => subscription.serviceId === serviceID);
   }
 
-  const sortedSubscriptionsByName = filteredSubscriptions.sort((a, b) =>
-    a.serviceName.localeCompare(b.serviceName)
-  );
+  const sortedSubscriptionsByName = filteredSubscriptions.sort((a, b) => a.serviceName.localeCompare(b.serviceName));
 
-  const rootSubscriptions = sortedSubscriptionsByName.filter(
-    (sub) => sub.roleType === "root"
-  );
+  const rootSubscriptions = sortedSubscriptionsByName.filter((sub) => sub.roleType === "root");
 
-  const editorSubscriptions = sortedSubscriptionsByName.filter(
-    (sub) => sub.roleType === "editor"
-  );
+  const editorSubscriptions = sortedSubscriptionsByName.filter((sub) => sub.roleType === "editor");
 
   let selectedSubscription: Subscription | undefined;
 
@@ -70,15 +58,12 @@ export const getValidSubscriptionForInstanceCreation = (
     //-> if plan requires valid payment config, check that payment is configured
     //-> if plan has max instance limit set, check that the limit has not been met
     const productTierID = subsription.productTierId;
-    const requiresPaymentConfig =
-      productTierPaymentRequirementHash[productTierID];
+    const requiresPaymentConfig = productTierPaymentRequirementHash[productTierID];
     const numInstances = subscriptionInstancesNumHash[subsription.id] || 0;
     const instancesLimit = productTierInstanceLimitHash[productTierID];
     if (
       (requiresPaymentConfig && !isPaymentConfigured) ||
-      (instancesLimit > -1 &&
-        numInstances >= instancesLimit &&
-        !skipInstanceQuotaCheck)
+      (instancesLimit > -1 && numInstances >= instancesLimit && !skipInstanceQuotaCheck)
     )
       return false;
 
@@ -92,14 +77,10 @@ export const getValidSubscriptionForInstanceCreation = (
       //-> if plan requires valid payment config, check that payment is configured
       //-> if plan has max instance limit set, check that the limit has not been met
       const productTierID = subsription.productTierId;
-      const requiresPaymentConfig =
-        productTierPaymentRequirementHash[productTierID];
+      const requiresPaymentConfig = productTierPaymentRequirementHash[productTierID];
       const numInstances = subscriptionInstancesNumHash[subsription.id] || 0;
       const instancesLimit = productTierInstanceLimitHash[productTierID];
-      if (
-        (requiresPaymentConfig && !isPaymentConfigured) ||
-        (instancesLimit > -1 && numInstances >= instancesLimit)
-      )
+      if ((requiresPaymentConfig && !isPaymentConfigured) || (instancesLimit > -1 && numInstances >= instancesLimit))
         return false;
 
       return true;
@@ -123,9 +104,7 @@ export const getInitialValues = (
   isPaymentConfigured: boolean
 ) => {
   if (selectedInstance) {
-    const subscription = byoaSubscriptions.find(
-      (sub) => sub.id === selectedInstance.subscriptionId
-    );
+    const subscription = byoaSubscriptions.find((sub) => sub.id === selectedInstance.subscriptionId);
     return {
       serviceId: subscription?.serviceId || "",
       servicePlanId: subscription?.productTierId || "",
@@ -166,15 +145,13 @@ export const getInitialValues = (
 
   if (isValidFormValues) {
     const cloudProvider =
-      byoaServiceOfferingsObj[initialFormValues?.serviceId]?.[
-        initialFormValues?.servicePlanId
-      ]?.cloudProviders?.[0] || "";
+      byoaServiceOfferingsObj[initialFormValues?.serviceId]?.[initialFormValues?.servicePlanId]?.cloudProviders?.[0] ||
+      "";
 
     return {
       ...initialFormValues,
       cloudProvider,
-      accountConfigurationMethod:
-        CLOUD_PROVIDER_DEFAULT_CREATION_METHOD[cloudProvider],
+      accountConfigurationMethod: CLOUD_PROVIDER_DEFAULT_CREATION_METHOD[cloudProvider],
     };
   }
 
@@ -182,36 +159,29 @@ export const getInitialValues = (
     (sub) => byoaServiceOfferingsObj[sub.serviceId]?.[sub.productTierId]
   );
 
-  const selectedSubscription: Subscription | undefined =
-    getValidSubscriptionForInstanceCreation(
-      byoaServiceOfferings,
-      byoaServiceOfferingsObj,
-      byoaSubscriptions,
-      instances,
-      isPaymentConfigured,
-      "",
-      false
-    );
+  const selectedSubscription: Subscription | undefined = getValidSubscriptionForInstanceCreation(
+    byoaServiceOfferings,
+    byoaServiceOfferingsObj,
+    byoaSubscriptions,
+    instances,
+    isPaymentConfigured,
+    "",
+    false
+  );
 
   const serviceId =
-    selectedSubscription?.serviceId ||
-    filteredSubscriptions[0]?.serviceId ||
-    byoaServiceOfferings[0]?.serviceId ||
-    "";
+    selectedSubscription?.serviceId || filteredSubscriptions[0]?.serviceId || byoaServiceOfferings[0]?.serviceId || "";
 
   const servicePlanId = selectedSubscription?.productTierId || "";
 
-  const cloudProvider =
-    byoaServiceOfferingsObj[serviceId]?.[servicePlanId]?.cloudProviders?.[0] ||
-    "";
+  const cloudProvider = byoaServiceOfferingsObj[serviceId]?.[servicePlanId]?.cloudProviders?.[0] || "";
 
   return {
     serviceId,
     servicePlanId,
     subscriptionId: selectedSubscription?.id || "",
     cloudProvider,
-    accountConfigurationMethod:
-      CLOUD_PROVIDER_DEFAULT_CREATION_METHOD[cloudProvider],
+    accountConfigurationMethod: CLOUD_PROVIDER_DEFAULT_CREATION_METHOD[cloudProvider],
     awsAccountId: "",
     gcpProjectId: "",
     gcpProjectNumber: "",

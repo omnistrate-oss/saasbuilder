@@ -1,27 +1,21 @@
-import _ from "lodash";
 import { useEffect, useMemo, useState } from "react";
+import { Close } from "@mui/icons-material";
 import { Box } from "@mui/material";
-import {
-  SelectedCategoryDateTimeRange,
-  SelectedCategoryOptions,
-} from "./AddInstanceFilters";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
-import { Close } from "@mui/icons-material";
-import { themeConfig } from "src/themeConfig";
-import { FilterCategorySchema, getIntialFiltersObject } from "../utils";
-import { SetState } from "src/types/common/reactGenerics";
+import _ from "lodash";
+
 import { initialRangeState } from "src/components/DateRangePicker/DateTimeRangePickerStatic";
 import { PopoverDynamicHeight } from "src/components/Popover/Popover";
+import { themeConfig } from "src/themeConfig";
+import { SetState } from "src/types/common/reactGenerics";
+
+import { FilterCategorySchema, getIntialFiltersObject } from "../utils";
+
+import { SelectedCategoryDateTimeRange, SelectedCategoryOptions } from "./AddInstanceFilters";
 dayjs.extend(utc);
 
-const FilterChip = ({
-  categoryObj,
-  handleRemoveCategory,
-  popoverAnchor,
-  categoryToEdit,
-  handleEditCategory,
-}) => {
+const FilterChip = ({ categoryObj, handleRemoveCategory, popoverAnchor, categoryToEdit, handleEditCategory }) => {
   return (
     <Box
       sx={{
@@ -44,21 +38,13 @@ const FilterChip = ({
     >
       {categoryObj.type === "list" && (
         <p className="whitespace-pre-wrap">
-          {categoryObj.label} ={" "}
-          {categoryObj.options?.map((option) => option?.label)?.join(", ")}
+          {categoryObj.label} = {categoryObj.options?.map((option) => option?.label)?.join(", ")}
         </p>
       )}
       {categoryObj.type === "date-range" && (
         <p className="whitespace-pre-wrap">
-          {categoryObj.label} ={" "}
-          {dayjs(new Date(categoryObj.range.startDate))
-            .utc()
-            .format("YYYY-MM-DD HH:mm:ss")}{" "}
-          UTC to{" "}
-          {dayjs(new Date(categoryObj.range.endDate))
-            .utc()
-            .format("YYYY-MM-DD HH:mm:ss")}{" "}
-          UTC
+          {categoryObj.label} = {dayjs(new Date(categoryObj.range.startDate)).utc().format("YYYY-MM-DD HH:mm:ss")} UTC
+          to {dayjs(new Date(categoryObj.range.endDate)).utc().format("YYYY-MM-DD HH:mm:ss")} UTC
         </p>
       )}
       <Close
@@ -81,11 +67,7 @@ type EditInstanceFiltersProps = {
   selectedFilters: Record<string, FilterCategorySchema>;
 };
 
-const EditInstanceFilters = ({
-  selectedFilters,
-  setSelectedFilters,
-  filterOptionsMap,
-}: EditInstanceFiltersProps) => {
+const EditInstanceFilters = ({ selectedFilters, setSelectedFilters, filterOptionsMap }: EditInstanceFiltersProps) => {
   const [categoryToEdit, setCategoryToEdit] = useState(null);
   const [anchorEl, setAnchorEl] = useState(null);
 
@@ -102,8 +84,7 @@ const EditInstanceFilters = ({
       if (!filter) return false; // Ensure it's defined before accessing properties
 
       const type = filter.type;
-      if (type === "list")
-        return Array.isArray(filter.options) && filter.options.length > 0;
+      if (type === "list") return Array.isArray(filter.options) && filter.options.length > 0;
       if (type === "date-range") return !!filter.range?.startDate;
       return false;
     });
@@ -193,30 +174,22 @@ const EditInstanceFilters = ({
       >
         {categoryToEdit && (
           <div className="min-w-[470px]">
-            {categoryToEdit &&
-              selectedFilters[categoryToEdit].type === "list" && (
-                <SelectedCategoryOptions
-                  selectedCategory={filterOptionsMap[categoryToEdit]}
-                  setSelectedFilters={setSelectedFilters}
-                  handleRemoveCategory={handleClose}
-                  initialSelection={
-                    new Set(
-                      selectedFilters[categoryToEdit].options?.map(
-                        (option) => option.value
-                      )
-                    )
-                  }
-                />
-              )}
+            {categoryToEdit && selectedFilters[categoryToEdit].type === "list" && (
+              <SelectedCategoryOptions
+                selectedCategory={filterOptionsMap[categoryToEdit]}
+                setSelectedFilters={setSelectedFilters}
+                handleRemoveCategory={handleClose}
+                initialSelection={new Set(selectedFilters[categoryToEdit].options?.map((option) => option.value))}
+              />
+            )}
 
-            {categoryToEdit &&
-              selectedFilters[categoryToEdit].type === "date-range" && (
-                <SelectedCategoryDateTimeRange
-                  setSelectedFilters={setSelectedFilters}
-                  handleRemoveCategory={handleClose}
-                  selectedCategory={selectedFilters[categoryToEdit]}
-                />
-              )}
+            {categoryToEdit && selectedFilters[categoryToEdit].type === "date-range" && (
+              <SelectedCategoryDateTimeRange
+                setSelectedFilters={setSelectedFilters}
+                handleRemoveCategory={handleClose}
+                selectedCategory={selectedFilters[categoryToEdit]}
+              />
+            )}
           </div>
         )}
       </PopoverDynamicHeight>

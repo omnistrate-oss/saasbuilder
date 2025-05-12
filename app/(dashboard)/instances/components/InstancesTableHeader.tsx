@@ -1,36 +1,32 @@
 import { useMemo } from "react";
+import { CircularProgress, menuClasses } from "@mui/material";
 import { useMutation } from "@tanstack/react-query";
+import useBillingStatus from "app/(dashboard)/billing/hooks/useBillingStatus";
 
-import Button from "components/Button/Button";
-import Select from "components/FormElementsv2/Select/Select";
-import MenuItem from "components/FormElementsv2/MenuItem/MenuItem";
-import DataGridHeaderTitle from "components/Headers/DataGridHeaderTitle";
-import RefreshWithToolTip from "components/RefreshWithTooltip/RefreshWithToolTip";
-
-import useSnackbar from "src/hooks/useSnackbar";
+import { restartResourceInstance, startResourceInstance, stopResourceInstance } from "src/api/resourceInstance";
+import LoadingSpinnerSmall from "src/components/CircularProgress/CircularProgress";
+import InstanceFilters from "src/components/InstanceFilters/InstanceFilters";
+import Tooltip from "src/components/Tooltip/Tooltip";
 import { CLI_MANAGED_RESOURCES } from "src/constants/resource";
-import {
-  restartResourceInstance,
-  startResourceInstance,
-  stopResourceInstance,
-} from "src/api/resourceInstance";
-
-import { icons } from "../constants";
-import { getMainResourceFromInstance } from "../utils";
+import useSnackbar from "src/hooks/useSnackbar";
+import { colors } from "src/themeConfig";
 import {
   getEnumFromUserRoleString,
   isOperationAllowedByRBAC,
   operationEnum,
   viewEnum,
 } from "src/utils/isAllowedByRBAC";
-import Tooltip from "src/components/Tooltip/Tooltip";
+import Button from "components/Button/Button";
+import MenuItem from "components/FormElementsv2/MenuItem/MenuItem";
+import Select from "components/FormElementsv2/Select/Select";
+import DataGridHeaderTitle from "components/Headers/DataGridHeaderTitle";
+import RefreshWithToolTip from "components/RefreshWithTooltip/RefreshWithToolTip";
+
+import { icons } from "../constants";
+import { getMainResourceFromInstance } from "../utils";
+
 import AddInstanceFilters from "./AddInstanceFilters";
 import EditInstanceFilters from "./EditInstanceFilters";
-import { CircularProgress, menuClasses } from "@mui/material";
-import InstanceFilters from "src/components/InstanceFilters/InstanceFilters";
-import LoadingSpinnerSmall from "src/components/CircularProgress/CircularProgress";
-import { colors } from "src/themeConfig";
-import useBillingStatus from "app/(dashboard)/billing/hooks/useBillingStatus";
 
 type Action = {
   dataTestId?: string;
@@ -91,15 +87,10 @@ const InstancesTableHeader = ({
   });
 
   const selectedResource = useMemo(() => {
-    return getMainResourceFromInstance(
-      selectedInstance,
-      selectedInstanceOffering
-    );
+    return getMainResourceFromInstance(selectedInstance, selectedInstanceOffering);
   }, [selectedInstance, selectedInstanceOffering]);
 
-  const isComplexResource = CLI_MANAGED_RESOURCES.includes(
-    selectedResource?.resourceType as string
-  );
+  const isComplexResource = CLI_MANAGED_RESOURCES.includes(selectedResource?.resourceType as string);
 
   const isProxyResource = selectedResource?.resourceType === "PortsBasedProxy";
 
@@ -108,20 +99,10 @@ const InstancesTableHeader = ({
     const status = selectedInstance?.status;
 
     // Check if the user has permission to perform the operation - Role from Subscription
-    const role = getEnumFromUserRoleString(
-      selectedInstanceSubscription?.roleType
-    );
-    const isUpdateAllowedByRBAC = isOperationAllowedByRBAC(
-      operationEnum.Update,
-      role,
-      viewEnum.Access_Resources
-    );
+    const role = getEnumFromUserRoleString(selectedInstanceSubscription?.roleType);
+    const isUpdateAllowedByRBAC = isOperationAllowedByRBAC(operationEnum.Update, role, viewEnum.Access_Resources);
 
-    const isDeleteAllowedByRBAC = isOperationAllowedByRBAC(
-      operationEnum.Delete,
-      role,
-      viewEnum.Access_Resources
-    );
+    const isDeleteAllowedByRBAC = isOperationAllowedByRBAC(operationEnum.Delete, role, viewEnum.Access_Resources);
 
     const requestData = {
       serviceProviderId: selectedInstanceOffering?.serviceProviderId,
@@ -148,10 +129,8 @@ const InstancesTableHeader = ({
         isProxyResource ||
         !isUpdateAllowedByRBAC,
       onClick: () => {
-        if (!selectedInstance)
-          return snackbar.showError("Please select an instance");
-        if (!selectedInstanceOffering)
-          return snackbar.showError("Service Offering not found");
+        if (!selectedInstance) return snackbar.showError("Please select an instance");
+        if (!selectedInstanceOffering) return snackbar.showError("Service Offering not found");
         stopInstanceMutation.mutate(requestData);
       },
       disabledMessage: !selectedInstance
@@ -180,10 +159,8 @@ const InstancesTableHeader = ({
         isProxyResource ||
         !isUpdateAllowedByRBAC,
       onClick: () => {
-        if (!selectedInstance)
-          return snackbar.showError("Please select an instance");
-        if (!selectedInstanceOffering)
-          return snackbar.showError("Service Offering not found");
+        if (!selectedInstance) return snackbar.showError("Please select an instance");
+        if (!selectedInstanceOffering) return snackbar.showError("Service Offering not found");
         startInstanceMutation.mutate(requestData);
       },
       disabledMessage: !selectedInstance
@@ -205,15 +182,12 @@ const InstancesTableHeader = ({
       actionType: "secondary",
       isDisabled:
         !selectedInstance ||
-        (status !== "RUNNING" &&
-          status !== "FAILED" &&
-          status !== "COMPLETE") ||
+        (status !== "RUNNING" && status !== "FAILED" && status !== "COMPLETE") ||
         status === "DISCONNECTED" ||
         isProxyResource ||
         !isUpdateAllowedByRBAC,
       onClick: () => {
-        if (!selectedInstance)
-          return snackbar.showError("Please select an instance");
+        if (!selectedInstance) return snackbar.showError("Please select an instance");
         setOverlayType("modify-instance-form");
         setIsOverlayOpen(true);
       },
@@ -241,8 +215,7 @@ const InstancesTableHeader = ({
         isProxyResource ||
         !isDeleteAllowedByRBAC,
       onClick: () => {
-        if (!selectedInstance)
-          return snackbar.showError("Please select an instance");
+        if (!selectedInstance) return snackbar.showError("Please select an instance");
         setOverlayType("delete-dialog");
         setIsOverlayOpen(true);
       },
@@ -281,15 +254,11 @@ const InstancesTableHeader = ({
         isLoading: restartInstanceMutation.isLoading,
         isDisabled:
           !selectedInstance ||
-          (status !== "RUNNING" &&
-            status !== "FAILED" &&
-            status !== "COMPLETE") ||
+          (status !== "RUNNING" && status !== "FAILED" && status !== "COMPLETE") ||
           !isUpdateAllowedByRBAC,
         onClick: () => {
-          if (!selectedInstance)
-            return snackbar.showError("Please select an instance");
-          if (!selectedInstanceOffering)
-            return snackbar.showError("Service Offering not found");
+          if (!selectedInstance) return snackbar.showError("Please select an instance");
+          if (!selectedInstanceOffering) return snackbar.showError("Service Offering not found");
           restartInstanceMutation.mutate(requestData);
         },
         disabledMessage: !selectedInstance
@@ -306,12 +275,9 @@ const InstancesTableHeader = ({
           dataTestId: "restore-button",
           label: "Restore",
           isDisabled:
-            !selectedInstance ||
-            !selectedInstance.backupStatus?.earliestRestoreTime ||
-            !isUpdateAllowedByRBAC,
+            !selectedInstance || !selectedInstance.backupStatus?.earliestRestoreTime || !isUpdateAllowedByRBAC,
           onClick: () => {
-            if (!selectedInstance)
-              return snackbar.showError("Please select an instance");
+            if (!selectedInstance) return snackbar.showError("Please select an instance");
             setOverlayType("restore-dialog");
             setIsOverlayOpen(true);
           },
@@ -329,11 +295,9 @@ const InstancesTableHeader = ({
         other.push({
           dataTestId: "add-capacity-button",
           label: "Add Capacity",
-          isDisabled:
-            !selectedInstance || status !== "RUNNING" || !isUpdateAllowedByRBAC,
+          isDisabled: !selectedInstance || status !== "RUNNING" || !isUpdateAllowedByRBAC,
           onClick: () => {
-            if (!selectedInstance)
-              return snackbar.showError("Please select an instance");
+            if (!selectedInstance) return snackbar.showError("Please select an instance");
             setOverlayType("add-capacity-dialog");
             setIsOverlayOpen(true);
           },
@@ -349,11 +313,9 @@ const InstancesTableHeader = ({
         other.push({
           dataTestId: "remove-capacity-button",
           label: "Remove Capacity",
-          isDisabled:
-            !selectedInstance || status !== "RUNNING" || !isUpdateAllowedByRBAC,
+          isDisabled: !selectedInstance || status !== "RUNNING" || !isUpdateAllowedByRBAC,
           onClick: () => {
-            if (!selectedInstance)
-              return snackbar.showError("Please select an instance");
+            if (!selectedInstance) return snackbar.showError("Please select an instance");
             setOverlayType("remove-capacity-dialog");
             setIsOverlayOpen(true);
           },
@@ -379,8 +341,7 @@ const InstancesTableHeader = ({
             ? "Cloud account is disconnected"
             : "",
         onClick: () => {
-          if (!selectedInstance)
-            return snackbar.showError("Please select an instance");
+          if (!selectedInstance) return snackbar.showError("Please select an instance");
           setOverlayType("generate-token-dialog");
           setIsOverlayOpen(true);
         },
@@ -428,8 +389,7 @@ const InstancesTableHeader = ({
           [`& .${menuClasses.paper}`]: {
             marginTop: "4px",
             border: `1px solid ${colors.gray200}`,
-            boxShadow:
-              "0px 2px 2px -1px #0A0D120A, 0px 4px 6px -2px #0A0D1208, 0px 12px 16px -4px #0A0D1214",
+            boxShadow: "0px 2px 2px -1px #0A0D120A, 0px 4px 6px -2px #0A0D1208, 0px 12px 16px -4px #0A0D1214",
             borderRadius: "8px",
           },
         },
@@ -447,40 +407,38 @@ const InstancesTableHeader = ({
         },
       }}
     >
-      {otherActions.map(
-        ({ dataTestId, label, onClick, isDisabled, disabledMessage }) => {
-          const Icon = icons[label];
-          const menuItem = (
-            <MenuItem
-              data-testid={dataTestId}
-              value={label}
-              key={label}
-              sx={{
-                gap: "10px",
-                fontSize: "14px",
-                color: isDisabled ? colors.gray400 : "",
-                minWidth: otherActions?.length > 2 ? "220px" : "180px",
-                padding: "8px 16px",
-              }}
-              disabled={isDisabled}
-              onClick={onClick}
-            >
-              <Icon disabled={isDisabled} />
-              {label}
-            </MenuItem>
+      {otherActions.map(({ dataTestId, label, onClick, isDisabled, disabledMessage }) => {
+        const Icon = icons[label];
+        const menuItem = (
+          <MenuItem
+            data-testid={dataTestId}
+            value={label}
+            key={label}
+            sx={{
+              gap: "10px",
+              fontSize: "14px",
+              color: isDisabled ? colors.gray400 : "",
+              minWidth: otherActions?.length > 2 ? "220px" : "180px",
+              padding: "8px 16px",
+            }}
+            disabled={isDisabled}
+            onClick={onClick}
+          >
+            <Icon disabled={isDisabled} />
+            {label}
+          </MenuItem>
+        );
+
+        if (disabledMessage) {
+          return (
+            <Tooltip key={label} title={disabledMessage} placement="top">
+              <span>{menuItem}</span>
+            </Tooltip>
           );
-
-          if (disabledMessage) {
-            return (
-              <Tooltip key={label} title={disabledMessage} placement="top">
-                <span>{menuItem}</span>
-              </Tooltip>
-            );
-          }
-
-          return menuItem;
         }
-      )}
+
+        return menuItem;
+      })}
     </Select>
   );
 
@@ -495,14 +453,9 @@ const InstancesTableHeader = ({
         />
 
         <div className="flex items-center gap-4">
-          <div className="flex items-center">
-            {isFetchingInstances && <CircularProgress size={20} />}
-          </div>
+          <div className="flex items-center">{isFetchingInstances && <CircularProgress size={20} />}</div>
 
-          <RefreshWithToolTip
-            refetch={refetchInstances}
-            disabled={isFetchingInstances}
-          />
+          <RefreshWithToolTip refetch={refetchInstances} disabled={isFetchingInstances} />
 
           {mainActions.map((action, index) => {
             const Icon = icons[action.label];
@@ -510,14 +463,10 @@ const InstancesTableHeader = ({
               <Button
                 data-testid={action.dataTestId || action.label}
                 key={index}
-                variant={
-                  action.actionType === "primary" ? "contained" : "outlined"
-                }
+                variant={action.actionType === "primary" ? "contained" : "outlined"}
                 disabled={action.isDisabled || action.isLoading}
                 onClick={action.onClick}
-                startIcon={
-                  <Icon disabled={action.isDisabled || action.isLoading} />
-                }
+                startIcon={<Icon disabled={action.isDisabled || action.isLoading} />}
                 disabledMessage={action.disabledMessage}
               >
                 {action.label}
@@ -529,14 +478,7 @@ const InstancesTableHeader = ({
           {otherActions.length > 0 && selectedInstance ? (
             select
           ) : (
-            <Tooltip
-              title={
-                !selectedInstance
-                  ? "Please select an instance"
-                  : "No actions available"
-              }
-              placement="top"
-            >
+            <Tooltip title={!selectedInstance ? "Please select an instance" : "No actions available"} placement="top">
               <span>{select}</span>
             </Tooltip>
           )}

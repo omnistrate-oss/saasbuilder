@@ -1,19 +1,18 @@
 "use client";
 
-import Cookies from "js-cookie";
-import { Buffer } from "buffer";
-import { Stack } from "@mui/material";
 import { useCallback, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import { Stack } from "@mui/material";
+import { Buffer } from "buffer";
+import Cookies from "js-cookie";
 
-import { Text } from "components/Typography/Typography";
-import LoadingSpinner from "components/LoadingSpinner/LoadingSpinner";
-
-import axios from "src/axios";
-import useSnackbar from "src/hooks/useSnackbar";
 import { customerSignInWithIdentityProvider } from "src/api/customer-user";
+import axios from "src/axios";
 import { PAGE_TITLE_MAP } from "src/constants/pageTitleMap";
+import useSnackbar from "src/hooks/useSnackbar";
 import { getInstancesRoute } from "src/utils/routes";
+import LoadingSpinner from "components/LoadingSpinner/LoadingSpinner";
+import { Text } from "components/Typography/Typography";
 
 const IDPAuthPage = () => {
   const router = useRouter();
@@ -62,19 +61,14 @@ const IDPAuthPage = () => {
 
   useEffect(() => {
     if (state && code) {
-      const decodedAuthStateString = Buffer.from(state, "base64").toString(
-        "utf8"
-      );
+      const decodedAuthStateString = Buffer.from(state, "base64").toString("utf8");
       try {
         const authState = JSON.parse(decodedAuthStateString);
 
         //get local auth state from session storage and compare the nonce values
         const localAuthStateString = sessionStorage.getItem("authState");
         //decode from base64 to utf8 string
-        const decodedLocalAuthStateString = Buffer.from(
-          localAuthStateString || "",
-          "base64"
-        ).toString("utf8");
+        const decodedLocalAuthStateString = Buffer.from(localAuthStateString || "", "base64").toString("utf8");
 
         const localAuthState = JSON.parse(decodedLocalAuthStateString);
 
@@ -101,12 +95,7 @@ const IDPAuthPage = () => {
   }, [state, code, router, handleSignIn]);
 
   return (
-    <Stack
-      height="100vh"
-      width="100vw"
-      justifyContent="center"
-      alignItems="center"
-    >
+    <Stack height="100vh" width="100vw" justifyContent="center" alignItems="center">
       <Text
         sx={{
           fontSize: "32px",

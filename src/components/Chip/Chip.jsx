@@ -1,5 +1,6 @@
 import { styled } from "@mui/material";
 import MuiChip, { chipClasses } from "@mui/material/Chip";
+
 import { textStyles, weights } from "../Typography/Typography";
 
 const Chip = styled(
@@ -8,9 +9,7 @@ const Chip = styled(
   },
   {
     shouldForwardProp: (prop) => {
-      return (
-        prop !== "fontColor" && prop !== "bgColor" && prop !== "borderColor"
-      );
+      return prop !== "fontColor" && prop !== "bgColor" && prop !== "borderColor";
     },
   }
 )(({ fontColor, bgColor, borderColor }) => ({

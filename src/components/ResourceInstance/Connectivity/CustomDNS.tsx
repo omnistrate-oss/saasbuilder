@@ -1,33 +1,34 @@
-import { SxProps, Theme, Stack, Box } from "@mui/material";
-import { Text } from "src/components/Typography/Typography";
 import { FC, useEffect, useRef, useState } from "react";
-import FieldContainer from "src/components/FormElementsv2/FieldContainer/FieldContainer";
-import TextField from "src/components/FormElementsv2/TextField/TextField";
-import Button from "src/components/Button/Button";
+import { Box, Stack, SxProps, Theme } from "@mui/material";
+import { useMutation } from "@tanstack/react-query";
 import { useFormik } from "formik";
+import * as Yup from "yup";
+
 import {
   addCustomDNSToResourceInstance,
-  removeCustomDNSFromResourceInstance,
   getResourceInstanceDetails,
+  removeCustomDNSFromResourceInstance,
 } from "src/api/resourceInstance";
-
-import * as Yup from "yup";
-import FieldError from "src/components/FormElementsv2/FieldError/FieldError";
-import IconButtonSquare from "src/components/IconButtonSquare/IconButtonSquare";
-import EditIcon from "src/components/Icons/Edit/Edit";
-import DeleteIcon from "src/components/Icons/Delete/Delete";
-import TextConfirmationDialog from "src/components/TextConfirmationDialog/TextConfirmationDialog";
-import LoadingSpinnerSmall from "src/components/CircularProgress/CircularProgress";
-import { useMutation } from "@tanstack/react-query";
+import Button from "src/components/Button/Button";
 import Card from "src/components/Card/Card";
-import { AddCustomDNSToResourceInstancePayload } from "./ConnectivityCustomDNS";
-import CustomDNSDetails from "./CustomDNSDetails";
+import LoadingSpinnerSmall from "src/components/CircularProgress/CircularProgress";
+import CustomStatusChips from "src/components/CustomStatusChips/CustomStatusChips";
+import FieldContainer from "src/components/FormElementsv2/FieldContainer/FieldContainer";
+import FieldError from "src/components/FormElementsv2/FieldError/FieldError";
+import TextField from "src/components/FormElementsv2/TextField/TextField";
+import IconButtonSquare from "src/components/IconButtonSquare/IconButtonSquare";
 import AlertTrianglePITR from "src/components/Icons/AlertTrianglePITR/AlertTrianglePITR";
 import CircleCheckWithBorderIcon from "src/components/Icons/CircleCheck/CircleCheckWithBorderIcon";
-import CustomStatusChips from "src/components/CustomStatusChips/CustomStatusChips";
+import DeleteIcon from "src/components/Icons/Delete/Delete";
+import EditIcon from "src/components/Icons/Edit/Edit";
 import PlayIcon from "src/components/Icons/Play/Play";
-import { colors } from "src/themeConfig";
 import PublicResourceIcon from "src/components/Icons/PublicResource/PublicResource";
+import TextConfirmationDialog from "src/components/TextConfirmationDialog/TextConfirmationDialog";
+import { Text } from "src/components/Typography/Typography";
+import { colors } from "src/themeConfig";
+
+import { AddCustomDNSToResourceInstancePayload } from "./ConnectivityCustomDNS";
+import CustomDNSDetails from "./CustomDNSDetails";
 
 type EndpointProps = {
   resourceName: string;
@@ -67,8 +68,7 @@ const CustomDNS: FC<EndpointProps> = (props) => {
     resourceHasCompute,
   } = props;
 
-  const [showDeleteConfirmationDialog, setShowDeleteConfirmationDialog] =
-    useState(false);
+  const [showDeleteConfirmationDialog, setShowDeleteConfirmationDialog] = useState(false);
   const [deleteMessage, setDeleteMessage] = useState("");
   const [isTextfieldDisabled, setIsTextFieldDisabled] = useState(false);
   const textfieldRef = useRef<HTMLInputElement>();
@@ -149,8 +149,7 @@ const CustomDNS: FC<EndpointProps> = (props) => {
             accessQueryParams.subscriptionId
           )
             .then((response) => {
-              const topologyDetails =
-                response.data?.detailedNetworkTopology?.[resourceId];
+              const topologyDetails = response.data?.detailedNetworkTopology?.[resourceId];
               //check for dnsName field in the response, absence means dns removal complete
               // @ts-ignore
               if (!Boolean(topologyDetails?.customDNSEndpoint?.dnsName)) {
@@ -223,21 +222,13 @@ const CustomDNS: FC<EndpointProps> = (props) => {
             <Box>
               <PublicResourceIcon />
             </Box>
-            <Text
-              size="medium"
-              weight="bold"
-              color="#6941C6"
-              sx={{ flex: 1, wordBreak: "break-word" }}
-            >
+            <Text size="medium" weight="bold" color="#6941C6" sx={{ flex: 1, wordBreak: "break-word" }}>
               {resourceName}
             </Text>
           </Box>
 
           <>
-            <Box
-              padding={"24px"}
-              borderBottom={"1px solid rgba(213, 215, 218, 1)"}
-            >
+            <Box padding={"24px"} borderBottom={"1px solid rgba(213, 215, 218, 1)"}>
               {(customDNSData?.aRecordTarget || customDNSData?.cnameTarget) && (
                 <CustomDNSDetails
                   aRecordTarget={customDNSData?.aRecordTarget}
@@ -247,12 +238,7 @@ const CustomDNS: FC<EndpointProps> = (props) => {
                 />
               )}
               <FieldContainer marginTop={0} sx={{ maxWidth: "1000px" }}>
-                <Stack
-                  direction="row"
-                  alignItems="center"
-                  gap="24px"
-                  marginTop="6px"
-                >
+                <Stack direction="row" alignItems="center" gap="24px" marginTop="6px">
                   <TextField
                     //@ts-ignore
                     marginTop="0px"
@@ -278,9 +264,7 @@ const CustomDNS: FC<EndpointProps> = (props) => {
                       <IconButtonSquare
                         sx={{ borderColor: "#FDA29B !important" }}
                         onClick={() => {
-                          setDeleteMessage(
-                            "Are you sure you want to delete this endpoint alias?"
-                          );
+                          setDeleteMessage("Are you sure you want to delete this endpoint alias?");
                           setShowDeleteConfirmationDialog(true);
                         }}
                       >
@@ -299,17 +283,13 @@ const CustomDNS: FC<EndpointProps> = (props) => {
                         }}
                         endIcon={<PlayIcon color="rgba(255, 255, 255, 1)" />}
                       >
-                        Verify{" "}
-                        {addCustomDNSMutation?.isLoading && (
-                          <LoadingSpinnerSmall />
-                        )}
+                        Verify {addCustomDNSMutation?.isLoading && <LoadingSpinnerSmall />}
                       </Button>
                     </>
                   )}
                 </Stack>
                 <FieldError>
-                  {customDNSFormik.touched.customDNSEndpoint &&
-                    customDNSFormik.errors.customDNSEndpoint}
+                  {customDNSFormik.touched.customDNSEndpoint && customDNSFormik.errors.customDNSEndpoint}
                 </FieldError>
               </FieldContainer>
               {isCustomDNSSetup && (
@@ -318,11 +298,7 @@ const CustomDNS: FC<EndpointProps> = (props) => {
                     customDNSData?.status === "READY" ? (
                       <CircleCheckWithBorderIcon />
                     ) : (
-                      <AlertTrianglePITR
-                        height={16}
-                        width={16}
-                        style={{ alignSelf: "normal", flexShrink: 0 }}
-                      />
+                      <AlertTrianglePITR height={16} width={16} style={{ alignSelf: "normal", flexShrink: 0 }} />
                     )
                   }
                   containerStyles={
@@ -340,15 +316,9 @@ const CustomDNS: FC<EndpointProps> = (props) => {
                   <Text
                     size="xsmall"
                     weight="medium"
-                    color={
-                      customDNSData?.status === "READY"
-                        ? "rgba(8, 116, 67, 1)"
-                        : "rgba(220, 104, 3, 1)"
-                    }
+                    color={customDNSData?.status === "READY" ? "rgba(8, 116, 67, 1)" : "rgba(220, 104, 3, 1)"}
                   >
-                    {customDNSData?.status === "READY"
-                      ? "Domain Verified"
-                      : "Pending Verification"}
+                    {customDNSData?.status === "READY" ? "Domain Verified" : "Pending Verification"}
                   </Text>
                 </CustomStatusChips>
               )}

@@ -1,9 +1,9 @@
 import AddIcon from "@mui/icons-material/Add";
 
+import RefreshWithToolTip from "src/components/RefreshWithTooltip/RefreshWithToolTip";
 import Button from "components/Button/Button";
 import SearchInput from "components/DataGrid/SearchInput";
 import DataGridHeaderTitle from "components/Headers/DataGridHeaderTitle";
-import RefreshWithToolTip from "src/components/RefreshWithTooltip/RefreshWithToolTip";
 
 const SubscriptionsTableHeader = ({
   selectedRows,
@@ -36,10 +36,7 @@ const SubscriptionsTableHeader = ({
           setSearchText={setSearchText}
           width="250px"
         />
-        <RefreshWithToolTip
-          refetch={refetchSubscriptions}
-          disabled={isFetchingSubscriptions}
-        />
+        <RefreshWithToolTip refetch={refetchSubscriptions} disabled={isFetchingSubscriptions} />
         <Button
           variant="outlined"
           onClick={onUnsubscribe}
@@ -55,8 +52,7 @@ const SubscriptionsTableHeader = ({
               ? "Please select a subscription to unsubscribe"
               : selectedSubscription?.defaultSubscription
                 ? "Cannot unsubscribe from Default subscription"
-                : selectedSubscription &&
-                    selectedSubscription?.roleType !== "root"
+                : selectedSubscription && selectedSubscription?.roleType !== "root"
                   ? "Cannot unsubscribe without Root access"
                   : ""
           }

@@ -1,8 +1,9 @@
-import { ResourceInstance } from "src/types/resourceInstance";
-import { ServiceOffering } from "src/types/serviceOffering";
 import { GlobalStateManager } from "test-utils/global-state-manager";
 import { ProviderAPIClient } from "test-utils/provider-api-client";
 import { UserAPIClient } from "test-utils/user-api-client";
+
+import { ResourceInstance } from "src/types/resourceInstance";
+import { ServiceOffering } from "src/types/serviceOffering";
 
 const deleteInstances = async (instances: ResourceInstance[], serviceOfferings: ServiceOffering[]) => {
   const userAPIClient = new UserAPIClient();

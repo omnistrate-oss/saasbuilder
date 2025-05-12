@@ -1,11 +1,12 @@
 import { AxiosResponse } from "axios";
+
 import axios from "src/axios";
 import {
-  GetCurrentConsumptionUsageSuccessResponse,
-  DescribeConsumptionBillingStatusResponse,
-  ListConsumptionInvoicesSuccessResponse,
   DescribeConsumptionBillingDetailsSuccessResponse,
+  DescribeConsumptionBillingStatusResponse,
   GetConsumptionUsagePerDaySuccessResponse,
+  GetCurrentConsumptionUsageSuccessResponse,
+  ListConsumptionInvoicesSuccessResponse,
 } from "src/types/consumption";
 
 export type GetConsumptionUsageQueryParams = {
@@ -30,21 +31,16 @@ export type GetConsumptionUsagePerDayQueryParams = {
 export const getConsumptionUsagePerDay = (
   queryParams: GetConsumptionUsagePerDayQueryParams = {}
 ): Promise<AxiosResponse<GetConsumptionUsagePerDaySuccessResponse>> => {
-
   return axios.get("/resource-instance/usage-per-day", {
     params: queryParams,
   });
 };
 
-export const getConsumptionBillingStatus = (): Promise<
-  AxiosResponse<DescribeConsumptionBillingStatusResponse>
-> => {
+export const getConsumptionBillingStatus = (): Promise<AxiosResponse<DescribeConsumptionBillingStatusResponse>> => {
   return axios.get("/resource-instance/billing-status");
 };
 
-export const getConsumptionInvoices = (): Promise<
-  AxiosResponse<ListConsumptionInvoicesSuccessResponse>
-> => {
+export const getConsumptionInvoices = (): Promise<AxiosResponse<ListConsumptionInvoicesSuccessResponse>> => {
   return axios.get("/resource-instance/invoice");
 };
 

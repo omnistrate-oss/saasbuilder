@@ -1,33 +1,30 @@
 "use client";
 
-import * as Yup from "yup";
-import Image from "next/image";
-import { useFormik } from "formik";
-import { Box, Stack } from "@mui/material";
 import { useRef, useState } from "react";
-import ReCAPTCHA from "react-google-recaptcha";
+import Image from "next/image";
+import { Box, Stack } from "@mui/material";
 import { useMutation } from "@tanstack/react-query";
+import { useFormik } from "formik";
+import ReCAPTCHA from "react-google-recaptcha";
+import * as Yup from "yup";
 
+import { customerUserResetPassword } from "src/api/customer-user";
 import useSnackbar from "src/hooks/useSnackbar";
 import { styleConfig } from "src/providerConfig";
-import { customerUserResetPassword } from "src/api/customer-user";
 import { useProviderOrgDetails } from "src/providers/ProviderOrgDetailsProvider";
-
-import Logo from "components/NonDashboardComponents/Logo";
-import { Text } from "components/Typography/Typography";
 import DisplayHeading from "components/NonDashboardComponents/DisplayHeading";
-import PageDescription from "components/NonDashboardComponents/PageDescription";
-import TextField from "components/NonDashboardComponents/FormElementsV2/TextField";
+import FieldContainer from "components/NonDashboardComponents/FormElementsV2/FieldContainer";
 import FieldLabel from "components/NonDashboardComponents/FormElementsV2/FieldLabel";
 import SubmitButton from "components/NonDashboardComponents/FormElementsV2/SubmitButton";
-import FieldContainer from "components/NonDashboardComponents/FormElementsV2/FieldContainer";
+import TextField from "components/NonDashboardComponents/FormElementsV2/TextField";
+import Logo from "components/NonDashboardComponents/Logo";
+import PageDescription from "components/NonDashboardComponents/PageDescription";
+import { Text } from "components/Typography/Typography";
 
 import Confetti from "public/assets/images/non-dashboard/confetti.svg";
 
 const resetPasswordValidationSchema = Yup.object({
-  email: Yup.string()
-    .email("Invalid email address")
-    .required("Email is required"),
+  email: Yup.string().email("Invalid email address").required("Email is required"),
 });
 
 const ResetPasswordPage = (props) => {
@@ -91,22 +88,13 @@ const ResetPasswordPage = (props) => {
   if (showSuccess) {
     return (
       <>
-        <Image
-          src={Confetti}
-          alt="Confetti"
-          width={265}
-          height={140}
-          style={{ margin: "0 auto" }}
-        />
+        <Image src={Confetti} alt="Confetti" width={265} height={140} style={{ margin: "0 auto" }} />
 
         <Stack gap="16px">
-          <DisplayHeading>
-            Check Your Email for a Password Reset Link
-          </DisplayHeading>
+          <DisplayHeading>Check Your Email for a Password Reset Link</DisplayHeading>
           <PageDescription>
-            If an account is associated with the provided email, a password
-            reset link will be sent. Please follow the instructions to reset
-            your password.
+            If an account is associated with the provided email, a password reset link will be sent. Please follow the
+            instructions to reset your password.
           </PageDescription>
         </Stack>
         {/* @ts-ignore */}
@@ -114,17 +102,9 @@ const ResetPasswordPage = (props) => {
           Go to Login
         </SubmitButton>
 
-        <Text
-          size="small"
-          weight="medium"
-          color="#4B5563"
-          style={{ textAlign: "center" }}
-        >
+        <Text size="small" weight="medium" color="#4B5563" style={{ textAlign: "center" }}>
           Didn&apos;t get a reset password link?{" "}
-          <span
-            onClick={() => setShowSuccess(false)}
-            style={{ color: styleConfig.primaryColor, cursor: "pointer" }}
-          >
+          <span onClick={() => setShowSuccess(false)} style={{ color: styleConfig.primaryColor, cursor: "pointer" }}>
             Try again
           </span>
         </Text>
@@ -136,11 +116,7 @@ const ResetPasswordPage = (props) => {
     <>
       <Box textAlign="center">
         {orgLogoURL ? (
-          <Logo
-            src={orgLogoURL}
-            alt={orgName}
-            style={{ width: "120px", height: "auto", maxHeight: "unset" }}
-          />
+          <Logo src={orgLogoURL} alt={orgName} style={{ width: "120px", height: "auto", maxHeight: "unset" }} />
         ) : (
           ""
         )}
@@ -149,8 +125,7 @@ const ResetPasswordPage = (props) => {
         <Stack gap="16px">
           <DisplayHeading>Reset your password</DisplayHeading>
           <PageDescription>
-            Enter your email address and we&apos;ll send you password reset
-            instructions.
+            Enter your email address and we&apos;ll send you password reset instructions.
           </PageDescription>
         </Stack>
         <FieldContainer>

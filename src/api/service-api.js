@@ -1,16 +1,11 @@
 import axios, { baseURL } from "../axios";
 
 export const downloadCLI = (serviceId, serviceApiId) => {
-  return axios.get(
-    `${baseURL}/service/${serviceId}/service-api/${serviceApiId}/cli`,
-    {
-      responseType: "blob",
-    }
-  );
+  return axios.get(`${baseURL}/service/${serviceId}/service-api/${serviceApiId}/cli`, {
+    responseType: "blob",
+  });
 };
 
 export const getServiceApiDocs = (serviceId, serviceApiId) => {
-  return axios.get(
-    `/service/${serviceId}/service-api/${serviceApiId}/swagger_spec`
-  );
+  return axios.get(`/service/${serviceId}/service-api/${serviceApiId}/swagger_spec`);
 };

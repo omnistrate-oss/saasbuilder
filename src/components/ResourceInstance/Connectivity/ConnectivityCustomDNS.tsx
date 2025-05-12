@@ -1,31 +1,31 @@
-import { SxProps, styled, Theme, Stack } from "@mui/material";
-import TableRow from "@mui/material/TableRow";
-import MuiTableCell from "@mui/material/TableCell";
-import { Text } from "src/components/Typography/Typography";
 import { FC, useEffect, useRef, useState } from "react";
-import AccordionEditIcon from "src/components/Icons/AccordionEdit/AccordionEdit";
-import Switch from "src/components/Switch/Switch";
-import FieldContainer from "src/components/FormElementsv2/FieldContainer/FieldContainer";
-import TextField from "src/components/FormElementsv2/TextField/TextField";
-import Button from "src/components/Button/Button";
+import { Stack, styled, SxProps, Theme } from "@mui/material";
+import MuiTableCell from "@mui/material/TableCell";
+import TableRow from "@mui/material/TableRow";
+import { useMutation } from "@tanstack/react-query";
 import { useFormik } from "formik";
+import * as Yup from "yup";
+
 import {
   addCustomDNSToResourceInstance,
-  removeCustomDNSFromResourceInstance,
   getResourceInstanceDetails,
+  removeCustomDNSFromResourceInstance,
 } from "src/api/resourceInstance";
-
-import * as Yup from "yup";
-import FieldError from "src/components/FormElementsv2/FieldError/FieldError";
-import IconButtonSquare from "src/components/IconButtonSquare/IconButtonSquare";
-import EditIcon from "src/components/Icons/Edit/Edit";
-import DeleteIcon from "src/components/Icons/Delete/Delete";
-import TextConfirmationDialog from "src/components/TextConfirmationDialog/TextConfirmationDialog";
+import Button from "src/components/Button/Button";
 import LoadingSpinnerSmall from "src/components/CircularProgress/CircularProgress";
-import StatusChip from "src/components/StatusChip/StatusChip";
-import { getCustomDNSStatusStylesAndLabel } from "src/constants/statusChipStyles/customDNS";
-import { useMutation } from "@tanstack/react-query";
+import FieldContainer from "src/components/FormElementsv2/FieldContainer/FieldContainer";
+import FieldError from "src/components/FormElementsv2/FieldError/FieldError";
+import TextField from "src/components/FormElementsv2/TextField/TextField";
+import IconButtonSquare from "src/components/IconButtonSquare/IconButtonSquare";
+import AccordionEditIcon from "src/components/Icons/AccordionEdit/AccordionEdit";
 import ViewInstructionsIcon from "src/components/Icons/AccountConfig/ViewInstrcutionsIcon";
+import DeleteIcon from "src/components/Icons/Delete/Delete";
+import EditIcon from "src/components/Icons/Edit/Edit";
+import StatusChip from "src/components/StatusChip/StatusChip";
+import Switch from "src/components/Switch/Switch";
+import TextConfirmationDialog from "src/components/TextConfirmationDialog/TextConfirmationDialog";
+import { Text } from "src/components/Typography/Typography";
+import { getCustomDNSStatusStylesAndLabel } from "src/constants/statusChipStyles/customDNS";
 import { colors } from "src/themeConfig";
 
 export type AddCustomDNSToResourceInstancePayload = {
@@ -62,9 +62,7 @@ type ResourceConnectivityEndpointProps = {
   refetchInstance: () => void;
 };
 
-const ResourceConnectivityCustomDNS: FC<ResourceConnectivityEndpointProps> = (
-  props
-) => {
+const ResourceConnectivityCustomDNS: FC<ResourceConnectivityEndpointProps> = (props) => {
   const {
     customDNSData = { enabled: false },
     queryData,
@@ -74,8 +72,7 @@ const ResourceConnectivityCustomDNS: FC<ResourceConnectivityEndpointProps> = (
     resourceHasCompute,
   } = props;
 
-  const [showDeleteConfirmationDialog, setShowDeleteConfirmationDialog] =
-    useState(false);
+  const [showDeleteConfirmationDialog, setShowDeleteConfirmationDialog] = useState(false);
   const [deleteMessage, setDeleteMessage] = useState("");
   const [isTextfieldDisabled, setIsTextFieldDisabled] = useState(false);
   const [shouldShowConfigDialog, setShouldShowConfigDialog] = useState(false);
@@ -162,8 +159,7 @@ const ResourceConnectivityCustomDNS: FC<ResourceConnectivityEndpointProps> = (
             queryData.subscriptionId
           )
             .then((response) => {
-              const topologyDetails =
-                response.data?.detailedNetworkTopology?.[resourceId];
+              const topologyDetails = response.data?.detailedNetworkTopology?.[resourceId];
               //check for dnsName field in the response, absence means dns removal complete
               // @ts-ignore
               if (!Boolean(topologyDetails?.customDNSEndpoint?.dnsName)) {
@@ -233,9 +229,7 @@ const ResourceConnectivityCustomDNS: FC<ResourceConnectivityEndpointProps> = (
       if (!isCustomDNSSetup) {
         setIsToggleChecked(false);
       } else {
-        setDeleteMessage(
-          "Disabling will delete endpoint alias. Are you sure you want to continue?"
-        );
+        setDeleteMessage("Disabling will delete endpoint alias. Are you sure you want to continue?");
         setShowDeleteConfirmationDialog(true);
       }
     } else {
@@ -243,9 +237,7 @@ const ResourceConnectivityCustomDNS: FC<ResourceConnectivityEndpointProps> = (
     }
   }
 
-  const statusStylesAndLabel = getCustomDNSStatusStylesAndLabel(
-    customDNSData?.status as string
-  );
+  const statusStylesAndLabel = getCustomDNSStatusStylesAndLabel(customDNSData?.status as string);
 
   return (
     <>
@@ -260,15 +252,9 @@ const ResourceConnectivityCustomDNS: FC<ResourceConnectivityEndpointProps> = (
                 <Text color="#53389E" weight="medium" size="small">
                   Configure Endpoint Alias
                 </Text>
-                <Switch
-                  checked={isToggleChecked}
-                  onChange={handleSwitchToggle}
-                />
+                <Switch checked={isToggleChecked} onChange={handleSwitchToggle} />
                 {isCustomDNSSetup && (
-                  <StatusChip
-                    {...statusStylesAndLabel}
-                    pulsateDot={Boolean(customDNSData?.status === "PENDING")}
-                  />
+                  <StatusChip {...statusStylesAndLabel} pulsateDot={Boolean(customDNSData?.status === "PENDING")} />
                 )}
                 {isVerifyingDNSRemoval && <LoadingSpinnerSmall />}
               </Stack>
@@ -286,12 +272,7 @@ const ResourceConnectivityCustomDNS: FC<ResourceConnectivityEndpointProps> = (
               />
               <TableCell colSpan={2} sx={{ paddingLeft: "4px", paddingTop: 0 }}>
                 <FieldContainer marginTop={0} sx={{ maxWidth: "510px" }}>
-                  <Stack
-                    direction="row"
-                    alignItems="center"
-                    gap="6px"
-                    marginTop="6px"
-                  >
+                  <Stack direction="row" alignItems="center" gap="6px" marginTop="6px">
                     <TextField
                       //@ts-ignore
                       marginTop="0px"
@@ -320,9 +301,7 @@ const ResourceConnectivityCustomDNS: FC<ResourceConnectivityEndpointProps> = (
                         <IconButtonSquare
                           sx={{ borderColor: "#FDA29B !important" }}
                           onClick={() => {
-                            setDeleteMessage(
-                              "Are you sure you want to delete this endpoint alias?"
-                            );
+                            setDeleteMessage("Are you sure you want to delete this endpoint alias?");
                             setShowDeleteConfirmationDialog(true);
                           }}
                         >
@@ -340,10 +319,7 @@ const ResourceConnectivityCustomDNS: FC<ResourceConnectivityEndpointProps> = (
                             customDNSFormik.submitForm();
                           }}
                         >
-                          Verify{" "}
-                          {addCustomDNSMutation?.isLoading && (
-                            <LoadingSpinnerSmall />
-                          )}
+                          Verify {addCustomDNSMutation?.isLoading && <LoadingSpinnerSmall />}
                         </Button>
                         {isEditing && (
                           <Button
@@ -364,8 +340,7 @@ const ResourceConnectivityCustomDNS: FC<ResourceConnectivityEndpointProps> = (
                     )}
                   </Stack>
                   <FieldError>
-                    {customDNSFormik.touched.customDNSEndpoint &&
-                      customDNSFormik.errors.customDNSEndpoint}
+                    {customDNSFormik.touched.customDNSEndpoint && customDNSFormik.errors.customDNSEndpoint}
                   </FieldError>
                 </FieldContainer>
               </TableCell>

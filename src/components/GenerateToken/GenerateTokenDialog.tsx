@@ -1,29 +1,17 @@
+import { Box, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, Stack } from "@mui/material";
+
 import Button from "../Button/Button";
 import CopyButton from "../Button/CopyButton";
+import LoadingSpinnerSmall from "../CircularProgress/CircularProgress";
 import TextField from "../FormElementsv2/TextField/TextField";
+import GridCellExpand from "../GridCellExpand/GridCellExpand";
 import CloseIcon from "../Icons/Close/CloseIcon";
 import GenerateTokenIcon from "../Icons/GenerateToken/GenerateTokenIcon";
 import { Text } from "../Typography/Typography";
-import {
-  Box,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  IconButton,
-  Stack,
-} from "@mui/material";
-import useToken from "./useToken";
-import LoadingSpinnerSmall from "../CircularProgress/CircularProgress";
-import GridCellExpand from "../GridCellExpand/GridCellExpand";
 
-const GenerateTokenDialog = ({
-  open,
-  onClose,
-  selectedInstanceId,
-  subscriptionId,
-  dashboardEndpoint,
-}) => {
+import useToken from "./useToken";
+
+const GenerateTokenDialog = ({ open, onClose, selectedInstanceId, subscriptionId, dashboardEndpoint }) => {
   const { data: tokenData, isFetching: isFetchingTokenData } = useToken(
     {
       instanceId: selectedInstanceId,
@@ -84,12 +72,7 @@ const GenerateTokenDialog = ({
       </DialogTitle>
       <DialogContent sx={{ pb: "32px" }}>
         {isFetchingTokenData ? (
-          <Box
-            height="110px"
-            display="flex"
-            alignItems="center"
-            justifyContent="center"
-          >
+          <Box height="110px" display="flex" alignItems="center" justifyContent="center">
             <LoadingSpinnerSmall />
           </Box>
         ) : (
@@ -113,8 +96,7 @@ const GenerateTokenDialog = ({
               />
             </Stack>
             <Text size="small" weight="regular" color="#475467">
-              Please make sure to copy the token and store it securely, you
-              won&apos;t be able to view it again
+              Please make sure to copy the token and store it securely, you won&apos;t be able to view it again
             </Text>
           </>
         )}

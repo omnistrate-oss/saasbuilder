@@ -1,11 +1,12 @@
+import ServiceFilter from "app/(dashboard)/audit-logs/components/ServiceFilter";
+
+import { DateRange, DateTimePickerPopover } from "src/components/DateRangePicker/DateTimeRangePickerStatic";
 import DataGridHeaderTitle from "src/components/Headers/DataGridHeaderTitle";
 import RefreshWithToolTip from "src/components/RefreshWithTooltip/RefreshWithToolTip";
 import AuditLogsEventFilterDropdown from "src/components/ResourceInstance/AuditLogs/components/AuditLogsEventFilterDropdown";
 import { SetState } from "src/types/common/reactGenerics";
 import { EventType } from "src/types/event";
 import { ServiceOffering } from "src/types/serviceOffering";
-import { DateTimePickerPopover, DateRange } from "src/components/DateRangePicker/DateTimeRangePickerStatic";
-import ServiceFilter from "app/(dashboard)/audit-logs/components/ServiceFilter";
 
 type NotificationsTableHeaderProps = {
   refetchNotifications: () => void;

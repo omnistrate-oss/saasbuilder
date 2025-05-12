@@ -1,6 +1,7 @@
-import { Stack, SxProps, useTheme, Theme, Box } from "@mui/material";
-import { Text } from "../Typography/Typography";
 import { ReactNode } from "react";
+import { Box, Stack, SxProps, Theme, useTheme } from "@mui/material";
+
+import { Text } from "../Typography/Typography";
 
 type CustomStatusChipsProps = {
   icon?: ReactNode;
@@ -11,13 +12,7 @@ type CustomStatusChipsProps = {
 };
 
 export default function CustomStatusChips(props: CustomStatusChipsProps) {
-  const {
-    icon,
-    children,
-    containerStyles = {},
-    textStyles = {},
-    iconStyles = {},
-  } = props;
+  const { icon, children, containerStyles = {}, textStyles = {}, iconStyles = {} } = props;
   const theme = useTheme();
 
   return (
@@ -35,11 +30,7 @@ export default function CustomStatusChips(props: CustomStatusChipsProps) {
         ...containerStyles,
       }}
     >
-      {icon && (
-        <Box sx={{ display: "flex", alignItems: "center", ...iconStyles }}>
-          {icon}
-        </Box>
-      )}
+      {icon && <Box sx={{ display: "flex", alignItems: "center", ...iconStyles }}>{icon}</Box>}
       <Text
         color={theme.palette.warning.main}
         weight="regular"

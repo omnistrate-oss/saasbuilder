@@ -1,29 +1,30 @@
-import { Box, IconButton, Stack, Typography } from "@mui/material";
-import EventMessageChip from "./EventMessageChip";
-import { createColumnHelper } from "@tanstack/react-table";
-import { AccessEvent, EventType } from "src/types/event";
 import { FC, useMemo, useState } from "react";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
-import EventTypeChip from "./EventTypeChip";
-import formatDateUTC from "src/utils/formatDateUTC";
-import { getAccessControlRoute } from "src/utils/route/access/accessRoute";
-import GridCellExpand from "../GridCellExpand/GridCellExpand";
-import DateRangePicker, {
-  initialRangeState,
-} from "../DateRangePicker/DateRangePicker";
-import { Range } from "react-date-range";
+import { Box, IconButton, Stack, Typography } from "@mui/material";
+import { createColumnHelper } from "@tanstack/react-table";
 import dayjs from "dayjs";
-import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
 import isSameOrAfter from "dayjs/plugin/isSameOrAfter";
-import DataTable from "src/components/DataTable/DataTable";
+import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
+import { Range } from "react-date-range";
 import { OnCopyProps } from "react-json-view";
-import { SetState } from "src/types/common/reactGenerics";
-import DataGridHeaderTitle from "src/components/Headers/DataGridHeaderTitle";
+
 import SearchInput from "src/components/DataGrid/SearchInput";
+import DataTable from "src/components/DataTable/DataTable";
+import DataGridHeaderTitle from "src/components/Headers/DataGridHeaderTitle";
 import RefreshWithToolTip from "src/components/RefreshWithTooltip/RefreshWithToolTip";
 import AuditLogsEventFilterDropdown from "src/components/ResourceInstance/AuditLogs/components/AuditLogsEventFilterDropdown";
+import { SetState } from "src/types/common/reactGenerics";
+import { AccessEvent, EventType } from "src/types/event";
+import formatDateUTC from "src/utils/formatDateUTC";
+import { getAccessControlRoute } from "src/utils/route/access/accessRoute";
+
+import DateRangePicker, { initialRangeState } from "../DateRangePicker/DateRangePicker";
+import GridCellExpand from "../GridCellExpand/GridCellExpand";
 import JSONView from "../JSONView/JSONView";
+
+import EventMessageChip from "./EventMessageChip";
+import EventTypeChip from "./EventTypeChip";
 
 dayjs.extend(isSameOrBefore);
 dayjs.extend(isSameOrAfter);
@@ -98,10 +99,7 @@ const EventsTableHeader: FC<EventsTableHeaderProps> = (props) => {
           width="250px"
         />
         <RefreshWithToolTip refetch={refetchEvents} disabled={isRefetching} />
-        <DateRangePicker
-          dateRange={selectedDateRange}
-          setDateRange={setSelectedDateRange}
-        />
+        <DateRangePicker dateRange={selectedDateRange} setDateRange={setSelectedDateRange} />
         {!disableTypeFilter && (
           <AuditLogsEventFilterDropdown
             selectedEventTypes={selectedEventTypes}
@@ -173,8 +171,7 @@ const EventsTable: FC<EventsTableProps> = (props) => {
   } = props;
 
   const [searchText, setSearchText] = useState("");
-  const [selectedDateRange, setSelectedDateRange] =
-    useState<Range>(initialRangeState);
+  const [selectedDateRange, setSelectedDateRange] = useState<Range>(initialRangeState);
   const [selectedEventTypes, setSelectedEventTypes] = useState<EventType[]>([]);
 
   const dataTableColumns = useMemo(() => {
@@ -237,8 +234,7 @@ const EventsTable: FC<EventsTableProps> = (props) => {
       columnHelper.accessor((row) => formatDateUTC(row.time), {
         id: "time",
         header: "Time",
-        cell: (data) =>
-          data.row.original.time ? formatDateUTC(data.row.original.time) : "-",
+        cell: (data) => (data.row.original.time ? formatDateUTC(data.row.original.time) : "-"),
       }),
 
       columnHelper.accessor("userName", {
@@ -249,8 +245,7 @@ const EventsTable: FC<EventsTableProps> = (props) => {
           const userName = data.row.original.userName;
           const orgName = data.row.original.orgName;
 
-          const isUserOmnistrateSystem =
-            userName === "System" && orgName === "System";
+          const isUserOmnistrateSystem = userName === "System" && orgName === "System";
 
           let pageLink: string;
           if (!isUserOmnistrateSystem && userId) {
@@ -272,22 +267,11 @@ const EventsTable: FC<EventsTableProps> = (props) => {
         id: "message",
         header: "Message",
         cell: (data) => {
-          return data.row.original.message ? (
-            <EventMessageChip message={data.row.original.message} />
-          ) : (
-            "-"
-          );
+          return data.row.original.message ? <EventMessageChip message={data.row.original.message} /> : "-";
         },
       }),
     ];
-  }, [
-    isRootSubscription,
-    serviceId,
-    environmentId,
-    productTierId,
-    subscriptionId,
-    hideTypeColumn,
-  ]);
+  }, [isRootSubscription, serviceId, environmentId, productTierId, subscriptionId, hideTypeColumn]);
 
   const filteredEvents = useMemo(() => {
     let filtered = events;
@@ -296,8 +280,7 @@ const EventsTable: FC<EventsTableProps> = (props) => {
       const searchTerm = searchText.toLowerCase().trim();
       filtered = filtered.filter(
         (event) =>
-          event.userName?.toLowerCase().includes(searchTerm) ||
-          event.message.toLowerCase().includes(searchTerm)
+          event.userName?.toLowerCase().includes(searchTerm) || event.message.toLowerCase().includes(searchTerm)
       );
     }
 
@@ -307,21 +290,14 @@ const EventsTable: FC<EventsTableProps> = (props) => {
       });
     }
 
-    if (
-      selectedDateRange &&
-      selectedDateRange.startDate &&
-      selectedDateRange.endDate
-    ) {
+    if (selectedDateRange && selectedDateRange.startDate && selectedDateRange.endDate) {
       const startDate = dayjs(selectedDateRange.startDate).format("YYYY-MM-DD");
       const endDate = dayjs(selectedDateRange.endDate).format("YYYY-MM-DD");
 
       filtered = filtered.filter((event) => {
         const eventDate = dayjs(event.time).format("YYYY-MM-DD");
 
-        return (
-          dayjs(eventDate).isSameOrAfter(startDate) &&
-          dayjs(eventDate).isSameOrBefore(endDate)
-        );
+        return dayjs(eventDate).isSameOrAfter(startDate) && dayjs(eventDate).isSameOrBefore(endDate);
       });
     }
 
@@ -335,9 +311,7 @@ const EventsTable: FC<EventsTableProps> = (props) => {
         rows={filteredEvents}
         renderDetailsComponent={DetailTableRowView}
         noRowsText={`No ${entityName?.toLowerCase()}s`}
-        getRowCanExpand={(rowData) =>
-          Boolean(Number(rowData.original.workflowFailures?.length) > 0)
-        }
+        getRowCanExpand={(rowData) => Boolean(Number(rowData.original.workflowFailures?.length) > 0)}
         HeaderComponent={EventsTableHeader}
         headerProps={{
           count: filteredEvents.length,

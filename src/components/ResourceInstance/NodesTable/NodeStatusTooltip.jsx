@@ -1,33 +1,23 @@
-import { Box, Stack, Tooltip, tooltipClasses, styled } from "@mui/material";
+import { Box, Stack, styled, Tooltip, tooltipClasses } from "@mui/material";
 
-import { Text } from "components/Typography/Typography";
-
+import QuestionIcon from "src/components/Icons/Question/QuestionIcon";
 import CircleCheckIcon from "components/Icons/CircleCheck/CircleCheckIcon";
 import CircleCrossIcon from "components/Icons/CircleCross/CircleCrossIcon";
-import QuestionIcon from "src/components/Icons/Question/QuestionIcon";
+import { Text } from "components/Typography/Typography";
 
-const CustomTooltip = styled(({ className, ...props }) => (
-  <Tooltip {...props} classes={{ popper: className }} />
-))({
+const CustomTooltip = styled(({ className, ...props }) => <Tooltip {...props} classes={{ popper: className }} />)({
   [`& .${tooltipClasses.tooltip}`]: {
     backgroundColor: "#FFFFFF",
     padding: "12px",
     borderRadius: "8px",
     minWidth: "180px",
-    boxShadow:
-      "0px 4px 6px -2px rgba(16, 24, 40, 0.03), 0px 12px 16px -4px rgba(16, 24, 40, 0.08)",
+    boxShadow: "0px 4px 6px -2px rgba(16, 24, 40, 0.03), 0px 12px 16px -4px rgba(16, 24, 40, 0.08)",
     border: "1px solid var(--Colors-Border-border-primary, #D0D5DD)",
   },
 });
 
 const NodeStatusTooltip = ({ isJob = false, detailedHealth, children }) => {
-  const {
-    ConnectivityStatus,
-    DiskHealth,
-    NodeHealth,
-    ProcessHealth,
-    ProcessLiveness,
-  } = detailedHealth;
+  const { ConnectivityStatus, DiskHealth, NodeHealth, ProcessHealth, ProcessLiveness } = detailedHealth;
 
   const configurationList = [
     {
@@ -57,29 +47,17 @@ const NodeStatusTooltip = ({ isJob = false, detailedHealth, children }) => {
       // disableFocusListener
       title={
         <>
-          <Text
-            size="xsmall"
-            weight="medium"
-            color={"#344054"}
-            sx={{ mb: "8px" }}
-          >
+          <Text size="xsmall" weight="medium" color={"#344054"} sx={{ mb: "8px" }}>
             Health Status
           </Text>
           {configurationList.map((item, index) => (
-            <Stack
-              key={index}
-              direction="row"
-              gap="12px"
-              sx={{ paddingTop: "6px" }}
-            >
+            <Stack key={index} direction="row" gap="12px" sx={{ paddingTop: "6px" }}>
               {isJob ? (
                 <QuestionIcon />
               ) : item.status === "HEALTHY" ? (
                 <CircleCheckIcon />
               ) : (
-                <CircleCrossIcon
-                  color={item.status === "UNHEALTHY" ? "#F44336" : "#808080"}
-                />
+                <CircleCrossIcon color={item.status === "UNHEALTHY" ? "#F44336" : "#808080"} />
               )}
               <Text size="xsmall" weight="regular" color="rgba(52, 64, 84, 1)">
                 {item.text}

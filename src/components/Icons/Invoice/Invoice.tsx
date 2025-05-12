@@ -1,12 +1,5 @@
 const InvoiceIcon = (props) => (
-  <svg
-    width="40"
-    height="40"
-    viewBox="0 0 40 40"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-    {...props}
-  >
+  <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
     <mask
       id="mask0_1635_1025"
       style={{ maskType: "alpha" }}
@@ -37,14 +30,7 @@ const InvoiceIcon = (props) => (
       strokeLinejoin="round"
     />
     <defs>
-      <linearGradient
-        id="paint0_linear_1635_1025"
-        x1="20"
-        y1="0"
-        x2="20"
-        y2="40"
-        gradientUnits="userSpaceOnUse"
-      >
+      <linearGradient id="paint0_linear_1635_1025" x1="20" y1="0" x2="20" y2="40" gradientUnits="userSpaceOnUse">
         <stop stopOpacity="0.4" />
         <stop offset="1" />
       </linearGradient>

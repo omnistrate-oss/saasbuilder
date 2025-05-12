@@ -8,9 +8,7 @@ export const FieldCell = ({ children }) => (
   </div>
 );
 
-export const FieldTitleCell = ({ children }) => (
-  <div className="lg:pb-5 lg:border-b border-[#E9EAEB]">{children}</div>
-);
+export const FieldTitleCell = ({ children }) => <div className="lg:pb-5 lg:border-b border-[#E9EAEB]">{children}</div>;
 
 export const ProfileValidationSchema = yup.object({
   name: yup.string().required("Name is required"),
@@ -36,10 +34,7 @@ export const BillingAddressValidationSchema = yup.object({
 
 export const PasswordValidationSchema = yup.object({
   currentPassword: yup.string().required("Current Password is required"),
-  newPassword: yup
-    .string()
-    .required("New Password is required")
-    .matches(passwordRegex, passwordText),
+  newPassword: yup.string().required("New Password is required").matches(passwordRegex, passwordText),
   confirmPassword: yup
     .string()
     .required("Confirm Password is required")

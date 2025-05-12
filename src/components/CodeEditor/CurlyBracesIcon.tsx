@@ -1,12 +1,6 @@
 const CurlyBracesIcon = () => {
   return (
-    <svg
-      width="18"
-      height="18"
-      viewBox="0 0 18 18"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
+    <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path
         d="M11.0236 10.0654C10.5974 10.0654 10.252 9.71984 10.252 9.29367C10.252 8.8675 10.5974 8.52197 11.0236 8.52197C11.4498 8.52197 11.7953 8.8675 11.7953 9.29367C11.7953 9.71984 11.4498 10.0654 11.0236 10.0654Z"
         fill="#0093B0"

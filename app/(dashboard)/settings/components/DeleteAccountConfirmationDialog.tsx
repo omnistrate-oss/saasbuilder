@@ -1,5 +1,6 @@
 "use client";
 
+import { FC, useState } from "react";
 import CloseIcon from "@mui/icons-material/Close";
 import {
   Dialog as MuiDialog,
@@ -10,15 +11,15 @@ import {
   Stack,
   styled,
 } from "@mui/material";
-import Button from "components/Button/Button";
-import Form from "components/FormElements/Form/Form";
-import { Text } from "src/components/Typography/Typography";
-import DeleteOutlinedIcon from "src/components/Icons/DeleteOutlined/DeleteOutlined";
+
+import CustomCheckbox from "src/components/Checkbox/Checkbox";
 import LoadingSpinnerSmall from "src/components/CircularProgress/CircularProgress";
 import ArrowBulletIcon from "src/components/Icons/ArrowIcon/ArrowBulletIcon";
+import DeleteOutlinedIcon from "src/components/Icons/DeleteOutlined/DeleteOutlined";
+import { Text } from "src/components/Typography/Typography";
 import { useProviderOrgDetails } from "src/providers/ProviderOrgDetailsProvider";
-import CustomCheckbox from "src/components/Checkbox/Checkbox";
-import { FC, useState } from "react";
+import Button from "components/Button/Button";
+import Form from "components/FormElements/Form/Form";
 
 const Dialog = styled(MuiDialog)(() => ({
   [`& .MuiPaper-root `]: {
@@ -67,9 +68,7 @@ type DeleteAccountConfirmationDialogProps = {
   handleSubmit: () => void;
 };
 
-const DeleteAccountConfirmationDialog: FC<
-  DeleteAccountConfirmationDialogProps
-> = (props) => {
+const DeleteAccountConfirmationDialog: FC<DeleteAccountConfirmationDialogProps> = (props) => {
   const { open = false, handleClose, isLoading, handleSubmit } = props;
   const { orgName } = useProviderOrgDetails();
   const [checked, setChecked] = useState(false);
@@ -84,11 +83,7 @@ const DeleteAccountConfirmationDialog: FC<
       {/*@ts-ignore */}
       <Form onSubmit={handleSubmit}>
         <DialogTitle>
-          <Stack
-            direction="row"
-            alignItems="center"
-            justifyContent="space-between"
-          >
+          <Stack direction="row" alignItems="center" justifyContent="space-between">
             <Stack direction="row" alignItems="center" gap="16px">
               <DeleteOutlinedIcon />
               <Text size="large" weight="bold">
@@ -118,14 +113,8 @@ const DeleteAccountConfirmationDialog: FC<
               Activity logs associated with your account
             </ListItem>
           </List>
-          <Text
-            size="medium"
-            weight="regular"
-            color="#374151"
-            sx={{ marginTop: "20px" }}
-          >
-            You will also lose access to all {orgName} subscriptions. This
-            action is permanent and cannot be undone.
+          <Text size="medium" weight="regular" color="#374151" sx={{ marginTop: "20px" }}>
+            You will also lose access to all {orgName} subscriptions. This action is permanent and cannot be undone.
           </Text>
           <Stack marginTop="20px" direction="row" alignItems="start">
             <CustomCheckbox
@@ -137,18 +126,12 @@ const DeleteAccountConfirmationDialog: FC<
               sx={{ padding: "0px", marginRight: "8px" }}
             />
             <Text size="small" weight="medium" color="#414651">
-              I understand that deleting my account is permanent and
-              irreversible.
+              I understand that deleting my account is permanent and irreversible.
             </Text>
           </Stack>
         </DialogContent>
         <DialogActions>
-          <Button
-            variant="outlined"
-            size="large"
-            disabled={isLoading}
-            onClick={onClose}
-          >
+          <Button variant="outlined" size="large" disabled={isLoading} onClick={onClose}>
             Cancel
           </Button>
           <Button

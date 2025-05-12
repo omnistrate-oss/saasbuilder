@@ -1,11 +1,52 @@
 "use client";
 
-import { Box, Stack } from "@mui/material";
 import { useMemo, useState } from "react";
+import { Box, Stack } from "@mui/material";
 import { useMutation } from "@tanstack/react-query";
 import { createColumnHelper } from "@tanstack/react-table";
-import useInstances from "./hooks/useInstances";
+
+import { deleteResourceInstance } from "src/api/resourceInstance";
+import LoadIndicatorHigh from "src/components/Icons/LoadIndicator/LoadIndicatorHigh";
+import LoadIndicatorIdle from "src/components/Icons/LoadIndicator/LoadIndicatorIdle";
+import LoadIndicatorNormal from "src/components/Icons/LoadIndicator/LoadIndicatorNormal";
+import { getInitialFilterState } from "src/components/InstanceFilters/InstanceFilters";
+import InstanceHealthStatusChip, {
+  getInstanceHealthStatus,
+} from "src/components/InstanceHealthStatusChip/InstanceHealthStatusChip";
+import InstanceLicenseStatusChip from "src/components/InstanceLicenseStatusChip/InstanceLicenseStatusChip";
+import { BlackTooltip } from "src/components/Tooltip/Tooltip";
+import { cloudProviderLongLogoMap } from "src/constants/cloudProviders";
+import { getResourceInstanceStatusStylesAndLabel } from "src/constants/statusChipStyles/resourceInstanceStatus";
+import useSnackbar from "src/hooks/useSnackbar";
+import { useGlobalData } from "src/providers/GlobalDataProvider";
+import { ResourceInstance, ResourceInstanceNetworkTopology } from "src/types/resourceInstance";
+import { isCloudAccountInstance } from "src/utils/access/byoaResource";
+import formatDateUTC from "src/utils/formatDateUTC";
+import { getInstanceDetailsRoute } from "src/utils/routes";
+import CapacityDialog from "components/CapacityDialog/CapacityDialog";
+import DataGridText from "components/DataGrid/DataGridText";
+import DataTable from "components/DataTable/DataTable";
+import GenerateTokenDialog from "components/GenerateToken/GenerateTokenDialog";
+import GridCellExpand from "components/GridCellExpand/GridCellExpand";
+import RegionIcon from "components/Region/RegionIcon";
+import CreateInstanceModal from "components/ResourceInstance/CreateInstanceModal/CreateInstanceModal";
+import AccessSideRestoreInstance from "components/RestoreInstance/AccessSideRestoreInstance";
+import ServiceNameWithLogo from "components/ServiceNameWithLogo/ServiceNameWithLogo";
+import StatusChip from "components/StatusChip/StatusChip";
+import TextConfirmationDialog from "components/TextConfirmationDialog/TextConfirmationDialog";
+
+import useBillingDetails from "../billing/hooks/useBillingDetails";
+import useBillingStatus from "../billing/hooks/useBillingStatus";
+import FullScreenDrawer from "../components/FullScreenDrawer/FullScreenDrawer";
+import InstancesIcon from "../components/Icons/InstancesIcon";
+import PageContainer from "../components/Layout/PageContainer";
+import PageTitle from "../components/Layout/PageTitle";
+
 import InstanceForm from "./components/InstanceForm";
+import InstancesTableHeader from "./components/InstancesTableHeader";
+import StatusCell from "./components/StatusCell";
+import useInstances from "./hooks/useInstances";
+import { loadStatusMap } from "./constants";
 import {
   FilterCategorySchema,
   getFilteredInstances,
@@ -14,45 +55,6 @@ import {
   getMainResourceFromInstance,
   getRowBorderStyles,
 } from "./utils";
-import PageTitle from "../components/Layout/PageTitle";
-import InstancesIcon from "../components/Icons/InstancesIcon";
-import PageContainer from "../components/Layout/PageContainer";
-import InstancesTableHeader from "./components/InstancesTableHeader";
-import FullScreenDrawer from "../components/FullScreenDrawer/FullScreenDrawer";
-import useSnackbar from "src/hooks/useSnackbar";
-import formatDateUTC from "src/utils/formatDateUTC";
-import { ResourceInstance, ResourceInstanceNetworkTopology } from "src/types/resourceInstance";
-import { useGlobalData } from "src/providers/GlobalDataProvider";
-
-import { deleteResourceInstance } from "src/api/resourceInstance";
-import { getResourceInstanceStatusStylesAndLabel } from "src/constants/statusChipStyles/resourceInstanceStatus";
-import RegionIcon from "components/Region/RegionIcon";
-import DataTable from "components/DataTable/DataTable";
-import StatusChip from "components/StatusChip/StatusChip";
-import DataGridText from "components/DataGrid/DataGridText";
-import GridCellExpand from "components/GridCellExpand/GridCellExpand";
-import CapacityDialog from "components/CapacityDialog/CapacityDialog";
-import GenerateTokenDialog from "components/GenerateToken/GenerateTokenDialog";
-import ServiceNameWithLogo from "components/ServiceNameWithLogo/ServiceNameWithLogo";
-import AccessSideRestoreInstance from "components/RestoreInstance/AccessSideRestoreInstance";
-import TextConfirmationDialog from "components/TextConfirmationDialog/TextConfirmationDialog";
-import CreateInstanceModal from "components/ResourceInstance/CreateInstanceModal/CreateInstanceModal";
-import { getInitialFilterState } from "src/components/InstanceFilters/InstanceFilters";
-import InstanceHealthStatusChip, {
-  getInstanceHealthStatus,
-} from "src/components/InstanceHealthStatusChip/InstanceHealthStatusChip";
-import { getInstanceDetailsRoute } from "src/utils/routes";
-import { loadStatusMap } from "./constants";
-import { isCloudAccountInstance } from "src/utils/access/byoaResource";
-import { BlackTooltip } from "src/components/Tooltip/Tooltip";
-import LoadIndicatorIdle from "src/components/Icons/LoadIndicator/LoadIndicatorIdle";
-import LoadIndicatorNormal from "src/components/Icons/LoadIndicator/LoadIndicatorNormal";
-import LoadIndicatorHigh from "src/components/Icons/LoadIndicator/LoadIndicatorHigh";
-import StatusCell from "./components/StatusCell";
-import useBillingDetails from "../billing/hooks/useBillingDetails";
-import { cloudProviderLongLogoMap } from "src/constants/cloudProviders";
-import InstanceLicenseStatusChip from "src/components/InstanceLicenseStatusChip/InstanceLicenseStatusChip";
-import useBillingStatus from "../billing/hooks/useBillingStatus";
 
 const columnHelper = createColumnHelper<ResourceInstance>();
 type Overlay =
@@ -287,12 +289,7 @@ const InstancesPage = () => {
           const licenseDetails = data.cell.getValue();
           const licenseExpirationDate = licenseDetails?.expirationDate;
 
-          return (
-            <InstanceLicenseStatusChip
-              expirationDate={licenseExpirationDate}
-              showExpirationDateTooltip={true}
-            />
-          );
+          return <InstanceLicenseStatusChip expirationDate={licenseExpirationDate} showExpirationDateTooltip={true} />;
         },
       }),
 

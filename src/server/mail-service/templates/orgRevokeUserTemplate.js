@@ -8,12 +8,7 @@ async function getOrgRevokeUserMailContent(revokeUserEventObj, orgLogoURL) {
 
   const subject = `Access revoked for ${userName}'s subscription on ${serviceName} service`;
 
-  const templatePath = path.resolve(
-    __dirname,
-    "..",
-    "ejsTemplates",
-    "revokeAccess.ejs"
-  );
+  const templatePath = path.resolve(__dirname, "..", "ejsTemplates", "revokeAccess.ejs");
 
   const baseURL = getSaaSDomainURL();
 

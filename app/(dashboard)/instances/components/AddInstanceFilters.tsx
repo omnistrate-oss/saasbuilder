@@ -1,19 +1,21 @@
+import { useState } from "react";
 import { ChevronLeft } from "@mui/icons-material";
 import { Box, MenuItem, MenuList, Stack, styled } from "@mui/material";
-import { useState } from "react";
-import SearchLens from "src/components/Icons/SearchLens/SearchLens";
-import { themeConfig } from "src/themeConfig";
-import Checkbox from "src/components/Checkbox/Checkbox";
-import FilterFunnel from "src/components/Icons/Filter/FilterFunnel";
-import { SetState } from "src/types/common/reactGenerics";
+
 import Button from "src/components/Button/Button";
+import Checkbox from "src/components/Checkbox/Checkbox";
 import {
   DateRange,
   DateTimeRangePickerStatic,
   initialRangeState,
 } from "src/components/DateRangePicker/DateTimeRangePickerStatic";
-import { FilterCategorySchema } from "../utils";
+import FilterFunnel from "src/components/Icons/Filter/FilterFunnel";
+import SearchLens from "src/components/Icons/SearchLens/SearchLens";
 import { PopoverDynamicHeight } from "src/components/Popover/Popover";
+import { themeConfig } from "src/themeConfig";
+import { SetState } from "src/types/common/reactGenerics";
+
+import { FilterCategorySchema } from "../utils";
 
 const StyledIconCard = styled(Box)({
   padding: "8px",
@@ -89,8 +91,7 @@ export const SelectedCategoryOptions = ({
   handleRemoveCategory,
   setSelectedFilters,
 }: SelectedCategoryOptionsProps) => {
-  const [selectedOptionsSet, setSelectedOptionsSet] =
-    useState<Set<string>>(initialSelection);
+  const [selectedOptionsSet, setSelectedOptionsSet] = useState<Set<string>>(initialSelection);
 
   const handleOptionToggle = (value: string) => {
     setSelectedOptionsSet((prev) => {
@@ -155,15 +156,10 @@ export const SelectedCategoryOptions = ({
             }}
           />
         </StyledIconCard>
-        <p className="text-base font-semibold text-purple-600">
-          Select {selectedCategory.label}
-        </p>
+        <p className="text-base font-semibold text-purple-600">Select {selectedCategory.label}</p>
       </Stack>
 
-      <MenuList
-        disablePadding
-        sx={{ paddingBottom: "10px", paddingTop: "4px" }}
-      >
+      <MenuList disablePadding sx={{ paddingBottom: "10px", paddingTop: "4px" }}>
         {selectedCategory?.options?.map((option, i) => (
           <MenuItem
             sx={{
@@ -220,20 +216,11 @@ export const SelectedCategoryOptions = ({
           Clear
         </Button>
 
-        <Stack
-          direction="row"
-          justifyContent="flex-end"
-          alignItems="center"
-          gap="12px"
-        >
+        <Stack direction="row" justifyContent="flex-end" alignItems="center" gap="12px">
           <Button variant="outlined" onClick={handleCancel}>
             Cancel
           </Button>
-          <Button
-            variant="contained"
-            onClick={handleApply}
-            disabled={!selectedCategory?.options?.length}
-          >
+          <Button variant="contained" onClick={handleApply} disabled={!selectedCategory?.options?.length}>
             Apply
           </Button>
         </Stack>
@@ -258,10 +245,7 @@ const SelectCategory = ({ filterOptionsMap, handleSelectCategory }) => {
         </StyledIconCard>
         <p className="text-base font-semibold text-purple-600">Properties</p>
       </Stack>
-      <MenuList
-        disablePadding
-        sx={{ paddingBottom: "10px", paddingTop: "4px" }}
-      >
+      <MenuList disablePadding sx={{ paddingBottom: "10px", paddingTop: "4px" }}>
         {Object.keys(filterOptionsMap)?.map((category, i) => (
           <MenuItem
             sx={{
@@ -289,14 +273,9 @@ type AddInstanceFiltersProps = {
   selectedFilters: Record<string, FilterCategorySchema>;
 };
 
-const AddInstanceFilters = ({
-  setSelectedFilters,
-  filterOptionsMap,
-  selectedFilters,
-}: AddInstanceFiltersProps) => {
+const AddInstanceFilters = ({ setSelectedFilters, filterOptionsMap, selectedFilters }: AddInstanceFiltersProps) => {
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
-  const [selectedCategory, setSelectedCategory] =
-    useState<FilterCategorySchema | null>(null);
+  const [selectedCategory, setSelectedCategory] = useState<FilterCategorySchema | null>(null);
 
   const handleOpen = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -352,11 +331,7 @@ const AddInstanceFilters = ({
                   handleRemoveCategory={handleRemoveCategory}
                   setSelectedFilters={setSelectedFilters}
                   initialSelection={
-                    new Set(
-                      selectedFilters[selectedCategory.name]?.options?.map(
-                        (option) => option.value
-                      )
-                    )
+                    new Set(selectedFilters[selectedCategory.name]?.options?.map((option) => option.value))
                   }
                 />
               )}
@@ -369,10 +344,7 @@ const AddInstanceFilters = ({
               )}
             </>
           ) : (
-            <SelectCategory
-              filterOptionsMap={filterOptionsMap}
-              handleSelectCategory={handleSelectCategory}
-            />
+            <SelectCategory filterOptionsMap={filterOptionsMap} handleSelectCategory={handleSelectCategory} />
           )}
         </div>
       </PopoverDynamicHeight>

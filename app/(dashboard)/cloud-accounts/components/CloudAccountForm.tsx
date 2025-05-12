@@ -1,46 +1,35 @@
 "use client";
 
 import { useMemo } from "react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import CloudProviderRadio from "app/(dashboard)/components/CloudProviderRadio/CloudProviderRadio";
+import SubscriptionMenu from "app/(dashboard)/components/SubscriptionMenu/SubscriptionMenu";
+import SubscriptionPlanRadio from "app/(dashboard)/components/SubscriptionPlanRadio/SubscriptionPlanRadio";
+import { getServiceMenuItems } from "app/(dashboard)/instances/utils";
 import { useFormik } from "formik";
 import { useSelector } from "react-redux";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 
-import { CloudAccountValidationSchema } from "../constants";
-import { FormConfiguration } from "components/DynamicForm/types";
-import GridDynamicForm from "components/DynamicForm/GridDynamicForm";
-import LoadingSpinner from "components/LoadingSpinner/LoadingSpinner";
+import { createResourceInstance, getResourceInstanceDetails } from "src/api/resourceInstance";
+import { CLOUD_PROVIDERS, cloudProviderLongLogoMap } from "src/constants/cloudProviders";
 import useSnackbar from "src/hooks/useSnackbar";
-import {
-  createResourceInstance,
-  getResourceInstanceDetails,
-} from "src/api/resourceInstance";
 import { useGlobalData } from "src/providers/GlobalDataProvider";
-import {
-  getAwsBootstrapArn,
-  getGcpServiceEmail,
-} from "src/utils/accountConfig/accountConfig";
-import { ServiceOffering } from "src/types/serviceOffering";
 import { selectUserrootData } from "src/slices/userDataSlice";
-import {
-  CLOUD_PROVIDERS,
-  cloudProviderLongLogoMap,
-} from "src/constants/cloudProviders";
-
-import { getServiceMenuItems } from "app/(dashboard)/instances/utils";
-import SubscriptionMenu from "app/(dashboard)/components/SubscriptionMenu/SubscriptionMenu";
-import CloudProviderRadio from "app/(dashboard)/components/CloudProviderRadio/CloudProviderRadio";
-import SubscriptionPlanRadio from "app/(dashboard)/components/SubscriptionPlanRadio/SubscriptionPlanRadio";
-import CustomLabelDescription from "./CustomLabelDescription";
-import {
-  getInitialValues,
-  getValidSubscriptionForInstanceCreation,
-} from "../utils";
+import { ResourceInstance } from "src/types/resourceInstance";
+import { ServiceOffering } from "src/types/serviceOffering";
+import { getAwsBootstrapArn, getGcpServiceEmail } from "src/utils/accountConfig/accountConfig";
 import {
   ACCOUNT_CREATION_METHOD_LABELS,
   CLOUD_ACCOUNT_CREATION_METHOD_OPTIONS,
   CLOUD_PROVIDER_DEFAULT_CREATION_METHOD,
 } from "src/utils/constants/accountConfig";
-import { ResourceInstance } from "src/types/resourceInstance";
+import GridDynamicForm from "components/DynamicForm/GridDynamicForm";
+import { FormConfiguration } from "components/DynamicForm/types";
+import LoadingSpinner from "components/LoadingSpinner/LoadingSpinner";
+
+import { CloudAccountValidationSchema } from "../constants";
+import { getInitialValues, getValidSubscriptionForInstanceCreation } from "../utils";
+
+import CustomLabelDescription from "./CustomLabelDescription";
 
 const CloudAccountForm = ({
   initialFormValues, // These are from URL Params
@@ -94,16 +83,11 @@ const CloudAccountForm = ({
 
   const byoaServiceOfferings = useMemo(() => {
     return serviceOfferings.filter(
-      (offering) =>
-        offering.serviceModelType === "BYOA" ||
-        offering.serviceModelType === "ON_PREM_COPILOT"
+      (offering) => offering.serviceModelType === "BYOA" || offering.serviceModelType === "ON_PREM_COPILOT"
     );
   }, [serviceOfferings]);
 
-  const byoaServiceOfferingsObj: Record<
-    string,
-    Record<string, ServiceOffering>
-  > = useMemo(() => {
+  const byoaServiceOfferingsObj: Record<string, Record<string, ServiceOffering>> = useMemo(() => {
     return byoaServiceOfferings.reduce((acc, offering) => {
       acc[offering.serviceId] = acc[offering.serviceId] || {};
       acc[offering.serviceId][offering.productTierID] = offering;
@@ -113,9 +97,7 @@ const CloudAccountForm = ({
 
   // Find Subscriptions for BYOA Service Offerings
   const byoaSubscriptions = useMemo(() => {
-    return subscriptions.filter(
-      (sub) => byoaServiceOfferingsObj[sub.serviceId]?.[sub.productTierId]
-    );
+    return subscriptions.filter((sub) => byoaServiceOfferingsObj[sub.serviceId]?.[sub.productTierId]);
   }, [subscriptions, byoaServiceOfferingsObj]);
 
   const createCloudAccountMutation = useMutation(createResourceInstance, {
@@ -154,9 +136,7 @@ const CloudAccountForm = ({
 
         if (values.cloudProvider === "aws") {
           result_params.aws_account_id = values.awsAccountId;
-          result_params.aws_bootstrap_role_arn = getAwsBootstrapArn(
-            values.awsAccountId
-          );
+          result_params.aws_bootstrap_role_arn = getAwsBootstrapArn(values.awsAccountId);
         } else if (values.cloudProvider === "gcp") {
           result_params.gcp_project_id = values.gcpProjectId;
           result_params.gcp_project_number = values.gcpProjectNumber;
@@ -240,10 +220,7 @@ const CloudAccountForm = ({
           gcp_project_id: values.gcpProjectId,
           gcp_project_number: values.gcpProjectNumber,
           account_configuration_method: values.accountConfigurationMethod,
-          gcp_service_account_email: getGcpServiceEmail(
-            values.gcpProjectId,
-            selectUser?.orgId.toLowerCase()
-          ),
+          gcp_service_account_email: getGcpServiceEmail(values.gcpProjectId, selectUser?.orgId.toLowerCase()),
         };
       } else {
         requestParams = {
@@ -285,12 +262,9 @@ const CloudAccountForm = ({
     const { serviceId, servicePlanId, cloudProvider } = values;
 
     const serviceMenuItems = getServiceMenuItems(byoaServiceOfferings);
-    const subscriptionMenuItems = byoaSubscriptions.filter(
-      (sub) => sub.productTierId === servicePlanId
-    );
+    const subscriptionMenuItems = byoaSubscriptions.filter((sub) => sub.productTierId === servicePlanId);
 
-    const accountConfigurationMethods =
-      CLOUD_ACCOUNT_CREATION_METHOD_OPTIONS[values.cloudProvider] ?? [];
+    const accountConfigurationMethods = CLOUD_ACCOUNT_CREATION_METHOD_OPTIONS[values.cloudProvider] ?? [];
     return {
       footer: {
         submitButton: {
@@ -304,8 +278,7 @@ const CloudAccountForm = ({
             {
               dataTestId: "service-name-select",
               label: "Service Name",
-              subLabel:
-                "Select the service you want to deploy in this cloud account",
+              subLabel: "Select the service you want to deploy in this cloud account",
               name: "serviceId",
               type: "select",
               required: true,
@@ -333,17 +306,13 @@ const CloudAccountForm = ({
                 const servicePlanId = subscription?.productTierId || "";
                 const subscriptionId = subscription?.id || "";
 
-                const offering =
-                  byoaServiceOfferingsObj[serviceId]?.[servicePlanId];
+                const offering = byoaServiceOfferingsObj[serviceId]?.[servicePlanId];
                 const cloudProvider = offering?.cloudProviders?.[0] || "";
 
                 setFieldValue("servicePlanId", servicePlanId);
                 setFieldValue("subscriptionId", subscriptionId);
                 setFieldValue("cloudProvider", cloudProvider);
-                setFieldValue(
-                  "accountConfigurationMethod",
-                  cloudProvider === "aws" ? "CloudFormation" : "Terraform"
-                );
+                setFieldValue("accountConfigurationMethod", cloudProvider === "aws" ? "CloudFormation" : "Terraform");
 
                 // Set Field Touched to False
                 formData.setFieldTouched("servicePlanId", false);
@@ -360,9 +329,7 @@ const CloudAccountForm = ({
               customComponent: (
                 <SubscriptionPlanRadio
                   disabled={formMode !== "create"}
-                  servicePlans={Object.values(
-                    byoaServiceOfferingsObj[serviceId] || {}
-                  ).sort((a, b) =>
+                  servicePlans={Object.values(byoaServiceOfferingsObj[serviceId] || {}).sort((a, b) =>
                     a.productTierName.localeCompare(b.productTierName)
                   )}
                   name="servicePlanId"
@@ -372,47 +339,34 @@ const CloudAccountForm = ({
                     servicePlanId: string,
                     subscriptionId?: string // This is very specific to when we subscribe to the plan for the first time
                   ) => {
-                    const offering =
-                      byoaServiceOfferingsObj[serviceId]?.[servicePlanId];
+                    const offering = byoaServiceOfferingsObj[serviceId]?.[servicePlanId];
 
                     const cloudProvider = offering?.cloudProviders?.[0] || "";
 
                     setFieldValue("cloudProvider", cloudProvider);
-                    setFieldValue(
-                      "accountConfigurationMethod",
-                      CLOUD_PROVIDER_DEFAULT_CREATION_METHOD[cloudProvider]
-                    );
+                    setFieldValue("accountConfigurationMethod", CLOUD_PROVIDER_DEFAULT_CREATION_METHOD[cloudProvider]);
 
                     const filteredSubscriptions = byoaSubscriptions.filter(
                       (sub) => sub.productTierId === servicePlanId
                     );
-                    const rootSubscription = filteredSubscriptions.find(
-                      (sub) => sub.roleType === "root"
-                    );
+                    const rootSubscription = filteredSubscriptions.find((sub) => sub.roleType === "root");
 
                     setFieldValue(
                       "subscriptionId",
-                      subscriptionId ||
-                        rootSubscription?.id ||
-                        filteredSubscriptions[0]?.id ||
-                        ""
+                      subscriptionId || rootSubscription?.id || filteredSubscriptions[0]?.id || ""
                     );
 
                     // Set Field Touched to False
                     formData.setFieldTouched("subscriptionId", false);
                     formData.setFieldTouched("cloudProvider", false);
                   }}
-                  serviceSubscriptions={subscriptions.filter(
-                    (subscription) => subscription.serviceId === serviceId
-                  )}
+                  serviceSubscriptions={subscriptions.filter((subscription) => subscription.serviceId === serviceId)}
                   isPaymentConfigured={isPaymentConfigured}
                   instances={allInstances}
                   isCloudAccountForm={true}
                 />
               ),
-              previewValue:
-                serviceOfferingsObj[values.serviceId]?.[values.servicePlanId]
-                  ?.productTierName,
+              previewValue: serviceOfferingsObj[values.serviceId]?.[values.servicePlanId]?.productTierName,
             },
             {
               dataTestId: "subscription-select",
@@ -450,18 +404,12 @@ const CloudAccountForm = ({
               isHidden: !serviceId || !servicePlanId,
               customComponent: (
                 <CloudProviderRadio
-                  cloudProviders={
-                    serviceOfferingsObj[serviceId]?.[servicePlanId]
-                      ?.cloudProviders || []
-                  }
+                  cloudProviders={serviceOfferingsObj[serviceId]?.[servicePlanId]?.cloudProviders || []}
                   name="cloudProvider"
                   formData={formData}
                   // @ts-ignore
                   onChange={(cloudProvider: string) => {
-                    setFieldValue(
-                      "accountConfigurationMethod",
-                      CLOUD_PROVIDER_DEFAULT_CREATION_METHOD[cloudProvider]
-                    );
+                    setFieldValue("accountConfigurationMethod", CLOUD_PROVIDER_DEFAULT_CREATION_METHOD[cloudProvider]);
                   }}
                   disabled={formMode !== "create"}
                 />
@@ -476,8 +424,7 @@ const CloudAccountForm = ({
             {
               dataTestId: "account-configuration-method-select",
               label: "Account Configuration Method",
-              subLabel:
-                "Choose a method from among the options to configure your cloud provider account",
+              subLabel: "Choose a method from among the options to configure your cloud provider account",
               name: "accountConfigurationMethod",
               type: "select",
               required: true,
@@ -487,10 +434,7 @@ const CloudAccountForm = ({
                 value: option,
                 label: ACCOUNT_CREATION_METHOD_LABELS[option],
               })),
-              previewValue:
-                ACCOUNT_CREATION_METHOD_LABELS[
-                  values.accountConfigurationMethod
-                ],
+              previewValue: ACCOUNT_CREATION_METHOD_LABELS[values.accountConfigurationMethod],
             },
             {
               dataTestId: "aws-account-id-input",
@@ -502,8 +446,7 @@ const CloudAccountForm = ({
               required: true,
               disabled: formMode !== "create",
               isHidden: values.cloudProvider !== "aws",
-              previewValue:
-                cloudProvider === "aws" ? values.awsAccountId : null,
+              previewValue: cloudProvider === "aws" ? values.awsAccountId : null,
             },
             {
               dataTestId: "gcp-project-id-input",
@@ -515,39 +458,32 @@ const CloudAccountForm = ({
               required: true,
               disabled: formMode !== "create",
               isHidden: values.cloudProvider !== "gcp",
-              previewValue:
-                cloudProvider === "gcp" ? values.gcpProjectId : null,
+              previewValue: cloudProvider === "gcp" ? values.gcpProjectId : null,
             },
             {
               dataTestId: "gcp-project-number-input",
               label: "GCP Project Number",
               subLabel: "GCP Project Number to use for the account",
-              description: (
-                <CustomLabelDescription variant="gcpProjectNumber" />
-              ),
+              description: <CustomLabelDescription variant="gcpProjectNumber" />,
               name: "gcpProjectNumber",
               type: "text",
               required: true,
               disabled: formMode !== "create",
               isHidden: values.cloudProvider !== "gcp",
-              previewValue:
-                cloudProvider === "gcp" ? values.gcpProjectNumber : null,
+              previewValue: cloudProvider === "gcp" ? values.gcpProjectNumber : null,
             },
 
             {
               dataTestId: "azure-subscription-id-input",
               label: "Azure Subscription ID",
               subLabel: "Azure Subscription ID to use for the account",
-              description: (
-                <CustomLabelDescription variant="azureSubscriptionId" />
-              ),
+              description: <CustomLabelDescription variant="azureSubscriptionId" />,
               name: "azureSubscriptionId",
               type: "text",
               required: true,
               disabled: formMode !== "create",
               isHidden: values.cloudProvider !== "azure",
-              previewValue:
-                cloudProvider === "azure" ? values.azureSubscriptionId : null,
+              previewValue: cloudProvider === "azure" ? values.azureSubscriptionId : null,
             },
             {
               dataTestId: "azure-tenant-id-input",
@@ -559,8 +495,7 @@ const CloudAccountForm = ({
               required: true,
               disabled: formMode !== "create",
               isHidden: values.cloudProvider !== "azure",
-              previewValue:
-                cloudProvider === "azure" ? values.azureTenantId : null,
+              previewValue: cloudProvider === "azure" ? values.azureTenantId : null,
             },
           ],
         },

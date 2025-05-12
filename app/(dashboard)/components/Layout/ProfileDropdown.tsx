@@ -1,18 +1,17 @@
-import Image from "next/image";
 import { useState } from "react";
-import { useSelector } from "react-redux";
+import Image from "next/image";
 import { Box, Stack, styled } from "@mui/material";
+import { useSelector } from "react-redux";
 
-import { colors } from "src/themeConfig";
 import useLogout from "src/hooks/useLogout";
 import { styleConfig } from "src/providerConfig";
 import { selectUserData } from "src/slices/userDataSlice";
-
+import { colors } from "src/themeConfig";
+import LogoutIcon from "components/Icons/Logout/LogoutIcon";
 import Menu from "components/Menu/Menu";
 import MenuItem from "components/MenuItem/MenuItem";
-import { Text } from "components/Typography/Typography";
-import LogoutIcon from "components/Icons/Logout/LogoutIcon";
 import EllipsisTooltipText from "components/Tooltip/EllipsisTooltip";
+import { Text } from "components/Typography/Typography";
 
 import profile_icon from "public/assets/images/dashboard/avatar.jpeg";
 
@@ -88,12 +87,7 @@ const ProfileDropdown = () => {
           }}
           disableRipple
         >
-          <Stack
-            direction="row"
-            justifyContent="flex-start"
-            alignItems="center"
-            gap="12px"
-          >
+          <Stack direction="row" justifyContent="flex-start" alignItems="center" gap="12px">
             <Avatar
               src={profile_icon}
               alt="avatar-two"
@@ -105,18 +99,10 @@ const ProfileDropdown = () => {
             />
             <Stack sx={{ flex: 1, overflow: "hidden" }}>
               {/* @ts-ignore */}
-              <EllipsisTooltipText
-                weight="semibold"
-                color="#344054"
-                text={Object.values(userAllData)[0]?.name}
-              />
+              <EllipsisTooltipText weight="semibold" color="#344054" text={Object.values(userAllData)[0]?.name} />
 
               {/* @ts-ignore */}
-              <EllipsisTooltipText
-                weight="regular"
-                color="#475467"
-                text={Object.values(userAllData)[0]?.email}
-              />
+              <EllipsisTooltipText weight="regular" color="#475467" text={Object.values(userAllData)[0]?.email} />
             </Stack>
           </Stack>
         </MenuItem>

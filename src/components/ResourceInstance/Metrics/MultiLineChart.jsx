@@ -1,13 +1,5 @@
-import {
-  Area,
-  AreaChart,
-  CartesianGrid,
-  Legend,
-  ResponsiveContainer,
-  Tooltip,
-  XAxis,
-  YAxis,
-} from "recharts";
+import { Area, AreaChart, CartesianGrid, Legend, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
+
 import ReChartContainer from "src/components/ReChartContainer/ReChartContainer";
 import lineChartColorPalette from "src/utils/constants/lineChartColorPalette";
 
@@ -31,16 +23,10 @@ function MultiLineChart(props) {
           <XAxis dataKey="time" tickFormatter={() => ""} tickLine={false} />
           <YAxis
             tickFormatter={(value) => `${value}`}
-            domain={([, datamax]) => [
-              0,
-              datamax > 0 ? Math.round(datamax + 1) : 1,
-            ]}
+            domain={([, datamax]) => [0, datamax > 0 ? Math.round(datamax + 1) : 1]}
             style={{ fontSize: 14 }}
           />
-          <Tooltip
-            isAnimationActive={false}
-            formatter={(value) => `${value}`}
-          />
+          <Tooltip isAnimationActive={false} formatter={(value) => `${value}`} />
           <Legend />
           {labels.map((labelName, index) => {
             return (

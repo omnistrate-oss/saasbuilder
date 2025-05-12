@@ -4,13 +4,7 @@ const QuestionIcon = (props) => {
   const { color = "#D0D1D3", disabled, ...restProps } = props;
 
   return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      width={18}
-      height={18}
-      fill="none"
-      {...restProps}
-    >
+    <svg xmlns="http://www.w3.org/2000/svg" width={18} height={18} fill="none" {...restProps}>
       <g clipPath="url(#a)">
         <g clipPath="url(#b)">
           <path

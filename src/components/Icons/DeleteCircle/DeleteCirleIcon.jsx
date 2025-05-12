@@ -1,22 +1,8 @@
 function DeleteCirleIcon(props) {
   return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      width={56}
-      height={56}
-      fill="none"
-      {...props}
-    >
+    <svg xmlns="http://www.w3.org/2000/svg" width={56} height={56} fill="none" {...props}>
       <rect width={48} height={48} x={4} y={4} fill="#FEE4E2" rx={24} />
-      <rect
-        width={48}
-        height={48}
-        x={4}
-        y={4}
-        stroke="#FEF3F2"
-        strokeWidth={8}
-        rx={24}
-      />
+      <rect width={48} height={48} x={4} y={4} stroke="#FEF3F2" strokeWidth={8} rx={24} />
       <path
         stroke="#B42318"
         strokeLinecap="round"

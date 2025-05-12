@@ -1,21 +1,15 @@
 import { useState } from "react";
+import { Box, InputAdornment } from "@mui/material";
 import Generator from "generate-password";
-import { InputAdornment, Box } from "@mui/material";
+
+import KeyIcon from "src/components/Icons/Key/KeyIcon";
+import Tooltip from "src/components/Tooltip/Tooltip";
+import { Text } from "src/components/Typography/Typography";
 
 import TextField from "../TextField/TextField";
-import KeyIcon from "src/components/Icons/Key/KeyIcon";
-import { Text } from "src/components/Typography/Typography";
-import Tooltip from "src/components/Tooltip/Tooltip";
 
 export const PasswordField = (props) => {
-  const {
-    disabled = false,
-    value,
-    dataCy,
-    showPasswordGenerator,
-    sx = {},
-    ...restProps
-  } = props;
+  const { disabled = false, value, dataCy, showPasswordGenerator, sx = {}, ...restProps } = props;
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
   return (

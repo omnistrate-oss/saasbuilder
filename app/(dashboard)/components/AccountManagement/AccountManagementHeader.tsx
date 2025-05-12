@@ -1,6 +1,7 @@
 import { FC } from "react";
-import { DisplayText, Text } from "components/Typography/Typography";
 import { cn } from "lib/utils";
+
+import { DisplayText, Text } from "components/Typography/Typography";
 
 type AccountManagementHeaderProps = {
   userName?: string;
@@ -17,10 +18,7 @@ const AccountManagementHeader: FC<AccountManagementHeaderProps> = ({
     <div>
       <div className="h-[140px] w-full bg-gradient-to-b from-[#A5C0EE] to-[#FBC5EC]" />
 
-      <div
-        className={cn("flex items-end gap-6 px-8 -mt-6", className)}
-        {...otherProps}
-      >
+      <div className={cn("flex items-end gap-6 px-8 -mt-6", className)} {...otherProps}>
         <div className="w-24 h-24 rounded-full border-4 border-white bg-[#DEE4E4] flex items-center justify-center">
           {/* @ts-ignore */}
           <DisplayText size="large" weight="medium">

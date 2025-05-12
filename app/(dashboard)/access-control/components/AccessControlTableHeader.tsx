@@ -2,13 +2,7 @@ import SearchInput from "src/components/DataGrid/SearchInput";
 import DataGridHeaderTitle from "src/components/Headers/DataGridHeaderTitle";
 import RefreshWithToolTip from "src/components/RefreshWithTooltip/RefreshWithToolTip";
 
-const AccessControlTableHeader = ({
-  searchText,
-  setSearchText,
-  refetchUsers,
-  isFetchingUsers,
-  count,
-}) => {
+const AccessControlTableHeader = ({ searchText, setSearchText, refetchUsers, isFetchingUsers, count }) => {
   return (
     <div className="flex items-center justify-between gap-4 py-5 px-6">
       <DataGridHeaderTitle

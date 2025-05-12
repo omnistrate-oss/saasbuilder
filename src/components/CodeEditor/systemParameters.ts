@@ -37,8 +37,7 @@ export const baseSystermParameters: Record<string, BaseSystemParameter> = {
     type: "string",
   },
   "compute.nodes[i].poolName": {
-    description:
-      "Name of the node pool where a specific node (node i) is allocated.",
+    description: "Name of the node pool where a specific node (node i) is allocated.",
     type: "string",
   },
   "compute.nodes[i].cores": {
@@ -50,8 +49,7 @@ export const baseSystermParameters: Record<string, BaseSystemParameter> = {
     type: "integer",
   },
   "compute.nodes[i].instanceType": {
-    description:
-      "Instance type for a specific node (node i) in the service instance.",
+    description: "Instance type for a specific node (node i) in the service instance.",
     type: "string",
   },
   "compute.nodes[i].name": {
@@ -81,13 +79,11 @@ export const baseSystermParameters: Record<string, BaseSystemParameter> = {
     type: "string",
   },
   "network.node.availabilityZone.code": {
-    description:
-      "Code of the availability zone where the current node is located.",
+    description: "Code of the availability zone where the current node is located.",
     type: "string",
   },
   "network.node.availabilityZone.id": {
-    description:
-      "ID of the availability zone where the current node is located.",
+    description: "ID of the availability zone where the current node is located.",
     type: "string",
   },
   "network.node.internalIP": {
@@ -111,48 +107,39 @@ export const baseSystermParameters: Record<string, BaseSystemParameter> = {
     type: "string",
   },
   "network.nodes[i].internalEndpoint": {
-    description:
-      "Internal network endpoint of a specific node (node i) in the network array.",
+    description: "Internal network endpoint of a specific node (node i) in the network array.",
     type: "string",
   },
   "network.nodes[i].externalEndpoint": {
-    description:
-      "External network endpoint of a specific node (node i) in the network array.",
+    description: "External network endpoint of a specific node (node i) in the network array.",
     type: "string",
   },
   "network.nodes[i].availabilityZone.code": {
-    description:
-      "Code of the availability zone for a specific node (node i) in the network array.",
+    description: "Code of the availability zone for a specific node (node i) in the network array.",
     type: "string",
   },
   "network.nodes[i].availabilityZone.id": {
-    description:
-      "ID of the availability zone for a specific node (node i) in the network array.",
+    description: "ID of the availability zone for a specific node (node i) in the network array.",
     type: "string",
   },
   "network.nodes[i].internalIP": {
-    description:
-      "Internal IP address of a specific node (node i) in the network array.",
+    description: "Internal IP address of a specific node (node i) in the network array.",
     type: "string",
   },
   "network.nodes[i].hostIP": {
-    description:
-      "Host IP address of a specific node (node i) in the network array.",
+    description: "Host IP address of a specific node (node i) in the network array.",
     type: "string",
   },
   "network.nodes[i].subnetID": {
-    description:
-      "Subnet ID associated with a specific node (node i) in the network array.",
+    description: "Subnet ID associated with a specific node (node i) in the network array.",
     type: "string",
   },
   "network.nodes[i].networkID": {
-    description:
-      "Network ID associated with a specific node (node i) in the network array.",
+    description: "Network ID associated with a specific node (node i) in the network array.",
     type: "string",
   },
   "network.nodes[i].cidrRange": {
-    description:
-      "CIDR range of the network for a specific node (node i) in the network array.",
+    description: "CIDR range of the network for a specific node (node i) in the network array.",
     type: "string",
   },
   "network.internalClusterEndpoint": {
@@ -165,8 +152,7 @@ export const baseSystermParameters: Record<string, BaseSystemParameter> = {
     unapplicableTo: ["helm", "kustomize", "operator"],
   },
   "network.internalClusterServerlessEndpoint.openPorts[i]": {
-    description:
-      "Open ports for the internal cluster serverless endpoint (port 0).",
+    description: "Open ports for the internal cluster serverless endpoint (port 0).",
     type: "integer",
     unapplicableTo: ["helm", "kustomize", "operator"],
   },
@@ -185,8 +171,7 @@ export const baseSystermParameters: Record<string, BaseSystemParameter> = {
     unapplicableTo: ["helm", "kustomize", "operator"],
   },
   "network.externalClusterServerlessEndpoint.openPorts[i]": {
-    description:
-      "Open ports for the external cluster serverless endpoint (port 0).",
+    description: "Open ports for the external cluster serverless endpoint (port 0).",
     type: "integer",
     unapplicableTo: ["helm", "kustomize", "operator"],
   },
@@ -196,13 +181,11 @@ export const baseSystermParameters: Record<string, BaseSystemParameter> = {
     unapplicableTo: ["helm", "kustomize", "operator"],
   },
   "network.availabilityZones[i].code": {
-    description:
-      "Code of the first availability zone in the array of availability zones.",
+    description: "Code of the first availability zone in the array of availability zones.",
     type: "string",
   },
   "network.availabilityZones[i].id": {
-    description:
-      "ID of the first availability zone in the array of availability zones.",
+    description: "ID of the first availability zone in the array of availability zones.",
     type: "string",
   },
 
@@ -229,8 +212,7 @@ export const baseSystermParameters: Record<string, BaseSystemParameter> = {
     type: "string",
   },
   "storage.volumes[i].pvName": {
-    description:
-      "Persistent Volume (PV) name of the storage volume (volume i).",
+    description: "Persistent Volume (PV) name of the storage volume (volume i).",
     type: "string",
   },
   "storage.numVolumes": {
@@ -296,8 +278,7 @@ export const baseSystermParameters: Record<string, BaseSystemParameter> = {
     type: "string",
   },
   "deployment.imagePullSecretName": {
-    description:
-      "Name of the image pull secret used for the deployment container image.",
+    description: "Name of the image pull secret used for the deployment container image.",
     type: "string",
   },
   "deployment.iamWorkloadRoleARN": {
@@ -305,13 +286,11 @@ export const baseSystermParameters: Record<string, BaseSystemParameter> = {
     type: "string",
   },
   "deployment.kubernetesServiceAccountName": {
-    description:
-      "Name of the Kubernetes service account used in the deployment.",
+    description: "Name of the Kubernetes service account used in the deployment.",
     type: "string",
   },
   "deployment.cloudProvider": {
-    description:
-      "Cloud provider where the deployment is hosted (e.g., AWS, GCP).",
+    description: "Cloud provider where the deployment is hosted (e.g., AWS, GCP).",
     type: "string",
   },
   "deployment.cloudProviderAccountID": {
@@ -331,8 +310,7 @@ export const baseSystermParameters: Record<string, BaseSystemParameter> = {
     type: "string",
   },
   "deploymentCell.cloudProviderName": {
-    description:
-      "Name of the cloud provider for the deployment cell (e.g., AWS, GCP).",
+    description: "Name of the cloud provider for the deployment cell (e.g., AWS, GCP).",
     type: "string",
   },
   "deploymentCell.region": {

@@ -1,4 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
+
 import { getConsumptionBillingStatus } from "src/api/consumption";
 
 function useBillingStatus() {

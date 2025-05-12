@@ -1,25 +1,20 @@
 import {
-  SystemVariable,
   composeSystemVariables,
-  kustomizeSystemVariables,
   helmSystemVariables,
+  kustomizeSystemVariables,
   operatorSystemVariables,
+  SystemVariable,
 } from "./constants";
 import { ungroupedSystemParameters } from "./systemParameters";
 
-const ungroupedVariables: any = Object.entries(ungroupedSystemParameters).map(
-  ([key, value]) => ({
-    label: `$sys.${key}`,
-    documentation: value.description,
-    insertText: `"$sys.${key}"`,
-    type: value.type,
-  })
-);
+const ungroupedVariables: any = Object.entries(ungroupedSystemParameters).map(([key, value]) => ({
+  label: `$sys.${key}`,
+  documentation: value.description,
+  insertText: `"$sys.${key}"`,
+  type: value.type,
+}));
 
-export const getSuggestionsByPrefix = (
-  word: string,
-  resourceType
-): SystemVariable[] => {
+export const getSuggestionsByPrefix = (word: string, resourceType): SystemVariable[] => {
   let systemVariables = composeSystemVariables;
   if (resourceType === "kustomize") {
     systemVariables = kustomizeSystemVariables;

@@ -1,7 +1,8 @@
 import GlobalDataProvider from "src/providers/GlobalDataProvider";
+
+import Footer from "./components/Layout/Footer";
 import Navbar from "./components/Layout/Navbar";
 import Sidebar from "./components/Layout/Sidebar";
-import Footer from "./components/Layout/Footer";
 
 const DashboardLayout = ({ children }) => {
   return (

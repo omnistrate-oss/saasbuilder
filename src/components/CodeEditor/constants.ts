@@ -1,4 +1,4 @@
-import { ResourceType, baseSystermParameters } from "./systemParameters";
+import { baseSystermParameters, ResourceType } from "./systemParameters";
 
 export type SystemVariable = {
   label: string;

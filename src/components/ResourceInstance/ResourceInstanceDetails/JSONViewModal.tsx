@@ -1,4 +1,5 @@
 import { Box, Modal, styled } from "@mui/material";
+
 import Button from "src/components/Button/Button";
 import CodeEditor from "src/components/CodeEditor/CodeEditor";
 import Divider from "src/components/Divider/Divider";
@@ -42,13 +43,7 @@ const Footer = styled(Box)(() => ({
 }));
 
 function JSONViewModal(props) {
-  const {
-    open,
-    handleClose,
-    parameterName = "",
-    parameterDescription = "",
-    jsonData,
-  } = props;
+  const { open, handleClose, parameterName = "", parameterDescription = "", jsonData } = props;
 
   return (
     <Modal open={open} onClose={handleClose}>
@@ -67,12 +62,7 @@ function JSONViewModal(props) {
         <Divider />
 
         <ContentSection>
-          <CodeEditor
-            language="json"
-            value={JSON.stringify(jsonData, null, "\t")}
-            height="400px"
-            isReadOnly={true}
-          />
+          <CodeEditor language="json" value={JSON.stringify(jsonData, null, "\t")} height="400px" isReadOnly={true} />
           <Footer sx={{ marginTop: "12px" }}>
             <Button variant="outlined" onClick={handleClose}>
               Close

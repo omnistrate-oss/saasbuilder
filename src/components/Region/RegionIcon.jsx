@@ -1,13 +1,6 @@
 const RegionIcon = (props) => {
   return (
-    <svg
-      width={32}
-      height={32}
-      viewBox="0 0 32 32"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      {...props}
-    >
+    <svg width={32} height={32} viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
       <g filter="url(#filter0_dii_3115_241)">
         <path
           d="M2 5C2 2.79086 3.79086 1 6 1H26C28.2091 1 30 2.79086 30 5V25C30 27.2091 28.2091 29 26 29H6C3.79086 29 2 27.2091 2 25V5Z"
@@ -44,21 +37,9 @@ const RegionIcon = (props) => {
           <feOffset dy={1} />
           <feGaussianBlur stdDeviation={1} />
           <feComposite in2="hardAlpha" operator="out" />
-          <feColorMatrix
-            type="matrix"
-            values="0 0 0 0 0.0627451 0 0 0 0 0.0941176 0 0 0 0 0.156863 0 0 0 0.05 0"
-          />
-          <feBlend
-            mode="normal"
-            in2="BackgroundImageFix"
-            result="effect1_dropShadow_3115_241"
-          />
-          <feBlend
-            mode="normal"
-            in="SourceGraphic"
-            in2="effect1_dropShadow_3115_241"
-            result="shape"
-          />
+          <feColorMatrix type="matrix" values="0 0 0 0 0.0627451 0 0 0 0 0.0941176 0 0 0 0 0.156863 0 0 0 0.05 0" />
+          <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_3115_241" />
+          <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_3115_241" result="shape" />
           <feColorMatrix
             in="SourceAlpha"
             type="matrix"
@@ -67,38 +48,19 @@ const RegionIcon = (props) => {
           />
           <feOffset dy={-2} />
           <feComposite in2="hardAlpha" operator="arithmetic" k2={-1} k3={1} />
-          <feColorMatrix
-            type="matrix"
-            values="0 0 0 0 0.0627451 0 0 0 0 0.0941176 0 0 0 0 0.156863 0 0 0 0.05 0"
-          />
-          <feBlend
-            mode="normal"
-            in2="shape"
-            result="effect2_innerShadow_3115_241"
-          />
+          <feColorMatrix type="matrix" values="0 0 0 0 0.0627451 0 0 0 0 0.0941176 0 0 0 0 0.156863 0 0 0 0.05 0" />
+          <feBlend mode="normal" in2="shape" result="effect2_innerShadow_3115_241" />
           <feColorMatrix
             in="SourceAlpha"
             type="matrix"
             values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
             result="hardAlpha"
           />
-          <feMorphology
-            radius={1}
-            operator="erode"
-            in="SourceAlpha"
-            result="effect3_innerShadow_3115_241"
-          />
+          <feMorphology radius={1} operator="erode" in="SourceAlpha" result="effect3_innerShadow_3115_241" />
           <feOffset />
           <feComposite in2="hardAlpha" operator="arithmetic" k2={-1} k3={1} />
-          <feColorMatrix
-            type="matrix"
-            values="0 0 0 0 0.0627451 0 0 0 0 0.0941176 0 0 0 0 0.156863 0 0 0 0.18 0"
-          />
-          <feBlend
-            mode="normal"
-            in2="effect2_innerShadow_3115_241"
-            result="effect3_innerShadow_3115_241"
-          />
+          <feColorMatrix type="matrix" values="0 0 0 0 0.0627451 0 0 0 0 0.0941176 0 0 0 0 0.156863 0 0 0 0.18 0" />
+          <feBlend mode="normal" in2="effect2_innerShadow_3115_241" result="effect3_innerShadow_3115_241" />
         </filter>
       </defs>
     </svg>

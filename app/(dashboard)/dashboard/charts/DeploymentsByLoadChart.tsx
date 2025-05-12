@@ -1,11 +1,7 @@
-import {
-  ChartConfig,
-  ChartContainer,
-  ChartTooltip,
-  ChartTooltipContent,
-} from "@/components/ui/chart";
 import { useMemo } from "react";
 import { Label, Pie, PieChart } from "recharts";
+
+import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
 import { ResourceInstance } from "src/types/resourceInstance";
 
 type DeploymentsByLoadChartProps = {
@@ -42,9 +38,7 @@ const chartConfig = {
   },
 } satisfies ChartConfig;
 
-const DeploymentsByLoadChart: React.FC<DeploymentsByLoadChartProps> = ({
-  instances,
-}) => {
+const DeploymentsByLoadChart: React.FC<DeploymentsByLoadChartProps> = ({ instances }) => {
   const chartData = useMemo(() => {
     const statusCountsObj = instances.reduce((acc, curr) => {
       const loadStatus = curr.instanceLoadStatus;
@@ -66,44 +60,19 @@ const DeploymentsByLoadChart: React.FC<DeploymentsByLoadChartProps> = ({
   }, [instances]);
 
   return (
-    <ChartContainer
-      config={chartConfig}
-      className="mx-auto aspect-square max-h-[250px]"
-    >
+    <ChartContainer config={chartConfig} className="mx-auto aspect-square max-h-[250px]">
       <PieChart>
-        <ChartTooltip
-          cursor={false}
-          content={<ChartTooltipContent hideLabel />}
-        />
-        <Pie
-          data={chartData}
-          dataKey="instances"
-          nameKey="loadStatus"
-          innerRadius={60}
-          strokeWidth={5}
-        >
+        <ChartTooltip cursor={false} content={<ChartTooltipContent hideLabel />} />
+        <Pie data={chartData} dataKey="instances" nameKey="loadStatus" innerRadius={60} strokeWidth={5}>
           <Label
             content={({ viewBox }) => {
               if (viewBox && "cx" in viewBox && "cy" in viewBox) {
                 return (
-                  <text
-                    x={viewBox.cx}
-                    y={viewBox.cy}
-                    textAnchor="middle"
-                    dominantBaseline="middle"
-                  >
-                    <tspan
-                      x={viewBox.cx}
-                      y={viewBox.cy}
-                      className="fill-foreground text-3xl font-bold"
-                    >
+                  <text x={viewBox.cx} y={viewBox.cy} textAnchor="middle" dominantBaseline="middle">
+                    <tspan x={viewBox.cx} y={viewBox.cy} className="fill-foreground text-3xl font-bold">
                       {instances?.length.toLocaleString()}
                     </tspan>
-                    <tspan
-                      x={viewBox.cx}
-                      y={(viewBox.cy || 0) + 24}
-                      className="fill-muted-foreground"
-                    >
+                    <tspan x={viewBox.cx} y={(viewBox.cy || 0) + 24} className="fill-muted-foreground">
                       Instances
                     </tspan>
                   </text>

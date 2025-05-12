@@ -2,24 +2,15 @@ const ejs = require("ejs");
 const path = require("path");
 const { getSaaSDomainURL } = require("../../utils/getSaaSDomainURL");
 
-async function getDenySubscriptionMailContent(
-  denySubsriptionEventObj,
-  orgLogoURL
-) {
+async function getDenySubscriptionMailContent(denySubsriptionEventObj, orgLogoURL) {
   const orgName = denySubsriptionEventObj.orgName;
   const email = denySubsriptionEventObj.userEmail;
   const serviceName = denySubsriptionEventObj.eventPayload.service_name;
-  const servicePlanName =
-    denySubsriptionEventObj.eventPayload.product_tier_name;
+  const servicePlanName = denySubsriptionEventObj.eventPayload.product_tier_name;
 
   const subject = `Your ${serviceName} - ${servicePlanName} subscription request denied`;
 
-  const templatePath = path.resolve(
-    __dirname,
-    "..",
-    "ejsTemplates",
-    "denySubscriptionRequest.ejs"
-  );
+  const templatePath = path.resolve(__dirname, "..", "ejsTemplates", "denySubscriptionRequest.ejs");
 
   const baseURL = getSaaSDomainURL();
 

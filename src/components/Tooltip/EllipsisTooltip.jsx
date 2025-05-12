@@ -7,8 +7,7 @@ function EllipsisTooltipText({ text, sx, ...restProps }) {
 
   const compareSize = () => {
     if (textElementRef.current) {
-      const compare =
-        textElementRef.current.scrollWidth > textElementRef.current.clientWidth;
+      const compare = textElementRef.current.scrollWidth > textElementRef.current.clientWidth;
       setHasEllipsis(compare);
     }
   };

@@ -1,28 +1,26 @@
 "use client";
 
 import { Add } from "@mui/icons-material";
+import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
 import { InputAdornment } from "@mui/material";
 import { useMutation } from "@tanstack/react-query";
 import { FieldArray, FormikProvider, useFormik } from "formik";
-import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
+import { cn } from "lib/utils";
 
+import { inviteSubscriptionUser } from "src/api/users";
+import useSnackbar from "src/hooks/useSnackbar";
+import { useGlobalData } from "src/providers/GlobalDataProvider";
+import { colors } from "src/themeConfig";
+import { Subscription } from "src/types/subscription";
 import Button from "components/Button/Button";
+import LoadingSpinnerSmall from "components/CircularProgress/CircularProgress";
 import Form from "components/FormElementsv2/Form/Form";
-import { Text } from "components/Typography/Typography";
-import DeleteIcon from "components/Icons/Delete/Delete";
-import Select from "components/FormElementsv2/Select/Select";
 import MenuItem from "components/FormElementsv2/MenuItem/MenuItem";
+import Select from "components/FormElementsv2/Select/Select";
 import TextField from "components/FormElementsv2/TextField/TextField";
 import DataGridHeaderTitle from "components/Headers/DataGridHeaderTitle";
-import LoadingSpinnerSmall from "components/CircularProgress/CircularProgress";
-
-import { colors } from "src/themeConfig";
-import useSnackbar from "src/hooks/useSnackbar";
-import { Subscription } from "src/types/subscription";
-import { inviteSubscriptionUser } from "src/api/users";
-import { useGlobalData } from "src/providers/GlobalDataProvider";
-
-import { cn } from "lib/utils";
+import DeleteIcon from "components/Icons/Delete/Delete";
+import { Text } from "components/Typography/Typography";
 
 const getNewEnvVariable = () => {
   return {
@@ -60,10 +58,7 @@ const getServiceMenuItems = (subscriptions: Subscription[]) => {
   );
 };
 
-const getServicePlanMenuItems = (
-  subscriptions: Subscription[],
-  serviceId: string
-) => {
+const getServicePlanMenuItems = (subscriptions: Subscription[], serviceId: string) => {
   const servicePlanMenuItems = subscriptions
     ?.filter((sub) => sub.serviceId === serviceId && sub.roleType === "root")
     .map((sub) => {
@@ -81,10 +76,7 @@ type InviteUsersCardProps = {
   isFetchingUsers?: boolean;
 };
 
-const InviteUsersCard: React.FC<InviteUsersCardProps> = ({
-  refetchUsers,
-  isFetchingUsers,
-}) => {
+const InviteUsersCard: React.FC<InviteUsersCardProps> = ({ refetchUsers, isFetchingUsers }) => {
   const snackbar = useSnackbar();
   const { subscriptions, isLoadingSubscriptions } = useGlobalData();
 
@@ -98,10 +90,7 @@ const InviteUsersCard: React.FC<InviteUsersCardProps> = ({
           };
 
           const rootSubscription = subscriptions.find(
-            (sub) =>
-              sub.serviceId === d.serviceId &&
-              sub.productTierId === d.servicePlanId &&
-              sub.roleType === "root"
+            (sub) => sub.serviceId === d.serviceId && sub.productTierId === d.servicePlanId && sub.roleType === "root"
           );
           return inviteSubscriptionUser(rootSubscription?.id, payload);
         })
@@ -110,9 +99,7 @@ const InviteUsersCard: React.FC<InviteUsersCardProps> = ({
       // eslint-disable-next-line no-use-before-define
       formData.resetForm();
     } catch {
-      snackbar.showError(
-        "Some of the invites failed to send. Please review the access permissions and try again."
-      );
+      snackbar.showError("Some of the invites failed to send. Please review the access permissions and try again.");
     } finally {
       refetchUsers();
     }
@@ -177,8 +164,7 @@ const InviteUsersCard: React.FC<InviteUsersCardProps> = ({
                   return (
                     <>
                       {values.userInvite.map((invite, index) => {
-                        const serivceMenuItems =
-                          getServiceMenuItems(subscriptions);
+                        const serivceMenuItems = getServiceMenuItems(subscriptions);
 
                         const servicePlanMenuItems = getServicePlanMenuItems(
                           subscriptions,
@@ -186,10 +172,7 @@ const InviteUsersCard: React.FC<InviteUsersCardProps> = ({
                         );
 
                         return (
-                          <div
-                            className="flex items-center flex-wrap gap-4"
-                            key={index}
-                          >
+                          <div className="flex items-center flex-wrap gap-4" key={index}>
                             <TextField
                               data-testid="email-input"
                               required
@@ -197,10 +180,7 @@ const InviteUsersCard: React.FC<InviteUsersCardProps> = ({
                               value={invite.email}
                               onChange={handleChange}
                               name={`userInvite[${index}].email`}
-                              disabled={
-                                createUserInvitesMutation.isLoading ||
-                                isFetchingUsers
-                              }
+                              disabled={createUserInvitesMutation.isLoading || isFetchingUsers}
                               sx={{
                                 minWidth: "240px",
                                 flex: 1,
@@ -226,32 +206,21 @@ const InviteUsersCard: React.FC<InviteUsersCardProps> = ({
                               name={`userInvite[${index}].serviceId`}
                               value={invite.serviceId}
                               onBlur={handleBlur}
-                              disabled={
-                                createUserInvitesMutation.isLoading ||
-                                isFetchingUsers
-                              }
+                              disabled={createUserInvitesMutation.isLoading || isFetchingUsers}
                               onChange={(e) => {
                                 handleChange(e);
-                                setFieldValue(
-                                  `userInvite[${index}].servicePlanId`,
-                                  ""
-                                );
+                                setFieldValue(`userInvite[${index}].servicePlanId`, "");
                               }}
                               sx={{ flex: 1, mt: 0 }}
                               displayEmpty
                               renderValue={(value) => {
                                 if (!value) return "Service";
-                                return serivceMenuItems.find(
-                                  (item) => item.value === value
-                                )?.label;
+                                return serivceMenuItems.find((item) => item.value === value)?.label;
                               }}
                             >
                               {serivceMenuItems?.length > 0 ? (
                                 serivceMenuItems.map((option) => (
-                                  <MenuItem
-                                    key={option.value}
-                                    value={option.value}
-                                  >
+                                  <MenuItem key={option.value} value={option.value}>
                                     {option.label}
                                   </MenuItem>
                                 ))
@@ -269,35 +238,23 @@ const InviteUsersCard: React.FC<InviteUsersCardProps> = ({
                               value={invite.servicePlanId}
                               onBlur={handleBlur}
                               onChange={handleChange}
-                              disabled={
-                                createUserInvitesMutation.isLoading ||
-                                isFetchingUsers
-                              }
+                              disabled={createUserInvitesMutation.isLoading || isFetchingUsers}
                               sx={{ flex: 1, mt: 0 }}
                               displayEmpty
                               renderValue={(value) => {
                                 if (!value) return "Subscription Plan";
-                                return servicePlanMenuItems.find(
-                                  (item) => item.value === value
-                                )?.label;
+                                return servicePlanMenuItems.find((item) => item.value === value)?.label;
                               }}
                             >
                               {servicePlanMenuItems?.length > 0 ? (
                                 servicePlanMenuItems.map((option) => (
-                                  <MenuItem
-                                    key={option.value}
-                                    value={option.value}
-                                  >
+                                  <MenuItem key={option.value} value={option.value}>
                                     {option.label}
                                   </MenuItem>
                                 ))
                               ) : (
                                 <MenuItem value="" disabled>
-                                  <i>
-                                    {invite.serviceId
-                                      ? "No subscription plans"
-                                      : "Select a service first"}
-                                  </i>
+                                  <i>{invite.serviceId ? "No subscription plans" : "Select a service first"}</i>
                                 </MenuItem>
                               )}
                             </Select>
@@ -309,10 +266,7 @@ const InviteUsersCard: React.FC<InviteUsersCardProps> = ({
                               onChange={handleChange}
                               sx={{ flex: 1, mt: 0 }}
                               displayEmpty
-                              disabled={
-                                createUserInvitesMutation.isLoading ||
-                                isFetchingUsers
-                              }
+                              disabled={createUserInvitesMutation.isLoading || isFetchingUsers}
                               renderValue={(value) => {
                                 if (value) return value;
                                 return "Role";
@@ -347,11 +301,7 @@ const InviteUsersCard: React.FC<InviteUsersCardProps> = ({
                         }}
                       >
                         <Add sx={{ color: colors.gray700 }} />
-                        <Text
-                          size="small"
-                          weight="semibold"
-                          color={colors.gray700}
-                        >
+                        <Text size="small" weight="semibold" color={colors.gray700}>
                           Add Another
                         </Text>
                       </div>

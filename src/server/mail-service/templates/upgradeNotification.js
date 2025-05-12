@@ -31,12 +31,7 @@ async function getUpgradeNotificationMailContent(
             : "Your instance upgrade is complete";
   }
 
-  const templatePath = path.resolve(
-    __dirname,
-    "..",
-    "ejsTemplates",
-    "upgradeNotification.ejs"
-  );
+  const templatePath = path.resolve(__dirname, "..", "ejsTemplates", "upgradeNotification.ejs");
 
   const message = await ejs.renderFile(templatePath, {
     logo_url: orgLogoURL,

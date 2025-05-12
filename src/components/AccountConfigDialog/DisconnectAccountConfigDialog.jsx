@@ -1,35 +1,29 @@
-import Button from "components/Button/Button";
-import TextField from "components/FormElements/TextField/TextField";
-import {
-  Stack,
-  styled,
-  Box,
-  Dialog,
-  Step,
-  StepLabel,
-  Stepper,
-} from "@mui/material";
-import LoadingSpinnerSmall from "components/CircularProgress/CircularProgress";
-import { Text } from "components/Typography/Typography";
-import Link from "next/link";
-import DisconnectIcon from "../Icons/Disconnect/Disconnect";
-import { roundNumberToTwoDecimals } from "src/utils/formatNumber";
-import StepStepper from "../Stepper/StepStepper";
 import { useEffect, useRef, useState } from "react";
-import Chip from "../Chip/Chip";
-import AlertTriangle from "../Icons/AlertTriangle/AlertTriangle";
-import StepperSuccessIcon from "../Stepper/StepperSuccessIcon";
-import { useFormik } from "formik";
+import Link from "next/link";
+import { Box, Dialog, Stack, Step, StepLabel, Stepper, styled } from "@mui/material";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useFormik } from "formik";
+
 import { disconnected } from "src/api/resourceInstance";
+import useSnackbar from "src/hooks/useSnackbar";
+import { roundNumberToTwoDecimals } from "src/utils/formatNumber";
+import Button from "components/Button/Button";
+import LoadingSpinnerSmall from "components/CircularProgress/CircularProgress";
+import TextField from "components/FormElements/TextField/TextField";
+import { Text } from "components/Typography/Typography";
+
+import Chip from "../Chip/Chip";
+import { TextContainerToCopy } from "../CloudProviderAccountOrgIdModal/CloudProviderAccountOrgIdModal";
+import AlertTriangle from "../Icons/AlertTriangle/AlertTriangle";
+import DisconnectIcon from "../Icons/Disconnect/Disconnect";
+import StepperSuccessIcon from "../Stepper/StepperSuccessIcon";
+import StepStepper from "../Stepper/StepStepper";
 import {
   CustomStepIcon,
   getStepperProps,
   stateAccountConfigStepper,
   stepsDisconnectRunAccountConfig,
 } from "../Stepper/utils";
-import useSnackbar from "src/hooks/useSnackbar";
-import { TextContainerToCopy } from "../CloudProviderAccountOrgIdModal/CloudProviderAccountOrgIdModal";
 
 const StyledForm = styled(Box)({
   position: "fixed",
@@ -38,8 +32,7 @@ const StyledForm = styled(Box)({
   transform: "translateX(50%)",
   background: "white",
   borderRadius: "12px",
-  boxShadow:
-    "0px 8px 8px -4px rgba(16, 24, 40, 0.03), 0px 20px 24px -4px rgba(16, 24, 40, 0.08)",
+  boxShadow: "0px 8px 8px -4px rgba(16, 24, 40, 0.03), 0px 20px 24px -4px rgba(16, 24, 40, 0.08)",
   padding: "24px",
   width: "100%",
   maxWidth: "550px",
@@ -95,11 +88,7 @@ const ListItem = styled(Box)({
   gap: "4px",
 });
 
-const usePolling = (
-  fetchClickedInstanceDetails,
-  setClickedInstance,
-  stepStatusStopPolling
-) => {
+const usePolling = (fetchClickedInstanceDetails, setClickedInstance, stepStatusStopPolling) => {
   const queryClient = useQueryClient();
   const [isPolling, setIsPolling] = useState(true);
   const timeoutId = useRef(null);
@@ -130,15 +119,14 @@ const usePolling = (
       queryClient.setQueryData(["instances"], (oldData) => ({
         ...oldData,
         data: {
-          resourceInstances: (oldData?.data?.resourceInstances || []).map(
-            (inst) =>
-              inst?.id === resourceInstance?.id
-                ? {
-                    ...resourceInstance,
-                    status: resourceInstance.status,
-                    result_params: resourceInstance.result_params,
-                  }
-                : inst
+          resourceInstances: (oldData?.data?.resourceInstances || []).map((inst) =>
+            inst?.id === resourceInstance?.id
+              ? {
+                  ...resourceInstance,
+                  status: resourceInstance.status,
+                  result_params: resourceInstance.result_params,
+                }
+              : inst
           ),
         },
       }));
@@ -236,10 +224,7 @@ const Check = ({
   useEffect(() => {
     setActiveStepRun(0);
     // Handle instance status updates separately
-    if (
-      instance?.status === "DETACHING" ||
-      instance?.status === "PENDING_DETACHING"
-    ) {
+    if (instance?.status === "DETACHING" || instance?.status === "PENDING_DETACHING") {
       setActiveStepRun(0);
     } else if (instance?.status === "DISCONNECTING") {
       setActiveStepRun(1);
@@ -260,12 +245,7 @@ const Check = ({
           }}
         >
           {" "}
-          <Stack
-            direction="row"
-            justifyContent={"center"}
-            alignItems="center"
-            gap="16px"
-          >
+          <Stack direction="row" justifyContent={"center"} alignItems="center" gap="16px">
             <StepperSuccessIcon />
             <Text size="large" weight="semibold" color="#101828">
               {"Verification complete"}
@@ -311,15 +291,13 @@ const Check = ({
                   >
                     this
                   </StyledLink>
-                   CloudFormation template to revoke all{" "}
-                  {`${serviceProviderName}`} permissions from your account.
+                   CloudFormation template to revoke all {`${serviceProviderName}`} permissions from your account.
                 </Text>
               ) : (
                 <Box>
                   <Text size="medium" weight="regular" color="#374151">
                     {/* <b>Using GCP Cloud Shell:</b>  */}
-                    Please open the Google Cloud Shell environment using the
-                    following link:
+                    Please open the Google Cloud Shell environment using the following link:
                     <StyledLink
                       target="_blank"
                       rel="noopener noreferrer"
@@ -330,12 +308,7 @@ const Check = ({
                     . Once the terminal is open, execute the following command:
                   </Text>
                   {instance?.result_params?.gcp_disconnect_shell_script && (
-                    <TextContainerToCopy
-                      text={
-                        instance?.result_params?.gcp_disconnect_shell_script
-                      }
-                      marginTop="12px"
-                    />
+                    <TextContainerToCopy text={instance?.result_params?.gcp_disconnect_shell_script} marginTop="12px" />
                   )}
                 </Box>
               )}
@@ -344,8 +317,7 @@ const Check = ({
                   <Stack direction="row" alignItems="center" gap="6px">
                     <AlertTriangle />
                     <Text size="xsmall" weight="medium" color="#B54708">
-                      This is a mandatory step to fully disconnect your cloud
-                      account.
+                      This is a mandatory step to fully disconnect your cloud account.
                     </Text>
                   </Stack>
                 }
@@ -380,9 +352,7 @@ function DisconnectAccountConfigDialog(props) {
     serviceProviderName,
   } = props;
   const snackbar = useSnackbar();
-  const [disconnectState, setDisconnectState] = useState(
-    stateAccountConfigStepper.trigger
-  );
+  const [disconnectState, setDisconnectState] = useState(stateAccountConfigStepper.trigger);
   const [activeStepRun, setActiveStepRun] = useState(0);
 
   useEffect(() => {
@@ -442,16 +412,11 @@ function DisconnectAccountConfigDialog(props) {
     <Dialog open={open} onClose={handleClose}>
       <StyledForm>
         <Header>
-          <StepStepper
-            {...getStepperProps(disconnectState, roundNumberToTwoDecimals(100))}
-          />
+          <StepStepper {...getStepperProps(disconnectState, roundNumberToTwoDecimals(100))} />
         </Header>
         <Content>
           {disconnectState === stateAccountConfigStepper.trigger && (
-            <Trigger
-              formData={formik}
-              serviceProviderName={serviceProviderName}
-            />
+            <Trigger formData={formik} serviceProviderName={serviceProviderName} />
           )}
           {disconnectState === stateAccountConfigStepper.check && (
             <Check
@@ -486,9 +451,7 @@ function DisconnectAccountConfigDialog(props) {
               bgColor={buttonColor}
               onClick={formik.handleSubmit}
             >
-              {"Disconnect"}{" "}
-              {isFetching ||
-                (accountConfigMutation.isLoading && <LoadingSpinnerSmall />)}
+              {"Disconnect"} {isFetching || (accountConfigMutation.isLoading && <LoadingSpinnerSmall />)}
             </Button>
           )}
           {disconnectState === stateAccountConfigStepper.check && (

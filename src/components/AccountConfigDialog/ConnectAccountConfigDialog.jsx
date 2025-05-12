@@ -1,24 +1,26 @@
-import Button from "components/Button/Button";
-import TextField from "components/FormElements/TextField/TextField";
-import { Stack, styled, Box, Dialog } from "@mui/material";
-import LoadingSpinnerSmall from "components/CircularProgress/CircularProgress";
-import { Text } from "components/Typography/Typography";
-import Link from "next/link";
-
-import StepStepper from "../Stepper/StepStepper";
 import { useEffect, useRef, useState } from "react";
-import sandClock from "public/assets/images/cloud-account/sandclock.gif";
 import Image from "next/image";
-import Chip from "../Chip/Chip";
-import AlertTriangle from "../Icons/AlertTriangle/AlertTriangle";
-import StepperSuccessIcon from "../Stepper/StepperSuccessIcon";
-import { useFormik } from "formik";
+import Link from "next/link";
+import { Box, Dialog, Stack, styled } from "@mui/material";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useFormik } from "formik";
+
 import { disconnected } from "src/api/resourceInstance";
-import ConnectIcon from "../Icons/Connect/Connect";
-import { getStepperProps, stateAccountConfigStepper } from "../Stepper/utils";
 import useSnackbar from "src/hooks/useSnackbar";
+import Button from "components/Button/Button";
+import LoadingSpinnerSmall from "components/CircularProgress/CircularProgress";
+import TextField from "components/FormElements/TextField/TextField";
+import { Text } from "components/Typography/Typography";
+
+import sandClock from "public/assets/images/cloud-account/sandclock.gif";
+
+import Chip from "../Chip/Chip";
 import { TextContainerToCopy } from "../CloudProviderAccountOrgIdModal/CloudProviderAccountOrgIdModal";
+import AlertTriangle from "../Icons/AlertTriangle/AlertTriangle";
+import ConnectIcon from "../Icons/Connect/Connect";
+import StepperSuccessIcon from "../Stepper/StepperSuccessIcon";
+import StepStepper from "../Stepper/StepStepper";
+import { getStepperProps, stateAccountConfigStepper } from "../Stepper/utils";
 
 const StyledForm = styled(Box)({
   position: "fixed",
@@ -27,8 +29,7 @@ const StyledForm = styled(Box)({
   transform: "translateX(50%)",
   background: "white",
   borderRadius: "12px",
-  boxShadow:
-    "0px 8px 8px -4px rgba(16, 24, 40, 0.03), 0px 20px 24px -4px rgba(16, 24, 40, 0.08)",
+  boxShadow: "0px 8px 8px -4px rgba(16, 24, 40, 0.03), 0px 20px 24px -4px rgba(16, 24, 40, 0.08)",
   padding: "24px",
   width: "100%",
   maxWidth: "550px",
@@ -84,11 +85,7 @@ const ListItem = styled(Box)({
   gap: "4px",
 });
 
-const usePolling = (
-  fetchClickedInstanceDetails,
-  setClickedInstance,
-  stepStatusStopPolling
-) => {
+const usePolling = (fetchClickedInstanceDetails, setClickedInstance, stepStatusStopPolling) => {
   const queryClient = useQueryClient();
   const [isPolling, setIsPolling] = useState(true);
   const timeoutId = useRef(null);
@@ -119,15 +116,14 @@ const usePolling = (
       queryClient.setQueryData(["instances"], (oldData) => ({
         ...oldData,
         data: {
-          resourceInstances: (oldData?.data?.resourceInstances || []).map(
-            (inst) =>
-              inst?.id === resourceInstance?.id
-                ? {
-                    ...resourceInstance,
-                    status: resourceInstance.status,
-                    result_params: resourceInstance.result_params,
-                  }
-                : inst
+          resourceInstances: (oldData?.data?.resourceInstances || []).map((inst) =>
+            inst?.id === resourceInstance?.id
+              ? {
+                  ...resourceInstance,
+                  status: resourceInstance.status,
+                  result_params: resourceInstance.result_params,
+                }
+              : inst
           ),
         },
       }));
@@ -214,12 +210,7 @@ const Trigger = ({ formData, serviceProviderName }) => {
   );
 };
 
-const Check = ({
-  instance,
-  fetchClickedInstanceDetails,
-  setClickedInstance,
-  serviceProviderName,
-}) => {
+const Check = ({ instance, fetchClickedInstanceDetails, setClickedInstance, serviceProviderName }) => {
   usePolling(fetchClickedInstanceDetails, setClickedInstance, "READY");
 
   return (
@@ -235,12 +226,7 @@ const Check = ({
           }}
         >
           {" "}
-          <Stack
-            direction="row"
-            justifyContent={"center"}
-            alignItems="center"
-            gap="16px"
-          >
+          <Stack direction="row" justifyContent={"center"} alignItems="center" gap="16px">
             <StepperSuccessIcon />
             <Text size="large" weight="semibold" color="#101828">
               {"Verification complete"}
@@ -258,12 +244,7 @@ const Check = ({
           }}
         >
           {" "}
-          <Stack
-            direction="row"
-            justifyContent={"center"}
-            alignItems="center"
-            gap="16px"
-          >
+          <Stack direction="row" justifyContent={"center"} alignItems="center" gap="16px">
             <Image src={sandClock} alt="sandwatch" width={26} />
             <Text size="large" weight="semibold" color="#101828">
               {"Verification is in progress..."}
@@ -281,15 +262,13 @@ const Check = ({
                 >
                   this
                 </StyledLink>
-                 CloudFormation template to grant {`${serviceProviderName}`} the
-                required permissions.
+                 CloudFormation template to grant {`${serviceProviderName}`} the required permissions.
               </Text>
             ) : (
               <Box>
                 <Text size="medium" weight="regular" color="#374151">
                   {/* <b>Using GCP Cloud Shell:</b>  */}
-                  Please open the Google Cloud Shell environment using the
-                  following link:
+                  Please open the Google Cloud Shell environment using the following link:
                   <StyledLink
                     target="_blank"
                     rel="noopener noreferrer"
@@ -300,10 +279,7 @@ const Check = ({
                   . Once the terminal is open, execute the following command:
                 </Text>
                 {instance?.result_params?.gcp_bootstrap_shell_script && (
-                  <TextContainerToCopy
-                    text={instance?.result_params?.gcp_bootstrap_shell_script}
-                    marginTop="12px"
-                  />
+                  <TextContainerToCopy text={instance?.result_params?.gcp_bootstrap_shell_script} marginTop="12px" />
                 )}
               </Box>
             )}
@@ -313,8 +289,7 @@ const Check = ({
                 <Stack direction="row" alignItems="center" gap="6px">
                   <AlertTriangle />
                   <Text size="xsmall" weight="medium" color="#B54708">
-                    This is a mandatory step to fully establish the cloud
-                    account connection.
+                    This is a mandatory step to fully establish the cloud account connection.
                   </Text>
                 </Stack>
               }
@@ -329,8 +304,7 @@ const Check = ({
             />
           </Box>
           <Text size="small" weight="semibold" color="#414651" mt="24px">
-            Once the verification is complete, the lifecycle status will change
-            to Ready.
+            Once the verification is complete, the lifecycle status will change to Ready.
           </Text>
         </Box>
       )}
@@ -352,16 +326,10 @@ function ConnectAccountConfigDialog(props) {
     serviceProviderName,
   } = props;
   const snackbar = useSnackbar();
-  const [connectState, setConnectState] = useState(
-    stateAccountConfigStepper.trigger
-  );
+  const [connectState, setConnectState] = useState(stateAccountConfigStepper.trigger);
 
   useEffect(() => {
-    if (
-      instance?.status === "READY" ||
-      instance?.status === "ATTACHING" ||
-      instance?.status === "CONNECTING"
-    ) {
+    if (instance?.status === "READY" || instance?.status === "ATTACHING" || instance?.status === "CONNECTING") {
       setConnectState(stateAccountConfigStepper.check);
     }
   }, [connectState, setConnectState, instance?.status]);
@@ -416,10 +384,7 @@ function ConnectAccountConfigDialog(props) {
         </Header>
         <Content>
           {connectState === stateAccountConfigStepper.trigger && (
-            <Trigger
-              formData={formik}
-              serviceProviderName={serviceProviderName}
-            />
+            <Trigger formData={formik} serviceProviderName={serviceProviderName} />
           )}
 
           {connectState === stateAccountConfigStepper.check && (
@@ -453,9 +418,7 @@ function ConnectAccountConfigDialog(props) {
               bgColor={buttonColor}
               onClick={formik.handleSubmit}
             >
-              {"Connect"}{" "}
-              {isFetching ||
-                (accountConfigMutation.isLoading && <LoadingSpinnerSmall />)}
+              {"Connect"} {isFetching || (accountConfigMutation.isLoading && <LoadingSpinnerSmall />)}
             </Button>
           )}
           {connectState === stateAccountConfigStepper.check && (

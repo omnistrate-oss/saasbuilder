@@ -1,26 +1,25 @@
 "use client";
 
-import { useFormik } from "formik";
+import { Box, CircularProgress } from "@mui/material";
 import { useMutation } from "@tanstack/react-query";
+import BrokenCircleCheckIcon from "app/(dashboard)/components/Icons/BrokenCircleCheckIcon";
+import { useFormik } from "formik";
 
-import useLogout from "src/hooks/useLogout";
+import { customerUserResetPassword } from "src/api/customer-user";
 import { updatePassword } from "src/api/users";
+import Divider from "src/components/Divider/Divider";
+import useLogout from "src/hooks/useLogout";
 import useSnackbar from "src/hooks/useSnackbar";
-
 import Button from "components/Button/Button";
-import Form from "components/FormElementsv2/Form/Form";
-import { Text } from "components/Typography/Typography";
+import LoadingSpinnerSmall from "components/CircularProgress/CircularProgress";
 import FieldError from "components/FormElementsv2/FieldError/FieldError";
 import FieldTitle from "components/FormElementsv2/FieldTitle/FieldTitle";
-import LoadingSpinnerSmall from "components/CircularProgress/CircularProgress";
+import Form from "components/FormElementsv2/Form/Form";
 import { PasswordField } from "components/FormElementsv2/PasswordField/PasswordField";
+import { Text } from "components/Typography/Typography";
 
-import FormHeader from "./FormHeader";
 import { FieldCell, FieldTitleCell, PasswordValidationSchema } from "./Common";
-import { customerUserResetPassword } from "src/api/customer-user";
-import { Box, CircularProgress } from "@mui/material";
-import Divider from "src/components/Divider/Divider";
-import BrokenCircleCheckIcon from "app/(dashboard)/components/Icons/BrokenCircleCheckIcon";
+import FormHeader from "./FormHeader";
 type PasswordFormProps = {
   email: string;
 };
@@ -113,21 +112,14 @@ const PasswordForm: React.FC<PasswordFormProps> = ({ email }) => {
                 onBlur={handleBlur}
                 sx={{ mt: 0 }}
               />
-              <FieldError>
-                {touched.currentPassword && errors.currentPassword}
-              </FieldError>
+              <FieldError>{touched.currentPassword && errors.currentPassword}</FieldError>
             </FieldCell>
 
             <FieldTitleCell>
               <FieldTitle required>New Password</FieldTitle>
             </FieldTitleCell>
             <FieldCell>
-              <Text
-                size="small"
-                weight="regular"
-                color="#535862"
-                sx={{ mb: "6px" }}
-              >
+              <Text size="small" weight="regular" color="#535862" sx={{ mb: "6px" }}>
                 Your new password must be more than 8 characters
               </Text>
               <PasswordField
@@ -139,9 +131,7 @@ const PasswordForm: React.FC<PasswordFormProps> = ({ email }) => {
                 onBlur={handleBlur}
                 sx={{ mt: 0 }}
               />
-              <FieldError>
-                {touched.newPassword && errors.newPassword}
-              </FieldError>
+              <FieldError>{touched.newPassword && errors.newPassword}</FieldError>
             </FieldCell>
 
             <FieldTitleCell>
@@ -157,25 +147,15 @@ const PasswordForm: React.FC<PasswordFormProps> = ({ email }) => {
                 onBlur={handleBlur}
                 sx={{ mt: 0 }}
               />
-              <FieldError>
-                {touched.confirmPassword && errors.confirmPassword}
-              </FieldError>
+              <FieldError>{touched.confirmPassword && errors.confirmPassword}</FieldError>
             </FieldCell>
           </div>
 
           <div className="flex items-center justify-end gap-4 mt-5">
-            <Button
-              variant="outlined"
-              onClick={() => formData.resetForm()}
-              disabled={updatePasswordMutation.isLoading}
-            >
+            <Button variant="outlined" onClick={() => formData.resetForm()} disabled={updatePasswordMutation.isLoading}>
               Cancel
             </Button>
-            <Button
-              type="submit"
-              variant="contained"
-              disabled={updatePasswordMutation.isLoading}
-            >
+            <Button type="submit" variant="contained" disabled={updatePasswordMutation.isLoading}>
               Save
               {updatePasswordMutation.isLoading && <LoadingSpinnerSmall />}
             </Button>
@@ -190,13 +170,7 @@ const PasswordForm: React.FC<PasswordFormProps> = ({ email }) => {
       <>
         <Box display="flex" flexDirection={"column"}>
           <Box display="flex" justifyContent={"center"}>
-            <Box
-              display="flex"
-              gap={1}
-              mt="2px"
-              textAlign={"center"}
-              alignItems={"center"}
-            >
+            <Box display="flex" gap={1} mt="2px" textAlign={"center"} alignItems={"center"}>
               <BrokenCircleCheckIcon color="#079455" />
 
               <Text size="xlarge" weight="regular" color="rgba(83, 88, 98, 1)">
@@ -234,9 +208,7 @@ const PasswordForm: React.FC<PasswordFormProps> = ({ email }) => {
             </Box>
           </Box>
           <Box display="flex" justifyContent={"center"}>
-            {setPasswordMutation.isLoading && (
-              <CircularProgress size={16} sx={{ marginTop: "8px" }} />
-            )}
+            {setPasswordMutation.isLoading && <CircularProgress size={16} sx={{ marginTop: "8px" }} />}
           </Box>
           <Divider sx={{ mt: 3, mb: 3 }} />
         </Box>

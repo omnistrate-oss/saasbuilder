@@ -1,28 +1,31 @@
-import { Box, CircularProgress, Stack, styled } from "@mui/material";
-import { Text } from "../../Typography/Typography";
-import Card from "../../Card/Card";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { Box, CircularProgress, Stack, styled } from "@mui/material";
+import _ from "lodash";
 import useWebSocket from "react-use-websocket";
-import MetricCard from "./MetricCard";
+
+import MenuItem from "src/components/FormElementsv2/MenuItem/MenuItem";
+import Select from "src/components/FormElementsv2/Select/Select";
+import DataGridHeaderTitle from "src/components/Headers/DataGridHeaderTitle";
+import JobCompleted from "src/components/JobResource/JobCompleted";
+
+import useSnackbar from "../../../hooks/useSnackbar";
+import formatDateUTC from "../../../utils/formatDateUTC";
+import Card from "../../Card/Card";
 import LoadingSpinner from "../../LoadingSpinner/LoadingSpinner";
+import { Text } from "../../Typography/Typography";
+import DataUnavailableMessage from "../DataUnavailableMessage";
+
 import CpuUsageChart from "./CpuUsageChart";
-import MemUsagePercentChart from "./MemUsagePercentChart";
-import LoadAverageChart from "./LoadAverageChart";
 import DiskIOPSReadChart from "./DiskIOPSReadChart";
 import DiskIOPSWriteChart from "./DiskIOPSWriteChart";
 import DiskThroughputChart from "./DiskThroughputChart";
-import NetworkThroughputChart from "./NetworkThroughputChart";
 import DiskUsageChart from "./DiskUsageChart";
-import useSnackbar from "../../../hooks/useSnackbar";
-import formatDateUTC from "../../../utils/formatDateUTC";
+import LoadAverageChart from "./LoadAverageChart";
+import MemUsagePercentChart from "./MemUsagePercentChart";
+import MetricCard from "./MetricCard";
 import MultiLineChart from "./MultiLineChart";
+import NetworkThroughputChart from "./NetworkThroughputChart";
 import SingleLineChart from "./SingleLineChart";
-import DataGridHeaderTitle from "src/components/Headers/DataGridHeaderTitle";
-import Select from "src/components/FormElementsv2/Select/Select";
-import MenuItem from "src/components/FormElementsv2/MenuItem/MenuItem";
-import _ from "lodash";
-import JobCompleted from "src/components/JobResource/JobCompleted";
-import DataUnavailableMessage from "../DataUnavailableMessage";
 
 const initialCpuUsage = {
   current: "",
@@ -122,9 +125,7 @@ function Metrics(props) {
 
   const socketOpenTime = useRef(null);
   const [isMetricsDataLoaded, setIsMetricsDataLoaded] = useState(false);
-  const [socketConnectionStatus, setConnectionStatus] = useState(
-    connectionStatuses.idle
-  );
+  const [socketConnectionStatus, setConnectionStatus] = useState(connectionStatuses.idle);
   const numConnectError = useRef(0);
   const [cpuUsageData, setCpuUsageData] = useState({
     current: "",
@@ -148,12 +149,8 @@ function Metrics(props) {
   const [diskIOPSReadLabels, setDiskIOPSReadLabels] = useState([]);
   const [diskIOPSWriteLabels, setDiskIOPSWriteLabels] = useState([]);
   const [diskThroughputReadLabels, setDiskThroughputReadLabels] = useState([]);
-  const [diskThroughputWriteLabels, setDiskThroughputWriteLabels] = useState(
-    []
-  );
-  const [netThroughputReceiveLabels, setNetThroughputReceiveLabels] = useState(
-    []
-  );
+  const [diskThroughputWriteLabels, setDiskThroughputWriteLabels] = useState([]);
+  const [netThroughputReceiveLabels, setNetThroughputReceiveLabels] = useState([]);
   const [netThroughputSendLabels, setNetThroughputSendLabels] = useState([]);
   const [diskIOPSRead, setDiskIOPSRead] = useState([]);
   const [diskIOPSWrite, setDiskIOPSWrite] = useState([]);
@@ -175,11 +172,7 @@ function Metrics(props) {
     if (isOlderThanFourHours(messageTime)) {
     } else {
       //Start displaying metrics as soon as we receive data that is 2 min 10 seconds older than socket opening timestamp. We don't show the charts immediately as we wait and collect data to prevent too many rerenders
-      if (
-        socketOpenTime.current &&
-        socketOpenTime.current - messageTime <= 140 &&
-        !isMetricsDataLoaded
-      ) {
+      if (socketOpenTime.current && socketOpenTime.current - messageTime <= 140 && !isMetricsDataLoaded) {
         setIsMetricsDataLoaded(true);
       }
 
@@ -223,17 +216,12 @@ function Metrics(props) {
           if (metric.Name === "system_uptime_seconds") {
             systemUptime = metric;
           }
-          if (
-            metric.Name === "disk_ops_per_sec" &&
-            metric.Labels.type === "read"
-          ) {
+          if (metric.Name === "disk_ops_per_sec" && metric.Labels.type === "read") {
             const value = metric.Value;
             const label = metric.Labels.disk;
 
             setDiskIOPSReadLabels((prev) => {
-              const isAlreadyPresent = prev.find(
-                (diskLabel) => diskLabel === label
-              );
+              const isAlreadyPresent = prev.find((diskLabel) => diskLabel === label);
 
               if (!isAlreadyPresent) {
                 return [...prev, label];
@@ -244,17 +232,12 @@ function Metrics(props) {
             diskIOPSRead[label] = value;
           }
 
-          if (
-            metric.Name === "disk_ops_per_sec" &&
-            metric.Labels.type === "write"
-          ) {
+          if (metric.Name === "disk_ops_per_sec" && metric.Labels.type === "write") {
             const value = metric.Value;
             const label = metric.Labels.disk;
 
             setDiskIOPSWriteLabels((prev) => {
-              const isAlreadyPresent = prev.find(
-                (diskLabel) => diskLabel === label
-              );
+              const isAlreadyPresent = prev.find((diskLabel) => diskLabel === label);
 
               if (!isAlreadyPresent) {
                 return [...prev, label];
@@ -266,19 +249,12 @@ function Metrics(props) {
             diskIOPSWrite[label] = value;
           }
 
-          if (
-            metric.Name === "disk_throughput_bytes_per_sec" &&
-            metric.Labels.type === "read"
-          ) {
-            const value = Number(
-              Number(metric.Value / Math.pow(1024, 2)).toFixed(2)
-            );
+          if (metric.Name === "disk_throughput_bytes_per_sec" && metric.Labels.type === "read") {
+            const value = Number(Number(metric.Value / Math.pow(1024, 2)).toFixed(2));
             const label = metric.Labels.disk;
 
             setDiskThroughputReadLabels((prev) => {
-              const isAlreadyPresent = prev.find(
-                (diskLabel) => diskLabel === label
-              );
+              const isAlreadyPresent = prev.find((diskLabel) => diskLabel === label);
 
               if (!isAlreadyPresent) {
                 return [...prev, label];
@@ -290,19 +266,12 @@ function Metrics(props) {
             diskThroughputRead[label] = value;
           }
 
-          if (
-            metric.Name === "disk_throughput_bytes_per_sec" &&
-            metric.Labels.type === "write"
-          ) {
-            const value = Number(
-              Number(metric.Value / Math.pow(1024, 2)).toFixed(2)
-            );
+          if (metric.Name === "disk_throughput_bytes_per_sec" && metric.Labels.type === "write") {
+            const value = Number(Number(metric.Value / Math.pow(1024, 2)).toFixed(2));
             const label = metric.Labels.disk;
 
             setDiskThroughputWriteLabels((prev) => {
-              const isAlreadyPresent = prev.find(
-                (diskLabel) => diskLabel === label
-              );
+              const isAlreadyPresent = prev.find((diskLabel) => diskLabel === label);
 
               if (!isAlreadyPresent) {
                 return [...prev, label];
@@ -314,19 +283,12 @@ function Metrics(props) {
             diskThroughputWrite[label] = value;
           }
 
-          if (
-            metric.Name === "net_throughput_bytes_per_sec" &&
-            metric.Labels.direction === "recv"
-          ) {
-            const value = Number(
-              Number(metric.Value / Math.pow(1024, 2)).toFixed(2)
-            );
+          if (metric.Name === "net_throughput_bytes_per_sec" && metric.Labels.direction === "recv") {
+            const value = Number(Number(metric.Value / Math.pow(1024, 2)).toFixed(2));
             const label = metric.Labels.interface;
 
             setNetThroughputReceiveLabels((prev) => {
-              const isAlreadyPresent = prev.find(
-                (interfaceLabel) => interfaceLabel === label
-              );
+              const isAlreadyPresent = prev.find((interfaceLabel) => interfaceLabel === label);
 
               if (!isAlreadyPresent) {
                 return [...prev, label];
@@ -338,19 +300,12 @@ function Metrics(props) {
             netThroughputReceive[label] = value;
           }
 
-          if (
-            metric.Name === "net_throughput_bytes_per_sec" &&
-            metric.Labels.direction === "sent"
-          ) {
-            const value = Number(
-              Number(metric.Value / Math.pow(1024, 2)).toFixed(2)
-            );
+          if (metric.Name === "net_throughput_bytes_per_sec" && metric.Labels.direction === "sent") {
+            const value = Number(Number(metric.Value / Math.pow(1024, 2)).toFixed(2));
             const label = metric.Labels.interface;
 
             setNetThroughputSendLabels((prev) => {
-              const isAlreadyPresent = prev.find(
-                (interfaceLabel) => interfaceLabel === label
-              );
+              const isAlreadyPresent = prev.find((interfaceLabel) => interfaceLabel === label);
 
               if (!isAlreadyPresent) {
                 return [...prev, label];
@@ -378,9 +333,7 @@ function Metrics(props) {
             diskUsage[label] = value;
           }
 
-          const customMetricMatch = customMetrics.find(
-            (metricInfo) => metricInfo.metricName === metric.Name
-          );
+          const customMetricMatch = customMetrics.find((metricInfo) => metricInfo.metricName === metric.Name);
 
           if (customMetricMatch) {
             const labelName = metric.Labels.series_name;
@@ -438,10 +391,7 @@ function Metrics(props) {
             const newDataPoint = customMetricsData[metricName];
 
             if (prevMetricDataArray.length >= maxDataPoints) {
-              updatedData[metricName] = [
-                ...prevMetricDataArray.slice(1, maxDataPoints),
-                newDataPoint,
-              ];
+              updatedData[metricName] = [...prevMetricDataArray.slice(1, maxDataPoints), newDataPoint];
             } else {
               updatedData[metricName] = [...prevMetricDataArray, newDataPoint];
             }
@@ -490,10 +440,7 @@ function Metrics(props) {
         setLoadAverage((prev) => {
           if (prev.data.length === maxDataPoints) {
             return {
-              current:
-                !isNaN(loadAverageValue) && loadAverageValue !== null
-                  ? loadAverageValue
-                  : prev.current,
+              current: !isNaN(loadAverageValue) && loadAverageValue !== null ? loadAverageValue : prev.current,
               data: [
                 ...prev.data.slice(1, maxDataPoints),
                 {
@@ -504,10 +451,7 @@ function Metrics(props) {
             };
           } else {
             return {
-              current:
-                !isNaN(loadAverageValue) && loadAverageValue !== null
-                  ? loadAverageValue
-                  : prev.current,
+              current: !isNaN(loadAverageValue) && loadAverageValue !== null ? loadAverageValue : prev.current,
               data: [
                 ...prev.data,
                 {
@@ -642,9 +586,7 @@ function Metrics(props) {
     onReconnectStop: () => {
       // console.log("Stopping", numAttempts);
       if (isMetricsDataLoaded) {
-        snackbar.showError(
-          "Unable to get the latest data. The displayed data might be outdated"
-        );
+        snackbar.showError("Unable to get the latest data. The displayed data might be outdated");
       } else {
         // snackbar.showError("Unable to get the latest data...");
         setErrorMessage(
@@ -656,9 +598,7 @@ function Metrics(props) {
 
   useEffect(() => {
     function handleNetorkDisconnect() {
-      snackbar.showError(
-        "Network disconnected. The displayed data might be outdated"
-      );
+      snackbar.showError("Network disconnected. The displayed data might be outdated");
     }
     window.addEventListener("offline", handleNetorkDisconnect);
     //close the socket on unmount
@@ -698,21 +638,13 @@ function Metrics(props) {
   }
 
   if (instanceStatus !== "COMPLETE" && selectedNode?.isJob !== true) {
-    if (
-      !metricsSocketEndpoint ||
-      errorMessage ||
-      instanceStatus === "STOPPED"
-    ) {
+    if (!metricsSocketEndpoint || errorMessage || instanceStatus === "STOPPED") {
       return (
         <ContainerCard>
           <Stack direction="row" justifyContent="center" marginTop="200px">
             <Text size="xlarge">
               {errorMessage ||
-                `Metrics are not available ${
-                  instanceStatus !== "RUNNING"
-                    ? "as the instance is not running"
-                    : ""
-                }`}
+                `Metrics are not available ${instanceStatus !== "RUNNING" ? "as the instance is not running" : ""}`}
             </Text>
           </Stack>
         </ContainerCard>
@@ -797,12 +729,7 @@ function Metrics(props) {
     selectedNode?.isJob !== true
   ) {
     return (
-      <Stack
-        flexDirection={"column"}
-        gap="30px"
-        alignItems="center"
-        sx={{ marginTop: "200px", marginBottom: "200px" }}
-      >
+      <Stack flexDirection={"column"} gap="30px" alignItems="center" sx={{ marginTop: "200px", marginBottom: "200px" }}>
         <CircularProgress />
         <Text size="large" weight="medium">
           Connected to the server, metrics will be available shortly
@@ -810,11 +737,7 @@ function Metrics(props) {
       </Stack>
     );
   }
-  if (
-    !isMetricsDataLoaded &&
-    instanceStatus !== "COMPLETE" &&
-    selectedNode?.isJob !== true
-  ) {
+  if (!isMetricsDataLoaded && instanceStatus !== "COMPLETE" && selectedNode?.isJob !== true) {
     return <LoadingSpinner />;
   }
 
@@ -834,11 +757,7 @@ function Metrics(props) {
         <DataGridHeaderTitle
           title={`Metrics`}
           desc="Metrics for monitoring and performance insights"
-          count={
-            instanceStatus !== "COMPLETE" && selectedNode?.isJob !== true
-              ? 10 + customMetrics?.length
-              : 0
-          }
+          count={instanceStatus !== "COMPLETE" && selectedNode?.isJob !== true ? 10 + customMetrics?.length : 0}
           units={{
             singular: "Metric",
             plural: "Metrics",
@@ -880,51 +799,17 @@ function Metrics(props) {
       ) : (
         <>
           <Box display="flex" alignItems="stretch" gap={"12px"} mt={2.5}>
-            <MetricCard
-              dataTestId="cpu-usage-card"
-              title="CPU Usage"
-              value={cpuUsageData.current}
-              unit="%"
-            />
+            <MetricCard dataTestId="cpu-usage-card" title="CPU Usage" value={cpuUsageData.current} unit="%" />
             {productTierType !== "OMNISTRATE_MULTI_TENANCY" && (
-              <MetricCard
-                dataTestId="load-average-card"
-                title="Load average"
-                value={loadAverage.current}
-              />
+              <MetricCard dataTestId="load-average-card" title="Load average" value={loadAverage.current} />
             )}
             {selectedNode?.storageSize && (
-              <MetricCard
-                dataTestId="storage-card"
-                title="Storage"
-                value={selectedNode?.storageSize}
-                unit="GiB"
-              />
+              <MetricCard dataTestId="storage-card" title="Storage" value={selectedNode?.storageSize} unit="GiB" />
             )}
-            <MetricCard
-              dataTestId="total-ram-card"
-              title="Total RAM"
-              value={totalMemoryGiB}
-              unit="GiB"
-            />
-            <MetricCard
-              dataTestId="used-ram-card"
-              title="Used RAM"
-              value={memoryUsageGiB}
-              unit="GiB"
-            />
-            <MetricCard
-              dataTestId="ram-usage-card"
-              title="RAM Usage (%)"
-              value={memoryUsagePercent}
-              unit="%"
-            />
-            <MetricCard
-              dataTestId="system-uptime-card"
-              title="System Uptime"
-              value={systemUptimeHours}
-              unit="hrs"
-            />
+            <MetricCard dataTestId="total-ram-card" title="Total RAM" value={totalMemoryGiB} unit="GiB" />
+            <MetricCard dataTestId="used-ram-card" title="Used RAM" value={memoryUsageGiB} unit="GiB" />
+            <MetricCard dataTestId="ram-usage-card" title="RAM Usage (%)" value={memoryUsagePercent} unit="%" />
+            <MetricCard dataTestId="system-uptime-card" title="System Uptime" value={systemUptimeHours} unit="hrs" />
           </Box>
           <MetricsContainerCard title="CPU Usage">
             <CpuUsageChart data={cpuUsageData.data} />
@@ -944,52 +829,33 @@ function Metrics(props) {
           </MetricsContainerCard>
 
           <MetricsContainerCard title="Disk IOPS (Read)">
-            <DiskIOPSReadChart
-              data={diskIOPSRead}
-              labels={diskIOPSReadLabels}
-            />
+            <DiskIOPSReadChart data={diskIOPSRead} labels={diskIOPSReadLabels} />
           </MetricsContainerCard>
 
           <MetricsContainerCard title="Disk IOPS (Write)">
-            <DiskIOPSWriteChart
-              data={diskIOPSWrite}
-              labels={diskIOPSWriteLabels}
-            />
+            <DiskIOPSWriteChart data={diskIOPSWrite} labels={diskIOPSWriteLabels} />
           </MetricsContainerCard>
 
           <MetricsContainerCard title="Disk Throughput (Read)">
-            <DiskThroughputChart
-              data={diskThroughputRead}
-              labels={diskThroughputReadLabels}
-            />
+            <DiskThroughputChart data={diskThroughputRead} labels={diskThroughputReadLabels} />
           </MetricsContainerCard>
 
           <MetricsContainerCard title="Disk Throughput (Write)">
-            <DiskThroughputChart
-              data={diskThroughputWrite}
-              labels={diskThroughputWriteLabels}
-            />
+            <DiskThroughputChart data={diskThroughputWrite} labels={diskThroughputWriteLabels} />
           </MetricsContainerCard>
           {productTierType !== "OMNISTRATE_MULTI_TENANCY" && (
             <>
               <MetricsContainerCard title="Network Throughput (Receive)">
-                <NetworkThroughputChart
-                  data={netThroughputReceive}
-                  labels={netThroughputReceiveLabels}
-                />
+                <NetworkThroughputChart data={netThroughputReceive} labels={netThroughputReceiveLabels} />
               </MetricsContainerCard>
               <MetricsContainerCard title="Network Throughput (Send)">
-                <NetworkThroughputChart
-                  data={netThroughputSend}
-                  labels={netThroughputSendLabels}
-                />
+                <NetworkThroughputChart data={netThroughputSend} labels={netThroughputSendLabels} />
               </MetricsContainerCard>
             </>
           )}
           {customMetrics //show metrics for selected node resource type
             .filter((metric) => {
-              if (selectedNode)
-                return metric.resourceKey === selectedNode?.resourceKey;
+              if (selectedNode) return metric.resourceKey === selectedNode?.resourceKey;
               //else assume it's a serverless resource and filter by the main resource key
               else return metric.resourceKey === resourceKey;
             })
@@ -998,20 +864,13 @@ function Metrics(props) {
               if (labels.length > 0)
                 return (
                   <MetricsContainerCard key={metricName} title={metricName}>
-                    <MultiLineChart
-                      data={customMetricsChartData[metricName]}
-                      labels={labels}
-                      key={metricName}
-                    />
+                    <MultiLineChart data={customMetricsChartData[metricName]} labels={labels} key={metricName} />
                   </MetricsContainerCard>
                 );
               else
                 return (
                   <MetricsContainerCard key={metricName} title={metricName}>
-                    <SingleLineChart
-                      data={customMetricsChartData[metricName]}
-                      key={metricName}
-                    />
+                    <SingleLineChart data={customMetricsChartData[metricName]} key={metricName} />
                   </MetricsContainerCard>
                 );
             })}

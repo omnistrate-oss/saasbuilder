@@ -1,5 +1,5 @@
-import MuiLinearProgress from "@mui/material/LinearProgress";
 import { linearProgressClasses, styled } from "@mui/material";
+import MuiLinearProgress from "@mui/material/LinearProgress";
 
 const LinearProgress = styled(MuiLinearProgress, {
   shouldForwardProp: (prop) => !["height"].includes(prop),

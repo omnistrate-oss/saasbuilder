@@ -1,12 +1,10 @@
-import { httpRequestMethods } from "src/server/utils/constants/httpsRequestMethods";
 import Axios from "axios";
 import Qs from "qs";
+
 //omnistrate backend base url
 import { baseURL } from "src/axios";
-import {
-  passwordRegex,
-  passwordText as passwordRegexFailText,
-} from "src/utils/passwordRegex";
+import { httpRequestMethods } from "src/server/utils/constants/httpsRequestMethods";
+import { passwordRegex, passwordText as passwordRegexFailText } from "src/utils/passwordRegex";
 
 const axios = Axios.create({
   baseURL: baseURL,
@@ -27,9 +25,7 @@ export default async function handleAction(nextRequest, nextResponse) {
           const password = data.password;
           if (password && typeof password === "string") {
             if (!password.match(passwordRegex)) {
-              return nextResponse
-                .status(400)
-                .send({ message: passwordRegexFailText });
+              return nextResponse.status(400).send({ message: passwordRegexFailText });
             }
           }
         }
@@ -73,9 +69,7 @@ export default async function handleAction(nextRequest, nextResponse) {
           nextResponse.status(responseStatusCode);
 
           if (response.headers["content-type"] === "application/octet-stream") {
-            return nextResponse
-              .setHeader("content-type", response.headers["content-type"])
-              .send(data);
+            return nextResponse.setHeader("content-type", response.headers["content-type"]).send(data);
           }
           if (data) nextResponse.send({ ...data });
           else nextResponse.send();
@@ -83,8 +77,7 @@ export default async function handleAction(nextRequest, nextResponse) {
       } catch (error) {
         console.error("Action Route error", error);
         const errorCode = error?.response?.status || 500;
-        const errorMessage =
-          error?.response?.data?.message || defaultErrorMessage;
+        const errorMessage = error?.response?.data?.message || defaultErrorMessage;
         nextResponse.status(errorCode).send({
           message: errorMessage,
         });

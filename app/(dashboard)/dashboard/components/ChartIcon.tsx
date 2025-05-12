@@ -1,12 +1,6 @@
 const ChartIcon = () => {
   return (
-    <svg
-      width="56"
-      height="56"
-      viewBox="0 0 56 56"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
+    <svg width="56" height="56" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
       <mask
         id="mask0_248_92695"
         style={{ maskType: "alpha" }}
@@ -29,14 +23,7 @@ const ChartIcon = () => {
         strokeLinejoin="round"
       />
       <defs>
-        <linearGradient
-          id="paint0_linear_248_92695"
-          x1="28"
-          y1="0"
-          x2="28"
-          y2="56"
-          gradientUnits="userSpaceOnUse"
-        >
+        <linearGradient id="paint0_linear_248_92695" x1="28" y1="0" x2="28" y2="56" gradientUnits="userSpaceOnUse">
           <stop />
           <stop offset="1" stopOpacity="0" />
         </linearGradient>

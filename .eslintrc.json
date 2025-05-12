@@ -4,7 +4,7 @@
     "es6": true
   },
   "ignorePatterns": ["node_modules/*", "schema.ts"],
-  "plugins": ["react", "react-hooks", "import"],
+  "plugins": ["react", "react-hooks", "import", "simple-import-sort"],
   "extends": [
     "next/core-web-vitals",
     "plugin:@typescript-eslint/recommended"
@@ -22,6 +22,8 @@
         "functions": false
       }
     ],
+    "simple-import-sort/imports": "warn",
+    "simple-import-sort/exports": "warn",
     "no-undef": "error",
     "@typescript-eslint/no-unused-vars": "error",
     "@typescript-eslint/no-require-imports": "off",
@@ -38,5 +40,33 @@
     "@typescript-eslint/no-explicit-any": "off",
     "@typescript-eslint/ban-ts-comment": "off",
     "@typescript-eslint/no-wrapper-object-types": "off"
-  }
+  },
+  "overrides": [
+    {
+      "files": ["**/*.js", "**/*.ts", "**/*.tsx", "**/*.jsx"],
+      "rules": {
+        "simple-import-sort/imports": [
+          "warn",
+          {
+            "groups": [
+              // `react` first, `next` second, then packages starting with a character
+              ["^react$", "^next", "^@", "^[a-z]"],
+              // Absolute imports starting with 'src/'
+              ["^@/", "^src/", "^components/", "^hooks/", "^utils/"],
+              // Public imports
+              ["^public/"],
+              // Imports starting with `../`
+              ["^\\.\\.(?!/?$)", "^\\.\\./?$"],
+              // Imports starting with `./`
+              ["^\\./(?=.*/)(?!/?$)", "^\\.(?!/?$)", "^\\./?$"],
+              // Style imports
+              ["^.+\\.s?css$"],
+              // Side effect imports
+              ["^\\u0000"]
+            ]
+          }
+        ]
+      }
+    }
+  ]
 }

@@ -1,9 +1,6 @@
 import { getCloudProviders } from "src/server/api/cloud-providers";
 
-export default async function handleGetCloudProviders(
-  nextRequest,
-  nextResponse
-) {
+export default async function handleGetCloudProviders(nextRequest, nextResponse) {
   if (nextRequest.method === "GET") {
     try {
       const response = await getCloudProviders();
@@ -12,10 +9,7 @@ export default async function handleGetCloudProviders(
     } catch (error) {
       const defaultErrorMessage = "Something went wrong. Please retry";
 
-      if (
-        error.name === "ProviderAuthError" ||
-        error?.response?.status === undefined
-      ) {
+      if (error.name === "ProviderAuthError" || error?.response?.status === undefined) {
         nextResponse.status(500).send({
           message: defaultErrorMessage,
         });

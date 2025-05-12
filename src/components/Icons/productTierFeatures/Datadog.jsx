@@ -1,12 +1,5 @@
 const Datadog = (props) => (
-  <svg
-    width={24}
-    height={24}
-    viewBox="0 0 24 24"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-    {...props}
-  >
+  <svg width={24} height={24} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
     <rect x={0.5} y={0.5} width={23} height={23} rx={11.5} fill="white" />
     <rect x={0.5} y={0.5} width={23} height={23} rx={11.5} stroke="#632CA6" />
     <g clipPath="url(#clip0_2608_9314)">
@@ -19,12 +12,7 @@ const Datadog = (props) => (
     </g>
     <defs>
       <clipPath id="clip0_2608_9314">
-        <rect
-          width={14}
-          height={14.9846}
-          fill="white"
-          transform="translate(5 5)"
-        />
+        <rect width={14} height={14.9846} fill="white" transform="translate(5 5)" />
       </clipPath>
     </defs>
   </svg>

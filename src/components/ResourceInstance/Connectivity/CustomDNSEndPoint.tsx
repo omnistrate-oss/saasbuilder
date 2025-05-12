@@ -1,11 +1,12 @@
 import { Box, styled, SxProps, Theme } from "@mui/material";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
-import TableRow from "@mui/material/TableRow";
 import MuiTableCell from "@mui/material/TableCell";
-import { Text } from "src/components/Typography/Typography";
+import TableRow from "@mui/material/TableRow";
+
 import CopyButton from "src/components/Button/CopyButton";
 import PublicResourceIcon from "src/components/Icons/PublicResource/PublicResource";
+import { Text } from "src/components/Typography/Typography";
 const TableCell = styled(MuiTableCell)({
   borderBottom: "none",
 });
@@ -22,9 +23,7 @@ const CustomDNSEndPoint: React.FC<CustomDNSEndPointProps> = ({
   containerStyles,
   endpointName,
 }) => {
-  const endpointURLWithProtocol = endpointURL.includes("http")
-    ? endpointURL
-    : `https://${endpointURL}`;
+  const endpointURLWithProtocol = endpointURL.includes("http") ? endpointURL : `https://${endpointURL}`;
 
   return (
     <Box
@@ -59,23 +58,9 @@ const CustomDNSEndPoint: React.FC<CustomDNSEndPointProps> = ({
                 {endpointName}
               </Text>
 
-              <Box
-                alignSelf="start"
-                marginBottom="8px"
-                display="flex"
-                gap="12px"
-                marginTop="8px"
-              >
-                <Text
-                  size="small"
-                  weight="regular"
-                  color={isPrimaryResource ? "#6941C6" : ""}
-                >
-                  <a
-                    href={`${endpointURLWithProtocol}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
+              <Box alignSelf="start" marginBottom="8px" display="flex" gap="12px" marginTop="8px">
+                <Text size="small" weight="regular" color={isPrimaryResource ? "#6941C6" : ""}>
+                  <a href={`${endpointURLWithProtocol}`} target="_blank" rel="noopener noreferrer">
                     {endpointURLWithProtocol}
                   </a>
                 </Text>

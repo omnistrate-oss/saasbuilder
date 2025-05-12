@@ -1,4 +1,5 @@
 import { Page } from "@playwright/test";
+
 import { getInstanceDetailsRoute } from "src/utils/routes";
 
 export class InstanceDetailsPage {

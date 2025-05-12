@@ -1,7 +1,7 @@
 import dayjs from "dayjs";
-import utc from "dayjs/plugin/utc";
-import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
 import isSameOrAfter from "dayjs/plugin/isSameOrAfter";
+import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
+import utc from "dayjs/plugin/utc";
 dayjs.extend(utc);
 dayjs.extend(isSameOrBefore);
 dayjs.extend(isSameOrAfter);
@@ -9,26 +9,17 @@ dayjs.extend(isSameOrAfter);
 export const getFilteredTimeOptions = (minDate, selectedDate) => {
   const now = dayjs.utc();
 
-  const isSelectedSameAsEarliest = selectedDate
-    ? selectedDate.isSame(minDate, "day")
-    : false; //check if selected date is same is earliest excluding time
+  const isSelectedSameAsEarliest = selectedDate ? selectedDate.isSame(minDate, "day") : false; //check if selected date is same is earliest excluding time
 
-  const isSelectedSameAsToday = selectedDate
-    ? selectedDate.isSame(now, "day")
-    : false; //check if selected date is same is today excluding time
+  const isSelectedSameAsToday = selectedDate ? selectedDate.isSame(now, "day") : false; //check if selected date is same is today excluding time
 
   const maxOptionsCount = 24;
   const options = [];
-  let selectedDateClone = selectedDate
-    ? selectedDate.clone()
-    : now.startOf("day");
+  let selectedDateClone = selectedDate ? selectedDate.clone() : now.startOf("day");
 
   if (isSelectedSameAsEarliest && isSelectedSameAsToday) {
     for (let i = 0; i < maxOptionsCount; i++) {
-      if (
-        selectedDateClone.isSameOrAfter(minDate) &&
-        selectedDateClone.isSameOrBefore(now)
-      ) {
+      if (selectedDateClone.isSameOrAfter(minDate) && selectedDateClone.isSameOrBefore(now)) {
         //add time option which is between minDate and now
         options.push(selectedDateClone.format("HH:mm"));
       } else if (

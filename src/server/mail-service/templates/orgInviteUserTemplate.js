@@ -6,9 +6,7 @@ async function getOrgInviteUserMailContent(inviteUserEventObj, orgLogoURL) {
   const saasDomainURL = getSaaSDomainURL();
 
   const signUpURL = encodeURI(
-    `${saasDomainURL}/signup?org=${encodeURIComponent(
-      inviteUserEventObj.orgName
-    )}&orgUrl=${encodeURI(
+    `${saasDomainURL}/signup?org=${encodeURIComponent(inviteUserEventObj.orgName)}&orgUrl=${encodeURI(
       inviteUserEventObj.orgURL
     )}&email=${encodeURIComponent(inviteUserEventObj.userEmail)}`
   );
@@ -19,12 +17,7 @@ async function getOrgInviteUserMailContent(inviteUserEventObj, orgLogoURL) {
 
   const subject = `Invitation to join ${userName}'s subscription on ${serviceName} service`;
 
-  const templatePath = path.resolve(
-    __dirname,
-    "..",
-    "ejsTemplates",
-    "orgInviteUser.ejs"
-  );
+  const templatePath = path.resolve(__dirname, "..", "ejsTemplates", "orgInviteUser.ejs");
 
   const baseURL = saasDomainURL;
 
@@ -35,9 +28,7 @@ async function getOrgInviteUserMailContent(inviteUserEventObj, orgLogoURL) {
     bottom_bg_image_url: `${baseURL}/mail/bottom-bg.png`,
     hero_banner: `${baseURL}/mail/cloud-hero-section.png`,
     invite_user: `${baseURL}/mail/invite-user.png`,
-    get_started: inviteUserEventObj.eventPayload.is_user_enabled
-      ? signInURL
-      : signUpURL,
+    get_started: inviteUserEventObj.eventPayload.is_user_enabled ? signInURL : signUpURL,
     is_user_enabled: inviteUserEventObj.eventPayload.is_user_enabled,
   });
 

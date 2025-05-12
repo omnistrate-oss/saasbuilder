@@ -1,26 +1,24 @@
 import { Metadata } from "next";
-// import Script from "next/script";
-import RootProviders from "./RootProviders";
 
 import { ENVIRONMENT_TYPES } from "src/constants/environmentTypes";
 import { getProviderOrgDetails } from "src/server/api/customer-user";
-
-import { ProviderUser } from "src/types/users";
 import { EnvironmentType } from "src/types/common/enums";
+import { ProviderUser } from "src/types/users";
+
+// import Script from "next/script";
+import RootProviders from "./RootProviders";
 
 import "./globals.css";
 
 export const metadata: Metadata = {
   title: "Omnistrate",
-  description:
-    "Working template for a SaaS service Front-end for Services created using Omnistrate",
+  description: "Working template for a SaaS service Front-end for Services created using Omnistrate",
 };
 
 export const dynamic = "force-dynamic";
 
 const RootLayout = async ({ children }: { children: React.ReactNode }) => {
-  const providerOrgDetails: { data: ProviderUser } =
-    await getProviderOrgDetails();
+  const providerOrgDetails: { data: ProviderUser } = await getProviderOrgDetails();
 
   return (
     <html lang="en">
@@ -62,10 +60,7 @@ const RootLayout = async ({ children }: { children: React.ReactNode }) => {
       </head>
       <body>
         <RootProviders
-          envType={
-            (process.env.ENVIRONMENT_TYPE ||
-              ENVIRONMENT_TYPES.PROD) as EnvironmentType
-          }
+          envType={(process.env.ENVIRONMENT_TYPE || ENVIRONMENT_TYPES.PROD) as EnvironmentType}
           providerOrgDetails={providerOrgDetails.data}
           googleAnalyticsTagID={process.env.GOOGLE_ANALYTICS_TAG_ID}
         >

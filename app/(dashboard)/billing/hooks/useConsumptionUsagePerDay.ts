@@ -1,12 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
-import {
-  getConsumptionUsagePerDay,
-  GetConsumptionUsagePerDayQueryParams,
-} from "src/api/consumption";
 
-function useConsumptionUsagePerDay(
-  queryParams: GetConsumptionUsagePerDayQueryParams = {}
-) {
+import { getConsumptionUsagePerDay, GetConsumptionUsagePerDayQueryParams } from "src/api/consumption";
+
+function useConsumptionUsagePerDay(queryParams: GetConsumptionUsagePerDayQueryParams = {}) {
   const { subscriptionID, startDate, endDate } = queryParams;
 
   const query = useQuery({

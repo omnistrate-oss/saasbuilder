@@ -1,29 +1,28 @@
 import { FC, useMemo, useState } from "react";
 import { Box, Stack } from "@mui/material";
-import BackupSummary from "./components/BackupSummary";
-import useSnackbar from "src/hooks/useSnackbar";
-import { useMutation } from "@tanstack/react-query";
-import DataGrid, { selectSingleItem } from "src/components/DataGrid/DataGrid";
-import StatusChip from "src/components/StatusChip/StatusChip";
-import { postInstanceRestoreAccess } from "src/api/resourceInstance";
-import formatDateUTC from "src/utils/formatDateUTC";
-import useBackup, { SnapshotBase } from "./hooks/useBackup";
-import { getResourceInstanceStatusStylesAndLabel } from "src/constants/statusChipStyles/resourceInstanceStatus";
-import { getResourceInstanceBackupStatusStylesAndLabel } from "src/constants/statusChipStyles/resourceInstanceBackupStatus";
-import { roundNumberToTwoDecimals } from "src/utils/formatNumber";
-import LinearProgress from "src/components/LinearProgress/LinearProgress";
-import BackupsTableHeader from "./components/BackupTableHeader";
-import dayjs from "dayjs";
-import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
-import isSameOrAfter from "dayjs/plugin/isSameOrAfter";
-import RestoreInstanceSuccessStep from "src/components/RestoreInstance/RestoreInstanceSuccessStep";
-import InformationDialogTopCenter from "src/components/Dialog/InformationDialogTopCenter";
 import { GridSelectionModel } from "@mui/x-data-grid";
+import { useMutation } from "@tanstack/react-query";
+import dayjs from "dayjs";
+import isSameOrAfter from "dayjs/plugin/isSameOrAfter";
+import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
+
+import { postInstanceRestoreAccess } from "src/api/resourceInstance";
+import DataGrid, { selectSingleItem } from "src/components/DataGrid/DataGrid";
+import { DateRange, initialRangeState } from "src/components/DateRangePicker/DateTimeRangePickerStatic";
+import InformationDialogTopCenter from "src/components/Dialog/InformationDialogTopCenter";
+import LinearProgress from "src/components/LinearProgress/LinearProgress";
+import RestoreInstanceSuccessStep from "src/components/RestoreInstance/RestoreInstanceSuccessStep";
+import StatusChip from "src/components/StatusChip/StatusChip";
+import { getResourceInstanceBackupStatusStylesAndLabel } from "src/constants/statusChipStyles/resourceInstanceBackupStatus";
+import { getResourceInstanceStatusStylesAndLabel } from "src/constants/statusChipStyles/resourceInstanceStatus";
+import useSnackbar from "src/hooks/useSnackbar";
 import { NetworkType } from "src/types/common/enums";
-import {
-  DateRange,
-  initialRangeState,
-} from "src/components/DateRangePicker/DateTimeRangePickerStatic";
+import formatDateUTC from "src/utils/formatDateUTC";
+import { roundNumberToTwoDecimals } from "src/utils/formatNumber";
+
+import BackupSummary from "./components/BackupSummary";
+import BackupsTableHeader from "./components/BackupTableHeader";
+import useBackup, { SnapshotBase } from "./hooks/useBackup";
 dayjs.extend(isSameOrBefore);
 dayjs.extend(isSameOrAfter);
 
@@ -51,13 +50,7 @@ const Backup: FC<{
   accessQueryParams?: accessQueryParams;
   resourceName?: string;
   networkType: NetworkType;
-}> = ({
-  instanceId,
-  backupStatus,
-  accessQueryParams,
-  resourceName,
-  networkType,
-}) => {
+}> = ({ instanceId, backupStatus, accessQueryParams, resourceName, networkType }) => {
   const snackbar = useSnackbar();
 
   const [selectionModel, setSelectionModel] = useState<GridSelectionModel>([]);
@@ -77,8 +70,7 @@ const Backup: FC<{
     isEnable,
   });
   const { data: restoreData = [], isRefetching, refetch } = restoreQuery;
-  const [selectedDateRange, setSelectedDateRange] =
-    useState<DateRange>(initialRangeState);
+  const [selectedDateRange, setSelectedDateRange] = useState<DateRange>(initialRangeState);
 
   const handleClose = () => {
     setRestoreInstanceSuccess(false);
@@ -87,25 +79,16 @@ const Backup: FC<{
   const filteredsnapshots = useMemo(() => {
     let filtered = restoreData;
     if (searchText) {
-      filtered = filtered.filter((snapshot) =>
-        snapshot?.snapshotId.toLowerCase().includes(searchText.toLowerCase())
-      );
+      filtered = filtered.filter((snapshot) => snapshot?.snapshotId.toLowerCase().includes(searchText.toLowerCase()));
     }
-    if (
-      selectedDateRange &&
-      selectedDateRange.startDate &&
-      selectedDateRange.endDate
-    ) {
+    if (selectedDateRange && selectedDateRange.startDate && selectedDateRange.endDate) {
       const startDate = dayjs(selectedDateRange.startDate);
       const endDate = dayjs(selectedDateRange.endDate);
 
       filtered = filtered.filter((backup) => {
         const backupDate = dayjs(backup.createdTime);
 
-        return (
-          dayjs(backupDate).isSameOrAfter(startDate) &&
-          dayjs(backupDate).isSameOrBefore(endDate)
-        );
+        return dayjs(backupDate).isSameOrAfter(startDate) && dayjs(backupDate).isSameOrBefore(endDate);
       });
     }
     return filtered;
@@ -165,8 +148,7 @@ const Backup: FC<{
         flex: 0.5,
         renderCell: (params: { row: SnapshotBase }) => {
           const status = params.row.status;
-          const statusStylesAndMap =
-            getResourceInstanceStatusStylesAndLabel(status);
+          const statusStylesAndMap = getResourceInstanceStatusStylesAndLabel(status);
           return <StatusChip status={status} {...statusStylesAndMap} />;
         },
         minWidth: 100,
@@ -176,16 +158,14 @@ const Backup: FC<{
         headerName: "Created On",
         flex: 1,
         minWidth: 170,
-        valueGetter: (params: { row: SnapshotBase }) =>
-          formatDateUTC(params.row.createdTime),
+        valueGetter: (params: { row: SnapshotBase }) => formatDateUTC(params.row.createdTime),
       },
       {
         field: "completeTime",
         headerName: "Completion Time",
         flex: 1,
         minWidth: 170,
-        valueGetter: (params: { row: SnapshotBase }) =>
-          formatDateUTC(params.row.completeTime),
+        valueGetter: (params: { row: SnapshotBase }) => formatDateUTC(params.row.completeTime),
       },
       {
         field: "progress",
@@ -210,14 +190,9 @@ const Backup: FC<{
         field: "encrypted",
         headerName: "Encryption Status",
         flex: 0.7,
-        valueGetter: (params: { row: SnapshotBase }) =>
-          params.row.encrypted ? "Encrypted" : "Not Encrypted",
-        renderCell: (params: {
-          row: SnapshotBase;
-          value: "Encrypted" | "Not Encrypted";
-        }) => {
-          const statusStylesAndMap =
-            getResourceInstanceBackupStatusStylesAndLabel(params.value);
+        valueGetter: (params: { row: SnapshotBase }) => (params.row.encrypted ? "Encrypted" : "Not Encrypted"),
+        renderCell: (params: { row: SnapshotBase; value: "Encrypted" | "Not Encrypted" }) => {
+          const statusStylesAndMap = getResourceInstanceBackupStatusStylesAndLabel(params.value);
           return <StatusChip status={params.value} {...statusStylesAndMap} />;
         },
         minWidth: 150,
@@ -258,9 +233,7 @@ const Backup: FC<{
               isRestoreDisabled: selectionModel.length === 0,
             },
           }}
-          getRowClassName={(params: { row: SnapshotBase }) =>
-            `${params.row.status}`
-          }
+          getRowClassName={(params: { row: SnapshotBase }) => `${params.row.status}`}
           sx={{
             "& .node-ports": {
               color: "#101828",
@@ -276,15 +249,8 @@ const Backup: FC<{
           noRowsText="No backups"
         />
       </Box>
-      <InformationDialogTopCenter
-        open={isRestoreInstanceSuccess}
-        handleClose={handleClose}
-        maxWidth={"550px"}
-      >
-        <RestoreInstanceSuccessStep
-          handleClose={handleClose}
-          restoredInstanceID={restoredInstanceID}
-        />
+      <InformationDialogTopCenter open={isRestoreInstanceSuccess} handleClose={handleClose} maxWidth={"550px"}>
+        <RestoreInstanceSuccessStep handleClose={handleClose} restoredInstanceID={restoredInstanceID} />
       </InformationDialogTopCenter>
     </>
   );

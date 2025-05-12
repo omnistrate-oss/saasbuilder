@@ -1,5 +1,4 @@
 import { defineConfig, devices } from "@playwright/test";
-
 /**
  * Read environment variables from file.
  * https://github.com/motdotla/dotenv
@@ -35,7 +34,7 @@ export default defineConfig({
     actionTimeout: 30 * 1000, // Timeout for each action (like a click)
 
     /* Base URL to use in actions like `await page.goto('/')`. */
-    baseURL: process.env.YOUR_SAAS_DOMAIN_URL || "http://localhost:3000",
+    baseURL: process.env.YOUR_SAAS_DOMAIN_URL || "http://127.0.0.1:3000",
 
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: "on-first-retry",
@@ -96,7 +95,7 @@ export default defineConfig({
   /* Run your local dev server before starting the tests */
   // webServer: {
   //   command: "yarn dev",
-  //   url: "http://localhost:3000",
+  //   url: process.env.YOUR_SAAS_DOMAIN_URL || "http://127.0.0.1:3000",
   //   reuseExistingServer: !process.env.CI,
   //   env: {
   //     PROVIDER_EMAIL: process.env.PROVIDER_EMAIL as string,

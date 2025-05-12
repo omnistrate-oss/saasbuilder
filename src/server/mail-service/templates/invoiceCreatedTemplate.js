@@ -10,12 +10,7 @@ async function getInvoiceCreatedTemplate(invoiceCreatedEventObj, orgLogoURL) {
 
   const subject = `${orgName} new invoice ${invoiceId} is now available`;
 
-  const templatePath = path.resolve(
-    __dirname,
-    "..",
-    "ejsTemplates",
-    "invoiceCreated.ejs"
-  );
+  const templatePath = path.resolve(__dirname, "..", "ejsTemplates", "invoiceCreated.ejs");
 
   const baseURL = saasDomainURL;
 

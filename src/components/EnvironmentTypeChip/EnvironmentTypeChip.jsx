@@ -1,6 +1,7 @@
-import useEnvironmentType from "src/hooks/useEnvironmentType";
-import Chip from "../Chip/Chip";
 import { ENVIRONMENT_TYPE_LABEL } from "src/constants/environmentTypes";
+import useEnvironmentType from "src/hooks/useEnvironmentType";
+
+import Chip from "../Chip/Chip";
 
 function EnvironmentTypeChip() {
   const environmentType = useEnvironmentType();

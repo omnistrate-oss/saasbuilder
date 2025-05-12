@@ -25,8 +25,7 @@ export default async function handleAuth(nextRequest, nextResponse) {
 
     if (authRequestPayload) {
       try {
-        const response =
-          await customerSignInWithIdentityProvider(authRequestPayload);
+        const response = await customerSignInWithIdentityProvider(authRequestPayload);
         const jwtToken = response.data.jwtToken;
         nextResponse.setHeader("Set-Cookie", `token=${jwtToken}; Path=/`);
         nextResponse.setHeader("Access-Control-Expose-Headers", "Set-Cookie");

@@ -3,8 +3,8 @@ import Link from "next/link";
 import { Box, Stack } from "@mui/material";
 
 import { colors } from "src/themeConfig";
-import { Text } from "components/Typography/Typography";
 import ChevronRightIcon from "components/Icons/ChevronRight/ChevronRightIcon";
+import { Text } from "components/Typography/Typography";
 
 type StyledListItemProps = {
   text: string;
@@ -41,12 +41,7 @@ export const StyledListItem: FC<StyledListItemProps> = (props) => {
 
 const CustomLabelDescription: FC<{
   hideLinks?: boolean;
-  variant:
-    | "aws"
-    | "gcpProjectNumber"
-    | "gcpProjectId"
-    | "azureSubscriptionId"
-    | "azureTenantId";
+  variant: "aws" | "gcpProjectNumber" | "gcpProjectId" | "azureSubscriptionId" | "azureTenantId";
 }> = ({ hideLinks, variant }) => {
   return (
     <Box mt="8px">
@@ -65,10 +60,7 @@ const CustomLabelDescription: FC<{
           </>
         ) : variant === "gcpProjectId" ? (
           <>
-            <StyledListItem
-              text="Don't have GCP Account?"
-              link="https://cloud.google.com/"
-            />
+            <StyledListItem text="Don't have GCP Account?" link="https://cloud.google.com/" />
             <StyledListItem
               text="Can't find GCP Project ID?"
               link="https://cloud.google.com/resource-manager/docs/creating-managing-projects#identifying_projects"
@@ -88,10 +80,7 @@ const CustomLabelDescription: FC<{
               }
             />
 
-            <StyledListItem
-              text="Don't have Azure Account?"
-              link={"https://signup.azure.com/"}
-            />
+            <StyledListItem text="Don't have Azure Account?" link={"https://signup.azure.com/"} />
           </>
         ) : (
           <>

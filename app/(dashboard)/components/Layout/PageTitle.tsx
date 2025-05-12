@@ -1,5 +1,6 @@
-import clsx from "clsx";
 import { FC } from "react";
+import clsx from "clsx";
+
 import { DisplayText } from "src/components/Typography/Typography";
 
 type PageTitleProps = {
@@ -7,12 +8,7 @@ type PageTitleProps = {
   icon: React.ElementType;
 } & React.HTMLAttributes<HTMLDivElement>;
 
-const PageTitle: FC<PageTitleProps> = ({
-  children,
-  icon: Icon,
-  className,
-  ...otherProps
-}) => {
+const PageTitle: FC<PageTitleProps> = ({ children, icon: Icon, className, ...otherProps }) => {
   return (
     <div className={clsx("flex items-center gap-2", className)} {...otherProps}>
       <Icon />

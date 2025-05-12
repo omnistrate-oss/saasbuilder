@@ -1,10 +1,11 @@
 import { Box, Stack, styled } from "@mui/material";
 import MuiTable from "@mui/material/Table";
 import MuiTableBody from "@mui/material/TableBody";
-import MuiTableRow from "@mui/material/TableRow";
 import MuiTableCell from "@mui/material/TableCell";
-import { DisplayText, Text } from "components/Typography/Typography";
 import MuiTableHead from "@mui/material/TableHead";
+import MuiTableRow from "@mui/material/TableRow";
+
+import { DisplayText, Text } from "components/Typography/Typography";
 
 export const TableContainer = styled(Box)({
   boxShadow: "0px 1px 2px 0px rgba(16, 24, 40, 0.05)",
@@ -14,9 +15,7 @@ export const TableContainer = styled(Box)({
   padding: 20,
 });
 
-export const TableTitle = styled((props) => (
-  <DisplayText {...props} size="xsmall" />
-))({});
+export const TableTitle = styled((props) => <DisplayText {...props} size="xsmall" />)({});
 
 export const Table = styled(MuiTable)({ borderRadius: "12px !important" });
 
@@ -51,13 +50,9 @@ export const TableCell = styled(MuiTableCell)({
   borderRadius: "12px",
 });
 
-export const CellTitle = styled((props) => (
-  <Text size="small" weight="medium" color="#101828" {...props} />
-))({});
+export const CellTitle = styled((props) => <Text size="small" weight="medium" color="#101828" {...props} />)({});
 
-export const CellSubtext = styled((props) => (
-  <Text size="small" weight="regular" color="#475467" {...props} />
-))({
+export const CellSubtext = styled((props) => <Text size="small" weight="regular" color="#475467" {...props} />)({
   mt: "2px",
 });
 

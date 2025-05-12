@@ -1,7 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
-import useEnvironmentType from "../useEnvironmentType";
 
 import { getSubscriptions } from "src/api/subscriptions";
+
+import useEnvironmentType from "../useEnvironmentType";
 
 // Before Making any Changes, Please Be Careful because we use the QueryClient to Update the Data when Unsubscribing
 const useSubscriptions = (queryOptions = {}) => {

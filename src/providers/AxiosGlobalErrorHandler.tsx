@@ -1,11 +1,11 @@
-import _ from "lodash";
 import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import { Alert, Snackbar } from "@mui/material";
+import _ from "lodash";
 
 import axios, { baseURL } from "src/axios";
-import useLogout from "src/hooks/useLogout";
 import { logoutBroadcastChannel } from "src/broadcastChannel";
+import useLogout from "src/hooks/useLogout";
 
 const AxiosGlobalErrorHandler = () => {
   const pathname = usePathname();
@@ -85,11 +85,7 @@ const AxiosGlobalErrorHandler = () => {
           if (`${baseURL}/signin` !== error.request.responseURL) {
             handleLogout();
           }
-        } else if (
-          error.response &&
-          error.response.data &&
-          !ignoreGlobalErrorSnack
-        ) {
+        } else if (error.response && error.response.data && !ignoreGlobalErrorSnack) {
           const status = String(error.response.status);
           if (status.startsWith("4") || status.startsWith("5")) {
             const message = error.response.data.message;
@@ -123,12 +119,7 @@ const AxiosGlobalErrorHandler = () => {
 
   return (
     <Snackbar open={isOpen} autoHideDuration={5000} onClose={handleClose}>
-      <Alert
-        onClose={handleClose}
-        variant="filled"
-        severity={"error"}
-        sx={{ width: "100%", fontWeight: 500 }}
-      >
+      <Alert onClose={handleClose} variant="filled" severity={"error"} sx={{ width: "100%", fontWeight: 500 }}>
         {snackbarMsg}
       </Alert>
     </Snackbar>

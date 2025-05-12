@@ -5,39 +5,30 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useMutation } from "@tanstack/react-query";
 import { createColumnHelper } from "@tanstack/react-table";
 
-import PageTitle from "../components/Layout/PageTitle";
-import useCustomNetworks from "./hooks/useCustomNetworks";
-import PageContainer from "../components/Layout/PageContainer";
-import CustomNetworkForm from "./components/CustomNetworkForm";
-import CustomNetworksIcon from "../components/Icons/CustomNetworksIcon";
-import CustomNetworksTableHeader from "./components/CustomNetworksTableHeader";
-import FullScreenDrawer from "../components/FullScreenDrawer/FullScreenDrawer";
-import PeeringInfoDialog, {
-  ListItemProps,
-} from "./components/PeeringInfoDialog";
-
-import RegionIcon from "components/Region/RegionIcon";
-import DataTable from "components/DataTable/DataTable";
-import DataGridText from "components/DataGrid/DataGridText";
-import GridCellExpand from "components/GridCellExpand/GridCellExpand";
-import TextConfirmationDialog from "components/TextConfirmationDialog/TextConfirmationDialog";
-
+import { deleteCustomNetwork } from "src/api/customNetworks";
+import { cloudProviderLogoMap, cloudProviderLongLogoMap } from "src/constants/cloudProviders";
 import useSnackbar from "src/hooks/useSnackbar";
 import { CustomNetwork } from "src/types/customNetwork";
-import { deleteCustomNetwork } from "src/api/customNetworks";
-import useRegions from "./hooks/useRegions";
-import {
-  cloudProviderLogoMap,
-  cloudProviderLongLogoMap,
-} from "src/constants/cloudProviders";
 import { getCustomNetworksRoute } from "src/utils/routes";
+import DataGridText from "components/DataGrid/DataGridText";
+import DataTable from "components/DataTable/DataTable";
+import GridCellExpand from "components/GridCellExpand/GridCellExpand";
+import RegionIcon from "components/Region/RegionIcon";
+import TextConfirmationDialog from "components/TextConfirmationDialog/TextConfirmationDialog";
+
+import FullScreenDrawer from "../components/FullScreenDrawer/FullScreenDrawer";
+import CustomNetworksIcon from "../components/Icons/CustomNetworksIcon";
+import PageContainer from "../components/Layout/PageContainer";
+import PageTitle from "../components/Layout/PageTitle";
+
+import CustomNetworkForm from "./components/CustomNetworkForm";
+import CustomNetworksTableHeader from "./components/CustomNetworksTableHeader";
+import PeeringInfoDialog, { ListItemProps } from "./components/PeeringInfoDialog";
+import useCustomNetworks from "./hooks/useCustomNetworks";
+import useRegions from "./hooks/useRegions";
 
 const columnHelper = createColumnHelper<CustomNetwork>();
-type Overlay =
-  | "peering-info-dialog"
-  | "create-custom-network"
-  | "modify-custom-network"
-  | "delete-dialog";
+type Overlay = "peering-info-dialog" | "create-custom-network" | "modify-custom-network" | "delete-dialog";
 
 const CustomNetworksPage = () => {
   const snackbar = useSnackbar();
@@ -48,9 +39,7 @@ const CustomNetworksPage = () => {
 
   const [searchText, setSearchText] = useState<string>("");
   const [selectedRows, setSelectedRows] = useState<string[]>([]);
-  const [overlayType, setOverlayType] = useState<Overlay>(
-    "peering-info-dialog"
-  );
+  const [overlayType, setOverlayType] = useState<Overlay>("peering-info-dialog");
   const [isOverlayOpen, setIsOverlayOpen] = useState<boolean>(false);
 
   // Open the Create Form Overlay when the overlay query param is set to "create"
@@ -70,9 +59,7 @@ const CustomNetworksPage = () => {
 
   const filteredCustomNetworks = useMemo(() => {
     return customNetworks.filter((customNetwork) => {
-      return customNetwork.name
-        ?.toLowerCase()
-        .includes(searchText.toLowerCase());
+      return customNetwork.name?.toLowerCase().includes(searchText.toLowerCase());
     });
   }, [customNetworks, searchText]);
 
@@ -116,10 +103,7 @@ const CustomNetworksPage = () => {
         header: "Region",
         cell: (data) => {
           return (
-            <GridCellExpand
-              value={data.row.original.cloudProviderRegion || "Global"}
-              startIcon={<RegionIcon />}
-            />
+            <GridCellExpand value={data.row.original.cloudProviderRegion || "Global"} startIcon={<RegionIcon />} />
           );
         },
       }),
@@ -144,9 +128,7 @@ const CustomNetworksPage = () => {
       return [];
     }
 
-    const selectedCustomNetwork = customNetworks.find(
-      (customNetwork) => customNetwork.id === selectedRows[0]
-    );
+    const selectedCustomNetwork = customNetworks.find((customNetwork) => customNetwork.id === selectedRows[0]);
 
     const networkInstance = selectedCustomNetwork?.networkInstances?.[0] || {};
     const res: ListItemProps[] = [];
@@ -242,25 +224,16 @@ const CustomNetworksPage = () => {
       <FullScreenDrawer
         title="Create Customer Network"
         description="Create a new customer network with the specified details"
-        open={
-          isOverlayOpen &&
-          ["create-custom-network", "modify-custom-network"].includes(
-            overlayType
-          )
-        }
+        open={isOverlayOpen && ["create-custom-network", "modify-custom-network"].includes(overlayType)}
         closeDrawer={() => setIsOverlayOpen(false)}
         RenderUI={
           <CustomNetworkForm
-            formMode={
-              overlayType === "create-custom-network" ? "create" : "modify"
-            }
+            formMode={overlayType === "create-custom-network" ? "create" : "modify"}
             regions={regions}
             isFetchingRegions={isFetchingRegions}
             refetchCustomNetworks={refetchCustomNetworks}
             onClose={() => setIsOverlayOpen(false)}
-            selectedCustomNetwork={customNetworks.find(
-              (customNetwork) => customNetwork.id === selectedRows[0]
-            )}
+            selectedCustomNetwork={customNetworks.find((customNetwork) => customNetwork.id === selectedRows[0])}
           />
         }
       />

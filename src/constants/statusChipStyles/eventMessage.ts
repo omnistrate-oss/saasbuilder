@@ -1,9 +1,4 @@
-import {
-  Category,
-  ColorObject,
-  chipCategoryColors,
-  defaultChipStyles,
-} from "./index";
+import { Category, chipCategoryColors, ColorObject, defaultChipStyles } from "./index";
 
 const eventMessageMap: Record<string, { category: Category }> = {
   "Instance capacity added": { category: "success" },
@@ -36,9 +31,7 @@ const eventMessageMap: Record<string, { category: Category }> = {
   "Restart Node X complete": { category: "success" },
 };
 
-export const getEventMessageStylesAndLabel = (
-  status: string
-): ColorObject & { label?: string } => {
+export const getEventMessageStylesAndLabel = (status: string): ColorObject & { label?: string } => {
   let category: string;
 
   if (/^Restarting Node \d$/.test(status)) {

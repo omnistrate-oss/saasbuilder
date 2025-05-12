@@ -1,19 +1,22 @@
 "use client";
 
-import { useSelector } from "react-redux";
-import AccountManagementHeader from "../components/AccountManagement/AccountManagementHeader";
-import { selectUserrootData } from "src/slices/userDataSlice";
-import PageContainer from "../components/Layout/PageContainer";
-import PageTitle from "../components/Layout/PageTitle";
-import CostExplorerIcon from "../components/Icons/CostExplorer";
-import UsageOverview from "./components/UsageOverview";
+import { useState } from "react";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
-import { getEndOfCurrentUTCDay, getFirstDayOfUTCMonth } from "src/utils/time";
-import { useState } from "react";
+import { useSelector } from "react-redux";
+
 import { DateRange } from "src/components/DateRangePicker/DateTimeRangePickerStatic";
-import useConsumptionUsagePerDay from "../billing/hooks/useConsumptionUsagePerDay";
 import LoadingSpinner from "src/components/LoadingSpinner/LoadingSpinner";
+import { selectUserrootData } from "src/slices/userDataSlice";
+import { getEndOfCurrentUTCDay, getFirstDayOfUTCMonth } from "src/utils/time";
+
+import useConsumptionUsagePerDay from "../billing/hooks/useConsumptionUsagePerDay";
+import AccountManagementHeader from "../components/AccountManagement/AccountManagementHeader";
+import CostExplorerIcon from "../components/Icons/CostExplorer";
+import PageContainer from "../components/Layout/PageContainer";
+import PageTitle from "../components/Layout/PageTitle";
+
+import UsageOverview from "./components/UsageOverview";
 dayjs.extend(utc);
 
 const defaultDailyDateRange = {
@@ -24,8 +27,7 @@ const defaultDailyDateRange = {
 function CostExplorerPage() {
   const selectUser = useSelector(selectUserrootData);
   const [dateRange, setDateRange] = useState<DateRange>(defaultDailyDateRange);
-  const [selectedSubscriptionId, setSelectedSubscriptionId] =
-    useState<string>("");
+  const [selectedSubscriptionId, setSelectedSubscriptionId] = useState<string>("");
 
   let filterEndDate;
   if (dateRange.endDate) {
@@ -40,8 +42,7 @@ function CostExplorerPage() {
   } = useConsumptionUsagePerDay({
     startDate: dateRange.startDate,
     endDate: filterEndDate,
-    subscriptionID:
-      selectedSubscriptionId.trim() !== "" ? selectedSubscriptionId : undefined,
+    subscriptionID: selectedSubscriptionId.trim() !== "" ? selectedSubscriptionId : undefined,
   });
 
   //show page spinner only on initial load
@@ -53,10 +54,7 @@ function CostExplorerPage() {
 
   return (
     <div>
-      <AccountManagementHeader
-        userName={selectUser?.name}
-        userEmail={selectUser?.email}
-      />
+      <AccountManagementHeader userName={selectUser?.name} userEmail={selectUser?.email} />
       <PageContainer>
         <PageTitle icon={CostExplorerIcon} className="mb-6">
           Cost Explorer

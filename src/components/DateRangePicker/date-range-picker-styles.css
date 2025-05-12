@@ -382,9 +382,7 @@
   color: #333;
 }
 
-.rdrCalendarWrapper:not(.rdrDateRangeWrapper)
-  .rdrDayHovered
-  .rdrDayNumber:after {
+.rdrCalendarWrapper:not(.rdrDateRangeWrapper) .rdrDayHovered .rdrDayNumber:after {
   content: "";
   border: 1px solid var(--success-600);
   border-radius: 20px;

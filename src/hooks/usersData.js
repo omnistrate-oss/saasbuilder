@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { useDispatch, useSelector } from "react-redux";
-import axios from "../axios";
 
+import axios from "../axios";
 import {
   selectUserDataLoadingStatus,
   selectUserrootData,
@@ -37,10 +37,7 @@ function useUserData() {
 
   return {
     loadingStatus: loadingStatus,
-    isLoading: Boolean(
-      loadingStatus === loadingStatuses.idle ||
-        loadingStatus === loadingStatuses.loading
-    ),
+    isLoading: Boolean(loadingStatus === loadingStatuses.idle || loadingStatus === loadingStatuses.loading),
     userData: userData,
     refetch: query.refetch,
     query: query,

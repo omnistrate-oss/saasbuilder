@@ -1,46 +1,40 @@
 "use client";
 
-import * as yup from "yup";
-import { useFormik } from "formik";
-import { cloneDeep } from "lodash";
 import React, { useEffect, useMemo } from "react";
 import { useMutation } from "@tanstack/react-query";
+import useCustomNetworks from "app/(dashboard)/custom-networks/hooks/useCustomNetworks";
+import { useFormik } from "formik";
+import { cloneDeep } from "lodash";
+import * as yup from "yup";
 
-import { colors } from "src/themeConfig";
-import useSnackbar from "src/hooks/useSnackbar";
-import { APIEntity } from "src/types/serviceOffering";
-import { useGlobalData } from "src/providers/GlobalDataProvider";
+import { createResourceInstance, updateResourceInstance } from "src/api/resourceInstance";
+import Tooltip from "src/components/Tooltip/Tooltip";
+import { productTierTypes } from "src/constants/servicePlan";
 import useAvailabilityZone from "src/hooks/query/useAvailabilityZone";
 import useResourcesInstanceIds from "src/hooks/useResourcesInstanceIds";
-import {
-  createResourceInstance,
-  updateResourceInstance,
-} from "src/api/resourceInstance";
-
+import useSnackbar from "src/hooks/useSnackbar";
+import { useGlobalData } from "src/providers/GlobalDataProvider";
+import { colors } from "src/themeConfig";
+import { CloudProvider } from "src/types/common/enums";
+import { APIEntity } from "src/types/serviceOffering";
+import { isCloudAccountInstance } from "src/utils/access/byoaResource";
 import Button from "components/Button/Button";
-import Form from "components/FormElementsv2/Form/Form";
-import { Text } from "components/Typography/Typography";
 import CardWithTitle from "components/Card/CardWithTitle";
-import PreviewCard from "components/DynamicForm/PreviewCard";
-import LoadingSpinner from "components/LoadingSpinner/LoadingSpinner";
-import GridDynamicField from "components/DynamicForm/GridDynamicField";
 import LoadingSpinnerSmall from "components/CircularProgress/CircularProgress";
+import GridDynamicField from "components/DynamicForm/GridDynamicField";
+import PreviewCard from "components/DynamicForm/PreviewCard";
+import Form from "components/FormElementsv2/Form/Form";
+import LoadingSpinner from "components/LoadingSpinner/LoadingSpinner";
+import { Text } from "components/Typography/Typography";
 
-import {
-  getInitialValues,
-  getOfferingPaymentConfigRequiredStatus,
-} from "../utils";
 import useResourceSchema from "../hooks/useResourceSchema";
+import { getInitialValues, getOfferingPaymentConfigRequiredStatus } from "../utils";
+
 import {
   getDeploymentConfigurationFields,
   getNetworkConfigurationFields,
   getStandardInformationFields,
 } from "./InstanceFormFields";
-import useCustomNetworks from "app/(dashboard)/custom-networks/hooks/useCustomNetworks";
-import { CloudProvider } from "src/types/common/enums";
-import { productTierTypes } from "src/constants/servicePlan";
-import { isCloudAccountInstance } from "src/utils/access/byoaResource";
-import Tooltip from "src/components/Tooltip/Tooltip";
 
 const InstanceForm = ({
   formMode,
@@ -110,15 +104,12 @@ const InstanceForm = ({
     enableReinitialize: true,
     validationSchema: yup.object({
       serviceId: yup.string().required("Service is required"),
-      servicePlanId: yup
-        .string()
-        .required("A service plan with a valid subscription is required"),
+      servicePlanId: yup.string().required("A service plan with a valid subscription is required"),
       subscriptionId: yup.string().required("Subscription is required"),
       resourceId: yup.string().required("Resource is required"),
     }),
     onSubmit: async (values) => {
-      const offering =
-        serviceOfferingsObj[values.serviceId]?.[values.servicePlanId];
+      const offering = serviceOfferingsObj[values.serviceId]?.[values.servicePlanId];
       const selectedResource = offering?.resourceParameters.find(
         (resource) => resource.resourceId === values.resourceId
       );
@@ -136,13 +127,11 @@ const InstanceForm = ({
 
       const createSchema =
         // eslint-disable-next-line no-use-before-define
-        resourceSchemaData?.apis?.find((api) => api.verb === "CREATE")
-          ?.inputParameters || [];
+        resourceSchemaData?.apis?.find((api) => api.verb === "CREATE")?.inputParameters || [];
 
       const updateSchema =
         // eslint-disable-next-line no-use-before-define
-        resourceSchemaData?.apis?.find((api) => api.verb === "UPDATE")
-          ?.inputParameters || [];
+        resourceSchemaData?.apis?.find((api) => api.verb === "UPDATE")?.inputParameters || [];
 
       const schema = formMode === "create" ? createSchema : updateSchema;
       const inputParametersObj = schema.reduce((acc: any, param: any) => {
@@ -173,8 +162,7 @@ const InstanceForm = ({
               }
               break;
             case "boolean":
-              if (data.requestParams[key] === "true")
-                data.requestParams[key] = true;
+              if (data.requestParams[key] === "true") data.requestParams[key] = true;
               else data.requestParams[key] = false;
               break;
           }
@@ -183,10 +171,7 @@ const InstanceForm = ({
         for (const key in data.requestParams) {
           const value = data.requestParams[key];
 
-          if (
-            value === undefined ||
-            (typeof value === "string" && !value.trim())
-          ) {
+          if (value === undefined || (typeof value === "string" && !value.trim())) {
             delete data.requestParams[key];
           }
         }
@@ -206,8 +191,7 @@ const InstanceForm = ({
 
         const networkTypeFieldExists =
           inputParametersObj["cloud_provider"] &&
-          offering?.productTierType !==
-            productTierTypes.OMNISTRATE_MULTI_TENANCY &&
+          offering?.productTierType !== productTierTypes.OMNISTRATE_MULTI_TENANCY &&
           offering?.supportsPublicNetwork;
 
         if (!data.network_type) {
@@ -222,13 +206,9 @@ const InstanceForm = ({
           return snackbar.showError("Network Type is required");
         }
 
-        if (
-          inputParametersObj["custom_dns_configuration"] &&
-          data.requestParams["custom_dns_configuration"]
-        ) {
+        if (inputParametersObj["custom_dns_configuration"] && data.requestParams["custom_dns_configuration"]) {
           data.requestParams.custom_dns_configuration = {
-            [selectedResource?.urlKey || ""]:
-              data.requestParams.custom_dns_configuration,
+            [selectedResource?.urlKey || ""]: data.requestParams.custom_dns_configuration,
           };
         }
 
@@ -260,9 +240,7 @@ const InstanceForm = ({
         delete data.requestParams.custom_availability_zone;
 
         if (!Object.keys(requestParams).length) {
-          return snackbar.showError(
-            "Please update at least one field before submitting"
-          );
+          return snackbar.showError("Please update at least one field before submitting");
         }
 
         let isTypeError = false;
@@ -287,8 +265,7 @@ const InstanceForm = ({
               }
               break;
             case "boolean":
-              if (data.requestParams[key] === "true")
-                data.requestParams[key] = true;
+              if (data.requestParams[key] === "true") data.requestParams[key] = true;
               else data.requestParams[key] = false;
               break;
           }
@@ -298,10 +275,7 @@ const InstanceForm = ({
         for (const key in data.requestParams) {
           const value = data.requestParams[key];
 
-          if (
-            value === undefined ||
-            (typeof value === "string" && !value.trim())
-          ) {
+          if (value === undefined || (typeof value === "string" && !value.trim())) {
             delete data.requestParams[key];
           }
         }
@@ -314,40 +288,29 @@ const InstanceForm = ({
   });
 
   const { values } = formData;
-  const offering =
-    serviceOfferingsObj[values.serviceId]?.[values.servicePlanId];
+  const offering = serviceOfferingsObj[values.serviceId]?.[values.servicePlanId];
 
-  const { data: customNetworks = [], isFetching: isFetchingCustomNetworks } =
-    useCustomNetworks({
-      enabled: values.requestParams?.custom_network_id !== undefined, // Fetch only if custom_network_id is present
-      refetchOnWindowFocus: true, // User can create a custom network and come back to this tab
-    });
+  const { data: customNetworks = [], isFetching: isFetchingCustomNetworks } = useCustomNetworks({
+    enabled: values.requestParams?.custom_network_id !== undefined, // Fetch only if custom_network_id is present
+    refetchOnWindowFocus: true, // User can create a custom network and come back to this tab
+  });
 
-  const { data: resourceSchemaData, isFetching: isFetchingResourceSchema } =
-    useResourceSchema({
-      serviceId: values.serviceId,
-      resourceId: selectedInstance?.resourceID || values.resourceId,
-      instanceId: selectedInstance?.id,
-    });
+  const { data: resourceSchemaData, isFetching: isFetchingResourceSchema } = useResourceSchema({
+    serviceId: values.serviceId,
+    resourceId: selectedInstance?.resourceID || values.resourceId,
+    instanceId: selectedInstance?.id,
+  });
 
-  const resourceSchema = resourceSchemaData?.apis?.find(
-    (api) => api.verb === "CREATE"
-  ) as APIEntity;
+  const resourceSchema = resourceSchemaData?.apis?.find((api) => api.verb === "CREATE") as APIEntity;
 
-  const {
-    data: customAvailabilityZoneData,
-    isLoading: isFetchingCustomAvailabilityZones,
-  } = useAvailabilityZone(
+  const { data: customAvailabilityZoneData, isLoading: isFetchingCustomAvailabilityZones } = useAvailabilityZone(
     values.region,
     values.cloudProvider as CloudProvider,
     // @ts-ignore
     values.requestParams?.custom_availability_zone !== undefined
   );
 
-  const {
-    isFetching: isFetchingResourceInstanceIds,
-    data: resourceIdInstancesHashMap = {},
-  } = useResourcesInstanceIds(
+  const { isFetching: isFetchingResourceInstanceIds, data: resourceIdInstancesHashMap = {} } = useResourcesInstanceIds(
     offering?.serviceProviderId,
     offering?.serviceURLKey,
     offering?.serviceAPIVersion,
@@ -355,8 +318,7 @@ const InstanceForm = ({
     offering?.serviceModelURLKey,
     offering?.productTierURLKey,
     offering?.resourceParameters,
-    subscriptionsObj[values.subscriptionId]?.productTierId ===
-      values.servicePlanId && values.subscriptionId
+    subscriptionsObj[values.subscriptionId]?.productTierId === values.servicePlanId && values.subscriptionId
   );
 
   const requiresValidPaymentConfig = getOfferingPaymentConfigRequiredStatus(
@@ -380,8 +342,7 @@ const InstanceForm = ({
         requestParams: defaultValues,
       }));
 
-      const isMultiTenancy =
-        offering?.productTierType === productTierTypes.OMNISTRATE_MULTI_TENANCY;
+      const isMultiTenancy = offering?.productTierType === productTierTypes.OMNISTRATE_MULTI_TENANCY;
 
       const networkTypeFieldExists =
         inputParameters.find((param) => param.key === "cloud_provider") &&
@@ -397,8 +358,7 @@ const InstanceForm = ({
   }, [resourceSchema, formMode, offering]);
 
   const customAvailabilityZones = useMemo(() => {
-    const availabilityZones =
-      customAvailabilityZoneData?.availabilityZones || [];
+    const availabilityZones = customAvailabilityZoneData?.availabilityZones || [];
     return availabilityZones.sort(function (a, b) {
       if (a.code < b.code) return -1;
       else if (a.code > b.code) {
@@ -469,14 +429,7 @@ const InstanceForm = ({
       customNetworks,
       isFetchingCustomNetworks
     );
-  }, [
-    formMode,
-    formData.values,
-    resourceSchema,
-    serviceOfferingsObj,
-    customNetworks,
-    isFetchingCustomNetworks,
-  ]);
+  }, [formMode, formData.values, resourceSchema, serviceOfferingsObj, customNetworks, isFetchingCustomNetworks]);
 
   const deploymentConfigurationFields = useMemo(() => {
     return getDeploymentConfigurationFields(
@@ -511,15 +464,10 @@ const InstanceForm = ({
         fields: deploymentConfigurationFields,
       },
     ],
-    [
-      standardInformationFields,
-      networkConfigurationFields,
-      deploymentConfigurationFields,
-    ]
+    [standardInformationFields, networkConfigurationFields, deploymentConfigurationFields]
   );
 
-  const disableInstanceCreation =
-    requiresValidPaymentConfig && !isPaymentConfigured;
+  const disableInstanceCreation = requiresValidPaymentConfig && !isPaymentConfigured;
 
   if (isFetchingServiceOfferings) {
     return <LoadingSpinner />;
@@ -532,29 +480,16 @@ const InstanceForm = ({
         <CardWithTitle title="Standard Information">
           <div className="space-y-6">
             {standardInformationFields.map((field, index) => {
-              return (
-                <GridDynamicField
-                  key={index}
-                  field={field}
-                  formData={formData}
-                />
-              );
+              return <GridDynamicField key={index} field={field} formData={formData} />;
             })}
           </div>
         </CardWithTitle>
 
-        {isFetchingResourceSchema ||
-        !networkConfigurationFields.length ? null : (
+        {isFetchingResourceSchema || !networkConfigurationFields.length ? null : (
           <CardWithTitle title="Network Configuration">
             <div className="space-y-6">
               {networkConfigurationFields.map((field, index) => {
-                return (
-                  <GridDynamicField
-                    key={index}
-                    field={field}
-                    formData={formData}
-                  />
-                );
+                return <GridDynamicField key={index} field={field} formData={formData} />;
               })}
             </div>
           </CardWithTitle>
@@ -565,13 +500,7 @@ const InstanceForm = ({
           <CardWithTitle title="Deployment Configuration">
             <div className="space-y-6">
               {deploymentConfigurationFields.map((field, index) => {
-                return (
-                  <GridDynamicField
-                    key={index}
-                    field={field}
-                    formData={formData}
-                  />
-                );
+                return <GridDynamicField key={index} field={field} formData={formData} />;
               })}
             </div>
           </CardWithTitle>
@@ -609,10 +538,7 @@ const InstanceForm = ({
               data-testid="cancel-button"
               variant="outlined"
               onClick={() => setIsOverlayOpen(false)}
-              disabled={
-                createInstanceMutation.isLoading ||
-                updateResourceInstanceMutation.isLoading
-              }
+              disabled={createInstanceMutation.isLoading || updateResourceInstanceMutation.isLoading}
               sx={{ marginLeft: "auto" }} // Pushes the 2 buttons to the end
             >
               Cancel
@@ -634,8 +560,7 @@ const InstanceForm = ({
                   type="submit"
                 >
                   {formMode === "create" ? "Create" : "Update"}
-                  {(createInstanceMutation.isLoading ||
-                    updateResourceInstanceMutation.isLoading) && (
+                  {(createInstanceMutation.isLoading || updateResourceInstanceMutation.isLoading) && (
                     <LoadingSpinnerSmall />
                   )}
                 </Button>

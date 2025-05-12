@@ -1,41 +1,38 @@
 "use client";
 
-import { useSelector } from "react-redux";
+import { useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useEffect, useMemo, useState } from "react";
 import { createColumnHelper } from "@tanstack/react-table";
+import { useSelector } from "react-redux";
 
-import useSnackbar from "src/hooks/useSnackbar";
-import formatDateUTC from "src/utils/formatDateUTC";
-import { Subscription } from "src/types/subscription";
 import { deleteSubscription } from "src/api/subscriptions";
-import { selectUserrootData } from "src/slices/userDataSlice";
+import useSnackbar from "src/hooks/useSnackbar";
 import { useGlobalData } from "src/providers/GlobalDataProvider";
-
-import PageTitle from "../components/Layout/PageTitle";
-import PageContainer from "../components/Layout/PageContainer";
-import SubscriptionDetails from "./components/SubscriptionDetails";
-import SubscriptionsIcon from "../components/Icons/SubscriptionsIcon";
-import ManageSubscriptionsForm from "./components/ManageSubscriptionsForm";
-import SubscriptionsTableHeader from "./components/SubscriptionsTableHeader";
-import FullScreenDrawer from "../components/FullScreenDrawer/FullScreenDrawer";
-import AccountManagementHeader from "../components/AccountManagement/AccountManagementHeader";
-
-import DataTable from "components/DataTable/DataTable";
-import StatusChip from "components/StatusChip/StatusChip";
+import { selectUserrootData } from "src/slices/userDataSlice";
+import { Subscription } from "src/types/subscription";
+import formatDateUTC from "src/utils/formatDateUTC";
 import DataGridText from "components/DataGrid/DataGridText";
+import DataTable from "components/DataTable/DataTable";
 import GridCellExpand from "components/GridCellExpand/GridCellExpand";
-import ServiceNameWithLogo from "components/ServiceNameWithLogo/ServiceNameWithLogo";
-import TextConfirmationDialog from "components/TextConfirmationDialog/TextConfirmationDialog";
 import SubscriptionTypeDirectIcon from "components/Icons/SubscriptionType/SubscriptionTypeDirectIcon";
 import SubscriptionTypeInvitedIcon from "components/Icons/SubscriptionType/SubscriptionTypeInvitedIcon";
+import ServiceNameWithLogo from "components/ServiceNameWithLogo/ServiceNameWithLogo";
+import StatusChip from "components/StatusChip/StatusChip";
+import TextConfirmationDialog from "components/TextConfirmationDialog/TextConfirmationDialog";
+
+import AccountManagementHeader from "../components/AccountManagement/AccountManagementHeader";
+import FullScreenDrawer from "../components/FullScreenDrawer/FullScreenDrawer";
+import SubscriptionsIcon from "../components/Icons/SubscriptionsIcon";
+import PageContainer from "../components/Layout/PageContainer";
+import PageTitle from "../components/Layout/PageTitle";
+
+import ManageSubscriptionsForm from "./components/ManageSubscriptionsForm";
+import SubscriptionDetails from "./components/SubscriptionDetails";
+import SubscriptionsTableHeader from "./components/SubscriptionsTableHeader";
 
 const columnHelper = createColumnHelper<Subscription>();
-type Overlay =
-  | "manage-subscriptions"
-  | "unsubscribe-dialog"
-  | "subscription-details";
+type Overlay = "manage-subscriptions" | "unsubscribe-dialog" | "subscription-details";
 
 const SubscriptionsPage = () => {
   const queryClient = useQueryClient();
@@ -47,14 +44,10 @@ const SubscriptionsPage = () => {
 
   const [searchText, setSearchText] = useState<string>("");
   const [selectedRows, setSelectedRows] = useState<string[]>([]);
-  const [overlayType, setOverlayType] = useState<Overlay>(
-    "manage-subscriptions"
-  );
+  const [overlayType, setOverlayType] = useState<Overlay>("manage-subscriptions");
   const [isOverlayOpen, setIsOverlayOpen] = useState<boolean>(false);
-  const [clickedSubscription, setClickedSubscription] =
-    useState<Subscription | null>(null);
-  const [subscriptionIdToDelete, setSubscriptionIdToDelete] =
-    useState<string>();
+  const [clickedSubscription, setClickedSubscription] = useState<Subscription | null>(null);
+  const [subscriptionIdToDelete, setSubscriptionIdToDelete] = useState<string>();
 
   const selectUser = useSelector(selectUserrootData);
   const {
@@ -70,18 +63,11 @@ const SubscriptionsPage = () => {
       setIsOverlayOpen(true);
       setOverlayType("manage-subscriptions");
     }
-  }, [
-    serviceId,
-    servicePlanId,
-    isFetchingSubscriptions,
-    isFetchingServiceOfferings,
-  ]);
+  }, [serviceId, servicePlanId, isFetchingSubscriptions, isFetchingServiceOfferings]);
 
   // Show only subscriptions that have service offerings associated with them
   const existingSubscriptions = useMemo(() => {
-    return subscriptions.filter(
-      (sub) => serviceOfferingsObj[sub.serviceId]?.[sub.productTierId]
-    );
+    return subscriptions.filter((sub) => serviceOfferingsObj[sub.serviceId]?.[sub.productTierId]);
   }, [serviceOfferingsObj, subscriptions]);
 
   const dataTableColumns = useMemo(() => {
@@ -128,12 +114,7 @@ const SubscriptionsPage = () => {
         header: "Service Name",
         cell: (data) => {
           const { serviceName, serviceLogoURL } = data.row.original;
-          return (
-            <ServiceNameWithLogo
-              serviceName={serviceName}
-              serviceLogoURL={serviceLogoURL}
-            />
-          );
+          return <ServiceNameWithLogo serviceName={serviceName} serviceLogoURL={serviceLogoURL} />;
         },
         meta: {
           minWidth: 230,
@@ -156,10 +137,7 @@ const SubscriptionsPage = () => {
       columnHelper.accessor((row) => formatDateUTC(row.createdAt), {
         id: "createdAt",
         header: "Subscription Date",
-        cell: (data) =>
-          data.row.original.createdAt
-            ? formatDateUTC(data.row.original.createdAt)
-            : "-",
+        cell: (data) => (data.row.original.createdAt ? formatDateUTC(data.row.original.createdAt) : "-"),
       }),
       columnHelper.accessor("subscriptionOwnerName", {
         id: "subscriptionOwnerName",
@@ -169,11 +147,7 @@ const SubscriptionsPage = () => {
             <GridCellExpand
               value={data.row.original.subscriptionOwnerName}
               startIcon={
-                data.row.original.roleType === "root" ? (
-                  <SubscriptionTypeDirectIcon />
-                ) : (
-                  <SubscriptionTypeInvitedIcon />
-                )
+                data.row.original.roleType === "root" ? <SubscriptionTypeDirectIcon /> : <SubscriptionTypeInvitedIcon />
               }
             />
           );
@@ -183,9 +157,7 @@ const SubscriptionsPage = () => {
   }, []);
 
   const selectedSubscription = useMemo(() => {
-    return subscriptions.find(
-      (subscription) => subscription.id === selectedRows[0]
-    );
+    return subscriptions.find((subscription) => subscription.id === selectedRows[0]);
   }, [selectedRows, subscriptions]);
 
   const unSubscribeMutation = useMutation(deleteSubscription, {
@@ -194,12 +166,8 @@ const SubscriptionsPage = () => {
         return {
           ...oldData,
           data: {
-            ids: oldData.data.ids.filter(
-              (id: string) => id !== subscriptionIdToDelete
-            ),
-            subscriptions: oldData.data.subscriptions.filter(
-              (sub: Subscription) => sub.id !== subscriptionIdToDelete
-            ),
+            ids: oldData.data.ids.filter((id: string) => id !== subscriptionIdToDelete),
+            subscriptions: oldData.data.subscriptions.filter((sub: Subscription) => sub.id !== subscriptionIdToDelete),
           },
         };
       });
@@ -220,10 +188,7 @@ const SubscriptionsPage = () => {
 
   return (
     <div>
-      <AccountManagementHeader
-        userName={selectUser?.name}
-        userEmail={selectUser?.email}
-      />
+      <AccountManagementHeader userName={selectUser?.name} userEmail={selectUser?.email} />
       <PageContainer>
         <PageTitle icon={SubscriptionsIcon} className="mb-6">
           Subscriptions
@@ -262,21 +227,11 @@ const SubscriptionsPage = () => {
         </div>
 
         <FullScreenDrawer
-          open={
-            isOverlayOpen &&
-            (overlayType === "manage-subscriptions" ||
-              overlayType === "subscription-details")
-          }
+          open={isOverlayOpen && (overlayType === "manage-subscriptions" || overlayType === "subscription-details")}
           closeDrawer={() => setIsOverlayOpen(false)}
-          title={
-            overlayType === "manage-subscriptions"
-              ? "Manage Subscriptions"
-              : "Subscription Details"
-          }
+          title={overlayType === "manage-subscriptions" ? "Manage Subscriptions" : "Subscription Details"}
           description={
-            overlayType === "manage-subscriptions"
-              ? "Add or remove subscriptions"
-              : "View subscription details"
+            overlayType === "manage-subscriptions" ? "Add or remove subscriptions" : "View subscription details"
           }
           RenderUI={
             overlayType === "manage-subscriptions" ? (
@@ -286,10 +241,7 @@ const SubscriptionsPage = () => {
                 isFetchingServiceOfferings={isFetchingServiceOfferings}
               />
             ) : (
-              <SubscriptionDetails
-                subscription={clickedSubscription}
-                serviceOfferingsObj={serviceOfferingsObj}
-              />
+              <SubscriptionDetails subscription={clickedSubscription} serviceOfferingsObj={serviceOfferingsObj} />
             )
           }
         />

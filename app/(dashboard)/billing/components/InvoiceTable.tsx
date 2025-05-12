@@ -1,12 +1,14 @@
 "use client";
 
-import { createColumnHelper } from "@tanstack/react-table";
 import { useMemo } from "react";
+import { createColumnHelper } from "@tanstack/react-table";
+import PDFIcon from "app/(dashboard)/components/Icons/PDFIcon";
+
 import DataTable from "src/components/DataTable/DataTable";
 import DataGridHeaderTitle from "src/components/Headers/DataGridHeaderTitle";
-import { sampleInvoices } from "../constants";
 import StatusChip from "src/components/StatusChip/StatusChip";
-import PDFIcon from "app/(dashboard)/components/Icons/PDFIcon";
+
+import { sampleInvoices } from "../constants";
 
 const columnHelper = createColumnHelper<any>();
 
@@ -30,12 +32,7 @@ const InvoiceTable = () => {
       columnHelper.accessor("invoiceStatus", {
         id: "invoiceStatus",
         header: "Invoice Status",
-        cell: (data) => (
-          <StatusChip
-            category="success"
-            status={data.row.original.invoiceStatus}
-          />
-        ),
+        cell: (data) => <StatusChip category="success" status={data.row.original.invoiceStatus} />,
       }),
       columnHelper.accessor("dueDate", {
         id: "dueDate",

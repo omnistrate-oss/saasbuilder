@@ -1,8 +1,10 @@
-import { Stack, styled } from "@mui/material";
-import { GridCell, GridRow, DataGrid as MuiDataGrid } from "@mui/x-data-grid";
-import DataGridCustomPagination from "./DataGridCustomPagination";
-import CustomCheckbox from "../Checkbox/Checkbox";
 import { memo } from "react";
+import { Stack, styled } from "@mui/material";
+import { DataGrid as MuiDataGrid, GridCell, GridRow } from "@mui/x-data-grid";
+
+import CustomCheckbox from "../Checkbox/Checkbox";
+
+import DataGridCustomPagination from "./DataGridCustomPagination";
 
 // Define memoized components outside of the render function
 const MemoizedCell = memo(function Cell(props) {
@@ -44,8 +46,7 @@ const DataGrid = styled(
 )(({ enableSelectAll = false }) => ({
   borderRadius: "12px",
   background: "white",
-  boxShadow:
-    "0px 1px 3px rgba(16, 24, 40, 0.1), 0px 1px 2px rgba(16, 24, 40, 0.06)",
+  boxShadow: "0px 1px 3px rgba(16, 24, 40, 0.1), 0px 1px 2px rgba(16, 24, 40, 0.06)",
   border: "1px solid #EAECF0",
   "& .MuiDataGrid-main": {
     minHeight: "540px",
@@ -102,11 +103,7 @@ const DataGrid = styled(
 }));
 
 // Utility method to select one particular row in the data grid
-export function selectSingleItem(
-  newSelection,
-  selectionModel,
-  selectionModelSetter
-) {
+export function selectSingleItem(newSelection, selectionModel, selectionModelSetter) {
   if (newSelection.length > 0) {
     const selectionSet = new Set(selectionModel);
     const newSelectedItem = newSelection.filter((s) => !selectionSet.has(s));

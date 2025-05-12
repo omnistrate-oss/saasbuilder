@@ -14,7 +14,5 @@ function getIdentityProvidersList(payload) {
 }
 
 module.exports = {
-  getIdentityProvidersList: withProviderTokenExpirationHanding(
-    getIdentityProvidersList
-  ),
+  getIdentityProvidersList: withProviderTokenExpirationHanding(getIdentityProvidersList),
 };

@@ -1,13 +1,14 @@
 "use client";
 
 import { useState } from "react";
+import ChevronRightIcon from "@mui/icons-material/ChevronRight";
+
 import Button from "src/components/Button/Button";
 import BellIcon from "src/components/Icons/Bell/BellIcon";
 import Popover from "src/components/Popover/Popover";
 import { Text } from "src/components/Typography/Typography";
 import { styleConfig } from "src/providerConfig";
 import { colors } from "src/themeConfig";
-import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 
 const NotificationItem = () => {
   return (
@@ -34,9 +35,7 @@ const Notifications = () => {
     <>
       <Button
         varaiant="outlined"
-        onClick={(e: React.MouseEvent<HTMLButtonElement>) =>
-          setAnchorEl(e.currentTarget)
-        }
+        onClick={(e: React.MouseEvent<HTMLButtonElement>) => setAnchorEl(e.currentTarget)}
         disableRipple
         sx={{
           position: "relative",
@@ -61,11 +60,7 @@ const Notifications = () => {
         sx={{ marginTop: "8px" }}
       >
         <div className="py-3 px-4 border-b border-[#E9EAEB] w-80">
-          <Text
-            size="small"
-            weight="semibold"
-            color={styleConfig.secondaryColor}
-          >
+          <Text size="small" weight="semibold" color={styleConfig.secondaryColor}>
             Alerts
           </Text>
         </div>

@@ -1,11 +1,12 @@
-import Button from "src/components/Button/Button";
-import DataGridHeaderTitle from "src/components/Headers/DataGridHeaderTitle";
 import AddIcon from "@mui/icons-material/Add";
+import PeeringInfoIcon from "app/(dashboard)/components/Icons/PeeringInfoIcon";
+
+import Button from "src/components/Button/Button";
+import SearchInput from "src/components/DataGrid/SearchInput";
+import DataGridHeaderTitle from "src/components/Headers/DataGridHeaderTitle";
 import DeleteIcon from "src/components/Icons/Delete/Delete";
 import EditIcon from "src/components/Icons/Edit/Edit";
-import SearchInput from "src/components/DataGrid/SearchInput";
 import RefreshWithToolTip from "src/components/RefreshWithTooltip/RefreshWithToolTip";
-import PeeringInfoIcon from "app/(dashboard)/components/Icons/PeeringInfoIcon";
 
 const CustomNetworksTableHeader = ({
   count,
@@ -32,16 +33,8 @@ const CustomNetworksTableHeader = ({
       />
 
       <div className="flex items-center gap-4 flex-shrink-0">
-        <SearchInput
-          placeholder="Search by Name"
-          searchText={searchText}
-          setSearchText={setSearchText}
-          width="250px"
-        />
-        <RefreshWithToolTip
-          refetch={refetchCustomNetworks}
-          disabled={isFetchingCustomNetworks}
-        />
+        <SearchInput placeholder="Search by Name" searchText={searchText} setSearchText={setSearchText} width="250px" />
+        <RefreshWithToolTip refetch={refetchCustomNetworks} disabled={isFetchingCustomNetworks} />
         <Button
           data-testid="modify-button"
           variant={"outlined"}

@@ -2,24 +2,15 @@ const ejs = require("ejs");
 const path = require("path");
 const { getSaaSDomainURL } = require("../../utils/getSaaSDomainURL");
 
-async function getSubscriptionResumedMailContent(
-  resumeSubscriptionEventObj,
-  orgLogoURL
-) {
+async function getSubscriptionResumedMailContent(resumeSubscriptionEventObj, orgLogoURL) {
   const orgName = resumeSubscriptionEventObj.orgName;
   const email = resumeSubscriptionEventObj.userEmail;
   const serviceName = resumeSubscriptionEventObj.eventPayload.service_name;
-  const servicePlanName =
-    resumeSubscriptionEventObj.eventPayload.product_tier_name;
+  const servicePlanName = resumeSubscriptionEventObj.eventPayload.product_tier_name;
 
   const subject = `Your ${serviceName} - ${servicePlanName} subscription resumed`;
 
-  const templatePath = path.resolve(
-    __dirname,
-    "..",
-    "ejsTemplates",
-    "resumeSubscription.ejs"
-  );
+  const templatePath = path.resolve(__dirname, "..", "ejsTemplates", "resumeSubscription.ejs");
 
   const baseURL = getSaaSDomainURL();
 

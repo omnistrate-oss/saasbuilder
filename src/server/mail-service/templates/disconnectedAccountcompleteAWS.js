@@ -14,12 +14,7 @@ async function getDisconnectedAccountCompleteMailContentAWS(
 
   const subject = `Success: AWS Account ${accountId} Disconnected from ${orgName}`;
 
-  const templatePath = path.resolve(
-    __dirname,
-    "..",
-    "ejsTemplates",
-    "disconnectedAccountcompleteAWS.ejs"
-  );
+  const templatePath = path.resolve(__dirname, "..", "ejsTemplates", "disconnectedAccountcompleteAWS.ejs");
 
   const baseURL = getSaaSDomainURL();
 

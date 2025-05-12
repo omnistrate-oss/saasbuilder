@@ -1,7 +1,8 @@
 import { AxiosResponse } from "axios";
 
-import axios from "../axios";
 import { ListSubscriptionRequestsSuccessResponse } from "src/types/subscriptionRequest";
+
+import axios from "../axios";
 
 export const listSubscriptionRequests = (
   params = {}

@@ -1,6 +1,6 @@
+import React from "react";
 import { Box } from "@mui/material";
 import { styled } from "@mui/material/styles";
-import React from "react";
 
 //The outer spans full width, background to be added here
 const Outer = styled(Box, {
@@ -42,19 +42,7 @@ const Inner = styled("div", {
 }));
 
 function Container(props) {
-  const {
-    children,
-    bgImg,
-    bgColor,
-    mt,
-    mb,
-    pt,
-    pb,
-    maxWidth,
-    fontColor,
-    noBottomBorder = true,
-    ...restProps
-  } = props;
+  const { children, bgImg, bgColor, mt, mb, pt, pb, maxWidth, fontColor, noBottomBorder = true, ...restProps } = props;
 
   return (
     <Outer

@@ -76,21 +76,21 @@ yarn install
 
 5. Configure .env.local: Create a .env.local file in the root directory. Populate it with necessary environment variables
 
-| Environment Variables | Description                                                                                                                                                                                                                                           |
-| --------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| PROVIDER_EMAIL        | Service provider's Omnistrate email address                                                                                                                                                                                                           |
-| PROVIDER_PASSWORD     | Service provider's Omnistrate account password                                                                                                                                                                                                        |
-| ENVIRONMENT_TYPE  | The environment type for your application. Defaults to *PROD*. Learn more about environments [here](https://docs.omnistrate.com/operate-guides/pipelines/) 
-| YOUR_SAAS_DOMAIN_URL  | The secure domain URL where this application will be deployed eg. https://www.yourcloud.com. When working locally, it should be http://localhost:3000 
-| YOUR_SAAS_DOMAIN_ALIAS  | The domain alias for your deployment 
-| MAIL_SMTP_HOST    | The the hostname or IP address of the mail service provider. Defaults to *smtp.gmail.com* |                                                                                                |
-| MAIL_SMTP_PORT    | The port to be used for creating the SMTP connection. Defaults to *587* |                                                                                                |
-| MAIL_USER_EMAIL       | The email account to be used to authenticate to send mails (signup, reset password etc) to your customers. Check the following [section](#how-to-configure-google-account-for-sending-out-emails) for instructions to configure gmail account for sending out the emails. |
-| MAIL_USER_PASSWORD    | The email account password |
-| MAIL_FROM | Gmail account from which emails will be sent (might be different than MAIL_USER_EMAIL). If this environment variable is not configured, the mails will be sent using MAIL_USER_EMAIL |
-| GOOGLE_ANALYTICS_TAG_ID | Google Analytics tag ID |
-| GOOGLE_RECAPTCHA_SITE_KEY | Google reCAPTCHA v2 (Invisible) Site Key |
-| GOOGLE_RECAPTCHA_SECRET_KEY | Google reCAPTCHA v2 (Invisible) Secret Key |
+| Environment Variables       | Description                                                                                                                                                                                                                                                               |
+| --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --- |
+| PROVIDER_EMAIL              | Service provider's Omnistrate email address                                                                                                                                                                                                                               |
+| PROVIDER_PASSWORD           | Service provider's Omnistrate account password                                                                                                                                                                                                                            |
+| ENVIRONMENT_TYPE            | The environment type for your application. Defaults to _PROD_. Learn more about environments [here](https://docs.omnistrate.com/operate-guides/pipelines/)                                                                                                                |
+| YOUR_SAAS_DOMAIN_URL        | The secure domain URL where this application will be deployed eg. https://www.yourcloud.com. When working locally, it should be http://localhost:3000                                                                                                                     |
+| YOUR_SAAS_DOMAIN_ALIAS      | The domain alias for your deployment                                                                                                                                                                                                                                      |
+| MAIL_SMTP_HOST              | The the hostname or IP address of the mail service provider. Defaults to _smtp.gmail.com_                                                                                                                                                                                 |     |
+| MAIL_SMTP_PORT              | The port to be used for creating the SMTP connection. Defaults to _587_                                                                                                                                                                                                   |     |
+| MAIL_USER_EMAIL             | The email account to be used to authenticate to send mails (signup, reset password etc) to your customers. Check the following [section](#how-to-configure-google-account-for-sending-out-emails) for instructions to configure gmail account for sending out the emails. |
+| MAIL_USER_PASSWORD          | The email account password                                                                                                                                                                                                                                                |
+| MAIL_FROM                   | Gmail account from which emails will be sent (might be different than MAIL_USER_EMAIL). If this environment variable is not configured, the mails will be sent using MAIL_USER_EMAIL                                                                                      |
+| GOOGLE_ANALYTICS_TAG_ID     | Google Analytics tag ID                                                                                                                                                                                                                                                   |
+| GOOGLE_RECAPTCHA_SITE_KEY   | Google reCAPTCHA v2 (Invisible) Site Key                                                                                                                                                                                                                                  |
+| GOOGLE_RECAPTCHA_SECRET_KEY | Google reCAPTCHA v2 (Invisible) Secret Key                                                                                                                                                                                                                                |
 
 6. Run the development server:
 
@@ -161,13 +161,12 @@ For a video guide covering all the below steps, you can follow it [here](https:/
 
 Ensure your node and yarn versions meet the project's requirements. Try clearing your yarn cache with yarn cache clean and reinstalling dependencies.
 
-
 #### Why do I need to specify an environment type?
 
 SaaSBuilder runs in an environment scope. The services and subscription plans that are made available to the users depend on the environment type that you specify when running the application. SaaSBuilder supports DEV, STAGING, QA, CANARY, PRIVATE and PROD environment types.
-User sign-ups are supported in *PROD*, while other environments are meant for internal use.
+User sign-ups are supported in _PROD_, while other environments are meant for internal use.
 
-Learn more about environments [here](https://docs.omnistrate.com/operate-guides/pipelines/) 
+Learn more about environments [here](https://docs.omnistrate.com/operate-guides/pipelines/)
 
 #### How to configure Google Account for sending out emails?
 
@@ -203,17 +202,17 @@ Configuring Google Account for sending out emails is a two step process. First t
 #### How to configure Google reCAPTCHA?
 
 SaaSBuilder uses Google reCAPTCHA v2 (Invisible) to protect certain pages from attacks against bots. To configure reCAPTCHA,
-  1. Register a new site by navigating to https://www.google.com/recaptcha/admin/create
-  2. On the site registration form, choose "Challenge(v2)" as the reCAPTCHA type and then choose the 
-  "Invisible reCAPTCHA badge" option
 
-  ![Alt text](https://drive.google.com/uc?id=1_LsnRbSX4-XHEw3IAXZHKYqaetH7tqFn "reCAPTHCA Site Registration")
+1. Register a new site by navigating to https://www.google.com/recaptcha/admin/create
+2. On the site registration form, choose "Challenge(v2)" as the reCAPTCHA type and then choose the
+   "Invisible reCAPTCHA badge" option
 
-  3. Provide the other required details and submit the form.
-  4. Google will generate a Site Key and a Secret Key for your site.
+![Alt text](https://drive.google.com/uc?id=1_LsnRbSX4-XHEw3IAXZHKYqaetH7tqFn "reCAPTHCA Site Registration")
 
-  ![Alt text](https://drive.google.com/uc?id=1Ntk2NzpRC545X-7pw24nxs-ZhjVLiS_E "reCAPTHCA Key")
+3. Provide the other required details and submit the form.
+4. Google will generate a Site Key and a Secret Key for your site.
 
+![Alt text](https://drive.google.com/uc?id=1Ntk2NzpRC545X-7pw24nxs-ZhjVLiS_E "reCAPTHCA Key")
 
 #### How do I resolve "node version not compatible" errors?
 
@@ -252,4 +251,3 @@ If you need help or want to report an issue, please follow these steps:
 - Contact Us: For more direct support, contact Omnistrate support
 
 We strive to create a welcoming and supportive community, so don't hesitate to reach out!
-

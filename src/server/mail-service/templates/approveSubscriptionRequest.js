@@ -2,24 +2,15 @@ const ejs = require("ejs");
 const path = require("path");
 const { getSaaSDomainURL } = require("../../utils/getSaaSDomainURL");
 
-async function getApproveSubscriptionMailContent(
-  approveSubsriptionEventObj,
-  orgLogoURL
-) {
+async function getApproveSubscriptionMailContent(approveSubsriptionEventObj, orgLogoURL) {
   const orgName = approveSubsriptionEventObj.orgName;
   const email = approveSubsriptionEventObj.userEmail;
   const serviceName = approveSubsriptionEventObj.eventPayload.service_name;
-  const servicePlanName =
-    approveSubsriptionEventObj.eventPayload.product_tier_name;
+  const servicePlanName = approveSubsriptionEventObj.eventPayload.product_tier_name;
 
   const subject = `Your ${serviceName} - ${servicePlanName} subscription request approved`;
 
-  const templatePath = path.resolve(
-    __dirname,
-    "..",
-    "ejsTemplates",
-    "approveSubscriptionRequest.ejs"
-  );
+  const templatePath = path.resolve(__dirname, "..", "ejsTemplates", "approveSubscriptionRequest.ejs");
 
   const baseURL = getSaaSDomainURL();
 

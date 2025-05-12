@@ -1,19 +1,12 @@
 import { useState } from "react";
+import { Box, InputAdornment, TextField, Tooltip } from "@mui/material";
 import Generator from "generate-password";
-import { InputAdornment, Tooltip, Box, TextField } from "@mui/material";
 
 import KeyIcon from "src/components/Icons/Key/KeyIcon";
 import { Text } from "src/components/Typography/Typography";
 
 const PasswordField = (props) => {
-  const {
-    disabled = false,
-    value,
-    dataCy,
-    showPasswordGenerator,
-    sx = {},
-    ...restProps
-  } = props;
+  const { disabled = false, value, dataCy, showPasswordGenerator, sx = {}, ...restProps } = props;
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
   return (

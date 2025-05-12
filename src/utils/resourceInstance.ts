@@ -1,4 +1,5 @@
 import { SxProps } from "@mui/material";
+
 import { instaceHealthStatusMap } from "src/constants/statusChipStyles/resourceInstanceHealthStatus";
 import { InstanceComputedHealthStatus } from "src/types/resourceInstance";
 
@@ -11,7 +12,7 @@ export const getRowBorderStyles = () => {
       HEALTHY: "#17B26A",
       UNHEALTHY: "#F04438",
       UNKNOWN: "#363F72",
-      "NA": "#676b83",
+      NA: "#676b83",
     };
 
     const color = colorMap[status as InstanceComputedHealthStatus];

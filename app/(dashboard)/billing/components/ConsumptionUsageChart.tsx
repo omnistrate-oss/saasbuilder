@@ -1,16 +1,8 @@
+import React, { FC, useMemo } from "react";
 import { Box, Stack } from "@mui/material";
 import dayjs from "dayjs";
-import React, { FC, useMemo } from "react";
-import {
-  ComposedChart,
-  Line,
-  Bar,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
-} from "recharts";
+import { Bar, CartesianGrid, ComposedChart, Line, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
+
 import LoadingSpinner from "src/components/LoadingSpinner/LoadingSpinner";
 import ReChartContainer from "src/components/ReChartContainer/ReChartContainer";
 import { Text } from "src/components/Typography/Typography";
@@ -22,16 +14,8 @@ function formatDate(inputDate) {
 
 const LegendItem = ({ title = "", bgColor }) => {
   return (
-    <Box
-      display={"flex"}
-      justifyContent={"space-between"}
-      alignSelf={"center"}
-      gap={"8px"}
-    >
-      <Box
-        alignSelf={"center"}
-        sx={{ background: bgColor, width: "11px", height: "11px" }}
-      />
+    <Box display={"flex"} justifyContent={"space-between"} alignSelf={"center"} gap={"8px"}>
+      <Box alignSelf={"center"} sx={{ background: bgColor, width: "11px", height: "11px" }} />
       <Text size="xsmall" weight="medium" color="#7E8299">
         {title}
       </Text>
@@ -41,12 +25,7 @@ const LegendItem = ({ title = "", bgColor }) => {
 
 const Legend = () => {
   return (
-    <Box
-      display={"flex"}
-      justifyContent={"space-between"}
-      gap={"17px"}
-      mt="16px"
-    >
+    <Box display={"flex"} justifyContent={"space-between"} gap={"17px"} mt="16px">
       <LegendItem bgColor="#3E97FF" title="Memory GiB hours" />
       <LegendItem bgColor="#10AA50" title="Storage GiB hours" />
       <LegendItem bgColor="#7239EA" title="CPU core hours" />
@@ -54,36 +33,25 @@ const Legend = () => {
   );
 };
 
-export function handleYAxisShift(
-  chartID: string,
-  e: React.UIEvent<HTMLDivElement>
-) {
+export function handleYAxisShift(chartID: string, e: React.UIEvent<HTMLDivElement>) {
   const allAxis = document.querySelectorAll(`#${chartID} .recharts-yAxis`);
 
   const xAxis = document.querySelector(`#${chartID} .recharts-xAxis`);
   const xAxisHeight = xAxis?.getBoundingClientRect().height || 0;
 
   allAxis?.forEach((axis) => {
-    const orientation =
-      axis
-        .querySelector(`.recharts-cartesian-axis-tick-line`)
-        ?.getAttribute("orientation") || "hor";
+    const orientation = axis.querySelector(`.recharts-cartesian-axis-tick-line`)?.getAttribute("orientation") || "hor";
 
-    const rectElement = document.querySelector(
-      `#${chartID} .y-axis-rect-${orientation}`
-    );
+    const rectElement = document.querySelector(`#${chartID} .y-axis-rect-${orientation}`);
     if (!rectElement) {
       //Adding a rect
-      const rect = document.createElementNS(
-        "http://www.w3.org/2000/svg",
-        "rect"
-      );
+      const rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
       const yAxisheight = axis.getBoundingClientRect().height;
       const yAxisWidth = axis.getBoundingClientRect().width;
 
       rect.setAttribute("x", "0");
       rect.setAttribute("y", "0");
-      rect.setAttribute("width", `${Math.max(yAxisWidth + 20, 53)  }px`);
+      rect.setAttribute("width", `${Math.max(yAxisWidth + 20, 53)}px`);
       rect.setAttribute("height", `${yAxisheight + xAxisHeight}px`);
       rect.setAttribute("fill", "white");
       rect.setAttribute("class", `y-axis-rect-${orientation}`);
@@ -166,9 +134,7 @@ const ConsumptionUsageChart: FC<ConsumptionUsageChartProps> = (props) => {
         };
       }
     });
-    return Object.values(dataHashByDate).sort((itemA, itemB) =>
-      itemA.date < itemB.date ? -1 : 1
-    );
+    return Object.values(dataHashByDate).sort((itemA, itemB) => (itemA.date < itemB.date ? -1 : 1));
   }, [usagePerDayData]);
 
   const minChartWidth =
@@ -318,10 +284,7 @@ const ConsumptionUsageChart: FC<ConsumptionUsageChartProps> = (props) => {
               ))}
               <YAxis
                 tickFormatter={(value) => `${value}`}
-                domain={([, datamax]) => [
-                  0,
-                  datamax > 0 ? Math.round(datamax + 1) : 1,
-                ]}
+                domain={([, datamax]) => [0, datamax > 0 ? Math.round(datamax + 1) : 1]}
                 interval={0}
                 tick={({ x, y, payload }) => (
                   <text

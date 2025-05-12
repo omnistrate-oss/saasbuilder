@@ -1,12 +1,5 @@
-import {
-  Area,
-  AreaChart,
-  CartesianGrid,
-  ResponsiveContainer,
-  Tooltip,
-  XAxis,
-  YAxis,
-} from "recharts";
+import { Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
+
 import ReChartContainer from "src/components/ReChartContainer/ReChartContainer";
 
 function SingleLineChart(props) {
@@ -26,12 +19,7 @@ function SingleLineChart(props) {
         >
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis dataKey="x" tickLine={false} tickFormatter={() => ""} />
-          <YAxis
-            domain={([, datamax]) => [
-              0,
-              datamax > 0 ? Math.round(datamax + 1) : 1,
-            ]}
-          />
+          <YAxis domain={([, datamax]) => [0, datamax > 0 ? Math.round(datamax + 1) : 1]} />
           <Tooltip
             formatter={(value, name, props) => {
               return `${value} | Time :${props.payload.x}`;

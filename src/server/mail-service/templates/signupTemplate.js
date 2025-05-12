@@ -16,12 +16,7 @@ async function getSignUpMailContent(signUpEventObj, orgLogoURL) {
 
   const subject = `Action Required: Please activate your ${signUpEventObj.orgName} account now`;
 
-  const templatePath = path.resolve(
-    __dirname,
-    "..",
-    "ejsTemplates",
-    "userSignUp.ejs"
-  );
+  const templatePath = path.resolve(__dirname, "..", "ejsTemplates", "userSignUp.ejs");
 
   const baseURL = saasDomainURL;
 

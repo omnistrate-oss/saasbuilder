@@ -1,16 +1,8 @@
 import React from "react";
-import {
-  Area,
-  AreaChart,
-  CartesianGrid,
-  Legend,
-  ResponsiveContainer,
-  Tooltip,
-  XAxis,
-  YAxis,
-} from "recharts";
-import ReChartContainer from "../../ReChartContainer/ReChartContainer";
+import { Area, AreaChart, CartesianGrid, Legend, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
+
 import lineChartColorPalette from "../../../utils/constants/lineChartColorPalette";
+import ReChartContainer from "../../ReChartContainer/ReChartContainer";
 
 function DiskIOPSWriteChart(props) {
   const { data, labels } = props;
@@ -32,10 +24,7 @@ function DiskIOPSWriteChart(props) {
           <XAxis dataKey="time" tickFormatter={() => ""} tickLine={false} />
           <YAxis
             tickFormatter={(value) => `${value}`}
-            domain={([, datamax]) => [
-              0,
-              datamax > 0 ? Math.round(datamax + 1) : 1,
-            ]}
+            domain={([, datamax]) => [0, datamax > 0 ? Math.round(datamax + 1) : 1]}
           />
           <Tooltip isAnimationActive={false} />
           <Legend />

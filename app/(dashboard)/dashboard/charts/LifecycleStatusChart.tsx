@@ -1,24 +1,13 @@
 "use client";
 
 import { useMemo } from "react";
-import {
-  ResponsiveContainer,
-  BarChart,
-  Bar,
-  CartesianGrid,
-  XAxis,
-  YAxis,
-} from "recharts";
-import {
-  ChartContainer,
-  ChartConfig,
-  ChartTooltip,
-  ChartTooltipContent,
-} from "@/components/ui/chart";
-import { ResourceInstance } from "src/types/resourceInstance";
-import { resourceInstanceStatusMap } from "src/constants/statusChipStyles/resourceInstanceStatus";
-import { chipCategoryColors } from "src/constants/statusChipStyles";
+import { Bar, BarChart, CartesianGrid, ResponsiveContainer, XAxis, YAxis } from "recharts";
+
+import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
 import { Text } from "src/components/Typography/Typography";
+import { chipCategoryColors } from "src/constants/statusChipStyles";
+import { resourceInstanceStatusMap } from "src/constants/statusChipStyles/resourceInstanceStatus";
+import { ResourceInstance } from "src/types/resourceInstance";
 
 const chartConfig = {
   instances: {
@@ -46,9 +35,7 @@ type LifecycleStatusChartProps = {
   instances: ResourceInstance[];
 };
 
-const LifecycleStatusChart: React.FC<LifecycleStatusChartProps> = ({
-  instances,
-}) => {
+const LifecycleStatusChart: React.FC<LifecycleStatusChartProps> = ({ instances }) => {
   const chartData = useMemo(() => {
     const statusCountsObj = instances.reduce((acc, curr) => {
       const lifecycleStatus = curr.status;
@@ -89,22 +76,12 @@ const LifecycleStatusChart: React.FC<LifecycleStatusChartProps> = ({
             tickLine={false}
             tickMargin={10}
             axisLine={false}
-            tickFormatter={(value) =>
-              chartConfig[value as keyof typeof chartConfig]?.label
-            }
+            tickFormatter={(value) => chartConfig[value as keyof typeof chartConfig]?.label}
           />
 
           <YAxis allowDecimals={false} axisLine={false} />
-          <ChartTooltip
-            cursor={false}
-            content={<ChartTooltipContent hideLabel />}
-          />
-          <Bar
-            dataKey="instances"
-            strokeWidth={2}
-            radius={8}
-            maxBarSize={100}
-          />
+          <ChartTooltip cursor={false} content={<ChartTooltipContent hideLabel />} />
+          <Bar dataKey="instances" strokeWidth={2} radius={8} maxBarSize={100} />
         </BarChart>
       </ChartContainer>
     </ResponsiveContainer>

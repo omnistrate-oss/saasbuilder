@@ -1,8 +1,9 @@
 import React from "react";
+import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import { Box, styled } from "@mui/material";
+
 import CopyButton from "src/components/Button/CopyButton";
 import { Text } from "src/components/Typography/Typography";
-import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 
 type CustomDNSDetailsProps = {
   aRecordTarget?: string;
@@ -104,21 +105,11 @@ const CustomDNSDetails: React.FC<CustomDNSDetailsProps> = ({
                 flexShrink={0}
                 width="100px"
               >
-                <Text
-                  size="medium"
-                  weight="regular"
-                  color="rgba(71, 84, 103, 1)"
-                >
+                <Text size="medium" weight="regular" color="rgba(71, 84, 103, 1)">
                   {record.recordLabel}
                 </Text>
               </Box>
-              <Box
-                display="flex"
-                justifyContent="space-between"
-                alignItems="center"
-                flexGrow={1}
-                minWidth={0}
-              >
+              <Box display="flex" justifyContent="space-between" alignItems="center" flexGrow={1} minWidth={0}>
                 <Box
                   p="10px"
                   borderRight="1px solid #EAECF0"
@@ -127,13 +118,7 @@ const CustomDNSDetails: React.FC<CustomDNSDetailsProps> = ({
                   textOverflow="ellipsis"
                   whiteSpace="nowrap"
                 >
-                  <Text
-                    size="medium"
-                    weight="regular"
-                    color="rgba(71, 84, 103, 1)"
-                    maxWidth={"100%"}
-                    ellipsis
-                  >
+                  <Text size="medium" weight="regular" color="rgba(71, 84, 103, 1)" maxWidth={"100%"} ellipsis>
                     {record.domainValue}
                   </Text>
                 </Box>
@@ -147,13 +132,7 @@ const CustomDNSDetails: React.FC<CustomDNSDetailsProps> = ({
               <ArrowForwardIcon sx={{ color: "#6941C6" }} />
             </Box>
             <RecordColumn hasBorder>
-              <Box
-                display="flex"
-                justifyContent="space-between"
-                alignItems="center"
-                flexGrow={1}
-                minWidth={0}
-              >
+              <Box display="flex" justifyContent="space-between" alignItems="center" flexGrow={1} minWidth={0}>
                 <Box
                   p="10px"
                   borderRight="1px solid #EAECF0"
@@ -162,13 +141,7 @@ const CustomDNSDetails: React.FC<CustomDNSDetailsProps> = ({
                   textOverflow="ellipsis"
                   whiteSpace="nowrap"
                 >
-                  <Text
-                    size="medium"
-                    weight="regular"
-                    color="rgba(71, 84, 103, 1)"
-                    maxWidth={"100%"}
-                    ellipsis
-                  >
+                  <Text size="medium" weight="regular" color="rgba(71, 84, 103, 1)" maxWidth={"100%"} ellipsis>
                     {record.recordValue}
                   </Text>
                 </Box>
@@ -186,11 +159,7 @@ const CustomDNSDetails: React.FC<CustomDNSDetailsProps> = ({
               <Box px="8px" />
               <RecordColumn>
                 <Box paddingLeft="15px">
-                  <Text
-                    size="small"
-                    weight="regular"
-                    color="rgba(52, 64, 84, 1)"
-                  >
+                  <Text size="small" weight="regular" color="rgba(52, 64, 84, 1)">
                     {record?.recordValueDetails}
                   </Text>
                 </Box>

@@ -1,13 +1,15 @@
 import { styled } from "@mui/material";
-import { Text } from "../../Typography/Typography";
-import RegionIcon from "../../Region/RegionIcon";
-import { getResourceInstanceStatusStylesAndLabel } from "src/constants/statusChipStyles/resourceInstanceStatus";
-import StatusChip from "src/components/StatusChip/StatusChip";
+
 import InstanceHealthStatusChip, {
   getInstanceHealthStatus,
 } from "src/components/InstanceHealthStatusChip/InstanceHealthStatusChip";
-import { colors } from "src/themeConfig";
+import StatusChip from "src/components/StatusChip/StatusChip";
 import { cloudProviderLongLogoMap } from "src/constants/cloudProviders";
+import { getResourceInstanceStatusStylesAndLabel } from "src/constants/statusChipStyles/resourceInstanceStatus";
+import { colors } from "src/themeConfig";
+
+import RegionIcon from "../../Region/RegionIcon";
+import { Text } from "../../Typography/Typography";
 
 const ServiceLogoImg = styled("img")({
   height: "40px",
@@ -35,9 +37,7 @@ function ResourceInstanceOverview(props) {
 
   const healthStatus = getInstanceHealthStatus(detailedNetworkTopology, status);
 
-  const statusStylesAndLabel = getResourceInstanceStatusStylesAndLabel(
-    status || "UNKNOWN"
-  );
+  const statusStylesAndLabel = getResourceInstanceStatusStylesAndLabel(status || "UNKNOWN");
 
   return (
     <div
@@ -72,57 +72,25 @@ function ResourceInstanceOverview(props) {
             </Text>
           </div>
         ))}
-      <div
-        style={{ padding: "14px" }}
-        className="flex items-center justify-center gap-2"
-      >
-        {serviceLogoURL && (
-          <ServiceLogoImg src={serviceLogoURL} alt={serviceName} />
-        )}
-        <Text
-          size="small"
-          weight="regular"
-          color={colors.gray600}
-          ellipsis
-          title={serviceName}
-        >
+      <div style={{ padding: "14px" }} className="flex items-center justify-center gap-2">
+        {serviceLogoURL && <ServiceLogoImg src={serviceLogoURL} alt={serviceName} />}
+        <Text size="small" weight="regular" color={colors.gray600} ellipsis title={serviceName}>
           {serviceName}
         </Text>
       </div>
-      <div
-        style={{ padding: "14px" }}
-        className="flex items-center justify-center"
-      >
-        <Text
-          size="small"
-          weight="regular"
-          color={colors.gray600}
-          ellipsis
-          title={productTierName}
-        >
+      <div style={{ padding: "14px" }} className="flex items-center justify-center">
+        <Text size="small" weight="regular" color={colors.gray600} ellipsis title={productTierName}>
           {productTierName}
         </Text>
       </div>
 
-      <div
-        style={{ padding: "14px" }}
-        className="flex items-center justify-center"
-      >
-        <Text
-          size="small"
-          weight="regular"
-          color={colors.gray600}
-          ellipsis
-          title={subscriptionOwner}
-        >
+      <div style={{ padding: "14px" }} className="flex items-center justify-center">
+        <Text size="small" weight="regular" color={colors.gray600} ellipsis title={subscriptionOwner}>
           {subscriptionOwner}
         </Text>
       </div>
 
-      <div
-        style={{ padding: "14px" }}
-        className="flex items-center justify-center"
-      >
+      <div style={{ padding: "14px" }} className="flex items-center justify-center">
         {status ? (
           <StatusChip status={status} {...statusStylesAndLabel} />
         ) : (
@@ -130,39 +98,24 @@ function ResourceInstanceOverview(props) {
         )}
       </div>
 
-      <div
-        style={{ padding: "14px" }}
-        className="flex items-center justify-center gap-1.5"
-      >
+      <div style={{ padding: "14px" }} className="flex items-center justify-center gap-1.5">
         <RegionIcon style={{ flexShrink: "0" }} />
         <Text size="small" weight="regular" color="#475467" ellipsis>
           {region ?? "Global"}
         </Text>
       </div>
 
-      <div
-        style={{ padding: "14px" }}
-        className="flex items-center justify-center"
-      >
+      <div style={{ padding: "14px" }} className="flex items-center justify-center">
         {cloudProvider ? (
           cloudProviderLongLogoMap[cloudProvider]
         ) : (
-          <Text
-            size="small"
-            weight="regular"
-            color={colors.gray600}
-            ellipsis
-            title="Everywhere"
-          >
+          <Text size="small" weight="regular" color={colors.gray600} ellipsis title="Everywhere">
             Everywhere
           </Text>
         )}
       </div>
 
-      <div
-        style={{ padding: "14px" }}
-        className="flex items-center justify-center"
-      >
+      <div style={{ padding: "14px" }} className="flex items-center justify-center">
         <InstanceHealthStatusChip
           computedHealthStatus={healthStatus}
           detailedNetworkTopology={detailedNetworkTopology}

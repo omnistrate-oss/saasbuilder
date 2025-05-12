@@ -1,4 +1,5 @@
 import { Box } from "@mui/material";
+
 import { hexToRgb } from "src/utils/hexToRgb";
 
 const RippleCircle = (props) => {
@@ -15,7 +16,6 @@ const RippleCircle = (props) => {
   } = props;
 
   const color = hexToRgb(colorHex) || "0,0,0";
-
 
   return (
     <Box

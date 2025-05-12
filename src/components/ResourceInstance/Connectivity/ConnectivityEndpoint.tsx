@@ -1,21 +1,24 @@
-import { Box, SxProps, styled, Theme, Stack } from "@mui/material";
-import Image from "next/image";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableRow from "@mui/material/TableRow";
-import MuiTableCell from "@mui/material/TableCell";
-import { Text } from "src/components/Typography/Typography";
-import resourcePortsIcon from "../../../../public/assets/images/dashboard/resource-instance-nodes/ports.svg";
 import { FC, useMemo, useState } from "react";
-import CopyButton from "src/components/Button/CopyButton";
-import Button from "src/components/Button/Button";
+import Image from "next/image";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
-import CustomDNSEndPoint from "./CustomDNSEndPoint";
-import PublicResourceIcon from "src/components/Icons/PublicResource/PublicResource";
+import { Box, Stack, styled, SxProps, Theme } from "@mui/material";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import MuiTableCell from "@mui/material/TableCell";
+import TableRow from "@mui/material/TableRow";
+
+import Button from "src/components/Button/Button";
+import CopyButton from "src/components/Button/CopyButton";
 import PrivateResourceIcon from "src/components/Icons/PrivateResource/PrivateResource";
+import PublicResourceIcon from "src/components/Icons/PublicResource/PublicResource";
 import StatusChip from "src/components/StatusChip/StatusChip";
+import { Text } from "src/components/Typography/Typography";
+
+import resourcePortsIcon from "../../../../public/assets/images/dashboard/resource-instance-nodes/ports.svg";
 import { ContainerCard } from "../ResourceInstanceDetails/PropertyDetails";
+
+import CustomDNSEndPoint from "./CustomDNSEndPoint";
 const TableCell = styled(MuiTableCell)({
   borderBottom: "none",
 });
@@ -46,9 +49,7 @@ interface PortItem {
   ports: string | string[]; // 'ports' can be a string or an array of strings
 }
 
-const ResourceConnectivityEndpoint: FC<ResourceConnectivityEndpointProps> = (
-  props
-) => {
+const ResourceConnectivityEndpoint: FC<ResourceConnectivityEndpointProps> = (props) => {
   const {
     resourceName,
     endpointURL,
@@ -66,15 +67,11 @@ const ResourceConnectivityEndpoint: FC<ResourceConnectivityEndpointProps> = (
   const portsArray = useMemo(() => {
     const resourcePorts = (Array.isArray(ports) ? ports : []) as PortItem[];
 
-    const selectedPortItem = resourcePorts.find(
-      (item) => item.resourceName === resourceName
-    );
+    const selectedPortItem = resourcePorts.find((item) => item.resourceName === resourceName);
 
     const parsePorts = (portsString: string): number[] | string[] => {
       if (portsString.includes("-")) {
-        const [start, end] = portsString
-          .split("-")
-          .map((part) => Number(part.trim()));
+        const [start, end] = portsString.split("-").map((part) => Number(part.trim()));
         if (!isNaN(start) && !isNaN(end) && start <= end) {
           // Return the original range string
           return [portsString];
@@ -91,9 +88,7 @@ const ResourceConnectivityEndpoint: FC<ResourceConnectivityEndpointProps> = (
       typeof selectedPortItem?.ports === "string"
         ? parsePorts(selectedPortItem.ports)
         : Array.isArray(selectedPortItem?.ports)
-          ? selectedPortItem.ports.map((port) =>
-              typeof port === "string" ? Number(port.trim()) : port
-            )
+          ? selectedPortItem.ports.map((port) => (typeof port === "string" ? Number(port.trim()) : port))
           : typeof ports === "string"
             ? parsePorts(ports)
             : [];
@@ -128,11 +123,7 @@ const ResourceConnectivityEndpoint: FC<ResourceConnectivityEndpointProps> = (
   };
 
   return (
-    <ContainerCard
-      title={resourceName}
-      contentBoxProps={{ padding: "12px 16px" }}
-      marginTop="20px"
-    >
+    <ContainerCard title={resourceName} contentBoxProps={{ padding: "12px 16px" }} marginTop="20px">
       <Box
         sx={{
           border: isPrimaryResource ? "1px solid #7F56D9" : "1px solid #EAECF0",
@@ -159,11 +150,7 @@ const ResourceConnectivityEndpoint: FC<ResourceConnectivityEndpointProps> = (
                     <PrivateResourceIcon />
                   )
                 ) : (
-                  <Image
-                    src={resourcePortsIcon}
-                    alt="resource-ports"
-                    style={{ minWidth: "36px" }}
-                  />
+                  <Image src={resourcePortsIcon} alt="resource-ports" style={{ minWidth: "36px" }} />
                 )}
               </TableCell>
               <TableCell
@@ -183,12 +170,7 @@ const ResourceConnectivityEndpoint: FC<ResourceConnectivityEndpointProps> = (
                     category={publiclyAccessible ? "success" : "unknown"}
                   />
                   {isPrimaryResource && (
-                    <StatusChip
-                      label="Primary"
-                      color="#7F56D9"
-                      borderColor="#7F56D9"
-                      bgColor="#F9F5FF"
-                    />
+                    <StatusChip label="Primary" color="#7F56D9" borderColor="#7F56D9" bgColor="#F9F5FF" />
                   )}
                 </Stack>
 
@@ -206,30 +188,12 @@ const ResourceConnectivityEndpoint: FC<ResourceConnectivityEndpointProps> = (
                 ) : (
                   Array.isArray(sortedPortsArray) &&
                   sortedPortsArray.map((port, index) => {
-                    if (
-                      (index === 0 && !isEndpointsExpanded) ||
-                      isEndpointsExpanded
-                    ) {
+                    if ((index === 0 && !isEndpointsExpanded) || isEndpointsExpanded) {
                       return (
-                        <Box
-                          alignSelf="start"
-                          key={index}
-                          marginTop="8px"
-                          marginBottom="8px"
-                          display="flex"
-                          gap="12px"
-                        >
-                          <Text
-                            size="small"
-                            weight="regular"
-                            color={isPrimaryResource ? "#6941C6" : ""}
-                          >
+                        <Box alignSelf="start" key={index} marginTop="8px" marginBottom="8px" display="flex" gap="12px">
+                          <Text size="small" weight="regular" color={isPrimaryResource ? "#6941C6" : ""}>
                             {portEndpoint[port] ? (
-                              <a
-                                href={`${endpointPort(endpointURL, port)}`}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                              >
+                              <a href={`${endpointPort(endpointURL, port)}`} target="_blank" rel="noopener noreferrer">
                                 {endpointPort(endpointURL, port)}
                               </a>
                             ) : (
@@ -256,13 +220,7 @@ const ResourceConnectivityEndpoint: FC<ResourceConnectivityEndpointProps> = (
                   <Stack direction="row">
                     <Button
                       sx={{ color: "#6941C6" }}
-                      startIcon={
-                        isEndpointsExpanded ? (
-                          <RemoveCircleOutlineIcon />
-                        ) : (
-                          <AddCircleOutlineIcon />
-                        )
-                      }
+                      startIcon={isEndpointsExpanded ? <RemoveCircleOutlineIcon /> : <AddCircleOutlineIcon />}
                       onClick={toggleExpanded}
                     >
                       {isEndpointsExpanded ? "View Less" : "View More"}
@@ -280,9 +238,7 @@ const ResourceConnectivityEndpoint: FC<ResourceConnectivityEndpointProps> = (
           <CustomDNSEndPoint
             isPrimaryResource={isPrimaryResource}
             endpointURL={customDNSData?.dnsName}
-            endpointName={
-              customDNSData?.name ? customDNSData?.name : "Custom DNS Endpoint"
-            }
+            endpointName={customDNSData?.name ? customDNSData?.name : "Custom DNS Endpoint"}
           />
         </Box>
       )}

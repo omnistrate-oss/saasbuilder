@@ -2,16 +2,11 @@ import { Stack } from "@mui/material";
 import { useMutation } from "@tanstack/react-query";
 
 import { getTerraformKit } from "src/api/resourceInstance";
-
-import { Text } from "components/Typography/Typography";
-import LoadingSpinnerSmall from "components/CircularProgress/CircularProgress";
 import ExportIcon from "src/components/Icons/Export/ExportIcon";
+import LoadingSpinnerSmall from "components/CircularProgress/CircularProgress";
+import { Text } from "components/Typography/Typography";
 
-const TerraformDownloadURL = ({
-  serviceOffering,
-  subscriptionId,
-  cloud_provider,
-}) => {
+const TerraformDownloadURL = ({ serviceOffering, subscriptionId, cloud_provider }) => {
   const downloadTerraformKitMutation = useMutation(
     () =>
       getTerraformKit(
@@ -51,9 +46,7 @@ const TerraformDownloadURL = ({
       <LoadingSpinnerSmall
         sx={{
           flexShrink: "0",
-          visibility: downloadTerraformKitMutation.isLoading
-            ? "visible"
-            : "hidden",
+          visibility: downloadTerraformKitMutation.isLoading ? "visible" : "hidden",
         }}
       />
     </Stack>

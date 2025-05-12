@@ -1,7 +1,4 @@
-export const calculateInstanceHealthPercentage = (
-  detailedNetworkTopology = {},
-  instanceStatus
-) => {
+export const calculateInstanceHealthPercentage = (detailedNetworkTopology = {}, instanceStatus) => {
   const nodesFromAllResources = [];
   const detailedNetworkTopologyValues = Object.values(detailedNetworkTopology);
 
@@ -15,10 +12,9 @@ export const calculateInstanceHealthPercentage = (
   }
 
   // filter out the oberservability resource
-  const resourcesOtherThanMainAndObservability =
-    detailedNetworkTopologyValues?.filter((value) => {
-      return !value.main && value.resourceKey !== "omnistrateobserv";
-    });
+  const resourcesOtherThanMainAndObservability = detailedNetworkTopologyValues?.filter((value) => {
+    return !value.main && value.resourceKey !== "omnistrateobserv";
+  });
 
   resourcesOtherThanMainAndObservability?.forEach((resource) => {
     const resourceNodes = resource.nodes;
@@ -34,11 +30,8 @@ export const calculateInstanceHealthPercentage = (
   let healthStatusPercent = 0;
 
   if (nodesFromAllResources?.length > 0) {
-    const healthyNodes = nodesFromAllResources?.filter(
-      (node) => node?.healthStatus === "HEALTHY"
-    );
-    healthStatusPercent =
-      (healthyNodes?.length / nodesFromAllResources?.length) * 100;
+    const healthyNodes = nodesFromAllResources?.filter((node) => node?.healthStatus === "HEALTHY");
+    healthStatusPercent = (healthyNodes?.length / nodesFromAllResources?.length) * 100;
   } else if (instanceStatus === "RUNNING" || instanceStatus === "READY") {
     healthStatusPercent = 100;
   }

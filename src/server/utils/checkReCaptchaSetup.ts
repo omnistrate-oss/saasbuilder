@@ -3,10 +3,7 @@ export function checkReCaptchaSetup(): boolean {
   const siteKey = process.env.GOOGLE_RECAPTCHA_SITE_KEY;
 
   const isSetup = Boolean(
-    secretKey &&
-      siteKey &&
-      secretKey.toUpperCase() !== "DISABLED" &&
-      siteKey.toUpperCase() !== "DISABLED"
+    secretKey && siteKey && secretKey.toUpperCase() !== "DISABLED" && siteKey.toUpperCase() !== "DISABLED"
   );
 
   return isSetup;

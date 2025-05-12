@@ -3,17 +3,13 @@
 import Image from "next/image";
 import { Box, styled } from "@mui/material";
 
+import { getInstancesRoute } from "src/utils/routes";
 import Button from "components/Button/Button";
-import Layout from "components/NonDashboardComponents/Layout/Layout";
 import Container from "components/NonDashboardComponents/Container/Container";
-import {
-  CardTitle,
-  Heading,
-  Link,
-} from "components/NonDashboardComponents/FormElements/FormElements";
+import { CardTitle, Heading, Link } from "components/NonDashboardComponents/FormElements/FormElements";
+import Layout from "components/NonDashboardComponents/Layout/Layout";
 
 import fourZeroFourImg from "public/assets/images/404.png";
-import { getInstancesRoute } from "src/utils/routes";
 
 const Description = styled("p")({
   color: "#475467",
@@ -70,9 +66,7 @@ const NotFoundPage = () => {
               margin: "auto",
             }}
           >
-            <CardTitle
-              sx={{ maxWidth: "592px", marginTop: "40px", textAlign: "center" }}
-            >
+            <CardTitle sx={{ maxWidth: "592px", marginTop: "40px", textAlign: "center" }}>
               Looks like you&apos;ve found the doorway to the great nothing.
               <br />
             </CardTitle>
@@ -82,11 +76,7 @@ const NotFoundPage = () => {
             </Description>
 
             <Link href={getInstancesRoute()}>
-              <Button
-                variant="contained"
-                size="xlarge"
-                sx={{ marginTop: "40px" }}
-              >
+              <Button variant="contained" size="xlarge" sx={{ marginTop: "40px" }}>
                 Take me there
               </Button>
             </Link>

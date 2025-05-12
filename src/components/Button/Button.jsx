@@ -1,10 +1,12 @@
-import MuiButton, { buttonClasses } from "@mui/material/Button";
 import { styled } from "@mui/material";
-import { textStyles, weights } from "../Typography/Typography";
-import LoadingSpinnerSmall from "../CircularProgress/CircularProgress";
+import MuiButton, { buttonClasses } from "@mui/material/Button";
+
 import { styleConfig } from "src/providerConfig";
-import Tooltip from "../Tooltip/Tooltip";
 import { colors } from "src/themeConfig";
+
+import LoadingSpinnerSmall from "../CircularProgress/CircularProgress";
+import Tooltip from "../Tooltip/Tooltip";
+import { textStyles, weights } from "../Typography/Typography";
 
 const Button = styled(
   ({ children, isLoading, disabledMessage, ...restProps }) => {
@@ -28,13 +30,7 @@ const Button = styled(
   },
   {
     shouldForwardProp: (prop) => {
-      return ![
-        "isLoading",
-        "fontColor",
-        "outlineColor",
-        "outlineBg",
-        "bgColor",
-      ].includes(prop);
+      return !["isLoading", "fontColor", "outlineColor", "outlineBg", "bgColor"].includes(prop);
     },
   }
 )(({ theme, outlineColor, fontColor, outlineBg, bgColor, size }) => {

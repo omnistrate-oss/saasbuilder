@@ -1,4 +1,5 @@
 import { createSelector, createSlice } from "@reduxjs/toolkit";
+
 import loadingStatuses from "../utils/constants/loadingStatuses";
 
 const initialState = {
@@ -34,13 +35,8 @@ const userDataSlice = createSlice({
   },
 });
 
-export const {
-  setOrgUsers,
-  setOrgUsersLoadingStatus,
-  setUserData,
-  setUserDataLoadingStatus,
-  initialiseUserData,
-} = userDataSlice.actions;
+export const { setOrgUsers, setOrgUsersLoadingStatus, setUserData, setUserDataLoadingStatus, initialiseUserData } =
+  userDataSlice.actions;
 
 export default userDataSlice.reducer;
 
@@ -83,28 +79,18 @@ const serviceConsumptionUserRoles = [
   // "admin",
   // "operator",
 ];
-const serviceCreationUserRoles = [
-  "service_editor",
-  "service_reader",
-  "root",
-  "admin",
-  "service_operator",
-];
+const serviceCreationUserRoles = ["service_editor", "service_reader", "root", "admin", "service_operator"];
 
 export const selectServiceCreationOrgUsers = createSelector(
   (state) => state.user.orgUsers,
   (orgUsers) => {
-    return orgUsers.filter((user) =>
-      serviceCreationUserRoles.includes(user.roleType)
-    );
+    return orgUsers.filter((user) => serviceCreationUserRoles.includes(user.roleType));
   }
 );
 
 export const selectServiceConsumptionOrgUsers = createSelector(
   (state) => state.user.orgUsers,
   (orgUsers) => {
-    return orgUsers.filter((user) =>
-      serviceConsumptionUserRoles.includes(user.roleType)
-    );
+    return orgUsers.filter((user) => serviceConsumptionUserRoles.includes(user.roleType));
   }
 );

@@ -1,6 +1,7 @@
 import { Page } from "@playwright/test";
-import { PageURLs } from "./pages";
 import { UserAPIClient } from "test-utils/user-api-client";
+
+import { PageURLs } from "./pages";
 
 export class InstancesPage {
   page: Page;

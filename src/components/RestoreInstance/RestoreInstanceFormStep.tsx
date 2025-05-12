@@ -1,12 +1,10 @@
-import {
-  DialogContent,
-  DialogFooter,
-  DialogHeader,
-} from "../Dialog/InformationDialogTopCenter";
 import { Box, CircularProgress, Stack } from "@mui/material";
+
+import Button from "../Button/Button";
+import { DialogContent, DialogFooter, DialogHeader } from "../Dialog/InformationDialogTopCenter";
 import RestoreBackupModalHeaderIcon from "../Icons/RestoreInstance/RestoreBackupModalHeaderIcon";
 import { Text } from "../Typography/Typography";
-import Button from "../Button/Button";
+
 import RestoreInstanceDateTime from "./RestoreInstanceDateTime";
 
 type RestoreInstanceFormStepProps = {
@@ -25,36 +23,23 @@ function RestoreInstanceFormStep({
   return (
     <>
       <DialogHeader>
-        <Stack
-          direction={"row"}
-          justifyContent={"flex-start"}
-          alignItems={"center"}
-          gap="8px"
-        >
+        <Stack direction={"row"} justifyContent={"flex-start"} alignItems={"center"} gap="8px">
           <Box sx={{ flexShrink: 0 }}>
             <RestoreBackupModalHeaderIcon />
           </Box>
           <Box>
             <Text size="medium">Restore Your Instance from a Backup</Text>
             <Text size="small" weight="normal" color="#475467">
-              Create a new deployment instance from a specific point in time
-              backup
+              Create a new deployment instance from a specific point in time backup
             </Text>
           </Box>
         </Stack>
       </DialogHeader>
       <DialogContent>
-        <RestoreInstanceDateTime
-          formData={restoreFormik}
-          earliestRestoreTime={earliestRestoreTime}
-        />
+        <RestoreInstanceDateTime formData={restoreFormik} earliestRestoreTime={earliestRestoreTime} />
       </DialogContent>
       <DialogFooter>
-        <Button
-          variant="outlined"
-          disabled={restoreMutation.isLoaing}
-          onClick={handleClose}
-        >
+        <Button variant="outlined" disabled={restoreMutation.isLoaing} onClick={handleClose}>
           Cancel
         </Button>
 
@@ -64,9 +49,7 @@ function RestoreInstanceFormStep({
           onClick={restoreFormik.handleSubmit}
         >
           Restore
-          {restoreMutation.isLoading && (
-            <CircularProgress size={16} sx={{ marginLeft: "8px" }} />
-          )}
+          {restoreMutation.isLoading && <CircularProgress size={16} sx={{ marginLeft: "8px" }} />}
         </Button>
       </DialogFooter>
     </>

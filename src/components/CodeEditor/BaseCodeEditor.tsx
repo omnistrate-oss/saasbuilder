@@ -1,15 +1,17 @@
 import { FC, useEffect, useRef, useState } from "react";
 import { Editor, loader, OnChange } from "@monaco-editor/react";
-import { getSuggestionsByPrefix } from "./utils";
 import { Box, IconButton, Stack } from "@mui/material";
-import LockIcon from "./LockIcon";
-import CurlyBracesIcon from "./CurlyBracesIcon";
-import { Text } from "../Typography/Typography";
-import { ResourceType } from "./systemParameters";
-import FullScreenIcon from "./FullScreenIcon";
-import ExitFullScreenIcon from "./ExitFullScreenIcon";
-import CopyIcon from "./CopyIcon";
+
 import Tooltip from "../Tooltip/Tooltip";
+import { Text } from "../Typography/Typography";
+
+import CopyIcon from "./CopyIcon";
+import CurlyBracesIcon from "./CurlyBracesIcon";
+import ExitFullScreenIcon from "./ExitFullScreenIcon";
+import FullScreenIcon from "./FullScreenIcon";
+import LockIcon from "./LockIcon";
+import { ResourceType } from "./systemParameters";
+import { getSuggestionsByPrefix } from "./utils";
 
 export type BaseCodeEditorProps = {
   value?: string;
@@ -59,10 +61,7 @@ const BaseCodeEditor: FC<BaseCodeEditorProps> = ({
   });
   const [decorationCollection, setDecorationCollection] = useState<any>(null);
   const [completionDisposable, setCompletionDisposable] = useState<any>({});
-  useEffect(
-    () => completionDisposable.dispose,
-    [completionDisposable, language, isReadOnly, resourceType]
-  );
+  useEffect(() => completionDisposable.dispose, [completionDisposable, language, isReadOnly, resourceType]);
 
   useEffect(() => {
     const onFullscreenChange = () => {
@@ -71,8 +70,7 @@ const BaseCodeEditor: FC<BaseCodeEditorProps> = ({
 
     document.addEventListener("fullscreenchange", onFullscreenChange);
 
-    return () =>
-      document.removeEventListener("fullscreenchange", onFullscreenChange);
+    return () => document.removeEventListener("fullscreenchange", onFullscreenChange);
   }, []);
 
   useEffect(() => {
@@ -100,12 +98,7 @@ const BaseCodeEditor: FC<BaseCodeEditorProps> = ({
   }, [lineToHighlight]);
 
   return (
-    <Stack
-      id="monaco-editor-container"
-      gap="10px"
-      bgcolor="#1B2333"
-      borderRadius="12px"
-    >
+    <Stack id="monaco-editor-container" gap="10px" bgcolor="#1B2333" borderRadius="12px">
       <Box
         display="flex"
         alignItems="center"
@@ -129,15 +122,11 @@ const BaseCodeEditor: FC<BaseCodeEditorProps> = ({
             onClick={() =>
               isFullScreen
                 ? document.exitFullscreen()
-                : document
-                    .getElementById("monaco-editor-container")
-                    ?.requestFullscreen()
+                : document.getElementById("monaco-editor-container")?.requestFullscreen()
             }
           >
             <Tooltip title="Full Screen" placement="top">
-              <span>
-                {isFullScreen ? <ExitFullScreenIcon /> : <FullScreenIcon />}
-              </span>
+              <span>{isFullScreen ? <ExitFullScreenIcon /> : <FullScreenIcon />}</span>
             </Tooltip>
           </IconButton>
           <IconButton
@@ -168,9 +157,7 @@ const BaseCodeEditor: FC<BaseCodeEditorProps> = ({
 
             // Show the Suggestion Documentation/Details Automatically
             // @ts-ignore
-            const { widget } = editor.getContribution(
-              "editor.contrib.suggestController"
-            );
+            const { widget } = editor.getContribution("editor.contrib.suggestController");
             if (widget) {
               const suggestWidget = widget.value;
               if (suggestWidget && suggestWidget._setDetailsVisible) {
@@ -184,78 +171,67 @@ const BaseCodeEditor: FC<BaseCodeEditorProps> = ({
           beforeMount={(monaco) => {
             if (!shouldShowSuggestions) return;
 
-            const disposable = monaco?.languages.registerCompletionItemProvider(
-              language,
-              {
-                provideCompletionItems: (model, position) => {
-                  const text = model.getValueInRange({
-                    startLineNumber: position.lineNumber,
-                    startColumn: 0,
-                    endLineNumber: position.lineNumber,
-                    endColumn: position.column,
-                  });
+            const disposable = monaco?.languages.registerCompletionItemProvider(language, {
+              provideCompletionItems: (model, position) => {
+                const text = model.getValueInRange({
+                  startLineNumber: position.lineNumber,
+                  startColumn: 0,
+                  endLineNumber: position.lineNumber,
+                  endColumn: position.column,
+                });
 
-                  const words = text.replaceAll("\t", "").split(" ");
-                  const lastWord =
-                    words[words.length - 1]
-                      ?.replaceAll('"', "")
-                      .replaceAll("'", "") || "";
+                const words = text.replaceAll("\t", "").split(" ");
+                const lastWord = words[words.length - 1]?.replaceAll('"', "").replaceAll("'", "") || "";
 
-                  const range = {
-                    startLineNumber: position.lineNumber,
-                    endLineNumber: position.lineNumber,
-                    startColumn: text.length - lastWord.length + 1,
-                    endColumn: text.length + 1,
-                  };
+                const range = {
+                  startLineNumber: position.lineNumber,
+                  endLineNumber: position.lineNumber,
+                  startColumn: text.length - lastWord.length + 1,
+                  endColumn: text.length + 1,
+                };
 
-                  if (customSuggestions) {
-                    return {
-                      suggestions: customSuggestions.map((el) => ({
-                        ...el,
-                        kind: monaco.languages.CompletionItemKind.Variable,
-                        range,
-                      })),
-                    };
-                  }
-
-                  const startsWith$sys = lastWord.startsWith("$sys");
-
-                  if (!startsWith$sys) {
-                    return {
-                      suggestions: [
-                        {
-                          label: "$sys",
-                          detail: "System parameters",
-                          kind: monaco.languages.CompletionItemKind.Module,
-                          documentation: "System parameters",
-                          insertText: "$sys",
-                          range,
-                        },
-                      ],
-                    };
-                  }
-
-                  const suggestions = getSuggestionsByPrefix(
-                    lastWord,
-                    resourceType
-                  ).map((variable) => ({
-                    label: variable.label,
-                    detail: `(${variable.type}) ${variable.label}`,
-                    kind: monaco.languages.CompletionItemKind.Variable,
-                    documentation: variable.documentation,
-                    insertText: variable.insertText,
-                    range,
-                  }));
-
+                if (customSuggestions) {
                   return {
-                    suggestions: suggestions.sort((a, b) =>
-                      a.label.localeCompare(b.label)
-                    ),
+                    suggestions: customSuggestions.map((el) => ({
+                      ...el,
+                      kind: monaco.languages.CompletionItemKind.Variable,
+                      range,
+                    })),
                   };
-                },
-                triggerCharacters: ["$", "."],
-              }
-            );
+                }
+
+                const startsWith$sys = lastWord.startsWith("$sys");
+
+                if (!startsWith$sys) {
+                  return {
+                    suggestions: [
+                      {
+                        label: "$sys",
+                        detail: "System parameters",
+                        kind: monaco.languages.CompletionItemKind.Module,
+                        documentation: "System parameters",
+                        insertText: "$sys",
+                        range,
+                      },
+                    ],
+                  };
+                }
+
+                const suggestions = getSuggestionsByPrefix(lastWord, resourceType).map((variable) => ({
+                  label: variable.label,
+                  detail: `(${variable.type}) ${variable.label}`,
+                  kind: monaco.languages.CompletionItemKind.Variable,
+                  documentation: variable.documentation,
+                  insertText: variable.insertText,
+                  range,
+                }));
+
+                return {
+                  suggestions: suggestions.sort((a, b) => a.label.localeCompare(b.label)),
+                };
+              },
+              triggerCharacters: ["$", "."],
+            });
 
             setCompletionDisposable(disposable);
           }}

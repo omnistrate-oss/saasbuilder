@@ -1,21 +1,19 @@
-import GoogleLoginIcon from "src/components/Icons/GoogleLogin/GoogleLogin";
-import SSOLoginButton from "./SSOLoginButton";
-import { useGoogleLogin } from "@react-oauth/google";
-import Tooltip from "src/components/Tooltip/Tooltip";
-import { Box } from "@mui/material";
 import { useState } from "react";
-import { v4 as uuidv4 } from "uuid";
-import { IDENTITY_PROVIDER_TYPES } from "../constants";
+import { Box } from "@mui/material";
+import { useGoogleLogin } from "@react-oauth/google";
 import { Buffer } from "buffer";
 import { flushSync } from "react-dom";
+import { v4 as uuidv4 } from "uuid";
+
+import GoogleLoginIcon from "src/components/Icons/GoogleLogin/GoogleLogin";
+import Tooltip from "src/components/Tooltip/Tooltip";
+
+import { IDENTITY_PROVIDER_TYPES } from "../constants";
+
+import SSOLoginButton from "./SSOLoginButton";
 
 function GoogleLogin(props) {
-  const {
-    disabled,
-    saasBuilderBaseURL,
-    invitationInfo = {},
-    destination,
-  } = props;
+  const { disabled, saasBuilderBaseURL, invitationInfo = {}, destination } = props;
   const [authState, setAuthState] = useState("");
 
   const googleLogin = useGoogleLogin({
@@ -35,10 +33,7 @@ function GoogleLogin(props) {
       destination,
       identityProvider: IDENTITY_PROVIDER_TYPES.Google,
     };
-    const encodedGoogleAuthState = Buffer.from(
-      JSON.stringify(googleAuthState),
-      "utf8"
-    ).toString("base64");
+    const encodedGoogleAuthState = Buffer.from(JSON.stringify(googleAuthState), "utf8").toString("base64");
     //synchronously update state to make immediately available to google login hook
     flushSync(() => {
       setAuthState(encodedGoogleAuthState);
@@ -46,21 +41,14 @@ function GoogleLogin(props) {
 
     const localAuthState = { ...googleAuthState, invitationInfo };
 
-    const encodedLocalAuthState = Buffer.from(
-      JSON.stringify(localAuthState),
-      "utf8"
-    ).toString("base64");
+    const encodedLocalAuthState = Buffer.from(JSON.stringify(localAuthState), "utf8").toString("base64");
 
     sessionStorage.setItem("authState", encodedLocalAuthState);
     googleLogin();
   }
 
   return (
-    <Tooltip
-      isVisible={disabled}
-      title="Temporarily Unavailable"
-      placement="top"
-    >
+    <Tooltip isVisible={disabled} title="Temporarily Unavailable" placement="top">
       <Box>
         <SSOLoginButton
           data-testid="google-signin-button"

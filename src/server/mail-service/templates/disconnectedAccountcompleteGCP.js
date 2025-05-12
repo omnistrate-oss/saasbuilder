@@ -14,12 +14,7 @@ async function getDisconnectedAccountCompleteMailContentGCP(
 
   const subject = `Success: GCP Account ${accountId} Disconnected from ${orgName}`;
 
-  const templatePath = path.resolve(
-    __dirname,
-    "..",
-    "ejsTemplates",
-    "disconnectedAccountcompleteGCP.ejs"
-  );
+  const templatePath = path.resolve(__dirname, "..", "ejsTemplates", "disconnectedAccountcompleteGCP.ejs");
 
   const baseURL = getSaaSDomainURL();
 

@@ -1,10 +1,12 @@
+import { useState } from "react";
+import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import { Box, ButtonBase, styled } from "@mui/material";
 import MuiInputAdornment from "@mui/material/InputAdornment";
-import ContentCopyIcon from "@mui/icons-material/ContentCopy";
-import { useState } from "react";
 import clipboard from "clipboardy";
-import { Text } from "../../Typography/Typography";
+
 import Tooltip from "src/components/Tooltip/Tooltip";
+
+import { Text } from "../../Typography/Typography";
 
 const TextCopy = (props) => {
   const { copyButton, ...restProps } = props;
@@ -14,10 +16,7 @@ const TextCopy = (props) => {
   if (copyButton) {
     endAdornment = (
       <InputAdornment position="end">
-        <CopyButton
-          sx={{ width: "24px", height: "24px" }}
-          textToCopy={textToCopy}
-        />
+        <CopyButton sx={{ width: "24px", height: "24px" }} textToCopy={textToCopy} />
       </InputAdornment>
     );
   }

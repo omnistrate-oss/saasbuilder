@@ -1,4 +1,5 @@
 import { Box } from "@mui/material";
+
 import { getEventMessageStylesAndLabel } from "src/constants/statusChipStyles/eventMessage";
 
 function EventMessageChip({ message }) {

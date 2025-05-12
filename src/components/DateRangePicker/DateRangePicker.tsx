@@ -1,22 +1,19 @@
-import { Box, IconButton, Stack, styled } from "@mui/material";
-import { addMonths, format, subMonths } from "date-fns";
 import { FC, useMemo, useState } from "react";
-import {
-  DateRangePicker as ReactDateRangePicker,
-  Range,
-} from "react-date-range";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
-import "react-date-range/dist/styles.css"; // main css file
+import { Box, IconButton, Stack, styled } from "@mui/material";
+import { addMonths, format, subMonths } from "date-fns";
+import { DateRangePicker as ReactDateRangePicker, Range } from "react-date-range";
+
+import { SetState } from "src/types/common/reactGenerics";
+
 import Button from "../Button/Button";
 import CalendarIcon from "../Icons/Calendar/Calendar";
-import { SetState } from "src/types/common/reactGenerics";
 import Popover from "../Popover/Popover";
 
-const NavigationRenderer = (
-  currentFocusedDate: Date,
-  setShownDate: (shownDate: Date) => void
-) => {
+import "react-date-range/dist/styles.css"; // main css file
+
+const NavigationRenderer = (currentFocusedDate: Date, setShownDate: (shownDate: Date) => void) => {
   return (
     <Box position="relative" width="100%">
       <Stack
@@ -85,10 +82,7 @@ const DateRangePicker: FC<DateRangePickerProps> = (props) => {
   //meant to be used on the widget menu
   let formattedSelectedStartDate = "Select Start Date";
   if (selectedDateRange?.startDate) {
-    formattedSelectedStartDate = format(
-      selectedDateRange.startDate,
-      "MMM d, yyyy"
-    );
+    formattedSelectedStartDate = format(selectedDateRange.startDate, "MMM d, yyyy");
   }
   //meant to be used on the widget menu
 
@@ -141,9 +135,7 @@ const DateRangePicker: FC<DateRangePickerProps> = (props) => {
     <>
       <Button
         variant="outlined"
-        startIcon={
-          <CalendarIcon color="#414651" style={{ marginLeft: "4px" }} />
-        }
+        startIcon={<CalendarIcon color="#414651" style={{ marginLeft: "4px" }} />}
         onClick={handleButtonClick}
         sx={{
           fontWeight: "500 !important",

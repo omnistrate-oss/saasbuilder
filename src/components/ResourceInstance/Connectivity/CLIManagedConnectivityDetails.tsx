@@ -1,10 +1,13 @@
-import EndpointCard from "./EndpointCard";
-import { ContainerCard } from "../ResourceInstanceDetails/PropertyDetails";
-import { Box } from "@mui/material";
-import { getResourceInstanceChipStylesAndLabel } from "src/constants/statusChipStyles/resourceInstanceHealthStatus";
-import StatusChip from "src/components/StatusChip/StatusChip";
 import { FC } from "react";
+import { Box } from "@mui/material";
+
+import StatusChip from "src/components/StatusChip/StatusChip";
+import { getResourceInstanceChipStylesAndLabel } from "src/constants/statusChipStyles/resourceInstanceHealthStatus";
+
+import { ContainerCard } from "../ResourceInstanceDetails/PropertyDetails";
+
 import { getAdditionalEndpointsInstanceHealthStatus } from "./AdditionalEndPointInstanceHealthStatus";
+import EndpointCard from "./EndpointCard";
 
 type HealthStatus = "HEALTHY" | "UNHEALTHY" | "UNKNOWN" | "DEGRADED";
 

@@ -6,11 +6,7 @@ const PDFIcon = () => {
         stroke="#D5D7DA"
         strokeWidth="1.125"
       />
-      <path
-        d="M20.25 0.375V6a3 3 0 0 0 3 3h5.625"
-        stroke="#D5D7DA"
-        strokeWidth="1.125"
-      />
+      <path d="M20.25 0.375V6a3 3 0 0 0 3 3h5.625" stroke="#D5D7DA" strokeWidth="1.125" />
       <path
         d="M0.75 15a1.5 1.5 0 0 1 1.5 -1.5h16.5a1.5 1.5 0 0 1 1.5 1.5v9a1.5 1.5 0 0 1 -1.5 1.5H2.25a1.5 1.5 0 0 1 -1.5 -1.5z"
         fill="#D92D20"

@@ -15,7 +15,7 @@ const MenuItem = styled(MuiMenuItem)(() => ({
     backgroundColor: "#F4F4F4 !important",
   },
   [`&.${menuItemClasses.disabled}`]: {
-    opacity: 0.7
+    opacity: 0.7,
   },
 }));
 

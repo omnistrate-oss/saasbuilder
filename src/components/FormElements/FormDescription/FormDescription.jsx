@@ -7,7 +7,7 @@ const FormDescription = styled("p")(() => ({
   fontSize: "14px",
   fontStyle: "normal",
   fontWeight: 500,
-  lineHeight: "14px"
+  lineHeight: "14px",
 }));
 
 export default FormDescription;

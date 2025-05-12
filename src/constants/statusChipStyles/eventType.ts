@@ -1,4 +1,5 @@
 import { EventType } from "src/types/event";
+
 import { ColorObject } from "./index";
 
 const stylesMap: Record<EventType, ColorObject & { label: string }> = {
@@ -22,9 +23,7 @@ const stylesMap: Record<EventType, ColorObject & { label: string }> = {
   },
 };
 
-export function getEventTypeStylesAndLabel(
-  eventType: EventType
-): ColorObject & { label: string } {
+export function getEventTypeStylesAndLabel(eventType: EventType): ColorObject & { label: string } {
   let styles = stylesMap[eventType];
 
   if (!styles) {

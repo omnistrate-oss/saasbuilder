@@ -1,4 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
+
 import { getAllResourceInstances } from "src/api/resourceInstance";
 import useEnvironmentType from "src/hooks/useEnvironmentType";
 
@@ -15,9 +16,7 @@ const useInstances = (queryOptions = {}) => {
     {
       select: (data) => {
         return data.data.resourceInstances.sort(
-          (a, b) =>
-            new Date(b.created_at || "").getTime() -
-            new Date(a.created_at || "").getTime()
+          (a, b) => new Date(b.created_at || "").getTime() - new Date(a.created_at || "").getTime()
         );
       },
       refetchInterval: 60000,

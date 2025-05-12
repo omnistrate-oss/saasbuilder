@@ -1,5 +1,6 @@
 import React from "react";
 import { Box, useTheme } from "@mui/material";
+
 import { Text } from "src/components/Typography/Typography";
 
 const RequiredAsterisk = (props) => (
@@ -13,12 +14,7 @@ function FieldTitle(props) {
   const theme = useTheme();
 
   return (
-    <Text
-      size="small"
-      weight="medium"
-      color={theme.palette.gray["700"]}
-      {...restProps}
-    >
+    <Text size="small" weight="medium" color={theme.palette.gray["700"]} {...restProps}>
       {children} {required && <RequiredAsterisk />}
     </Text>
   );

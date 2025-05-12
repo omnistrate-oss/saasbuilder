@@ -1,27 +1,23 @@
 "use client";
 
-import { useFormik } from "formik";
+import { useMemo } from "react";
 import { useMutation } from "@tanstack/react-query";
+import { useFormik } from "formik";
 
 import { updateProfile } from "src/api/users";
 import useSnackbar from "src/hooks/useSnackbar";
-
 import Button from "components/Button/Button";
-import Form from "components/FormElementsv2/Form/Form";
-import TextField from "components/FormElementsv2/TextField/TextField";
+import LoadingSpinnerSmall from "components/CircularProgress/CircularProgress";
+import Autocomplete from "components/FormElementsv2/AutoComplete/AutoComplete";
 import FieldError from "components/FormElementsv2/FieldError/FieldError";
 import FieldTitle from "components/FormElementsv2/FieldTitle/FieldTitle";
-import Autocomplete from "components/FormElementsv2/AutoComplete/AutoComplete";
-import LoadingSpinnerSmall from "components/CircularProgress/CircularProgress";
+import Form from "components/FormElementsv2/Form/Form";
+import TextField from "components/FormElementsv2/TextField/TextField";
 
-import FormHeader from "./FormHeader";
-import {
-  FieldCell,
-  FieldTitleCell,
-  BillingAddressValidationSchema,
-} from "./Common";
 import { countriesAlpha3 } from "../constants";
-import { useMemo } from "react";
+
+import { BillingAddressValidationSchema, FieldCell, FieldTitleCell } from "./Common";
+import FormHeader from "./FormHeader";
 
 type BillingAddressFormProps = {
   userData: any;
@@ -29,22 +25,15 @@ type BillingAddressFormProps = {
   refetchUserData: () => void;
 };
 
-const BillingAddressForm: React.FC<BillingAddressFormProps> = ({
-  userData,
-  isLoadingUserData,
-  refetchUserData,
-}) => {
+const BillingAddressForm: React.FC<BillingAddressFormProps> = ({ userData, isLoadingUserData, refetchUserData }) => {
   const snackbar = useSnackbar();
 
-  const updateProfileMutation = useMutation(
-    (data) => updateProfile(userData?.id, data),
-    {
-      onSuccess: () => {
-        refetchUserData();
-        snackbar.showSuccess("Billing address updated successfully");
-      },
-    }
-  );
+  const updateProfileMutation = useMutation((data) => updateProfile(userData?.id, data), {
+    onSuccess: () => {
+      refetchUserData();
+      snackbar.showSuccess("Billing address updated successfully");
+    },
+  });
 
   const formData = useFormik({
     initialValues: {
@@ -73,19 +62,13 @@ const BillingAddressForm: React.FC<BillingAddressFormProps> = ({
   });
 
   const { values, handleChange, handleBlur, touched, errors } = formData;
-  const isDisabled =
-    updateProfileMutation.isLoading ||
-    isLoadingUserData ||
-    userData?.roleType !== "root";
+  const isDisabled = updateProfileMutation.isLoading || isLoadingUserData || userData?.roleType !== "root";
 
   const currentCountry = useMemo(() => {
     const alpha3Code = values.address.country;
 
     if (alpha3Code) {
-      const match = countriesAlpha3.find(
-        (country) =>
-          country["alpha-3"].toLowerCase() === alpha3Code.toLowerCase()
-      );
+      const match = countriesAlpha3.find((country) => country["alpha-3"].toLowerCase() === alpha3Code.toLowerCase());
       return match;
     }
     return null;
@@ -117,9 +100,7 @@ const BillingAddressForm: React.FC<BillingAddressFormProps> = ({
               disabled={isDisabled}
               sx={{ mt: 0 }}
             />
-            <FieldError>
-              {touched.address?.addressLine1 && errors.address?.addressLine1}
-            </FieldError>
+            <FieldError>{touched.address?.addressLine1 && errors.address?.addressLine1}</FieldError>
           </FieldCell>
 
           <FieldTitleCell>
@@ -136,9 +117,7 @@ const BillingAddressForm: React.FC<BillingAddressFormProps> = ({
               disabled={isDisabled}
               sx={{ mt: 0 }}
             />
-            <FieldError>
-              {touched.address?.addressLine2 && errors.address?.addressLine2}
-            </FieldError>
+            <FieldError>{touched.address?.addressLine2 && errors.address?.addressLine2}</FieldError>
           </FieldCell>
 
           <FieldTitleCell>
@@ -155,9 +134,7 @@ const BillingAddressForm: React.FC<BillingAddressFormProps> = ({
               disabled={isDisabled}
               sx={{ mt: 0 }}
             />
-            <FieldError>
-              {touched.address?.city && errors.address?.city}
-            </FieldError>
+            <FieldError>{touched.address?.city && errors.address?.city}</FieldError>
           </FieldCell>
 
           <FieldTitleCell>
@@ -174,9 +151,7 @@ const BillingAddressForm: React.FC<BillingAddressFormProps> = ({
               disabled={isDisabled}
               sx={{ mt: 0 }}
             />
-            <FieldError>
-              {touched.address?.state && errors.address?.state}
-            </FieldError>
+            <FieldError>{touched.address?.state && errors.address?.state}</FieldError>
           </FieldCell>
 
           <FieldTitleCell>
@@ -192,19 +167,14 @@ const BillingAddressForm: React.FC<BillingAddressFormProps> = ({
                 return "Select a country";
               }}
               onChange={(e, newValue) => {
-                formData.setFieldValue(
-                  "address.country",
-                  newValue?.["alpha-3"]?.toLowerCase()
-                );
+                formData.setFieldValue("address.country", newValue?.["alpha-3"]?.toLowerCase());
               }}
               onBlur={() => {
                 formData.setFieldTouched("address.country", true);
               }}
               disabled={isDisabled}
             />
-            <FieldError>
-              {touched.address?.country && errors.address?.country}
-            </FieldError>
+            <FieldError>{touched.address?.country && errors.address?.country}</FieldError>
           </FieldCell>
 
           <FieldTitleCell>
@@ -221,9 +191,7 @@ const BillingAddressForm: React.FC<BillingAddressFormProps> = ({
               disabled={isDisabled}
               sx={{ mt: 0 }}
             />
-            <FieldError>
-              {touched.address?.zip && errors.address?.zip}
-            </FieldError>
+            <FieldError>{touched.address?.zip && errors.address?.zip}</FieldError>
           </FieldCell>
         </div>
 
@@ -237,11 +205,7 @@ const BillingAddressForm: React.FC<BillingAddressFormProps> = ({
           >
             Cancel
           </Button>
-          <Button
-            type="submit"
-            variant="contained"
-            disabled={updateProfileMutation.isLoading || isLoadingUserData}
-          >
+          <Button type="submit" variant="contained" disabled={updateProfileMutation.isLoading || isLoadingUserData}>
             Save
             {updateProfileMutation.isLoading && <LoadingSpinnerSmall />}
           </Button>

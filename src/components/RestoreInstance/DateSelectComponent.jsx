@@ -1,14 +1,16 @@
 import { useEffect, useState } from "react";
-import CalenderIcon from "../Icons/RestoreInstance/CalenderIcon";
-import { Text } from "../Typography/Typography";
 import { Box, Popover, Stack, styled } from "@mui/material";
+import { DateCalendar, PickersDay } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { DateCalendar, PickersDay } from "@mui/x-date-pickers";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
-import { shouldDisableDate } from "src/utils/restore";
+
 import { themeConfig } from "src/themeConfig";
+import { shouldDisableDate } from "src/utils/restore";
+
+import CalenderIcon from "../Icons/RestoreInstance/CalenderIcon";
+import { Text } from "../Typography/Typography";
 dayjs.extend(utc);
 
 const HighlightedDay = styled(PickersDay)(({ theme }) => ({
@@ -39,15 +41,13 @@ const StyledDateInput = styled(Box)(({ theme }) => ({
   gap: "16px",
   "&.Mui-focused": {
     border: `1px solid  ${theme.palette.primary["300"]}`,
-    boxShadow:
-      "0px 0px 0px 4px #F4EBFF, 0px 1px 2px 0px rgba(16, 24, 40, 0.05)",
+    boxShadow: "0px 0px 0px 4px #F4EBFF, 0px 1px 2px 0px rgba(16, 24, 40, 0.05)",
   },
 
   "&.Mui-error": {
     border: `1px solid  ${theme.palette.error["300"]}`,
     "&.Mui-focused": {
-      boxShadow:
-        "0px 0px 0px 4px #FEE4E2, 0px 1px 2px 0px rgba(16, 24, 40, 0.05)",
+      boxShadow: "0px 0px 0px 4px #FEE4E2, 0px 1px 2px 0px rgba(16, 24, 40, 0.05)",
     },
   },
 }));
@@ -106,22 +106,13 @@ function DateSelectComponent({ formData }) {
         aria-describedby={id}
         className={`${open && "Mui-focused"} ${touched.date && errors.date && "Mui-error"}`}
       >
-        <Stack
-          direction={"row"}
-          justifyContent={"flex-start"}
-          alignItems={"center"}
-          gap={"8px"}
-        >
+        <Stack direction={"row"} justifyContent={"flex-start"} alignItems={"center"} gap={"8px"}>
           <CalenderIcon />
           <Text size="medium" weight="medium" color="#101828">
             UTC
           </Text>
         </Stack>
-        <Text
-          size="medium"
-          weight="regular"
-          color={selectedDate ? "#101828" : "#475467"}
-        >
+        <Text size="medium" weight="regular" color={selectedDate ? "#101828" : "#475467"}>
           {selectedDate ? selectedDate?.format("MM-DD-YYYY") : "mm-dd-yyyy"}
         </Text>
       </StyledDateInput>
@@ -154,9 +145,7 @@ function DateSelectComponent({ formData }) {
                   earliestRestoreTime: earliestRestoreTime,
                 },
               }}
-              shouldDisableDate={(date) =>
-                shouldDisableDate(date, earliestRestoreTime)
-              }
+              shouldDisableDate={(date) => shouldDisableDate(date, earliestRestoreTime)}
               dayOfWeekFormatter={(date) => dayjs(date).format("ddd")}
             />
           </LocalizationProvider>

@@ -1,10 +1,10 @@
-import { Box, BoxProps } from "@mui/material";
 import { FC, Fragment } from "react";
-
 import Link from "next/link";
-import { Text } from "src/components/Typography/Typography";
+import { Box, BoxProps } from "@mui/material";
+
 import CopyButton from "src/components/Button/CopyButton";
 import Tooltip from "src/components/Tooltip/Tooltip";
+import { Text } from "src/components/Typography/Typography";
 
 export type Row = {
   label: string;
@@ -72,12 +72,7 @@ const PropertyTable: FC<PropertyTableProps> = ({ rows }) => {
               alignItems="center"
               gap="4px"
             >
-              <Text
-                size="small"
-                weight="regular"
-                color="#6941C6"
-                sx={{ flex: 1, wordBreak: "break-word" }}
-              >
+              <Text size="small" weight="regular" color="#6941C6" sx={{ flex: 1, wordBreak: "break-word" }}>
                 {row.value}
               </Text>
               <CopyButton
@@ -95,13 +90,7 @@ const PropertyTable: FC<PropertyTableProps> = ({ rows }) => {
         // If valueType is text or link, add a copy button
         if (!!row.value && (valueType === "text" || valueType === "link")) {
           value = (
-            <Box
-              paddingTop="12px"
-              display="flex"
-              gap="8px"
-              justifyContent="flex-end"
-              alignItems="center"
-            >
+            <Box paddingTop="12px" display="flex" gap="8px" justifyContent="flex-end" alignItems="center">
               <Tooltip title={row.value} placement="top" arrow>
                 {/* Div is Necessary for the Tooltip */}
                 <div>{value}</div>

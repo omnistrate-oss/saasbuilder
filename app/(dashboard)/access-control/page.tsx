@@ -1,36 +1,36 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import { useMutation } from "@tanstack/react-query";
 import { createColumnHelper } from "@tanstack/react-table";
 
-import useAllUsers from "./hooks/useAllUsers";
-import PageTitle from "../components/Layout/PageTitle";
-import InviteUsersCard from "./components/InviteUsersCard";
-import PageContainer from "../components/Layout/PageContainer";
-import AccessControlIcon from "../components/Icons/AccessControlIcon";
-import AccessControlTableHeader from "./components/AccessControlTableHeader";
-
-import Button from "components/Button/Button";
-import DataTable from "components/DataTable/DataTable";
-import DeleteIcon from "components/Icons/Delete/Delete";
-import GridCellExpand from "components/GridCellExpand/GridCellExpand";
-import ServiceNameWithLogo from "components/ServiceNameWithLogo/ServiceNameWithLogo";
-import TextConfirmationDialog from "components/TextConfirmationDialog/TextConfirmationDialog";
-import SubscriptionTypeDirectIcon from "components/Icons/SubscriptionType/SubscriptionTypeDirectIcon";
-import SubscriptionTypeInvitedIcon from "components/Icons/SubscriptionType/SubscriptionTypeInvitedIcon";
-
-import useSnackbar from "src/hooks/useSnackbar";
 import { revokeSubscriptionUser } from "src/api/users";
+import useSnackbar from "src/hooks/useSnackbar";
 import { useGlobalData } from "src/providers/GlobalDataProvider";
+import { SubscriptionUser } from "src/types/consumptionUser";
 import {
   getEnumFromUserRoleString,
   isOperationAllowedByRBAC,
   operationEnum,
   viewEnum,
 } from "src/utils/isAllowedByRBAC";
-import { useSearchParams } from "next/navigation";
-import { SubscriptionUser } from "src/types/consumptionUser";
+import Button from "components/Button/Button";
+import DataTable from "components/DataTable/DataTable";
+import GridCellExpand from "components/GridCellExpand/GridCellExpand";
+import DeleteIcon from "components/Icons/Delete/Delete";
+import SubscriptionTypeDirectIcon from "components/Icons/SubscriptionType/SubscriptionTypeDirectIcon";
+import SubscriptionTypeInvitedIcon from "components/Icons/SubscriptionType/SubscriptionTypeInvitedIcon";
+import ServiceNameWithLogo from "components/ServiceNameWithLogo/ServiceNameWithLogo";
+import TextConfirmationDialog from "components/TextConfirmationDialog/TextConfirmationDialog";
+
+import AccessControlIcon from "../components/Icons/AccessControlIcon";
+import PageContainer from "../components/Layout/PageContainer";
+import PageTitle from "../components/Layout/PageTitle";
+
+import AccessControlTableHeader from "./components/AccessControlTableHeader";
+import InviteUsersCard from "./components/InviteUsersCard";
+import useAllUsers from "./hooks/useAllUsers";
 
 const columnHelper = createColumnHelper<SubscriptionUser>();
 type Overlay = "delete-dialog";
@@ -42,9 +42,7 @@ const AccessControlPage = () => {
   const [searchText, setSearchText] = useState<string>("");
   const [overlayType, setOverlayType] = useState<Overlay>("delete-dialog");
   const [isOverlayOpen, setIsOverlayOpen] = useState<boolean>(false);
-  const [selectedUser, setSelectedUser] = useState<SubscriptionUser | null>(
-    null
-  );
+  const [selectedUser, setSelectedUser] = useState<SubscriptionUser | null>(null);
   const { subscriptions, isLoadingSubscriptions } = useGlobalData();
 
   useEffect(() => {
@@ -60,11 +58,7 @@ const AccessControlPage = () => {
     }, {});
   }, [subscriptions]);
 
-  const {
-    data: users = [],
-    isFetching: isFetchingUsers,
-    refetch: refetchUsers,
-  } = useAllUsers();
+  const { data: users = [], isFetching: isFetchingUsers, refetch: refetchUsers } = useAllUsers();
 
   const dataTableColumns = useMemo(() => {
     return [
@@ -102,14 +96,8 @@ const AccessControlPage = () => {
           id: "serviceName",
           header: "Service Name",
           cell: (data) => {
-            const { serviceLogoURL, serviceName } =
-              subscriptionsObj[data.row.original.subscriptionId] || {};
-            return (
-              <ServiceNameWithLogo
-                serviceName={serviceName}
-                serviceLogoURL={serviceLogoURL}
-              />
-            );
+            const { serviceLogoURL, serviceName } = subscriptionsObj[data.row.original.subscriptionId] || {};
+            return <ServiceNameWithLogo serviceName={serviceName} serviceLogoURL={serviceLogoURL} />;
           },
           meta: {
             minWidth: 230,
@@ -126,38 +114,29 @@ const AccessControlPage = () => {
           header: "Subscription Plan",
         }
       ),
-      columnHelper.accessor(
-        (row) => subscriptionsObj[row.subscriptionId]?.subscriptionOwnerName,
-        {
-          id: "subscriptionOwnerName",
-          header: "Subscription Owner",
-          cell: (data) => {
-            const subscription =
-              subscriptionsObj[data.row.original.subscriptionId];
+      columnHelper.accessor((row) => subscriptionsObj[row.subscriptionId]?.subscriptionOwnerName, {
+        id: "subscriptionOwnerName",
+        header: "Subscription Owner",
+        cell: (data) => {
+          const subscription = subscriptionsObj[data.row.original.subscriptionId];
 
-            return (
-              <GridCellExpand
-                value={subscription?.subscriptionOwnerName}
-                startIcon={
-                  data.row.original.roleType === "root" ? (
-                    <SubscriptionTypeDirectIcon />
-                  ) : (
-                    <SubscriptionTypeInvitedIcon />
-                  )
-                }
-              />
-            );
-          },
-        }
-      ),
+          return (
+            <GridCellExpand
+              value={subscription?.subscriptionOwnerName}
+              startIcon={
+                data.row.original.roleType === "root" ? <SubscriptionTypeDirectIcon /> : <SubscriptionTypeInvitedIcon />
+              }
+            />
+          );
+        },
+      }),
       // @ts-ignore
       columnHelper.accessor("action", {
         id: "action",
         header: "Action",
         enableSorting: false,
         cell: (data) => {
-          const subscription =
-            subscriptionsObj[data.row.original.subscriptionId];
+          const subscription = subscriptionsObj[data.row.original.subscriptionId];
 
           const isDeleteAllowed = isOperationAllowedByRBAC(
             operationEnum.UnInvite,
@@ -174,21 +153,14 @@ const AccessControlPage = () => {
                 setOverlayType("delete-dialog");
                 setSelectedUser(data.row.original);
               }}
-              startIcon={
-                <DeleteIcon
-                  color="#B42318"
-                  disabled={data.row.original.roleType === "root"}
-                />
-              }
+              startIcon={<DeleteIcon color="#B42318" disabled={data.row.original.roleType === "root"} />}
               sx={{
                 border: "none !important",
                 padding: "4px !important",
                 boxShadow: "none !important",
               }}
               disableRipple
-              disabled={
-                data.row.original.roleType === "root" || !isDeleteAllowed
-              }
+              disabled={data.row.original.roleType === "root" || !isDeleteAllowed}
               disabledMessage={
                 !isDeleteAllowed
                   ? "You do not have permission to remove access of this user"
@@ -208,17 +180,14 @@ const AccessControlPage = () => {
     ];
   }, [subscriptionsObj]);
 
-  const deleteUserMutation = useMutation(
-    (payload: any) => revokeSubscriptionUser(payload.subscriptionId, payload),
-    {
-      onSuccess: async () => {
-        // TODO Later: Set the Query Data Directly without Refetching
-        refetchUsers();
-        setIsOverlayOpen(false);
-        snackbar.showSuccess("User access removed successfully");
-      },
-    }
-  );
+  const deleteUserMutation = useMutation((payload: any) => revokeSubscriptionUser(payload.subscriptionId, payload), {
+    onSuccess: async () => {
+      // TODO Later: Set the Query Data Directly without Refetching
+      refetchUsers();
+      setIsOverlayOpen(false);
+      snackbar.showSuccess("User access removed successfully");
+    },
+  });
 
   const filteredUsers = useMemo(() => {
     let res = users || [];
@@ -244,10 +213,7 @@ const AccessControlPage = () => {
         Access Control
       </PageTitle>
 
-      <InviteUsersCard
-        refetchUsers={refetchUsers}
-        isFetchingUsers={isFetchingUsers}
-      />
+      <InviteUsersCard refetchUsers={refetchUsers} isFetchingUsers={isFetchingUsers} />
 
       <div>
         <DataTable
@@ -290,8 +256,7 @@ const AccessControlPage = () => {
         buttonLabel="Remove Access"
         subtitle={`Are you sure you want remove the ${
           selectedUser?.roleType
-            ? selectedUser?.roleType.charAt(0).toUpperCase() +
-              selectedUser?.roleType.slice(1)
+            ? selectedUser?.roleType.charAt(0).toUpperCase() + selectedUser?.roleType.slice(1)
             : null
         } access for the user ${selectedUser?.email}?`}
         message="To confirm access removal, please enter <b>remove</b>, in the field below:"

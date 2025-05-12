@@ -80,13 +80,7 @@ function getProviderOrgDetails() {
 module.exports = {
   customerUserSignUp: withProviderTokenExpirationHanding(customerUserSignUp),
   customerUserSignIn: withProviderTokenExpirationHanding(customerUserSignIn),
-  customerUserResetPassword: withProviderTokenExpirationHanding(
-    customerUserResetPassword
-  ),
-  getProviderOrgDetails: withProviderTokenExpirationHanding(
-    getProviderOrgDetails
-  ),
-  customerSignInWithIdentityProvider: withProviderTokenExpirationHanding(
-    customerSignInWithIdentityProvider
-  ),
+  customerUserResetPassword: withProviderTokenExpirationHanding(customerUserResetPassword),
+  getProviderOrgDetails: withProviderTokenExpirationHanding(getProviderOrgDetails),
+  customerSignInWithIdentityProvider: withProviderTokenExpirationHanding(customerSignInWithIdentityProvider),
 };

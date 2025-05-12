@@ -14,12 +14,7 @@ async function getConnectedAccountCompleteMailContentAWS(
 
   const subject = `Success: AWS Account ${accountId} Connected to ${orgName}`;
 
-  const templatePath = path.resolve(
-    __dirname,
-    "..",
-    "ejsTemplates",
-    "connectedAccountCompleteAWS.ejs"
-  );
+  const templatePath = path.resolve(__dirname, "..", "ejsTemplates", "connectedAccountCompleteAWS.ejs");
 
   const baseURL = getSaaSDomainURL();
 
