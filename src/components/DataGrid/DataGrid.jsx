@@ -1,6 +1,6 @@
 import { memo } from "react";
 import { Stack, styled } from "@mui/material";
-import { DataGrid as MuiDataGrid,GridCell, GridRow } from "@mui/x-data-grid";
+import { DataGrid as MuiDataGrid, GridCell, GridRow } from "@mui/x-data-grid";
 
 import CustomCheckbox from "../Checkbox/Checkbox";
 

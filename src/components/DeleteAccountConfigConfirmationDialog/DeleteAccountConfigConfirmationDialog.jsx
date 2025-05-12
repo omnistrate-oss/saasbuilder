@@ -1,6 +1,6 @@
 import Link from "next/link";
 import CloseIcon from "@mui/icons-material/Close";
-import { Box, Dialog,IconButton, Stack, styled } from "@mui/material";
+import { Box, Dialog, IconButton, Stack, styled } from "@mui/material";
 
 import Button from "components/Button/Button";
 import LoadingSpinnerSmall from "components/CircularProgress/CircularProgress";

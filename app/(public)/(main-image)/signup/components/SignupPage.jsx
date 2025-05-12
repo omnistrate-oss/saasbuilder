@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { Box, Stack, styled,Typography } from "@mui/material";
+import { Box, Stack, styled, Typography } from "@mui/material";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import { useMutation } from "@tanstack/react-query";
 import { IDENTITY_PROVIDER_STATUS_TYPES } from "app/(public)/(main-image)/signin/constants";

@@ -1,4 +1,4 @@
-import { Box, Stack, styled,Tooltip, tooltipClasses } from "@mui/material";
+import { Box, Stack, styled, Tooltip, tooltipClasses } from "@mui/material";
 
 import QuestionIcon from "src/components/Icons/Question/QuestionIcon";
 import CircleCheckIcon from "components/Icons/CircleCheck/CircleCheckIcon";

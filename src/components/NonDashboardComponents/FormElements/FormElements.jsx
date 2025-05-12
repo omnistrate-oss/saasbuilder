@@ -1,5 +1,5 @@
 import NextLink from "next/link";
-import { Box,InputBase, inputBaseClasses, styled } from "@mui/material";
+import { Box, InputBase, inputBaseClasses, styled } from "@mui/material";
 
 export const Heading = styled("h1")(({ theme }) => ({
   fontSize: 36,

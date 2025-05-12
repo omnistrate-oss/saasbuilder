@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Box, Dialog,Stack, styled } from "@mui/material";
+import { Box, Dialog, Stack, styled } from "@mui/material";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useFormik } from "formik";
 
