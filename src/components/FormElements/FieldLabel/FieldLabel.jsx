@@ -1,6 +1,7 @@
 import { styled } from "@mui/material";
-import { weights } from "../../Typography/Typography";
 import Box from "@mui/material/Box";
+
+import { weights } from "../../Typography/Typography";
 
 const StyledFieldLabel = styled((props) => <Box component="label" {...props} />)(() => ({
   color: "#344054",

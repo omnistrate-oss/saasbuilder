@@ -1,7 +1,8 @@
 import { useEffect, useMemo, useState } from "react";
-import ResourceConnectivityEndpoint from "./ConnectivityEndpoint";
-import CLIManagedConnectivityDetails from "./CLIManagedConnectivityDetails";
+
 import PropertyDetails from "../ResourceInstanceDetails/PropertyDetails";
+import CLIManagedConnectivityDetails from "./CLIManagedConnectivityDetails";
+import ResourceConnectivityEndpoint from "./ConnectivityEndpoint";
 
 function Connectivity(props) {
   const {

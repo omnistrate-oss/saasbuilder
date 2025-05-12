@@ -1,5 +1,5 @@
-import Link from "next/link";
 import { Box, Typography } from "@mui/material";
+import Link from "next/link";
 import { useCookieConsentContext } from "src/context/cookieConsentContext";
 import { useProviderOrgDetails } from "src/providers/ProviderOrgDetailsProvider";
 

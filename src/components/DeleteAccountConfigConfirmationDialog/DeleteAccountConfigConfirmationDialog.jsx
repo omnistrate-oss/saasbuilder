@@ -1,12 +1,13 @@
+import CloseIcon from "@mui/icons-material/Close";
+import { Box, Dialog,IconButton, Stack, styled } from "@mui/material";
 import Button from "components/Button/Button";
-import TextField from "components/FormElements/TextField/TextField";
-import Form from "components/FormElements/Form/Form";
-import { IconButton, Stack, styled, Box, Dialog } from "@mui/material";
 import LoadingSpinnerSmall from "components/CircularProgress/CircularProgress";
+import Form from "components/FormElements/Form/Form";
+import TextField from "components/FormElements/TextField/TextField";
 import DeleteCirleIcon from "components/Icons/DeleteCircle/DeleteCirleIcon";
 import { Text } from "components/Typography/Typography";
-import CloseIcon from "@mui/icons-material/Close";
 import Link from "next/link";
+
 import { TextContainerToCopy } from "../CloudProviderAccountOrgIdModal/CloudProviderAccountOrgIdModal";
 
 const StyledForm = styled(Form)({

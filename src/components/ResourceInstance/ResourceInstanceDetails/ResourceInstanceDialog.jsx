@@ -1,15 +1,15 @@
+import CloseIcon from "@mui/icons-material/Close";
+import { Box, Stack } from "@mui/material";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
-import { Box, Stack } from "@mui/material";
-import AccordionEditIcon from "src/components/Icons/AccordionEdit/AccordionEdit";
-import FieldContainer from "src/components/FormElementsv2/FieldContainer/FieldContainer";
-import FieldLabel from "src/components/FormElements/FieldLabel/FieldLabel";
-import CopyButton from "src/components/Button/CopyButton";
 import Button from "src/components/Button/Button";
+import CopyButton from "src/components/Button/CopyButton";
+import FieldLabel from "src/components/FormElements/FieldLabel/FieldLabel";
+import FieldContainer from "src/components/FormElementsv2/FieldContainer/FieldContainer";
+import AccordionEditIcon from "src/components/Icons/AccordionEdit/AccordionEdit";
 import { Text } from "src/components/Typography/Typography";
-import CloseIcon from "@mui/icons-material/Close";
 
 export default function ResourceInstanceDialog(props) {
   const { open = false, handleClose, variant = "array", data, title, subtitle } = props;

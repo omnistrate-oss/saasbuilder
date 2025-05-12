@@ -1,27 +1,28 @@
-import Button from "components/Button/Button";
-import TextField from "components/FormElements/TextField/TextField";
-import { Stack, styled, Box, Dialog, Step, StepLabel, Stepper } from "@mui/material";
-import LoadingSpinnerSmall from "components/CircularProgress/CircularProgress";
-import { Text } from "components/Typography/Typography";
-import Link from "next/link";
-import DisconnectIcon from "../Icons/Disconnect/Disconnect";
-import { roundNumberToTwoDecimals } from "src/utils/formatNumber";
-import StepStepper from "../Stepper/StepStepper";
-import { useEffect, useRef, useState } from "react";
-import Chip from "../Chip/Chip";
-import AlertTriangle from "../Icons/AlertTriangle/AlertTriangle";
-import StepperSuccessIcon from "../Stepper/StepperSuccessIcon";
-import { useFormik } from "formik";
+import { Box, Dialog, Stack, Step, StepLabel, Stepper,styled } from "@mui/material";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import Button from "components/Button/Button";
+import LoadingSpinnerSmall from "components/CircularProgress/CircularProgress";
+import TextField from "components/FormElements/TextField/TextField";
+import { Text } from "components/Typography/Typography";
+import { useFormik } from "formik";
+import Link from "next/link";
+import { useEffect, useRef, useState } from "react";
 import { disconnected } from "src/api/resourceInstance";
+import useSnackbar from "src/hooks/useSnackbar";
+import { roundNumberToTwoDecimals } from "src/utils/formatNumber";
+
+import Chip from "../Chip/Chip";
+import { TextContainerToCopy } from "../CloudProviderAccountOrgIdModal/CloudProviderAccountOrgIdModal";
+import AlertTriangle from "../Icons/AlertTriangle/AlertTriangle";
+import DisconnectIcon from "../Icons/Disconnect/Disconnect";
+import StepperSuccessIcon from "../Stepper/StepperSuccessIcon";
+import StepStepper from "../Stepper/StepStepper";
 import {
   CustomStepIcon,
   getStepperProps,
   stateAccountConfigStepper,
   stepsDisconnectRunAccountConfig,
 } from "../Stepper/utils";
-import useSnackbar from "src/hooks/useSnackbar";
-import { TextContainerToCopy } from "../CloudProviderAccountOrgIdModal/CloudProviderAccountOrgIdModal";
 
 const StyledForm = styled(Box)({
   position: "fixed",

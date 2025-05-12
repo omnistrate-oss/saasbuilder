@@ -1,6 +1,7 @@
 import { Box } from "@mui/material";
-import NodeStatusTooltip from "./NodeStatusTooltip";
 import StatusChip, { getChipStyles } from "src/components/StatusChip/StatusChip";
+
+import NodeStatusTooltip from "./NodeStatusTooltip";
 
 export const NodeStatus = (props) => {
   const { detailedHealth, isStopped, isJob } = props;

@@ -1,7 +1,7 @@
-import { useState } from "react";
 import { InputAdornment, Stack, Typography } from "@mui/material";
-import { Text } from "src/components/Typography/Typography";
+import { useState } from "react";
 import Tooltip from "src/components/Tooltip/Tooltip";
+import { Text } from "src/components/Typography/Typography";
 
 function convertToAsterisks(str) {
   // Get the length of the input string

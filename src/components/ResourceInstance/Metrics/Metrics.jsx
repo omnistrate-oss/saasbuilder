@@ -1,28 +1,29 @@
 import { Box, CircularProgress, Stack, styled } from "@mui/material";
-import { Text } from "../../Typography/Typography";
-import Card from "../../Card/Card";
+import _ from "lodash";
 import { useCallback, useEffect, useRef, useState } from "react";
 import useWebSocket from "react-use-websocket";
-import MetricCard from "./MetricCard";
+import MenuItem from "src/components/FormElementsv2/MenuItem/MenuItem";
+import Select from "src/components/FormElementsv2/Select/Select";
+import DataGridHeaderTitle from "src/components/Headers/DataGridHeaderTitle";
+import JobCompleted from "src/components/JobResource/JobCompleted";
+
+import useSnackbar from "../../../hooks/useSnackbar";
+import formatDateUTC from "../../../utils/formatDateUTC";
+import Card from "../../Card/Card";
 import LoadingSpinner from "../../LoadingSpinner/LoadingSpinner";
+import { Text } from "../../Typography/Typography";
+import DataUnavailableMessage from "../DataUnavailableMessage";
 import CpuUsageChart from "./CpuUsageChart";
-import MemUsagePercentChart from "./MemUsagePercentChart";
-import LoadAverageChart from "./LoadAverageChart";
 import DiskIOPSReadChart from "./DiskIOPSReadChart";
 import DiskIOPSWriteChart from "./DiskIOPSWriteChart";
 import DiskThroughputChart from "./DiskThroughputChart";
-import NetworkThroughputChart from "./NetworkThroughputChart";
 import DiskUsageChart from "./DiskUsageChart";
-import useSnackbar from "../../../hooks/useSnackbar";
-import formatDateUTC from "../../../utils/formatDateUTC";
+import LoadAverageChart from "./LoadAverageChart";
+import MemUsagePercentChart from "./MemUsagePercentChart";
+import MetricCard from "./MetricCard";
 import MultiLineChart from "./MultiLineChart";
+import NetworkThroughputChart from "./NetworkThroughputChart";
 import SingleLineChart from "./SingleLineChart";
-import DataGridHeaderTitle from "src/components/Headers/DataGridHeaderTitle";
-import Select from "src/components/FormElementsv2/Select/Select";
-import MenuItem from "src/components/FormElementsv2/MenuItem/MenuItem";
-import _ from "lodash";
-import JobCompleted from "src/components/JobResource/JobCompleted";
-import DataUnavailableMessage from "../DataUnavailableMessage";
 
 const initialCpuUsage = {
   current: "",

@@ -1,14 +1,15 @@
-import { useMemo } from "react";
 import { Box } from "@mui/material";
-import formatDateUTC from "src/utils/formatDateUTC";
-import { Base64 } from "js-base64";
 import LoadingSpinner from "components/LoadingSpinner/LoadingSpinner";
-import TerraformDownloadURL from "./TerraformDownloadURL";
-import NonOmnistrateIntegrationRow from "./NonOmnistrateIntegrationRow";
-import { INTEGRATION_TYPE_LABEL_MAP } from "src/constants/productTierFeatures";
-import PropertyDetails from "./PropertyDetails";
-import UpgradeScheduledNotificationBar from "./UpgradeScheduledNotificationBar";
+import { Base64 } from "js-base64";
+import { useMemo } from "react";
 import InstanceLicenseStatusChip from "src/components/InstanceLicenseStatusChip/InstanceLicenseStatusChip";
+import { INTEGRATION_TYPE_LABEL_MAP } from "src/constants/productTierFeatures";
+import formatDateUTC from "src/utils/formatDateUTC";
+
+import NonOmnistrateIntegrationRow from "./NonOmnistrateIntegrationRow";
+import PropertyDetails from "./PropertyDetails";
+import TerraformDownloadURL from "./TerraformDownloadURL";
+import UpgradeScheduledNotificationBar from "./UpgradeScheduledNotificationBar";
 
 function ResourceInstanceDetails(props) {
   const {

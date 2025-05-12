@@ -1,33 +1,31 @@
 "use client";
 
-import * as Yup from "yup";
-import Link from "next/link";
-import { useFormik } from "formik";
-import ReCAPTCHA from "react-google-recaptcha";
-import { useSearchParams } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
-import { useMutation } from "@tanstack/react-query";
+import { Box, Stack, styled,Typography } from "@mui/material";
 import { GoogleOAuthProvider } from "@react-oauth/google";
-import { Box, Stack, Typography, styled } from "@mui/material";
-
-import SuccessBox from "components/SuccessBox/SuccessBox";
+import { useMutation } from "@tanstack/react-query";
+import { IDENTITY_PROVIDER_STATUS_TYPES } from "app/(public)/(main-image)/signin/constants";
 import FieldError from "components/FormElementsv2/FieldError/FieldError";
 import DisplayHeading from "components/NonDashboardComponents/DisplayHeading";
-import TextField from "components/NonDashboardComponents/FormElementsV2/TextField";
-import FieldLabel from "components/NonDashboardComponents/FormElementsV2/FieldLabel";
-import SubmitButton from "components/NonDashboardComponents/FormElementsV2/SubmitButton";
-import PasswordField from "components/NonDashboardComponents/FormElementsV2/PasswordField";
 import FieldContainer from "components/NonDashboardComponents/FormElementsV2/FieldContainer";
-
-import useSnackbar from "src/hooks/useSnackbar";
+import FieldLabel from "components/NonDashboardComponents/FormElementsV2/FieldLabel";
+import PasswordField from "components/NonDashboardComponents/FormElementsV2/PasswordField";
+import SubmitButton from "components/NonDashboardComponents/FormElementsV2/SubmitButton";
+import TextField from "components/NonDashboardComponents/FormElementsV2/TextField";
+import SuccessBox from "components/SuccessBox/SuccessBox";
+import { useFormik } from "formik";
+import Link from "next/link";
+import { useSearchParams } from "next/navigation";
+import { useEffect, useRef, useState } from "react";
+import ReCAPTCHA from "react-google-recaptcha";
 import { customerUserSignup } from "src/api/customer-user";
-import { passwordRegex, passwordText } from "src/utils/passwordRegex";
-
-import GoogleLogin from "../../signin/components/GoogleLogin";
-import GithubLogin from "../../signin/components/GitHubLogin";
-import { IDENTITY_PROVIDER_STATUS_TYPES } from "app/(public)/(main-image)/signin/constants";
-import { useProviderOrgDetails } from "src/providers/ProviderOrgDetailsProvider";
 import Logo from "src/components/NonDashboardComponents/Logo";
+import useSnackbar from "src/hooks/useSnackbar";
+import { useProviderOrgDetails } from "src/providers/ProviderOrgDetailsProvider";
+import { passwordRegex, passwordText } from "src/utils/passwordRegex";
+import * as Yup from "yup";
+
+import GithubLogin from "../../signin/components/GitHubLogin";
+import GoogleLogin from "../../signin/components/GoogleLogin";
 
 const FormGrid = styled(Box)(() => ({
   display: "grid",

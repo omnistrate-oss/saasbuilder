@@ -1,6 +1,5 @@
 "use client";
 
-import { useFormik } from "formik";
 import CloseIcon from "@mui/icons-material/Close";
 import {
   Dialog as MuiDialog,
@@ -11,16 +10,15 @@ import {
   Stack,
   styled,
 } from "@mui/material";
-
 import Button from "components/Button/Button";
 import Form from "components/FormElements/Form/Form";
 import TextField from "components/FormElements/TextField/TextField";
-
-import { Text } from "../Typography/Typography";
-import DeleteCirleIcon from "../Icons/DeleteCircle/DeleteCirleIcon";
-import LoadingSpinnerSmall from "../CircularProgress/CircularProgress";
-
+import { useFormik } from "formik";
 import useSnackbar from "src/hooks/useSnackbar";
+
+import LoadingSpinnerSmall from "../CircularProgress/CircularProgress";
+import DeleteCirleIcon from "../Icons/DeleteCircle/DeleteCirleIcon";
+import { Text } from "../Typography/Typography";
 
 const Dialog = styled(MuiDialog)(() => ({
   [`& .MuiPaper-root `]: {

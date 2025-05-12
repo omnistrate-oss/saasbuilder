@@ -1,5 +1,5 @@
-import React from "react";
 import { Box, styled } from "@mui/material";
+import React from "react";
 
 const ContentWrapper = styled(Box)(({ theme }) => ({
   minHeight: "calc(100% - 88px)",

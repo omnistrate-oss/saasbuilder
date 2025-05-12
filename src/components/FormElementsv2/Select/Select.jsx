@@ -1,9 +1,10 @@
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import { menuClasses, styled } from "@mui/material";
 import MuiSelect from "@mui/material/Select";
 import Stack from "@mui/material/Stack";
-import LoadingSpinnerSmall from "../../CircularProgress/CircularProgress";
-import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import { colors } from "src/themeConfig";
+
+import LoadingSpinnerSmall from "../../CircularProgress/CircularProgress";
 
 const LoadingUI = () => {
   return (

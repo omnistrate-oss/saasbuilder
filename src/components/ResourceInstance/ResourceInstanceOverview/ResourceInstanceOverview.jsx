@@ -1,13 +1,14 @@
 import { styled } from "@mui/material";
-import { Text } from "../../Typography/Typography";
-import RegionIcon from "../../Region/RegionIcon";
-import { getResourceInstanceStatusStylesAndLabel } from "src/constants/statusChipStyles/resourceInstanceStatus";
-import StatusChip from "src/components/StatusChip/StatusChip";
 import InstanceHealthStatusChip, {
   getInstanceHealthStatus,
 } from "src/components/InstanceHealthStatusChip/InstanceHealthStatusChip";
-import { colors } from "src/themeConfig";
+import StatusChip from "src/components/StatusChip/StatusChip";
 import { cloudProviderLongLogoMap } from "src/constants/cloudProviders";
+import { getResourceInstanceStatusStylesAndLabel } from "src/constants/statusChipStyles/resourceInstanceStatus";
+import { colors } from "src/themeConfig";
+
+import RegionIcon from "../../Region/RegionIcon";
+import { Text } from "../../Typography/Typography";
 
 const ServiceLogoImg = styled("img")({
   height: "40px",

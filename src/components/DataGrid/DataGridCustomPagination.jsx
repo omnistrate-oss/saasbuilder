@@ -1,11 +1,12 @@
-import * as React from "react";
-import Box from "@mui/material/Box";
-import { gridPageCountSelector, GridPagination, useGridApiContext, useGridSelector } from "@mui/x-data-grid";
-import usePagination from "@mui/material/usePagination";
-import Button from "../Button/Button";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import { List } from "@mui/material";
+import Box from "@mui/material/Box";
+import usePagination from "@mui/material/usePagination";
+import { gridPageCountSelector, GridPagination, useGridApiContext, useGridSelector } from "@mui/x-data-grid";
+import * as React from "react";
+
+import Button from "../Button/Button";
 
 export function Pagination(props) {
   const { page, onPageChange } = props;

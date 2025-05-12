@@ -1,4 +1,5 @@
-import { CartesianGrid, Area, AreaChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
+import { Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
+
 import ReChartContainer from "../../ReChartContainer/ReChartContainer";
 
 function CpuUsageChart(props) {

@@ -1,6 +1,6 @@
-import MuiTabs, { tabsClasses } from "@mui/material/Tabs";
-import MuiTab, { tabClasses } from "@mui/material/Tab";
 import styled from "@emotion/styled";
+import MuiTab, { tabClasses } from "@mui/material/Tab";
+import MuiTabs, { tabsClasses } from "@mui/material/Tabs";
 import { styleConfig } from "src/providerConfig";
 import { colors } from "src/themeConfig";
 

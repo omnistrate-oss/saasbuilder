@@ -1,14 +1,15 @@
+import ExpandLessIcon from "@mui/icons-material/ExpandLess";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import { Box, IconButton, Stack, styled } from "@mui/material";
 import MuiAccordion from "@mui/material/Accordion";
 import MuiAccordionDetails from "@mui/material/AccordionDetails";
 import MuiAccordionSummary, { accordionSummaryClasses } from "@mui/material/AccordionSummary";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import ExpandLessIcon from "@mui/icons-material/ExpandLess";
-import { Box, IconButton, Stack, styled } from "@mui/material";
-import { Text } from "../Typography/Typography";
-import Switch from "src/components/Switch/Switch";
 import AccordionEditIcon from "src/components/Icons/AccordionEdit/AccordionEdit";
-import AccordionValidIcon from "src/components/Icons/AccordionValid/AccordionValid";
 import AccordionErrorIcon from "src/components/Icons/AccordionError/AccordionError";
+import AccordionValidIcon from "src/components/Icons/AccordionValid/AccordionValid";
+import Switch from "src/components/Switch/Switch";
+
+import { Text } from "../Typography/Typography";
 
 export const ACCORDION_ICON_VARIANTS = {
   edit: "edit",

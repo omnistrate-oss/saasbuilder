@@ -1,8 +1,9 @@
 import { Stack, styled } from "@mui/material";
-import { GridCell, GridRow, DataGrid as MuiDataGrid } from "@mui/x-data-grid";
-import DataGridCustomPagination from "./DataGridCustomPagination";
-import CustomCheckbox from "../Checkbox/Checkbox";
+import { DataGrid as MuiDataGrid,GridCell, GridRow } from "@mui/x-data-grid";
 import { memo } from "react";
+
+import CustomCheckbox from "../Checkbox/Checkbox";
+import DataGridCustomPagination from "./DataGridCustomPagination";
 
 // Define memoized components outside of the render function
 const MemoizedCell = memo(function Cell(props) {

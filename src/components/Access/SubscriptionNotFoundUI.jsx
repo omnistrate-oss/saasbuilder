@@ -1,8 +1,9 @@
-import React from "react";
-import Card from "../Card/Card";
 import { Box } from "@mui/material";
 import Image from "next/image";
 import marketplaceIcon from "public/assets/images/dashboard/marketplace.svg";
+import React from "react";
+
+import Card from "../Card/Card";
 
 function SubscriptionNotFoundUI({ isOfferingFound }) {
   return (

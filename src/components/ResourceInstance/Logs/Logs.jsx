@@ -1,22 +1,23 @@
-import Ansi from "ansi-to-react";
+import styled from "@emotion/styled";
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import { Box, CircularProgress, IconButton as MuiIconButton, Stack } from "@mui/material";
-import { useRef, useState, useEffect } from "react";
-import { Text } from "../../Typography/Typography";
+import Ansi from "ansi-to-react";
+import _ from "lodash";
+import { useEffect,useRef, useState } from "react";
+import InfiniteScroll from "react-infinite-scroller";
+import { useWebSocket } from "react-use-websocket/dist/lib/use-websocket";
+import MenuItem from "src/components/FormElementsv2/MenuItem/MenuItem";
+import Select from "src/components/FormElementsv2/Select/Select";
+import DataGridHeaderTitle from "src/components/Headers/DataGridHeaderTitle";
+import JobCompleted from "src/components/JobResource/JobCompleted";
+import LoadingSpinner from "src/components/LoadingSpinner/LoadingSpinner";
+
+import useSnackbar from "../../../hooks/useSnackbar";
 import Card from "../../Card/Card";
 import Divider from "../../Divider/Divider";
-import { useWebSocket } from "react-use-websocket/dist/lib/use-websocket";
-import styled from "@emotion/styled";
-import useSnackbar from "../../../hooks/useSnackbar";
-import InfiniteScroll from "react-infinite-scroller";
-import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
-import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import Tooltip from "../../Tooltip/Tooltip";
-import LoadingSpinner from "src/components/LoadingSpinner/LoadingSpinner";
-import DataGridHeaderTitle from "src/components/Headers/DataGridHeaderTitle";
-import Select from "src/components/FormElementsv2/Select/Select";
-import MenuItem from "src/components/FormElementsv2/MenuItem/MenuItem";
-import _ from "lodash";
-import JobCompleted from "src/components/JobResource/JobCompleted";
+import { Text } from "../../Typography/Typography";
 import DataUnavailableMessage from "../DataUnavailableMessage";
 
 const logsPerPage = 50;

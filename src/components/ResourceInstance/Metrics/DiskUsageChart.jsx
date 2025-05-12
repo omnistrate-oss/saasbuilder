@@ -1,7 +1,8 @@
 import React from "react";
 import { Area, AreaChart, CartesianGrid, Legend, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
-import ReChartContainer from "../../ReChartContainer/ReChartContainer";
+
 import lineChartColorPalette from "../../../utils/constants/lineChartColorPalette";
+import ReChartContainer from "../../ReChartContainer/ReChartContainer";
 
 function DiskUsageChart(props) {
   const { data, labels } = props;

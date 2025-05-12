@@ -1,8 +1,9 @@
-import { useState } from "react";
-import RestoreInstanceModal from "./RestoreInstanceModal";
 import { useMutation } from "@tanstack/react-query";
+import { useState } from "react";
 import { restoreResourceInstance } from "src/api/resourceInstance";
 import useSnackbar from "src/hooks/useSnackbar";
+
+import RestoreInstanceModal from "./RestoreInstanceModal";
 
 function AccessSideRestoreInstance({
   open,

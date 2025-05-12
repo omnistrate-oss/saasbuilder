@@ -1,19 +1,20 @@
+import CloseIcon from "@mui/icons-material/Close";
 import { Box, Dialog, IconButton, Stack, styled } from "@mui/material";
+import { useQueryClient } from "@tanstack/react-query";
+import Link from "next/link";
+// import { CLOUD_PROVIDERS } from "src/constants/cloudProviders";
+import { useEffect, useRef, useState } from "react";
 import Button from "src/components/Button/Button";
 import { Text } from "src/components/Typography/Typography";
-import CloseIcon from "@mui/icons-material/Close";
-import Link from "next/link";
-import InstructionsModalIcon from "../Icons/AccountConfig/InstructionsModalIcon";
-import CopyToClipboardButton from "../CopyClipboardButton/CopyClipboardButton";
-import ArrowBulletIcon from "../Icons/ArrowIcon/ArrowBulletIcon";
-import LoadingSpinnerSmall from "../CircularProgress/CircularProgress";
 import {
   // ACCOUNT_CREATION_METHODS,
   getAccountConfigStatusBasedHeader,
 } from "src/utils/constants/accountConfig";
-// import { CLOUD_PROVIDERS } from "src/constants/cloudProviders";
-import { useEffect, useRef, useState } from "react";
-import { useQueryClient } from "@tanstack/react-query";
+
+import LoadingSpinnerSmall from "../CircularProgress/CircularProgress";
+import CopyToClipboardButton from "../CopyClipboardButton/CopyClipboardButton";
+import InstructionsModalIcon from "../Icons/AccountConfig/InstructionsModalIcon";
+import ArrowBulletIcon from "../Icons/ArrowIcon/ArrowBulletIcon";
 
 const ArrowBulletSmall = () => <ArrowBulletIcon width={20} height={20} />;
 

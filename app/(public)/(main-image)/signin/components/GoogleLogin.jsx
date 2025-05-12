@@ -1,13 +1,14 @@
-import GoogleLoginIcon from "src/components/Icons/GoogleLogin/GoogleLogin";
-import SSOLoginButton from "./SSOLoginButton";
-import { useGoogleLogin } from "@react-oauth/google";
-import Tooltip from "src/components/Tooltip/Tooltip";
 import { Box } from "@mui/material";
-import { useState } from "react";
-import { v4 as uuidv4 } from "uuid";
-import { IDENTITY_PROVIDER_TYPES } from "../constants";
+import { useGoogleLogin } from "@react-oauth/google";
 import { Buffer } from "buffer";
+import { useState } from "react";
 import { flushSync } from "react-dom";
+import GoogleLoginIcon from "src/components/Icons/GoogleLogin/GoogleLogin";
+import Tooltip from "src/components/Tooltip/Tooltip";
+import { v4 as uuidv4 } from "uuid";
+
+import { IDENTITY_PROVIDER_TYPES } from "../constants";
+import SSOLoginButton from "./SSOLoginButton";
 
 function GoogleLogin(props) {
   const { disabled, saasBuilderBaseURL, invitationInfo = {}, destination } = props;

@@ -1,10 +1,11 @@
-import { DialogContent, DialogFooter, DialogHeader } from "../Dialog/InformationDialogTopCenter";
-import { Box, IconButton, Stack } from "@mui/material";
-import { Text } from "../Typography/Typography";
-import Button from "../Button/Button";
 import CloseIcon from "@mui/icons-material/Close";
+import { Box, IconButton, Stack } from "@mui/material";
 import SuccessIcon from "src/components/Icons/SuccessIcon/SuccessIcon";
+
+import Button from "../Button/Button";
 import CopyButton from "../Button/CopyButton";
+import { DialogContent, DialogFooter, DialogHeader } from "../Dialog/InformationDialogTopCenter";
+import { Text } from "../Typography/Typography";
 
 function RestoreInstanceSuccessStep({ handleClose, restoredInstanceID }) {
   return (

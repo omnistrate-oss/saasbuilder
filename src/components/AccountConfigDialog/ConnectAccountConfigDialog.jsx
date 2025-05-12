@@ -1,24 +1,24 @@
-import Button from "components/Button/Button";
-import TextField from "components/FormElements/TextField/TextField";
-import { Stack, styled, Box, Dialog } from "@mui/material";
-import LoadingSpinnerSmall from "components/CircularProgress/CircularProgress";
-import { Text } from "components/Typography/Typography";
-import Link from "next/link";
-
-import StepStepper from "../Stepper/StepStepper";
-import { useEffect, useRef, useState } from "react";
-import sandClock from "public/assets/images/cloud-account/sandclock.gif";
-import Image from "next/image";
-import Chip from "../Chip/Chip";
-import AlertTriangle from "../Icons/AlertTriangle/AlertTriangle";
-import StepperSuccessIcon from "../Stepper/StepperSuccessIcon";
-import { useFormik } from "formik";
+import { Box, Dialog,Stack, styled } from "@mui/material";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import Button from "components/Button/Button";
+import LoadingSpinnerSmall from "components/CircularProgress/CircularProgress";
+import TextField from "components/FormElements/TextField/TextField";
+import { Text } from "components/Typography/Typography";
+import { useFormik } from "formik";
+import Image from "next/image";
+import Link from "next/link";
+import sandClock from "public/assets/images/cloud-account/sandclock.gif";
+import { useEffect, useRef, useState } from "react";
 import { disconnected } from "src/api/resourceInstance";
-import ConnectIcon from "../Icons/Connect/Connect";
-import { getStepperProps, stateAccountConfigStepper } from "../Stepper/utils";
 import useSnackbar from "src/hooks/useSnackbar";
+
+import Chip from "../Chip/Chip";
 import { TextContainerToCopy } from "../CloudProviderAccountOrgIdModal/CloudProviderAccountOrgIdModal";
+import AlertTriangle from "../Icons/AlertTriangle/AlertTriangle";
+import ConnectIcon from "../Icons/Connect/Connect";
+import StepperSuccessIcon from "../Stepper/StepperSuccessIcon";
+import StepStepper from "../Stepper/StepStepper";
+import { getStepperProps, stateAccountConfigStepper } from "../Stepper/utils";
 
 const StyledForm = styled(Box)({
   position: "fixed",

@@ -1,28 +1,29 @@
 import { Box } from "@mui/material";
-import DataGrid from "../../DataGrid/DataGrid";
-import { useEffect, useMemo, useState } from "react";
-import zoneIcon from "public/assets/images/dashboard/resource-instance-nodes/zone.svg";
-import Image from "next/image";
-import StatusChip from "../../StatusChip/StatusChip";
 import { useMutation } from "@tanstack/react-query";
+import _ from "lodash";
+import Image from "next/image";
+import zoneIcon from "public/assets/images/dashboard/resource-instance-nodes/zone.svg";
+import { useEffect, useMemo, useState } from "react";
+import { useSelector } from "react-redux";
+import DataGridText from "src/components/DataGrid/DataGridText";
+import GenerateTokenDialog from "src/components/GenerateToken/GenerateTokenDialog";
+import NodeIcon from "src/components/Icons/Node/NodeIcon";
+import { productTierTypes } from "src/constants/servicePlan";
+import { getResourceInstanceStatusStylesAndLabel } from "src/constants/statusChipStyles/resourceInstanceStatus";
+
 import { failoverResourceInstanceNode } from "../../../api/resourceInstance";
-import GridCellExpand from "../../GridCellExpand/GridCellExpand";
+import { selectUserrootData } from "../../../slices/userDataSlice";
 import {
   getEnumFromUserRoleString,
   isOperationAllowedByRBAC,
   operationEnum,
   viewEnum,
 } from "../../../utils/isAllowedByRBAC";
-import { useSelector } from "react-redux";
-import { selectUserrootData } from "../../../slices/userDataSlice";
-import { NodeStatus } from "./NodeStatus";
-import DataGridText from "src/components/DataGrid/DataGridText";
+import DataGrid from "../../DataGrid/DataGrid";
+import GridCellExpand from "../../GridCellExpand/GridCellExpand";
+import StatusChip from "../../StatusChip/StatusChip";
 import NodesTableHeader from "./NodesTableHeader";
-import { getResourceInstanceStatusStylesAndLabel } from "src/constants/statusChipStyles/resourceInstanceStatus";
-import { productTierTypes } from "src/constants/servicePlan";
-import GenerateTokenDialog from "src/components/GenerateToken/GenerateTokenDialog";
-import _ from "lodash";
-import NodeIcon from "src/components/Icons/Node/NodeIcon";
+import { NodeStatus } from "./NodeStatus";
 
 export const getRowBorderStyles = () => {
   const styles = {};

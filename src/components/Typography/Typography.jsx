@@ -1,6 +1,6 @@
 "use client";
 
-import { Typography, styled } from "@mui/material";
+import { styled,Typography } from "@mui/material";
 
 const variantTypes = {
   desktop: "desktop",

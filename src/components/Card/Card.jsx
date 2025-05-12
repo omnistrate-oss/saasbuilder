@@ -1,4 +1,5 @@
 import { Box, styled } from "@mui/material";
+
 import { Text } from "../Typography/Typography";
 
 const Card = styled(Box)(() => ({

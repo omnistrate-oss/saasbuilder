@@ -1,10 +1,10 @@
 import { Box, Stack, styled } from "@mui/material";
 import MuiTable from "@mui/material/Table";
 import MuiTableBody from "@mui/material/TableBody";
-import MuiTableRow from "@mui/material/TableRow";
 import MuiTableCell from "@mui/material/TableCell";
-import { DisplayText, Text } from "components/Typography/Typography";
 import MuiTableHead from "@mui/material/TableHead";
+import MuiTableRow from "@mui/material/TableRow";
+import { DisplayText, Text } from "components/Typography/Typography";
 
 export const TableContainer = styled(Box)({
   boxShadow: "0px 1px 2px 0px rgba(16, 24, 40, 0.05)",

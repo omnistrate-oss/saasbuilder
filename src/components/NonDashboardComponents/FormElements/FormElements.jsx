@@ -1,4 +1,4 @@
-import { InputBase, styled, inputBaseClasses, Box } from "@mui/material";
+import { Box,InputBase, inputBaseClasses, styled } from "@mui/material";
 import NextLink from "next/link";
 
 export const Heading = styled("h1")(({ theme }) => ({
