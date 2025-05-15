@@ -24,7 +24,7 @@ const CustomLegend = (chartConfig: ChartConfig) => (props: LegendProps) => {
               marginRight: 8,
             }}
           />
-          <span style={{ color: "#1F2937", fontSize: "14px" }}>{chartConfig[entry.value]?.label || entry.value}</span>
+          <span style={{ color: "#1F2937", fontSize: "12px" }}>{chartConfig[entry.value]?.label || entry.value}</span>
         </li>
       ))}
     </ul>
