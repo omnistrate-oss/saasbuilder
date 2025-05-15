@@ -11,10 +11,11 @@ import useInstances from "../instances/hooks/useInstances";
 
 import ClusterLocations from "./components/ClusterLocations";
 import DashboardLogsTableHeader from "./components/DashboardLogsTableHeader";
-// import ChartCard from "./components/ChartCard";
-// import LifecycleStatusChart from "./charts/LifecycleStatusChart";
-// import DeploymentsByLoad from "./charts/DeploymentsByLoadChart";
-// import CloudProvidersChart from "./charts/CloudProvidersChart";
+import LifecycleStatusChart from "./charts/LifecycleStatusChart";
+import ChartCard from "./components/ChartCard";
+import DeploymentsByLoadChart from "./charts/DeploymentsByLoadChart";
+import CloudProvidersChart from "./charts/CloudProvidersChart";
+import HealthStatusChart from "./charts/HealthStatusChart";
 
 const DashboardPage = () => {
   const { data: instances = [], isLoading: isLoadingInstances } = useInstances();
@@ -61,23 +62,25 @@ const DashboardPage = () => {
         />
       </div>
 
-      {/* <div className="mt-8 grid lg:grid-cols-3 gap-6">
+      <div className="mt-8 grid lg:grid-cols-3 gap-6">
         <ChartCard title="Lifecycle Status Breakdown" className="lg:col-span-2">
           <LifecycleStatusChart instances={instances} />
         </ChartCard>
 
-        <ChartCard title="Health Status Breakdown">Hello World!</ChartCard>
+        <ChartCard title="Health Status Breakdown">
+          <HealthStatusChart instances={instances} />
+        </ChartCard>
       </div>
 
       <div className="mt-8 grid lg:grid-cols-3 gap-6">
         <ChartCard title="Deployments By Load">
-          <DeploymentsByLoad instances={instances} />
+          <DeploymentsByLoadChart instances={instances} />
         </ChartCard>
 
         <ChartCard title="Deployments By Cloud">
           <CloudProvidersChart instances={instances} />
         </ChartCard>
-      </div> */}
+      </div>
     </PageContainer>
   );
 };
