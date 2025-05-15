@@ -1,8 +1,9 @@
 import { useMemo } from "react";
-import { Label, Pie, PieChart } from "recharts";
+import { Label, Legend, Pie, PieChart } from "recharts";
 
 import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
 import { ResourceInstance } from "src/types/resourceInstance";
+import CustomLegend from "./CustomLegend";
 
 type DeploymentsByLoadChartProps = {
   instances: ResourceInstance[];
@@ -12,16 +13,16 @@ const chartConfig = {
   instances: {
     label: "Instances",
   },
-  POD_NORMAL: {
-    label: "Pod Normal",
-    color: "#7F56D9",
+  LOAD_NORMAL: {
+    label: "Load Normal",
+    color: "#9E77ED",
   },
-  POD_IDLE: {
-    label: "Pod Idle",
-    color: "#7F56D9",
+  LOAD_IDLE: {
+    label: "Load Idle",
+    color: "#9E77ED",
   },
-  POD_OVERLOADED: {
-    label: "Pod Overloaded",
+  LOAD_OVERLOADED: {
+    label: "Load Overloaded",
     color: "#7F56D9",
   },
   STOPPED: {
@@ -30,11 +31,11 @@ const chartConfig = {
   },
   UNKNOWN: {
     label: "Unknown",
-    color: "#7F56D9",
+    color: "#E9EAEB",
   },
   "N/A": {
     label: "N/A",
-    color: "#7F56D9",
+    color: "#E9EAEB",
   },
 } satisfies ChartConfig;
 
@@ -55,15 +56,17 @@ const DeploymentsByLoadChart: React.FC<DeploymentsByLoadChartProps> = ({ instanc
     return Object.entries(statusCountsObj).map(([key, value]) => ({
       loadStatus: key,
       instances: value,
-      fill: "#7F56D9",
+      fill: chartConfig[key]?.color || "#7F56D9",
     }));
   }, [instances]);
 
   return (
-    <ChartContainer config={chartConfig} className="mx-auto aspect-square max-h-[250px]">
+    <ChartContainer config={chartConfig} className="mx-auto aspect-square">
       <PieChart>
         <ChartTooltip cursor={false} content={<ChartTooltipContent hideLabel />} />
-        <Pie data={chartData} dataKey="instances" nameKey="loadStatus" innerRadius={60} strokeWidth={5}>
+        <Legend layout="vertical" verticalAlign="top" align="right" content={CustomLegend(chartConfig)} />
+
+        <Pie data={chartData} dataKey="instances" nameKey="loadStatus" innerRadius={80}>
           <Label
             content={({ viewBox }) => {
               if (viewBox && "cx" in viewBox && "cy" in viewBox) {

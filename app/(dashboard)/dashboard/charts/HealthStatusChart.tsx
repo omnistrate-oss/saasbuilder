@@ -1,8 +1,10 @@
 import { useMemo } from "react";
-import { Label, Pie, PieChart } from "recharts";
+import { Label, Legend, Pie, PieChart } from "recharts";
 
 import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
 import { ResourceInstance } from "src/types/resourceInstance";
+import { getInstanceHealthStatus } from "./utlis";
+import CustomLegend from "./CustomLegend";
 
 type HealthStatusChartProps = {
   instances: ResourceInstance[];
@@ -12,16 +14,16 @@ const chartConfig = {
   instances: {
     label: "Instances",
   },
-  POD_NORMAL: {
-    label: "Pod Normal",
-    color: "#7F56D9",
+  DEGRADED: {
+    label: "Degraded",
+    color: "#9E77ED",
   },
-  POD_IDLE: {
-    label: "Pod Idle",
-    color: "#7F56D9",
+  HEALTHY: {
+    label: "Healthy",
+    color: "#9E77ED",
   },
-  POD_OVERLOADED: {
-    label: "Pod Overloaded",
+  UNHEALTHY: {
+    label: "Unhealthy",
     color: "#7F56D9",
   },
   STOPPED: {
@@ -30,40 +32,44 @@ const chartConfig = {
   },
   UNKNOWN: {
     label: "Unknown",
-    color: "#7F56D9",
+    color: "#E9EAEB",
   },
   "N/A": {
     label: "N/A",
-    color: "#7F56D9",
+    color: "#E9EAEB",
   },
 } satisfies ChartConfig;
 
 const HealthStatusChart: React.FC<HealthStatusChartProps> = ({ instances }) => {
   const chartData = useMemo(() => {
     const statusCountsObj = instances.reduce((acc, curr) => {
-      const loadStatus = curr.status;
-      if (!loadStatus) return acc;
+      //@ts-ignore
+      const healthStatus = getInstanceHealthStatus(curr?.detailedNetworkTopology, curr?.status);
 
-      if (!acc[loadStatus]) {
-        acc[loadStatus] = 0;
+      if (!healthStatus) return acc;
+
+      if (!acc[healthStatus]) {
+        acc[healthStatus] = 0;
       }
 
-      acc[loadStatus]++;
+      acc[healthStatus]++;
       return acc;
     }, {});
 
     return Object.entries(statusCountsObj).map(([key, value]) => ({
-      loadStatus: key,
+      healthStatus: key,
       instances: value,
-      fill: "#7F56D9",
+      fill: chartConfig[key]?.color || "#7F56D9",
     }));
   }, [instances]);
 
   return (
-    <ChartContainer config={chartConfig} className="mx-auto aspect-square max-h-[250px]">
+    <ChartContainer config={chartConfig} className="mx-auto aspect-square ">
       <PieChart>
         <ChartTooltip cursor={false} content={<ChartTooltipContent hideLabel />} />
-        <Pie data={chartData} dataKey="instances" nameKey="loadStatus" innerRadius={60} strokeWidth={5}>
+        <Legend layout="vertical" verticalAlign="top" align="right" content={CustomLegend(chartConfig)} />
+
+        <Pie data={chartData} dataKey="instances" nameKey="healthStatus" innerRadius={80}>
           <Label
             content={({ viewBox }) => {
               if (viewBox && "cx" in viewBox && "cy" in viewBox) {
