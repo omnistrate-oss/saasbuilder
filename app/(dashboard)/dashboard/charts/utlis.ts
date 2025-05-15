@@ -16,7 +16,7 @@ function getInstanceNodes(detailedNetworkTopology: Record<string, ResourceInstan
   });
   //@ts-ignore
   nodes = nodes.filter((node) => !node.isServerless);
-
+  //@ts-ignore
   nodes = _.uniqBy(nodes, "id");
 
   return nodes;
