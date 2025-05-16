@@ -5,7 +5,7 @@ import useBillingStatus from "app/(dashboard)/billing/hooks/useBillingStatus";
 
 import { restartResourceInstance, startResourceInstance, stopResourceInstance } from "src/api/resourceInstance";
 import LoadingSpinnerSmall from "src/components/CircularProgress/CircularProgress";
-import InstanceFilters from "src/components/InstanceFilters/InstanceFilters";
+// import InstanceFilters from "src/components/InstanceFilters/InstanceFilters";
 import Tooltip from "src/components/Tooltip/Tooltip";
 import { CLI_MANAGED_RESOURCES } from "src/constants/resource";
 import useSnackbar from "src/hooks/useSnackbar";
@@ -51,9 +51,9 @@ const InstancesTableHeader = ({
   filterOptionsMap,
   selectedFilters,
   setSelectedFilters,
-  instancesFilterCount,
-  statusFilters,
-  setStatusFilters,
+  // instancesFilterCount,
+  // statusFilters,
+  // setStatusFilters,
   isLoadingInstances,
   isLoadingPaymentConfiguration,
 }) => {
@@ -498,13 +498,13 @@ const InstancesTableHeader = ({
           filterOptionsMap={filterOptionsMap}
         />
       </div>
-      <div className="flex flex-row justify-between gap-4 items-center py-4 px-6 border-b border-[#EAECF0]">
+      {/* <div className="flex flex-row justify-between gap-4 items-center py-4 px-6 border-b border-[#EAECF0]">
         <InstanceFilters
           filterStatus={statusFilters}
           setFilterStatus={setStatusFilters}
           filterInstanceCount={instancesFilterCount}
         />
-      </div>
+      </div> */}
     </div>
   );
 };
