@@ -20,6 +20,7 @@ import { PAGE_TITLE_MAP } from "src/constants/pageTitleMap";
 import useEnvironmentType from "src/hooks/useEnvironmentType";
 import useSnackbar from "src/hooks/useSnackbar";
 import { useProviderOrgDetails } from "src/providers/ProviderOrgDetailsProvider";
+import { domainsMatch } from "src/utils/compareEmailAndUrlDomains";
 import { getInstancesRoute } from "src/utils/routes";
 import DisplayHeading from "components/NonDashboardComponents/DisplayHeading";
 import FieldContainer from "components/NonDashboardComponents/FormElementsV2/FieldContainer";
@@ -31,10 +32,9 @@ import { Text } from "components/Typography/Typography";
 
 import { IDENTITY_PROVIDER_STATUS_TYPES } from "../constants";
 
+import AccessDeniedAlertDialog from "./AccessDeniedAlertDialog";
 import GithubLogin from "./GitHubLogin";
 import GoogleLogin from "./GoogleLogin";
-import { domainsMatch } from "src/constants/compareEmailAndUrlDomains";
-import AccessDeniedAlertDialog from "./AccessDeniedAlertDialog";
 
 const createSigninValidationSchema = Yup.object({
   email: Yup.string().email("Invalid email address").required("Email is required"),
