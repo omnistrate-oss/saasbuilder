@@ -55,7 +55,7 @@ const DeploymentsByAgeChart: React.FC<LifecycleStatusChartProps> = ({ instances 
 
     // Map to chart data, only month name (without year) shown in label
     return monthsWithYear.map((monthYear) => ({
-      month: format(new Date(monthYear), "MMM"), // just month abbreviation
+      month: format(new Date(monthYear), "MMM ''yy"), // e.g., "May '24"
       instances: counts[monthYear],
     }));
   }, [instances]);

@@ -6,7 +6,6 @@ import { ResourceInstance } from "src/types/resourceInstance";
 import CustomLegend from "./CustomLegend";
 import { resourceInstanceStatusMap } from "src/constants/statusChipStyles/resourceInstanceStatus";
 import { chipCategoryColors } from "src/constants/statusChipStyles";
-import { useMediaQuery, useTheme } from "@mui/material";
 import { useDynamicInnerRadius } from "./useDynamicInnerRadius";
 import { Text } from "src/components/Typography/Typography";
 
@@ -14,22 +13,34 @@ const chartConfig = {
   instances: {
     label: "Instances",
   },
-  // Create Something Like This
-  // DELETING: {
-  //   label: "Deleting",
-  //   color: "#7F56D9",
-  // },
-  ...Object.entries(resourceInstanceStatusMap).reduce(
-    (acc, [key, value]) => {
-      const categoryColor = chipCategoryColors[value.category];
-      acc[key] = {
-        label: value.label,
-        color: categoryColor?.borderColor || "#7F56D9",
-      };
-      return acc;
-    },
-    {} as Record<string, { label: string; color: string }>
-  ),
+  RUNNING: {
+    label: "Running",
+    color: "#27AE60",
+  },
+  FAILED: {
+    label: "Failed",
+    color: "#E74C3C",
+  },
+  CANCELLED: {
+    label: "Cancelled",
+    color: "#95A5A6",
+  },
+  STOPPED: {
+    label: "Stopped",
+    color: "#FF7567",
+  },
+  UNKNOWN: {
+    label: "Unknown",
+    color: "#727272",
+  },
+  DEPLOYING: {
+    label: "Deploying",
+    color: "#E67E22",
+  },
+  Other: {
+    label: "Other",
+    color: "#3498DB",
+  },
 } satisfies ChartConfig;
 
 type LifecycleStatusChartProps = {
@@ -57,7 +68,7 @@ const LifecycleStatusChart: React.FC<LifecycleStatusChartProps> = ({ instances }
         status: key,
         instances: value,
         // @ts-ignore
-        fill: chartConfig[key as keyof typeof chartConfig]?.color || "#7F56D9",
+        fill: chartConfig[key as keyof typeof chartConfig]?.color || "#3498DB",
       };
     });
   }, [instances]);

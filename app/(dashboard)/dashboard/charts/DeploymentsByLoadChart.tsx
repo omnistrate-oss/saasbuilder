@@ -16,28 +16,24 @@ const chartConfig = {
     label: "Instances",
   },
   LOAD_NORMAL: {
-    label: "Load Normal",
-    color: "#9E77ED",
+    label: "Normal",
+    color: "#E67E22",
   },
   LOAD_IDLE: {
-    label: "Load Idle",
-    color: "#9E77ED",
+    label: "Idle",
+    color: "#B7C7C8",
   },
   LOAD_OVERLOADED: {
-    label: "Load Overloaded",
-    color: "#7F56D9",
-  },
-  STOPPED: {
-    label: "Stopped",
-    color: "#7F56D9",
+    label: "High",
+    color: "#E74C3C",
   },
   UNKNOWN: {
     label: "Unknown",
-    color: "#E9EAEB",
+    color: "#727272",
   },
   "N/A": {
     label: "N/A",
-    color: "#E9EAEB",
+    color: "#727272",
   },
 } satisfies ChartConfig;
 
@@ -63,7 +59,7 @@ const DeploymentsByLoadChart: React.FC<DeploymentsByLoadChartProps> = ({ instanc
     return Object.entries(statusCountsObj).map(([key, value]) => ({
       loadStatus: key,
       instances: value,
-      fill: chartConfig[key]?.color || "#7F56D9",
+      fill: chartConfig[key]?.color || "#3498DB",
     }));
   }, [instances]);
 

@@ -64,20 +64,20 @@ const DashboardPage = () => {
       </div>
 
       <div className="mt-8 grid lg:grid-cols-3 gap-6">
-        <ChartCard title="Lifecycle Status Breakdown">
+        <ChartCard title="Deployments by Lifecycle Stage">
           {isLoadingInstances ? <LoadingSpinner /> : <LifecycleStatusChart instances={instances} />}
         </ChartCard>
 
-        <ChartCard title="Health Status Breakdown">
+        <ChartCard title="Deployment Health Status">
           {isLoadingInstances ? <LoadingSpinner /> : <HealthStatusChart instances={instances} />}
         </ChartCard>
-        <ChartCard title="Deployments By Load">
+        <ChartCard title="Deployments by System Load">
           {isLoadingInstances ? <LoadingSpinner /> : <DeploymentsByLoadChart instances={instances} />}
         </ChartCard>
       </div>
 
       <div className="mt-8">
-        <ChartCard title="Deployments By Age" className="lg:col-span-2">
+        <ChartCard title="Deployments by Month – Last 12 Months" className="lg:col-span-2">
           {isLoadingInstances ? <LoadingSpinner /> : <DeploymentsByAgeChart instances={instances} />}
         </ChartCard>
 
