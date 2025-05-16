@@ -33,6 +33,8 @@ import { IDENTITY_PROVIDER_STATUS_TYPES } from "../constants";
 
 import GithubLogin from "./GitHubLogin";
 import GoogleLogin from "./GoogleLogin";
+import { domainsMatch } from "src/constants/compareEmailAndUrlDomains";
+import AccessDeniedAlertDialog from "./AccessDeniedAlertDialog";
 
 const createSigninValidationSchema = Yup.object({
   email: Yup.string().email("Invalid email address").required("Email is required"),
@@ -50,7 +52,7 @@ const SigninPage = (props) => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const environmentType = useEnvironmentType();
-  const { orgName, orgLogoURL } = useProviderOrgDetails();
+  const { orgName, orgLogoURL, orgURL } = useProviderOrgDetails();
   const redirect_reason = searchParams?.get("redirect_reason");
   const destination = searchParams?.get("destination");
 
@@ -58,6 +60,8 @@ const SigninPage = (props) => {
   const [hasCaptchaErrored, setHasCaptchaErrored] = useState(false);
   const reCaptchaRef = useRef<any>(null);
   const snackbar = useSnackbar();
+
+  const [showAccessDenied, setShowAccessDenied] = useState(false);
 
   useEffect(() => {
     if (redirect_reason === "idp_auth_error") {
@@ -112,7 +116,15 @@ const SigninPage = (props) => {
       onError: (error: any) => {
         if (error.response.data && error.response.data.message) {
           const errorMessage = error.response.data.message;
-          snackbar.showError(errorMessage);
+          if (
+            errorMessage === "Failed to sign in. Either the credentials are incorrect or the user does not exist" &&
+            environmentType === ENVIRONMENT_TYPES.PROD &&
+            domainsMatch(formik.values.email, orgURL)
+          ) {
+            setShowAccessDenied(true);
+          } else {
+            snackbar.showError(errorMessage);
+          }
         } else {
           snackbar.showError("Failed to sign in. Either the credentials are incorrect or the user does not exist");
         }
@@ -322,6 +334,8 @@ const SigninPage = (props) => {
           </Link>
         </Typography>
       )}
+
+      <AccessDeniedAlertDialog open={showAccessDenied} handleClose={() => setShowAccessDenied(false)} />
     </>
   );
 };
