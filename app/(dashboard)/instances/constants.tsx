@@ -36,3 +36,9 @@ export const loadStatusMap = {
   UNKNOWN: "Unknown",
   "N/A": "N/A",
 };
+
+export const loadStatusLabel = {
+  Low: "Idle",
+  Medium: "Normal",
+  High: "High",
+};

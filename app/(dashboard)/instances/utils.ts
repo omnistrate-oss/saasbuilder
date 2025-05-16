@@ -11,8 +11,15 @@ import { Subscription } from "src/types/subscription";
 dayjs.extend(utc);
 import { SxProps } from "@mui/material";
 
+import { getInstanceHealthStatus } from "src/components/InstanceHealthStatusChip/InstanceHealthStatusChip";
 import { instaceHealthStatusMap } from "src/constants/statusChipStyles/resourceInstanceHealthStatus";
-import { InstanceComputedHealthStatus, ResourceInstance } from "src/types/resourceInstance";
+import {
+  InstanceComputedHealthStatus,
+  ResourceInstance,
+  ResourceInstanceNetworkTopology,
+} from "src/types/resourceInstance";
+
+import { loadStatusLabel, loadStatusMap } from "./constants";
 
 export const getServiceMenuItems = (serviceOfferings: ServiceOffering[]) => {
   const menuItems: MenuItem[] = [];
@@ -371,6 +378,18 @@ export const getIntialFiltersObject: () => Record<string, FilterCategorySchema> 
       options: [],
       type: "list",
     },
+    healthStatus: {
+      label: "Health Status",
+      name: "healthStatus",
+      options: [],
+      type: "list",
+    },
+    load: {
+      label: "Load",
+      name: "load",
+      options: [],
+      type: "list",
+    },
     createdOn: {
       label: "Created On",
       type: "date-range",
@@ -392,6 +411,8 @@ export const getInstanceFiltersObject = (
   const regionsSet = new Set();
   const subOwnersSet = new Set();
   const lifecycleStatusSet = new Set();
+  const healthStatusSet = new Set();
+  const loadSet = new Set();
 
   instances?.forEach((instance) => {
     //add lifecylce status options
@@ -402,6 +423,32 @@ export const getInstanceFiltersObject = (
         label: resourceInstanceStatusMap[status]?.label ?? status,
       });
       lifecycleStatusSet.add(status);
+    }
+
+    //add health status options
+    const detailedNetworkTopology = instance?.detailedNetworkTopology;
+    const healthStatus = getInstanceHealthStatus(
+      detailedNetworkTopology as Record<string, ResourceInstanceNetworkTopology>,
+      status as string
+    );
+    if (!healthStatusSet.has(healthStatus) && healthStatus) {
+      result.healthStatus.options?.push({
+        value: healthStatus,
+        label: instaceHealthStatusMap[healthStatus]?.label ?? healthStatus,
+      });
+      healthStatusSet.add(healthStatus);
+    }
+
+    //load options
+    //@ts-ignore
+    const load = loadStatusMap[instance.instanceLoadStatus] ?? "Unknown";
+
+    if (Object.keys(loadStatusLabel).includes(load) && !loadSet.has(load)) {
+      result.load?.options?.push({
+        value: load,
+        label: loadStatusLabel[load],
+      });
+      loadSet.add(load);
     }
 
     const subscription = subscriptionsObj[instance.subscriptionId as string];
@@ -542,6 +589,33 @@ export const getFilteredInstances = (
     result = result.filter((instance) => {
       const status = instance.status;
       return status && statusOptions.has(status);
+    });
+  }
+
+  //filter on health status
+  if (filterOptionsMap.healthStatus?.options?.length) {
+    const healthStatusOptions = new Set(filterOptionsMap.healthStatus?.options?.map((option) => option.value));
+
+    result = result.filter((instance) => {
+      const status = instance.status;
+      const detailedNetworkTopology = instance?.detailedNetworkTopology;
+      const healthStatus = getInstanceHealthStatus(
+        detailedNetworkTopology as Record<string, ResourceInstanceNetworkTopology>,
+        status as string
+      );
+      return healthStatus && healthStatusOptions.has(healthStatus);
+    });
+  }
+
+  //filter on instance load
+  if (filterOptionsMap.load?.options?.length) {
+    const loadOptions = new Set(filterOptionsMap.load?.options?.map((option) => option.value));
+
+    result = result.filter((instance) => {
+      //@ts-ignore
+      const load = loadStatusMap[instance.instanceLoadStatus] ?? "Unknown";
+
+      return load && loadOptions.has(load);
     });
   }
 

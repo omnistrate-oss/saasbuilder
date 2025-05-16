@@ -9,7 +9,7 @@ import { deleteResourceInstance } from "src/api/resourceInstance";
 import LoadIndicatorHigh from "src/components/Icons/LoadIndicator/LoadIndicatorHigh";
 import LoadIndicatorIdle from "src/components/Icons/LoadIndicator/LoadIndicatorIdle";
 import LoadIndicatorNormal from "src/components/Icons/LoadIndicator/LoadIndicatorNormal";
-import { getInitialFilterState } from "src/components/InstanceFilters/InstanceFilters";
+// import { getInitialFilterState } from "src/components/InstanceFilters/InstanceFilters";
 import InstanceHealthStatusChip, {
   getInstanceHealthStatus,
 } from "src/components/InstanceHealthStatusChip/InstanceHealthStatusChip";
@@ -38,11 +38,12 @@ import TextConfirmationDialog from "components/TextConfirmationDialog/TextConfir
 import useBillingDetails from "../billing/hooks/useBillingDetails";
 import useBillingStatus from "../billing/hooks/useBillingStatus";
 import FullScreenDrawer from "../components/FullScreenDrawer/FullScreenDrawer";
-import InstancesIcon from "../components/Icons/InstancesIcon";
+// import InstancesIcon from "../components/Icons/InstancesIcon";
 import PageContainer from "../components/Layout/PageContainer";
-import PageTitle from "../components/Layout/PageTitle";
 
+// import PageTitle from "../components/Layout/PageTitle";
 import InstanceForm from "./components/InstanceForm";
+import InstancesOverview from "./components/InstancesOverview";
 import InstancesTableHeader from "./components/InstancesTableHeader";
 import StatusCell from "./components/StatusCell";
 import useInstances from "./hooks/useInstances";
@@ -84,7 +85,7 @@ const InstancesPage = () => {
   const { data: billingConfig, isLoading: isLoadingPaymentConfiguration } = useBillingDetails(isBillingEnabled);
   const isPaymentConfigured = Boolean(billingConfig?.paymentConfigured);
 
-  const [statusFilters, setStatusFilters] = useState(getInitialFilterState());
+  // const [statusFilters, setStatusFilters] = useState(getInitialFilterState());
 
   const { subscriptionsObj, serviceOfferingsObj, isFetchingSubscriptions, isFetchingServiceOfferings } =
     useGlobalData();
@@ -368,15 +369,18 @@ const InstancesPage = () => {
     [nonBYOAInstances, selectedFilters, subscriptionsObj]
   );
   const failedInstances = useMemo(() => {
-    return filteredInstances.filter((instance) => instance.status === "FAILED");
-  }, [filteredInstances]);
+    return nonBYOAInstances?.filter((instance) => instance.status === "FAILED");
+  }, [nonBYOAInstances]);
 
   const overloadedInstances = useMemo(() => {
-    return filteredInstances.filter((instance) => instance.instanceLoadStatus === "POD_OVERLOAD");
-  }, [filteredInstances]);
+    return nonBYOAInstances?.filter((instance) =>
+      //@ts-ignore
+      ["POD_OVERLOAD", "LOAD_OVERLOADED"].includes(instance.instanceLoadStatus)
+    );
+  }, [nonBYOAInstances]);
 
   const unhealthyInstances = useMemo(() => {
-    return filteredInstances.filter((instance) => {
+    return nonBYOAInstances?.filter((instance) => {
       const instanceHealthStatus = getInstanceHealthStatus(
         instance.detailedNetworkTopology as Record<string, ResourceInstanceNetworkTopology>,
 
@@ -386,22 +390,22 @@ const InstancesPage = () => {
 
       return false;
     });
-  }, [filteredInstances]);
+  }, [nonBYOAInstances]);
 
-  const statusFilteredInstances = useMemo(() => {
-    let instances = filteredInstances;
-    if (statusFilters.failed) {
-      instances = failedInstances;
-    }
-    if (statusFilters.overloaded) {
-      instances = overloadedInstances;
-    }
+  // const statusFilteredInstances = useMemo(() => {
+  //   let instances = filteredInstances;
+  //   if (statusFilters.failed) {
+  //     instances = failedInstances;
+  //   }
+  //   if (statusFilters.overloaded) {
+  //     instances = overloadedInstances;
+  //   }
 
-    if (statusFilters.unhealthy) {
-      instances = unhealthyInstances;
-    }
-    return instances;
-  }, [failedInstances, overloadedInstances, unhealthyInstances, statusFilters, nonBYOAInstances]);
+  //   if (statusFilters.unhealthy) {
+  //     instances = unhealthyInstances;
+  //   }
+  //   return instances;
+  // }, [failedInstances, overloadedInstances, unhealthyInstances, statusFilters, nonBYOAInstances]);
 
   const selectedInstance = useMemo(() => {
     return nonBYOAInstances.find((instance) => instance.id === selectedRows[0]);
@@ -452,25 +456,95 @@ const InstancesPage = () => {
     }
   );
 
-  const instancesFilterCount = {
-    failed: failedInstances.length,
-    overloaded: overloadedInstances.length,
-    unhealthy: unhealthyInstances.length,
-  };
+  // const instancesFilterCount = {
+  //   failed: failedInstances.length,
+  //   overloaded: overloadedInstances.length,
+  //   unhealthy: unhealthyInstances.length,
+  // };
+
+  const instancesCountSummary = useMemo(
+    () => [
+      {
+        title: "Failed Deployments",
+        count: failedInstances?.length,
+        handleClick: () => {
+          setSelectedFilters((prev) => {
+            return {
+              ...getIntialFiltersObject(),
+              lifecycleStatus: {
+                ...prev["lifecycleStatus"],
+                options: [
+                  {
+                    value: "FAILED",
+                    label: "Failed",
+                  },
+                ],
+              },
+            };
+          });
+        },
+      },
+      {
+        title: "Unhealthy Deployments",
+        count: unhealthyInstances?.length,
+
+        handleClick: () => {
+          setSelectedFilters((prev) => {
+            return {
+              ...getIntialFiltersObject(),
+              healthStatus: {
+                ...prev["healthStatus"],
+                options: [
+                  {
+                    value: "UNHEALTHY",
+                    label: "Unhealthy",
+                  },
+                ],
+              },
+            };
+          });
+        },
+      },
+      {
+        title: "Overload Deployments",
+        count: overloadedInstances?.length,
+
+        handleClick: () => {
+          setSelectedFilters((prev) => {
+            return {
+              ...getIntialFiltersObject(),
+              load: {
+                ...prev["load"],
+                options: [
+                  {
+                    value: "High",
+                    label: "High",
+                  },
+                ],
+              },
+            };
+          });
+        },
+      },
+    ],
+    [failedInstances, overloadedInstances, unhealthyInstances]
+  );
 
   return (
     <PageContainer>
-      <PageTitle icon={InstancesIcon} className="mb-6">
+      {/* <PageTitle icon={InstancesIcon} className="mb-6">
         Deployment Instances
-      </PageTitle>
-      <div>
+      </PageTitle> */}
+
+      <InstancesOverview summary={instancesCountSummary} />
+      <div className="mt-8">
         <DataTable
           columns={dataTableColumns}
-          rows={statusFilteredInstances}
+          rows={filteredInstances}
           noRowsText="No instances"
           HeaderComponent={InstancesTableHeader}
           headerProps={{
-            count: statusFilteredInstances.length,
+            count: filteredInstances.length,
             selectedInstance,
             setSelectedRows,
             setOverlayType,
@@ -484,9 +558,9 @@ const InstancesPage = () => {
             setSelectedFilters,
             isLoadingInstances,
             isLoadingPaymentConfiguration,
-            instancesFilterCount: instancesFilterCount,
-            statusFilters: statusFilters,
-            setStatusFilters: setStatusFilters,
+            // instancesFilterCount: instancesFilterCount,
+            // statusFilters: statusFilters,
+            // setStatusFilters: setStatusFilters,
           }}
           isLoading={isLoadingInstances || isFetchingSubscriptions || isFetchingServiceOfferings}
           selectedRows={selectedRows}

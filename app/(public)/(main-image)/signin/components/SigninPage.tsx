@@ -20,6 +20,7 @@ import { PAGE_TITLE_MAP } from "src/constants/pageTitleMap";
 import useEnvironmentType from "src/hooks/useEnvironmentType";
 import useSnackbar from "src/hooks/useSnackbar";
 import { useProviderOrgDetails } from "src/providers/ProviderOrgDetailsProvider";
+import { domainsMatch } from "src/utils/compareEmailAndUrlDomains";
 import { getInstancesRoute } from "src/utils/routes";
 import DisplayHeading from "components/NonDashboardComponents/DisplayHeading";
 import FieldContainer from "components/NonDashboardComponents/FormElementsV2/FieldContainer";
@@ -31,6 +32,7 @@ import { Text } from "components/Typography/Typography";
 
 import { IDENTITY_PROVIDER_STATUS_TYPES } from "../constants";
 
+import AccessDeniedAlertDialog from "./AccessDeniedAlertDialog";
 import GithubLogin from "./GitHubLogin";
 import GoogleLogin from "./GoogleLogin";
 
@@ -50,7 +52,7 @@ const SigninPage = (props) => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const environmentType = useEnvironmentType();
-  const { orgName, orgLogoURL } = useProviderOrgDetails();
+  const { orgName, orgLogoURL, orgURL } = useProviderOrgDetails();
   const redirect_reason = searchParams?.get("redirect_reason");
   const destination = searchParams?.get("destination");
 
@@ -58,6 +60,8 @@ const SigninPage = (props) => {
   const [hasCaptchaErrored, setHasCaptchaErrored] = useState(false);
   const reCaptchaRef = useRef<any>(null);
   const snackbar = useSnackbar();
+
+  const [showAccessDenied, setShowAccessDenied] = useState(false);
 
   useEffect(() => {
     if (redirect_reason === "idp_auth_error") {
@@ -112,7 +116,15 @@ const SigninPage = (props) => {
       onError: (error: any) => {
         if (error.response.data && error.response.data.message) {
           const errorMessage = error.response.data.message;
-          snackbar.showError(errorMessage);
+          if (
+            errorMessage === "Failed to sign in. Either the credentials are incorrect or the user does not exist" &&
+            environmentType === ENVIRONMENT_TYPES.PROD &&
+            domainsMatch(formik.values.email, orgURL)
+          ) {
+            setShowAccessDenied(true);
+          } else {
+            snackbar.showError(errorMessage);
+          }
         } else {
           snackbar.showError("Failed to sign in. Either the credentials are incorrect or the user does not exist");
         }
@@ -322,6 +334,8 @@ const SigninPage = (props) => {
           </Link>
         </Typography>
       )}
+
+      <AccessDeniedAlertDialog open={showAccessDenied} handleClose={() => setShowAccessDenied(false)} />
     </>
   );
 };
