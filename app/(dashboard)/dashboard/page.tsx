@@ -14,8 +14,9 @@ import DashboardLogsTableHeader from "./components/DashboardLogsTableHeader";
 import LifecycleStatusChart from "./charts/LifecycleStatusChart";
 import ChartCard from "./components/ChartCard";
 import DeploymentsByLoadChart from "./charts/DeploymentsByLoadChart";
-import CloudProvidersChart from "./charts/CloudProvidersChart";
 import HealthStatusChart from "./charts/HealthStatusChart";
+import DeploymentsByAgeChart from "./charts/DeploymentsByAgeChart";
+import LoadingSpinner from "src/components/LoadingSpinner/LoadingSpinner";
 
 const DashboardPage = () => {
   const { data: instances = [], isLoading: isLoadingInstances } = useInstances();
@@ -63,23 +64,26 @@ const DashboardPage = () => {
       </div>
 
       <div className="mt-8 grid lg:grid-cols-3 gap-6">
-        <ChartCard title="Lifecycle Status Breakdown" className="lg:col-span-2">
-          <LifecycleStatusChart instances={instances} />
+        <ChartCard title="Lifecycle Status Breakdown">
+          {isLoadingInstances ? <LoadingSpinner /> : <LifecycleStatusChart instances={instances} />}
         </ChartCard>
 
         <ChartCard title="Health Status Breakdown">
-          <HealthStatusChart instances={instances} />
+          {isLoadingInstances ? <LoadingSpinner /> : <HealthStatusChart instances={instances} />}
+        </ChartCard>
+        <ChartCard title="Deployments By Load">
+          {isLoadingInstances ? <LoadingSpinner /> : <DeploymentsByLoadChart instances={instances} />}
         </ChartCard>
       </div>
 
-      <div className="mt-8 grid lg:grid-cols-3 gap-6">
-        <ChartCard title="Deployments By Load">
-          <DeploymentsByLoadChart instances={instances} />
+      <div className="mt-8">
+        <ChartCard title="Deployments By Age" className="lg:col-span-2">
+          {isLoadingInstances ? <LoadingSpinner /> : <DeploymentsByAgeChart instances={instances} />}
         </ChartCard>
 
-        <ChartCard title="Deployments By Cloud">
+        {/* <ChartCard title="Deployments By Cloud">
           <CloudProvidersChart instances={instances} />
-        </ChartCard>
+        </ChartCard> */}
       </div>
     </PageContainer>
   );

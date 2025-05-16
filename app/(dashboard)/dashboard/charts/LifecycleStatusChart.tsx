@@ -1,13 +1,14 @@
-"use client";
-
 import { useMemo } from "react";
-import { Bar, BarChart, CartesianGrid, ResponsiveContainer, XAxis, YAxis } from "recharts";
+import { Label, Legend, Pie, PieChart } from "recharts";
 
 import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
-import { Text } from "src/components/Typography/Typography";
-import { chipCategoryColors } from "src/constants/statusChipStyles";
-import { resourceInstanceStatusMap } from "src/constants/statusChipStyles/resourceInstanceStatus";
 import { ResourceInstance } from "src/types/resourceInstance";
+import CustomLegend from "./CustomLegend";
+import { resourceInstanceStatusMap } from "src/constants/statusChipStyles/resourceInstanceStatus";
+import { chipCategoryColors } from "src/constants/statusChipStyles";
+import { useMediaQuery, useTheme } from "@mui/material";
+import { useDynamicInnerRadius } from "./useDynamicInnerRadius";
+import { Text } from "src/components/Typography/Typography";
 
 const chartConfig = {
   instances: {
@@ -36,6 +37,8 @@ type LifecycleStatusChartProps = {
 };
 
 const LifecycleStatusChart: React.FC<LifecycleStatusChartProps> = ({ instances }) => {
+  const { ref, radius } = useDynamicInnerRadius();
+
   const chartData = useMemo(() => {
     const statusCountsObj = instances.reduce((acc, curr) => {
       const lifecycleStatus = curr.status;
@@ -58,7 +61,6 @@ const LifecycleStatusChart: React.FC<LifecycleStatusChartProps> = ({ instances }
       };
     });
   }, [instances]);
-
   if (!instances.length)
     return (
       <div className="h-[300px] flex items-center justify-center">
@@ -67,24 +69,39 @@ const LifecycleStatusChart: React.FC<LifecycleStatusChartProps> = ({ instances }
     );
 
   return (
-    <ResponsiveContainer width="100%" height={300}>
-      <ChartContainer config={chartConfig}>
-        <BarChart accessibilityLayer data={chartData}>
-          <CartesianGrid vertical={false} />
-          <XAxis
-            dataKey="status"
-            tickLine={false}
-            tickMargin={10}
-            axisLine={false}
-            tickFormatter={(value) => chartConfig[value as keyof typeof chartConfig]?.label}
-          />
-
-          <YAxis allowDecimals={false} axisLine={false} />
+    <div ref={ref} className="w-full min-w-[200px] max-w-xl aspect-square mx-auto">
+      <ChartContainer config={chartConfig} className="w-full h-full">
+        <PieChart>
           <ChartTooltip cursor={false} content={<ChartTooltipContent hideLabel />} />
-          <Bar dataKey="instances" strokeWidth={2} radius={8} maxBarSize={100} />
-        </BarChart>
+          <Legend layout="vertical" verticalAlign="top" align="right" content={CustomLegend(chartConfig)} />
+          <Pie data={chartData} dataKey="instances" nameKey="status" innerRadius={radius}>
+            <Label
+              content={({ viewBox }) => {
+                if (viewBox && "cx" in viewBox && "cy" in viewBox) {
+                  // Dynamically calculate font size based on radius
+                  const fontSize = "18px";
+                  const fontWeight = "600";
+
+                  return (
+                    <text
+                      x={viewBox.cx}
+                      y={viewBox.cy}
+                      textAnchor="middle"
+                      dominantBaseline="middle"
+                      style={{ fontSize, fontWeight }}
+                      className="fill-foreground"
+                    >
+                      {instances?.length.toLocaleString()}
+                    </text>
+                  );
+                }
+                return null;
+              }}
+            />
+          </Pie>
+        </PieChart>
       </ChartContainer>
-    </ResponsiveContainer>
+    </div>
   );
 };
 

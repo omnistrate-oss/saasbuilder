@@ -5,6 +5,8 @@ import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from "
 import { ResourceInstance } from "src/types/resourceInstance";
 import { getInstanceHealthStatus } from "./utlis";
 import CustomLegend from "./CustomLegend";
+import { useDynamicInnerRadius } from "./useDynamicInnerRadius"; // ✅ Import the hook
+import { Text } from "src/components/Typography/Typography";
 
 type HealthStatusChartProps = {
   instances: ResourceInstance[];
@@ -41,20 +43,25 @@ const chartConfig = {
 } satisfies ChartConfig;
 
 const HealthStatusChart: React.FC<HealthStatusChartProps> = ({ instances }) => {
+  const { ref, radius } = useDynamicInnerRadius(); // ✅ Use hook
+
   const chartData = useMemo(() => {
-    const statusCountsObj = instances.reduce((acc, curr) => {
-      //@ts-ignore
-      const healthStatus = getInstanceHealthStatus(curr?.detailedNetworkTopology, curr?.status);
+    const statusCountsObj = instances.reduce(
+      (acc, curr) => {
+        //@ts-ignore
+        const healthStatus = getInstanceHealthStatus(curr?.detailedNetworkTopology, curr?.status);
 
-      if (!healthStatus) return acc;
+        if (!healthStatus) return acc;
 
-      if (!acc[healthStatus]) {
-        acc[healthStatus] = 0;
-      }
+        if (!acc[healthStatus]) {
+          acc[healthStatus] = 0;
+        }
 
-      acc[healthStatus]++;
-      return acc;
-    }, {});
+        acc[healthStatus]++;
+        return acc;
+      },
+      {} as Record<string, number>
+    );
 
     return Object.entries(statusCountsObj).map(([key, value]) => ({
       healthStatus: key,
@@ -63,29 +70,48 @@ const HealthStatusChart: React.FC<HealthStatusChartProps> = ({ instances }) => {
     }));
   }, [instances]);
 
-  return (
-    <ChartContainer config={chartConfig} className="mx-auto aspect-square ">
-      <PieChart>
-        <ChartTooltip cursor={false} content={<ChartTooltipContent hideLabel />} />
-        <Legend layout="vertical" verticalAlign="top" align="right" content={CustomLegend(chartConfig)} />
+  if (!instances.length)
+    return (
+      <div className="h-[300px] flex items-center justify-center">
+        <Text>No Instances</Text>
+      </div>
+    );
 
-        <Pie data={chartData} dataKey="instances" nameKey="healthStatus" innerRadius={80}>
-          <Label
-            content={({ viewBox }) => {
-              if (viewBox && "cx" in viewBox && "cy" in viewBox) {
-                return (
-                  <text x={viewBox.cx} y={viewBox.cy} textAnchor="middle" dominantBaseline="middle">
-                    <tspan x={viewBox.cx} y={viewBox.cy} className="fill-foreground text-3xl font-bold">
+  return (
+    <div ref={ref} className="w-full min-w-[200px] max-w-xl aspect-square mx-auto">
+      <ChartContainer config={chartConfig} className="w-full h-full">
+        <PieChart>
+          <ChartTooltip cursor={false} content={<ChartTooltipContent hideLabel />} />
+          <Legend layout="vertical" verticalAlign="top" align="right" content={CustomLegend(chartConfig)} />
+
+          <Pie data={chartData} dataKey="instances" nameKey="healthStatus" innerRadius={radius}>
+            <Label
+              content={({ viewBox }) => {
+                if (viewBox && "cx" in viewBox && "cy" in viewBox) {
+                  // Dynamically calculate font size based on radius
+                  const fontSize = "18px";
+                  const fontWeight = "600";
+
+                  return (
+                    <text
+                      x={viewBox.cx}
+                      y={viewBox.cy}
+                      textAnchor="middle"
+                      dominantBaseline="middle"
+                      style={{ fontSize, fontWeight }}
+                      className="fill-foreground"
+                    >
                       {instances?.length.toLocaleString()}
-                    </tspan>
-                  </text>
-                );
-              }
-            }}
-          />
-        </Pie>
-      </PieChart>
-    </ChartContainer>
+                    </text>
+                  );
+                }
+                return null;
+              }}
+            />
+          </Pie>
+        </PieChart>
+      </ChartContainer>
+    </div>
   );
 };
 
