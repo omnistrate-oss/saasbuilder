@@ -9,7 +9,7 @@ import { deleteResourceInstance } from "src/api/resourceInstance";
 import LoadIndicatorHigh from "src/components/Icons/LoadIndicator/LoadIndicatorHigh";
 import LoadIndicatorIdle from "src/components/Icons/LoadIndicator/LoadIndicatorIdle";
 import LoadIndicatorNormal from "src/components/Icons/LoadIndicator/LoadIndicatorNormal";
-import { getInitialFilterState } from "src/components/InstanceFilters/InstanceFilters";
+// import { getInitialFilterState } from "src/components/InstanceFilters/InstanceFilters";
 import InstanceHealthStatusChip, {
   getInstanceHealthStatus,
 } from "src/components/InstanceHealthStatusChip/InstanceHealthStatusChip";
