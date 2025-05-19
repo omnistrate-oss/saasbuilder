@@ -79,8 +79,6 @@ const LifecycleStatusChart: React.FC<LifecycleStatusChartProps> = ({ instances }
     }));
   }, [instances, knownStatuses]);
 
-  console.log("check chartData", chartData);
-
   if (!instances.length)
     return (
       <div className="h-[300px] flex items-center justify-center">
