@@ -243,8 +243,9 @@ const ChartTooltipContent = React.forwardRef<
                       <div
                         key={statusKey}
                         className="flex items-center justify-between w-full text-muted-foreground text-[0.7rem]"
+                        style={{ marginLeft: "20px" }}
                       >
-                        <span className="truncate" style={{ marginRight: "20px", flexShrink: 0 }}>
+                        <span className="truncate" style={{ marginRight: "5px", flexShrink: 0 }}>
                           {statusKey}
                         </span>
                         <span className="font-mono text-right whitespace-nowrap" style={{ marginTop: "5px" }}>
