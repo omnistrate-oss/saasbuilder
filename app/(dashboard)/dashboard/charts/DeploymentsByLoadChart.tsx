@@ -17,7 +17,7 @@ const chartConfig = {
   },
   LOAD_NORMAL: {
     label: "Normal",
-    color: "#E67E22",
+    color: "#27AE60",
   },
   LOAD_IDLE: {
     label: "Idle",
