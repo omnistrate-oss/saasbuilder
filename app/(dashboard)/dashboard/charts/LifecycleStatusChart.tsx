@@ -4,14 +4,14 @@ import { Label, Legend, Pie, PieChart } from "recharts";
 import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
 import { ResourceInstance } from "src/types/resourceInstance";
 import CustomLegend from "./CustomLegend";
-import { resourceInstanceStatusMap } from "src/constants/statusChipStyles/resourceInstanceStatus";
-import { chipCategoryColors } from "src/constants/statusChipStyles";
 import { useDynamicInnerRadius } from "./useDynamicInnerRadius";
 import { Text } from "src/components/Typography/Typography";
+import { resourceInstanceStatusMap } from "src/constants/statusChipStyles/resourceInstanceStatus";
 
 const chartConfig = {
   instances: {
     label: "Instances",
+    color: "#B7C7C8",
   },
   RUNNING: {
     label: "Running",
@@ -50,28 +50,38 @@ type LifecycleStatusChartProps = {
 const LifecycleStatusChart: React.FC<LifecycleStatusChartProps> = ({ instances }) => {
   const { ref, radius } = useDynamicInnerRadius();
 
-  const chartData = useMemo(() => {
-    const statusCountsObj = instances.reduce((acc, curr) => {
-      const lifecycleStatus = curr.status;
-      if (!lifecycleStatus) return acc;
+  const knownStatuses = ["RUNNING", "FAILED", "CANCELLED", "STOPPED", "UNKNOWN", "DEPLOYING"] as const; // <-- all the ones you want individual wedges for
 
-      if (!acc[lifecycleStatus]) {
-        acc[lifecycleStatus] = 0;
+  const chartData = useMemo(() => {
+    const statusBreakdown: Record<string, number> = {}; // ✅ Define it here
+
+    const counts = instances.reduce<Record<string, number>>((acc, { status }) => {
+      if (!status) return acc;
+
+      const isKnown = knownStatuses.includes(status as (typeof knownStatuses)[number]);
+      const key = isKnown ? status : "Other";
+
+      acc[key] = (acc[key] || 0) + 1;
+
+      if (!isKnown) {
+        console.log("status ===", status);
+        const statusLabel = resourceInstanceStatusMap[status as keyof typeof resourceInstanceStatusMap];
+        statusBreakdown[statusLabel.label] = (statusBreakdown[statusLabel.label] || 0) + 1;
       }
 
-      acc[lifecycleStatus]++;
       return acc;
     }, {});
 
-    return Object.entries(statusCountsObj).map(([key, value]) => {
-      return {
-        status: key,
-        instances: value,
-        // @ts-ignore
-        fill: chartConfig[key as keyof typeof chartConfig]?.color || "#3498DB",
-      };
-    });
-  }, [instances]);
+    return Object.entries(counts).map(([key, value]) => ({
+      status: key,
+      instances: value,
+      fill: chartConfig[key as keyof typeof chartConfig]?.color,
+      ...(key === "Other" ? { statusBreakdown } : {}), // Only attach statusBreakdown for "Other"
+    }));
+  }, [instances, knownStatuses]);
+
+  console.log("check chartData", chartData);
+
   if (!instances.length)
     return (
       <div className="h-[300px] flex items-center justify-center">
