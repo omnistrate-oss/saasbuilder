@@ -64,7 +64,6 @@ const LifecycleStatusChart: React.FC<LifecycleStatusChartProps> = ({ instances }
       acc[key] = (acc[key] || 0) + 1;
 
       if (!isKnown) {
-        console.log("status ===", status);
         const statusLabel = resourceInstanceStatusMap[status as keyof typeof resourceInstanceStatusMap];
         statusBreakdown[statusLabel.label] = (statusBreakdown[statusLabel.label] || 0) + 1;
       }
