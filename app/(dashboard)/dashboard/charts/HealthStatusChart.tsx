@@ -3,7 +3,7 @@ import { Label, Legend, Pie, PieChart } from "recharts";
 
 import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
 import { ResourceInstance } from "src/types/resourceInstance";
-import { getInstanceHealthStatus } from "./utlis";
+import { getInstanceHealthStatus } from "./utils";
 import CustomLegend from "./CustomLegend";
 import { useDynamicInnerRadius } from "./useDynamicInnerRadius"; // ✅ Import the hook
 import { Text } from "src/components/Typography/Typography";
