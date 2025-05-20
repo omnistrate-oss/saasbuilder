@@ -1,4 +1,3 @@
-// useDynamicInnerRadius.ts
 import { useEffect, useRef, useState } from "react";
 
 export const useDynamicInnerRadius = () => {
@@ -7,7 +6,7 @@ export const useDynamicInnerRadius = () => {
 
   useEffect(() => {
     const resizeObserver = new ResizeObserver((entries) => {
-      for (let entry of entries) {
+      for (const entry of entries) {
         const width = entry.contentRect.width;
         const dynamicRadius = Math.max(30, Math.min(80, width / 10));
         setRadius(dynamicRadius);
