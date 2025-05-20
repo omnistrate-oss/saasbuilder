@@ -13,6 +13,18 @@ function getIdentityProvidersList(payload) {
   });
 }
 
+function getRenderIdentityProvidersList(payload) {
+  return axios.post("/identity-provider/render", payload).catch((error) => {
+    console.log("list identity provider error", error);
+    if (error.response && error.response.status === 401) {
+      throw new ProviderAuthError();
+    } else {
+      throw error;
+    }
+  });
+}
+
 module.exports = {
   getIdentityProvidersList: withProviderTokenExpirationHanding(getIdentityProvidersList),
+  getRenderIdentityProvidersList: withProviderTokenExpirationHanding(getRenderIdentityProvidersList),
 };
