@@ -11,10 +11,12 @@ import useInstances from "../instances/hooks/useInstances";
 
 import ClusterLocations from "./components/ClusterLocations";
 import DashboardLogsTableHeader from "./components/DashboardLogsTableHeader";
-// import ChartCard from "./components/ChartCard";
-// import LifecycleStatusChart from "./charts/LifecycleStatusChart";
-// import DeploymentsByLoad from "./charts/DeploymentsByLoadChart";
-// import CloudProvidersChart from "./charts/CloudProvidersChart";
+import LifecycleStatusChart from "./charts/LifecycleStatusChart";
+import ChartCard from "./components/ChartCard";
+import DeploymentsByLoadChart from "./charts/DeploymentsByLoadChart";
+import HealthStatusChart from "./charts/HealthStatusChart";
+import DeploymentsByAgeChart from "./charts/DeploymentsByAgeChart";
+import LoadingSpinner from "src/components/LoadingSpinner/LoadingSpinner";
 
 const DashboardPage = () => {
   const { data: instances = [], isLoading: isLoadingInstances } = useInstances();
@@ -61,23 +63,28 @@ const DashboardPage = () => {
         />
       </div>
 
-      {/* <div className="mt-8 grid lg:grid-cols-3 gap-6">
-        <ChartCard title="Lifecycle Status Breakdown" className="lg:col-span-2">
-          <LifecycleStatusChart instances={instances} />
+      <div className="mt-8 grid lg:grid-cols-3 gap-6">
+        <ChartCard title="Deployments by Lifecycle Stage">
+          {isLoadingInstances ? <LoadingSpinner /> : <LifecycleStatusChart instances={instances} />}
         </ChartCard>
 
-        <ChartCard title="Health Status Breakdown">Hello World!</ChartCard>
+        <ChartCard title="Deployment Health Status">
+          {isLoadingInstances ? <LoadingSpinner /> : <HealthStatusChart instances={instances} />}
+        </ChartCard>
+        <ChartCard title="Deployments by System Load">
+          {isLoadingInstances ? <LoadingSpinner /> : <DeploymentsByLoadChart instances={instances} />}
+        </ChartCard>
       </div>
 
-      <div className="mt-8 grid lg:grid-cols-3 gap-6">
-        <ChartCard title="Deployments By Load">
-          <DeploymentsByLoad instances={instances} />
+      <div className="mt-8">
+        <ChartCard title="Deployments by Month – Last 12 Months" className="lg:col-span-2">
+          {isLoadingInstances ? <LoadingSpinner /> : <DeploymentsByAgeChart instances={instances} />}
         </ChartCard>
 
-        <ChartCard title="Deployments By Cloud">
+        {/* <ChartCard title="Deployments By Cloud">
           <CloudProvidersChart instances={instances} />
-        </ChartCard>
-      </div> */}
+        </ChartCard> */}
+      </div>
     </PageContainer>
   );
 };

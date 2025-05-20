@@ -4,10 +4,11 @@ import { Label, Legend, Pie, PieChart } from "recharts";
 import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
 import { ResourceInstance } from "src/types/resourceInstance";
 import CustomLegend from "./CustomLegend";
-import { useDynamicInnerRadius } from "./useDynamicInnerRadius"; // ✅ Import your hook
+import { useDynamicInnerRadius } from "./useDynamicInnerRadius"; // ✅ Import the hook
 import { Text } from "src/components/Typography/Typography";
+import { getInstanceHealthStatus } from "src/components/InstanceHealthStatusChip/InstanceHealthStatusChip";
 
-type DeploymentsByLoadChartProps = {
+type HealthStatusChartProps = {
   instances: ResourceInstance[];
 };
 
@@ -15,16 +16,16 @@ const chartConfig = {
   instances: {
     label: "Instances",
   },
-  LOAD_NORMAL: {
-    label: "Normal",
+  DEGRADED: {
+    label: "Degraded",
+    color: "#FF975D",
+  },
+  HEALTHY: {
+    label: "Healthy",
     color: "#7BBC29",
   },
-  LOAD_IDLE: {
-    label: "Idle",
-    color: "#B5C9C6",
-  },
-  LOAD_OVERLOADED: {
-    label: "High",
+  UNHEALTHY: {
+    label: "Unhealthy",
     color: "#E1584A",
   },
   UNKNOWN: {
@@ -37,28 +38,31 @@ const chartConfig = {
   },
 } satisfies ChartConfig;
 
-const DeploymentsByLoadChart: React.FC<DeploymentsByLoadChartProps> = ({ instances }) => {
-  const { ref, radius } = useDynamicInnerRadius(); // ✅ Get dynamic radius
+const HealthStatusChart: React.FC<HealthStatusChartProps> = ({ instances }) => {
+  const { ref, radius } = useDynamicInnerRadius(); // ✅ Use hook
 
   const chartData = useMemo(() => {
     const statusCountsObj = instances.reduce(
       (acc, curr) => {
-        const loadStatus = curr.instanceLoadStatus;
-        if (!loadStatus) return acc;
+        //@ts-ignore
+        const healthStatus = getInstanceHealthStatus(curr?.detailedNetworkTopology, curr?.status);
 
-        if (!acc[loadStatus]) {
-          acc[loadStatus] = 0;
+        if (!healthStatus) return acc;
+
+        if (!acc[healthStatus]) {
+          acc[healthStatus] = 0;
         }
 
-        acc[loadStatus]++;
+        acc[healthStatus]++;
         return acc;
       },
       {} as Record<string, number>
     );
+
     return Object.entries(statusCountsObj).map(([key, value]) => ({
-      loadStatus: key,
+      healthStatus: key,
       instances: value,
-      fill: chartConfig[key]?.color || "#3498DB",
+      fill: chartConfig[key]?.color || "#7F56D9",
     }));
   }, [instances]);
 
@@ -75,7 +79,8 @@ const DeploymentsByLoadChart: React.FC<DeploymentsByLoadChartProps> = ({ instanc
         <PieChart>
           <ChartTooltip cursor={false} content={<ChartTooltipContent hideLabel />} />
           <Legend layout="vertical" verticalAlign="top" align="right" content={CustomLegend(chartConfig)} />
-          <Pie data={chartData} dataKey="instances" nameKey="loadStatus" innerRadius={radius}>
+
+          <Pie data={chartData} dataKey="instances" nameKey="healthStatus" innerRadius={radius}>
             <Label
               content={({ viewBox }) => {
                 if (viewBox && "cx" in viewBox && "cy" in viewBox) {
@@ -106,4 +111,4 @@ const DeploymentsByLoadChart: React.FC<DeploymentsByLoadChartProps> = ({ instanc
   );
 };
 
-export default DeploymentsByLoadChart;
+export default HealthStatusChart;
