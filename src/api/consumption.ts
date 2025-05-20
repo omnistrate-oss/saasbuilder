@@ -37,7 +37,9 @@ export const getConsumptionUsagePerDay = (
 };
 
 export const getConsumptionBillingStatus = (): Promise<AxiosResponse<DescribeConsumptionBillingStatusResponse>> => {
-  return axios.get("/resource-instance/billing-status");
+  return axios.get("/resource-instance/billing-status", {
+    ignoreGlobalErrorSnack: true,
+  });
 };
 
 export const getConsumptionInvoices = (): Promise<AxiosResponse<ListConsumptionInvoicesSuccessResponse>> => {
