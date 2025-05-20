@@ -15,19 +15,19 @@ const chartConfig = {
   },
   RUNNING: {
     label: "Running",
-    color: "#27AE60",
+    color: "#7BBC29",
   },
   FAILED: {
     label: "Failed",
-    color: "#E74C3C",
+    color: "#E1584A",
   },
   CANCELLED: {
     label: "Cancelled",
-    color: "#95A5A6",
+    color: "#9AC5C1",
   },
   STOPPED: {
     label: "Stopped",
-    color: "#FF7567",
+    color: "#FF8D81",
   },
   UNKNOWN: {
     label: "Unknown",
@@ -35,11 +35,11 @@ const chartConfig = {
   },
   DEPLOYING: {
     label: "Deploying",
-    color: "#E67E22",
+    color: "#FF975D",
   },
   Other: {
     label: "Other",
-    color: "#3498DB",
+    color: "#599BFF",
   },
 } satisfies ChartConfig;
 

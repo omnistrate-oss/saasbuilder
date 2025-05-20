@@ -17,15 +17,15 @@ const chartConfig = {
   },
   LOAD_NORMAL: {
     label: "Normal",
-    color: "#27AE60",
+    color: "#7BBC29",
   },
   LOAD_IDLE: {
     label: "Idle",
-    color: "#B7C7C8",
+    color: "#B5C9C6",
   },
   LOAD_OVERLOADED: {
     label: "High",
-    color: "#E74C3C",
+    color: "#E1584A",
   },
   UNKNOWN: {
     label: "Unknown",
@@ -55,7 +55,6 @@ const DeploymentsByLoadChart: React.FC<DeploymentsByLoadChartProps> = ({ instanc
       },
       {} as Record<string, number>
     );
-
     return Object.entries(statusCountsObj).map(([key, value]) => ({
       loadStatus: key,
       instances: value,

@@ -18,15 +18,15 @@ const chartConfig = {
   },
   DEGRADED: {
     label: "Degraded",
-    color: "#E67E22",
+    color: "#FF975D",
   },
   HEALTHY: {
     label: "Healthy",
-    color: "#27AE60",
+    color: "#7BBC29",
   },
   UNHEALTHY: {
     label: "Unhealthy",
-    color: "#E74C3C",
+    color: "#E1584A",
   },
   UNKNOWN: {
     label: "Unknown",
