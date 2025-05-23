@@ -1,12 +1,9 @@
 import { Metadata } from "next";
 import { IDENTITY_PROVIDER_TYPES } from "app/(public)/(main-image)/signin/constants";
 
-import {
-  getIdentityProvidersList,
-  // , getRenderIdentityProvidersList
-} from "src/server/api/identity-provider";
+import { getIdentityProvidersList, getRenderIdentityProvidersList } from "src/server/api/identity-provider";
 import { checkReCaptchaSetup } from "src/server/utils/checkReCaptchaSetup";
-//import { getEnvironmentType } from "src/server/utils/getEnvironmentType";
+import { getEnvironmentType } from "src/server/utils/getEnvironmentType";
 import { getSaaSDomainURL } from "src/server/utils/getSaaSDomainURL";
 
 import SigninPage from "./components/SigninPage";
@@ -20,12 +17,14 @@ const Page = async () => {
   let googleIdentityProvider = null;
   let githubIdentityProvider = null;
 
-  // const renderResponse = await getRenderIdentityProvidersList({
-  //   environmentType: getEnvironmentType(),
-  //   redirectUrl: getSaaSDomainURL(),
-  // });
+  const identityProvidersList = await getRenderIdentityProvidersList({
+    environmentType: getEnvironmentType(),
+    redirectUrl: "https://omnistrate-dev-access-ui.fly.dev",
+  });
 
-  //console.log("renderResponse", renderResponse);
+  const isPasswordLoginDisabled = Boolean(process.env.DISABLE_PASSWORD_LOGIN);
+
+  console.log("identityProvidersList", identityProvidersList);
 
   const response = await getIdentityProvidersList();
   const providers = response.data.identityProviders || [];
@@ -46,6 +45,8 @@ const Page = async () => {
       isReCaptchaSetup={checkReCaptchaSetup()}
       saasBuilderBaseURL={getSaaSDomainURL()}
       googleReCaptchaSiteKey={process.env.GOOGLE_RECAPTCHA_SITE_KEY || null}
+      isPasswordLoginDisabled={isPasswordLoginDisabled}
+      identityProvidersList={identityProvidersList}
     />
   );
 };

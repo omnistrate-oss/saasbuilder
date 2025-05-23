@@ -1,9 +1,8 @@
 function GithubLoginIcon(props) {
-  const { disabled } = props;
-
+  const { disabled, width = 32, height = 32 } = props;
   return (
-    <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <g clipPath="url(#clip0_1809_20060)">
+    <svg width={width} height={height} viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
+      <g clipPath="url(#clip0)">
         <path
           fillRule="evenodd"
           clipRule="evenodd"
@@ -12,7 +11,7 @@ function GithubLoginIcon(props) {
         />
       </g>
       <defs>
-        <clipPath id="clip0_1809_20060">
+        <clipPath id="clip0">
           <rect width="32" height="31.3469" fill="white" transform="translate(0 0.659393)" />
         </clipPath>
       </defs>

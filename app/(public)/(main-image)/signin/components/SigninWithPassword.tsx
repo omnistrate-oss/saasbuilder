@@ -4,8 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useRouter } from "next-nprogress-bar";
-import { Box, Checkbox, Stack, Typography } from "@mui/material";
-import { GoogleOAuthProvider } from "@react-oauth/google";
+import { Stack } from "@mui/material";
 import { useMutation } from "@tanstack/react-query";
 import { useFormik } from "formik";
 import Cookies from "js-cookie";
@@ -14,7 +13,6 @@ import * as Yup from "yup";
 
 import { customerUserSignin } from "src/api/customer-user";
 import axios from "src/axios";
-import Logo from "src/components/NonDashboardComponents/Logo";
 import { ENVIRONMENT_TYPES } from "src/constants/environmentTypes";
 import { PAGE_TITLE_MAP } from "src/constants/pageTitleMap";
 import useEnvironmentType from "src/hooks/useEnvironmentType";
@@ -22,52 +20,30 @@ import useSnackbar from "src/hooks/useSnackbar";
 import { useProviderOrgDetails } from "src/providers/ProviderOrgDetailsProvider";
 import { domainsMatch } from "src/utils/compareEmailAndUrlDomains";
 import { getInstancesRoute } from "src/utils/routes";
-import DisplayHeading from "components/NonDashboardComponents/DisplayHeading";
 import FieldContainer from "components/NonDashboardComponents/FormElementsV2/FieldContainer";
 import FieldLabel from "components/NonDashboardComponents/FormElementsV2/FieldLabel";
 import PasswordField from "components/NonDashboardComponents/FormElementsV2/PasswordField";
 import SubmitButton from "components/NonDashboardComponents/FormElementsV2/SubmitButton";
-import TextField from "components/NonDashboardComponents/FormElementsV2/TextField";
-import { Text } from "components/Typography/Typography";
-
-import { IDENTITY_PROVIDER_STATUS_TYPES } from "../constants";
-
-import AccessDeniedAlertDialog from "./AccessDeniedAlertDialog";
-import GithubLogin from "./GitHubLogin";
-import GoogleLogin from "./GoogleLogin";
-import IdentityProviders from "./IdentityProviders";
 
 const createSigninValidationSchema = Yup.object({
   email: Yup.string().email("Invalid email address").required("Email is required"),
   password: Yup.string().required("Password is required"),
 });
 
-const SigninPage = (props) => {
-  const {
-    googleIdentityProvider,
-    githubIdentityProvider,
-    saasBuilderBaseURL,
-    googleReCaptchaSiteKey,
-    isReCaptchaSetup,
-    isPasswordLoginDisabled,
-    identityProvidersList,
-  } = props;
+const SigninWithPassword = (props) => {
+  const { googleReCaptchaSiteKey, isReCaptchaSetup, email, setShowAccessDenied } = props;
   const router = useRouter();
   const searchParams = useSearchParams();
   const environmentType = useEnvironmentType();
-  const { orgName, orgLogoURL, orgURL } = useProviderOrgDetails();
+  const { orgURL } = useProviderOrgDetails();
   const redirect_reason = searchParams?.get("redirect_reason");
   const destination = searchParams?.get("destination");
 
   const [isScriptLoaded, setIsScriptLoaded] = useState(false);
   const [hasCaptchaErrored, setHasCaptchaErrored] = useState(false);
-  const [isRememberMe, setIsRememberMe] = useState(false);
-  const [signinStep, setSigninStep] = useState(0);
 
   const reCaptchaRef = useRef<any>(null);
   const snackbar = useSnackbar();
-
-  const [showAccessDenied, setShowAccessDenied] = useState(false);
 
   useEffect(() => {
     if (redirect_reason === "idp_auth_error") {
@@ -152,7 +128,7 @@ const SigninPage = (props) => {
 
   const formik = useFormik({
     initialValues: {
-      email: "",
+      email: email,
       password: "",
     },
     enableReinitialize: true,
@@ -166,99 +142,68 @@ const SigninPage = (props) => {
 
   return (
     <>
-      <Box textAlign="center">
-        {orgLogoURL ? (
-          <Logo src={orgLogoURL} alt={orgName} style={{ width: "120px", height: "auto", maxHeight: "unset" }} />
-        ) : (
-          ""
-        )}
-      </Box>
-      <DisplayHeading mt="24px">Login to your account</DisplayHeading>
-
       <Stack component="form" gap="32px" mt="44px">
         {/* Signin Form */}
         <Stack gap="30px">
           <FieldContainer>
-            <FieldLabel required>Email Address</FieldLabel>
-            {/* @ts-ignore */}
-            <TextField
+            <FieldLabel required>Password</FieldLabel>
+            <PasswordField
               inputProps={{
-                "data-testid": "email-input",
+                "data-testid": "password-input",
               }}
-              name="email"
-              id="email"
-              placeholder="Enter your registered email"
-              value={values.email}
+              name="password"
+              id="password"
+              placeholder="Enter your password"
+              value={values.password}
               onChange={handleChange}
               onBlur={handleBlur}
-              error={touched.email && errors.email}
-              helperText={touched.email && errors.email}
+              error={touched.password && errors.password}
+              helperText={touched.password && errors.password}
             />
           </FieldContainer>
-
-          {signinStep === 0 && (
-            <>
-              <div className="flex items-center justify-start">
-                <Checkbox
-                  sx={{
-                    padding: "0px",
-                    marginRight: "8px",
-                    borderRadius: "4px",
-                    color: "#D5D7DA", // affects checkmark and fill
-                    "& .MuiSvgIcon-root": {
-                      backgroundColor: "#fff", // optional: makes the border clearer
-                    },
-                    "&.Mui-checked .MuiSvgIcon-root": {
-                      color: "#111827", // checkmark color
-                      backgroundColor: "#fff",
-                    },
-                  }}
-                  checked={isRememberMe}
-                  onChange={(e) => setIsRememberMe(e.target.checked)}
-                />
-
-                <Typography fontWeight="500" fontSize="14px" lineHeight="20px" color="#414651" textAlign="center">
-                  {"Remember Me"}
-                </Typography>
-              </div>
-              <SubmitButton
-                data-testid="next-button"
-                type="button" // <- important: prevent form submission here
-                onClick={async () => {
-                  const errors = await formik.validateForm();
-                  if (!errors.email && formik.values.email) {
-                    setSigninStep(1);
-                  } else {
-                    formik.setTouched({ email: true }); // trigger error message
-                  }
-                }}
-                loading={false}
-              >
-                Next
-              </SubmitButton>
-            </>
+          {!shouldHideSignupLink && (
+            <Link
+              href="/reset-password"
+              style={{
+                fontWeight: "500",
+                fontSize: "14px",
+                lineHeight: "22px",
+                color: "#687588",
+              }}
+            >
+              Forgot Password
+            </Link>
           )}
         </Stack>
-        {signinStep === 1 && !errors.email && values?.email && (
-          <IdentityProviders
-            isPasswordLoginDisabled={isPasswordLoginDisabled}
-            identityProvidersList={identityProvidersList?.identityProviders}
-          />
-        )}
+
+        <Stack gap="16px">
+          <SubmitButton
+            data-testid="login-button"
+            type="submit"
+            onClick={formik.handleSubmit}
+            disabled={!formik.isValid || (isReCaptchaSetup && !isScriptLoaded)}
+            loading={signInMutation.isLoading}
+          >
+            Login
+          </SubmitButton>
+          {isReCaptchaSetup && (
+            // @ts-ignore
+            <ReCAPTCHA
+              size="invisible"
+              sitekey={googleReCaptchaSiteKey}
+              ref={reCaptchaRef}
+              asyncScriptOnLoad={() => {
+                setIsScriptLoaded(true);
+              }}
+              onErrored={() => {
+                setHasCaptchaErrored(true);
+              }}
+            />
+          )}
+        </Stack>
       </Stack>
-
-      {!shouldHideSignupLink && (
-        <Typography mt="22px" fontWeight="500" fontSize="14px" lineHeight="22px" color="#A0AEC0" textAlign="center">
-          You&apos;re new in here?{" "}
-          <Link href="/signup" style={{ color: "#27A376" }}>
-            Create Account
-          </Link>
-        </Typography>
-      )}
-
-      <AccessDeniedAlertDialog open={showAccessDenied} handleClose={() => setShowAccessDenied(false)} />
     </>
   );
 };
 
-export default SigninPage;
+export default SigninWithPassword;
