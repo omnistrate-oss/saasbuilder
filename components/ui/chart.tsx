@@ -112,7 +112,6 @@ const ChartTooltipContent = React.forwardRef<
       label,
       labelFormatter,
       labelClassName,
-      formatter,
       color,
       nameKey,
       labelKey,
@@ -122,9 +121,7 @@ const ChartTooltipContent = React.forwardRef<
     const { config } = useChart();
 
     const tooltipLabel = React.useMemo(() => {
-      if (hideLabel || !payload?.length) {
-        return null;
-      }
+      if (hideLabel || !payload?.length) return null;
 
       const [item] = payload;
       const key = `${labelKey || item.dataKey || item.name || "value"}`;
@@ -138,16 +135,12 @@ const ChartTooltipContent = React.forwardRef<
         return <div className={cn("font-medium", labelClassName)}>{labelFormatter(value, payload)}</div>;
       }
 
-      if (!value) {
-        return null;
-      }
+      if (!value) return null;
 
       return <div className={cn("font-medium", labelClassName)}>{value}</div>;
     }, [label, labelFormatter, payload, hideLabel, labelClassName, config, labelKey]);
 
-    if (!active || !payload?.length) {
-      return null;
-    }
+    if (!active || !payload?.length) return null;
 
     const nestLabel = payload.length === 1 && indicator !== "dot";
 
@@ -169,75 +162,97 @@ const ChartTooltipContent = React.forwardRef<
         className={className}
       >
         {!nestLabel ? tooltipLabel : null}
+
         <div className="grid gap-1.5">
-          {payload.map((item, index) => {
+          {payload.map((item) => {
             const key = `${nameKey || item.name || item.dataKey || "value"}`;
             const itemConfig = getPayloadConfigFromPayload(config, item, key);
             const indicatorColor = color || item.payload.fill || item.color;
 
+            const statusBreakdown = item?.payload?.statusBreakdown ?? {}; // NEW
+
+            const entries = Object.entries(statusBreakdown); // NEW
+            const showStatusBreakdown = entries.length > 0; // NEW
+
             return (
               <div
                 key={item.dataKey}
-                className={cn(
-                  "flex w-full flex-wrap items-stretch gap-2 [&>svg]:h-2.5 [&>svg]:w-2.5 [&>svg]:text-muted-foreground",
-                  indicator === "dot" && "items-center"
-                )}
+                className={cn("flex w-full flex-col gap-1", indicator === "dot" && "items-start")}
               >
-                {formatter && item?.value !== undefined && item.name ? (
-                  formatter(item.value, item.name, item, index, item.payload)
-                ) : (
-                  <>
-                    {itemConfig?.icon ? (
-                      <itemConfig.icon />
-                    ) : (
-                      !hideIndicator && (
-                        <div
-                          style={
-                            {
-                              "--color-bg": indicatorColor,
-                              "--color-border": indicatorColor,
-                              flexShrink: 0,
-                              borderRadius: "2px",
-                              border: `1px solid ${indicatorColor}`,
-                              backgroundColor: indicatorColor,
-                              ...(indicator === "dot" && {
-                                height: "0.625rem",
-                                width: "0.625rem",
+                <div
+                  className={cn(
+                    "flex w-full items-stretch gap-2 [&>svg]:h-2.5 [&>svg]:w-2.5 [&>svg]:text-muted-foreground",
+                    indicator === "dot" && "items-center"
+                  )}
+                >
+                  {itemConfig?.icon ? (
+                    <itemConfig.icon />
+                  ) : (
+                    !hideIndicator && (
+                      <div
+                        style={
+                          {
+                            "--color-bg": indicatorColor,
+                            "--color-border": indicatorColor,
+                            flexShrink: 0,
+                            borderRadius: "2px",
+                            border: `1px solid ${indicatorColor}`,
+                            backgroundColor: indicatorColor,
+                            ...(indicator === "dot" && {
+                              height: "0.625rem",
+                              width: "0.625rem",
+                            }),
+                            ...(indicator === "line" && {
+                              width: "0.25rem",
+                            }),
+                            ...(indicator === "dashed" && {
+                              width: "0",
+                              border: "1.5px dashed",
+                              backgroundColor: "transparent",
+                            }),
+                            ...(nestLabel &&
+                              indicator === "dashed" && {
+                                margin: "0.125rem 0",
                               }),
-                              ...(indicator === "line" && {
-                                width: "0.25rem",
-                              }),
-                              ...(indicator === "dashed" && {
-                                width: "0",
-                                border: "1.5px dashed",
-                                backgroundColor: "transparent",
-                              }),
-                              ...(nestLabel &&
-                                indicator === "dashed" && {
-                                  margin: "0.125rem 0",
-                                }),
-                            } as React.CSSProperties
-                          }
-                        />
-                      )
-                    )}
-                    <div
-                      className={cn(
-                        "flex flex-1 justify-between leading-none",
-                        nestLabel ? "items-end" : "items-center"
-                      )}
-                    >
-                      <div className="grid gap-1.5">
-                        {nestLabel ? tooltipLabel : null}
-                        <span className="text-muted-foreground">{itemConfig?.label || item.name}</span>
-                      </div>
-                      {item.value && (
-                        <span className="font-mono font-medium tabular-nums text-foreground">
-                          {item.value.toLocaleString()}
-                        </span>
-                      )}
+                          } as React.CSSProperties
+                        }
+                      />
+                    )
+                  )}
+
+                  <div
+                    className={cn("flex flex-1 justify-between leading-none", nestLabel ? "items-end" : "items-center")}
+                  >
+                    <div className="grid gap-1.5">
+                      {nestLabel ? tooltipLabel : null}
+                      <span className="text-muted-foreground">{itemConfig?.label || item.name}</span>
                     </div>
-                  </>
+                    {item.value !== undefined && (
+                      <span className="font-mono font-medium tabular-nums text-foreground">
+                        {item.value.toLocaleString()}
+                      </span>
+                    )}
+                  </div>
+                </div>
+
+                {/* NEW: statusDesc breakdown */}
+                {showStatusBreakdown && (
+                  <div className="ml-1 flex flex-col gap-1">
+                    {entries.map(([statusKey, count]) => (
+                      <div
+                        key={statusKey}
+                        className="flex items-center justify-between w-full text-muted-foreground text-[0.7rem]"
+                        style={{ marginLeft: "20px" }}
+                      >
+                        <span className="truncate" style={{ marginRight: "5px", flexShrink: 0 }}>
+                          {statusKey}
+                        </span>
+                        <span className="font-mono text-right whitespace-nowrap" style={{ marginTop: "5px" }}>
+                          {typeof count === "number" ? count.toLocaleString() : String(count)}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
                 )}
               </div>
             );
