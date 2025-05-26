@@ -34,19 +34,17 @@ const ChangePasswordPage = () => {
   const token = searchParams?.get("token");
   const { orgLogoURL, orgName } = useProviderOrgDetails();
 
-  const changePasswordMutation = useMutation(
-    (payload) => {
+  const changePasswordMutation = useMutation({
+    mutationFn: (payload) => {
       return axios.post("/change-password", payload);
     },
-    {
-      onSuccess: () => {
-        /*eslint-disable-next-line no-use-before-define*/
-        formik.resetForm();
-        snackbar.showSuccess("Change password successful");
-        router.push("/signin");
-      },
-    }
-  );
+    onSuccess: () => {
+      /*eslint-disable-next-line no-use-before-define*/
+      formik.resetForm();
+      snackbar.showSuccess("Change password successful");
+      router.push("/signin");
+    },
+  });
 
   const formik = useFormik({
     initialValues: {
@@ -122,7 +120,7 @@ const ChangePasswordPage = () => {
             type="submit"
             onClick={formik.handleSubmit}
             disabled={!formik.isValid}
-            loading={changePasswordMutation.isLoading}
+            loading={changePasswordMutation.isPending}
           >
             Submit
           </SubmitButton>

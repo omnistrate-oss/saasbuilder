@@ -40,9 +40,9 @@ function useResourcesInstanceIds(
     ...resourceKeys,
   };
 
-  const query = useQuery(
-    ["resources-instance-ids", { ...queryDependencies }],
-    async () => {
+  const query = useQuery({
+    queryKey: ["resources-instance-ids", { ...queryDependencies }],
+    queryFn: async () => {
       const resourceIdInstanceIdHashMap = {};
 
       await Promise.all(
@@ -66,8 +66,8 @@ function useResourcesInstanceIds(
 
       return resourceIdInstanceIdHashMap;
     },
-    { enabled: isEnabled }
-  );
+    enabled: isEnabled,
+  });
 
   return query;
 }

@@ -1,5 +1,4 @@
-import { useQuery, UseQueryOptions, UseQueryResult } from "@tanstack/react-query";
-import { AxiosResponse } from "axios";
+import { useQuery } from "@tanstack/react-query";
 
 import { getInstanceRestoreAccess } from "src/api/resourceInstance";
 
@@ -27,21 +26,14 @@ type AccessSnapshot = SnapshotBase;
 // Union type to represent either fleet or access snapshot
 export type RestoreResponse = AccessSnapshot;
 
-function useBackup(
-  queryParams: QueryParams = {},
-  queryOptions: UseQueryOptions<AxiosResponse<{ snapshots: RestoreResponse[] }>, unknown, RestoreResponse[]> = {}
-) {
+function useBackup(queryParams: QueryParams = {}, queryOptions = {}) {
   const { instanceId, accessQueryParams, isEnable } = queryParams;
 
   const enabled = Boolean(instanceId && isEnable);
 
-  const query: UseQueryResult<RestoreResponse[]> = useQuery<
-    AxiosResponse<{ snapshots: RestoreResponse[] }>,
-    unknown,
-    RestoreResponse[]
-  >(
-    ["instanceRestore", instanceId, isEnable],
-    () => {
+  const query = useQuery({
+    queryKey: ["instanceRestore", instanceId, isEnable],
+    queryFn: () => {
       const {
         serviceProviderId,
         serviceKey,
@@ -67,20 +59,16 @@ function useBackup(
         }
       );
     },
-    {
-      enabled: enabled,
-      refetchOnWindowFocus: false,
-      retry: false,
-      refetchOnMount: true,
-      refetchInterval: 30000,
-      onError: () => {},
-      select: (response) => {
-        // Expecting response to be of type AxiosResponse<{ snapshots: RestoreResponse[] }>
-        return response?.data?.snapshots || [];
-      },
-      ...queryOptions,
-    }
-  );
+    enabled: enabled,
+    refetchOnWindowFocus: false,
+    retry: false,
+    refetchOnMount: true,
+    refetchInterval: 30000,
+    select: (response) => {
+      return response?.data?.snapshots || [];
+    },
+    ...queryOptions,
+  });
 
   return query;
 }

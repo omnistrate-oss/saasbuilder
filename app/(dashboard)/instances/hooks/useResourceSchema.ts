@@ -12,17 +12,15 @@ const useResourceSchema = (queryParams: QueryParams = {}, queryOptions = { enabl
   const { serviceId, resourceId, instanceId = "none" } = queryParams;
   const isEnabled = Boolean(serviceId && resourceId);
 
-  const query = useQuery(
-    ["resource-schema", serviceId, resourceId, instanceId],
-    () => describeServiceOfferingResource(serviceId!, resourceId!, instanceId),
-    {
-      ...queryOptions,
-      enabled: isEnabled && queryOptions.enabled,
-      select: (response) => {
-        return response.data;
-      },
-    }
-  );
+  const query = useQuery({
+    queryKey: ["resource-schema", serviceId, resourceId, instanceId],
+    queryFn: () => describeServiceOfferingResource(serviceId!, resourceId!, instanceId),
+    ...queryOptions,
+    enabled: isEnabled && queryOptions.enabled,
+    select: (response) => {
+      return response.data;
+    },
+  });
 
   return query;
 };

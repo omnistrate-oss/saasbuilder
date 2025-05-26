@@ -43,20 +43,18 @@ function DeleteAccount() {
     setConfirmationDialogOpen(false);
   }
 
-  const deleteAccountMutation = useMutation(
-    () => {
+  const deleteAccountMutation = useMutation({
+    mutationFn: () => {
       return deleteUser();
     },
-    {
-      onSuccess: () => {
-        snackbar.showSuccess("Your account has been successfully deleted");
-        handleLogout();
-      },
-      onError: () => {
-        snackbar.showError("Failed to delete your account. Please try again or contact support");
-      },
-    }
-  );
+    onSuccess: () => {
+      snackbar.showSuccess("Your account has been successfully deleted");
+      handleLogout();
+    },
+    onError: () => {
+      snackbar.showError("Failed to delete your account. Please try again or contact support");
+    },
+  });
 
   if (isLoadingInstances) return <LoadingSpinner />;
 
@@ -120,7 +118,7 @@ function DeleteAccount() {
         handleSubmit={() => {
           deleteAccountMutation.mutate();
         }}
-        isLoading={deleteAccountMutation.isLoading}
+        isLoading={deleteAccountMutation.isPending}
       />
     </>
   );

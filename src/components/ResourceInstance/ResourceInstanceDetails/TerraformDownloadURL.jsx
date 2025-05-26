@@ -7,8 +7,8 @@ import LoadingSpinnerSmall from "components/CircularProgress/CircularProgress";
 import { Text } from "components/Typography/Typography";
 
 const TerraformDownloadURL = ({ serviceOffering, subscriptionId, cloud_provider }) => {
-  const downloadTerraformKitMutation = useMutation(
-    () =>
+  const downloadTerraformKitMutation = useMutation({
+    mutationFn: () =>
       getTerraformKit(
         serviceOffering?.serviceProviderId,
         serviceOffering?.serviceURLKey,
@@ -18,19 +18,17 @@ const TerraformDownloadURL = ({ serviceOffering, subscriptionId, cloud_provider 
         subscriptionId,
         cloud_provider
       ),
-    {
-      onSuccess: (response) => {
-        const href = URL.createObjectURL(response.data);
-        const link = document.createElement("a");
-        link.href = href;
-        link.setAttribute("download", "terraformkit.tar");
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        URL.revokeObjectURL(href);
-      },
-    }
-  );
+    onSuccess: (response) => {
+      const href = URL.createObjectURL(response.data);
+      const link = document.createElement("a");
+      link.href = href;
+      link.setAttribute("download", "terraformkit.tar");
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(href);
+    },
+  });
 
   return (
     <Stack width="100%" direction="row" justifyContent="flex-end" gap="4px">
@@ -46,7 +44,7 @@ const TerraformDownloadURL = ({ serviceOffering, subscriptionId, cloud_provider 
       <LoadingSpinnerSmall
         sx={{
           flexShrink: "0",
-          visibility: downloadTerraformKitMutation.isLoading ? "visible" : "hidden",
+          visibility: downloadTerraformKitMutation.isPending ? "visible" : "hidden",
         }}
       />
     </Stack>

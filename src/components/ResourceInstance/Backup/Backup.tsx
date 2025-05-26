@@ -94,8 +94,8 @@ const Backup: FC<{
     return filtered;
   }, [restoreData, searchText, selectedDateRange]);
 
-  const restoreMutation = useMutation(
-    async () => {
+  const restoreMutation = useMutation({
+    mutationFn: async () => {
       if (selectionModel?.length > 0) {
         const snapshotId = selectionModel[0];
         const {
@@ -125,14 +125,12 @@ const Backup: FC<{
         );
       }
     },
-    {
-      onSuccess: (response) => {
-        setRestoreInstanceSuccess(true);
-        setRestoredInstanceID(response?.data?.id);
-        snackbar.showSuccess(`Restore successfully`);
-      },
-    }
-  );
+    onSuccess: (response) => {
+      setRestoreInstanceSuccess(true);
+      setRestoredInstanceID(response?.data?.id);
+      snackbar.showSuccess(`Restore successfully`);
+    },
+  });
 
   const columns = useMemo(
     () => [

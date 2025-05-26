@@ -22,8 +22,8 @@ function AccessSideRestoreInstance({
   const [restoredInstanceID, setRestoredInstanceID] = useState(null);
 
   const snackbar = useSnackbar();
-  const restoreMutation = useMutation(
-    (values) => {
+  const restoreMutation = useMutation({
+    mutationFn: (values) => {
       const payload = {
         targetRestoreTime: values.targetRestoreTime,
         network_type: values.network_type,
@@ -39,16 +39,14 @@ function AccessSideRestoreInstance({
       };
       return restoreResourceInstance(payload);
     },
-    {
-      onSuccess: (res) => {
-        snackbar.showSuccess("Restore initiated successfully!");
-        setSelectionModel([]);
-        fetchResourceInstances(selectedResource);
-        setRestoredInstanceID(res?.data?.id);
-        setStep(2);
-      },
-    }
-  );
+    onSuccess: (res) => {
+      snackbar.showSuccess("Restore initiated successfully!");
+      setSelectionModel([]);
+      fetchResourceInstances(selectedResource);
+      setRestoredInstanceID(res?.data?.id);
+      setStep(2);
+    },
+  });
 
   return (
     <RestoreInstanceModal

@@ -327,20 +327,18 @@ export default function NodesTable(props) {
     []
   );
 
-  const failoverMutation = useMutation(
-    (payload) => {
+  const failoverMutation = useMutation({
+    mutationFn: (payload) => {
       //if the context is inventory manage instance call failover endpoint of related to
       //invetory otherwise call access related endpoint
 
       return failoverResourceInstanceNode(payload);
     },
-    {
-      onSuccess: async () => {
-        await refetchData();
-        setSelectionModel([]);
-      },
-    }
-  );
+    onSuccess: async () => {
+      await refetchData();
+      setSelectionModel([]);
+    },
+  });
 
   function handleFailover(nodeId, resourceKey) {
     if (serviceOffering && nodeId) {
@@ -395,7 +393,7 @@ export default function NodesTable(props) {
             isRefetching,
             isFailoverDisabled:
               !isFailoverEnabled ||
-              failoverMutation.isLoading ||
+              failoverMutation.isPending ||
               !modifyAccessServiceAllowed ||
               (isInventoryManageInstance && isManagedProxy), //can't failover fleet instances of type serverless proxy and managedProxyType==="PortsbasedProxy"
             failoverDisabledMessage: !selectedNode
@@ -406,7 +404,7 @@ export default function NodesTable(props) {
                   ? "System managed proxy nodes cannot be failed over"
                   : selectedNode?.status !== "RUNNING"
                     ? "Node must be running to failover"
-                    : failoverMutation.isLoading
+                    : failoverMutation.isPending
                       ? "Failover in progress"
                       : "",
             selectedNode,

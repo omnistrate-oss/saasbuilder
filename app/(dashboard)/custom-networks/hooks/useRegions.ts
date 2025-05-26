@@ -4,9 +4,9 @@ import { getCloudProviders } from "src/api/cloudProvider";
 import { getRegionById, getRegions } from "src/api/region";
 
 const useRegions = (queryOptions = {}) => {
-  const regionsQuery = useQuery(
-    ["cloud-regions"],
-    async () => {
+  const regionsQuery = useQuery({
+    queryKey: ["cloud-regions"],
+    queryFn: async () => {
       const cloudProvidersRes = await getCloudProviders();
       const cloudProviders: string[] = cloudProvidersRes?.data?.map((cloudProvider) => cloudProvider?.name);
       const res: any[] = [];
@@ -31,11 +31,9 @@ const useRegions = (queryOptions = {}) => {
 
       return res;
     },
-    {
-      refetchOnMount: false,
-      ...queryOptions,
-    }
-  );
+    refetchOnMount: false,
+    ...queryOptions,
+  });
   return regionsQuery;
 };
 

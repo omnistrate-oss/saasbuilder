@@ -180,7 +180,8 @@ const AccessControlPage = () => {
     ];
   }, [subscriptionsObj]);
 
-  const deleteUserMutation = useMutation((payload: any) => revokeSubscriptionUser(payload.subscriptionId, payload), {
+  const deleteUserMutation = useMutation({
+    mutationFn: (payload: any) => revokeSubscriptionUser(payload.subscriptionId, payload),
     onSuccess: async () => {
       // TODO Later: Set the Query Data Directly without Refetching
       refetchUsers();
@@ -252,7 +253,7 @@ const AccessControlPage = () => {
         }}
         confirmationText="remove"
         title="Remove Access"
-        isLoading={deleteUserMutation.isLoading}
+        isLoading={deleteUserMutation.isPending}
         buttonLabel="Remove Access"
         subtitle={`Are you sure you want remove the ${
           selectedUser?.roleType

@@ -23,7 +23,8 @@ const CustomNetworkForm = ({
   selectedCustomNetwork,
 }) => {
   const snackbar = useSnackbar();
-  const createCustomNetworkMutation = useMutation(createCustomNetwork, {
+  const createCustomNetworkMutation = useMutation({
+    mutationFn: createCustomNetwork,
     onSuccess: async () => {
       onClose();
       snackbar.showSuccess("Customer Network created successfully");
@@ -31,16 +32,14 @@ const CustomNetworkForm = ({
     },
   });
 
-  const updateCustomNetworkMutation = useMutation(
-    (data: UpdateCustomNetworkRequestBody) => updateCustomNetwork(selectedCustomNetwork.id, data),
-    {
-      onSuccess: async () => {
-        onClose();
-        snackbar.showSuccess("Customer Network updated successfully");
-        refetchCustomNetworks();
-      },
-    }
-  );
+  const updateCustomNetworkMutation = useMutation({
+    mutationFn: (data: UpdateCustomNetworkRequestBody) => updateCustomNetwork(selectedCustomNetwork.id, data),
+    onSuccess: async () => {
+      onClose();
+      snackbar.showSuccess("Customer Network updated successfully");
+      refetchCustomNetworks();
+    },
+  });
 
   const formData = useFormik({
     initialValues: {
@@ -171,7 +170,7 @@ const CustomNetworkForm = ({
       formData={formData}
       formMode={formMode}
       onClose={onClose}
-      isFormSubmitting={createCustomNetworkMutation.isLoading || updateCustomNetworkMutation.isLoading}
+      isFormSubmitting={createCustomNetworkMutation.isPending || updateCustomNetworkMutation.isPending}
       previewCardTitle="Customer Network Summary"
     />
   );

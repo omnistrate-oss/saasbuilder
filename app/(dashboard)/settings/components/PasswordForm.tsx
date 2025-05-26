@@ -28,19 +28,17 @@ const PasswordForm: React.FC<PasswordFormProps> = ({ email }) => {
   const { logout } = useLogout();
   const loggedInUsingSSO = localStorage.getItem("loggedInUsingSSO");
   const isLoggedInUsingSSO = loggedInUsingSSO === "true";
-  const updatePasswordMutation = useMutation(
-    (data: any) =>
+  const updatePasswordMutation = useMutation({
+    mutationFn: (data: any) =>
       updatePassword({
         currentPassword: data.currentPassword,
         password: data.newPassword,
       }),
-    {
-      onSuccess: () => {
-        logout();
-        snackbar.showSuccess("Password updated successfully");
-      },
-    }
-  );
+    onSuccess: () => {
+      logout();
+      snackbar.showSuccess("Password updated successfully");
+    },
+  });
 
   const formData = useFormik({
     initialValues: {
@@ -64,18 +62,16 @@ const PasswordForm: React.FC<PasswordFormProps> = ({ email }) => {
 
   const { values, handleChange, handleBlur, touched, errors } = formData;
 
-  const setPasswordMutation = useMutation(
-    (payload: any) => {
+  const setPasswordMutation = useMutation({
+    mutationFn: (payload: any) => {
       return customerUserResetPassword(payload);
     },
-    {
-      onSuccess: () => {
-        snackbar.showSuccess(
-          "We have emailed you a link to set your password. Please check your email and follow the instructions."
-        );
-      },
-    }
-  );
+    onSuccess: () => {
+      snackbar.showSuccess(
+        "We have emailed you a link to set your password. Please check your email and follow the instructions."
+      );
+    },
+  });
 
   async function handleSetPassword() {
     const data = { email: email };
@@ -152,12 +148,12 @@ const PasswordForm: React.FC<PasswordFormProps> = ({ email }) => {
           </div>
 
           <div className="flex items-center justify-end gap-4 mt-5">
-            <Button variant="outlined" onClick={() => formData.resetForm()} disabled={updatePasswordMutation.isLoading}>
+            <Button variant="outlined" onClick={() => formData.resetForm()} disabled={updatePasswordMutation.isPending}>
               Cancel
             </Button>
-            <Button type="submit" variant="contained" disabled={updatePasswordMutation.isLoading}>
+            <Button type="submit" variant="contained" disabled={updatePasswordMutation.isPending}>
               Save
-              {updatePasswordMutation.isLoading && <LoadingSpinnerSmall />}
+              {updatePasswordMutation.isPending && <LoadingSpinnerSmall />}
             </Button>
           </div>
         </Form>
@@ -197,7 +193,7 @@ const PasswordForm: React.FC<PasswordFormProps> = ({ email }) => {
                   border: "none",
                   padding: "0 !important",
                 }}
-                disabled={setPasswordMutation.isLoading}
+                disabled={setPasswordMutation.isPending}
               >
                 click here
               </Button>
@@ -208,7 +204,7 @@ const PasswordForm: React.FC<PasswordFormProps> = ({ email }) => {
             </Box>
           </Box>
           <Box display="flex" justifyContent={"center"}>
-            {setPasswordMutation.isLoading && <CircularProgress size={16} sx={{ marginTop: "8px" }} />}
+            {setPasswordMutation.isPending && <CircularProgress size={16} sx={{ marginTop: "8px" }} />}
           </Box>
           <Divider sx={{ mt: 3, mb: 3 }} />
         </Box>

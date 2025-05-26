@@ -4,20 +4,13 @@ import { downloadCLI } from "../api/service-api";
 import { saveBlob } from "../utils/saveBlob";
 
 function useDownloadCLI() {
-  const downloadCLIMutation = useMutation(
-    (data) => {
-      return downloadCLI(data.serviceId, data.serviceApiId, data.subscriptionId);
+  const downloadCLIMutation = useMutation({
+    mutationFn: async (data) => {
+      const response = await downloadCLI(data.serviceId, data.serviceApiId, data.subscriptionId);
+      const blob = response.data;
+      saveBlob(blob, "cli");
     },
-    {
-      onSuccess: (response) => {
-        const blob = response.data;
-        saveBlob(blob, "cli");
-      },
-      onError: (error) => {
-        console.error("Error", error?.response?.data);
-      },
-    }
-  );
+  });
 
   return {
     downloadCLI: (serviceId, serviceApiId, subscriptionId) => {
@@ -27,7 +20,7 @@ function useDownloadCLI() {
         subscriptionId,
       });
     },
-    isDownloading: downloadCLIMutation.isLoading,
+    isDownloading: downloadCLIMutation.isPending,
   };
 }
 
