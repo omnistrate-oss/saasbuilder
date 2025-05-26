@@ -45,11 +45,11 @@ function RestoreInstanceFormStep({
 
         <Button
           variant="contained"
-          disabled={restoreMutation.isLoading || !restoreFormik.isValid}
+          disabled={restoreMutation.isPending || !restoreFormik.isValid}
           onClick={restoreFormik.handleSubmit}
         >
           Restore
-          {restoreMutation.isLoading && <CircularProgress size={16} sx={{ marginLeft: "8px" }} />}
+          {restoreMutation.isPending && <CircularProgress size={16} sx={{ marginLeft: "8px" }} />}
         </Button>
       </DialogFooter>
     </>

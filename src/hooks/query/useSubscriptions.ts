@@ -7,20 +7,18 @@ import useEnvironmentType from "../useEnvironmentType";
 // Before Making any Changes, Please Be Careful because we use the QueryClient to Update the Data when Unsubscribing
 const useSubscriptions = (queryOptions = {}) => {
   const environmentType = useEnvironmentType();
-  const subscriptionData = useQuery(
-    ["user-subscriptions"],
-    () => {
+  const subscriptionData = useQuery({
+    queryKey: ["user-subscriptions"],
+    queryFn: () => {
       return getSubscriptions({
         environmentType,
       });
     },
-    {
-      select: (data) => {
-        return data.data.subscriptions;
-      },
-      ...queryOptions,
-    }
-  );
+    select: (data) => {
+      return data.data.subscriptions;
+    },
+    ...queryOptions,
+  });
 
   return subscriptionData;
 };

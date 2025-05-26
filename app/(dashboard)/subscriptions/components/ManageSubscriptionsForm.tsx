@@ -81,21 +81,24 @@ const ManageSubscriptionsForm = ({ defaultServiceId, defaultServicePlanId, isFet
       }, {});
   }, [subscriptionRequests]);
 
-  const subscribeMutation = useMutation((payload: any) => {
-    if (payload.AutoApproveSubscription) {
-      return createSubscriptions({
-        productTierId: payload.productTierId,
-        serviceId: payload.serviceId,
-      });
-    } else {
-      return createSubscriptionRequest({
-        productTierId: payload.productTierId,
-        serviceId: payload.serviceId,
-      });
-    }
+  const subscribeMutation = useMutation({
+    mutationFn: (payload: any) => {
+      if (payload.AutoApproveSubscription) {
+        return createSubscriptions({
+          productTierId: payload.productTierId,
+          serviceId: payload.serviceId,
+        });
+      } else {
+        return createSubscriptionRequest({
+          productTierId: payload.productTierId,
+          serviceId: payload.serviceId,
+        });
+      }
+    },
   });
 
-  const unSubscribeMutation = useMutation(deleteSubscription, {
+  const unSubscribeMutation = useMutation({
+    mutationFn: deleteSubscription,
     onSuccess: () => {
       queryClient.setQueryData(["user-subscriptions"], (oldData: any) => {
         return {
@@ -258,7 +261,7 @@ const ManageSubscriptionsForm = ({ defaultServiceId, defaultServicePlanId, isFet
         confirmationText="unsubscribe"
         title="Unsubscribe Service"
         buttonLabel="Unsubscribe"
-        isLoading={unSubscribeMutation.isLoading}
+        isLoading={unSubscribeMutation.isPending}
         subtitle={`Are you sure you want to unsubscribe from ${subscriptionsObj[selectedPlanId]?.serviceName}?`}
         message="To confirm, please enter <b>unsubscribe</b>, in the field below:"
       />

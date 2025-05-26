@@ -1,4 +1,4 @@
-import { useInfiniteQuery } from "@tanstack/react-query";
+import { keepPreviousData, useInfiniteQuery, useQueryClient } from "@tanstack/react-query";
 
 import { getAllAuditEvents } from "src/api/event";
 import useEnvironmentType from "src/hooks/useEnvironmentType";
@@ -12,12 +12,13 @@ type QueryParams = {
 };
 
 const useAuditLogs = (queryParams: QueryParams = {}, queryOptions = {}) => {
+  const queryClient = useQueryClient();
   const environmentType = useEnvironmentType();
   const { startDate, endDate, eventSourceTypes, serviceID, pageSize = 10 } = queryParams;
 
-  const query = useInfiniteQuery(
-    ["audit-logs", startDate, endDate, eventSourceTypes, environmentType, serviceID],
-    async ({ pageParam }) => {
+  const query = useInfiniteQuery({
+    queryKey: ["audit-logs", startDate, endDate, eventSourceTypes, environmentType, serviceID],
+    queryFn: async ({ pageParam }) => {
       const params: any = {};
 
       if (pageParam) {
@@ -50,15 +51,17 @@ const useAuditLogs = (queryParams: QueryParams = {}, queryOptions = {}) => {
 
       return res.data;
     },
-    {
-      keepPreviousData: true,
-      getNextPageParam: (lastPage) => lastPage.nextPageToken,
-      ...queryOptions,
-    }
-  );
+    placeholderData: keepPreviousData,
+    initialPageParam: 0,
+    // @ts-ignore
+    getNextPageParam: (lastPage) => lastPage.nextPageToken,
+    ...queryOptions,
+  });
 
   const refetchAndReset = async () => {
-    query.remove();
+    queryClient.removeQueries({
+      queryKey: ["audit-logs", startDate, endDate, eventSourceTypes, environmentType, serviceID],
+    });
     return query.refetch();
   };
 

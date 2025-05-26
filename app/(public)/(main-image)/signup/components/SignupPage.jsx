@@ -72,25 +72,23 @@ const SignupPage = (props) => {
   const snackbar = useSnackbar();
   const reCaptchaRef = useRef(null);
 
-  const signupMutation = useMutation(
-    (payload) => {
+  const signupMutation = useMutation({
+    mutationFn: (payload) => {
       setShowSuccess(false);
       return customerUserSignup(payload);
     },
-    {
-      onSuccess: () => {
-        /* eslint-disable-next-line no-use-before-define*/
-        formik.resetForm();
-        setShowSuccess(true);
-      },
-      onError: (error) => {
-        if (error.response.data && error.response.data.message) {
-          const errorMessage = error.response.data.message;
-          snackbar.showError(errorMessage);
-        }
-      },
-    }
-  );
+    onSuccess: () => {
+      /* eslint-disable-next-line no-use-before-define*/
+      formik.resetForm();
+      setShowSuccess(true);
+    },
+    onError: (error) => {
+      if (error.response.data && error.response.data.message) {
+        const errorMessage = error.response.data.message;
+        snackbar.showError(errorMessage);
+      }
+    },
+  });
 
   async function handleFormSubmit(values) {
     const data = {};
@@ -332,7 +330,7 @@ const SignupPage = (props) => {
             type="submit"
             onClick={formik.handleSubmit}
             disabled={!formik.isValid || (isReCaptchaSetup && !isScriptLoaded)}
-            loading={signupMutation.isLoading}
+            loading={signupMutation.isPending}
           >
             Create Account
           </SubmitButton>

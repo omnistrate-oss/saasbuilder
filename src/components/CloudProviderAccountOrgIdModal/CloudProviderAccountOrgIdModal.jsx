@@ -601,7 +601,7 @@ function CloudProviderAccountOrgIdModal(props) {
   //     >
   //       here
   //     </Box>
-  //     {downloadTerraformKitMutation.isLoading && (
+  //     {downloadTerraformKitMutation.isPending && (
   //       <LoadingSpinnerSmall sx={{ color: "black", ml: "16px" }} size={12} />
   //     )}
   //   </>

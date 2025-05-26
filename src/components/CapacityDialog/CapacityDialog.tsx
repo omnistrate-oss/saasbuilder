@@ -74,8 +74,8 @@ const CapacityDialog: FC<CapacityDialogProps> = ({
   const maxReplicas = Number(autoscaling?.maxReplicas);
   const minReplicas = Number(autoscaling?.minReplicas);
 
-  const capacityMutation = useMutation(
-    async (payload: { count: number }) => {
+  const capacityMutation = useMutation({
+    mutationFn: async (payload: { count: number }) => {
       if (currentCapacityAction === "add") {
         return await addCapacityResourceInstanceAccess({
           count: payload.count,
@@ -88,16 +88,14 @@ const CapacityDialog: FC<CapacityDialogProps> = ({
         });
       }
     },
-    {
-      onSuccess: () => {
-        snackbar.showSuccess(`Capacity ${labelObj.successLabel} successfully`);
-        /*eslint-disable-next-line no-use-before-define*/
-        capacityFormik.resetForm();
-        handleClose();
-        refetch();
-      },
-    }
-  );
+    onSuccess: () => {
+      snackbar.showSuccess(`Capacity ${labelObj.successLabel} successfully`);
+      /*eslint-disable-next-line no-use-before-define*/
+      capacityFormik.resetForm();
+      handleClose();
+      refetch();
+    },
+  });
 
   const errorMessage = useMemo(() => {
     if (currentCapacityAction === "add") {
@@ -229,7 +227,7 @@ const CapacityDialog: FC<CapacityDialogProps> = ({
           <Button
             variant="outlined"
             sx={{ height: "40px !important", padding: "10px 14px !important" }}
-            disabled={capacityMutation.isLoading}
+            disabled={capacityMutation.isPending}
             onClick={() => {
               handleClose();
               capacityFormik.resetForm();
@@ -242,10 +240,10 @@ const CapacityDialog: FC<CapacityDialogProps> = ({
             type="submit"
             variant="contained"
             sx={{ height: "40px !important", padding: "10px 14px !important" }}
-            disabled={capacityMutation.isLoading}
+            disabled={capacityMutation.isPending}
           >
             {labelObj.buttonLabel}
-            {capacityMutation.isLoading && <LoadingSpinnerSmall />}
+            {capacityMutation.isPending && <LoadingSpinnerSmall />}
           </Button>
         </DialogActions>
       </Form>

@@ -101,36 +101,34 @@ const SigninPage = (props) => {
     }
   }
 
-  const signInMutation = useMutation(
-    (payload) => {
+  const signInMutation = useMutation({
+    mutationFn: (payload) => {
       delete axios.defaults.headers["Authorization"];
       return customerUserSignin(payload);
     },
-    {
-      onSuccess: (data) => {
-        /*eslint-disable-next-line no-use-before-define*/
-        formik.resetForm();
-        const jwtToken = data.data.jwtToken;
-        handleSignInSuccess(jwtToken);
-      },
-      onError: (error: any) => {
-        if (error.response.data && error.response.data.message) {
-          const errorMessage = error.response.data.message;
-          if (
-            errorMessage === "Failed to sign in. Either the credentials are incorrect or the user does not exist" &&
-            environmentType === ENVIRONMENT_TYPES.PROD &&
-            domainsMatch(formik.values.email, orgURL)
-          ) {
-            setShowAccessDenied(true);
-          } else {
-            snackbar.showError(errorMessage);
-          }
+    onSuccess: (data) => {
+      /*eslint-disable-next-line no-use-before-define*/
+      formik.resetForm();
+      const jwtToken = data.data.jwtToken;
+      handleSignInSuccess(jwtToken);
+    },
+    onError: (error: any) => {
+      if (error.response.data && error.response.data.message) {
+        const errorMessage = error.response.data.message;
+        if (
+          errorMessage === "Failed to sign in. Either the credentials are incorrect or the user does not exist" &&
+          environmentType === ENVIRONMENT_TYPES.PROD &&
+          domainsMatch(formik.values.email, orgURL)
+        ) {
+          setShowAccessDenied(true);
         } else {
-          snackbar.showError("Failed to sign in. Either the credentials are incorrect or the user does not exist");
+          snackbar.showError(errorMessage);
         }
-      },
-    }
-  );
+      } else {
+        snackbar.showError("Failed to sign in. Either the credentials are incorrect or the user does not exist");
+      }
+    },
+  });
 
   async function handleFormSubmit(values) {
     const data = { ...values };
@@ -257,7 +255,7 @@ const SigninPage = (props) => {
             type="submit"
             onClick={formik.handleSubmit}
             disabled={!formik.isValid || (isReCaptchaSetup && !isScriptLoaded)}
-            loading={signInMutation.isLoading}
+            loading={signInMutation.isPending}
           >
             Login
           </SubmitButton>

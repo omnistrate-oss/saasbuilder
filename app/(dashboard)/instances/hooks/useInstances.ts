@@ -6,23 +6,21 @@ import useEnvironmentType from "src/hooks/useEnvironmentType";
 const useInstances = (queryOptions = {}) => {
   const environmentType = useEnvironmentType();
 
-  const instancesQuery = useQuery(
-    ["instances"],
-    async () => {
+  const instancesQuery = useQuery({
+    queryKey: ["instances"],
+    queryFn: async () => {
       return getAllResourceInstances({
         environmentType,
       });
     },
-    {
-      select: (data) => {
-        return data.data.resourceInstances.sort(
-          (a, b) => new Date(b.created_at || "").getTime() - new Date(a.created_at || "").getTime()
-        );
-      },
-      refetchInterval: 60000,
-      ...queryOptions,
-    }
-  );
+    select: (data) => {
+      return data.data.resourceInstances.sort(
+        (a, b) => new Date(b.created_at || "").getTime() - new Date(a.created_at || "").getTime()
+      );
+    },
+    refetchInterval: 60000,
+    ...queryOptions,
+  });
   return instancesQuery;
 };
 

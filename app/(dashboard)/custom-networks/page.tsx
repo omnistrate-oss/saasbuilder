@@ -114,7 +114,8 @@ const CustomNetworksPage = () => {
     ];
   }, []);
 
-  const deleteCustomNetworkMutation = useMutation(deleteCustomNetwork, {
+  const deleteCustomNetworkMutation = useMutation({
+    mutationFn: deleteCustomNetwork,
     onSuccess: async () => {
       setSelectedRows([]);
       refetchCustomNetworks();
@@ -248,7 +249,7 @@ const CustomNetworksPage = () => {
         title="Delete Customer Network"
         subtitle={`Are you sure you want to delete - ${selectedRows[0]}?`}
         message="To confirm deletion, please enter <b>deleteme</b>, in the field below:"
-        isLoading={deleteCustomNetworkMutation.isLoading}
+        isLoading={deleteCustomNetworkMutation.isPending}
       />
 
       <PeeringInfoDialog

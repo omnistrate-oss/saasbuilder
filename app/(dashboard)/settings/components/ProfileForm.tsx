@@ -24,7 +24,8 @@ type ProfileFormProps = {
 const ProfileForm: React.FC<ProfileFormProps> = ({ userData, isLoadingUserData, refetchUserData }) => {
   const snackbar = useSnackbar();
 
-  const updateProfileMutation = useMutation((data) => updateProfile(userData?.id, data), {
+  const updateProfileMutation = useMutation({
+    mutationFn: (data) => updateProfile(userData?.id, data),
     onSuccess: () => {
       refetchUserData();
       snackbar.showSuccess("Profile updated successfully");
@@ -127,12 +128,12 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ userData, isLoadingUserData, 
         </div>
 
         <div className="flex items-center justify-end gap-4 mt-5">
-          <Button variant="outlined" onClick={() => formData.resetForm()} disabled={updateProfileMutation.isLoading}>
+          <Button variant="outlined" onClick={() => formData.resetForm()} disabled={updateProfileMutation.isPending}>
             Cancel
           </Button>
-          <Button type="submit" variant="contained" disabled={updateProfileMutation.isLoading}>
+          <Button type="submit" variant="contained" disabled={updateProfileMutation.isPending}>
             Save
-            {updateProfileMutation.isLoading && <LoadingSpinnerSmall />}
+            {updateProfileMutation.isPending && <LoadingSpinnerSmall />}
           </Button>
         </div>
       </Form>

@@ -6,7 +6,9 @@ import { ServiceOffering } from "src/types/serviceOffering";
 
 function useOrgServiceOfferings(queryOptions = {}) {
   const environmentType = useEnvironmentType();
-  const query = useQuery(["org-service-offerings"], () => listServiceOfferings({ environmentType: environmentType }), {
+  const query = useQuery({
+    queryKey: ["org-service-offerings"],
+    queryFn: () => listServiceOfferings({ environmentType: environmentType }),
     select: (data) => {
       const services = data.data?.services || [];
       const serviceOfferings: ServiceOffering[] = [];

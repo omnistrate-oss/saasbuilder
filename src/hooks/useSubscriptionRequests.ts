@@ -5,19 +5,17 @@ import useEnvironmentType from "src/hooks/useEnvironmentType";
 
 const useSubscriptionRequests = (queryOptions = {}) => {
   const environmentType = useEnvironmentType();
-  const query = useQuery(
-    ["subscription-requests"],
-    () =>
+  const query = useQuery({
+    queryKey: ["subscription-requests"],
+    queryFn: () =>
       listSubscriptionRequests({
         environmentType,
       }),
-    {
-      select: (response) => {
-        return response.data.subscriptionRequests;
-      },
-      ...queryOptions,
-    }
-  );
+    select: (response) => {
+      return response.data.subscriptionRequests;
+    },
+    ...queryOptions,
+  });
 
   return query;
 };

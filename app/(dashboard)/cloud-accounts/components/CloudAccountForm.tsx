@@ -100,7 +100,8 @@ const CloudAccountForm = ({
     return subscriptions.filter((sub) => byoaServiceOfferingsObj[sub.serviceId]?.[sub.productTierId]);
   }, [subscriptions, byoaServiceOfferingsObj]);
 
-  const createCloudAccountMutation = useMutation(createResourceInstance, {
+  const createCloudAccountMutation = useMutation({
+    mutationFn: createResourceInstance,
     onSuccess: async (response: any) => {
       const values = formData.values;
       const instanceId = response.data.id;
@@ -513,7 +514,7 @@ const CloudAccountForm = ({
       formData={formData}
       formMode="create"
       onClose={onClose}
-      isFormSubmitting={createCloudAccountMutation.isLoading}
+      isFormSubmitting={createCloudAccountMutation.isPending}
       previewCardTitle="Cloud Account Summary"
     />
   );

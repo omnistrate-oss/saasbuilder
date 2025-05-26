@@ -19,21 +19,17 @@ function useUserData() {
   const loadingStatus = useSelector(selectUserDataLoadingStatus);
   const userData = useSelector(selectUserrootData);
 
-  const query = useQuery(
-    ["user"],
-    () => {
+  const query = useQuery({
+    queryKey: ["user"],
+    queryFn: async () => {
       dispatch(setUserDataLoadingStatus(loadingStatuses.loading));
-      return getUserData();
+      const response = await getUserData();
+      dispatch(setUserData(response.data));
+      dispatch(setUserDataLoadingStatus(loadingStatuses.success));
     },
-    {
-      refetchOnWindowFocus: false,
-      refetchOnMount: false,
-      onSuccess: async (response) => {
-        dispatch(setUserData(response.data));
-        dispatch(setUserDataLoadingStatus(loadingStatuses.success));
-      },
-    }
-  );
+    refetchOnWindowFocus: false,
+    refetchOnMount: false,
+  });
 
   return {
     loadingStatus: loadingStatus,
