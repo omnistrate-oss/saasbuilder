@@ -1,5 +1,5 @@
 import * as React from "react";
-import Checkbox from "@mui/material/Checkbox";
+import MuiCheckbox from "@mui/material/Checkbox";
 import { styled } from "@mui/material/styles";
 
 const UnCheckedIcon = styled("span")(() => ({
@@ -29,9 +29,9 @@ const CheckedIcon = styled(UnCheckedIcon)({
   backgroundRepeat: "no-repeat",
 });
 
-const CustomCheckbox = React.forwardRef(function CustomCheckbox(props, ref) {
+const Checkbox = React.forwardRef(function Checkbox(props, ref) {
   return (
-    <Checkbox
+    <MuiCheckbox
       sx={{
         "&:hover": { bgcolor: "transparent" },
       }}
@@ -46,4 +46,4 @@ const CustomCheckbox = React.forwardRef(function CustomCheckbox(props, ref) {
   );
 });
 
-export default CustomCheckbox;
+export default Checkbox;

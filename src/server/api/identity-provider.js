@@ -14,7 +14,7 @@ function getIdentityProvidersList(payload) {
 }
 
 // function getRenderIdentityProvidersList(payload) {
-//   return axios.post("/identity-provider/render", payload).catch((error) => {
+//   return axios.post("/identity-provider-render", payload).catch((error) => {
 //     console.log("list identity provider error", error);
 //     if (error.response && error.response.status === 401) {
 //       throw new ProviderAuthError();
@@ -24,18 +24,18 @@ function getIdentityProvidersList(payload) {
 //   });
 // }
 
-function getRenderIdentityProvidersList(payload) {
+function getRenderIdentityProvidersList() {
   const dummyData = {
     identityProviders: [
       {
         emailIdentifiers: "company.com",
         id: "idp-12345672",
         identityProviderName: "GitHub",
-        loginButtonIconUrl: "https://example.com/icon.png",
+        loginButtonIconUrl: "https://github.githubassets.com/assets/GitHub-Mark-ea2971cee799.png",
         loginButtonText: "Login with Github",
         name: "Github for my company",
         renderedAuthorizationEndpoint:
-          "https://accounts.google.com/o/oauth2/auth?response_type=code&client_id=205376496935-vtfpdnseqmjhsynlh0bsufl38k0test.apps.googleusercontent.com&redirect_uri=https://example.com/redirect&scope=openid email profile&state=idpName-guid",
+          "https://accounts.google.com/o/oauth2/auth?response_type=code&client_id=624788127633-tjff5dsp8jk62b282fqafpmm6k2ficir.apps.googleusercontent.com&redirect_uri=https://omnistrate-dev-access-ui.fly.dev&scope=openid email profile&state=idpName-guid",
         state: "state",
       },
       {
@@ -46,7 +46,7 @@ function getRenderIdentityProvidersList(payload) {
         loginButtonText: "Login with Google",
         name: "Google for my company",
         renderedAuthorizationEndpoint:
-          "https://accounts.google.com/o/oauth2/auth?response_type=code&client_id=205376496935-vtfpdnseqmjhsynlh0bsufl38k0test.apps.googleusercontent.com&redirect_uri=https://example.com/redirect&scope=openid email profile&state=idpName-guid",
+          "https://accounts.google.com/o/oauth2/auth?response_type=code&client_id=624788127633-tjff5dsp8jk62b282fqafpmm6k2ficir.apps.googleusercontent.com&redirect_uri=https://omnistrate-dev-access-ui.fly.dev&scope=openid email profile&state=idpName-guid",
         state: "state",
       },
       {
@@ -57,7 +57,7 @@ function getRenderIdentityProvidersList(payload) {
         loginButtonText: "",
         name: "Amazon for my company",
         renderedAuthorizationEndpoint:
-          "https://accounts.google.com/o/oauth2/auth?response_type=code&client_id=205376496935-vtfpdnseqmjhsynlh0bsufl38k0test.apps.googleusercontent.com&redirect_uri=https://example.com/redirect&scope=openid email profile&state=idpName-guid",
+          "https://accounts.google.com/o/oauth2/auth?response_type=code&client_id=624788127633-tjff5dsp8jk62b282fqafpmm6k2ficir.apps.googleusercontent.com&redirect_uri=https://omnistrate-dev-access-ui.fly.dev&scope=openid email profile&state=idpName-guid",
         state: "state",
       },
     ],
