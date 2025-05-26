@@ -5,7 +5,7 @@ import { describeServiceOfferingResource } from "../api/serviceOffering";
 function useServiceOfferingResourceSchema(serviceId, resourceId, resourceInstanceId = "none") {
   const isQueryEnabled = Boolean(serviceId && resourceId && resourceInstanceId);
 
-  const resourceSchemeQuery = useQuery({
+  const resourceSchemaQuery = useQuery({
     queryKey: ["resource-schema", serviceId, resourceId, resourceInstanceId],
     queryFn: () => {
       return describeServiceOfferingResource(serviceId, resourceId, resourceInstanceId);
@@ -22,7 +22,7 @@ function useServiceOfferingResourceSchema(serviceId, resourceId, resourceInstanc
     },
   });
 
-  return resourceSchemeQuery;
+  return resourceSchemaQuery;
 }
 
 export default useServiceOfferingResourceSchema;

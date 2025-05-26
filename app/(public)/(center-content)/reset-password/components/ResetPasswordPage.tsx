@@ -48,8 +48,8 @@ const ResetPasswordPage = (props) => {
       setShowSuccess(true);
     },
     onError: (error: any) => {
-      if (error.response.data && error.response.data.message) {
-        const errorMessage = error.response.data.message;
+      const errorMessage = error.response?.data?.message;
+      if (errorMessage) {
         snackbar.showError(errorMessage);
       }
     },

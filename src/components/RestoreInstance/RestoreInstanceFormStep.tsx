@@ -39,7 +39,7 @@ function RestoreInstanceFormStep({
         <RestoreInstanceDateTime formData={restoreFormik} earliestRestoreTime={earliestRestoreTime} />
       </DialogContent>
       <DialogFooter>
-        <Button variant="outlined" disabled={restoreMutation.isLoaing} onClick={handleClose}>
+        <Button variant="outlined" disabled={restoreMutation.isPending} onClick={handleClose}>
           Cancel
         </Button>
 

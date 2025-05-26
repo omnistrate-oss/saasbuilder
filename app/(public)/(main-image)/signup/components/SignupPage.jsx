@@ -83,8 +83,8 @@ const SignupPage = (props) => {
       setShowSuccess(true);
     },
     onError: (error) => {
-      if (error.response.data && error.response.data.message) {
-        const errorMessage = error.response.data.message;
+      const errorMessage = error.response?.data?.message;
+      if (errorMessage) {
         snackbar.showError(errorMessage);
       }
     },

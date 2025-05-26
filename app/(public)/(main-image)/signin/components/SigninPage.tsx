@@ -103,7 +103,7 @@ const SigninPage = (props) => {
 
   const signInMutation = useMutation({
     mutationFn: (payload) => {
-      delete axios.defaults.headers["Authorization"];
+      axios.defaults.headers["Authorization"] = undefined;
       return customerUserSignin(payload);
     },
     onSuccess: (data) => {
@@ -113,7 +113,7 @@ const SigninPage = (props) => {
       handleSignInSuccess(jwtToken);
     },
     onError: (error: any) => {
-      if (error.response.data && error.response.data.message) {
+      if (error.response?.data?.message) {
         const errorMessage = error.response.data.message;
         if (
           errorMessage === "Failed to sign in. Either the credentials are incorrect or the user does not exist" &&

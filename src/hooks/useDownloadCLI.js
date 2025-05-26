@@ -5,8 +5,8 @@ import { saveBlob } from "../utils/saveBlob";
 
 function useDownloadCLI() {
   const downloadCLIMutation = useMutation({
-    mutationFn: (data) => {
-      const response = downloadCLI(data.serviceId, data.serviceApiId, data.subscriptionId);
+    mutationFn: async (data) => {
+      const response = await downloadCLI(data.serviceId, data.serviceApiId, data.subscriptionId);
       const blob = response.data;
       saveBlob(blob, "cli");
     },

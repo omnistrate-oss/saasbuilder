@@ -52,8 +52,7 @@ const useAuditLogs = (queryParams: QueryParams = {}, queryOptions = {}) => {
       return res.data;
     },
     placeholderData: keepPreviousData,
-    initialPageParam: 0,
-    // @ts-ignore
+    initialPageParam: null,
     getNextPageParam: (lastPage) => lastPage.nextPageToken,
     ...queryOptions,
   });

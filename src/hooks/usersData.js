@@ -26,6 +26,7 @@ function useUserData() {
       const response = await getUserData();
       dispatch(setUserData(response.data));
       dispatch(setUserDataLoadingStatus(loadingStatuses.success));
+      return response.data;
     },
     refetchOnWindowFocus: false,
     refetchOnMount: false,
