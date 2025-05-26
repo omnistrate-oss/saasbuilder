@@ -9,6 +9,8 @@ import TextField from "src/components/FormElementsv2/TextField/TextField";
 import SubmitButton from "src/components/NonDashboardComponents/FormElementsV2/SubmitButton";
 import { SetState } from "src/types/common/reactGenerics";
 
+import { useLastLoginDetails } from "../hooks/useLastLoginDetails";
+
 type EmailStepProps = {
   setCurrentStep: SetState<number>;
   formData: FormikProps<{
@@ -21,6 +23,16 @@ type EmailStepProps = {
 
 const EmailStep: FC<EmailStepProps> = (props) => {
   const { setCurrentStep, formData, setShouldRememberLoginDetails, shouldRememberLoginDetails } = props;
+  const { email, loginMethod } = useLastLoginDetails();
+  console.log("Email", email);
+  console.log("loginMethod", loginMethod);
+
+
+  function handleNextClick() {
+    console.log("formValues", formData.values);
+    if (shouldRememberLoginDetails) {
+    }
+  }
 
   return (
     <Stack gap="30px">
@@ -69,9 +81,7 @@ const EmailStep: FC<EmailStepProps> = (props) => {
       <SubmitButton
         data-testid="next-button"
         type="button" // <- important: prevent form submission here
-        onClick={async () => {
-          setCurrentStep(1);
-        }}
+        onClick={handleNextClick}
         loading={false}
       >
         Next

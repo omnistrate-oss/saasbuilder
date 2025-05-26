@@ -1,21 +1,13 @@
-"use client";
-
 import { useEffect, useRef, useState } from "react";
-import dynamic from "next/dynamic";
-import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useRouter } from "next-nprogress-bar";
-import { Box, Checkbox, Stack, Typography } from "@mui/material";
-import { GoogleOAuthProvider } from "@react-oauth/google";
+import { Stack } from "@mui/material";
 import { useMutation } from "@tanstack/react-query";
 import { useFormik } from "formik";
 import Cookies from "js-cookie";
-import ReCAPTCHA from "react-google-recaptcha";
-import * as Yup from "yup";
 
 import { customerUserSignin } from "src/api/customer-user";
 import axios from "src/axios";
-import Logo from "src/components/NonDashboardComponents/Logo";
 import { ENVIRONMENT_TYPES } from "src/constants/environmentTypes";
 import { PAGE_TITLE_MAP } from "src/constants/pageTitleMap";
 import useEnvironmentType from "src/hooks/useEnvironmentType";
@@ -23,44 +15,29 @@ import useSnackbar from "src/hooks/useSnackbar";
 import { useProviderOrgDetails } from "src/providers/ProviderOrgDetailsProvider";
 import { domainsMatch } from "src/utils/compareEmailAndUrlDomains";
 import { getInstancesRoute } from "src/utils/routes";
-import DisplayHeading from "components/NonDashboardComponents/DisplayHeading";
 
-import AccessDeniedAlertDialog from "./AccessDeniedAlertDialog";
+import { createSigninValidationSchema } from "../constants";
+
 import EmailStep from "./EmailStep";
 import IdentityProviders from "./IdentityProviders";
 
-const SignInForm = dynamic(() => import("./SignInForm"), { ssr: false });
+function SignInForm() {
+  const [shouldRememberLoginDetails, setShouldRememberLoginDetails] = useState(false);
+  const [currentStep, setCurrentStep] = useState(0);
+  const [hasCaptchaErrored, setHasCaptchaErrored] = useState(false);
+  const [showAccessDenied, setShowAccessDenied] = useState(false);
 
-const createSigninValidationSchema = Yup.object({
-  email: Yup.string().email("Invalid email address").required("Email is required"),
-  password: Yup.string().required("Password is required"),
-});
-
-const SigninPage = (props) => {
-  const {
-    googleIdentityProvider,
-    githubIdentityProvider,
-    saasBuilderBaseURL,
-    googleReCaptchaSiteKey,
-    isReCaptchaSetup,
-    isPasswordLoginDisabled,
-    identityProvidersList,
-  } = props;
-  const router = useRouter();
-  const searchParams = useSearchParams();
   const environmentType = useEnvironmentType();
   const { orgName, orgLogoURL, orgURL } = useProviderOrgDetails();
+
+  const router = useRouter();
+
+  const searchParams = useSearchParams();
   const redirect_reason = searchParams?.get("redirect_reason");
   const destination = searchParams?.get("destination");
-  const [shouldRememberLoginDetails, setShouldRememberLoginDetails] = useState(false);
-  const [isScriptLoaded, setIsScriptLoaded] = useState(false);
-  const [hasCaptchaErrored, setHasCaptchaErrored] = useState(false);
-  const [currentStep, setCurrentStep] = useState(0);
-
-  const reCaptchaRef = useRef<any>(null);
   const snackbar = useSnackbar();
 
-  const [showAccessDenied, setShowAccessDenied] = useState(false);
+  const reCaptchaRef = useRef<any>(null);
 
   useEffect(() => {
     if (redirect_reason === "idp_auth_error") {
@@ -153,35 +130,25 @@ const SigninPage = (props) => {
     validationSchema: createSigninValidationSchema,
   });
 
-  const { values, touched, errors, handleChange, handleBlur } = formik;
-
-  const shouldHideSignupLink = environmentType !== ENVIRONMENT_TYPES.PROD;
-
   return (
-    <>
-      <Box textAlign="center">
-        {orgLogoURL ? (
-          <Logo src={orgLogoURL} alt={orgName} style={{ width: "120px", height: "auto", maxHeight: "unset" }} />
-        ) : (
-          ""
-        )}
-      </Box>
-      <DisplayHeading mt="24px">Login to your account</DisplayHeading>
-
-      <SignInForm />
-
-      {!shouldHideSignupLink && (
-        <Typography mt="22px" fontWeight="500" fontSize="14px" lineHeight="22px" color="#A0AEC0" textAlign="center">
-          You&apos;re new in here?{" "}
-          <Link href="/signup" style={{ color: "#27A376" }}>
-            Create Account
-          </Link>
-        </Typography>
+    <Stack component="form" gap="32px" mt="44px">
+      {currentStep === 0 && (
+        <EmailStep
+          formData={formik}
+          setCurrentStep={setCurrentStep}
+          setShouldRememberLoginDetails={setShouldRememberLoginDetails}
+          shouldRememberLoginDetails={shouldRememberLoginDetails}
+        />
       )}
 
-      <AccessDeniedAlertDialog open={showAccessDenied} handleClose={() => setShowAccessDenied(false)} />
-    </>
+      {/* {currentStep === 1 && !errors.email && values?.email && (
+        <IdentityProviders
+          isPasswordLoginDisabled={isPasswordLoginDisabled}
+          identityProvidersList={identityProvidersList?.identityProviders}
+        />
+      )} */}
+    </Stack>
   );
-};
+}
 
-export default SigninPage;
+export default SignInForm;
