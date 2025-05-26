@@ -62,7 +62,8 @@ const InstancesTableHeader = ({
 
   const isBillingEnabled = Boolean(billingStatusQuery.data?.enabled);
 
-  const stopInstanceMutation = useMutation(stopResourceInstance, {
+  const stopInstanceMutation = useMutation({
+    mutationFn: stopResourceInstance,
     onSuccess: async () => {
       refetchInstances();
       setSelectedRows([]);
@@ -70,7 +71,8 @@ const InstancesTableHeader = ({
     },
   });
 
-  const startInstanceMutation = useMutation(startResourceInstance, {
+  const startInstanceMutation = useMutation({
+    mutationFn: startResourceInstance,
     onSuccess: async () => {
       refetchInstances();
       setSelectedRows([]);
@@ -78,7 +80,8 @@ const InstancesTableHeader = ({
     },
   });
 
-  const restartInstanceMutation = useMutation(restartResourceInstance, {
+  const restartInstanceMutation = useMutation({
+    mutationFn: restartResourceInstance,
     onSuccess: async () => {
       refetchInstances();
       setSelectedRows([]);
@@ -120,7 +123,7 @@ const InstancesTableHeader = ({
       dataTestId: "stop-button",
       label: "Stop",
       actionType: "secondary",
-      isLoading: stopInstanceMutation.isLoading,
+      isLoading: stopInstanceMutation.isPending,
       isDisabled:
         !selectedInstance ||
         status !== "RUNNING" ||
@@ -150,7 +153,7 @@ const InstancesTableHeader = ({
       dataTestId: "start-button",
       label: "Start",
       actionType: "secondary",
-      isLoading: startInstanceMutation.isLoading,
+      isLoading: startInstanceMutation.isPending,
       isDisabled:
         !selectedInstance ||
         status !== "STOPPED" ||
@@ -251,7 +254,7 @@ const InstancesTableHeader = ({
       other.push({
         dataTestId: "reboot-button",
         label: "Reboot",
-        isLoading: restartInstanceMutation.isLoading,
+        isLoading: restartInstanceMutation.isPending,
         isDisabled:
           !selectedInstance ||
           (status !== "RUNNING" && status !== "FAILED" && status !== "COMPLETE") ||

@@ -1,5 +1,6 @@
 "use client";
 
+import LoadingSpinner from "src/components/LoadingSpinner/LoadingSpinner";
 import { useGlobalData } from "src/providers/GlobalDataProvider";
 
 import useAuditLogs from "../audit-logs/hooks/useAuditLogs";
@@ -9,14 +10,13 @@ import PageContainer from "../components/Layout/PageContainer";
 import PageTitle from "../components/Layout/PageTitle";
 import useInstances from "../instances/hooks/useInstances";
 
-import ClusterLocations from "./components/ClusterLocations";
-import DashboardLogsTableHeader from "./components/DashboardLogsTableHeader";
-import LifecycleStatusChart from "./charts/LifecycleStatusChart";
-import ChartCard from "./components/ChartCard";
+import DeploymentsByAgeChart from "./charts/DeploymentsByAgeChart";
 import DeploymentsByLoadChart from "./charts/DeploymentsByLoadChart";
 import HealthStatusChart from "./charts/HealthStatusChart";
-import DeploymentsByAgeChart from "./charts/DeploymentsByAgeChart";
-import LoadingSpinner from "src/components/LoadingSpinner/LoadingSpinner";
+import LifecycleStatusChart from "./charts/LifecycleStatusChart";
+import ChartCard from "./components/ChartCard";
+import ClusterLocations from "./components/ClusterLocations";
+import DashboardLogsTableHeader from "./components/DashboardLogsTableHeader";
 
 const DashboardPage = () => {
   const { data: instances = [], isLoading: isLoadingInstances } = useInstances();
@@ -80,10 +80,6 @@ const DashboardPage = () => {
         <ChartCard title="Deployments by Month – Last 12 Months" className="lg:col-span-2">
           {isLoadingInstances ? <LoadingSpinner /> : <DeploymentsByAgeChart instances={instances} />}
         </ChartCard>
-
-        {/* <ChartCard title="Deployments By Cloud">
-          <CloudProvidersChart instances={instances} />
-        </ChartCard> */}
       </div>
     </PageContainer>
   );

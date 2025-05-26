@@ -160,7 +160,8 @@ const SubscriptionsPage = () => {
     return subscriptions.find((subscription) => subscription.id === selectedRows[0]);
   }, [selectedRows, subscriptions]);
 
-  const unSubscribeMutation = useMutation(deleteSubscription, {
+  const unSubscribeMutation = useMutation({
+    mutationFn: deleteSubscription,
     onSuccess: () => {
       queryClient.setQueryData(["user-subscriptions"], (oldData: any) => {
         return {
@@ -212,7 +213,7 @@ const SubscriptionsPage = () => {
                 setIsOverlayOpen(true);
                 setOverlayType("unsubscribe-dialog");
               },
-              isUnsubscribing: unSubscribeMutation.isLoading,
+              isUnsubscribing: unSubscribeMutation.isPending,
               count: filteredSubscriptions?.length,
               isFetchingSubscriptions,
               refetchSubscriptions,
@@ -259,7 +260,7 @@ const SubscriptionsPage = () => {
           confirmationText="unsubscribe"
           title="Unsubscribe Service"
           buttonLabel="Unsubscribe"
-          isLoading={unSubscribeMutation.isLoading}
+          isLoading={unSubscribeMutation.isPending}
           subtitle={`Are you sure you want to unsubscribe from ${selectedSubscription?.serviceName}?`}
           message="To confirm, please enter <b>unsubscribe</b>, in the field below:"
         />

@@ -9,20 +9,18 @@ type QueryParams = {
 
 const useToken = (queryParams: QueryParams, queryOptions = {}) => {
   const { instanceId, subscriptionId } = queryParams;
-  const query = useQuery(
-    ["deployment-cell-token", instanceId, subscriptionId],
-    () => {
+  const query = useQuery({
+    queryKey: ["deployment-cell-token", instanceId, subscriptionId],
+    queryFn: () => {
       return getDeploymentCellToken({
         instanceId,
         subscriptionId,
       });
     },
-    {
-      refetchOnWindowFocus: false,
-      select: (response) => response.data,
-      ...queryOptions,
-    }
-  );
+    refetchOnWindowFocus: false,
+    select: (response) => response.data,
+    ...queryOptions,
+  });
 
   return query;
 };

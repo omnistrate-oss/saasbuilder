@@ -17,32 +17,30 @@ function fetchSubscriptionDetails({ subscriptionId, serviceId }) {
 
 function useSubscriptionForProductTierAccess(serviceId, productTierId, subscriptionId) {
   const isQueryEnabled = Boolean(productTierId && serviceId);
-  const query = useQuery(
-    ["user-subscription", productTierId, serviceId, subscriptionId],
-    () => {
+  const query = useQuery({
+    queryKey: ["user-subscription", productTierId, serviceId, subscriptionId],
+    queryFn: () => {
       return fetchSubscriptionDetails({
         subscriptionId,
         serviceId,
       });
     },
-    {
-      enabled: isQueryEnabled,
-      refetchOnWindowFocus: false,
-      select: (response) => {
-        if (subscriptionId) {
-          const isSubscriptionValid = checkSubscriptionIsForProductTier(response?.data, serviceId, productTierId);
-          if (isSubscriptionValid) {
-            return response.data;
-          } else {
-            return null;
-          }
+    enabled: isQueryEnabled,
+    refetchOnWindowFocus: false,
+    select: (response) => {
+      if (subscriptionId) {
+        const isSubscriptionValid = checkSubscriptionIsForProductTier(response?.data, serviceId, productTierId);
+        if (isSubscriptionValid) {
+          return response.data;
         } else {
-          const subscriptionsList = response?.data?.subscriptions;
-          return findSubscriptionByPriority(subscriptionsList, serviceId, productTierId);
+          return null;
         }
-      },
-    }
-  );
+      } else {
+        const subscriptionsList = response?.data?.subscriptions;
+        return findSubscriptionByPriority(subscriptionsList, serviceId, productTierId);
+      }
+    },
+  });
 
   return query;
 }

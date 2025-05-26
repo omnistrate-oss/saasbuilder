@@ -80,29 +80,31 @@ const InviteUsersCard: React.FC<InviteUsersCardProps> = ({ refetchUsers, isFetch
   const snackbar = useSnackbar();
   const { subscriptions, isLoadingSubscriptions } = useGlobalData();
 
-  const createUserInvitesMutation = useMutation(async (data: any) => {
-    try {
-      await Promise.all(
-        data.userInvite.map((d) => {
-          const payload = {
-            email: d.email,
-            roleType: d.roleType,
-          };
+  const createUserInvitesMutation = useMutation({
+    mutationFn: async (data: any) => {
+      try {
+        await Promise.all(
+          data.userInvite.map((d) => {
+            const payload = {
+              email: d.email,
+              roleType: d.roleType,
+            };
 
-          const rootSubscription = subscriptions.find(
-            (sub) => sub.serviceId === d.serviceId && sub.productTierId === d.servicePlanId && sub.roleType === "root"
-          );
-          return inviteSubscriptionUser(rootSubscription?.id, payload);
-        })
-      );
-      snackbar.showSuccess("Invites Sent");
-      // eslint-disable-next-line no-use-before-define
-      formData.resetForm();
-    } catch {
-      snackbar.showError("Some of the invites failed to send. Please review the access permissions and try again.");
-    } finally {
-      refetchUsers();
-    }
+            const rootSubscription = subscriptions.find(
+              (sub) => sub.serviceId === d.serviceId && sub.productTierId === d.servicePlanId && sub.roleType === "root"
+            );
+            return inviteSubscriptionUser(rootSubscription?.id, payload);
+          })
+        );
+        snackbar.showSuccess("Invites Sent");
+        // eslint-disable-next-line no-use-before-define
+        formData.resetForm();
+      } catch {
+        snackbar.showError("Some of the invites failed to send. Please review the access permissions and try again.");
+      } finally {
+        refetchUsers();
+      }
+    },
   });
 
   const formData = useFormik({
@@ -149,10 +151,10 @@ const InviteUsersCard: React.FC<InviteUsersCardProps> = ({ refetchUsers, isFetch
               variant="contained"
               startIcon={<EmailOutlinedIcon />}
               type="submit"
-              disabled={createUserInvitesMutation.isLoading || isFetchingUsers}
+              disabled={createUserInvitesMutation.isPending || isFetchingUsers}
             >
               Send Invites
-              {createUserInvitesMutation.isLoading && <LoadingSpinnerSmall />}
+              {createUserInvitesMutation.isPending && <LoadingSpinnerSmall />}
             </Button>
           </div>
 
@@ -180,7 +182,7 @@ const InviteUsersCard: React.FC<InviteUsersCardProps> = ({ refetchUsers, isFetch
                               value={invite.email}
                               onChange={handleChange}
                               name={`userInvite[${index}].email`}
-                              disabled={createUserInvitesMutation.isLoading || isFetchingUsers}
+                              disabled={createUserInvitesMutation.isPending || isFetchingUsers}
                               sx={{
                                 minWidth: "240px",
                                 flex: 1,
@@ -206,7 +208,7 @@ const InviteUsersCard: React.FC<InviteUsersCardProps> = ({ refetchUsers, isFetch
                               name={`userInvite[${index}].serviceId`}
                               value={invite.serviceId}
                               onBlur={handleBlur}
-                              disabled={createUserInvitesMutation.isLoading || isFetchingUsers}
+                              disabled={createUserInvitesMutation.isPending || isFetchingUsers}
                               onChange={(e) => {
                                 handleChange(e);
                                 setFieldValue(`userInvite[${index}].servicePlanId`, "");
@@ -238,7 +240,7 @@ const InviteUsersCard: React.FC<InviteUsersCardProps> = ({ refetchUsers, isFetch
                               value={invite.servicePlanId}
                               onBlur={handleBlur}
                               onChange={handleChange}
-                              disabled={createUserInvitesMutation.isLoading || isFetchingUsers}
+                              disabled={createUserInvitesMutation.isPending || isFetchingUsers}
                               sx={{ flex: 1, mt: 0 }}
                               displayEmpty
                               renderValue={(value) => {
@@ -266,7 +268,7 @@ const InviteUsersCard: React.FC<InviteUsersCardProps> = ({ refetchUsers, isFetch
                               onChange={handleChange}
                               sx={{ flex: 1, mt: 0 }}
                               displayEmpty
-                              disabled={createUserInvitesMutation.isLoading || isFetchingUsers}
+                              disabled={createUserInvitesMutation.isPending || isFetchingUsers}
                               renderValue={(value) => {
                                 if (value) return value;
                                 return "Role";

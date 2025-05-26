@@ -6,20 +6,18 @@ import useEnvironmentType from "src/hooks/useEnvironmentType";
 const useAllUsers = (queryOptions = {}) => {
   const environmentType = useEnvironmentType();
 
-  const instancesQuery = useQuery(
-    ["users", environmentType],
-    async () => {
+  const instancesQuery = useQuery({
+    queryKey: ["users", environmentType],
+    queryFn: async () => {
       return getAllSubscriptionUsers({
         environmentType,
       });
     },
-    {
-      select: (data) => {
-        return data.data.subscriptionUsers;
-      },
-      ...queryOptions,
-    }
-  );
+    select: (data) => {
+      return data.data.subscriptionUsers;
+    },
+    ...queryOptions,
+  });
   return instancesQuery;
 };
 

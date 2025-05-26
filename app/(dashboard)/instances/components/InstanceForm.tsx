@@ -61,29 +61,28 @@ const InstanceForm = ({
     return instances.filter((instance) => !isCloudAccountInstance(instance));
   }, [instances]);
 
-  const createInstanceMutation = useMutation(
-    async (payload: any) => {
+  const createInstanceMutation = useMutation({
+    mutationFn: async (payload: any) => {
       return createResourceInstance(payload);
     },
-    {
-      onSuccess: (response) => {
-        // Show the Create Instance Dialog
-        setIsOverlayOpen(true);
-        setOverlayType("create-instance-dialog");
-        setCreateInstanceModalData({
-          // @ts-ignore
-          isCustomDNS: formData.values.requestParams?.custom_dns_configuration,
-          instanceId: response.data?.id,
-        });
+    onSuccess: (response) => {
+      // Show the Create Instance Dialog
+      setIsOverlayOpen(true);
+      setOverlayType("create-instance-dialog");
+      setCreateInstanceModalData({
+        // @ts-ignore
+        isCustomDNS: formData.values.requestParams?.custom_dns_configuration,
+        instanceId: response.data?.id,
+      });
 
-        snackbar.showSuccess("Instance created successfully");
-        refetchInstances();
-        formData.resetForm();
-      },
-    }
-  );
+      snackbar.showSuccess("Instance created successfully");
+      refetchInstances();
+      formData.resetForm();
+    },
+  });
 
-  const updateResourceInstanceMutation = useMutation(updateResourceInstance, {
+  const updateResourceInstanceMutation = useMutation({
+    mutationFn: updateResourceInstance,
     onSuccess: () => {
       refetchInstances();
       formData.resetForm();
@@ -538,7 +537,7 @@ const InstanceForm = ({
               data-testid="cancel-button"
               variant="outlined"
               onClick={() => setIsOverlayOpen(false)}
-              disabled={createInstanceMutation.isLoading || updateResourceInstanceMutation.isLoading}
+              disabled={createInstanceMutation.isPending || updateResourceInstanceMutation.isPending}
               sx={{ marginLeft: "auto" }} // Pushes the 2 buttons to the end
             >
               Cancel
@@ -553,14 +552,14 @@ const InstanceForm = ({
                   data-testid="submit-button"
                   variant="contained"
                   disabled={
-                    createInstanceMutation.isLoading ||
-                    updateResourceInstanceMutation.isLoading ||
+                    createInstanceMutation.isPending ||
+                    updateResourceInstanceMutation.isPending ||
                     disableInstanceCreation
                   }
                   type="submit"
                 >
                   {formMode === "create" ? "Create" : "Update"}
-                  {(createInstanceMutation.isLoading || updateResourceInstanceMutation.isLoading) && (
+                  {(createInstanceMutation.isPending || updateResourceInstanceMutation.isPending) && (
                     <LoadingSpinnerSmall />
                   )}
                 </Button>

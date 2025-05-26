@@ -13,7 +13,7 @@ function useLogout() {
   const router = useRouter();
   const dispatch = useDispatch();
   const pathname = usePathname();
-  const QueryClient = useQueryClient();
+  const queryClient = useQueryClient();
 
   // remove token from cookies, remove other user data and redirect to signin
   function handleLogout() {
@@ -31,7 +31,7 @@ function useLogout() {
   useEffect(() => {
     if (pathname === "/signin") {
       dispatch(initialiseUserData());
-      QueryClient.clear();
+      queryClient.clear();
     }
   }, [pathname]);
 

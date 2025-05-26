@@ -28,7 +28,8 @@ type BillingAddressFormProps = {
 const BillingAddressForm: React.FC<BillingAddressFormProps> = ({ userData, isLoadingUserData, refetchUserData }) => {
   const snackbar = useSnackbar();
 
-  const updateProfileMutation = useMutation((data) => updateProfile(userData?.id, data), {
+  const updateProfileMutation = useMutation({
+    mutationFn: (data) => updateProfile(userData?.id, data),
     onSuccess: () => {
       refetchUserData();
       snackbar.showSuccess("Billing address updated successfully");
@@ -62,7 +63,7 @@ const BillingAddressForm: React.FC<BillingAddressFormProps> = ({ userData, isLoa
   });
 
   const { values, handleChange, handleBlur, touched, errors } = formData;
-  const isDisabled = updateProfileMutation.isLoading || isLoadingUserData || userData?.roleType !== "root";
+  const isDisabled = updateProfileMutation.isPending || isLoadingUserData || userData?.roleType !== "root";
 
   const currentCountry = useMemo(() => {
     const alpha3Code = values.address.country;
@@ -201,13 +202,13 @@ const BillingAddressForm: React.FC<BillingAddressFormProps> = ({ userData, isLoa
             onClick={() => {
               formData.resetForm();
             }}
-            disabled={updateProfileMutation.isLoading || isLoadingUserData}
+            disabled={updateProfileMutation.isPending || isLoadingUserData}
           >
             Cancel
           </Button>
-          <Button type="submit" variant="contained" disabled={updateProfileMutation.isLoading || isLoadingUserData}>
+          <Button type="submit" variant="contained" disabled={updateProfileMutation.isPending || isLoadingUserData}>
             Save
-            {updateProfileMutation.isLoading && <LoadingSpinnerSmall />}
+            {updateProfileMutation.isPending && <LoadingSpinnerSmall />}
           </Button>
         </div>
       </Form>
