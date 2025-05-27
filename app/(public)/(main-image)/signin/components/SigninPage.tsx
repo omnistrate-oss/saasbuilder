@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { FC, useEffect, useRef, useState } from "react";
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
@@ -28,6 +28,7 @@ import DisplayHeading from "components/NonDashboardComponents/DisplayHeading";
 import AccessDeniedAlertDialog from "./AccessDeniedAlertDialog";
 import EmailStep from "./EmailStep";
 import IdentityProviders from "./IdentityProviders";
+import { IdentityProvider } from "src/types/identityProvider";
 
 const SignInForm = dynamic(() => import("./SignInForm"), { ssr: false });
 
@@ -36,16 +37,17 @@ const createSigninValidationSchema = Yup.object({
   password: Yup.string().required("Password is required"),
 });
 
-const SigninPage = (props) => {
-  const {
-    googleIdentityProvider,
-    githubIdentityProvider,
-    saasBuilderBaseURL,
-    googleReCaptchaSiteKey,
-    isReCaptchaSetup,
-    isPasswordLoginDisabled,
-    identityProvidersList,
-  } = props;
+type SignInPageProps = {
+  saasBuilderBaseURL: string;
+  googleReCaptchaSiteKey: string | null;
+  isReCaptchaSetup: boolean;
+  isPasswordLoginEnabled: boolean;
+  identityProviders: IdentityProvider[];
+};
+
+const SigninPage: FC<SignInPageProps> = (props) => {
+  const { saasBuilderBaseURL, googleReCaptchaSiteKey, isReCaptchaSetup, isPasswordLoginEnabled, identityProviders } =
+    props;
   const router = useRouter();
   const searchParams = useSearchParams();
   const environmentType = useEnvironmentType();
@@ -168,16 +170,7 @@ const SigninPage = (props) => {
       </Box>
       <DisplayHeading mt="24px">Login to your account</DisplayHeading>
 
-      <SignInForm />
-
-      {!shouldHideSignupLink && (
-        <Typography mt="22px" fontWeight="500" fontSize="14px" lineHeight="22px" color="#A0AEC0" textAlign="center">
-          You&apos;re new in here?{" "}
-          <Link href="/signup" style={{ color: "#27A376" }}>
-            Create Account
-          </Link>
-        </Typography>
-      )}
+      <SignInForm identityProviders={identityProviders} isPasswordLoginEnabled={isPasswordLoginEnabled} />
 
       <AccessDeniedAlertDialog open={showAccessDenied} handleClose={() => setShowAccessDenied(false)} />
     </>

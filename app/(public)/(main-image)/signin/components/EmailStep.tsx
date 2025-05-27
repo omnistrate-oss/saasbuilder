@@ -10,6 +10,7 @@ import SubmitButton from "src/components/NonDashboardComponents/FormElementsV2/S
 import { SetState } from "src/types/common/reactGenerics";
 
 import { useLastLoginDetails } from "../hooks/useLastLoginDetails";
+import { set } from "lodash";
 
 type EmailStepProps = {
   setCurrentStep: SetState<number>;
@@ -23,15 +24,23 @@ type EmailStepProps = {
 
 const EmailStep: FC<EmailStepProps> = (props) => {
   const { setCurrentStep, formData, setShouldRememberLoginDetails, shouldRememberLoginDetails } = props;
-  const { email, loginMethod } = useLastLoginDetails();
-  console.log("Email", email);
-  console.log("loginMethod", loginMethod);
-
+  const { setEmail } = useLastLoginDetails();
 
   function handleNextClick() {
-    console.log("formValues", formData.values);
-    if (shouldRememberLoginDetails) {
-    }
+    formData.validateForm().then((errors) => {
+      const isEmailError = errors.email;
+      if (isEmailError) {
+        formData.setTouched({
+          email: true,
+        });
+        return;
+      }
+
+      if (shouldRememberLoginDetails) {
+        setEmail(formData.values.email);
+        setCurrentStep(1); // Move to the next step
+      }
+    });
   }
 
   return (

@@ -14,39 +14,21 @@ export const metadata: Metadata = {
 };
 
 const Page = async () => {
-  let googleIdentityProvider = null;
-  let githubIdentityProvider = null;
-
-  const identityProvidersList = await getRenderIdentityProvidersList({
+  const identityProvidersResponse = await getRenderIdentityProvidersList({
     environmentType: getEnvironmentType(),
     redirectUrl: "https://omnistrate-dev-access-ui.fly.dev",
   });
+  const identityProviders = identityProvidersResponse.data.identityProviders || [];
 
-  const isPasswordLoginDisabled = Boolean(process.env.DISABLE_PASSWORD_LOGIN);
-
-  console.log("identityProvidersList", identityProvidersList);
-
-  const response = await getIdentityProvidersList();
-  const providers = response.data.identityProviders || [];
-  const googleIDP = providers.find((provider) => provider.identityProviderName === IDENTITY_PROVIDER_TYPES.Google);
-  if (googleIDP) {
-    googleIdentityProvider = googleIDP;
-  }
-
-  const githubIDP = providers.find((provider) => provider.identityProviderName === IDENTITY_PROVIDER_TYPES.GitHub);
-  if (githubIDP) {
-    githubIdentityProvider = githubIDP;
-  }
+  const isPasswordLoginEnabled = !Boolean(process.env.DISABLE_PASSWORD_LOGIN);
 
   return (
     <SigninPage
-      googleIdentityProvider={googleIdentityProvider}
-      githubIdentityProvider={githubIdentityProvider}
       isReCaptchaSetup={checkReCaptchaSetup()}
       saasBuilderBaseURL={getSaaSDomainURL()}
       googleReCaptchaSiteKey={process.env.GOOGLE_RECAPTCHA_SITE_KEY || null}
-      isPasswordLoginDisabled={isPasswordLoginDisabled}
-      identityProvidersList={identityProvidersList}
+      isPasswordLoginEnabled={isPasswordLoginEnabled}
+      identityProviders={identityProviders}
     />
   );
 };

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { FC, useEffect, useRef, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { useRouter } from "next-nprogress-bar";
 import { Stack } from "@mui/material";
@@ -20,12 +20,21 @@ import { createSigninValidationSchema } from "../constants";
 
 import EmailStep from "./EmailStep";
 import IdentityProviders from "./IdentityProviders";
+import { useLastLoginDetails } from "../hooks/useLastLoginDetails";
+import LoginMethodStep from "./LoginMethodStep";
+import { IdentityProvider } from "src/types/identityProvider";
 
-function SignInForm() {
-  const [shouldRememberLoginDetails, setShouldRememberLoginDetails] = useState(false);
-  const [currentStep, setCurrentStep] = useState(0);
+type SignInFormProps = {
+  isPasswordLoginEnabled: boolean;
+  identityProviders: IdentityProvider[];
+};
+
+const SignInForm: FC<SignInFormProps> = ({ identityProviders, isPasswordLoginEnabled }) => {
+  const [shouldRememberLoginDetails, setShouldRememberLoginDetails] = useState(true);
   const [hasCaptchaErrored, setHasCaptchaErrored] = useState(false);
   const [showAccessDenied, setShowAccessDenied] = useState(false);
+  const { email } = useLastLoginDetails();
+  const [currentStep, setCurrentStep] = useState(email ? 1 : 0);
 
   const environmentType = useEnvironmentType();
   const { orgName, orgLogoURL, orgURL } = useProviderOrgDetails();
@@ -122,7 +131,7 @@ function SignInForm() {
 
   const formik = useFormik({
     initialValues: {
-      email: "",
+      email: email || "",
       password: "",
     },
     enableReinitialize: true,
@@ -140,6 +149,19 @@ function SignInForm() {
           shouldRememberLoginDetails={shouldRememberLoginDetails}
         />
       )}
+      {currentStep === 1 && (
+        <LoginMethodStep
+          formData={formik}
+          setCurrentStep={setCurrentStep}
+          identityProviders={identityProviders}
+          isPasswordLoginEnabled={isPasswordLoginEnabled}
+          // hasCaptchaErrored={hasCaptchaErrored}
+          // setHasCaptchaErrored={setHasCaptchaErrored}
+          // reCaptchaRef={reCaptchaRef}
+          // showAccessDenied={showAccessDenied}
+          // setShowAccessDenied={setShowAccessDenied}
+        />
+      )}
 
       {/* {currentStep === 1 && !errors.email && values?.email && (
         <IdentityProviders
@@ -149,6 +171,6 @@ function SignInForm() {
       )} */}
     </Stack>
   );
-}
+};
 
 export default SignInForm;
