@@ -1,7 +1,6 @@
 import { Metadata } from "next";
-import { IDENTITY_PROVIDER_TYPES } from "app/(public)/(main-image)/signin/constants";
 
-import { getIdentityProvidersList, getRenderIdentityProvidersList } from "src/server/api/identity-provider";
+import { getRenderIdentityProvidersList } from "src/server/api/identity-provider";
 import { checkReCaptchaSetup } from "src/server/utils/checkReCaptchaSetup";
 import { getEnvironmentType } from "src/server/utils/getEnvironmentType";
 import { getSaaSDomainURL } from "src/server/utils/getSaaSDomainURL";
@@ -16,7 +15,7 @@ export const metadata: Metadata = {
 const Page = async () => {
   const identityProvidersResponse = await getRenderIdentityProvidersList({
     environmentType: getEnvironmentType(),
-    redirectUrl: "https://omnistrate-dev-access-ui.fly.dev",
+    redirectUrl: getSaaSDomainURL(),
   });
   const identityProviders = identityProvidersResponse.data.identityProviders || [];
 
@@ -26,7 +25,7 @@ const Page = async () => {
     <SigninPage
       isReCaptchaSetup={checkReCaptchaSetup()}
       saasBuilderBaseURL={getSaaSDomainURL()}
-      googleReCaptchaSiteKey={process.env.GOOGLE_RECAPTCHA_SITE_KEY || null}
+      googleReCaptchaSiteKey={process.env.GOOGLE_RECAPTCHA_SITE_KEY || ""}
       isPasswordLoginEnabled={isPasswordLoginEnabled}
       identityProviders={identityProviders}
     />

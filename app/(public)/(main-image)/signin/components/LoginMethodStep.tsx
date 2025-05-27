@@ -1,6 +1,6 @@
 import { FC, ReactNode, useEffect, useMemo, useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { Box, InputAdornment, Stack, styled } from "@mui/material";
@@ -48,6 +48,13 @@ const LoginMethodStep: FC<LoginMethodStepProps> = (props) => {
     isReCaptchaSetup,
     isRecaptchaScriptLoaded,
   } = props;
+
+  const searchParams = useSearchParams();
+  const org = searchParams?.get("org");
+  const orgUrl = searchParams?.get("orgUrl");
+  const email = searchParams?.get("email");
+  const destination = searchParams?.get("destination");
+
   const [idpOptionsExpanded, setIdpOptionsExpanded] = useState(false);
   const router = useRouter();
   const { loginMethod: loginMethodStringified } = useLastLoginDetails();
@@ -112,6 +119,41 @@ const LoginMethodStep: FC<LoginMethodStepProps> = (props) => {
   }, [loginMethodStringified, domainFilteredIdentityProviders, isPasswordLoginEnabled]);
 
   let defaultLoginMethodButton: ReactNode | null = null;
+
+  const invitationInfo: {
+    invitedEmail?: string;
+    legalCompanyName?: string;
+    companyUrl?: string;
+  } = {};
+
+  if (email || org || orgUrl) {
+    if (email) {
+      invitationInfo.invitedEmail = decodeURIComponent(email).trim();
+    }
+    if (org) {
+      invitationInfo.legalCompanyName = decodeURIComponent(org).trim();
+    }
+    if (orgUrl) {
+      invitationInfo.companyUrl = decodeURIComponent(orgUrl).trim();
+    }
+  }
+
+  function handleIDPButtonClick(idp: IdentityProvider) {
+    const state = idp.state;
+    const redirectUri = idp.renderedAuthorizationEndpoint + `&state=${state}`;
+
+    const localAuthState = {
+      nonce: state,
+      destination: destination,
+      identityProvider: idp.name,
+      invitationInfo,
+    };
+
+    const encodedLocalAuthState = Buffer.from(JSON.stringify(localAuthState), "utf8").toString("base64");
+
+    sessionStorage.setItem("authState", encodedLocalAuthState);
+    router.push(redirectUri);
+  }
 
   const passwordLoginButton = (
     <Button
@@ -250,9 +292,7 @@ const LoginMethodStep: FC<LoginMethodStepProps> = (props) => {
                     size="xlarge"
                     startIcon={LoginButtonIcon}
                     sx={{ justifyContent: "flex-start" }}
-                    onClick={() => {
-                      router.push(idp.renderedAuthorizationEndpoint);
-                    }}
+                    onClick={handleIDPButtonClick}
                   >
                     <Box display="inline-flex" flexGrow={1} justifyContent="center">
                       {" "}

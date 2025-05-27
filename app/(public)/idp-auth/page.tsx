@@ -9,12 +9,14 @@ import Cookies from "js-cookie";
 import { customerSignInWithIdentityProvider } from "src/api/customer-user";
 import axios from "src/axios";
 import { PAGE_TITLE_MAP } from "src/constants/pageTitleMap";
+import useEnvironmentType from "src/hooks/useEnvironmentType";
 import useSnackbar from "src/hooks/useSnackbar";
 import { getInstancesRoute } from "src/utils/routes";
 import LoadingSpinner from "components/LoadingSpinner/LoadingSpinner";
 import { Text } from "components/Typography/Typography";
 
 const IDPAuthPage = () => {
+  const environmentType = useEnvironmentType();
   const router = useRouter();
   const searchParams = useSearchParams();
   const state = searchParams?.get("state");
@@ -80,6 +82,8 @@ const IDPAuthPage = () => {
           const payload = {
             authorizationCode: code,
             identityProviderName: identityProvider,
+            environmentType: environmentType,
+            state: state,
             ...invitationInfo,
           };
 
