@@ -82,7 +82,7 @@ const InstancesPage = () => {
 
   const isBillingEnabled = Boolean(billingStatusQuery.data?.enabled);
 
-  const { data: billingConfig, isLoading: isLoadingPaymentConfiguration } = useBillingDetails(isBillingEnabled);
+  const { data: billingConfig, isPending: isLoadingPaymentConfiguration } = useBillingDetails(isBillingEnabled);
   const isPaymentConfigured = Boolean(billingConfig?.paymentConfigured);
 
   // const [statusFilters, setStatusFilters] = useState(getInitialFilterState());
@@ -349,7 +349,7 @@ const InstancesPage = () => {
 
   const {
     data: instances = [],
-    isLoading: isLoadingInstances,
+    isPending: isLoadingInstances,
     isFetching: isFetchingInstances,
     refetch: refetchInstances,
   } = useInstances();

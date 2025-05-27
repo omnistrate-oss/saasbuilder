@@ -21,7 +21,7 @@ const EventsPage = () => {
   const [selectedServiceId, setSelectedServiceId] = useState<string>("");
   const [selectedEventTypes, setSelectedEventTypes] = useState<EventType[]>([]);
 
-  const { serviceOfferings, isLoadingSubscriptions } = useGlobalData();
+  const { serviceOfferings, isSubscriptionsPending } = useGlobalData();
 
   const {
     data: auditLogs,
@@ -80,7 +80,7 @@ const EventsPage = () => {
           fetchNextPage={fetchNextPage}
           hasNextPage={hasNextPage}
           isFetchingNextPage={isFetchingNextPage}
-          isLoading={isFetchingAuditLogs || isLoadingSubscriptions}
+          isLoading={isFetchingAuditLogs || isSubscriptionsPending}
           pageIndex={pageIndex}
           setPageIndex={setPageIndex}
           showPagination={true}

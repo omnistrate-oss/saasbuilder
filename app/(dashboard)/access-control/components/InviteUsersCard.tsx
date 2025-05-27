@@ -78,7 +78,7 @@ type InviteUsersCardProps = {
 
 const InviteUsersCard: React.FC<InviteUsersCardProps> = ({ refetchUsers, isFetchingUsers }) => {
   const snackbar = useSnackbar();
-  const { subscriptions, isLoadingSubscriptions } = useGlobalData();
+  const { subscriptions, isSubscriptionsPending } = useGlobalData();
 
   const createUserInvitesMutation = useMutation({
     mutationFn: async (data: any) => {
@@ -204,7 +204,7 @@ const InviteUsersCard: React.FC<InviteUsersCardProps> = ({ refetchUsers, isFetch
                             <Select
                               data-testid="service-select"
                               required
-                              isLoading={isLoadingSubscriptions}
+                              isLoading={isSubscriptionsPending}
                               name={`userInvite[${index}].serviceId`}
                               value={invite.serviceId}
                               onBlur={handleBlur}
@@ -235,7 +235,7 @@ const InviteUsersCard: React.FC<InviteUsersCardProps> = ({ refetchUsers, isFetch
                             <Select
                               data-testid="subscription-plan-select"
                               required
-                              isLoading={isLoadingSubscriptions}
+                              isLoading={isSubscriptionsPending}
                               name={`userInvite[${index}].servicePlanId`}
                               value={invite.servicePlanId}
                               onBlur={handleBlur}

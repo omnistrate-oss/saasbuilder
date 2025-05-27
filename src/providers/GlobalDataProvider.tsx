@@ -13,17 +13,17 @@ import { SubscriptionRequest } from "src/types/subscriptionRequest";
 
 type Context = {
   subscriptions: Subscription[];
-  isLoadingSubscriptions: boolean;
+  isSubscriptionsPending: boolean;
   isFetchingSubscriptions: boolean;
   refetchSubscriptions: () => void; // TODO Later: Add a Proper Type
 
   subscriptionRequests: SubscriptionRequest[];
-  isLoadingSubscriptionRequests: boolean;
+  isSubscriptionRequestsPending: boolean;
   isFetchingSubscriptionRequests: boolean;
   refetchSubscriptionRequests: () => void; // TODO Later: Add a Proper Type
 
   serviceOfferings: ServiceOffering[];
-  isLoadingServiceOfferings: boolean;
+  isServiceOfferingsPending: boolean;
   isFetchingServiceOfferings: boolean;
   refetchServiceOfferings: () => void; // TODO Later: Add a Proper Type
 
@@ -47,21 +47,21 @@ export const useGlobalData = () => {
 const GlobalDataProvider = ({ children }: { children: React.ReactNode }) => {
   const {
     data: subscriptions = [],
-    isLoading: isLoadingSubscriptions,
+    isPending: isSubscriptionsPending,
     isFetching: isFetchingSubscriptions,
     refetch: refetchSubscriptions,
   } = useSubscriptions();
 
   const {
     data: subscriptionRequests = [],
-    isLoading: isLoadingSubscriptionRequests,
+    isPending: isSubscriptionRequestsPending,
     isFetching: isFetchingSubscriptionRequests,
     refetch: refetchSubscriptionRequests,
   } = useSubscriptionRequests();
 
   const {
     data: serviceOfferings = [],
-    isLoading: isLoadingServiceOfferings,
+    isPending: isServiceOfferingsPending,
     isFetching: isFetchingServiceOfferings,
     refetch: refetchServiceOfferings,
   } = useOrgServiceOfferings();
@@ -110,17 +110,17 @@ const GlobalDataProvider = ({ children }: { children: React.ReactNode }) => {
     <GlobalDataContext.Provider
       value={{
         subscriptions,
-        isLoadingSubscriptions,
+        isSubscriptionsPending,
         isFetchingSubscriptions,
         refetchSubscriptions,
 
         subscriptionRequests,
-        isLoadingSubscriptionRequests,
+        isSubscriptionRequestsPending,
         isFetchingSubscriptionRequests,
         refetchSubscriptionRequests,
 
         serviceOfferings,
-        isLoadingServiceOfferings,
+        isServiceOfferingsPending,
         isFetchingServiceOfferings,
         refetchServiceOfferings,
 

@@ -34,7 +34,7 @@ const NotificationsTable = () => {
 
   const {
     data: instances = [],
-    isLoading: isLoadingInstances,
+    isPending: isInstancesPending,
     isFetching: isFetchingInstances,
     refetch: refetchInstances,
   } = useInstances();
@@ -139,7 +139,7 @@ const NotificationsTable = () => {
         refetchNotifications: refetchInstances,
         isFetchingNotifications: isFetchingInstances,
       }}
-      isLoading={isLoadingInstances}
+      isLoading={isInstancesPending}
     />
   );
 };
