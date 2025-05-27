@@ -34,7 +34,7 @@ function DeleteAccount() {
   const { handleLogout } = useLogout();
   const snackbar = useSnackbar();
 
-  const { data: instances = [], isLoading: isLoadingInstances } = useInstances();
+  const { data: instances = [], isPending: isIstancesPending } = useInstances();
 
   function handleDialogOpen() {
     setConfirmationDialogOpen(true);
@@ -56,7 +56,7 @@ function DeleteAccount() {
     },
   });
 
-  if (isLoadingInstances) return <LoadingSpinner />;
+  if (isIstancesPending) return <LoadingSpinner />;
 
   return (
     <>

@@ -24,10 +24,10 @@ const columnHelper = createColumnHelper<SubscriptionUsageRow>();
 
 type SubscriptionUsageTableProps = {
   rows: SubscriptionUsageRow[];
-  isLoadingSubscriptionsUsage: boolean;
+  isSubscriptionsUsagePending: boolean;
 };
 
-const SubscriptionUsageTable: FC<SubscriptionUsageTableProps> = ({ rows, isLoadingSubscriptionsUsage }) => {
+const SubscriptionUsageTable: FC<SubscriptionUsageTableProps> = ({ rows, isSubscriptionsUsagePending }) => {
   const columns = useMemo(() => {
     return [
       //@ts-ignore
@@ -129,7 +129,7 @@ const SubscriptionUsageTable: FC<SubscriptionUsageTableProps> = ({ rows, isLoadi
         borderBottomLeftRadius: "12px",
         borderTop: "1px solid #E4E7EC",
       }}
-      isLoading={isLoadingSubscriptionsUsage}
+      isLoading={isSubscriptionsUsagePending}
       hidePagination={rows.length < 11}
     />
   );

@@ -52,7 +52,7 @@ const CloudAccountForm = ({
     serviceOfferingsObj,
     subscriptions,
     subscriptionsObj,
-    isLoadingSubscriptions,
+    isSubscriptionsPending,
   } = useGlobalData();
 
   const allInstances: ResourceInstance[] = instances;
@@ -381,7 +381,7 @@ const CloudAccountForm = ({
                   field={{
                     name: "subscriptionId",
                     value: values.subscriptionId,
-                    isLoading: isLoadingSubscriptions,
+                    isLoading: isSubscriptionsPending,
                     disabled: formMode !== "create",
                     emptyMenuText: !serviceId
                       ? "Select a service"

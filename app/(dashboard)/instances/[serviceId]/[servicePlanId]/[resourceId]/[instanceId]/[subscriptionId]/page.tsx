@@ -142,7 +142,7 @@ const InstanceDetailsPage = ({
     );
   }
 
-  if (isFetchingServiceOfferings || isFetchingSubscriptions || resourceInstanceQuery.isLoading) {
+  if (isFetchingServiceOfferings || isFetchingSubscriptions || resourceInstanceQuery.isPending) {
     return (
       <PageContainer>
         <LoadingSpinner />
@@ -246,7 +246,7 @@ const InstanceDetailsPage = ({
           createdAt={resourceInstanceData.createdAt}
           modifiedAt={resourceInstanceData.modifiedAt}
           resultParameters={resourceInstanceData.resultParameters}
-          isLoading={resourceSchemaQuery.isLoading || resourceInstanceQuery.isLoading}
+          isLoading={resourceSchemaQuery.isPending || resourceInstanceQuery.isPending}
           resultParametersSchema={resourceSchemaQuery?.data?.DESCRIBE?.outputParameters}
           serviceOffering={offering}
           subscriptionId={subscriptionId}
@@ -287,7 +287,7 @@ const InstanceDetailsPage = ({
           nodes={resourceInstanceData.nodes}
           refetchData={resourceInstanceQuery.refetch}
           isRefetching={resourceInstanceQuery.isRefetching}
-          isLoading={resourceInstanceQuery.isLoading}
+          isLoading={resourceInstanceQuery.isPending}
           serviceOffering={offering}
           resourceKey={resourceKey}
           resourceInstanceId={instanceId}

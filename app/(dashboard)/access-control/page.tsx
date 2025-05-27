@@ -43,7 +43,7 @@ const AccessControlPage = () => {
   const [overlayType, setOverlayType] = useState<Overlay>("delete-dialog");
   const [isOverlayOpen, setIsOverlayOpen] = useState<boolean>(false);
   const [selectedUser, setSelectedUser] = useState<SubscriptionUser | null>(null);
-  const { subscriptions, isLoadingSubscriptions } = useGlobalData();
+  const { subscriptions, isSubscriptionsPending } = useGlobalData();
 
   useEffect(() => {
     if (searchUserId) {
@@ -229,7 +229,7 @@ const AccessControlPage = () => {
             count: filteredUsers.length,
             isFetchingUsers,
           }}
-          isLoading={isFetchingUsers || isLoadingSubscriptions}
+          isLoading={isFetchingUsers || isSubscriptionsPending}
           tableStyles={{
             "& thead th:first-of-type, & tbody td:first-of-type": {
               paddingLeft: "24px",

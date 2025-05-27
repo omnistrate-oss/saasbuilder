@@ -115,7 +115,7 @@ const CloudAccountsPage = () => {
 
   const {
     data: instances = [],
-    isLoading: isLoadingInstances,
+    isPending: isInstancesPending,
     isFetching: isFetchingInstances,
     refetch: refetchInstances,
   } = useInstances();
@@ -530,7 +530,7 @@ const CloudAccountsPage = () => {
             isFetchingInstances: isFetchingInstances,
             serviceModelType: selectedInstanceOffering?.serviceModelType,
           }}
-          isLoading={isLoadingInstances}
+          isLoading={isInstancesPending}
           selectionMode="single"
           selectedRows={selectedRows}
           onRowSelectionChange={setSelectedRows}

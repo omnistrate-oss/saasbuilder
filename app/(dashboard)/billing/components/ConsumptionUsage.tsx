@@ -81,7 +81,7 @@ const ConsumptionUsage: FC<ConsumptionUsageProps> = (props) => {
   const {
     data: subscriptionUsageHashmap,
     isFetched: isSubscriptionUsageFetched,
-    isLoading: isLoadingSubscriptionsUsage,
+    isPending: isSubscriptionsUsagePending,
   } = useMultiSubscriptionUsage({
     subscriptionIds,
   });
@@ -157,7 +157,7 @@ const ConsumptionUsage: FC<ConsumptionUsageProps> = (props) => {
         </div>
       </div>
       <Collapse in={showUsageBreakdown}>
-        <SubscriptionUsageTable rows={rows} isLoadingSubscriptionsUsage={isLoadingSubscriptionsUsage} />
+        <SubscriptionUsageTable rows={rows} isSubscriptionsUsagePending={isSubscriptionsUsagePending} />
       </Collapse>
     </div>
   );
