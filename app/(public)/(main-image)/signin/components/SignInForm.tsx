@@ -5,6 +5,7 @@ import { Stack } from "@mui/material";
 import { useMutation } from "@tanstack/react-query";
 import { useFormik } from "formik";
 import Cookies from "js-cookie";
+import ReCAPTCHA from "react-google-recaptcha";
 
 import { customerUserSignin } from "src/api/customer-user";
 import axios from "src/axios";
@@ -13,32 +14,39 @@ import { PAGE_TITLE_MAP } from "src/constants/pageTitleMap";
 import useEnvironmentType from "src/hooks/useEnvironmentType";
 import useSnackbar from "src/hooks/useSnackbar";
 import { useProviderOrgDetails } from "src/providers/ProviderOrgDetailsProvider";
+import { IdentityProvider } from "src/types/identityProvider";
 import { domainsMatch } from "src/utils/compareEmailAndUrlDomains";
 import { getInstancesRoute } from "src/utils/routes";
 
 import { createSigninValidationSchema } from "../constants";
-
-import EmailStep from "./EmailStep";
-import IdentityProviders from "./IdentityProviders";
 import { useLastLoginDetails } from "../hooks/useLastLoginDetails";
+
+import AccessDeniedAlertDialog from "./AccessDeniedAlertDialog";
+import EmailStep from "./EmailStep";
 import LoginMethodStep from "./LoginMethodStep";
-import { IdentityProvider } from "src/types/identityProvider";
 
 type SignInFormProps = {
   isPasswordLoginEnabled: boolean;
   identityProviders: IdentityProvider[];
+  isReCaptchaSetup: boolean;
+  googleReCaptchaSiteKey: string;
 };
 
-const SignInForm: FC<SignInFormProps> = ({ identityProviders, isPasswordLoginEnabled }) => {
+const SignInForm: FC<SignInFormProps> = ({
+  identityProviders,
+  isPasswordLoginEnabled,
+  isReCaptchaSetup,
+  googleReCaptchaSiteKey,
+}) => {
   const [shouldRememberLoginDetails, setShouldRememberLoginDetails] = useState(true);
   const [hasCaptchaErrored, setHasCaptchaErrored] = useState(false);
   const [showAccessDenied, setShowAccessDenied] = useState(false);
   const { email } = useLastLoginDetails();
   const [currentStep, setCurrentStep] = useState(email ? 1 : 0);
-
+  const [isRecaptchaScriptLoaded, setIsRecaptchaScriptLoaded] = useState(false);
   const environmentType = useEnvironmentType();
-  const { orgName, orgLogoURL, orgURL } = useProviderOrgDetails();
-
+  const { orgURL } = useProviderOrgDetails();
+  const { setLoginMethod } = useLastLoginDetails();
   const router = useRouter();
 
   const searchParams = useSearchParams();
@@ -58,7 +66,7 @@ const SignInForm: FC<SignInFormProps> = ({ identityProviders, isPasswordLoginEna
     /*eslint-disable-next-line react-hooks/exhaustive-deps*/
   }, [redirect_reason]);
 
-  function handleSignInSuccess(jwtToken) {
+  function handlePasswordSignInSuccess(jwtToken) {
     function isValidDestination(destination) {
       const decodedURL = decodeURIComponent(destination);
       const isAllowedPath = Boolean(PAGE_TITLE_MAP[decodedURL]);
@@ -86,17 +94,20 @@ const SignInForm: FC<SignInFormProps> = ({ identityProviders, isPasswordLoginEna
     }
   }
 
-  const signInMutation = useMutation(
+  const passwordSignInMutation = useMutation(
     (payload) => {
       delete axios.defaults.headers["Authorization"];
       return customerUserSignin(payload);
     },
     {
       onSuccess: (data) => {
+        setLoginMethod({
+          methodType: "Password",
+        });
         /*eslint-disable-next-line no-use-before-define*/
         formik.resetForm();
         const jwtToken = data.data.jwtToken;
-        handleSignInSuccess(jwtToken);
+        handlePasswordSignInSuccess(jwtToken);
       },
       onError: (error: any) => {
         if (error.response.data && error.response.data.message) {
@@ -126,7 +137,7 @@ const SignInForm: FC<SignInFormProps> = ({ identityProviders, isPasswordLoginEna
       data["reCaptchaToken"] = token;
     }
 
-    signInMutation.mutate(data);
+    passwordSignInMutation.mutate(data);
   }
 
   const formik = useFormik({
@@ -155,20 +166,26 @@ const SignInForm: FC<SignInFormProps> = ({ identityProviders, isPasswordLoginEna
           setCurrentStep={setCurrentStep}
           identityProviders={identityProviders}
           isPasswordLoginEnabled={isPasswordLoginEnabled}
-          // hasCaptchaErrored={hasCaptchaErrored}
-          // setHasCaptchaErrored={setHasCaptchaErrored}
-          // reCaptchaRef={reCaptchaRef}
-          // showAccessDenied={showAccessDenied}
-          // setShowAccessDenied={setShowAccessDenied}
+          isPasswordSignInLoading={passwordSignInMutation.isLoading}
+          isReCaptchaSetup={isReCaptchaSetup}
+          isRecaptchaScriptLoaded={isRecaptchaScriptLoaded}
         />
       )}
-
-      {/* {currentStep === 1 && !errors.email && values?.email && (
-        <IdentityProviders
-          isPasswordLoginDisabled={isPasswordLoginDisabled}
-          identityProvidersList={identityProvidersList?.identityProviders}
+      {isReCaptchaSetup && (
+        // @ts-ignore
+        <ReCAPTCHA
+          size="invisible"
+          sitekey={googleReCaptchaSiteKey}
+          ref={reCaptchaRef}
+          asyncScriptOnLoad={() => {
+            setIsRecaptchaScriptLoaded(true);
+          }}
+          onErrored={() => {
+            setHasCaptchaErrored(true);
+          }}
         />
-      )} */}
+      )}
+      <AccessDeniedAlertDialog open={showAccessDenied} handleClose={() => setShowAccessDenied(false)} />
     </Stack>
   );
 };

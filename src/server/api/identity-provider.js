@@ -29,10 +29,32 @@ function getRenderIdentityProvidersList() {
     data: {
       identityProviders: [
         {
+          emailIdentifiers: "omnistrate.com",
+          id: "idp-12345672",
+          identityProviderName: "GitHub",
+          // loginButtonIconUrl: "https://github.githubassets.com/assets/GitHub-Mark-ea2971cee799.png",
+          loginButtonText: "Login with Github",
+          name: "Github for my company",
+          renderedAuthorizationEndpoint:
+            "https://accounts.google.com/o/oauth2/auth?response_type=code&client_id=624788127633-tjff5dsp8jk62b282fqafpmm6k2ficir.apps.googleusercontent.com&redirect_uri=https://omnistrate-dev-access-ui.fly.dev&scope=openid email profile&state=idpName-guid",
+          state: "state",
+        },
+        {
+          emailIdentifiers: "omnistrate.com",
+          id: "idp-12345678",
+          identityProviderName: "Google",
+          // loginButtonIconUrl: "https://example.com/icon.png",
+          loginButtonText: "Login with Google",
+          name: "Google for my company",
+          renderedAuthorizationEndpoint:
+            "https://accounts.google.com/o/oauth2/auth?response_type=code&client_id=624788127633-tjff5dsp8jk62b282fqafpmm6k2ficir.apps.googleusercontent.com&redirect_uri=https://omnistrate-dev-access-ui.fly.dev&scope=openid email profile&state=idpName-guid",
+          state: "state",
+        },
+        {
           emailIdentifiers: "company.com",
           id: "idp-12345672",
           identityProviderName: "GitHub",
-          loginButtonIconUrl: "https://github.githubassets.com/assets/GitHub-Mark-ea2971cee799.png",
+          // loginButtonIconUrl: "https://github.githubassets.com/assets/GitHub-Mark-ea2971cee799.png",
           loginButtonText: "Login with Github",
           name: "Github for my company",
           renderedAuthorizationEndpoint:
@@ -43,24 +65,14 @@ function getRenderIdentityProvidersList() {
           emailIdentifiers: "company.com",
           id: "idp-12345678",
           identityProviderName: "Google",
-          loginButtonIconUrl: "https://example.com/icon.png",
+          // loginButtonIconUrl: "https://example.com/icon.png",
           loginButtonText: "Login with Google",
           name: "Google for my company",
           renderedAuthorizationEndpoint:
             "https://accounts.google.com/o/oauth2/auth?response_type=code&client_id=624788127633-tjff5dsp8jk62b282fqafpmm6k2ficir.apps.googleusercontent.com&redirect_uri=https://omnistrate-dev-access-ui.fly.dev&scope=openid email profile&state=idpName-guid",
           state: "state",
         },
-        {
-          emailIdentifiers: "company.com",
-          id: "idp-12345675",
-          identityProviderName: "AmazonCognito",
-          loginButtonIconUrl: "",
-          loginButtonText: "",
-          name: "Amazon for my company",
-          renderedAuthorizationEndpoint:
-            "https://accounts.google.com/o/oauth2/auth?response_type=code&client_id=624788127633-tjff5dsp8jk62b282fqafpmm6k2ficir.apps.googleusercontent.com&redirect_uri=https://omnistrate-dev-access-ui.fly.dev&scope=openid email profile&state=idpName-guid",
-          state: "state",
-        },
+
       ],
     }
   

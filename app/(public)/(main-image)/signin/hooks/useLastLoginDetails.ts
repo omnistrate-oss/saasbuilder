@@ -9,7 +9,7 @@ export function useLastLoginDetails() {
   //Password or some IDP
   function setLoginMethod(loginMethod: {
     //'Password' or IDP type eg 'Google', 'Github'
-    methodType: string;
+    methodType: "Password" | string;
     idpName?: string;
   }) {
     const stringified = JSON.stringify(loginMethod);

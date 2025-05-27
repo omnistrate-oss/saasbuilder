@@ -10,7 +10,6 @@ import SubmitButton from "src/components/NonDashboardComponents/FormElementsV2/S
 import { SetState } from "src/types/common/reactGenerics";
 
 import { useLastLoginDetails } from "../hooks/useLastLoginDetails";
-import { set } from "lodash";
 
 type EmailStepProps = {
   setCurrentStep: SetState<number>;

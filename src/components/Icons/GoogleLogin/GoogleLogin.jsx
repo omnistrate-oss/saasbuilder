@@ -1,5 +1,5 @@
 function GoogleLoginIcon(props) {
-  const { disabled, width = 32, height = 32 } = props;
+  const { disabled, width = 24, height = 24 } = props;
 
   return (
     <svg width={width} height={height} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
