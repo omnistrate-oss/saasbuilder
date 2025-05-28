@@ -355,19 +355,16 @@ export const getNetworkConfigurationFields = (
       value: values.network_type || "",
       type: "radio",
       required: true,
-      disabled: formMode !== "create",
       options: [
         {
           dataTestId: "public-radio",
           label: "Public",
           value: "PUBLIC",
-          disabled: formMode !== "create",
         },
         {
           dataTestId: "private-radio",
           label: "Private",
           value: "INTERNAL",
-          disabled: formMode !== "create",
         },
       ],
       previewValue: values.network_type,

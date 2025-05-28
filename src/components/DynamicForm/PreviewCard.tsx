@@ -85,8 +85,8 @@ const FieldValue = ({ field, formData }: { field: Field; formData: any }) => {
           {label}
         </Text>
       </div>
-      <div className="col-span-3 flex items-baseline">
-        <div style={{ margin: "0 8px 0px 0px" }}>:</div>
+      <div className="col-span-3 flex items-baseline gap-2">
+        <div style={{ marginTop: "-3px" }}>:</div>
         <div style={{ maxWidth: "100%" }}>{previewValue ? renderPreviewValue() : renderValue()}</div>
       </div>
     </>
