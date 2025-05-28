@@ -72,6 +72,7 @@ const LoginMethodStep: FC<LoginMethodStepProps> = (props) => {
       if (idp.emailIdentifiers === undefined || idp.emailIdentifiers === "") return true;
 
       const emailIdentifiersList = idp.emailIdentifiers.split(",").map((identifier) => identifier.trim());
+
       return emailIdentifiersList.some((identifier) => {
         return identifier === emailDomain;
       });
@@ -98,16 +99,13 @@ const LoginMethodStep: FC<LoginMethodStepProps> = (props) => {
           selectedPreferredLoginMethod = "Password";
         } else if (lastLoginIdpName || lastLoginMethodType) {
           //check if the identity providers list has the preferredIdpName
-          let matchingIdp: IdentityProvider | undefined;
-          if (lastLoginIdpName) {
-            matchingIdp = domainFilteredIdentityProviders.find(
-              (idp) => idp.name.toLowerCase() === lastLoginIdpName.toLowerCase()
-            );
-          } else {
-            matchingIdp = domainFilteredIdentityProviders.find(
-              (idp) => idp.identityProviderName.toLowerCase() === lastLoginMethodType.toLowerCase()
-            );
-          }
+          // let matchingIdp: IdentityProvider | undefined;
+
+          const matchingIdp = domainFilteredIdentityProviders.find(
+            (idp) =>
+              idp.name.toLowerCase() === lastLoginIdpName.toLowerCase() &&
+              idp.identityProviderName.toLowerCase() === lastLoginMethodType.toLowerCase()
+          );
 
           if (matchingIdp) {
             selectedPreferredLoginMethod = matchingIdp.identityProviderName;
@@ -158,9 +156,10 @@ const LoginMethodStep: FC<LoginMethodStepProps> = (props) => {
     }
   }
 
-  const otherIdpSignInOptions = domainFilteredIdentityProviders.filter(
-    (idp) => idp.name !== preferredLoginMethod?.name
-  );
+  const otherIdpSignInOptions = domainFilteredIdentityProviders.filter((idp) => {
+    const match = idp.name === preferredLoginMethod?.name && idp.identityProviderName === preferredLoginMethod?.type;
+    return !Boolean(match);
+  });
 
   const numOtherSignInOptions =
     otherIdpSignInOptions.length +
@@ -195,7 +194,6 @@ const LoginMethodStep: FC<LoginMethodStepProps> = (props) => {
     const encodedLocalAuthState = Buffer.from(JSON.stringify(localAuthState), "utf8").toString("base64");
 
     sessionStorage.setItem("authState", encodedLocalAuthState);
-
     setLoginMethod({
       methodType: idp.identityProviderName,
       idpName: idp.name,
@@ -224,15 +222,11 @@ const LoginMethodStep: FC<LoginMethodStepProps> = (props) => {
     if (preferredLoginMethod.type?.toLocaleLowerCase() === "password") {
       defaultLoginMethodButton = passwordLoginButton;
     } else {
-      let matchingIdp = domainFilteredIdentityProviders.find(
-        (idp) => idp.name.toLowerCase() === preferredLoginMethod.name?.toLowerCase()
+      const matchingIdp = domainFilteredIdentityProviders.find(
+        (idp) =>
+          idp.name.toLowerCase() === preferredLoginMethod.name?.toLowerCase() &&
+          idp.identityProviderName.toLowerCase() === preferredLoginMethod.type?.toLowerCase()
       );
-
-      if (!matchingIdp) {
-        matchingIdp = domainFilteredIdentityProviders.find(
-          (idp) => idp.identityProviderName.toLowerCase() === preferredLoginMethod.type?.toLowerCase()
-        );
-      }
 
       if (matchingIdp) {
         const loginButtonIconUrl = matchingIdp.loginButtonIconUrl;
@@ -258,7 +252,7 @@ const LoginMethodStep: FC<LoginMethodStepProps> = (props) => {
             }}
           >
             <Box display="inline-flex" flexGrow={1} justifyContent="center">
-              {matchingIdp.loginButtonText}
+              {matchingIdp.loginButtonText || `Continue with ${matchingIdp.name || matchingIdp.identityProviderName}`}
             </Box>
           </Button>
         );
@@ -349,8 +343,7 @@ const LoginMethodStep: FC<LoginMethodStepProps> = (props) => {
                   }}
                 >
                   <Box display="inline-flex" flexGrow={1} justifyContent="center">
-                    {" "}
-                    {idp.loginButtonText}
+                    {idp.loginButtonText || `Continue with ${idp.name || idp.identityProviderName}`}
                   </Box>
                 </Button>
               );
