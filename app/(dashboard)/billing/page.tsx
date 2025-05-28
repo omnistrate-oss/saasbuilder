@@ -32,11 +32,11 @@ const BillingPage = () => {
 
   const isBillingEnabled = Boolean(billingStatusQuery.data?.enabled);
 
-  const { isLoading: isLoadingBillingDetails, data: billingDetails, error } = useBillingDetails(isBillingEnabled);
+  const { isPending: isBillingDetailsPending, data: billingDetails, error } = useBillingDetails(isBillingEnabled);
 
-  const { data: consumptionUsageData, isLoading: isLoadingConsumptionData } = useConsumptionUsage();
+  const { data: consumptionUsageData, isPending: isConsumptionDataPending } = useConsumptionUsage();
 
-  const { data: invoicesData, isLoading: isLoadingInvoices } = useConsumptionInvoices();
+  const { data: invoicesData, isPending: isInvoicesPending } = useConsumptionInvoices();
 
   const invoices = useMemo(() => invoicesData?.invoices || [], [invoicesData]);
 
@@ -87,7 +87,7 @@ const BillingPage = () => {
     }
   }
 
-  const isLoading = isLoadingBillingDetails || isLoadingConsumptionData || isLoadingInvoices;
+  const isLoading = isBillingDetailsPending || isConsumptionDataPending || isInvoicesPending;
 
   if (isLoading) return <LoadingSpinner />;
 

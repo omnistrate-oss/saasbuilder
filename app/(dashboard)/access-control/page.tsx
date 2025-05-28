@@ -43,7 +43,7 @@ const AccessControlPage = () => {
   const [overlayType, setOverlayType] = useState<Overlay>("delete-dialog");
   const [isOverlayOpen, setIsOverlayOpen] = useState<boolean>(false);
   const [selectedUser, setSelectedUser] = useState<SubscriptionUser | null>(null);
-  const { subscriptions, isLoadingSubscriptions } = useGlobalData();
+  const { subscriptions, isSubscriptionsPending } = useGlobalData();
 
   useEffect(() => {
     if (searchUserId) {
@@ -180,7 +180,8 @@ const AccessControlPage = () => {
     ];
   }, [subscriptionsObj]);
 
-  const deleteUserMutation = useMutation((payload: any) => revokeSubscriptionUser(payload.subscriptionId, payload), {
+  const deleteUserMutation = useMutation({
+    mutationFn: (payload: any) => revokeSubscriptionUser(payload.subscriptionId, payload),
     onSuccess: async () => {
       // TODO Later: Set the Query Data Directly without Refetching
       refetchUsers();
@@ -228,7 +229,7 @@ const AccessControlPage = () => {
             count: filteredUsers.length,
             isFetchingUsers,
           }}
-          isLoading={isFetchingUsers || isLoadingSubscriptions}
+          isLoading={isFetchingUsers || isSubscriptionsPending}
           tableStyles={{
             "& thead th:first-of-type, & tbody td:first-of-type": {
               paddingLeft: "24px",
@@ -252,7 +253,7 @@ const AccessControlPage = () => {
         }}
         confirmationText="remove"
         title="Remove Access"
-        isLoading={deleteUserMutation.isLoading}
+        isLoading={deleteUserMutation.isPending}
         buttonLabel="Remove Access"
         subtitle={`Are you sure you want remove the ${
           selectedUser?.roleType

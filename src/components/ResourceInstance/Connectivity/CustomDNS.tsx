@@ -283,7 +283,7 @@ const CustomDNS: FC<EndpointProps> = (props) => {
                         }}
                         endIcon={<PlayIcon color="rgba(255, 255, 255, 1)" />}
                       >
-                        Verify {addCustomDNSMutation?.isLoading && <LoadingSpinnerSmall />}
+                        Verify {addCustomDNSMutation.isPending && <LoadingSpinnerSmall />}
                       </Button>
                     </>
                   )}
@@ -337,7 +337,7 @@ const CustomDNS: FC<EndpointProps> = (props) => {
               title="Delete Endpoint Alias"
               subtitle={deleteMessage}
               message="To confirm deletion, please enter <b>deleteme</b>, in the field below:"
-              isLoading={removeCustomDNSMutation?.isLoading}
+              isLoading={removeCustomDNSMutation.isPending}
             />
           )}
         </Card>

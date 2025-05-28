@@ -70,14 +70,14 @@ const BackupsTableHeader: FC<BackupsTableHeaderProps> = ({
               padding: "10px 14px !important",
             }}
             startIcon={<RefreshIcon />}
-            disabled={isRefetching || restoreMutation.isLoading || isRestoreDisabled}
-            disabledMessage={restoreMutation.isLoading ? "Restoring backup..." : "Please select a backup to restore"}
+            disabled={isRefetching || restoreMutation.isPending || isRestoreDisabled}
+            disabledMessage={restoreMutation.isPending ? "Restoring backup..." : "Please select a backup to restore"}
             onClick={() => {
               restoreMutation.mutate();
             }}
           >
             Restore
-            {restoreMutation.isLoading && <LoadingSpinnerSmall sx={{ color: "#7F56D9", marginLeft: "12px" }} />}
+            {restoreMutation.isPending && <LoadingSpinnerSmall sx={{ color: "#7F56D9", marginLeft: "12px" }} />}
           </Button>
         </Stack>
       </Stack>

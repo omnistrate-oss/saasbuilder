@@ -1,5 +1,6 @@
 "use client";
 
+import LoadingSpinner from "src/components/LoadingSpinner/LoadingSpinner";
 import { useGlobalData } from "src/providers/GlobalDataProvider";
 
 import useAuditLogs from "../audit-logs/hooks/useAuditLogs";
@@ -9,17 +10,16 @@ import PageContainer from "../components/Layout/PageContainer";
 import PageTitle from "../components/Layout/PageTitle";
 import useInstances from "../instances/hooks/useInstances";
 
-import ClusterLocations from "./components/ClusterLocations";
-import DashboardLogsTableHeader from "./components/DashboardLogsTableHeader";
-import LifecycleStatusChart from "./charts/LifecycleStatusChart";
-import ChartCard from "./components/ChartCard";
+import DeploymentsByAgeChart from "./charts/DeploymentsByAgeChart";
 import DeploymentsByLoadChart from "./charts/DeploymentsByLoadChart";
 import HealthStatusChart from "./charts/HealthStatusChart";
-import DeploymentsByAgeChart from "./charts/DeploymentsByAgeChart";
-import LoadingSpinner from "src/components/LoadingSpinner/LoadingSpinner";
+import LifecycleStatusChart from "./charts/LifecycleStatusChart";
+import ChartCard from "./components/ChartCard";
+import ClusterLocations from "./components/ClusterLocations";
+import DashboardLogsTableHeader from "./components/DashboardLogsTableHeader";
 
 const DashboardPage = () => {
-  const { data: instances = [], isLoading: isLoadingInstances } = useInstances();
+  const { data: instances = [], isPending: isInstancesPending } = useInstances();
   const { isFetchingSubscriptions } = useGlobalData();
 
   const { data: dashboardLogs, isFetching: isFetchingDashboardLogs } = useAuditLogs({
@@ -33,7 +33,7 @@ const DashboardPage = () => {
         Dashboard
       </PageTitle>
 
-      <ClusterLocations resourceInstances={instances} isFetchingInstances={isLoadingInstances} />
+      <ClusterLocations resourceInstances={instances} isFetchingInstances={isInstancesPending} />
 
       <div className="mt-8">
         <EventsTable
@@ -65,25 +65,21 @@ const DashboardPage = () => {
 
       <div className="mt-8 grid lg:grid-cols-3 gap-6">
         <ChartCard title="Deployments by Lifecycle Stage">
-          {isLoadingInstances ? <LoadingSpinner /> : <LifecycleStatusChart instances={instances} />}
+          {isInstancesPending ? <LoadingSpinner /> : <LifecycleStatusChart instances={instances} />}
         </ChartCard>
 
         <ChartCard title="Deployment Health Status">
-          {isLoadingInstances ? <LoadingSpinner /> : <HealthStatusChart instances={instances} />}
+          {isInstancesPending ? <LoadingSpinner /> : <HealthStatusChart instances={instances} />}
         </ChartCard>
         <ChartCard title="Deployments by System Load">
-          {isLoadingInstances ? <LoadingSpinner /> : <DeploymentsByLoadChart instances={instances} />}
+          {isInstancesPending ? <LoadingSpinner /> : <DeploymentsByLoadChart instances={instances} />}
         </ChartCard>
       </div>
 
       <div className="mt-8">
         <ChartCard title="Deployments by Month – Last 12 Months" className="lg:col-span-2">
-          {isLoadingInstances ? <LoadingSpinner /> : <DeploymentsByAgeChart instances={instances} />}
+          {isInstancesPending ? <LoadingSpinner /> : <DeploymentsByAgeChart instances={instances} />}
         </ChartCard>
-
-        {/* <ChartCard title="Deployments By Cloud">
-          <CloudProvidersChart instances={instances} />
-        </ChartCard> */}
       </div>
     </PageContainer>
   );

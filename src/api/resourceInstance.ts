@@ -36,6 +36,7 @@ export const updateResourceInstance = (payload) => {
     `/resource-instance/${payload.serviceProviderId}/${payload.serviceKey}/${payload.serviceAPIVersion}/${payload.serviceEnvironmentKey}/${payload.serviceModelKey}/${payload.productTierKey}/${payload.resourceKey}/${payload.id}?subscriptionId=${payload.subscriptionId}`,
     {
       requestParams: payload.requestParams,
+      network_type: payload.network_type,
     },
     { params: queryParams }
   );

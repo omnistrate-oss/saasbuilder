@@ -21,7 +21,7 @@ type NodesTableHeaderProps = {
   disabledGenerateTokenButton: boolean;
   onGenerateTokenClick?: () => void;
   handleFailover: (nodeId: string, resourceKey: string) => void;
-  failoverMutation: { isLoading: boolean };
+  failoverMutation: { isPending: boolean };
   searchText: string;
   setSearchText: (text: string) => void;
 };
@@ -88,7 +88,7 @@ const NodesTableHeader: React.FC<NodesTableHeaderProps> = ({
               }}
             >
               Failover
-              {failoverMutation.isLoading && <LoadingSpinnerSmall sx={{ marginLeft: "12px" }} />}
+              {failoverMutation.isPending && <LoadingSpinnerSmall sx={{ marginLeft: "12px" }} />}
             </Button>
           )}
 

@@ -13,19 +13,16 @@ function useAccessInstanceAuditLogs(queryParams: QueryParams = {}, queryOptions:
   const { instanceId, subscriptionId } = queryParams;
   const enabled = Boolean(instanceId && subscriptionId);
 
-  const query: UseQueryResult<AccessEvent[]> = useQuery(
-    ["instanceLogsAccess", instanceId, subscriptionId],
-    () => getResourceInstanceEvents(instanceId, subscriptionId),
-    {
-      enabled: enabled,
-      refetchOnWindowFocus: false,
-      onError: () => {},
-      select: (response: AxiosResponse) => {
-        return response.data.events || [];
-      },
-      ...queryOptions,
-    }
-  );
+  const query: UseQueryResult<AccessEvent[]> = useQuery({
+    queryKey: ["instanceLogsAccess", instanceId, subscriptionId],
+    queryFn: () => getResourceInstanceEvents(instanceId, subscriptionId),
+    enabled: enabled,
+    refetchOnWindowFocus: false,
+    select: (response: AxiosResponse) => {
+      return response.data.events || [];
+    },
+    ...queryOptions,
+  });
 
   return query;
 }

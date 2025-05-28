@@ -52,7 +52,7 @@ const CloudAccountForm = ({
     serviceOfferingsObj,
     subscriptions,
     subscriptionsObj,
-    isLoadingSubscriptions,
+    isSubscriptionsPending,
   } = useGlobalData();
 
   const allInstances: ResourceInstance[] = instances;
@@ -100,7 +100,8 @@ const CloudAccountForm = ({
     return subscriptions.filter((sub) => byoaServiceOfferingsObj[sub.serviceId]?.[sub.productTierId]);
   }, [subscriptions, byoaServiceOfferingsObj]);
 
-  const createCloudAccountMutation = useMutation(createResourceInstance, {
+  const createCloudAccountMutation = useMutation({
+    mutationFn: createResourceInstance,
     onSuccess: async (response: any) => {
       const values = formData.values;
       const instanceId = response.data.id;
@@ -380,7 +381,7 @@ const CloudAccountForm = ({
                   field={{
                     name: "subscriptionId",
                     value: values.subscriptionId,
-                    isLoading: isLoadingSubscriptions,
+                    isLoading: isSubscriptionsPending,
                     disabled: formMode !== "create",
                     emptyMenuText: !serviceId
                       ? "Select a service"
@@ -513,7 +514,7 @@ const CloudAccountForm = ({
       formData={formData}
       formMode="create"
       onClose={onClose}
-      isFormSubmitting={createCloudAccountMutation.isLoading}
+      isFormSubmitting={createCloudAccountMutation.isPending}
       previewCardTitle="Cloud Account Summary"
     />
   );

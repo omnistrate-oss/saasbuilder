@@ -10,26 +10,21 @@ export default function useAvailabilityZone(
   queryOptions = {}
 ) {
   const isQueryEnabled = Boolean(regionCode && cloudProviderName && hasCustomAvailabilityZoneField);
-  const query = useQuery(
-    ["cloud-providers-custom-regions", regionCode, cloudProviderName],
-    async () => {
+  const query = useQuery({
+    queryKey: ["cloud-providers-custom-regions", regionCode, cloudProviderName],
+    queryFn: async () => {
       const response = await getAvailabilityZone(cloudProviderName!, regionCode!);
 
       return response;
     },
-    {
-      enabled: isQueryEnabled,
-      refetchOnWindowFocus: false,
-      refetchOnMount: true,
-      select: (response) => {
-        return response.data;
-      },
-      onError: (error) => {
-        console.error(error);
-      },
-      ...queryOptions,
-    }
-  );
+    enabled: isQueryEnabled,
+    refetchOnWindowFocus: false,
+    refetchOnMount: true,
+    select: (response) => {
+      return response.data;
+    },
+    ...queryOptions,
+  });
 
   return query;
 }

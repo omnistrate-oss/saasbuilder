@@ -37,25 +37,23 @@ const ResetPasswordPage = (props) => {
   const [hasCaptchaErrored, setHasCaptchaErrored] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
 
-  const resetPasswordMutation = useMutation(
-    (payload: any) => {
+  const resetPasswordMutation = useMutation({
+    mutationFn: (payload: any) => {
       setShowSuccess(false);
       return customerUserResetPassword(payload);
     },
-    {
-      onSuccess: () => {
-        /*eslint-disable-next-line no-use-before-define*/
-        formik.resetForm();
-        setShowSuccess(true);
-      },
-      onError: (error: any) => {
-        if (error.response.data && error.response.data.message) {
-          const errorMessage = error.response.data.message;
-          snackbar.showError(errorMessage);
-        }
-      },
-    }
-  );
+    onSuccess: () => {
+      /*eslint-disable-next-line no-use-before-define*/
+      formik.resetForm();
+      setShowSuccess(true);
+    },
+    onError: (error: any) => {
+      const errorMessage = error.response?.data?.message;
+      if (errorMessage) {
+        snackbar.showError(errorMessage);
+      }
+    },
+  });
 
   async function handleFormSubmit(values) {
     const data = {};
@@ -150,7 +148,7 @@ const ResetPasswordPage = (props) => {
           type="submit"
           onClick={formik.handleSubmit}
           disabled={!formik.isValid || (isReCaptchaSetup && !isScriptLoaded)}
-          loading={resetPasswordMutation.isLoading}
+          loading={resetPasswordMutation.isPending}
         >
           Submit
         </SubmitButton>

@@ -82,7 +82,7 @@ const InstancesPage = () => {
 
   const isBillingEnabled = Boolean(billingStatusQuery.data?.enabled);
 
-  const { data: billingConfig, isLoading: isLoadingPaymentConfiguration } = useBillingDetails(isBillingEnabled);
+  const { data: billingConfig, isPending: isLoadingPaymentConfiguration } = useBillingDetails(isBillingEnabled);
   const isPaymentConfigured = Boolean(billingConfig?.paymentConfigured);
 
   // const [statusFilters, setStatusFilters] = useState(getInitialFilterState());
@@ -349,7 +349,7 @@ const InstancesPage = () => {
 
   const {
     data: instances = [],
-    isLoading: isLoadingInstances,
+    isPending: isLoadingInstances,
     isFetching: isFetchingInstances,
     refetch: refetchInstances,
   } = useInstances();
@@ -442,19 +442,17 @@ const InstancesPage = () => {
     };
   }, [selectedInstance, selectedInstanceOffering, selectedInstanceSubscription, selectedResource]);
 
-  const deleteInstanceMutation = useMutation(
-    () => {
+  const deleteInstanceMutation = useMutation({
+    mutationFn: () => {
       return deleteResourceInstance(selectedInstanceData);
     },
-    {
-      onSuccess: () => {
-        setSelectedRows([]);
-        refetchInstances();
-        setIsOverlayOpen(false);
-        snackbar.showSuccess("Deleting deployment instance...");
-      },
-    }
-  );
+    onSuccess: () => {
+      setSelectedRows([]);
+      refetchInstances();
+      setIsOverlayOpen(false);
+      snackbar.showSuccess("Deleting deployment instance...");
+    },
+  });
 
   // const instancesFilterCount = {
   //   failed: failedInstances.length,
@@ -636,7 +634,7 @@ const InstancesPage = () => {
         title="Delete Instance"
         subtitle={`Are you sure you want to delete - ${selectedRows[0]}?`}
         message="To confirm, please enter <b>deleteme</b>, in the field below:"
-        isLoading={deleteInstanceMutation.isLoading}
+        isLoading={deleteInstanceMutation.isPending}
       />
 
       <CapacityDialog

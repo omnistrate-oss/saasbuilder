@@ -366,8 +366,8 @@ function DisconnectAccountConfigDialog(props) {
     }
   }, [disconnectState, setDisconnectState, instance?.status]);
 
-  const accountConfigMutation = useMutation(
-    () => {
+  const accountConfigMutation = useMutation({
+    mutationFn: () => {
       const requestPayload = {
         subscriptionId: instance?.subscriptionId,
         instanceId: instance?.id,
@@ -376,16 +376,14 @@ function DisconnectAccountConfigDialog(props) {
       };
       return disconnected(requestPayload);
     },
-    {
-      onSuccess: () => {
-        refetchInstances();
-        snackbar.showSuccess("Disconnecting cloud account");
-        setDisconnectState(stateAccountConfigStepper.check);
-        // eslint-disable-next-line no-use-before-define
-        formik.resetForm();
-      },
-    }
-  );
+    onSuccess: () => {
+      refetchInstances();
+      snackbar.showSuccess("Disconnecting cloud account");
+      setDisconnectState(stateAccountConfigStepper.check);
+      // eslint-disable-next-line no-use-before-define
+      formik.resetForm();
+    },
+  });
   const formik = useFormik({
     initialValues: {
       disconnect: "",
@@ -447,11 +445,11 @@ function DisconnectAccountConfigDialog(props) {
                 height: "40px !important",
                 padding: "10px 14px !important",
               }}
-              disabled={isFetching || accountConfigMutation.isLoading}
+              disabled={isFetching || accountConfigMutation.isPending}
               bgColor={buttonColor}
               onClick={formik.handleSubmit}
             >
-              {"Disconnect"} {isFetching || (accountConfigMutation.isLoading && <LoadingSpinnerSmall />)}
+              {"Disconnect"} {isFetching || (accountConfigMutation.isPending && <LoadingSpinnerSmall />)}
             </Button>
           )}
           {disconnectState === stateAccountConfigStepper.check && (

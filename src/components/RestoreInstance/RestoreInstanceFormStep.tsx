@@ -39,17 +39,17 @@ function RestoreInstanceFormStep({
         <RestoreInstanceDateTime formData={restoreFormik} earliestRestoreTime={earliestRestoreTime} />
       </DialogContent>
       <DialogFooter>
-        <Button variant="outlined" disabled={restoreMutation.isLoaing} onClick={handleClose}>
+        <Button variant="outlined" disabled={restoreMutation.isPending} onClick={handleClose}>
           Cancel
         </Button>
 
         <Button
           variant="contained"
-          disabled={restoreMutation.isLoading || !restoreFormik.isValid}
+          disabled={restoreMutation.isPending || !restoreFormik.isValid}
           onClick={restoreFormik.handleSubmit}
         >
           Restore
-          {restoreMutation.isLoading && <CircularProgress size={16} sx={{ marginLeft: "8px" }} />}
+          {restoreMutation.isPending && <CircularProgress size={16} sx={{ marginLeft: "8px" }} />}
         </Button>
       </DialogFooter>
     </>

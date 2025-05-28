@@ -204,18 +204,20 @@ const SubscriptionPlanRadio: React.FC<SubscriptionPlanRadioProps> = ({
       }, {});
   }, [subscriptionRequests]);
 
-  const subscribeMutation = useMutation((payload: any) => {
-    if (payload.AutoApproveSubscription) {
-      return createSubscriptions({
-        productTierId: payload.productTierId,
-        serviceId: payload.serviceId,
-      });
-    } else {
-      return createSubscriptionRequest({
-        productTierId: payload.productTierId,
-        serviceId: payload.serviceId,
-      });
-    }
+  const subscribeMutation = useMutation({
+    mutationFn: (payload: any) => {
+      if (payload.AutoApproveSubscription) {
+        return createSubscriptions({
+          productTierId: payload.productTierId,
+          serviceId: payload.serviceId,
+        });
+      } else {
+        return createSubscriptionRequest({
+          productTierId: payload.productTierId,
+          serviceId: payload.serviceId,
+        });
+      }
+    },
   });
 
   if (!servicePlans.length) {
