@@ -238,7 +238,7 @@ const InstanceForm = ({
         delete data.requestParams.custom_network_id;
         delete data.requestParams.custom_availability_zone;
 
-        if (!Object.keys(requestParams).length) {
+        if (!Object.keys(requestParams).length && data.network_type === selectedInstance?.network_type) {
           return snackbar.showError("Please update at least one field before submitting");
         }
 
