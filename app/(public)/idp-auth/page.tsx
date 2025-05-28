@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Stack } from "@mui/material";
 import { Buffer } from "buffer";
@@ -22,10 +22,12 @@ const IDPAuthPage = () => {
   const state = searchParams?.get("state");
   const code = searchParams?.get("code");
   const snackbar = useSnackbar();
+  const isAPICallInprogress = useRef(false);
 
   const handleSignIn = useCallback(
     async (payload, destination) => {
       try {
+        isAPICallInprogress.current = true;
         const response = await customerSignInWithIdentityProvider(payload);
         const jwtToken = response.data.jwtToken;
         sessionStorage.removeItem("authState");
@@ -63,18 +65,16 @@ const IDPAuthPage = () => {
 
   useEffect(() => {
     if (state && code) {
-      const decodedAuthStateString = Buffer.from(state, "base64").toString("utf8");
       try {
-        const authState = JSON.parse(decodedAuthStateString);
-
         //get local auth state from session storage and compare the nonce values
         const localAuthStateString = sessionStorage.getItem("authState");
         //decode from base64 to utf8 string
         const decodedLocalAuthStateString = Buffer.from(localAuthStateString || "", "base64").toString("utf8");
 
         const localAuthState = JSON.parse(decodedLocalAuthStateString);
-
-        if (localAuthState.nonce === authState.nonce) {
+        // console.log("localAuthState.nonce", localAuthState.nonce);
+        // console.log("authState.nonce", state);
+        if (localAuthState.nonce === state) {
           const identityProvider = localAuthState.identityProvider;
           const invitationInfo = localAuthState.invitationInfo || {};
           const destination = localAuthState.destination;
@@ -86,8 +86,9 @@ const IDPAuthPage = () => {
             state: state,
             ...invitationInfo,
           };
-
-          handleSignIn(payload, destination);
+          if (isAPICallInprogress.current !== true) {
+            handleSignIn(payload, destination);
+          }
         }
       } catch (error) {
         console.log(error);

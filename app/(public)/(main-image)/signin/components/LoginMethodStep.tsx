@@ -11,6 +11,7 @@ import FieldLabel from "src/components/FormElements/FieldLabel/FieldLabel";
 import FieldContainer from "src/components/FormElementsv2/FieldContainer/FieldContainer";
 import TextField from "src/components/FormElementsv2/TextField/TextField";
 import { Text } from "src/components/Typography/Typography";
+import extractQueryParam from "src/constants/extractQueryParam";
 import { SetState } from "src/types/common/reactGenerics";
 import { IdentityProvider } from "src/types/identityProvider";
 
@@ -54,17 +55,22 @@ const LoginMethodStep: FC<LoginMethodStepProps> = (props) => {
   const orgUrl = searchParams?.get("orgUrl");
   const email = searchParams?.get("email");
   const destination = searchParams?.get("destination");
-
+  const { setLoginMethod } = useLastLoginDetails();
   const [idpOptionsExpanded, setIdpOptionsExpanded] = useState(false);
   const router = useRouter();
   const { loginMethod: loginMethodStringified } = useLastLoginDetails();
   const userEmail = formData.values.email;
   const emailDomain = userEmail.split("@")[1] || "";
-  const [preferredLoginMethodName, setPreferredLoginMethodName] = useState<string | null>(null);
+  const [preferredLoginMethod, setPreferredLoginMethod] = useState<{
+    type: string;
+    name?: string;
+  } | null>(null);
   const [viewType, setViewType] = useState<"password-login" | "login-options">("login-options");
 
   const domainFilteredIdentityProviders = useMemo(() => {
     return identityProviders.filter((idp) => {
+      if (idp.emailIdentifiers === undefined || idp.emailIdentifiers === "") return true;
+
       const emailIdentifiersList = idp.emailIdentifiers.split(",").map((identifier) => identifier.trim());
       return emailIdentifiersList.some((identifier) => {
         return identifier === emailDomain;
@@ -75,43 +81,57 @@ const LoginMethodStep: FC<LoginMethodStepProps> = (props) => {
   //set default sign in method using data from last login stored in localStorage
   useEffect(() => {
     //'Password' or some IDP type
-    let preferredLoginMethod;
-    let preferredIdpName;
-    let selectedPreferredLoginMethod: string | null = null;
+    let lastLoginMethodType;
+    let lastLoginIdpName;
+
+    let selectedPreferredLoginMethod: string | undefined;
+    let selectedPreferredIdpName: string | undefined;
 
     if (loginMethodStringified) {
       try {
         const loginMethod = JSON.parse(loginMethodStringified);
         const { methodType, idpName } = loginMethod;
-        preferredLoginMethod = methodType;
-        preferredIdpName = idpName;
+        lastLoginMethodType = methodType;
+        lastLoginIdpName = idpName;
 
-        if (preferredLoginMethod && preferredLoginMethod.toLowerCase() === "password") {
+        if (lastLoginMethodType && lastLoginMethodType.toLowerCase() === "password") {
           selectedPreferredLoginMethod = "Password";
-        } else if (preferredIdpName && !preferredLoginMethod) {
-          if (preferredIdpName && preferredIdpName.length > 0) {
-            //check if the identity providers list has the preferredIdpName
-            const matchingIdp = domainFilteredIdentityProviders.find(
-              (idp) => idp.name.toLowerCase() === preferredIdpName.toLowerCase()
+        } else if (lastLoginIdpName || lastLoginMethodType) {
+          //check if the identity providers list has the preferredIdpName
+          let matchingIdp: IdentityProvider | undefined;
+          if (lastLoginIdpName) {
+            matchingIdp = domainFilteredIdentityProviders.find(
+              (idp) => idp.name.toLowerCase() === lastLoginIdpName.toLowerCase()
             );
-            if (matchingIdp) {
-              selectedPreferredLoginMethod = matchingIdp.name;
-            }
+          } else {
+            matchingIdp = domainFilteredIdentityProviders.find(
+              (idp) => idp.identityProviderName.toLowerCase() === lastLoginMethodType.toLowerCase()
+            );
+          }
+
+          if (matchingIdp) {
+            selectedPreferredLoginMethod = matchingIdp.identityProviderName;
+            selectedPreferredIdpName = matchingIdp.name;
           }
         }
       } catch {}
     } else {
       // Default to first IDP if no preferred login method is found
       if (domainFilteredIdentityProviders.length > 0) {
-        selectedPreferredLoginMethod = domainFilteredIdentityProviders[0].name;
+        selectedPreferredLoginMethod = domainFilteredIdentityProviders[0].identityProviderName;
+        selectedPreferredIdpName = domainFilteredIdentityProviders[0].name;
       } else {
         if (isPasswordLoginEnabled) {
           selectedPreferredLoginMethod = "Password";
         }
       }
     }
+
     if (selectedPreferredLoginMethod) {
-      setPreferredLoginMethodName(selectedPreferredLoginMethod);
+      setPreferredLoginMethod({
+        type: selectedPreferredLoginMethod,
+        name: selectedPreferredIdpName,
+      });
       if (selectedPreferredLoginMethod.toLowerCase() === "password") {
         setViewType("password-login");
       }
@@ -138,21 +158,49 @@ const LoginMethodStep: FC<LoginMethodStepProps> = (props) => {
     }
   }
 
-  function handleIDPButtonClick(idp: IdentityProvider) {
-    const state = idp.state;
-    const redirectUri = idp.renderedAuthorizationEndpoint + `&state=${state}`;
+  const otherIdpSignInOptions = domainFilteredIdentityProviders.filter(
+    (idp) => idp.name !== preferredLoginMethod?.name
+  );
 
-    const localAuthState = {
-      nonce: state,
+  const numOtherSignInOptions =
+    otherIdpSignInOptions.length +
+    (isPasswordLoginEnabled && preferredLoginMethod?.type?.toLowerCase() !== "password" ? 1 : 0);
+
+  function handleIDPButtonClick(idp: IdentityProvider) {
+    //check if state query param is present in the renderdAuthorizationEndpoint
+    const stateFromURL = extractQueryParam(idp.renderedAuthorizationEndpoint, "state");
+
+    const state = idp.state;
+    let redirectURL = idp.renderedAuthorizationEndpoint;
+
+    if (!stateFromURL && state) {
+      // If state is not present in the URL, append it
+      redirectURL += (redirectURL.includes("?") ? "&" : "?") + `state=${state}`;
+    }
+
+    const localAuthState: {
+      destination: string | undefined | null;
+      identityProvider: string;
+      invitationInfo: any;
+      nonce?: string;
+    } = {
       destination: destination,
-      identityProvider: idp.name,
+      identityProvider: idp.name || idp.identityProviderName,
       invitationInfo,
     };
+    if (stateFromURL || state) {
+      localAuthState.nonce = stateFromURL || state;
+    }
 
     const encodedLocalAuthState = Buffer.from(JSON.stringify(localAuthState), "utf8").toString("base64");
 
     sessionStorage.setItem("authState", encodedLocalAuthState);
-    router.push(redirectUri);
+
+    setLoginMethod({
+      methodType: idp.identityProviderName,
+      idpName: idp.name,
+    });
+    router.push(redirectURL);
   }
 
   const passwordLoginButton = (
@@ -172,13 +220,19 @@ const LoginMethodStep: FC<LoginMethodStepProps> = (props) => {
     </Button>
   );
 
-  if (preferredLoginMethodName) {
-    if (preferredLoginMethodName?.toLocaleLowerCase() === "password") {
+  if (preferredLoginMethod) {
+    if (preferredLoginMethod.type?.toLocaleLowerCase() === "password") {
       defaultLoginMethodButton = passwordLoginButton;
     } else {
-      const matchingIdp = domainFilteredIdentityProviders.find(
-        (idp) => idp.name.toLowerCase() === preferredLoginMethodName.toLowerCase()
+      let matchingIdp = domainFilteredIdentityProviders.find(
+        (idp) => idp.name.toLowerCase() === preferredLoginMethod.name?.toLowerCase()
       );
+
+      if (!matchingIdp) {
+        matchingIdp = domainFilteredIdentityProviders.find(
+          (idp) => idp.identityProviderName.toLowerCase() === preferredLoginMethod.type?.toLowerCase()
+        );
+      }
 
       if (matchingIdp) {
         const loginButtonIconUrl = matchingIdp.loginButtonIconUrl;
@@ -200,11 +254,11 @@ const LoginMethodStep: FC<LoginMethodStepProps> = (props) => {
             startIcon={LoginButtonIcon}
             sx={{ justifyContent: "flex-start" }}
             onClick={() => {
-              router.push(matchingIdp.renderedAuthorizationEndpoint);
+              handleIDPButtonClick(matchingIdp);
             }}
           >
             <Box display="inline-flex" flexGrow={1} justifyContent="center">
-              {matchingIdp.name}
+              {matchingIdp.loginButtonText}
             </Box>
           </Button>
         );
@@ -270,73 +324,74 @@ const LoginMethodStep: FC<LoginMethodStepProps> = (props) => {
           {defaultLoginMethodButton}
 
           {idpOptionsExpanded &&
-            domainFilteredIdentityProviders
-              .filter((idp) => idp.name !== preferredLoginMethodName)
-              .map((idp) => {
-                const loginButtonIconUrl = idp.loginButtonIconUrl;
+            otherIdpSignInOptions.map((idp) => {
+              const loginButtonIconUrl = idp.loginButtonIconUrl;
 
-                let LoginButtonIcon: ReactNode;
-                if (loginButtonIconUrl) {
-                  LoginButtonIcon = <LogoImg src={loginButtonIconUrl} alt={idp.name} />;
-                } else if (IDENTITY_PROVIDER_ICON_MAP[idp.identityProviderName]) {
-                  const IconComponent: FC = IDENTITY_PROVIDER_ICON_MAP[idp.identityProviderName];
-                  LoginButtonIcon = <IconComponent />;
-                } else {
-                  LoginButtonIcon = <Box width="24px" height="24px" />;
-                }
+              let LoginButtonIcon: ReactNode;
+              if (loginButtonIconUrl) {
+                LoginButtonIcon = <LogoImg src={loginButtonIconUrl} alt={idp.name} />;
+              } else if (IDENTITY_PROVIDER_ICON_MAP[idp.identityProviderName]) {
+                const IconComponent: FC = IDENTITY_PROVIDER_ICON_MAP[idp.identityProviderName];
+                LoginButtonIcon = <IconComponent />;
+              } else {
+                LoginButtonIcon = <Box width="24px" height="24px" />;
+              }
 
-                return (
-                  <Button
-                    variant="outlined"
-                    key={idp.name}
-                    size="xlarge"
-                    startIcon={LoginButtonIcon}
-                    sx={{ justifyContent: "flex-start" }}
-                    onClick={handleIDPButtonClick}
-                  >
-                    <Box display="inline-flex" flexGrow={1} justifyContent="center">
-                      {" "}
-                      {idp.name}
-                    </Box>
-                  </Button>
-                );
-              })}
-          {preferredLoginMethodName?.toLocaleLowerCase() !== "password" &&
+              return (
+                <Button
+                  variant="outlined"
+                  key={idp.name}
+                  size="xlarge"
+                  startIcon={LoginButtonIcon}
+                  sx={{ justifyContent: "flex-start" }}
+                  onClick={() => {
+                    handleIDPButtonClick(idp);
+                  }}
+                >
+                  <Box display="inline-flex" flexGrow={1} justifyContent="center">
+                    {" "}
+                    {idp.loginButtonText}
+                  </Box>
+                </Button>
+              );
+            })}
+          {preferredLoginMethod?.type?.toLocaleLowerCase() !== "password" &&
             isPasswordLoginEnabled &&
             idpOptionsExpanded &&
             passwordLoginButton}
         </Stack>
       )}
-
-      <Button
-        variant="text"
-        disableRipple
-        endIcon={
-          idpOptionsExpanded ? (
-            <ExpandLessIcon style={{ color: "#414651", fontSize: "20px" }} />
-          ) : (
-            <ExpandMoreIcon style={{ color: "#414651", fontSize: "20px" }} />
-          )
-        }
-        onClick={() => {
-          if (idpOptionsExpanded) {
-            // If the options are expanded, we switch to password login
-            if (preferredLoginMethodName?.toLowerCase() === "password") {
-              setViewType("password-login");
+      {numOtherSignInOptions > 0 && (
+        <Button
+          variant="text"
+          disableRipple
+          endIcon={
+            idpOptionsExpanded ? (
+              <ExpandLessIcon style={{ color: "#414651", fontSize: "20px" }} />
+            ) : (
+              <ExpandMoreIcon style={{ color: "#414651", fontSize: "20px" }} />
+            )
+          }
+          onClick={() => {
+            if (idpOptionsExpanded) {
+              // If the options are expanded, we switch to password login
+              if (preferredLoginMethod?.type?.toLowerCase() === "password") {
+                setViewType("password-login");
+              } else {
+                setViewType("login-options");
+              }
             } else {
               setViewType("login-options");
             }
-          } else {
-            setViewType("login-options");
-          }
 
-          setIdpOptionsExpanded((prev) => !prev);
-        }}
-      >
-        <Text size="medium" weight="semibold" sx={{ color: "#414651", textAlign: "center" }}>
-          {idpOptionsExpanded ? "View less options" : "Other sign in options"}
-        </Text>
-      </Button>
+            setIdpOptionsExpanded((prev) => !prev);
+          }}
+        >
+          <Text size="medium" weight="semibold" sx={{ color: "#414651", textAlign: "center" }}>
+            {idpOptionsExpanded ? "View less options" : "Other sign in options"}
+          </Text>
+        </Button>
+      )}
 
       <Text size="small" weight="regular" sx={{ color: "#535862", textAlign: "center" }}>
         New to Omnistrate?{" "}

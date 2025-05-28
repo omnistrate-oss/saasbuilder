@@ -13,10 +13,12 @@ export const metadata: Metadata = {
 };
 
 const Page = async () => {
+  const idpRedirectUri = `${getSaaSDomainURL()}/idp-auth`;
   const identityProvidersResponse = await getRenderIdentityProvidersList({
     environmentType: getEnvironmentType(),
-    redirectUrl: getSaaSDomainURL(),
+    redirectUrl: idpRedirectUri,
   });
+
   const identityProviders = identityProvidersResponse.data.identityProviders || [];
 
   const isPasswordLoginEnabled = !Boolean(process.env.DISABLE_PASSWORD_LOGIN);

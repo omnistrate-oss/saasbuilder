@@ -145,7 +145,7 @@ const SignInForm: FC<SignInFormProps> = ({
       email: email || "",
       password: "",
     },
-    enableReinitialize: true,
+    // enableReinitialize: true,
     onSubmit: handleFormSubmit,
     validationSchema: createSigninValidationSchema,
   });

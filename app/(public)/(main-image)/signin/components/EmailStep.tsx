@@ -24,6 +24,7 @@ type EmailStepProps = {
 const EmailStep: FC<EmailStepProps> = (props) => {
   const { setCurrentStep, formData, setShouldRememberLoginDetails, shouldRememberLoginDetails } = props;
   const { setEmail } = useLastLoginDetails();
+  
 
   function handleNextClick() {
     formData.validateForm().then((errors) => {
@@ -34,10 +35,14 @@ const EmailStep: FC<EmailStepProps> = (props) => {
         });
         return;
       }
-
-      if (shouldRememberLoginDetails) {
-        setEmail(formData.values.email);
-        setCurrentStep(1); // Move to the next step
+      if (formData.values.email.trim() !== "") {
+        if (shouldRememberLoginDetails) {
+          setEmail(formData.values.email);
+          setCurrentStep(1); // Move to the next step
+        } else {
+          setEmail("");
+          setCurrentStep(1); // Move to the next step
+        }
       }
     });
   }
