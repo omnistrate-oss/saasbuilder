@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { Box, Stack, styled, Typography } from "@mui/material";
+import { Box, Stack, styled } from "@mui/material";
 import { useMutation } from "@tanstack/react-query";
 import { useFormik } from "formik";
 import ReCAPTCHA from "react-google-recaptcha";
@@ -11,6 +11,7 @@ import * as Yup from "yup";
 
 import { customerUserSignup } from "src/api/customer-user";
 import Logo from "src/components/NonDashboardComponents/Logo";
+import { Text } from "src/components/Typography/Typography";
 import useSnackbar from "src/hooks/useSnackbar";
 import { useProviderOrgDetails } from "src/providers/ProviderOrgDetailsProvider";
 import { passwordRegex, passwordText } from "src/utils/passwordRegex";
@@ -303,23 +304,23 @@ const SignupPage = (props) => {
           )}
         </Stack>
       </Box>
-      <Typography mt="22px" fontWeight="500" fontSize="14px" lineHeight="22px" color="#A0AEC0" textAlign="center">
+      <Text size="small" weight="regular" sx={{ color: "#535862", textAlign: "center", marginTop: "32px" }}>
         {policyAgreementText}{" "}
-        <Link target="_blank" href="/terms-of-use" style={{ color: "#27A376" }}>
+        <Link target="_blank" href="/terms-of-use" style={{ color: "#364152", fontWeight: 600 }}>
           Terms & Conditions
         </Link>{" "}
         and{" "}
-        <Link target="_blank" href="/privacy-policy" style={{ color: "#27A376" }}>
+        <Link target="_blank" href="/privacy-policy" style={{ color: "#364152", fontWeight: 600 }}>
           Privacy Policy
         </Link>
-      </Typography>
+      </Text>
       {/* Signup Link */}
-      <Typography mt="20px" fontWeight="500" fontSize="14px" lineHeight="22px" color="#A0AEC0" textAlign="center">
+      <Text size="small" weight="regular" sx={{ color: "#535862", textAlign: "center", marginTop: "24px" }}>
         Already have an account?{" "}
-        <Link href="/signin" style={{ color: "#27A376" }}>
+        <Link href="/signin" style={{ color: "#364152", fontWeight: 600 }}>
           Login here
         </Link>
-      </Typography>
+      </Text>
     </>
   );
 };
