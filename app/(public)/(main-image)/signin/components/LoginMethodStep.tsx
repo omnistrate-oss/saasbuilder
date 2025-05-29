@@ -12,6 +12,7 @@ import FieldContainer from "src/components/FormElementsv2/FieldContainer/FieldCo
 import TextField from "src/components/FormElementsv2/TextField/TextField";
 import { Text } from "src/components/Typography/Typography";
 import extractQueryParam from "src/constants/extractQueryParam";
+import useEnvironmentType from "src/hooks/useEnvironmentType";
 import { SetState } from "src/types/common/reactGenerics";
 import { IdentityProvider } from "src/types/identityProvider";
 
@@ -66,7 +67,7 @@ const LoginMethodStep: FC<LoginMethodStepProps> = (props) => {
     name?: string;
   } | null>(null);
   const [viewType, setViewType] = useState<"password-login" | "login-options">("login-options");
-
+  const environmentType = useEnvironmentType();
   const domainFilteredIdentityProviders = useMemo(() => {
     return identityProviders.filter((idp) => {
       if (idp.emailIdentifiers === undefined || idp.emailIdentifiers === "") return true;
@@ -125,6 +126,11 @@ const LoginMethodStep: FC<LoginMethodStepProps> = (props) => {
       }
     }
 
+    //if not preferredLoginMethod is set, check if password login is enabled and set it as preferredLoginMethod
+    if (!selectedPreferredLoginMethod && isPasswordLoginEnabled) {
+      selectedPreferredLoginMethod = "Password";
+    }
+
     if (selectedPreferredLoginMethod) {
       setPreferredLoginMethod({
         type: selectedPreferredLoginMethod,
@@ -176,6 +182,7 @@ const LoginMethodStep: FC<LoginMethodStepProps> = (props) => {
       // If state is not present in the URL, append it
       redirectURL += (redirectURL.includes("?") ? "&" : "?") + `state=${state}`;
     }
+    redirectURL += (redirectURL.includes("?") ? "&" : "?") + `login_hint=${encodeURIComponent(userEmail)}`;
 
     const localAuthState: {
       destination: string | undefined | null;
@@ -385,13 +392,14 @@ const LoginMethodStep: FC<LoginMethodStepProps> = (props) => {
           </Text>
         </Button>
       )}
-
-      <Text size="small" weight="regular" sx={{ color: "#535862", textAlign: "center" }}>
-        New to Omnistrate?{" "}
-        <Link href="/signup" style={{ color: "#364152", fontWeight: 600 }}>
-          Sign Up{" "}
-        </Link>
-      </Text>
+      {environmentType === "PROD" && (
+        <Text size="small" weight="regular" sx={{ color: "#535862", textAlign: "center" }}>
+          New to Omnistrate?{" "}
+          <Link href="/signup" style={{ color: "#364152", fontWeight: 600 }}>
+            Sign Up{" "}
+          </Link>
+        </Text>
+      )}
     </Stack>
   );
 };
