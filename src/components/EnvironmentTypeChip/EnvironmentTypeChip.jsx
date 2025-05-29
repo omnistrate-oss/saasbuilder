@@ -13,7 +13,7 @@ function EnvironmentTypeChip() {
       bgColor={environmentStyles.bgColor}
       fontColor={environmentStyles.fontColor}
       borderColor={environmentStyles.fontColor}
-      label={environmentLabel}
+      label={environmentType !== "PROD" ? `${environmentLabel} - Internal Use` : environmentLabel}
     />
   ) : (
     ""
