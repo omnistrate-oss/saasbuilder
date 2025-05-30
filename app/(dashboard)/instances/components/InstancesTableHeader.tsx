@@ -133,7 +133,7 @@ const InstancesTableHeader = ({
         !isUpdateAllowedByRBAC,
       onClick: () => {
         if (!selectedInstance) return snackbar.showError("Please select an instance");
-        if (!selectedInstanceOffering) return snackbar.showError("Service Offering not found");
+        if (!selectedInstanceOffering) return snackbar.showError("SaaS Product not found");
         stopInstanceMutation.mutate(requestData);
       },
       disabledMessage: !selectedInstance
@@ -163,7 +163,7 @@ const InstancesTableHeader = ({
         !isUpdateAllowedByRBAC,
       onClick: () => {
         if (!selectedInstance) return snackbar.showError("Please select an instance");
-        if (!selectedInstanceOffering) return snackbar.showError("Service Offering not found");
+        if (!selectedInstanceOffering) return snackbar.showError("SaaS Product not found");
         startInstanceMutation.mutate(requestData);
       },
       disabledMessage: !selectedInstance
@@ -261,7 +261,7 @@ const InstancesTableHeader = ({
           !isUpdateAllowedByRBAC,
         onClick: () => {
           if (!selectedInstance) return snackbar.showError("Please select an instance");
-          if (!selectedInstanceOffering) return snackbar.showError("Service Offering not found");
+          if (!selectedInstanceOffering) return snackbar.showError("SaaS Product not found");
           restartInstanceMutation.mutate(requestData);
         },
         disabledMessage: !selectedInstance

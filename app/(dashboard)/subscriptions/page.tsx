@@ -111,7 +111,7 @@ const SubscriptionsPage = () => {
       }),
       columnHelper.accessor("serviceName", {
         id: "serviceName",
-        header: "Service Name",
+        header: "Product Name",
         cell: (data) => {
           const { serviceName, serviceLogoURL } = data.row.original;
           return <ServiceNameWithLogo serviceName={serviceName} serviceLogoURL={serviceLogoURL} />;
@@ -122,7 +122,7 @@ const SubscriptionsPage = () => {
       }),
       columnHelper.accessor("productTierName", {
         id: "productTierName",
-        header: "Service Plan",
+        header: "Plan",
         cell: (data) => {
           return data.row.original.productTierName || "-";
         },
@@ -258,7 +258,7 @@ const SubscriptionsPage = () => {
             await unSubscribeMutation.mutateAsync(selectedSubscription.id);
           }}
           confirmationText="unsubscribe"
-          title="Unsubscribe Service"
+          title="Unsubscribe SaaS Product"
           buttonLabel="Unsubscribe"
           isLoading={unSubscribeMutation.isPending}
           subtitle={`Are you sure you want to unsubscribe from ${selectedSubscription?.serviceName}?`}

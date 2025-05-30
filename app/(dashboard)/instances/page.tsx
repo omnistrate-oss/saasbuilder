@@ -136,7 +136,7 @@ const InstancesPage = () => {
         },
         {
           id: "serviceName",
-          header: "Service Name",
+          header: "Product Name",
           cell: (data) => {
             const subscription = subscriptionsObj[data.row.original.subscriptionId as string];
             const serviceName = subscription?.serviceName;

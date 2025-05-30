@@ -91,7 +91,7 @@ const EventsTable = ({
         },
         {
           id: "serviceName",
-          header: "Service Name",
+          header: "Product Name",
           cell: (data) => {
             const { serviceLogoURL, serviceName } = subscriptionsObj[data.row.original.subscriptionId] || {};
             if (!serviceName) return "-";

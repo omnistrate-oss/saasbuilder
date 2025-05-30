@@ -51,9 +51,9 @@ const PlanDetails = ({ startingTab }) => {
           <div className="flex items-center gap-8 justify-between flex-1">
             <div className="min-w-[200px]">
               <FieldLabel required sx={{ color: "#414651", fontWeight: "600" }}>
-                Service Name
+                Product Name
               </FieldLabel>
-              <FieldDescription sx={{ mt: 0, color: "#535862" }}>Select the service</FieldDescription>
+              <FieldDescription sx={{ mt: 0, color: "#535862" }}>Select the SaaS Product</FieldDescription>
             </div>
 
             <Select value={selectedServiceId} onChange={(e) => setSelectedServiceId(e.target.value)} sx={{ mt: 0 }}>
@@ -65,7 +65,7 @@ const PlanDetails = ({ startingTab }) => {
                 ))
               ) : (
                 <MenuItem value="" disabled>
-                  <i>No services found</i>
+                  <i>No SaaS Product found</i>
                 </MenuItem>
               )}
             </Select>

@@ -89,13 +89,13 @@ export const getStandardInformationFields = (
   const fields: Field[] = [
     {
       dataTestId: "service-name-select",
-      label: "Service Name",
-      subLabel: "Select the service you want to deploy",
+      label: "Product Name",
+      subLabel: "Select the SaaS Product you want to deploy",
       name: "serviceId",
       type: "select",
       required: true,
       disabled: formMode !== "create",
-      emptyMenuText: "No services available",
+      emptyMenuText: "No SaaS Products available",
       menuItems: serviceMenuItems,
       onChange: (e) => {
         const serviceId = e.target.value;
@@ -206,7 +206,7 @@ export const getStandardInformationFields = (
             isLoading: isFetchingSubscriptions,
             disabled: formMode !== "create",
             emptyMenuText: !serviceId
-              ? "Select a service"
+              ? "Select a SaaS Product"
               : !servicePlanId
                 ? "Select a subscription plan"
                 : "No subscriptions available",
@@ -233,7 +233,7 @@ export const getStandardInformationFields = (
       type: "select",
       required: true,
       emptyMenuText: !serviceId
-        ? "Select a service"
+        ? "Select a SaaS Product"
         : !servicePlanId
           ? "Select a subscription plan"
           : "No resources available",

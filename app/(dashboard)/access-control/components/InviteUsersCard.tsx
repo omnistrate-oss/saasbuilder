@@ -143,7 +143,7 @@ const InviteUsersCard: React.FC<InviteUsersCardProps> = ({ refetchUsers, isFetch
           <div className="flex items-center justify-between gap-4 pt-4 px-6">
             <DataGridHeaderTitle
               title="Invite Users"
-              desc="Invite team members with specific roles to manage your services/subscriptions"
+              desc="Invite team members with specific roles to manage your SaaS Products/subscriptions"
             />
 
             <Button
@@ -216,7 +216,7 @@ const InviteUsersCard: React.FC<InviteUsersCardProps> = ({ refetchUsers, isFetch
                               sx={{ flex: 1, mt: 0 }}
                               displayEmpty
                               renderValue={(value) => {
-                                if (!value) return "Service";
+                                if (!value) return "SaaS Product";
                                 return serivceMenuItems.find((item) => item.value === value)?.label;
                               }}
                             >
@@ -228,7 +228,7 @@ const InviteUsersCard: React.FC<InviteUsersCardProps> = ({ refetchUsers, isFetch
                                 ))
                               ) : (
                                 <MenuItem value="" disabled>
-                                  <i>No Services With Root Access</i>
+                                  <i>No SaaS Products With Root Access</i>
                                 </MenuItem>
                               )}
                             </Select>
@@ -256,7 +256,7 @@ const InviteUsersCard: React.FC<InviteUsersCardProps> = ({ refetchUsers, isFetch
                                 ))
                               ) : (
                                 <MenuItem value="" disabled>
-                                  <i>{invite.serviceId ? "No subscription plans" : "Select a service first"}</i>
+                                  <i>{invite.serviceId ? "No subscription plans" : "Select a SaaS Product first"}</i>
                                 </MenuItem>
                               )}
                             </Select>
