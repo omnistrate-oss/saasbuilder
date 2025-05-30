@@ -13,6 +13,7 @@ import TextField from "src/components/FormElementsv2/TextField/TextField";
 import { Text } from "src/components/Typography/Typography";
 import extractQueryParam from "src/constants/extractQueryParam";
 import useEnvironmentType from "src/hooks/useEnvironmentType";
+import { colors } from "src/themeConfig";
 import { SetState } from "src/types/common/reactGenerics";
 import { IdentityProvider } from "src/types/identityProvider";
 
@@ -310,6 +311,13 @@ const LoginMethodStep: FC<LoginMethodStepProps> = (props) => {
                 </Text>
               </InputAdornment>
             ),
+          }}
+          sx={{
+            "& .MuiOutlinedInput-root.Mui-disabled": {
+              [`& .MuiOutlinedInput-input`]: {
+                background: colors.white,
+              },
+            },
           }}
         />
       </FieldContainer>

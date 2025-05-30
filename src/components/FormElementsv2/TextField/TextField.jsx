@@ -10,6 +10,7 @@ const StyledTextField = styled(MuiTextField, {
     return prop !== "marginTop";
   },
 })(({ theme, marginTop }) => {
+
   return {
     marginTop: marginTop,
 
@@ -52,7 +53,7 @@ const StyledTextField = styled(MuiTextField, {
         border: `1px solid  ${theme.palette?.gray?.["300"]}`,
       },
       [`& .MuiOutlinedInput-input`]: {
-        WebkitTextFillColor: theme.palette?.gray?.["500"],
+        WebkitTextFillColor: colors.gray500,
         background: theme.palette.gray?.["50"],
       },
     },
