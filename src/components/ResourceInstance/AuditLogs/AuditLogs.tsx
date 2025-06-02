@@ -20,6 +20,7 @@ import GridCellExpand from "src/components/GridCellExpand/GridCellExpand";
 import JSONView from "src/components/JSONView/JSONView";
 import RefreshWithToolTip from "src/components/RefreshWithTooltip/RefreshWithToolTip";
 import useUserData from "src/hooks/usersData";
+import { AuditEvent } from "src/types/auditEvent";
 import { SetState } from "src/types/common/reactGenerics";
 import { AccessEvent, EventType } from "src/types/event";
 import formatDateUTC from "src/utils/formatDateUTC";
@@ -101,7 +102,7 @@ type AuditLogsTabProps = {
   subscriptionId: string;
 };
 
-function DetailTableRowView(props: { rowData: AccessEvent }) {
+function DetailTableRowView(props: { rowData: AuditEvent }) {
   const { rowData: event } = props;
   const { workflowFailures } = event;
   return (
@@ -256,6 +257,7 @@ const AuditLogs: FC<AuditLogsTabProps> = ({ instanceId, subscriptionId }) => {
   return (
     <Box mt="32px">
       <DataTable
+        // @ts-ignore
         columns={dataTableColumns}
         rows={filteredEvents}
         renderDetailsComponent={DetailTableRowView}

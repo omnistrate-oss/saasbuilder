@@ -1,7 +1,5 @@
 import { AxiosResponse } from "axios";
 
-import { ListAllSubscriptionUsersSuccessResponse } from "src/types/consumptionUser";
-
 import axios from "../axios";
 
 export const revokeSubscriptionUser = (subscriptionId, payload) =>
@@ -23,12 +21,6 @@ export const updateProfile = async (userId, data) => {
 
 export const updatePassword = (payload) => {
   return axios.post(`/update-password`, payload);
-};
-
-export const getAllSubscriptionUsers = (
-  params = {}
-): Promise<AxiosResponse<ListAllSubscriptionUsersSuccessResponse>> => {
-  return axios.get(`/resource-instance/subscription-users`, { params });
 };
 
 export const deleteUser = (): Promise<AxiosResponse<any>> => {

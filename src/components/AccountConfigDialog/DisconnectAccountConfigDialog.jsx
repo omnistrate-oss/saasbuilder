@@ -5,6 +5,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useFormik } from "formik";
 
 import { disconnected } from "src/api/resourceInstance";
+import useEnvironmentType from "src/hooks/useEnvironmentType";
 import useSnackbar from "src/hooks/useSnackbar";
 import { roundNumberToTwoDecimals } from "src/utils/formatNumber";
 import Button from "components/Button/Button";
@@ -89,6 +90,7 @@ const ListItem = styled(Box)({
 });
 
 const usePolling = (fetchClickedInstanceDetails, setClickedInstance, stepStatusStopPolling) => {
+  const environmentType = useEnvironmentType();
   const queryClient = useQueryClient();
   const [isPolling, setIsPolling] = useState(true);
   const timeoutId = useRef(null);
@@ -116,20 +118,33 @@ const usePolling = (fetchClickedInstanceDetails, setClickedInstance, stepStatusS
         },
       }));
 
-      queryClient.setQueryData(["instances"], (oldData) => ({
-        ...oldData,
-        data: {
-          resourceInstances: (oldData?.data?.resourceInstances || []).map((inst) =>
-            inst?.id === resourceInstance?.id
-              ? {
-                  ...resourceInstance,
-                  status: resourceInstance.status,
-                  result_params: resourceInstance.result_params,
-                }
-              : inst
-          ),
-        },
-      }));
+      queryClient.setQueryData(
+        [
+          "get",
+          "/2022-09-01-00/resource-instance",
+          {
+            params: {
+              query: {
+                environmentType,
+              },
+            },
+          },
+        ],
+        (oldData) => ({
+          ...oldData,
+          data: {
+            resourceInstances: (oldData?.data?.resourceInstances || []).map((inst) =>
+              inst?.id === resourceInstance?.id
+                ? {
+                    ...resourceInstance,
+                    status: resourceInstance.status,
+                    result_params: resourceInstance.result_params,
+                  }
+                : inst
+            ),
+          },
+        })
+      );
 
       // // Stop polling if the status matches the stop condition
       if (resourceInstance?.status === stepStatusStopPolling) {

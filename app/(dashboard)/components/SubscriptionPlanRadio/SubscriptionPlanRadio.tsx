@@ -12,6 +12,7 @@ import { createSubscriptionRequest } from "src/api/subscriptionRequests";
 import { createSubscriptions } from "src/api/subscriptions";
 import LoadingSpinnerSmall from "src/components/CircularProgress/CircularProgress";
 import AlertTriangle from "src/components/Icons/AlertTriangle/AlertTriangle";
+import useEnvironmentType from "src/hooks/useEnvironmentType";
 import useSnackbar from "src/hooks/useSnackbar";
 import { useGlobalData } from "src/providers/GlobalDataProvider";
 import { selectUserrootData } from "src/slices/userDataSlice";
@@ -188,6 +189,7 @@ const SubscriptionPlanRadio: React.FC<SubscriptionPlanRadioProps> = ({
   instances,
   isCloudAccountForm = false,
 }) => {
+  const environmentType = useEnvironmentType();
   const snackbar = useSnackbar();
   const queryClient = useQueryClient();
   const selectUser = useSelector(selectUserrootData);
@@ -346,35 +348,44 @@ const SubscriptionPlanRadio: React.FC<SubscriptionPlanRadioProps> = ({
                     } else if (id.startsWith("sub")) {
                       snackbar.showSuccess("Subscribed successfully");
 
-                      queryClient.setQueryData(["user-subscriptions"], (oldData: any) => {
-                        return {
-                          ...oldData,
-                          data: {
-                            ids: [...(oldData.data.ids || []), id],
-                            subscriptions: [
-                              ...(oldData.data.subscriptions || []),
-                              {
-                                id,
-                                rootUserId: selectUser.id,
-                                serviceId: plan.serviceId,
-                                productTierId: plan.productTierID,
-                                serviceOrgId: plan.serviceOrgId,
-                                serviceOrgName: plan.serviceProviderName,
-                                roleType: "root",
-                                createdAt: new Date().toISOString(),
-                                subscriptionOwnerName: selectUser.name,
-                                serviceName: plan.serviceName,
-                                serviceLogoURL: plan.serviceLogoURL,
-                                cloudProviderNames: plan.cloudProviders,
-                                defaultSubscription: false,
-                                productTierName: plan.productTierName,
-                                accountConfigIdentityId: selectUser.orgId,
-                                status: "ACTIVE",
-                              },
-                            ],
+                      queryClient.setQueryData(
+                        [
+                          "get",
+                          "/2022-09-01-00/subscription",
+                          {
+                            params: { query: { environmentType } },
                           },
-                        };
-                      });
+                        ],
+                        (oldData: any) => {
+                          return {
+                            ...oldData,
+                            data: {
+                              ids: [...(oldData.data.ids || []), id],
+                              subscriptions: [
+                                ...(oldData.data.subscriptions || []),
+                                {
+                                  id,
+                                  rootUserId: selectUser.id,
+                                  serviceId: plan.serviceId,
+                                  productTierId: plan.productTierID,
+                                  serviceOrgId: plan.serviceOrgId,
+                                  serviceOrgName: plan.serviceProviderName,
+                                  roleType: "root",
+                                  createdAt: new Date().toISOString(),
+                                  subscriptionOwnerName: selectUser.name,
+                                  serviceName: plan.serviceName,
+                                  serviceLogoURL: plan.serviceLogoURL,
+                                  cloudProviderNames: plan.cloudProviders,
+                                  defaultSubscription: false,
+                                  productTierName: plan.productTierName,
+                                  accountConfigIdentityId: selectUser.orgId,
+                                  status: "ACTIVE",
+                                },
+                              ],
+                            },
+                          };
+                        }
+                      );
                       if (!isPaymentConfigBlock) {
                         formData.setFieldValue(name, plan.productTierID);
                         onChange(plan.productTierID, id);

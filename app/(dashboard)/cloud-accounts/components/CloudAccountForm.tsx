@@ -11,6 +11,7 @@ import { useSelector } from "react-redux";
 
 import { createResourceInstance, getResourceInstanceDetails } from "src/api/resourceInstance";
 import { CLOUD_PROVIDERS, cloudProviderLongLogoMap } from "src/constants/cloudProviders";
+import useEnvironmentType from "src/hooks/useEnvironmentType";
 import useSnackbar from "src/hooks/useSnackbar";
 import { useGlobalData } from "src/providers/GlobalDataProvider";
 import { selectUserrootData } from "src/slices/userDataSlice";
@@ -42,6 +43,7 @@ const CloudAccountForm = ({
   instances,
   isPaymentConfigured,
 }) => {
+  const environmentType = useEnvironmentType();
   const queryClient = useQueryClient();
   const snackbar = useSnackbar();
   const selectUser = useSelector(selectUserrootData);
@@ -127,42 +129,55 @@ const CloudAccountForm = ({
 
       // Sometimes, we don't get the result_params in the response
       // So, we need to update the query data manually
-      queryClient.setQueryData(["instances"], (oldData: any) => {
-        const result_params = {
-          // @ts-ignore
-          ...resourceInstance.result_params,
-          cloud_provider: values.cloudProvider,
-          account_configuration_method: values.accountConfigurationMethod,
-        };
-
-        if (values.cloudProvider === "aws") {
-          result_params.aws_account_id = values.awsAccountId;
-          result_params.aws_bootstrap_role_arn = getAwsBootstrapArn(values.awsAccountId);
-        } else if (values.cloudProvider === "gcp") {
-          result_params.gcp_project_id = values.gcpProjectId;
-          result_params.gcp_project_number = values.gcpProjectNumber;
-          result_params.gcp_service_account_email = getGcpServiceEmail(
-            values.gcpProjectId,
-            selectUser?.orgId.toLowerCase()
-          );
-        } else if (values.cloudProvider === "azure") {
-          result_params.azure_subscription_id = values.azureSubscriptionId;
-          result_params.azure_tenant_id = values.azureTenantId;
-        }
-
-        return {
-          ...oldData,
-          data: {
-            resourceInstances: [
-              ...(oldData?.data?.resourceInstances || []),
-              {
-                ...(resourceInstance || {}),
-                result_params: result_params,
+      queryClient.setQueryData(
+        [
+          "get",
+          "/2022-09-01-00/resource-instance",
+          {
+            params: {
+              query: {
+                environmentType,
               },
-            ],
+            },
           },
-        };
-      });
+        ],
+        (oldData: any) => {
+          const result_params = {
+            // @ts-ignore
+            ...resourceInstance.result_params,
+            cloud_provider: values.cloudProvider,
+            account_configuration_method: values.accountConfigurationMethod,
+          };
+
+          if (values.cloudProvider === "aws") {
+            result_params.aws_account_id = values.awsAccountId;
+            result_params.aws_bootstrap_role_arn = getAwsBootstrapArn(values.awsAccountId);
+          } else if (values.cloudProvider === "gcp") {
+            result_params.gcp_project_id = values.gcpProjectId;
+            result_params.gcp_project_number = values.gcpProjectNumber;
+            result_params.gcp_service_account_email = getGcpServiceEmail(
+              values.gcpProjectId,
+              selectUser?.orgId.toLowerCase()
+            );
+          } else if (values.cloudProvider === "azure") {
+            result_params.azure_subscription_id = values.azureSubscriptionId;
+            result_params.azure_tenant_id = values.azureTenantId;
+          }
+
+          return {
+            ...oldData,
+            data: {
+              resourceInstances: [
+                ...(oldData?.data?.resourceInstances || []),
+                {
+                  ...(resourceInstance || {}),
+                  result_params: result_params,
+                },
+              ],
+            },
+          };
+        }
+      );
 
       setIsAccountCreation(true);
       setClickedInstance({

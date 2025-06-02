@@ -6,6 +6,7 @@ import { useSelector } from "react-redux";
 
 import { createSubscriptionRequest } from "src/api/subscriptionRequests";
 import { createSubscriptions, deleteSubscription } from "src/api/subscriptions";
+import useEnvironmentType from "src/hooks/useEnvironmentType";
 import useSnackbar from "src/hooks/useSnackbar";
 import { useGlobalData } from "src/providers/GlobalDataProvider";
 import { selectUserrootData } from "src/slices/userDataSlice";
@@ -30,6 +31,7 @@ const ManageSubscriptionsForm = ({ defaultServiceId, defaultServicePlanId, isFet
     isFetchingSubscriptionRequests,
   } = useGlobalData();
 
+  const environmentType = useEnvironmentType();
   const snackbar = useSnackbar();
   const queryClient = useQueryClient();
   const selectUser = useSelector(selectUserrootData);
@@ -100,15 +102,26 @@ const ManageSubscriptionsForm = ({ defaultServiceId, defaultServicePlanId, isFet
   const unSubscribeMutation = useMutation({
     mutationFn: deleteSubscription,
     onSuccess: () => {
-      queryClient.setQueryData(["user-subscriptions"], (oldData: any) => {
-        return {
-          ...oldData,
-          data: {
-            ids: oldData.data.ids.filter((id: string) => id !== subscriptionIdToDelete),
-            subscriptions: oldData.data.subscriptions.filter((sub: Subscription) => sub.id !== subscriptionIdToDelete),
+      queryClient.setQueryData(
+        [
+          "get",
+          "/2022-09-01-00/subscription",
+          {
+            params: { query: { environmentType } },
           },
-        };
-      });
+        ],
+        (oldData: any) => {
+          return {
+            ...oldData,
+            data: {
+              ids: oldData.data.ids.filter((id: string) => id !== subscriptionIdToDelete),
+              subscriptions: oldData.data.subscriptions.filter(
+                (sub: Subscription) => sub.id !== subscriptionIdToDelete
+              ),
+            },
+          };
+        }
+      );
       setIsUnsubscribeDialogOpen(false);
       snackbar.showSuccess("Unsubscribed successfully");
     },
@@ -203,35 +216,44 @@ const ManageSubscriptionsForm = ({ defaultServiceId, defaultServicePlanId, isFet
                   } else if (id.startsWith("sub")) {
                     snackbar.showSuccess("Subscribed successfully");
 
-                    queryClient.setQueryData(["user-subscriptions"], (oldData: any) => {
-                      return {
-                        ...oldData,
-                        data: {
-                          ids: [...(oldData.data.ids || []), id],
-                          subscriptions: [
-                            ...(oldData.data.subscriptions || []),
-                            {
-                              id,
-                              rootUserId: selectUser.id,
-                              serviceId: plan.serviceId,
-                              productTierId: plan.productTierID,
-                              serviceOrgId: plan.serviceOrgId,
-                              serviceOrgName: plan.serviceProviderName,
-                              roleType: "root",
-                              createdAt: new Date().toISOString(),
-                              subscriptionOwnerName: selectUser.name,
-                              serviceName: plan.serviceName,
-                              serviceLogoURL: plan.serviceLogoURL,
-                              cloudProviderNames: plan.cloudProviders,
-                              defaultSubscription: false,
-                              productTierName: plan.productTierName,
-                              accountConfigIdentityId: selectUser.orgId,
-                              status: "ACTIVE",
-                            },
-                          ],
+                    queryClient.setQueryData(
+                      [
+                        "get",
+                        "/2022-09-01-00/subscription",
+                        {
+                          params: { query: { environmentType } },
                         },
-                      };
-                    });
+                      ],
+                      (oldData: any) => {
+                        return {
+                          ...oldData,
+                          data: {
+                            ids: [...(oldData.data.ids || []), id],
+                            subscriptions: [
+                              ...(oldData.data.subscriptions || []),
+                              {
+                                id,
+                                rootUserId: selectUser.id,
+                                serviceId: plan.serviceId,
+                                productTierId: plan.productTierID,
+                                serviceOrgId: plan.serviceOrgId,
+                                serviceOrgName: plan.serviceProviderName,
+                                roleType: "root",
+                                createdAt: new Date().toISOString(),
+                                subscriptionOwnerName: selectUser.name,
+                                serviceName: plan.serviceName,
+                                serviceLogoURL: plan.serviceLogoURL,
+                                cloudProviderNames: plan.cloudProviders,
+                                defaultSubscription: false,
+                                productTierName: plan.productTierName,
+                                accountConfigIdentityId: selectUser.orgId,
+                                status: "ACTIVE",
+                              },
+                            ],
+                          },
+                        };
+                      }
+                    );
                   }
                 } catch (error) {
                   console.error(error);

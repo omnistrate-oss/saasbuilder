@@ -1,25 +1,17 @@
-import { useQuery } from "@tanstack/react-query";
+import { $api } from "src/api/query";
 
-import { getCustomNetworks } from "src/api/customNetworks";
-import useEnvironmentType from "src/hooks/useEnvironmentType";
-
-function useCustomNetworks(queryOptions = {}) {
-  const environmentType = useEnvironmentType();
-  const customNetworksQuery = useQuery({
-    queryKey: ["cloud-provider"],
-    queryFn: () => {
-      return getCustomNetworks({
-        environmentType,
-      });
-    },
-    select: (response) => {
-      const customNetworks = response.data.customNetworks || [];
-      return customNetworks;
-    },
-    ...queryOptions,
-  });
-
-  return customNetworksQuery;
-}
+const useCustomNetworks = (queryOptions = {}) => {
+  const query = $api.useQuery(
+    "get",
+    "/2022-09-01-00/resource-instance/custom-network",
+    {},
+    {
+      select: (data) => data.customNetworks,
+      refetchInterval: 60000,
+      ...queryOptions,
+    }
+  );
+  return query;
+};
 
 export default useCustomNetworks;

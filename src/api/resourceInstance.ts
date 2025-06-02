@@ -130,12 +130,6 @@ export const getResourceInstanceDetails = (
   );
 };
 
-export const getDeploymentCellToken = (payload) => {
-  return axios.post(
-    `/resource-instance/${payload.instanceId}/deployment-cell-dashboard/token?subscriptionId=${payload.subscriptionId}`
-  );
-};
-
 export const deleteResourceInstance = (payload) => {
   const queryParams: any = {};
   if (payload.subscriptionId) {

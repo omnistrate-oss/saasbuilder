@@ -97,22 +97,26 @@ const InstanceDetailsPage = ({
 
   const isCliManagedResource = useMemo(() => CLI_MANAGED_RESOURCES.includes(resourceType as string), [resourceType]);
 
-  const resourceInstanceQuery = useResourceInstance(
-    offering?.serviceProviderId,
-    offering?.serviceURLKey,
-    offering?.serviceAPIVersion,
-    offering?.serviceEnvironmentURLKey,
-    offering?.serviceModelURLKey,
-    offering?.productTierURLKey,
-    resourceKey,
-    instanceId,
+  const resourceInstanceQuery = useResourceInstance({
+    serviceProviderId: offering?.serviceProviderId,
+    serviceKey: offering?.serviceURLKey,
+    serviceAPIVersion: offering?.serviceAPIVersion,
+    serviceEnvironmentKey: offering?.serviceEnvironmentURLKey,
+    serviceModelKey: offering?.serviceModelURLKey,
+    productTierKey: offering?.productTierURLKey,
+    resourceKey: resourceKey,
+    resourceInstanceId: instanceId,
     resourceId,
-    subscription?.id
-  );
+    subscriptionId: subscription?.id,
+  });
 
   const { data: resourceInstanceData } = resourceInstanceQuery;
 
-  const resourceSchemaQuery = useServiceOfferingResourceSchema(serviceId, resourceId, instanceId);
+  const resourceSchemaQuery = useServiceOfferingResourceSchema({
+    serviceId,
+    resourceId,
+    instanceId,
+  });
 
   const tabs = useMemo(
     () =>
@@ -123,6 +127,7 @@ const InstanceDetailsPage = ({
         isResourceBYOA,
         isCliManagedResource,
         resourceType,
+        // @ts-ignore
         resourceInstanceData?.backupStatus?.backupPeriodInHours,
         checkCustomDNSEndpoint(resourceInstanceData ? resourceInstanceData?.connectivity?.globalEndpoints : {})
       ),

@@ -302,12 +302,11 @@ const InstanceForm = ({
 
   const resourceSchema = resourceSchemaData?.apis?.find((api) => api.verb === "CREATE") as APIEntity;
 
-  const { data: customAvailabilityZoneData, isLoading: isFetchingCustomAvailabilityZones } = useAvailabilityZone(
-    values.region,
-    values.cloudProvider as CloudProvider,
-    // @ts-ignore
-    values.requestParams?.custom_availability_zone !== undefined
-  );
+  const { data: customAvailabilityZoneData, isLoading: isFetchingCustomAvailabilityZones } = useAvailabilityZone({
+    regionCode: values.region,
+    cloudProviderName: values.cloudProvider as CloudProvider,
+    hasCustomAvailabilityZoneField: values.requestParams?.custom_availability_zone !== undefined,
+  });
 
   const { isFetching: isFetchingResourceInstanceIds, data: resourceIdInstancesHashMap = {} } = useResourcesInstanceIds(
     offering?.serviceProviderId,
@@ -357,6 +356,7 @@ const InstanceForm = ({
   }, [resourceSchema, formMode, offering]);
 
   const customAvailabilityZones = useMemo(() => {
+    // @ts-expect-error TODO: Ask someone on the backend to fix the docs
     const availabilityZones = customAvailabilityZoneData?.availabilityZones || [];
     return availabilityZones.sort(function (a, b) {
       if (a.code < b.code) return -1;
@@ -365,6 +365,7 @@ const InstanceForm = ({
       }
       return -1;
     });
+    // @ts-expect-error TODO: Ask someone on the backend to fix the docs
   }, [customAvailabilityZoneData?.availabilityZones]);
 
   const cloudAccountInstances = useMemo(
