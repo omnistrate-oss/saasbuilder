@@ -3,7 +3,7 @@ import createFetchClient from "openapi-fetch";
 
 import { paths } from "src/types/schema";
 
-export const baseDomain = process.env.NEXT_PUBLIC_BACKEND_BASE_DOMAIN || "https://api.omnistrate.dev";
+export const baseDomain = process.env.NEXT_PUBLIC_BACKEND_BASE_DOMAIN || "https://api.omnistrate.cloud";
 
 let globalErrorHandler: ((error: Error) => void) | null = null;
 export function setGlobalErrorHandler(handler: ((error: Error) => void) | null) {
