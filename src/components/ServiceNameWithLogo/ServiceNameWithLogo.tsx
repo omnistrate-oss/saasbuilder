@@ -12,7 +12,7 @@ type ServiceNameWithLogoProps = {
 const ServiceNameWithLogo: React.FC<ServiceNameWithLogoProps> = ({
   serviceName,
   serviceLogoURL,
-  onClick = () => {},
+  onClick,
   textStyles = {},
 }) => {
   return (
