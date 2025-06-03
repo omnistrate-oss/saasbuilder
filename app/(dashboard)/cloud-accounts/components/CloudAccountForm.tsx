@@ -165,16 +165,13 @@ const CloudAccountForm = ({
           }
 
           return {
-            ...oldData,
-            data: {
-              resourceInstances: [
-                ...(oldData?.data?.resourceInstances || []),
-                {
-                  ...(resourceInstance || {}),
-                  result_params: result_params,
-                },
-              ],
-            },
+            resourceInstances: [
+              ...(oldData?.resourceInstances || []),
+              {
+                ...(resourceInstance || {}),
+                result_params: result_params,
+              },
+            ],
           };
         }
       );

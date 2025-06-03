@@ -128,18 +128,15 @@ const usePolling = (fetchClickedInstanceDetails, setClickedInstance, stepStatusS
           },
         ],
         (oldData) => ({
-          ...oldData,
-          data: {
-            resourceInstances: (oldData?.data?.resourceInstances || []).map((inst) =>
-              inst?.id === resourceInstance?.id
-                ? {
-                    ...resourceInstance,
-                    status: resourceInstance.status,
-                    result_params: resourceInstance.result_params,
-                  }
-                : inst
-            ),
-          },
+          resourceInstances: (oldData?.resourceInstances || []).map((inst) =>
+            inst?.id === resourceInstance?.id
+              ? {
+                  ...resourceInstance,
+                  status: resourceInstance.status,
+                  result_params: resourceInstance.result_params,
+                }
+              : inst
+          ),
         })
       );
 

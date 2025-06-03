@@ -29,7 +29,7 @@ const AxiosGlobalErrorHandler = () => {
         //requestMetaData is the payload that will be sent to the next js endpoint
         //it contains information about the original request
         const requestMetaData: any = {
-          endpoint: `/2022-09-01-00/${originalRequestURL}`,
+          endpoint: `/2022-09-01-00${originalRequestURL}`,
           method: _.upperCase(originalRequestMethod),
         };
 

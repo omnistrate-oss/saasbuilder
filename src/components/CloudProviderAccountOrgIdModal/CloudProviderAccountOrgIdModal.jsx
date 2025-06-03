@@ -181,33 +181,28 @@ const CreationTimeInstructions = (props) => {
           "/2022-09-01-00/resource-instance",
           {
             params: {
-              query: {
-                environmentType,
-              },
+              query: { environmentType },
             },
           },
         ],
         (oldData) => {
           const result_params = {
             // @ts-ignore
-            ...oldData?.data?.resourceInstances?.result_params,
+            ...oldData?.resourceInstances?.result_params,
             ...resourceInstance.result_params,
           };
 
           return {
-            ...oldData,
-            data: {
-              resourceInstances: [
-                ...(oldData?.data?.resourceInstances || [])?.map((instance) =>
-                  instance?.id === resourceInstance?.id
-                    ? {
-                        ...(resourceInstance || {}),
-                        result_params: result_params,
-                      }
-                    : instance
-                ),
-              ],
-            },
+            resourceInstances: [
+              ...(oldData?.data?.resourceInstances || [])?.map((instance) =>
+                instance?.id === resourceInstance?.id
+                  ? {
+                      ...(resourceInstance || {}),
+                      result_params: result_params,
+                    }
+                  : instance
+              ),
+            ],
           };
         }
       );

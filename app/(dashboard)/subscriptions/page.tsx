@@ -175,13 +175,7 @@ const SubscriptionsPage = () => {
         ],
         (oldData: any) => {
           return {
-            ...oldData,
-            data: {
-              ids: oldData.data.ids.filter((id: string) => id !== subscriptionIdToDelete),
-              subscriptions: oldData.data.subscriptions.filter(
-                (sub: Subscription) => sub.id !== subscriptionIdToDelete
-              ),
-            },
+            subscriptions: oldData.subscriptions.filter((sub: Subscription) => sub.id !== subscriptionIdToDelete),
           };
         }
       );

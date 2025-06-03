@@ -4,8 +4,8 @@ import { useEffect, useMemo, useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useSelector } from "react-redux";
 
-import { createSubscriptionRequest } from "src/api/subscriptionRequests";
-import { createSubscriptions, deleteSubscription } from "src/api/subscriptions";
+import { $api } from "src/api/query";
+import { deleteSubscription } from "src/api/subscriptions";
 import useEnvironmentType from "src/hooks/useEnvironmentType";
 import useSnackbar from "src/hooks/useSnackbar";
 import { useGlobalData } from "src/providers/GlobalDataProvider";
@@ -83,21 +83,8 @@ const ManageSubscriptionsForm = ({ defaultServiceId, defaultServicePlanId, isFet
       }, {});
   }, [subscriptionRequests]);
 
-  const subscribeMutation = useMutation({
-    mutationFn: (payload: any) => {
-      if (payload.AutoApproveSubscription) {
-        return createSubscriptions({
-          productTierId: payload.productTierId,
-          serviceId: payload.serviceId,
-        });
-      } else {
-        return createSubscriptionRequest({
-          productTierId: payload.productTierId,
-          serviceId: payload.serviceId,
-        });
-      }
-    },
-  });
+  const createSubscriptionMutation = $api.useMutation("post", "/2022-09-01-00/subscription");
+  const createSubscriptionRequestMutation = $api.useMutation("post", "/2022-09-01-00/subscription/request");
 
   const unSubscribeMutation = useMutation({
     mutationFn: deleteSubscription,
@@ -112,13 +99,7 @@ const ManageSubscriptionsForm = ({ defaultServiceId, defaultServicePlanId, isFet
         ],
         (oldData: any) => {
           return {
-            ...oldData,
-            data: {
-              ids: oldData.data.ids.filter((id: string) => id !== subscriptionIdToDelete),
-              subscriptions: oldData.data.subscriptions.filter(
-                (sub: Subscription) => sub.id !== subscriptionIdToDelete
-              ),
-            },
+            subscriptions: oldData.subscriptions.filter((sub: Subscription) => sub.id !== subscriptionIdToDelete),
           };
         }
       );
@@ -175,11 +156,22 @@ const ManageSubscriptionsForm = ({ defaultServiceId, defaultServicePlanId, isFet
               subscriptionRequest={subscriptionRequestsObj[plan.productTierID]}
               onSubscribeClick={async () => {
                 try {
-                  const res = await subscribeMutation.mutateAsync({
-                    productTierId: plan.productTierID,
-                    serviceId: plan.serviceId,
-                    AutoApproveSubscription: plan.AutoApproveSubscription,
-                  });
+                  let res;
+                  if (plan.AutoApproveSubscription) {
+                    res = await createSubscriptionMutation.mutateAsync({
+                      body: {
+                        productTierId: plan.productTierID,
+                        serviceId: plan.serviceId,
+                      },
+                    });
+                  } else {
+                    res = await createSubscriptionRequestMutation.mutateAsync({
+                      body: {
+                        productTierId: plan.productTierID,
+                        serviceId: plan.serviceId,
+                      },
+                    });
+                  }
 
                   // @ts-ignore
                   const id = Object.values(res?.data || {}).join("");
@@ -226,31 +218,27 @@ const ManageSubscriptionsForm = ({ defaultServiceId, defaultServicePlanId, isFet
                       ],
                       (oldData: any) => {
                         return {
-                          ...oldData,
-                          data: {
-                            ids: [...(oldData.data.ids || []), id],
-                            subscriptions: [
-                              ...(oldData.data.subscriptions || []),
-                              {
-                                id,
-                                rootUserId: selectUser.id,
-                                serviceId: plan.serviceId,
-                                productTierId: plan.productTierID,
-                                serviceOrgId: plan.serviceOrgId,
-                                serviceOrgName: plan.serviceProviderName,
-                                roleType: "root",
-                                createdAt: new Date().toISOString(),
-                                subscriptionOwnerName: selectUser.name,
-                                serviceName: plan.serviceName,
-                                serviceLogoURL: plan.serviceLogoURL,
-                                cloudProviderNames: plan.cloudProviders,
-                                defaultSubscription: false,
-                                productTierName: plan.productTierName,
-                                accountConfigIdentityId: selectUser.orgId,
-                                status: "ACTIVE",
-                              },
-                            ],
-                          },
+                          subscriptions: [
+                            ...(oldData.subscriptions || []),
+                            {
+                              id,
+                              rootUserId: selectUser.id,
+                              serviceId: plan.serviceId,
+                              productTierId: plan.productTierID,
+                              serviceOrgId: plan.serviceOrgId,
+                              serviceOrgName: plan.serviceProviderName,
+                              roleType: "root",
+                              createdAt: new Date().toISOString(),
+                              subscriptionOwnerName: selectUser.name,
+                              serviceName: plan.serviceName,
+                              serviceLogoURL: plan.serviceLogoURL,
+                              cloudProviderNames: plan.cloudProviders,
+                              defaultSubscription: false,
+                              productTierName: plan.productTierName,
+                              accountConfigIdentityId: selectUser.orgId,
+                              status: "ACTIVE",
+                            },
+                          ],
                         };
                       }
                     );
