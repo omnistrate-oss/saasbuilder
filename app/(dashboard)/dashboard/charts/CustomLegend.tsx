@@ -1,4 +1,5 @@
 import { LegendProps } from "recharts";
+
 import { ChartConfig } from "@/components/ui/chart"; // Adjust path if needed
 
 const CustomLegend = (chartConfig: ChartConfig) => {

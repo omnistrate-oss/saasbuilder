@@ -15,10 +15,6 @@ export const inviteSubscriptionUser = (subscriptionId, payload, suppressErrorSna
 export const getUsersBySubscription = (subscriptionId) =>
   axios.get(`/resource-instance/subscription/${subscriptionId}/subscription-users`);
 
-export const updateProfile = async (userId, data) => {
-  return axios.patch(`/user/${userId}`, data);
-};
-
 export const updatePassword = (payload) => {
   return axios.post(`/update-password`, payload);
 };

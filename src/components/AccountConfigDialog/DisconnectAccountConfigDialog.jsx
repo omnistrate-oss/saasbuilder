@@ -1,10 +1,10 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { Box, Dialog, Stack, Step, StepLabel, Stepper, styled } from "@mui/material";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
 import { useFormik } from "formik";
 
-import { disconnected } from "src/api/resourceInstance";
+import { $api } from "src/api/query";
 import useEnvironmentType from "src/hooks/useEnvironmentType";
 import useSnackbar from "src/hooks/useSnackbar";
 import { roundNumberToTwoDecimals } from "src/utils/formatNumber";
@@ -378,16 +378,7 @@ function DisconnectAccountConfigDialog(props) {
     }
   }, [disconnectState, setDisconnectState, instance?.status]);
 
-  const accountConfigMutation = useMutation({
-    mutationFn: () => {
-      const requestPayload = {
-        subscriptionId: instance?.subscriptionId,
-        instanceId: instance?.id,
-        disconnect: false,
-        serviceId: serviceId,
-      };
-      return disconnected(requestPayload);
-    },
+  const accountConfigMutation = $api.useMutation("post", "/2022-09-01-00/resource-instance/account-config/{id}", {
     onSuccess: () => {
       refetchInstances();
       snackbar.showSuccess("Disconnecting cloud account");
@@ -396,6 +387,7 @@ function DisconnectAccountConfigDialog(props) {
       formik.resetForm();
     },
   });
+
   const formik = useFormik({
     initialValues: {
       disconnect: "",
@@ -404,7 +396,18 @@ function DisconnectAccountConfigDialog(props) {
       if (!instance) return snackbar.showError("No instance selected");
 
       if (values.disconnect === "disconnect") {
-        accountConfigMutation.mutate();
+        accountConfigMutation.mutate({
+          params: {
+            path: {
+              id: instance?.id,
+            },
+          },
+          body: {
+            disconnect: true,
+            serviceId: serviceId,
+            subscriptionId: instance?.subscriptionId,
+          },
+        });
       } else {
         snackbar.showError("Please enter disconnect");
       }

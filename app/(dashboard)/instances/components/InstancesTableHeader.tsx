@@ -1,11 +1,9 @@
 import { useMemo } from "react";
 import { CircularProgress, menuClasses } from "@mui/material";
-import { useMutation } from "@tanstack/react-query";
 import useBillingStatus from "app/(dashboard)/billing/hooks/useBillingStatus";
 
-import { restartResourceInstance, startResourceInstance, stopResourceInstance } from "src/api/resourceInstance";
+import { $api } from "src/api/query";
 import LoadingSpinnerSmall from "src/components/CircularProgress/CircularProgress";
-// import InstanceFilters from "src/components/InstanceFilters/InstanceFilters";
 import Tooltip from "src/components/Tooltip/Tooltip";
 import { CLI_MANAGED_RESOURCES } from "src/constants/resource";
 import useSnackbar from "src/hooks/useSnackbar";
@@ -62,32 +60,41 @@ const InstancesTableHeader = ({
 
   const isBillingEnabled = Boolean(billingStatusQuery.data?.enabled);
 
-  const stopInstanceMutation = useMutation({
-    mutationFn: stopResourceInstance,
-    onSuccess: async () => {
-      refetchInstances();
-      setSelectedRows([]);
-      snackbar.showSuccess("Stopping deployment instance...");
-    },
-  });
+  const stopInstanceMutation = $api.useMutation(
+    "post",
+    "/2022-09-01-00/resource-instance/{serviceProviderId}/{serviceKey}/{serviceAPIVersion}/{serviceEnvironmentKey}/{serviceModelKey}/{productTierKey}/{resourceKey}/{id}/stop",
+    {
+      onSuccess: async () => {
+        refetchInstances();
+        setSelectedRows([]);
+        snackbar.showSuccess("Stopping deployment instance...");
+      },
+    }
+  );
 
-  const startInstanceMutation = useMutation({
-    mutationFn: startResourceInstance,
-    onSuccess: async () => {
-      refetchInstances();
-      setSelectedRows([]);
-      snackbar.showSuccess("Starting deployment instance...");
-    },
-  });
+  const startInstanceMutation = $api.useMutation(
+    "post",
+    "/2022-09-01-00/resource-instance/{serviceProviderId}/{serviceKey}/{serviceAPIVersion}/{serviceEnvironmentKey}/{serviceModelKey}/{productTierKey}/{resourceKey}/{id}/start",
+    {
+      onSuccess: async () => {
+        refetchInstances();
+        setSelectedRows([]);
+        snackbar.showSuccess("Starting deployment instance...");
+      },
+    }
+  );
 
-  const restartInstanceMutation = useMutation({
-    mutationFn: restartResourceInstance,
-    onSuccess: async () => {
-      refetchInstances();
-      setSelectedRows([]);
-      snackbar.showSuccess("Rebooting deployment instance...");
-    },
-  });
+  const restartInstanceMutation = $api.useMutation(
+    "post",
+    "/2022-09-01-00/resource-instance/{serviceProviderId}/{serviceKey}/{serviceAPIVersion}/{serviceEnvironmentKey}/{serviceModelKey}/{productTierKey}/{resourceKey}/{id}/restart",
+    {
+      onSuccess: async () => {
+        refetchInstances();
+        setSelectedRows([]);
+        snackbar.showSuccess("Restarting deployment instance...");
+      },
+    }
+  );
 
   const selectedResource = useMemo(() => {
     return getMainResourceFromInstance(selectedInstance, selectedInstanceOffering);
@@ -107,7 +114,7 @@ const InstancesTableHeader = ({
 
     const isDeleteAllowedByRBAC = isOperationAllowedByRBAC(operationEnum.Delete, role, viewEnum.Access_Resources);
 
-    const requestData = {
+    const pathData = {
       serviceProviderId: selectedInstanceOffering?.serviceProviderId,
       serviceKey: selectedInstanceOffering?.serviceURLKey,
       serviceAPIVersion: selectedInstanceOffering?.serviceAPIVersion,
@@ -116,7 +123,6 @@ const InstancesTableHeader = ({
       productTierKey: selectedInstanceOffering?.productTierURLKey,
       resourceKey: selectedResource?.urlKey as string,
       id: selectedInstance?.id,
-      subscriptionId: selectedInstance?.subscriptionId,
     };
 
     actions.push({
@@ -134,7 +140,14 @@ const InstancesTableHeader = ({
       onClick: () => {
         if (!selectedInstance) return snackbar.showError("Please select an instance");
         if (!selectedInstanceOffering) return snackbar.showError("Service Offering not found");
-        stopInstanceMutation.mutate(requestData);
+        stopInstanceMutation.mutate({
+          params: {
+            path: pathData,
+            query: {
+              subscriptionId: selectedInstance?.subscriptionId,
+            },
+          },
+        });
       },
       disabledMessage: !selectedInstance
         ? "Please select an instance"
@@ -164,7 +177,14 @@ const InstancesTableHeader = ({
       onClick: () => {
         if (!selectedInstance) return snackbar.showError("Please select an instance");
         if (!selectedInstanceOffering) return snackbar.showError("Service Offering not found");
-        startInstanceMutation.mutate(requestData);
+        startInstanceMutation.mutate({
+          params: {
+            path: pathData,
+            query: {
+              subscriptionId: selectedInstance?.subscriptionId,
+            },
+          },
+        });
       },
       disabledMessage: !selectedInstance
         ? "Please select an instance"
@@ -262,7 +282,14 @@ const InstancesTableHeader = ({
         onClick: () => {
           if (!selectedInstance) return snackbar.showError("Please select an instance");
           if (!selectedInstanceOffering) return snackbar.showError("Service Offering not found");
-          restartInstanceMutation.mutate(requestData);
+          restartInstanceMutation.mutate({
+            params: {
+              path: pathData,
+              query: {
+                subscriptionId: selectedInstance?.subscriptionId,
+              },
+            },
+          });
         },
         disabledMessage: !selectedInstance
           ? "Please select an instance"

@@ -1,21 +1,41 @@
-import axios from "axios";
+import { defaultClient } from "./client";
 
 export function customerUserSignup(payload) {
-  return axios.post(`/api/signup`, payload);
+  return defaultClient.POST("/api/signup", {
+    body: payload,
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
 }
 
 export function customerUserSignin(payload) {
-  return axios.post(`/api/signin`, payload);
+  return defaultClient.POST("/api/signin", {
+    body: payload,
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
 }
 
 export function customerUserResetPassword(payload) {
-  return axios.post(`/api/reset-password`, payload);
+  return defaultClient.POST("/api/reset-password", {
+    body: payload,
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
 }
 
 export function getProviderOrgDetails() {
-  return axios.get(`/api/provider-details`);
+  return defaultClient.GET("/api/provider-org-details");
 }
 
 export function customerSignInWithIdentityProvider(payload) {
-  return axios.post("/api/sign-in-with-idp", payload);
+  return defaultClient.POST("/api/sign-in-with-idp", {
+    body: payload,
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
 }

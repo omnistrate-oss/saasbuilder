@@ -179,30 +179,26 @@ const ManageSubscriptionsForm = ({ defaultServiceId, defaultServicePlanId, isFet
                   if (id.startsWith("subr")) {
                     snackbar.showSuccess("Subscription Request sent successfully");
 
-                    queryClient.setQueryData(["subscription-requests"], (oldData: any) => {
+                    queryClient.setQueryData(["get", "/2022-09-01-00/subscription/request", {}], (oldData: any) => {
                       return {
-                        ...oldData,
-                        data: {
-                          ids: [...(oldData.data.ids || []), id],
-                          subscriptionRequests: [
-                            ...(oldData.data.subscriptionRequests || []),
-                            {
-                              id,
-                              serviceId: plan.serviceId,
-                              serviceName: plan.serviceName,
-                              productTierId: plan.productTierID,
-                              productTierName: plan.productTierName,
-                              rootUserId: selectUser.id,
-                              rootUserEmail: selectUser.email,
-                              rootUserName: selectUser.name,
-                              status: "PENDING",
-                              createdAt: new Date().toISOString(),
-                              updatedAt: new Date().toISOString(),
-                              updatedByUserId: "",
-                              updatedByUserName: "",
-                            },
-                          ],
-                        },
+                        subscriptionRequests: [
+                          ...(oldData.data.subscriptionRequests || []),
+                          {
+                            id,
+                            serviceId: plan.serviceId,
+                            serviceName: plan.serviceName,
+                            productTierId: plan.productTierID,
+                            productTierName: plan.productTierName,
+                            rootUserId: selectUser.id,
+                            rootUserEmail: selectUser.email,
+                            rootUserName: selectUser.name,
+                            status: "PENDING",
+                            createdAt: new Date().toISOString(),
+                            updatedAt: new Date().toISOString(),
+                            updatedByUserId: "",
+                            updatedByUserName: "",
+                          },
+                        ],
                       };
                     });
                   } else if (id.startsWith("sub")) {

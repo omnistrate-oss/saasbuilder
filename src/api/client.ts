@@ -10,6 +10,7 @@ export function setGlobalErrorHandler(handler: ((error: Error) => void) | null) 
   globalErrorHandler = handler;
 }
 
+export const defaultClient = createFetchClient();
 export const apiClient = createFetchClient<paths>();
 
 apiClient.use({
