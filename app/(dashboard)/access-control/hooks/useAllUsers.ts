@@ -1,24 +1,24 @@
-import { useQuery } from "@tanstack/react-query";
-
-import { getAllSubscriptionUsers } from "src/api/users";
+import { $api } from "src/api/query";
 import useEnvironmentType from "src/hooks/useEnvironmentType";
 
 const useAllUsers = (queryOptions = {}) => {
-  const environmentType = useEnvironmentType();
+  const query = $api.useQuery(
+    "get",
+    "/2022-09-01-00/resource-instance/subscription-users",
+    {
+      params: {
+        query: {
+          environmentType: useEnvironmentType(),
+        },
+      },
+    },
+    {
+      select: (data) => data.subscriptionUsers,
+      ...queryOptions,
+    }
+  );
 
-  const instancesQuery = useQuery({
-    queryKey: ["users", environmentType],
-    queryFn: async () => {
-      return getAllSubscriptionUsers({
-        environmentType,
-      });
-    },
-    select: (data) => {
-      return data.data.subscriptionUsers;
-    },
-    ...queryOptions,
-  });
-  return instancesQuery;
+  return query;
 };
 
 export default useAllUsers;

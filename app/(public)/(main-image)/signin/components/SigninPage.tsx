@@ -103,8 +103,8 @@ const SigninPage = (props) => {
       return customerUserSignin(payload);
     },
     onSuccess: (data) => {
-      /*eslint-disable-next-line no-use-before-define*/
       formik.resetForm();
+      // @ts-ignore
       const jwtToken = data.data.jwtToken;
       handleSignInSuccess(jwtToken);
     },

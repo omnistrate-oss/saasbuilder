@@ -1,26 +1,27 @@
-import { useQuery } from "@tanstack/react-query";
-
-import { getSubscriptions } from "src/api/subscriptions";
+import { $api } from "src/api/query";
 
 import useEnvironmentType from "../useEnvironmentType";
 
 // Before Making any Changes, Please Be Careful because we use the QueryClient to Update the Data when Unsubscribing
-const useSubscriptions = (queryOptions = {}) => {
-  const environmentType = useEnvironmentType();
-  const subscriptionData = useQuery({
-    queryKey: ["user-subscriptions"],
-    queryFn: () => {
-      return getSubscriptions({
-        environmentType,
-      });
-    },
-    select: (data) => {
-      return data.data.subscriptions;
-    },
-    ...queryOptions,
-  });
 
-  return subscriptionData;
+const useSubscriptions = (queryOptions = {}) => {
+  const query = $api.useQuery(
+    "get",
+    "/2022-09-01-00/subscription",
+    {
+      params: {
+        query: {
+          environmentType: useEnvironmentType(),
+        },
+      },
+    },
+    {
+      select: (data) => data.subscriptions,
+      ...queryOptions,
+    }
+  );
+
+  return query;
 };
 
 export default useSubscriptions;

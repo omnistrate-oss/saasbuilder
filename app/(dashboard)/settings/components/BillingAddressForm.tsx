@@ -1,10 +1,9 @@
 "use client";
 
 import { useMemo } from "react";
-import { useMutation } from "@tanstack/react-query";
 import { useFormik } from "formik";
 
-import { updateProfile } from "src/api/users";
+import { $api } from "src/api/query";
 import useSnackbar from "src/hooks/useSnackbar";
 import Button from "components/Button/Button";
 import LoadingSpinnerSmall from "components/CircularProgress/CircularProgress";
@@ -28,8 +27,7 @@ type BillingAddressFormProps = {
 const BillingAddressForm: React.FC<BillingAddressFormProps> = ({ userData, isLoadingUserData, refetchUserData }) => {
   const snackbar = useSnackbar();
 
-  const updateProfileMutation = useMutation({
-    mutationFn: (data) => updateProfile(userData?.id, data),
+  const updateProfileMutation = $api.useMutation("patch", "/2022-09-01-00/user/{id}", {
     onSuccess: () => {
       refetchUserData();
       snackbar.showSuccess("Billing address updated successfully");
@@ -57,7 +55,14 @@ const BillingAddressForm: React.FC<BillingAddressFormProps> = ({ userData, isLoa
         }
       }
 
-      updateProfileMutation.mutate(data as any);
+      updateProfileMutation.mutate({
+        params: {
+          path: {
+            id: userData?.id,
+          },
+        },
+        body: data,
+      });
     },
     validationSchema: BillingAddressValidationSchema,
   });

@@ -25,6 +25,7 @@ const IDPAuthPage = () => {
     async (payload, destination) => {
       try {
         const response = await customerSignInWithIdentityProvider(payload);
+        // @ts-ignore
         const jwtToken = response.data.jwtToken;
         sessionStorage.removeItem("authState");
         if (jwtToken) {

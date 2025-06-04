@@ -1,6 +1,6 @@
 import { useMemo } from "react";
+import { format, startOfMonth, subMonths } from "date-fns";
 import { Bar, BarChart, CartesianGrid, ResponsiveContainer, XAxis, YAxis } from "recharts";
-import { format, subMonths, startOfMonth } from "date-fns";
 
 import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
 import { Text } from "src/components/Typography/Typography";

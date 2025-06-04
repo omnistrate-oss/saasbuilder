@@ -7,6 +7,7 @@ import { useQueryClient } from "@tanstack/react-query";
 
 import Button from "src/components/Button/Button";
 import { Text } from "src/components/Typography/Typography";
+import useEnvironmentType from "src/hooks/useEnvironmentType";
 import {
   // ACCOUNT_CREATION_METHODS,
   getAccountConfigStatusBasedHeader,
@@ -142,14 +143,11 @@ const CreationTimeInstructions = (props) => {
     azureShellScriptGuide,
     azureBootstrapShellCommand,
     accountInstructionDetails,
-    // orgId,
-    // accountConfigMethod,
-    // terraformlink,
-    // terraformGuide,
     fetchClickedInstanceDetails,
     setClickedInstance,
   } = props;
 
+  const environmentType = useEnvironmentType();
   const queryClient = useQueryClient();
   const [isPolling, setIsPolling] = useState(true);
   const timeoutId = useRef();
@@ -177,18 +175,26 @@ const CreationTimeInstructions = (props) => {
         result_params: { ...prev?.result_params, ...result_params },
       }));
 
-      queryClient.setQueryData(["instances"], (oldData) => {
-        const result_params = {
-          // @ts-ignore
-          ...oldData?.data?.resourceInstances?.result_params,
-          ...resourceInstance.result_params,
-        };
+      queryClient.setQueryData(
+        [
+          "get",
+          "/2022-09-01-00/resource-instance",
+          {
+            params: {
+              query: { environmentType },
+            },
+          },
+        ],
+        (oldData) => {
+          const result_params = {
+            // @ts-ignore
+            ...oldData?.resourceInstances?.result_params,
+            ...resourceInstance.result_params,
+          };
 
-        return {
-          ...oldData,
-          data: {
+          return {
             resourceInstances: [
-              ...(oldData?.data?.resourceInstances || [])?.map((instance) =>
+              ...(oldData?.resourceInstances || []).map((instance) =>
                 instance?.id === resourceInstance?.id
                   ? {
                       ...(resourceInstance || {}),
@@ -197,9 +203,9 @@ const CreationTimeInstructions = (props) => {
                   : instance
               ),
             ],
-          },
-        };
-      });
+          };
+        }
+      );
 
       setIsPolling(false);
     } else if (pollCountRef.current < 3) {

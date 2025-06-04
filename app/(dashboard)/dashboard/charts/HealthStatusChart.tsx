@@ -2,11 +2,12 @@ import { useMemo } from "react";
 import { Label, Legend, Pie, PieChart } from "recharts";
 
 import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
+import { getInstanceHealthStatus } from "src/components/InstanceHealthStatusChip/InstanceHealthStatusChip";
+import { Text } from "src/components/Typography/Typography";
 import { ResourceInstance } from "src/types/resourceInstance";
+
 import CustomLegend from "./CustomLegend";
 import { useDynamicInnerRadius } from "./useDynamicInnerRadius"; // ✅ Import the hook
-import { Text } from "src/components/Typography/Typography";
-import { getInstanceHealthStatus } from "src/components/InstanceHealthStatusChip/InstanceHealthStatusChip";
 
 type HealthStatusChartProps = {
   instances: ResourceInstance[];

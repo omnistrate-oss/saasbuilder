@@ -1,9 +1,8 @@
 "use client";
 
-import { useMutation } from "@tanstack/react-query";
 import { useFormik } from "formik";
 
-import { updateProfile } from "src/api/users";
+import { $api } from "src/api/query";
 import useSnackbar from "src/hooks/useSnackbar";
 import Button from "components/Button/Button";
 import LoadingSpinnerSmall from "components/CircularProgress/CircularProgress";
@@ -24,8 +23,7 @@ type ProfileFormProps = {
 const ProfileForm: React.FC<ProfileFormProps> = ({ userData, isLoadingUserData, refetchUserData }) => {
   const snackbar = useSnackbar();
 
-  const updateProfileMutation = useMutation({
-    mutationFn: (data) => updateProfile(userData?.id, data),
+  const updateProfileMutation = $api.useMutation("patch", "/2022-09-01-00/user/{id}", {
     onSuccess: () => {
       refetchUserData();
       snackbar.showSuccess("Profile updated successfully");
@@ -50,7 +48,14 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ userData, isLoadingUserData, 
         }
       }
 
-      updateProfileMutation.mutate(data as any);
+      updateProfileMutation.mutate({
+        params: {
+          path: {
+            id: userData.id,
+          },
+        },
+        body: data,
+      });
     },
     validationSchema: ProfileValidationSchema,
   });
