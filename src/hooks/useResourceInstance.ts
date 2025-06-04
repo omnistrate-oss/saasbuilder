@@ -46,6 +46,9 @@ const useResourceInstance = (queryParams) => {
           resourceKey,
           id: resourceInstanceId,
         },
+        query: {
+          subscriptionId,
+        },
       },
     },
     {
