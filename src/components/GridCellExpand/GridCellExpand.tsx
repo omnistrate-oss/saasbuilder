@@ -28,7 +28,7 @@ const GridCellExpand = React.memo(function GridCellExpand(props: GridCellExpandP
     startIcon,
     endIcon,
     textStyles = {},
-    onClick = () => {},
+    onClick,
     href,
     target = "_self",
     justifyContent = "start",
@@ -46,6 +46,8 @@ const GridCellExpand = React.memo(function GridCellExpand(props: GridCellExpandP
     }
   };
 
+  const isClickable = Boolean(onClick) || Boolean(href);
+
   const CellValue = (
     <Box
       sx={{
@@ -58,7 +60,7 @@ const GridCellExpand = React.memo(function GridCellExpand(props: GridCellExpandP
         justifyContent: "center",
         gap: "6px",
         color: disabled ? "#A4A7AE" : "inherit", // Apply disabled color
-        cursor: disabled ? "not-allowed" : "pointer",
+        cursor: disabled ? "not-allowed" : isClickable ? "pointer" : "auto",
       }}
     >
       {startIcon && (
