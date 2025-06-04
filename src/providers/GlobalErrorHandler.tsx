@@ -19,22 +19,24 @@ const GlobalErrorHandler = () => {
 
   useEffect(() => {
     // listen to logout event from one tab and log out from all other tabs
-    if (logoutBroadcastChannel) {
-      logoutBroadcastChannel.onmessage = (event) => {
-        if (event.data === "logout") {
-          const regex =
-            /^\/(signin|signup|reset-password|validate-token|change-password|privacy-policy|cookie-policy|terms-of-use)$/;
-          if (regex.test(pathname as string)) {
-            return;
-          }
-          handleLogout();
+    const handleMessage = (event) => {
+      if (event.data === "logout") {
+        const regex =
+          /^\/(signin|signup|reset-password|validate-token|change-password|privacy-policy|cookie-policy|terms-of-use)$/;
+        if (regex.test(pathname as string)) {
+          return;
         }
-      };
+        handleLogout();
+      }
+    };
+
+    if (logoutBroadcastChannel) {
+      logoutBroadcastChannel.addEventListener("message", handleMessage);
     }
 
     return () => {
       if (logoutBroadcastChannel) {
-        logoutBroadcastChannel.onmessage = null;
+        logoutBroadcastChannel.removeEventListener("message", handleMessage);
       }
     };
   }, [pathname, handleLogout]);

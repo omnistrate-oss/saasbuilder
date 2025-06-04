@@ -182,7 +182,7 @@ const ManageSubscriptionsForm = ({ defaultServiceId, defaultServicePlanId, isFet
                     queryClient.setQueryData(["get", "/2022-09-01-00/subscription/request", {}], (oldData: any) => {
                       return {
                         subscriptionRequests: [
-                          ...(oldData.data.subscriptionRequests || []),
+                          ...(oldData.subscriptionRequests || []),
                           {
                             id,
                             serviceId: plan.serviceId,

@@ -47,14 +47,18 @@ const ChangePasswordPage = () => {
     },
     enableReinitialize: true,
     onSubmit: async (values) => {
-      await changePasswordMutation.mutateAsync({
-        body: {
-          email: decodeURIComponent(email as string),
-          token: decodeURIComponent(token as string),
-          password: values.password,
-        },
-      });
-      formik.resetForm();
+      try {
+        await changePasswordMutation.mutateAsync({
+          body: {
+            email: decodeURIComponent(email as string),
+            token: decodeURIComponent(token as string),
+            password: values.password,
+          },
+        });
+        formik.resetForm();
+      } catch (error) {
+        console.error("Password change failed:", error);
+      }
     },
     validationSchema: changePasswordValidationSchema,
   });

@@ -28,7 +28,7 @@ export function customerUserResetPassword(payload) {
 }
 
 export function getProviderOrgDetails() {
-  return defaultClient.GET("/api/provider-org-details");
+  return defaultClient.GET("/api/provider-details");
 }
 
 export function customerSignInWithIdentityProvider(payload) {

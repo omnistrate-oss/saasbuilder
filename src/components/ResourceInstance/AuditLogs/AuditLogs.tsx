@@ -22,7 +22,7 @@ import RefreshWithToolTip from "src/components/RefreshWithTooltip/RefreshWithToo
 import useUserData from "src/hooks/usersData";
 import { AuditEvent } from "src/types/auditEvent";
 import { SetState } from "src/types/common/reactGenerics";
-import { AccessEvent, EventType } from "src/types/event";
+import { EventType } from "src/types/event";
 import formatDateUTC from "src/utils/formatDateUTC";
 import { getAccessControlRoute } from "src/utils/route/access/accessRoute";
 import DataGridHeaderTitle from "components/Headers/DataGridHeaderTitle";
@@ -47,7 +47,7 @@ type AuditLogsTableHeaderProps = {
   setSelectedEventTypes: SetState<EventType[]>;
 };
 
-const columnHelper = createColumnHelper<AccessEvent>();
+const columnHelper = createColumnHelper<AuditEvent>();
 
 const AuditLogsTableHeader: FC<AuditLogsTableHeaderProps> = (props) => {
   const {
@@ -175,7 +175,11 @@ const AuditLogs: FC<AuditLogsTabProps> = ({ instanceId, subscriptionId }) => {
         id: "type",
         header: "Type",
         cell: (data) => {
-          return data.row.original.eventSource ? <EventTypeChip eventType={data.row.original.eventSource} /> : "-";
+          return data.row.original.eventSource ? (
+            <EventTypeChip eventType={data.row.original.eventSource as EventType} />
+          ) : (
+            "-"
+          );
         },
       }),
       columnHelper.accessor((row) => formatDateUTC(row.time), {

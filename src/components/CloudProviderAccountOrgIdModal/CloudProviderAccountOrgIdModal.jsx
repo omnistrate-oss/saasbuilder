@@ -194,7 +194,7 @@ const CreationTimeInstructions = (props) => {
 
           return {
             resourceInstances: [
-              ...(oldData?.data?.resourceInstances || [])?.map((instance) =>
+              ...(oldData?.resourceInstances || []).map((instance) =>
                 instance?.id === resourceInstance?.id
                   ? {
                       ...(resourceInstance || {}),

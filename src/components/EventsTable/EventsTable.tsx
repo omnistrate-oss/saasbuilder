@@ -14,8 +14,9 @@ import DataTable from "src/components/DataTable/DataTable";
 import DataGridHeaderTitle from "src/components/Headers/DataGridHeaderTitle";
 import RefreshWithToolTip from "src/components/RefreshWithTooltip/RefreshWithToolTip";
 import AuditLogsEventFilterDropdown from "src/components/ResourceInstance/AuditLogs/components/AuditLogsEventFilterDropdown";
+import { AuditEvent } from "src/types/auditEvent";
 import { SetState } from "src/types/common/reactGenerics";
-import { AccessEvent, EventType } from "src/types/event";
+import { EventType } from "src/types/event";
 import formatDateUTC from "src/utils/formatDateUTC";
 import { getAccessControlRoute } from "src/utils/route/access/accessRoute";
 
@@ -28,7 +29,7 @@ import EventTypeChip from "./EventTypeChip";
 
 dayjs.extend(isSameOrBefore);
 dayjs.extend(isSameOrAfter);
-const columnHelper = createColumnHelper<AccessEvent>();
+const columnHelper = createColumnHelper<AuditEvent>();
 
 type EventsTableHeaderProps = {
   count: number;
@@ -112,7 +113,7 @@ const EventsTableHeader: FC<EventsTableHeaderProps> = (props) => {
   );
 };
 
-function DetailTableRowView(props: { rowData: AccessEvent }) {
+function DetailTableRowView(props: { rowData: AuditEvent }) {
   const { rowData: event } = props;
   const { workflowFailures } = event;
   return (
@@ -138,7 +139,7 @@ function DetailTableRowView(props: { rowData: AccessEvent }) {
 }
 
 type EventsTableProps = {
-  events: AccessEvent[];
+  events: AuditEvent[];
   serviceId: string;
   environmentId: string;
   productTierId: string;
@@ -220,7 +221,7 @@ const EventsTable: FC<EventsTableProps> = (props) => {
               header: "Type",
               cell: (data) => {
                 return data.row.original.eventSource ? (
-                  <EventTypeChip eventType={data.row.original.eventSource} />
+                  <EventTypeChip eventType={data.row.original.eventSource as EventType} />
                 ) : (
                   "-"
                 );

@@ -261,13 +261,12 @@ const useResourceInstance = (queryParams) => {
           clusterPorts = Object.values(data.detailedNetworkTopology).reduce(
             (accumulator: any, topologyDetails: any) => {
               if (topologyDetails.main) return accumulator;
-              return [
-                ...accumulator,
-                {
-                  resourceName: topologyDetails?.resourceName,
-                  ports: processClusterPorts(topologyDetails?.clusterPorts),
-                },
-              ];
+
+              accumulator.push({
+                resourceName: topologyDetails?.resourceName,
+                ports: processClusterPorts(topologyDetails?.clusterPorts),
+              });
+              return accumulator;
             },
             [
               {
