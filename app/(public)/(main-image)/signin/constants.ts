@@ -6,7 +6,7 @@ import GithubLoginIcon from "src/components/Icons/GithubLogin/GithubLogin";
 import GoogleLoginIcon from "src/components/Icons/GoogleLogin/GoogleLogin";
 import KeycloakIcon from "src/components/Icons/Keycloak/Keycloak";
 import MicrosoftEntraIcon from "src/components/Icons/MicrosoftEntra/MicrosoftEntra";
-import OklaIcon from "src/components/Icons/Okla/Okla";
+import OktaIcon from "src/components/Icons/Okta/Okta";
 import OpenIDConnectIcon from "src/components/Icons/OpenIDConnect/OpenIDConnect";
 
 export const IDENTITY_PROVIDER_STATUS_TYPES = {
@@ -30,8 +30,8 @@ export const IDENTITY_PROVIDER_ICON_MAP = {
   GitHub: GithubLoginIcon,
   "Amazon Cognito": AmazonCognitoIcon,
   "Microsoft Entra": MicrosoftEntraIcon,
-  Okta: OklaIcon,
+  Okta: OktaIcon,
   Auth0: AuthOIcon,
-  Keycloak: OpenIDConnectIcon,
-  "OpenID Connect": KeycloakIcon,
+  Keycloak: KeycloakIcon,
+  "OpenID Connect": OpenIDConnectIcon,
 };
