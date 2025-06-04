@@ -67,7 +67,6 @@ export default async function handleSignIn(nextRequest, nextResponse) {
           const users = buildUsersRes?.data?.orgUsers;
           const email = nextRequest.body.email;
           const emailExistsInBuildUsers = users?.some((user) => user?.email === email);
-          console.log("email exists", emailExistsInBuildUsers);
           if (emailExistsInBuildUsers) {
             defaultErrorMessage = "Omnistrate credentials can’t be used in Production. Use a customer account instead";
           }
