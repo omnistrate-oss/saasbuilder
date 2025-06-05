@@ -1,4 +1,6 @@
-import { defaultClient } from "./client";
+import createFetchClient from "openapi-fetch";
+
+export const defaultClient = createFetchClient();
 
 export function customerUserSignup(payload) {
   return defaultClient.POST("/api/signup", {

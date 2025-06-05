@@ -9,7 +9,6 @@ function useServiceApiDocsData(serviceId, serviceApiId) {
       return getServiceApiDocs(serviceId, serviceApiId);
     },
     enabled: Boolean(serviceId && serviceApiId),
-    refetchOnWindowFocus: false,
     select: (response) => {
       return response.data;
     },

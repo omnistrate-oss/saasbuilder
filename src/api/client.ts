@@ -10,11 +10,10 @@ export function setGlobalErrorHandler(handler: ((error: Error) => void) | null) 
   globalErrorHandler = handler;
 }
 
-export const defaultClient = createFetchClient();
 export const apiClient = createFetchClient<paths>();
 
 apiClient.use({
-  onRequest({ request }) {
+  async onRequest({ request }) {
     const token = Cookies.get("token");
     if (token) {
       request.headers.set("Authorization", `Bearer ${token}`);
@@ -31,8 +30,12 @@ apiClient.use({
       // Get original request body
       let originalRequestPayload;
       if (request.body) {
-        // Clone the body since it can only be read once
-        originalRequestPayload = request.clone().body;
+        const clonedRequest = request.clone();
+        try {
+          originalRequestPayload = await clonedRequest.json();
+        } catch {
+          originalRequestPayload = await clonedRequest.text();
+        }
       }
 
       // Get original query parameters
@@ -138,6 +141,34 @@ apiClient.use({
           }
         }
       }
+    }
+
+    // Handle empty responses - Happens for some delete operations
+    const clonedResponse = response.clone();
+    const text = await clonedResponse.text();
+    if (text.trim() === "") {
+      console.warn("Received empty response for:", request.url);
+      return new Response("{}", {
+        status: response.status,
+        statusText: response.statusText,
+        headers: {
+          ...Object.fromEntries(response.headers.entries()),
+          "Content-Type": "application/json",
+        },
+      });
+    }
+
+    // Handle non-JSON responses
+    if (!response.headers.get("Content-Type")?.includes("application/json")) {
+      console.warn("Non-JSON response received:", text);
+      return new Response(JSON.stringify({ data: text }), {
+        status: response.status,
+        statusText: response.statusText,
+        headers: {
+          ...Object.fromEntries(response.headers.entries()),
+          "Content-Type": "application/json",
+        },
+      });
     }
 
     return response;

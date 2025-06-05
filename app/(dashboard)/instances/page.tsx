@@ -2,10 +2,9 @@
 
 import { useMemo, useState } from "react";
 import { Box, Stack } from "@mui/material";
-import { useMutation } from "@tanstack/react-query";
 import { createColumnHelper } from "@tanstack/react-table";
 
-import { deleteResourceInstance } from "src/api/resourceInstance";
+import { $api } from "src/api/query";
 import LoadIndicatorHigh from "src/components/Icons/LoadIndicator/LoadIndicatorHigh";
 import LoadIndicatorIdle from "src/components/Icons/LoadIndicator/LoadIndicatorIdle";
 import LoadIndicatorNormal from "src/components/Icons/LoadIndicator/LoadIndicatorNormal";
@@ -442,23 +441,18 @@ const InstancesPage = () => {
     };
   }, [selectedInstance, selectedInstanceOffering, selectedInstanceSubscription, selectedResource]);
 
-  const deleteInstanceMutation = useMutation({
-    mutationFn: () => {
-      return deleteResourceInstance(selectedInstanceData);
-    },
-    onSuccess: () => {
-      setSelectedRows([]);
-      refetchInstances();
-      setIsOverlayOpen(false);
-      snackbar.showSuccess("Deleting deployment instance...");
-    },
-  });
-
-  // const instancesFilterCount = {
-  //   failed: failedInstances.length,
-  //   overloaded: overloadedInstances.length,
-  //   unhealthy: unhealthyInstances.length,
-  // };
+  const deleteInstanceMutation = $api.useMutation(
+    "delete",
+    "/2022-09-01-00/resource-instance/{serviceProviderId}/{serviceKey}/{serviceAPIVersion}/{serviceEnvironmentKey}/{serviceModelKey}/{productTierKey}/{resourceKey}/{id}",
+    {
+      onSuccess: () => {
+        setSelectedRows([]);
+        refetchInstances();
+        setIsOverlayOpen(false);
+        snackbar.showSuccess("Deleting deployment instance...");
+      },
+    }
+  );
 
   const instancesCountSummary = useMemo(
     () => [
@@ -629,7 +623,23 @@ const InstancesPage = () => {
           if (!selectedResource) {
             return snackbar.showError("Resource not found");
           }
-          await deleteInstanceMutation.mutateAsync();
+          await deleteInstanceMutation.mutateAsync({
+            params: {
+              path: {
+                serviceProviderId: selectedInstanceData.serviceProviderId,
+                serviceKey: selectedInstanceData.serviceKey,
+                serviceAPIVersion: selectedInstanceData.serviceAPIVersion,
+                serviceEnvironmentKey: selectedInstanceData.serviceEnvironmentKey,
+                serviceModelKey: selectedInstanceData.serviceModelKey,
+                productTierKey: selectedInstanceData.productTierKey,
+                resourceKey: selectedInstanceData.resourceKey,
+                id: selectedInstanceData.instanceId,
+              },
+              query: {
+                subscriptionId: selectedInstanceSubscription.id,
+              },
+            },
+          });
         }}
         title="Delete Instance"
         subtitle={`Are you sure you want to delete - ${selectedRows[0]}?`}
