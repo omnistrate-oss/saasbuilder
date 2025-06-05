@@ -1,10 +1,12 @@
 import { FC, useState } from "react";
-import { InputAdornment } from "@mui/material";
+import Link from "next/link";
+import { InputAdornment, Stack } from "@mui/material";
 import { FormikProps } from "formik";
 
 import TextField from "src/components/FormElementsv2/TextField/TextField";
 import SubmitButton from "src/components/NonDashboardComponents/FormElementsV2/SubmitButton";
 import { Text } from "src/components/Typography/Typography";
+import useEnvironmentType from "src/hooks/useEnvironmentType";
 
 import AccessDeniedAlertDialog from "./AccessDeniedAlertDialog";
 
@@ -26,6 +28,7 @@ const PasswordLoginFields: FC<PasswordLoginFieldsProps> = ({
 }) => {
   const [showAccessDenied, setShowAccessDenied] = useState(false);
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+  const environmentType = useEnvironmentType();
 
   return (
     <>
@@ -71,6 +74,19 @@ const PasswordLoginFields: FC<PasswordLoginFieldsProps> = ({
           ),
         }}
       />
+      {environmentType === "PROD" && (
+        <Link
+          href="/reset-password"
+          style={{
+            fontWeight: "500",
+            fontSize: "14px",
+            lineHeight: "22px",
+            color: "#687588",
+          }}
+        >
+          Forgot Password
+        </Link>
+      )}
 
       <SubmitButton
         data-testid="login-button"
@@ -81,6 +97,11 @@ const PasswordLoginFields: FC<PasswordLoginFieldsProps> = ({
       >
         Sign In
       </SubmitButton>
+      {environmentType !== "PROD" && (
+        <Stack display="flex" justifyContent="center" alignItems="center" mt="22px">
+          <Text>Log in with your Omnistrate account credentials</Text>
+        </Stack>
+      )}
       <AccessDeniedAlertDialog open={showAccessDenied} handleClose={() => setShowAccessDenied(false)} />
     </>
   );

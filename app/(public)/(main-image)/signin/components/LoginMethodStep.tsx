@@ -112,6 +112,12 @@ const LoginMethodStep: FC<LoginMethodStepProps> = (props) => {
           if (matchingIdp) {
             selectedPreferredLoginMethod = matchingIdp.identityProviderName;
             selectedPreferredIdpName = matchingIdp.name;
+          } else {
+            //if last login method is not found in the current domain filtered identity providers, use the first available one
+            if (domainFilteredIdentityProviders.length > 0) {
+              selectedPreferredLoginMethod = domainFilteredIdentityProviders[0].identityProviderName;
+              selectedPreferredIdpName = domainFilteredIdentityProviders[0].name;
+            }
           }
         }
       } catch {}
@@ -268,6 +274,9 @@ const LoginMethodStep: FC<LoginMethodStepProps> = (props) => {
     }
   }
 
+  const hasNoLoginMethods = !isPasswordLoginEnabled && identityProviders.length === 0;
+  const hasNoLoginMethodsForEmail = !isPasswordLoginEnabled && domainFilteredIdentityProviders.length === 0;
+
   return (
     <Stack gap="24px">
       <FieldContainer>
@@ -321,92 +330,104 @@ const LoginMethodStep: FC<LoginMethodStepProps> = (props) => {
           }}
         />
       </FieldContainer>
-      {viewType === "password-login" ? (
-        <PasswordLoginFields
-          formData={formData}
-          isReCaptchaSetup={isReCaptchaSetup}
-          isRecaptchaScriptLoaded={isRecaptchaScriptLoaded}
-          isPasswordSignInLoading={isPasswordSignInLoading}
-        />
-      ) : (
-        <Stack gap="12px">
-          {defaultLoginMethodButton}
-
-          {idpOptionsExpanded &&
-            otherIdpSignInOptions.map((idp) => {
-              const loginButtonIconUrl = idp.loginButtonIconUrl;
-
-              let LoginButtonIcon: ReactNode;
-              if (loginButtonIconUrl) {
-                LoginButtonIcon = <LogoImg src={loginButtonIconUrl} alt={idp.name} />;
-              } else if (IDENTITY_PROVIDER_ICON_MAP[idp.identityProviderName]) {
-                const IconComponent: FC = IDENTITY_PROVIDER_ICON_MAP[idp.identityProviderName];
-                LoginButtonIcon = <IconComponent />;
-              } else {
-                LoginButtonIcon = <Box width="24px" height="24px" />;
-              }
-
-              return (
-                <Button
-                  variant="outlined"
-                  key={idp.name}
-                  size="xlarge"
-                  startIcon={LoginButtonIcon}
-                  sx={{ justifyContent: "flex-start" }}
-                  onClick={() => {
-                    handleIDPButtonClick(idp);
-                  }}
-                >
-                  <Box display="inline-flex" flexGrow={1} justifyContent="center">
-                    {idp.loginButtonText || `Continue with ${idp.name || idp.identityProviderName}`}
-                  </Box>
-                </Button>
-              );
-            })}
-          {preferredLoginMethod?.type?.toLocaleLowerCase() !== "password" &&
-            isPasswordLoginEnabled &&
-            idpOptionsExpanded &&
-            passwordLoginButton}
-        </Stack>
-      )}
-      {numOtherSignInOptions > 0 && (
-        <Button
-          variant="text"
-          disableRipple
-          endIcon={
-            idpOptionsExpanded ? (
-              <ExpandLessIcon style={{ color: "#414651", fontSize: "20px" }} />
-            ) : (
-              <ExpandMoreIcon style={{ color: "#414651", fontSize: "20px" }} />
-            )
-          }
-          onClick={() => {
-            if (idpOptionsExpanded) {
-              // If the options are expanded, we switch to password login
-              if (preferredLoginMethod?.type?.toLowerCase() === "password") {
-                setViewType("password-login");
-              } else {
-                setViewType("login-options");
-              }
-            } else {
-              setViewType("login-options");
-            }
-
-            setIdpOptionsExpanded((prev) => !prev);
-          }}
-        >
-          <Text size="medium" weight="semibold" sx={{ color: "#414651", textAlign: "center" }}>
-            {idpOptionsExpanded ? "View less options" : "Other sign in options"}
-          </Text>
-        </Button>
-      )}
-      {environmentType === "PROD" && (
-        <Text size="small" weight="regular" sx={{ color: "#535862", textAlign: "center" }}>
-          New to Omnistrate?{" "}
-          <Link href="/signup" style={{ color: "#364152", fontWeight: 600 }}>
-            Sign Up{" "}
-          </Link>
+      {hasNoLoginMethods ? (
+        <Text size="medium" weight="semibold" sx={{ color: "#414651", textAlign: "center", marginTop: "24px" }}>
+          No login methods available. Please contact support
         </Text>
+      ) : hasNoLoginMethodsForEmail ? (
+        <Text size="medium" weight="semibold" sx={{ color: "#414651", textAlign: "center", marginTop: "24px" }}>
+          No login methods available for this email. Try another email or contact support
+        </Text>
+      ) : (
+        <>
+          {viewType === "password-login" ? (
+            <PasswordLoginFields
+              formData={formData}
+              isReCaptchaSetup={isReCaptchaSetup}
+              isRecaptchaScriptLoaded={isRecaptchaScriptLoaded}
+              isPasswordSignInLoading={isPasswordSignInLoading}
+            />
+          ) : (
+            <Stack gap="12px">
+              {defaultLoginMethodButton}
+
+              {idpOptionsExpanded &&
+                otherIdpSignInOptions.map((idp) => {
+                  const loginButtonIconUrl = idp.loginButtonIconUrl;
+
+                  let LoginButtonIcon: ReactNode;
+                  if (loginButtonIconUrl) {
+                    LoginButtonIcon = <LogoImg src={loginButtonIconUrl} alt={idp.name} />;
+                  } else if (IDENTITY_PROVIDER_ICON_MAP[idp.identityProviderName]) {
+                    const IconComponent: FC = IDENTITY_PROVIDER_ICON_MAP[idp.identityProviderName];
+                    LoginButtonIcon = <IconComponent />;
+                  } else {
+                    LoginButtonIcon = <Box width="24px" height="24px" />;
+                  }
+
+                  return (
+                    <Button
+                      variant="outlined"
+                      key={idp.name}
+                      size="xlarge"
+                      startIcon={LoginButtonIcon}
+                      sx={{ justifyContent: "flex-start" }}
+                      onClick={() => {
+                        handleIDPButtonClick(idp);
+                      }}
+                    >
+                      <Box display="inline-flex" flexGrow={1} justifyContent="center">
+                        {idp.loginButtonText || `Continue with ${idp.name || idp.identityProviderName}`}
+                      </Box>
+                    </Button>
+                  );
+                })}
+              {preferredLoginMethod?.type?.toLocaleLowerCase() !== "password" &&
+                isPasswordLoginEnabled &&
+                idpOptionsExpanded &&
+                passwordLoginButton}
+            </Stack>
+          )}
+          {numOtherSignInOptions > 0 && (
+            <Button
+              variant="text"
+              disableRipple
+              endIcon={
+                idpOptionsExpanded ? (
+                  <ExpandLessIcon style={{ color: "#414651", fontSize: "20px" }} />
+                ) : (
+                  <ExpandMoreIcon style={{ color: "#414651", fontSize: "20px" }} />
+                )
+              }
+              onClick={() => {
+                if (idpOptionsExpanded) {
+                  // If the options are expanded, we switch to password login
+                  if (preferredLoginMethod?.type?.toLowerCase() === "password") {
+                    setViewType("password-login");
+                  } else {
+                    setViewType("login-options");
+                  }
+                } else {
+                  setViewType("login-options");
+                }
+
+                setIdpOptionsExpanded((prev) => !prev);
+              }}
+            >
+              <Text size="medium" weight="semibold" sx={{ color: "#414651", textAlign: "center" }}>
+                {idpOptionsExpanded ? "View less options" : "Other sign in options"}
+              </Text>
+            </Button>
+          )}
+          {environmentType === "PROD" && isPasswordLoginEnabled && (
+            <Text size="small" weight="regular" sx={{ color: "#535862", textAlign: "center" }}>
+              New to Omnistrate?{" "}
+              <Link href="/signup" style={{ color: "#364152", fontWeight: 600 }}>
+                Sign Up{" "}
+              </Link>
+            </Text>
+          )}
+        </>
       )}
     </Stack>
   );
