@@ -99,13 +99,15 @@ const SignInForm: FC<SignInFormProps> = ({
       delete axios.defaults.headers["Authorization"];
       return customerUserSignin(payload);
     },
-    onSuccess: (data) => {
+    onSuccess: (response) => {
       setLoginMethod({
         methodType: "Password",
       });
       /*eslint-disable-next-line no-use-before-define*/
       formik.resetForm();
-      const jwtToken = data.data.jwtToken;
+
+      //@ts-ignore
+      const jwtToken = response?.data?.jwtToken;
       handlePasswordSignInSuccess(jwtToken);
     },
     onError: (error: any) => {
