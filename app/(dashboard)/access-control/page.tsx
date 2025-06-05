@@ -2,10 +2,9 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
-import { useMutation } from "@tanstack/react-query";
 import { createColumnHelper } from "@tanstack/react-table";
 
-import { revokeSubscriptionUser } from "src/api/users";
+import { $api } from "src/api/query";
 import useSnackbar from "src/hooks/useSnackbar";
 import { useGlobalData } from "src/providers/GlobalDataProvider";
 import { SubscriptionUser } from "src/types/consumptionUser";
@@ -180,15 +179,18 @@ const AccessControlPage = () => {
     ];
   }, [subscriptionsObj]);
 
-  const deleteUserMutation = useMutation({
-    mutationFn: (payload: any) => revokeSubscriptionUser(payload.subscriptionId, payload),
-    onSuccess: async () => {
-      // TODO Later: Set the Query Data Directly without Refetching
-      refetchUsers();
-      setIsOverlayOpen(false);
-      snackbar.showSuccess("User access removed successfully");
-    },
-  });
+  const deleteUserMutation = $api.useMutation(
+    "delete",
+    "/2022-09-01-00/resource-instance/subscription/{subscriptionId}/revoke-user-role",
+    {
+      onSuccess: async () => {
+        // TODO Later: Set the Query Data Directly without Refetching
+        refetchUsers();
+        setIsOverlayOpen(false);
+        snackbar.showSuccess("User access removed successfully");
+      },
+    }
+  );
 
   const filteredUsers = useMemo(() => {
     let res = users || [];
@@ -244,12 +246,17 @@ const AccessControlPage = () => {
         onConfirm={async () => {
           if (!selectedUser) return snackbar.showError("No user selected");
 
-          const payload = {
-            email: selectedUser.email,
-            roleType: selectedUser.roleType,
-            subscriptionId: selectedUser.subscriptionId,
-          };
-          deleteUserMutation.mutate(payload);
+          deleteUserMutation.mutate({
+            params: {
+              path: {
+                subscriptionId: selectedUser.subscriptionId,
+              },
+            },
+            body: {
+              email: selectedUser.email,
+              roleType: selectedUser.roleType,
+            },
+          });
         }}
         confirmationText="remove"
         title="Remove Access"
