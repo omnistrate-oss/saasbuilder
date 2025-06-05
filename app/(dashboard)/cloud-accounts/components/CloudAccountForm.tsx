@@ -107,9 +107,9 @@ const CloudAccountForm = ({
     "post",
     "/2022-09-01-00/resource-instance/{serviceProviderId}/{serviceKey}/{serviceAPIVersion}/{serviceEnvironmentKey}/{serviceModelKey}/{productTierKey}/{resourceKey}",
     {
-      onSuccess: async (response: any) => {
+      onSuccess: async (response) => {
         const values = formData.values;
-        const instanceId = response.data.id;
+        const instanceId = response.id;
         const { serviceId, servicePlanId } = values;
         const offering = byoaServiceOfferingsObj[serviceId]?.[servicePlanId];
         const selectedResource = offering?.resourceParameters.find((resource) =>
