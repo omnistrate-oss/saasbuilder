@@ -6,7 +6,7 @@ import BrokenCircleCheckIcon from "app/(dashboard)/components/Icons/BrokenCircle
 import { useFormik } from "formik";
 
 import { customerUserResetPassword } from "src/api/customer-user";
-import { updatePassword } from "src/api/users";
+import { $api } from "src/api/query";
 import Divider from "src/components/Divider/Divider";
 import useLogout from "src/hooks/useLogout";
 import useSnackbar from "src/hooks/useSnackbar";
@@ -28,12 +28,8 @@ const PasswordForm: React.FC<PasswordFormProps> = ({ email }) => {
   const { logout } = useLogout();
   const loggedInUsingSSO = localStorage.getItem("loggedInUsingSSO");
   const isLoggedInUsingSSO = loggedInUsingSSO === "true";
-  const updatePasswordMutation = useMutation({
-    mutationFn: (data: any) =>
-      updatePassword({
-        currentPassword: data.currentPassword,
-        password: data.newPassword,
-      }),
+
+  const updatePasswordMutation = $api.useMutation("post", "/2022-09-01-00/update-password", {
     onSuccess: () => {
       logout();
       snackbar.showSuccess("Password updated successfully");
@@ -55,7 +51,12 @@ const PasswordForm: React.FC<PasswordFormProps> = ({ email }) => {
         }
       }
 
-      updatePasswordMutation.mutate(data);
+      updatePasswordMutation.mutate({
+        body: {
+          currentPassword: data.currentPassword,
+          password: data.newPassword,
+        },
+      });
     },
     validationSchema: PasswordValidationSchema,
   });

@@ -15,6 +15,7 @@ import CookieConsentProvider from "src/context/cookieConsentContext";
 import EnvironmentTypeProvider from "src/context/EnvironmentTypeProvider";
 import NotificationBarProvider from "src/context/NotificationBarProvider";
 import AxiosGlobalErrorHandler from "src/providers/AxiosGlobalErrorHandler";
+import GlobalErrorHandler from "src/providers/GlobalErrorHandler";
 import ProviderOrgDetailsProvider from "src/providers/ProviderOrgDetailsProvider";
 import { store } from "src/redux-store";
 import { EnvironmentType } from "src/types/common/enums";
@@ -69,8 +70,8 @@ const RootProviders = ({
             <SnackbarProvider>
               <NotificationBarProvider>
                 <AxiosGlobalErrorHandler />
-                {/* <ThemeProvider theme={isDashboardRoute ? dashboardTheme : nonDashboardTheme}> */}
-                <ThemeProvider theme={dashboardTheme}>
+                <GlobalErrorHandler />
+                <ThemeProvider theme={ dashboardTheme}>
                   <EnvironmentTypeProvider envType={envType}>
                     <ProviderOrgDetailsProvider details={providerOrgDetails}>
                       <CookieConsentProvider googleAnalyticsTagID={googleAnalyticsTagID}>

@@ -7,11 +7,7 @@ import { useMutation } from "@tanstack/react-query";
 import { createColumnHelper } from "@tanstack/react-table";
 import { useFormik } from "formik";
 
-import {
-  deleteResourceInstance,
-  getResourceInstanceDetails,
-  // getTerraformKit,
-} from "src/api/resourceInstance";
+import { deleteResourceInstance, getResourceInstanceDetails } from "src/api/resourceInstance";
 import ConnectAccountConfigDialog from "src/components/AccountConfigDialog/ConnectAccountConfigDialog";
 import DisconnectAccountConfigDialog from "src/components/AccountConfigDialog/DisconnectAccountConfigDialog";
 import { cloudProviderLongLogoMap } from "src/constants/cloudProviders";

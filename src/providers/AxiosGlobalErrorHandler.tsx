@@ -1,14 +1,11 @@
 import { useEffect, useState } from "react";
-import { usePathname } from "next/navigation";
 import { Alert, Snackbar } from "@mui/material";
 import _ from "lodash";
 
 import axios, { baseURL } from "src/axios";
-import { logoutBroadcastChannel } from "src/broadcastChannel";
 import useLogout from "src/hooks/useLogout";
 
 const AxiosGlobalErrorHandler = () => {
-  const pathname = usePathname();
   const { handleLogout } = useLogout();
   const [isOpen, setIsOpen] = useState(false);
   const [snackbarMsg, setSnackbarMsg] = useState("");
@@ -17,28 +14,6 @@ const AxiosGlobalErrorHandler = () => {
     setIsOpen(false);
     setSnackbarMsg("");
   }
-
-  useEffect(() => {
-    // listen to logout event from one tab and log out from all other tabs
-    if (logoutBroadcastChannel) {
-      logoutBroadcastChannel.onmessage = (event) => {
-        if (event.data === "logout") {
-          const regex =
-            /^\/(signin|signup|reset-password|validate-token|change-password|privacy-policy|cookie-policy|terms-of-use)$/;
-          if (regex.test(pathname as string)) {
-            return;
-          }
-          handleLogout();
-        }
-      };
-    }
-
-    return () => {
-      if (logoutBroadcastChannel) {
-        logoutBroadcastChannel.onmessage = null;
-      }
-    };
-  }, [pathname, handleLogout]);
 
   useEffect(() => {
     axios.interceptors.request.use((config) => {
@@ -54,7 +29,7 @@ const AxiosGlobalErrorHandler = () => {
         //requestMetaData is the payload that will be sent to the next js endpoint
         //it contains information about the original request
         const requestMetaData: any = {
-          endpoint: originalRequestURL,
+          endpoint: `/2022-09-01-00${originalRequestURL}`,
           method: _.upperCase(originalRequestMethod),
         };
 

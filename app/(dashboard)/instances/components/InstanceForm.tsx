@@ -1,13 +1,12 @@
 "use client";
 
 import React, { useEffect, useMemo } from "react";
-import { useMutation } from "@tanstack/react-query";
 import useCustomNetworks from "app/(dashboard)/custom-networks/hooks/useCustomNetworks";
 import { useFormik } from "formik";
 import { cloneDeep } from "lodash";
 import * as yup from "yup";
 
-import { createResourceInstance, updateResourceInstance } from "src/api/resourceInstance";
+import { $api } from "src/api/query";
 import Tooltip from "src/components/Tooltip/Tooltip";
 import { productTierTypes } from "src/constants/servicePlan";
 import useAvailabilityZone from "src/hooks/query/useAvailabilityZone";
@@ -61,35 +60,38 @@ const InstanceForm = ({
     return instances.filter((instance) => !isCloudAccountInstance(instance));
   }, [instances]);
 
-  const createInstanceMutation = useMutation({
-    mutationFn: async (payload: any) => {
-      return createResourceInstance(payload);
-    },
-    onSuccess: (response) => {
-      // Show the Create Instance Dialog
-      setIsOverlayOpen(true);
-      setOverlayType("create-instance-dialog");
-      setCreateInstanceModalData({
-        // @ts-ignore
-        isCustomDNS: formData.values.requestParams?.custom_dns_configuration,
-        instanceId: response.data?.id,
-      });
+  const createInstanceMutation = $api.useMutation(
+    "post",
+    "/2022-09-01-00/resource-instance/{serviceProviderId}/{serviceKey}/{serviceAPIVersion}/{serviceEnvironmentKey}/{serviceModelKey}/{productTierKey}/{resourceKey}",
+    {
+      onSuccess: (response) => {
+        // Show the Create Instance Dialog
+        setIsOverlayOpen(true);
+        setOverlayType("create-instance-dialog");
+        setCreateInstanceModalData({
+          isCustomDNS: formData.values.requestParams?.custom_dns_configuration,
+          instanceId: response?.id,
+        });
 
-      snackbar.showSuccess("Instance created successfully");
-      refetchInstances();
-      formData.resetForm();
-    },
-  });
+        snackbar.showSuccess("Instance created successfully");
+        refetchInstances();
+        formData.resetForm();
+      },
+    }
+  );
 
-  const updateResourceInstanceMutation = useMutation({
-    mutationFn: updateResourceInstance,
-    onSuccess: () => {
-      refetchInstances();
-      formData.resetForm();
-      snackbar.showSuccess("Updated Deployment Instance");
-      setIsOverlayOpen(false);
-    },
-  });
+  const updateInstanceMutation = $api.useMutation(
+    "patch",
+    "/2022-09-01-00/resource-instance/{serviceProviderId}/{serviceKey}/{serviceAPIVersion}/{serviceEnvironmentKey}/{serviceModelKey}/{productTierKey}/{resourceKey}/{id}",
+    {
+      onSuccess: () => {
+        refetchInstances();
+        formData.resetForm();
+        snackbar.showSuccess("Updated Deployment Instance");
+        setIsOverlayOpen(false);
+      },
+    }
+  );
 
   const formData = useFormik({
     initialValues: getInitialValues(
@@ -115,13 +117,6 @@ const InstanceForm = ({
 
       const data: any = {
         ...cloneDeep(values),
-        serviceProviderId: offering?.serviceProviderId,
-        serviceKey: offering?.serviceURLKey,
-        serviceAPIVersion: offering?.serviceAPIVersion,
-        serviceEnvironmentKey: offering?.serviceEnvironmentURLKey,
-        serviceModelKey: offering?.serviceModelURLKey,
-        productTierKey: offering?.productTierURLKey,
-        resourceKey: selectedResource?.urlKey,
       };
 
       const createSchema =
@@ -219,7 +214,24 @@ const InstanceForm = ({
         }
 
         if (!isTypeError) {
-          createInstanceMutation.mutate(data);
+          createInstanceMutation.mutate({
+            params: {
+              path: {
+                serviceProviderId: offering?.serviceProviderId,
+                serviceKey: offering?.serviceURLKey,
+                serviceAPIVersion: offering?.serviceAPIVersion,
+                serviceEnvironmentKey: offering?.serviceEnvironmentURLKey,
+                serviceModelKey: offering?.serviceModelURLKey,
+                productTierKey: offering?.productTierURLKey,
+                resourceKey: selectedResource?.urlKey || "",
+              },
+              query: {
+                subscriptionId: values.subscriptionId,
+              },
+            },
+
+            body: data,
+          });
         }
       } else {
         // Only send the fields that have changed
@@ -280,7 +292,24 @@ const InstanceForm = ({
         }
 
         if (!isTypeError) {
-          updateResourceInstanceMutation.mutate(data);
+          updateInstanceMutation.mutate({
+            params: {
+              path: {
+                serviceProviderId: offering?.serviceProviderId,
+                serviceKey: offering?.serviceURLKey,
+                serviceAPIVersion: offering?.serviceAPIVersion,
+                serviceEnvironmentKey: offering?.serviceEnvironmentURLKey,
+                serviceModelKey: offering?.serviceModelURLKey,
+                productTierKey: offering?.productTierURLKey,
+                resourceKey: selectedResource?.urlKey || "",
+                id: selectedInstance?.id,
+              },
+              query: {
+                subscriptionId: values.subscriptionId,
+              },
+            },
+            body: data,
+          });
         }
       }
     },
@@ -302,12 +331,11 @@ const InstanceForm = ({
 
   const resourceSchema = resourceSchemaData?.apis?.find((api) => api.verb === "CREATE") as APIEntity;
 
-  const { data: customAvailabilityZoneData, isLoading: isFetchingCustomAvailabilityZones } = useAvailabilityZone(
-    values.region,
-    values.cloudProvider as CloudProvider,
-    // @ts-ignore
-    values.requestParams?.custom_availability_zone !== undefined
-  );
+  const { data: customAvailabilityZoneData, isLoading: isFetchingCustomAvailabilityZones } = useAvailabilityZone({
+    regionCode: values.region,
+    cloudProviderName: values.cloudProvider as CloudProvider,
+    hasCustomAvailabilityZoneField: values.requestParams?.custom_availability_zone !== undefined,
+  });
 
   const { isFetching: isFetchingResourceInstanceIds, data: resourceIdInstancesHashMap = {} } = useResourcesInstanceIds(
     offering?.serviceProviderId,
@@ -357,6 +385,7 @@ const InstanceForm = ({
   }, [resourceSchema, formMode, offering]);
 
   const customAvailabilityZones = useMemo(() => {
+    // @ts-expect-error TODO: Ask someone on the backend to fix the docs
     const availabilityZones = customAvailabilityZoneData?.availabilityZones || [];
     return availabilityZones.sort(function (a, b) {
       if (a.code < b.code) return -1;
@@ -365,6 +394,7 @@ const InstanceForm = ({
       }
       return -1;
     });
+    // @ts-expect-error TODO: Ask someone on the backend to fix the docs
   }, [customAvailabilityZoneData?.availabilityZones]);
 
   const cloudAccountInstances = useMemo(
@@ -537,7 +567,7 @@ const InstanceForm = ({
               data-testid="cancel-button"
               variant="outlined"
               onClick={() => setIsOverlayOpen(false)}
-              disabled={createInstanceMutation.isPending || updateResourceInstanceMutation.isPending}
+              disabled={createInstanceMutation.isPending || updateInstanceMutation.isPending}
               sx={{ marginLeft: "auto" }} // Pushes the 2 buttons to the end
             >
               Cancel
@@ -552,16 +582,12 @@ const InstanceForm = ({
                   data-testid="submit-button"
                   variant="contained"
                   disabled={
-                    createInstanceMutation.isPending ||
-                    updateResourceInstanceMutation.isPending ||
-                    disableInstanceCreation
+                    createInstanceMutation.isPending || updateInstanceMutation.isPending || disableInstanceCreation
                   }
                   type="submit"
                 >
                   {formMode === "create" ? "Create" : "Update"}
-                  {(createInstanceMutation.isPending || updateResourceInstanceMutation.isPending) && (
-                    <LoadingSpinnerSmall />
-                  )}
+                  {(createInstanceMutation.isPending || updateInstanceMutation.isPending) && <LoadingSpinnerSmall />}
                 </Button>
               </span>
             </Tooltip>

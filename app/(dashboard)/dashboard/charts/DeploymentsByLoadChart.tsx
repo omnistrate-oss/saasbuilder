@@ -2,10 +2,11 @@ import { useMemo } from "react";
 import { Label, Legend, Pie, PieChart } from "recharts";
 
 import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
+import { Text } from "src/components/Typography/Typography";
 import { ResourceInstance } from "src/types/resourceInstance";
+
 import CustomLegend from "./CustomLegend";
 import { useDynamicInnerRadius } from "./useDynamicInnerRadius"; // ✅ Import your hook
-import { Text } from "src/components/Typography/Typography";
 
 type DeploymentsByLoadChartProps = {
   instances: ResourceInstance[];
