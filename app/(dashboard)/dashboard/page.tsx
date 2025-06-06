@@ -68,7 +68,7 @@ const DashboardPage = () => {
           {isInstancesPending ? <LoadingSpinner /> : <LifecycleStatusChart instances={instances} />}
         </ChartCard>
 
-        <ChartCard title="Deployment Health Status">
+        <ChartCard title="Deployments by Health Status">
           {isInstancesPending ? <LoadingSpinner /> : <HealthStatusChart instances={instances} />}
         </ChartCard>
         <ChartCard title="Deployments by System Load">
