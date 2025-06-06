@@ -9,19 +9,14 @@ import ReCAPTCHA from "react-google-recaptcha";
 
 import { customerUserSignin } from "src/api/customer-user";
 import axios from "src/axios";
-import { ENVIRONMENT_TYPES } from "src/constants/environmentTypes";
 import { PAGE_TITLE_MAP } from "src/constants/pageTitleMap";
-import useEnvironmentType from "src/hooks/useEnvironmentType";
 import useSnackbar from "src/hooks/useSnackbar";
-import { useProviderOrgDetails } from "src/providers/ProviderOrgDetailsProvider";
 import { IdentityProvider } from "src/types/identityProvider";
-import { domainsMatch } from "src/utils/compareEmailAndUrlDomains";
 import { getInstancesRoute } from "src/utils/routes";
 
 import { createSigninValidationSchema } from "../constants";
 import { useLastLoginDetails } from "../hooks/useLastLoginDetails";
 
-import AccessDeniedAlertDialog from "./AccessDeniedAlertDialog";
 import EmailStep from "./EmailStep";
 import LoginMethodStep from "./LoginMethodStep";
 
@@ -40,12 +35,9 @@ const SignInForm: FC<SignInFormProps> = ({
 }) => {
   const [shouldRememberLoginDetails, setShouldRememberLoginDetails] = useState(true);
   const [hasCaptchaErrored, setHasCaptchaErrored] = useState(false);
-  const [showAccessDenied, setShowAccessDenied] = useState(false);
   const { email } = useLastLoginDetails();
   const [currentStep, setCurrentStep] = useState(email ? 1 : 0);
   const [isRecaptchaScriptLoaded, setIsRecaptchaScriptLoaded] = useState(false);
-  const environmentType = useEnvironmentType();
-  const { orgURL } = useProviderOrgDetails();
   const { setLoginMethod } = useLastLoginDetails();
   const router = useRouter();
 
@@ -96,10 +88,12 @@ const SignInForm: FC<SignInFormProps> = ({
 
   const passwordSignInMutation = useMutation({
     mutationFn: (payload) => {
+      console.log("here")
       delete axios.defaults.headers["Authorization"];
       return customerUserSignin(payload);
     },
     onSuccess: (response) => {
+      console.log("Successfully signed in:", response);
       setLoginMethod({
         methodType: "Password",
       });
@@ -111,17 +105,10 @@ const SignInForm: FC<SignInFormProps> = ({
       handlePasswordSignInSuccess(jwtToken);
     },
     onError: (error: any) => {
+      console.log("Error signing in:", error);
       if (error.response.data && error.response.data.message) {
         const errorMessage = error.response.data.message;
-        if (
-          errorMessage === "Failed to sign in. Either the credentials are incorrect or the user does not exist" &&
-          environmentType === ENVIRONMENT_TYPES.PROD &&
-          domainsMatch(formik.values.email, orgURL)
-        ) {
-          setShowAccessDenied(true);
-        } else {
           snackbar.showError(errorMessage);
-        }
       } else {
         snackbar.showError("Failed to sign in. Either the credentials are incorrect or the user does not exist");
       }
@@ -185,7 +172,6 @@ const SignInForm: FC<SignInFormProps> = ({
           }}
         />
       )}
-      <AccessDeniedAlertDialog open={showAccessDenied} handleClose={() => setShowAccessDenied(false)} />
     </Stack>
   );
 };
