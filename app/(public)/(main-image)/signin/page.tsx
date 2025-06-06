@@ -31,7 +31,7 @@ const Page = async () => {
     return loginButtonTextA.localeCompare(loginButtonTextB);
   });
 
-  const isPasswordLoginEnabled = !Boolean(process.env.DISABLE_PASSWORD_LOGIN);
+  const isPasswordLoginEnabled = process.env.DISABLE_PASSWORD_LOGIN?.toLowerCase() !== "true";
 
   return (
     <SigninPage
