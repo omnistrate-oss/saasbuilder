@@ -217,8 +217,8 @@ const InviteUsersCard: React.FC<InviteUsersCardProps> = ({ refetchUsers, isFetch
                                 }}
                               />
                               <FieldError mt="4px">
-                                {getIn(formData.touched, `userInvite.${index}.email`) &&
-                                  getIn(formData.errors, `userInvite.${index}.email`)}
+                                {getIn(formData.touched, `userInvite[${index}].email`) &&
+                                  getIn(formData.errors, `userInvite[${index}].email`)}
                               </FieldError>
                             </div>
 
@@ -256,7 +256,7 @@ const InviteUsersCard: React.FC<InviteUsersCardProps> = ({ refetchUsers, isFetch
                               </Select>
                               <FieldError mt="4px">
                                 {getIn(formData.touched, `userInvite[${index}].serviceId`) &&
-                                  getIn(formData.errors, `userInvite.${index}.serviceId`)}
+                                  getIn(formData.errors, `userInvite[${index}].serviceId`)}
                               </FieldError>
                             </div>
 
@@ -291,7 +291,7 @@ const InviteUsersCard: React.FC<InviteUsersCardProps> = ({ refetchUsers, isFetch
                               </Select>
                               <FieldError mt="4px">
                                 {getIn(formData.touched, `userInvite[${index}].servicePlanId`) &&
-                                  getIn(formData.errors, `userInvite.${index}.servicePlanId`)}
+                                  getIn(formData.errors, `userInvite[${index}].servicePlanId`)}
                               </FieldError>
                             </div>
 
@@ -318,7 +318,7 @@ const InviteUsersCard: React.FC<InviteUsersCardProps> = ({ refetchUsers, isFetch
                               </Select>
                               <FieldError mt="4px">
                                 {getIn(formData.touched, `userInvite[${index}].roleType`) &&
-                                  getIn(formData.errors, `userInvite.${index}.roleType`)}
+                                  getIn(formData.errors, `userInvite[${index}].roleType`)}
                               </FieldError>
                             </div>
 
