@@ -235,7 +235,7 @@ const LoginMethodStep: FC<LoginMethodStepProps> = (props) => {
   );
 
   if (preferredLoginMethod) {
-    if (preferredLoginMethod.type?.toLocaleLowerCase() === "password") {
+    if (preferredLoginMethod.type?.toLowerCase() === "password") {
       defaultLoginMethodButton = passwordLoginButton;
     } else {
       const matchingIdp = domainFilteredIdentityProviders.find(
@@ -383,7 +383,7 @@ const LoginMethodStep: FC<LoginMethodStepProps> = (props) => {
                     </Button>
                   );
                 })}
-              {preferredLoginMethod?.type?.toLocaleLowerCase() !== "password" &&
+              {preferredLoginMethod?.type?.toLowerCase() !== "password" &&
                 isPasswordLoginEnabled &&
                 idpOptionsExpanded &&
                 passwordLoginButton}
