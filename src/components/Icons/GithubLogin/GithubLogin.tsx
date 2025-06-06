@@ -3,9 +3,16 @@ import { FC } from "react";
 import { SVGIconProps } from "src/types/common/generalTypes";
 
 const GithubLoginIcon: FC<SVGIconProps> = (props) => {
-  const { disabled, width = 24, height = 24 } = props;
+  const { disabled, width = 24, height = 24, ...restProps } = props;
   return (
-    <svg width={width} height={height} viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
+    <svg
+      width={width}
+      height={height}
+      viewBox="0 0 32 32"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      {...restProps}
+    >
       <g clipPath="url(#clip-github-login)">
         <path
           fillRule="evenodd"

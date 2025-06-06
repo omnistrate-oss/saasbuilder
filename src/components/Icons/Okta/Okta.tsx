@@ -3,9 +3,16 @@ import { FC } from "react";
 import { SVGIconProps } from "src/types/common/generalTypes";
 
 const OktaIcon: FC<SVGIconProps> = (props) => {
-  const { width = 24, height = 24 } = props;
+  const { width = 24, height = 24, ...restProps } = props;
   return (
-    <svg width={width} height={height} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
+    <svg
+      width={width}
+      height={height}
+      viewBox="0 0 24 24"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      {...restProps}
+    >
       <path
         fill="#191919"
         fillRule="evenodd"
