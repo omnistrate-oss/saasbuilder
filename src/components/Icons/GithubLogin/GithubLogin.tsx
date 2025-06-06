@@ -1,8 +1,12 @@
-function GithubLoginIcon(props) {
+import { FC } from "react";
+
+import { SVGIconProps } from "src/types/common/generalTypes";
+
+const GithubLoginIcon: FC<SVGIconProps> = (props) => {
   const { disabled, width = 24, height = 24 } = props;
   return (
     <svg width={width} height={height} viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
-      <g clipPath="url(#clip0)">
+      <g clipPath="url(#clip-github-login)">
         <path
           fillRule="evenodd"
           clipRule="evenodd"
@@ -11,12 +15,12 @@ function GithubLoginIcon(props) {
         />
       </g>
       <defs>
-        <clipPath id="clip0">
+        <clipPath id="clip-github-login">
           <rect width="32" height="31.3469" fill="white" transform="translate(0 0.659393)" />
         </clipPath>
       </defs>
     </svg>
   );
-}
+};
 
 export default GithubLoginIcon;

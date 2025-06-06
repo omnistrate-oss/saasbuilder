@@ -1,4 +1,8 @@
-function AmazonCognitoIcon(props) {
+import { FC } from "react";
+
+import { SVGIconProps } from "src/types/common/generalTypes";
+
+const AmazonCognitoIcon: FC<SVGIconProps> = (props) => {
   const { width = 24, height = 24 } = props;
 
   return (
@@ -32,6 +36,6 @@ function AmazonCognitoIcon(props) {
       </defs>
     </svg>
   );
-}
+};
 
 export default AmazonCognitoIcon;

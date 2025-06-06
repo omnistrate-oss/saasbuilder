@@ -8,8 +8,6 @@ import SubmitButton from "src/components/NonDashboardComponents/FormElementsV2/S
 import { Text } from "src/components/Typography/Typography";
 import useEnvironmentType from "src/hooks/useEnvironmentType";
 
-import AccessDeniedAlertDialog from "./AccessDeniedAlertDialog";
-
 type PasswordLoginFieldsProps = {
   formData: FormikProps<{
     email: string;
@@ -26,7 +24,6 @@ const PasswordLoginFields: FC<PasswordLoginFieldsProps> = ({
   isReCaptchaSetup,
   isRecaptchaScriptLoaded,
 }) => {
-  const [showAccessDenied, setShowAccessDenied] = useState(false);
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const environmentType = useEnvironmentType();
 
@@ -102,7 +99,6 @@ const PasswordLoginFields: FC<PasswordLoginFieldsProps> = ({
           <Text>Log in with your Omnistrate account credentials</Text>
         </Stack>
       )}
-      <AccessDeniedAlertDialog open={showAccessDenied} handleClose={() => setShowAccessDenied(false)} />
     </>
   );
 };

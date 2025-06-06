@@ -31,8 +31,8 @@ const LogoImg = styled("img")({
 type LoginMethodStepProps = {
   setCurrentStep: SetState<number>;
   formData: FormikProps<{
-    email: "";
-    password: "";
+    email: string;
+    password: string;
   }>;
   identityProviders: IdentityProvider[];
   isPasswordLoginEnabled: boolean;
@@ -120,7 +120,9 @@ const LoginMethodStep: FC<LoginMethodStepProps> = (props) => {
             }
           }
         }
-      } catch {}
+      } catch (error){
+        console.warn('Failed to parse login method from localStorage:', error);
+      }
     } else {
       // Default to first IDP if no preferred login method is found
       if (domainFilteredIdentityProviders.length > 0) {
@@ -281,7 +283,6 @@ const LoginMethodStep: FC<LoginMethodStepProps> = (props) => {
     <Stack gap="24px">
       <FieldContainer>
         <FieldLabel>Welcome</FieldLabel>
-        {/* @ts-ignore */}
         <TextField
           inputProps={{
             "data-testid": "email-input",

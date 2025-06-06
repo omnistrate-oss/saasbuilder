@@ -3,7 +3,13 @@ export function useLastLoginDetails() {
   const loginMethod: "Password" | string | null = localStorage ? localStorage.getItem("lastLoginMethod") : "";
 
   function setEmail(email: string) {
-    localStorage.setItem("lastLoginEmail", email);
+    try {
+      if (typeof window !== "undefined" && localStorage) {
+        localStorage.setItem("lastLoginEmail", email);
+      }
+    } catch (error) {
+      console.error("Error setting last login email in localStorage:", error);
+    }
   }
 
   //Password or some IDP
@@ -12,8 +18,14 @@ export function useLastLoginDetails() {
     methodType: "Password" | string;
     idpName?: string;
   }) {
-    const stringified = JSON.stringify(loginMethod);
-    localStorage.setItem("lastLoginMethod", stringified);
+    try {
+      if (typeof window !== "undefined" && localStorage) {
+        const stringified = JSON.stringify(loginMethod);
+        localStorage.setItem("lastLoginMethod", stringified);
+      }
+    } catch (error) {
+      console.error("Error setting last login method in localStorage:", error);
+    }
   }
 
   return {

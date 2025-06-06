@@ -54,7 +54,7 @@ const SignInForm: FC<SignInFormProps> = ({
   const destination = searchParams?.get("destination");
   const snackbar = useSnackbar();
 
-  const reCaptchaRef = useRef<any>(null);
+  const reCaptchaRef = useRef<ReCAPTCHA | null>(null);
 
   useEffect(() => {
     if (redirect_reason === "idp_auth_error") {

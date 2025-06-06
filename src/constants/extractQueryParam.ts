@@ -5,6 +5,9 @@
  * @returns The value of the specified parameter or null if not found
  */
 function extractQueryParam(url: string, paramName: string): string | null {
+  if (!url || !paramName) {
+    return null;
+  }
   try {
     // Create a URL object to parse the URL
     const urlObj = new URL(url);
@@ -18,4 +21,5 @@ function extractQueryParam(url: string, paramName: string): string | null {
     return null;
   }
 }
+
 export default extractQueryParam;

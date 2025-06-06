@@ -51,7 +51,6 @@ const EmailStep: FC<EmailStepProps> = (props) => {
     <Stack gap="30px">
       <FieldContainer>
         <FieldLabel required>Email</FieldLabel>
-        {/* @ts-ignore */}
         <TextField
           inputProps={{
             "data-testid": "email-input",
@@ -69,7 +68,6 @@ const EmailStep: FC<EmailStepProps> = (props) => {
 
       <div className="flex items-center justify-start">
         <Checkbox
-          //@ts-ignore
           sx={{
             padding: "0px",
             marginRight: "8px",
