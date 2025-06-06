@@ -88,7 +88,6 @@ const SignInForm: FC<SignInFormProps> = ({
 
   const passwordSignInMutation = useMutation({
     mutationFn: (payload) => {
-      console.log("here")
       delete axios.defaults.headers["Authorization"];
       return customerUserSignin(payload);
     },
@@ -108,7 +107,7 @@ const SignInForm: FC<SignInFormProps> = ({
       console.log("Error signing in:", error);
       if (error.response.data && error.response.data.message) {
         const errorMessage = error.response.data.message;
-          snackbar.showError(errorMessage);
+        snackbar.showError(errorMessage);
       } else {
         snackbar.showError("Failed to sign in. Either the credentials are incorrect or the user does not exist");
       }

@@ -97,7 +97,7 @@ const LoginMethodStep: FC<LoginMethodStepProps> = (props) => {
         lastLoginMethodType = methodType;
         lastLoginIdpName = idpName;
 
-        if (lastLoginMethodType && lastLoginMethodType.toLowerCase() === "password") {
+        if (lastLoginMethodType && lastLoginMethodType?.toLowerCase() === "password" && isPasswordLoginEnabled) {
           selectedPreferredLoginMethod = "Password";
         } else if (lastLoginIdpName || lastLoginMethodType) {
           //check if the identity providers list has the preferredIdpName
@@ -105,8 +105,8 @@ const LoginMethodStep: FC<LoginMethodStepProps> = (props) => {
 
           const matchingIdp = domainFilteredIdentityProviders.find(
             (idp) =>
-              idp.name.toLowerCase() === lastLoginIdpName.toLowerCase() &&
-              idp.identityProviderName.toLowerCase() === lastLoginMethodType.toLowerCase()
+              idp.name.toLowerCase() === lastLoginIdpName?.toLowerCase() &&
+              idp.identityProviderName.toLowerCase() === lastLoginMethodType?.toLowerCase()
           );
 
           if (matchingIdp) {
@@ -120,8 +120,8 @@ const LoginMethodStep: FC<LoginMethodStepProps> = (props) => {
             }
           }
         }
-      } catch (error){
-        console.warn('Failed to parse login method from localStorage:', error);
+      } catch (error) {
+        console.warn("Failed to parse login method from localStorage:", error);
       }
     } else {
       // Default to first IDP if no preferred login method is found
