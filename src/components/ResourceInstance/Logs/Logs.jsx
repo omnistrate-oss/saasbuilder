@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import styled from "@emotion/styled";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
@@ -35,11 +35,9 @@ const Log = styled("pre")({
   fontSize: "12px",
   lineHeight: "16px",
   color: "#FFFFFF",
-  "&+&": {
-    marginTop: 30,
-  },
   wordBreak: "break-word",
   whiteSpace: "pre-wrap",
+  marginBlock: "0px",
 });
 
 const LogsContainer = styled(Box)(() => ({
@@ -90,6 +88,9 @@ const IconButton = ({ direction, divRef, titleText, dataTestId }) => {
 function Logs(props) {
   const { nodes: nodesList = [], socketBaseURL, instanceStatus, resourceInstanceId } = props;
   const [logs, setLogs] = useState([]);
+  const [, setLogBuffer] = useState(""); // Buffer for partial log lines
+  const bufferTimeoutRef = useRef(null); // Add this ref
+
   let firstNode = null;
 
   const nodes = _.uniqBy(nodesList, "id");
@@ -125,8 +126,24 @@ function Logs(props) {
   };
 
   const snackbar = useSnackbar();
+
+  // Helper function to flush buffer
+  const flushBuffer = useCallback(() => {
+    setLogBuffer((currentBuffer) => {
+      if (currentBuffer.trim()) {
+        setLogs((prevLogs) => [...prevLogs, currentBuffer]);
+      }
+      return "";
+    });
+  }, []);
+
+  // Clear timeout on node change or unmount
   useEffect(() => {
     setLogs([]);
+    setLogBuffer(""); // Clear buffer on new connection
+    if (bufferTimeoutRef.current) {
+      clearTimeout(bufferTimeoutRef.current);
+    }
   }, [selectedNode]);
 
   function handleNodeChange(event) {
@@ -148,7 +165,45 @@ function Logs(props) {
         setIsLogsDataLoaded(true);
       }
       const data = event.data;
-      setLogs((prevData) => [...prevData, data]);
+      // Clear existing timeout
+      if (bufferTimeoutRef.current) {
+        clearTimeout(bufferTimeoutRef.current);
+      }
+
+      // Process the incoming data with buffering
+      setLogBuffer((currentBuffer) => {
+        // Combine buffer with new data
+        const combinedData = currentBuffer + data;
+
+        // Split by line breaks (supporting both \r\n and \n)
+        const lines = combinedData.split(/\r?\n/);
+
+        // The last element might be incomplete if it doesn't end with a line break
+        const potentialIncompleteLog = lines.pop();
+
+        // Add complete lines to logs (if any)
+        if (lines.length > 0) {
+          setLogs((prevLogs) => [...prevLogs, ...lines?.map((line) => (line ? line : "\n"))]);
+        }
+
+        // Set timeout to flush buffer after 5 second of inactivity
+        if (potentialIncompleteLog && potentialIncompleteLog.trim()) {
+          bufferTimeoutRef.current = setTimeout(() => {
+            flushBuffer();
+          }, 5000);
+        }
+
+        // Return the potentially incomplete line as the new buffer
+        // If the original data ended with a line break, this will be empty
+        return potentialIncompleteLog || "";
+      });
+    },
+    onClose: () => {
+      // console.log("Socket Connection closed", event);
+      if (bufferTimeoutRef.current) {
+        clearTimeout(bufferTimeoutRef.current);
+      }
+      flushBuffer();
     },
     shouldReconnect: () => true,
     reconnectAttempts: 3,
@@ -164,6 +219,10 @@ function Logs(props) {
         // snackbar.showError("Unable to get the latest data...");
         setErrorMessage("Can't access logs data. Please check if the instance is available and logs are enabled.");
       }
+      if (bufferTimeoutRef.current) {
+        clearTimeout(bufferTimeoutRef.current);
+      }
+      flushBuffer();
     },
   });
 
@@ -179,6 +238,11 @@ function Logs(props) {
       if (socket) {
         socket.close();
       }
+
+      if (bufferTimeoutRef.current) {
+        clearTimeout(bufferTimeoutRef.current);
+      }
+      setLogBuffer("");
     };
   }, [logsSocketEndpoint]);
 
