@@ -21,7 +21,6 @@ import { store } from "src/redux-store";
 import { EnvironmentType } from "src/types/common/enums";
 import { ProviderUser } from "src/types/users";
 
-import { theme as nonDashboardTheme } from "../styles/non-dashboard-theme";
 import { theme as dashboardTheme } from "../styles/theme";
 
 import "../styles/globals.css";
@@ -40,7 +39,7 @@ const queryQlient = new QueryClient({
   },
 });
 
-const nonDashboardRoutes = ["/404", "/signin", "/signup", "/change-password", "/reset-password"];
+// const nonDashboardRoutes = ["/404", "/signin", "/signup", "/change-password", "/reset-password"];
 
 const RootProviders = ({
   children,
@@ -54,7 +53,7 @@ const RootProviders = ({
   googleAnalyticsTagID: string | undefined;
 }) => {
   const pathname = usePathname();
-  const isDashboardRoute = !nonDashboardRoutes.includes(pathname as string);
+  // const isDashboardRoute = !nonDashboardRoutes.includes(pathname as string);
 
   // Set Page Title
   useEffect(() => {
@@ -72,7 +71,7 @@ const RootProviders = ({
               <NotificationBarProvider>
                 <AxiosGlobalErrorHandler />
                 <GlobalErrorHandler />
-                <ThemeProvider theme={isDashboardRoute ? dashboardTheme : nonDashboardTheme}>
+                <ThemeProvider theme={ dashboardTheme}>
                   <EnvironmentTypeProvider envType={envType}>
                     <ProviderOrgDetailsProvider details={providerOrgDetails}>
                       <CookieConsentProvider googleAnalyticsTagID={googleAnalyticsTagID}>

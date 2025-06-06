@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Stack } from "@mui/material";
 import { Buffer } from "buffer";
@@ -9,21 +9,25 @@ import Cookies from "js-cookie";
 import { customerSignInWithIdentityProvider } from "src/api/customer-user";
 import axios from "src/axios";
 import { PAGE_TITLE_MAP } from "src/constants/pageTitleMap";
+import useEnvironmentType from "src/hooks/useEnvironmentType";
 import useSnackbar from "src/hooks/useSnackbar";
 import { getInstancesRoute } from "src/utils/routes";
 import LoadingSpinner from "components/LoadingSpinner/LoadingSpinner";
 import { Text } from "components/Typography/Typography";
 
 const IDPAuthPage = () => {
+  const environmentType = useEnvironmentType();
   const router = useRouter();
   const searchParams = useSearchParams();
   const state = searchParams?.get("state");
   const code = searchParams?.get("code");
   const snackbar = useSnackbar();
+  const isAPICallInprogress = useRef(false);
 
   const handleSignIn = useCallback(
     async (payload, destination) => {
       try {
+        isAPICallInprogress.current = true;
         const response = await customerSignInWithIdentityProvider(payload);
         // @ts-ignore
         const jwtToken = response.data.jwtToken;
@@ -46,6 +50,7 @@ const IDPAuthPage = () => {
           }
         }
       } catch (error) {
+        isAPICallInprogress.current = false;
         sessionStorage.removeItem("authState");
         if (error.response && error.response.status === 409) {
           snackbar.showError(
@@ -62,18 +67,16 @@ const IDPAuthPage = () => {
 
   useEffect(() => {
     if (state && code) {
-      const decodedAuthStateString = Buffer.from(state, "base64").toString("utf8");
       try {
-        const authState = JSON.parse(decodedAuthStateString);
-
         //get local auth state from session storage and compare the nonce values
         const localAuthStateString = sessionStorage.getItem("authState");
         //decode from base64 to utf8 string
         const decodedLocalAuthStateString = Buffer.from(localAuthStateString || "", "base64").toString("utf8");
 
         const localAuthState = JSON.parse(decodedLocalAuthStateString);
-
-        if (localAuthState.nonce === authState.nonce) {
+        // console.log("localAuthState.nonce", localAuthState.nonce);
+        // console.log("authState.nonce", state);
+        if (localAuthState.nonce === state) {
           const identityProvider = localAuthState.identityProvider;
           const invitationInfo = localAuthState.invitationInfo || {};
           const destination = localAuthState.destination;
@@ -81,10 +84,13 @@ const IDPAuthPage = () => {
           const payload = {
             authorizationCode: code,
             identityProviderName: identityProvider,
+            environmentType: environmentType,
+            state: state,
             ...invitationInfo,
           };
-
-          handleSignIn(payload, destination);
+          if (isAPICallInprogress.current !== true) {
+            handleSignIn(payload, destination);
+          }
         }
       } catch (error) {
         console.log(error);
