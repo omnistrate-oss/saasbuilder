@@ -349,7 +349,7 @@ export const getIntialFiltersObject: () => Record<string, FilterCategorySchema> 
       type: "list",
     },
     resources: {
-      label: "Resource Type",
+      label: "Resource Name",
       name: "resources",
       options: [],
       type: "list",

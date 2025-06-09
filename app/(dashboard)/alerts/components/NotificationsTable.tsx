@@ -94,7 +94,7 @@ const NotificationsTable = () => {
         },
         {
           id: "resourceName",
-          header: "Resource Type",
+          header: "Resource Name",
         }
       ),
       columnHelper.accessor(() => "Maintenance", {

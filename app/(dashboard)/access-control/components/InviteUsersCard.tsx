@@ -143,7 +143,7 @@ const InviteUsersCard: React.FC<InviteUsersCardProps> = ({ refetchUsers, isFetch
           <div className="flex items-center justify-between gap-4 pt-4 px-6">
             <DataGridHeaderTitle
               title="Invite Users"
-              desc="Invite team members with specific roles to manage your SaaS Products/subscriptions"
+              desc="Invite team members with specific roles to manage your SaaS product subscriptions"
             />
 
             <Button

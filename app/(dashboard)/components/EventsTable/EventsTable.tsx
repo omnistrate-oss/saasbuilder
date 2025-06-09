@@ -106,7 +106,7 @@ const EventsTable = ({
       ),
       resourceType: columnHelper.accessor("resourceName", {
         id: "resourceName",
-        header: "Resource Type",
+        header: "Resource Name",
         enableSorting: false,
       }),
       time: columnHelper.accessor((row) => formatDateUTC(row.time), {
