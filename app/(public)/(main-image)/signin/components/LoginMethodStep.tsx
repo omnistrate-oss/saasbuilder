@@ -227,6 +227,7 @@ const LoginMethodStep: FC<LoginMethodStepProps> = (props) => {
         setViewType("password-login");
         setIdpOptionsExpanded(false);
       }}
+      data-testid="password-login-button"
     >
       <Box display="inline-flex" flexGrow={1} justifyContent="center">
         Sign In With Password
