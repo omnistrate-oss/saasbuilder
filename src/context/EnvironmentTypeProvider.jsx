@@ -1,6 +1,6 @@
 import { createContext, useEffect, useState } from "react";
 
-export const EnvironmentTypeContext = createContext(null);
+export const EnvironmentTypeContext = createContext(undefined);
 
 export default function EnvironmentTypeProvider(props) {
   const { envType, children } = props;

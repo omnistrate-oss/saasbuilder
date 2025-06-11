@@ -1,6 +1,6 @@
 import * as React from "react";
-import Checkbox from "@mui/material/Checkbox";
-import { styled } from "@mui/material/styles";
+import MuiCheckbox, { CheckboxProps as MuiCheckboxProps } from "@mui/material/Checkbox";
+import { styled, SxProps, Theme } from "@mui/material/styles";
 
 const UnCheckedIcon = styled("span")(() => ({
   borderRadius: "6px",
@@ -29,21 +29,30 @@ const CheckedIcon = styled(UnCheckedIcon)({
   backgroundRepeat: "no-repeat",
 });
 
-const CustomCheckbox = React.forwardRef(function CustomCheckbox(props, ref) {
-  return (
-    <Checkbox
-      sx={{
-        "&:hover": { bgcolor: "transparent" },
-      }}
-      disableRipple
-      color="default"
-      checkedIcon={<CheckedIcon />}
-      icon={<UnCheckedIcon />}
-      inputProps={{ "aria-label": "Checkbox demo" }}
-      ref={ref}
-      {...props}
-    />
-  );
-});
 
-export default CustomCheckbox;
+const Checkbox = React.forwardRef<HTMLButtonElement, MuiCheckboxProps>(
+  function Checkbox(props, ref) {
+    const { sx, checkedIcon, icon, ...otherProps } = props;
+
+    // Merge custom sx with default styles
+    const mergedSx: SxProps<Theme> = {
+      "&:hover": { bgcolor: "transparent" },
+      ...sx,
+    };
+
+    return (
+      <MuiCheckbox
+        sx={mergedSx}
+        disableRipple
+        color="default"
+        checkedIcon={checkedIcon || <CheckedIcon />}
+        icon={icon || <UnCheckedIcon />}
+        inputProps={{ "aria-label": "Checkbox demo" }}
+        ref={ref}
+        {...otherProps}
+      />
+    );
+  }
+);
+
+export default Checkbox;

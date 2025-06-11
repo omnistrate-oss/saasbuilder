@@ -11,9 +11,9 @@ import AzureFullLogo from "../Icons/AzureFullLogo";
 import GCPFullLogo from "../Icons/GCPFullLogo";
 
 export const cloudProviderFullLogoMap = {
-  aws: <AWSLogo height="36px" width="auto" />,
-  gcp: <GCPFullLogo height="26px" width="auto" />,
-  azure: <AzureFullLogo height="34px" width="auto" />,
+  aws: <AWSLogo />,
+  gcp: <GCPFullLogo />,
+  azure: <AzureFullLogo height="32px" width="96px" />,
 };
 
 const CloudProviderCard = ({ cloudProvider, isSelected, onClick, disabled }) => {

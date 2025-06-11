@@ -3,16 +3,15 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { Box, Stack, styled, Typography } from "@mui/material";
-import { GoogleOAuthProvider } from "@react-oauth/google";
+import { Box, Stack, styled } from "@mui/material";
 import { useMutation } from "@tanstack/react-query";
-import { IDENTITY_PROVIDER_STATUS_TYPES } from "app/(public)/(main-image)/signin/constants";
 import { useFormik } from "formik";
 import ReCAPTCHA from "react-google-recaptcha";
 import * as Yup from "yup";
 
 import { customerUserSignup } from "src/api/customer-user";
 import Logo from "src/components/NonDashboardComponents/Logo";
+import { Text } from "src/components/Typography/Typography";
 import useSnackbar from "src/hooks/useSnackbar";
 import { useProviderOrgDetails } from "src/providers/ProviderOrgDetailsProvider";
 import { passwordRegex, passwordText } from "src/utils/passwordRegex";
@@ -24,9 +23,6 @@ import PasswordField from "components/NonDashboardComponents/FormElementsV2/Pass
 import SubmitButton from "components/NonDashboardComponents/FormElementsV2/SubmitButton";
 import TextField from "components/NonDashboardComponents/FormElementsV2/TextField";
 import SuccessBox from "components/SuccessBox/SuccessBox";
-
-import GithubLogin from "../../signin/components/GitHubLogin";
-import GoogleLogin from "../../signin/components/GoogleLogin";
 
 const FormGrid = styled(Box)(() => ({
   display: "grid",
@@ -50,13 +46,7 @@ const signupValidationSchema = Yup.object({
 });
 
 const SignupPage = (props) => {
-  const {
-    googleIdentityProvider,
-    githubIdentityProvider,
-    saasBuilderBaseURL,
-    googleReCaptchaSiteKey,
-    isReCaptchaSetup,
-  } = props;
+  const { googleReCaptchaSiteKey, isReCaptchaSetup } = props;
   const { orgName, orgLogoURL } = useProviderOrgDetails();
 
   const searchParams = useSearchParams();
@@ -160,43 +150,8 @@ const SignupPage = (props) => {
 
   const { values, touched, errors, handleChange, handleBlur } = formik;
 
-  let googleIDPClientID = null;
-  let showGoogleLoginButton = false;
-  let isGoogleLoginDisabled = false;
+  const policyAgreementText = `By creating your account, you agree to our`;
 
-  if (googleIdentityProvider) {
-    showGoogleLoginButton = true;
-    googleIDPClientID = googleIdentityProvider.clientId;
-
-    const { status } = googleIdentityProvider;
-
-    if (status === IDENTITY_PROVIDER_STATUS_TYPES.FAILED) {
-      isGoogleLoginDisabled = true;
-    }
-  }
-
-  let githubIDPClientID = null;
-  let showGithubLoginButton = false;
-  let isGithubLoginDisabled = false;
-
-  if (githubIdentityProvider) {
-    showGithubLoginButton = true;
-    githubIDPClientID = githubIdentityProvider.clientId;
-    const { status } = githubIdentityProvider;
-
-    if (status === IDENTITY_PROVIDER_STATUS_TYPES.FAILED) {
-      isGithubLoginDisabled = true;
-    }
-  }
-
-  let policyAgreementText = `By creating your account, you agree to our`;
-  if (showGoogleLoginButton && showGithubLoginButton) {
-    policyAgreementText = `By creating your account manually or using your Google or GitHub account to sign up, you agree to our`;
-  } else if (showGoogleLoginButton) {
-    policyAgreementText = `By creating your account manually or using your Google account to sign up, you agree to our`;
-  } else if (showGithubLoginButton) {
-    policyAgreementText = `By creating your account manually or using your Github account to sign up, you agree to our`;
-  }
   const invitationInfo = {};
   if (email || org || orgUrl) {
     if (email) {
@@ -349,66 +304,23 @@ const SignupPage = (props) => {
           )}
         </Stack>
       </Box>
-      {Boolean(googleIdentityProvider || githubIdentityProvider) && (
-        <>
-          <Box borderTop="1px solid #F1F2F4" textAlign="center" mt="40px">
-            <Box
-              display="inline-block"
-              paddingLeft="16px"
-              paddingRight="16px"
-              color="#687588"
-              bgcolor="white"
-              fontSize="14px"
-              fontWeight="500"
-              lineHeight="22px"
-              sx={{ transform: "translateY(-50%)" }}
-            >
-              Or use one of these options
-            </Box>
-          </Box>
-          <Stack direction="row" justifyContent="center" mt="20px" gap="16px">
-            {showGoogleLoginButton && (
-              <GoogleOAuthProvider
-                clientId={googleIDPClientID}
-                onScriptLoadError={() => {}}
-                onScriptLoadSuccess={() => {}}
-              >
-                <GoogleLogin
-                  disabled={isGoogleLoginDisabled}
-                  saasBuilderBaseURL={saasBuilderBaseURL}
-                  invitationInfo={invitationInfo}
-                />
-              </GoogleOAuthProvider>
-            )}
-            {showGithubLoginButton && (
-              <GithubLogin
-                githubClientID={githubIDPClientID}
-                disabled={isGithubLoginDisabled}
-                saasBuilderBaseURL={saasBuilderBaseURL}
-                invitationInfo={invitationInfo}
-              />
-            )}
-          </Stack>
-        </>
-      )}
-
-      <Typography mt="22px" fontWeight="500" fontSize="14px" lineHeight="22px" color="#A0AEC0" textAlign="center">
+      <Text size="small" weight="regular" sx={{ color: "#535862", textAlign: "center", marginTop: "32px" }}>
         {policyAgreementText}{" "}
-        <Link target="_blank" href="/terms-of-use" style={{ color: "#27A376" }}>
+        <Link target="_blank" href="/terms-of-use" style={{ color: "#364152", fontWeight: 600 }}>
           Terms & Conditions
         </Link>{" "}
         and{" "}
-        <Link target="_blank" href="/privacy-policy" style={{ color: "#27A376" }}>
+        <Link target="_blank" href="/privacy-policy" style={{ color: "#364152", fontWeight: 600 }}>
           Privacy Policy
         </Link>
-      </Typography>
+      </Text>
       {/* Signup Link */}
-      <Typography mt="20px" fontWeight="500" fontSize="14px" lineHeight="22px" color="#A0AEC0" textAlign="center">
+      <Text size="small" weight="regular" sx={{ color: "#535862", textAlign: "center", marginTop: "24px" }}>
         Already have an account?{" "}
-        <Link href="/signin" style={{ color: "#27A376" }}>
+        <Link href="/signin" style={{ color: "#364152", fontWeight: 600 }}>
           Login here
         </Link>
-      </Typography>
+      </Text>
     </>
   );
 };

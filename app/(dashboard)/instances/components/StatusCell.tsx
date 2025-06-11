@@ -81,7 +81,7 @@ const TooltipContent = ({ notifications }: { notifications: Notification[] }) =>
       <div className="flex items-center gap-1.5 pb-1.5 border-b border-[#E9EAEB]">
         <BellIcon color="#414651" />
         <Text size="small" weight="semibold" color="#344054">
-          Notifications
+          Alerts
         </Text>
       </div>
 

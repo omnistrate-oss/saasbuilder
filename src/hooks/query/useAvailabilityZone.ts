@@ -1,30 +1,34 @@
-import { useQuery } from "@tanstack/react-query";
-
-import { getAvailabilityZone } from "src/api/availabilityZone";
+import { $api } from "src/api/query";
 import { CloudProvider } from "src/types/common/enums";
 
-export default function useAvailabilityZone(
-  regionCode?: string,
-  cloudProviderName?: CloudProvider,
-  hasCustomAvailabilityZoneField = true,
-  queryOptions = {}
-) {
-  const isQueryEnabled = Boolean(regionCode && cloudProviderName && hasCustomAvailabilityZoneField);
-  const query = useQuery({
-    queryKey: ["cloud-providers-custom-regions", regionCode, cloudProviderName],
-    queryFn: async () => {
-      const response = await getAvailabilityZone(cloudProviderName!, regionCode!);
+type QueryParams = {
+  regionCode: string;
+  cloudProviderName: CloudProvider;
+  hasCustomAvailabilityZoneField?: boolean;
+};
 
-      return response;
+const useAvailabilityZone = (queryParams: QueryParams, queryOptions = {}) => {
+  const { regionCode, cloudProviderName, hasCustomAvailabilityZoneField = true } = queryParams;
+  const isEnabled = Boolean(regionCode && cloudProviderName && hasCustomAvailabilityZoneField);
+
+  const query = $api.useQuery(
+    "get",
+    "/2022-09-01-00/availability-zone/region/code/{regionCode}/cloud-provider/{cloudProviderName}",
+    {
+      params: {
+        path: {
+          regionCode,
+          cloudProviderName,
+        },
+      },
     },
-    enabled: isQueryEnabled,
-    refetchOnWindowFocus: false,
-    refetchOnMount: true,
-    select: (response) => {
-      return response.data;
-    },
-    ...queryOptions,
-  });
+    {
+      enabled: isEnabled,
+      ...queryOptions,
+    }
+  );
 
   return query;
-}
+};
+
+export default useAvailabilityZone;

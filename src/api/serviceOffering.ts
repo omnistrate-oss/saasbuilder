@@ -8,10 +8,6 @@ import {
 
 import axios from "../axios";
 
-export const getServiceOfferingIds = (): Promise<AxiosResponse<ListServiceOfferingSuccessResponse>> => {
-  return axios.get("/service-offering");
-};
-
 export const getServiceOffering = (serviceId: string, environmentType: EnvironmentType) => {
   const queryParams = {};
   if (environmentType) {

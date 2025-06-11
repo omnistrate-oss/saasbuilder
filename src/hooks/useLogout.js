@@ -4,10 +4,9 @@ import { useQueryClient } from "@tanstack/react-query";
 import Cookies from "js-cookie";
 import { useDispatch } from "react-redux";
 
+import axios from "src/axios";
 import { logoutBroadcastChannel } from "src/broadcastChannel";
 import { initialiseUserData } from "src/slices/userDataSlice";
-
-import axios from "../axios";
 
 function useLogout() {
   const router = useRouter();
@@ -37,24 +36,17 @@ function useLogout() {
 
   // make backend call and invalidate the token
   function logout() {
-    axios
-      .post("/logout")
-      .then(() => {
-        handleLogout();
-      })
-      .catch(() => {
-        handleLogout();
-      })
-      .finally(() => {
-        //broadcasts the logout event to other windows and tabs to log them out
-        if (logoutBroadcastChannel) {
-          try {
-            logoutBroadcastChannel.postMessage("logout");
-          } catch (error) {
-            console.error("Failed to post message on broadcast channel:", error);
-          }
+    axios.post("/logout").finally(() => {
+      handleLogout();
+      //broadcasts the logout event to other windows and tabs to log them out
+      if (logoutBroadcastChannel) {
+        try {
+          logoutBroadcastChannel.postMessage("logout");
+        } catch (error) {
+          console.error("Failed to post message on broadcast channel:", error);
         }
-      });
+      }
+    });
   }
 
   return { handleLogout, logout };

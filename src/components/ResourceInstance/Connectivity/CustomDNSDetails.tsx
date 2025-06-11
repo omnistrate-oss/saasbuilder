@@ -69,9 +69,9 @@ const CustomDNSDetails: React.FC<CustomDNSDetailsProps> = ({
   }
   records.push({
     recordLabel: "TXT",
-    domainValue: domainName,
-    recordValue: `target-${domainName}=${resourceInstanceId}`,
-    recordValueDetails: `The TXT record is a name-value pair, where the name must start with the prefix "target-", and the value should be the Instance ID.`,
+    domainValue: `verification-${domainName}`,
+    recordValue: `${resourceInstanceId}`,
+    recordValueDetails: `The TXT record value is the instance ID`,
   });
 
   return (

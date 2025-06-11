@@ -1,21 +1,17 @@
-import { useQuery } from "@tanstack/react-query";
-
-import { listSubscriptionRequests } from "src/api/subscriptionRequests";
-import useEnvironmentType from "src/hooks/useEnvironmentType";
+import { $api } from "src/api/query";
 
 const useSubscriptionRequests = (queryOptions = {}) => {
-  const environmentType = useEnvironmentType();
-  const query = useQuery({
-    queryKey: ["subscription-requests"],
-    queryFn: () =>
-      listSubscriptionRequests({
-        environmentType,
-      }),
-    select: (response) => {
-      return response.data.subscriptionRequests;
-    },
-    ...queryOptions,
-  });
+  const query = $api.useQuery(
+    "get",
+    "/2022-09-01-00/subscription/request",
+    {},
+    {
+      select: (data) => {
+        return data.subscriptionRequests;
+      },
+      ...queryOptions,
+    }
+  );
 
   return query;
 };

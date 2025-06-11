@@ -1,26 +1,23 @@
-import Axios from "axios";
-import Qs from "qs";
+import createFetchClient from "openapi-fetch";
 
-//omnistrate backend base url
-import { baseURL } from "src/axios";
+import { baseDomain } from "src/api/client";
 import { httpRequestMethods } from "src/server/utils/constants/httpsRequestMethods";
 import { passwordRegex, passwordText as passwordRegexFailText } from "src/utils/passwordRegex";
 
-const axios = Axios.create({
-  baseURL: baseURL,
-  paramsSerializer: (params) => Qs.stringify(params, { arrayFormat: "repeat" }),
+// Create the API client
+const apiClient = createFetchClient({
+  baseUrl: baseDomain,
 });
 
 const defaultErrorMessage = "";
 
 export default async function handleAction(nextRequest, nextResponse) {
-  axios.defaults.headers["Authorization"] = nextRequest.headers.authorization;
   if (nextRequest.method === "POST") {
     const { endpoint, method, data = {}, queryParams = {} } = nextRequest.body;
 
     if (endpoint && method && endpoint?.startsWith("/")) {
-      let response = null;
       try {
+        // Password validation for change-password endpoint
         if (endpoint === "/change-password") {
           const password = data.password;
           if (password && typeof password === "string") {
@@ -29,64 +26,88 @@ export default async function handleAction(nextRequest, nextResponse) {
             }
           }
         }
+
+        // Prepare request options
+        const requestOptions = {
+          params: {
+            query: queryParams,
+          },
+          headers: {
+            Authorization: nextRequest.headers.authorization,
+          },
+        };
+
+        let response;
+
+        // Handle different HTTP methods
         if (method === httpRequestMethods.GET) {
-          response = await axios.get(endpoint, {
-            params: queryParams,
-          });
+          response = await apiClient.GET(endpoint, requestOptions);
         } else if (method === httpRequestMethods.POST) {
-          response = await axios.post(
-            endpoint,
-            { ...data },
-            {
-              params: queryParams,
-            }
-          );
+          response = await apiClient.POST(endpoint, {
+            ...requestOptions,
+            body: data,
+          });
         } else if (method === httpRequestMethods.PATCH) {
-          response = await axios.patch(
-            endpoint,
-            { ...data },
-            {
-              params: queryParams,
-            }
-          );
+          response = await apiClient.PATCH(endpoint, {
+            ...requestOptions,
+            body: data,
+          });
         } else if (method === httpRequestMethods.PUT) {
-          response = await axios.put(
-            endpoint,
-            { ...data },
-            {
-              params: queryParams,
-            }
-          );
+          response = await apiClient.PUT(endpoint, {
+            ...requestOptions,
+            body: data,
+          });
         } else if (method === httpRequestMethods.DELETE) {
-          response = await axios.delete(endpoint, {
-            data: { ...data },
-            params: queryParams,
+          response = await apiClient.DELETE(endpoint, {
+            ...requestOptions,
+            body: data,
           });
         }
+
         if (response) {
-          const data = response.data;
-          const responseStatusCode = response.status;
+          const { data: responseData, response: fetchResponse, error } = response;
+
+          // Handle errors from OpenAPI Fetch
+          if (error) {
+            console.error("Action Route error", error);
+            const errorCode = fetchResponse?.status || 500;
+            const errorMessage = error.message || defaultErrorMessage;
+            return nextResponse.status(errorCode).send({
+              message: errorMessage,
+            });
+          }
+
+          // Set response status
+          const responseStatusCode = fetchResponse?.status || 200;
           nextResponse.status(responseStatusCode);
 
-          if (response.headers["content-type"] === "application/octet-stream") {
-            return nextResponse.setHeader("content-type", response.headers["content-type"]).send(data);
+          // Handle binary content (octet-stream)
+          const contentType = fetchResponse?.headers.get("content-type");
+          if (contentType === "application/octet-stream") {
+            return nextResponse.setHeader("content-type", contentType).send(responseData);
           }
-          if (data) nextResponse.send({ ...data });
-          else nextResponse.send();
+
+          // Send response data
+          if (responseData) {
+            nextResponse.send(responseData);
+          } else {
+            nextResponse.send();
+          }
+          return;
         }
       } catch (error) {
         console.error("Action Route error", error);
-        const errorCode = error?.response?.status || 500;
-        const errorMessage = error?.response?.data?.message || defaultErrorMessage;
-        nextResponse.status(errorCode).send({
+        const errorCode = error?.status || 500;
+        const errorMessage = error?.message || defaultErrorMessage;
+        return nextResponse.status(errorCode).send({
           message: errorMessage,
         });
       }
     }
   }
 
-  //respond with 500 by default
-  nextResponse.status(500).send({ message: defaultErrorMessage });
+  // Respond with 500 by default
+  return nextResponse.status(500).send({ message: defaultErrorMessage });
 }
 
 export const config = {

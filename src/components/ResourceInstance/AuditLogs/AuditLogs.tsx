@@ -20,8 +20,9 @@ import GridCellExpand from "src/components/GridCellExpand/GridCellExpand";
 import JSONView from "src/components/JSONView/JSONView";
 import RefreshWithToolTip from "src/components/RefreshWithTooltip/RefreshWithToolTip";
 import useUserData from "src/hooks/usersData";
+import { AuditEvent } from "src/types/auditEvent";
 import { SetState } from "src/types/common/reactGenerics";
-import { AccessEvent, EventType } from "src/types/event";
+import { EventType } from "src/types/event";
 import formatDateUTC from "src/utils/formatDateUTC";
 import { getAccessControlRoute } from "src/utils/route/access/accessRoute";
 import DataGridHeaderTitle from "components/Headers/DataGridHeaderTitle";
@@ -46,7 +47,7 @@ type AuditLogsTableHeaderProps = {
   setSelectedEventTypes: SetState<EventType[]>;
 };
 
-const columnHelper = createColumnHelper<AccessEvent>();
+const columnHelper = createColumnHelper<AuditEvent>();
 
 const AuditLogsTableHeader: FC<AuditLogsTableHeaderProps> = (props) => {
   const {
@@ -101,7 +102,7 @@ type AuditLogsTabProps = {
   subscriptionId: string;
 };
 
-function DetailTableRowView(props: { rowData: AccessEvent }) {
+function DetailTableRowView(props: { rowData: AuditEvent }) {
   const { rowData: event } = props;
   const { workflowFailures } = event;
   return (
@@ -174,7 +175,11 @@ const AuditLogs: FC<AuditLogsTabProps> = ({ instanceId, subscriptionId }) => {
         id: "type",
         header: "Type",
         cell: (data) => {
-          return data.row.original.eventSource ? <EventTypeChip eventType={data.row.original.eventSource} /> : "-";
+          return data.row.original.eventSource ? (
+            <EventTypeChip eventType={data.row.original.eventSource as EventType} />
+          ) : (
+            "-"
+          );
         },
       }),
       columnHelper.accessor((row) => formatDateUTC(row.time), {
@@ -256,6 +261,7 @@ const AuditLogs: FC<AuditLogsTabProps> = ({ instanceId, subscriptionId }) => {
   return (
     <Box mt="32px">
       <DataTable
+        // @ts-ignore
         columns={dataTableColumns}
         rows={filteredEvents}
         renderDetailsComponent={DetailTableRowView}

@@ -7,6 +7,7 @@ import { createColumnHelper } from "@tanstack/react-table";
 import { useSelector } from "react-redux";
 
 import { deleteSubscription } from "src/api/subscriptions";
+import useEnvironmentType from "src/hooks/useEnvironmentType";
 import useSnackbar from "src/hooks/useSnackbar";
 import { useGlobalData } from "src/providers/GlobalDataProvider";
 import { selectUserrootData } from "src/slices/userDataSlice";
@@ -35,6 +36,7 @@ const columnHelper = createColumnHelper<Subscription>();
 type Overlay = "manage-subscriptions" | "unsubscribe-dialog" | "subscription-details";
 
 const SubscriptionsPage = () => {
+  const environmentType = useEnvironmentType();
   const queryClient = useQueryClient();
   const snackbar = useSnackbar();
   const searchParams = useSearchParams();
@@ -163,15 +165,20 @@ const SubscriptionsPage = () => {
   const unSubscribeMutation = useMutation({
     mutationFn: deleteSubscription,
     onSuccess: () => {
-      queryClient.setQueryData(["user-subscriptions"], (oldData: any) => {
-        return {
-          ...oldData,
-          data: {
-            ids: oldData.data.ids.filter((id: string) => id !== subscriptionIdToDelete),
-            subscriptions: oldData.data.subscriptions.filter((sub: Subscription) => sub.id !== subscriptionIdToDelete),
+      queryClient.setQueryData(
+        [
+          "get",
+          "/2022-09-01-00/subscription",
+          {
+            params: { query: { environmentType } },
           },
-        };
-      });
+        ],
+        (oldData: any) => {
+          return {
+            subscriptions: oldData.subscriptions.filter((sub: Subscription) => sub.id !== subscriptionIdToDelete),
+          };
+        }
+      );
       setIsOverlayOpen(false);
 
       snackbar.showSuccess("Unsubscribed successfully");

@@ -6,7 +6,6 @@ import {
   DescribeConsumptionBillingStatusResponse,
   GetConsumptionUsagePerDaySuccessResponse,
   GetCurrentConsumptionUsageSuccessResponse,
-  ListConsumptionInvoicesSuccessResponse,
 } from "src/types/consumption";
 
 export type GetConsumptionUsageQueryParams = {
@@ -40,10 +39,6 @@ export const getConsumptionBillingStatus = (): Promise<AxiosResponse<DescribeCon
   return axios.get("/resource-instance/billing-status", {
     ignoreGlobalErrorSnack: true,
   });
-};
-
-export const getConsumptionInvoices = (): Promise<AxiosResponse<ListConsumptionInvoicesSuccessResponse>> => {
-  return axios.get("/resource-instance/invoice");
 };
 
 export type GetBillingDetailsQueryParams = { returnUrl: string };
