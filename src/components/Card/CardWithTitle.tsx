@@ -19,7 +19,7 @@ const CardWithTitle: React.FC<CardWithTitleProps> = ({ title, actionButton, chil
           {title}
         </Text>
 
-        {actionButton && actionButton}
+        {actionButton && <div className="flex-shrink-0">{actionButton}</div>}
       </div>
       <div className="px-6 py-6">{children}</div>
     </div>
