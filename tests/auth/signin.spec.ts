@@ -62,6 +62,27 @@ test.describe("Signin Page", () => {
     await page.waitForURL(PageURLs.instances);
   });
 
+  test("Forgot Password Action", async ({ page }) => {
+    const dataTestIds = signinPage.dataTestIds;
+    await signinPage.goToPasswordLoginStep();
+    // Check Forgot Password Link
+    if (process.env.ENVIRONMENT_TYPE === "PROD") {
+      await expect(page.getByRole("link", { name: "Forgot Password" })).toHaveAttribute(
+        "href",
+        PageURLs.resetPassword
+      );
+      await page.getByRole("link", { name: "Forgot Password" }).click();
+      //heading should be visible
+      await expect(page.getByRole("heading", { name: "Reset your password" })).toBeVisible();
+      await page.getByTestId(dataTestIds.emailInput).fill(process.env.USER_EMAIL!);
+      await page.getByTestId(dataTestIds.resetPasswordSubmitButton).click();
+      // Check for success message
+      await expect(page.getByRole("heading", { name: "Check Your Email for a Password Reset Link" })).toBeVisible();
+    } else {
+      await expect(page.getByRole("link", { name: "Forgot Password" })).not.toBeVisible();
+    }
+  });
+
   test("Cookie Settings Banner", async ({ page }) => {
     const dataTestIds = signinPage.dataTestIds,
       pageElements = signinPage.pageElements;

@@ -17,6 +17,7 @@ export class SigninPage {
     nextButton: "next-button",
     otherSignInOptionsButton: "sign-in-options-button",
     passwordLoginButton: "password-login-button",
+    resetPasswordSubmitButton: "submit-button",
   };
 
   pageElements = {
@@ -46,12 +47,21 @@ export class SigninPage {
     await this.page.getByTestId(this.dataTestIds.nextButton).click();
   }
 
+  async goToPasswordLoginStep() {
+    const dataTestIds = this.dataTestIds;
+    // Navigate to the Signin Page
+    await this.goToLoginOptionsStep();
+    await this.page.getByTestId(dataTestIds.otherSignInOptionsButton).click();
+    if (process.env.DISABLE_PASSWORD_LOGIN !== "true") {
+      await this.page.getByTestId(dataTestIds.passwordLoginButton).click();
+    }
+  }
+
   async signInWithPassword() {
     const dataTestIds = this.dataTestIds;
 
     // Navigate to the Signin Page
-    await this.goToLoginOptionsStep();
-    await this.page.getByTestId(dataTestIds.otherSignInOptionsButton).click();
+    await this.goToPasswordLoginStep();
     if (process.env.DISABLE_PASSWORD_LOGIN !== "true") {
       this.page.getByTestId(dataTestIds.passwordLoginButton).click();
       // Fill the Password Field
