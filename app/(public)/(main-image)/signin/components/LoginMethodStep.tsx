@@ -391,6 +391,7 @@ const LoginMethodStep: FC<LoginMethodStepProps> = (props) => {
           )}
           {numOtherSignInOptions > 0 && (
             <Button
+              data-testid="sign-in-options-button"
               variant="text"
               disableRipple
               endIcon={

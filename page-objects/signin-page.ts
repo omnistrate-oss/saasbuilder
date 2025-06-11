@@ -14,6 +14,8 @@ export class SigninPage {
     googleSigninButton: "google-signin-button",
     githubSigninButton: "github-signin-button",
     cookieConsentBanner: "cookie-consent-banner",
+    nextButton: "next-button",
+    signInOptionsButton: "sign-in-options-button",
   };
 
   pageElements = {
@@ -35,6 +37,12 @@ export class SigninPage {
 
   async navigate() {
     await this.page.goto(getSigninRoute());
+  }
+
+  async goToLoginOptionsStep() {
+    await this.navigate();
+    await this.page.getByTestId(this.dataTestIds.emailInput).fill(process.env.USER_EMAIL!);
+    await this.page.getByTestId(this.dataTestIds.nextButton).click();
   }
 
   async signIn() {
