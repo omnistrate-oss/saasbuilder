@@ -56,7 +56,12 @@ const PlanDetails = ({ startingTab }) => {
               <FieldDescription sx={{ mt: 0, color: "#535862" }}>Select the service</FieldDescription>
             </div>
 
-            <Select value={selectedServiceId} onChange={(e) => setSelectedServiceId(e.target.value)} sx={{ mt: 0 }}>
+            <Select
+              value={selectedServiceId}
+              onChange={(e) => setSelectedServiceId(e.target.value)}
+              sx={{ mt: 0 }}
+              maxWidth="400px"
+            >
               {serviceMenuItems?.length ? (
                 serviceMenuItems.map((item) => (
                   <MenuItem key={item.value as string} value={item.value as string}>
@@ -79,7 +84,12 @@ const PlanDetails = ({ startingTab }) => {
               <FieldDescription sx={{ mt: 0, color: "#535862" }}>Select the subscription plan</FieldDescription>
             </div>
 
-            <Select value={selectedPlanId} onChange={(e) => setSelectedPlanId(e.target.value)} sx={{ mt: 0 }}>
+            <Select
+              value={selectedPlanId}
+              onChange={(e) => setSelectedPlanId(e.target.value)}
+              sx={{ mt: 0 }}
+              maxWidth="400px"
+            >
               {servicePlanMenuItems?.length ? (
                 servicePlanMenuItems.map((item) => (
                   <MenuItem key={item.value as string} value={item.value as string}>

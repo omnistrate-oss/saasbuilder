@@ -191,7 +191,7 @@ const InviteUsersCard: React.FC<InviteUsersCardProps> = ({ refetchUsers, isFetch
 
                         return (
                           <div className="flex items-start flex-wrap gap-4" key={index}>
-                            <div className="flex-1 min-w-[240px]">
+                            <div className="flex-1 max-w-60">
                               <TextField
                                 data-testid="email-input"
                                 required
@@ -222,7 +222,7 @@ const InviteUsersCard: React.FC<InviteUsersCardProps> = ({ refetchUsers, isFetch
                               </FieldError>
                             </div>
 
-                            <div className="flex-1">
+                            <div className="flex-1 max-w-60">
                               <Select
                                 data-testid="service-select"
                                 required
@@ -241,6 +241,7 @@ const InviteUsersCard: React.FC<InviteUsersCardProps> = ({ refetchUsers, isFetch
                                   if (!value) return "Service";
                                   return serivceMenuItems.find((item) => item.value === value)?.label;
                                 }}
+                                maxWidth="400px"
                               >
                                 {serivceMenuItems?.length > 0 ? (
                                   serivceMenuItems.map((option) => (
@@ -260,7 +261,7 @@ const InviteUsersCard: React.FC<InviteUsersCardProps> = ({ refetchUsers, isFetch
                               </FieldError>
                             </div>
 
-                            <div className="flex-1">
+                            <div className="flex-1 max-w-60">
                               <Select
                                 data-testid="subscription-plan-select"
                                 required
@@ -276,6 +277,7 @@ const InviteUsersCard: React.FC<InviteUsersCardProps> = ({ refetchUsers, isFetch
                                   if (!value) return "Subscription Plan";
                                   return servicePlanMenuItems.find((item) => item.value === value)?.label;
                                 }}
+                                maxWidth="400px"
                               >
                                 {servicePlanMenuItems?.length > 0 ? (
                                   servicePlanMenuItems.map((option) => (
@@ -295,7 +297,7 @@ const InviteUsersCard: React.FC<InviteUsersCardProps> = ({ refetchUsers, isFetch
                               </FieldError>
                             </div>
 
-                            <div className="flex-1">
+                            <div className="flex-1 max-w-60">
                               <Select
                                 data-testid="role-select"
                                 required
@@ -309,6 +311,7 @@ const InviteUsersCard: React.FC<InviteUsersCardProps> = ({ refetchUsers, isFetch
                                   if (value) return value;
                                   return "Role";
                                 }}
+                                maxWidth="400px"
                               >
                                 {["Editor", "Reader"].map((option) => (
                                   <MenuItem key={option} value={option}>
