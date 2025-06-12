@@ -63,7 +63,6 @@ export class SigninPage {
     // Navigate to the Signin Page
     await this.goToPasswordLoginStep();
     if (process.env.DISABLE_PASSWORD_LOGIN !== "true") {
-      this.page.getByTestId(dataTestIds.passwordLoginButton).click();
       // Fill the Password Field
       await this.page.getByTestId(dataTestIds.passwordInput).fill(process.env.USER_PASSWORD!);
       await this.page.getByTestId(dataTestIds.loginButton).click();

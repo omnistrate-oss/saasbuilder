@@ -1,4 +1,5 @@
 import test, { expect } from "@playwright/test";
+import { getIdentityProviderButtonLabel } from "app/(public)/(main-image)/signin/utils";
 import { PageURLs } from "page-objects/pages";
 import { SigninPage } from "page-objects/signin-page";
 import { ProviderAPIClient } from "test-utils/provider-api-client";
@@ -105,7 +106,8 @@ test.describe("Signin Page", () => {
     await expect(page.getByTestId(dataTestIds.cookieConsentBanner)).not.toBeVisible();
   });
 
-  test("identity-providers", async ({ page }) => {
+  //check that the identity providers buttons are visible based on the email domain
+  test("identity-providers-buttons", async ({ page }) => {
     const apiClient = new ProviderAPIClient();
 
     const identityProviders = await apiClient.getIdentityProviders();
@@ -113,13 +115,31 @@ test.describe("Signin Page", () => {
     const dataTestIds = signinPage.dataTestIds;
 
     await signinPage.goToLoginOptionsStep();
-    if (identityProviders.length > 0) {
 
-      //get the email input from the email field
-     const emailInput = await page.getByTestId(dataTestIds.emailInput).inputValue();
-     console.log("Email Input:", emailInput);
-      // expect(signinPage.dataTestIds.otherSignInOptionsButton);
-      // Check that the other sign in options button is visible
+    // Check that the other sign in options button is visible
+    //get the email input from the email field
+    const emailInput = await page.getByTestId(dataTestIds.emailInput).inputValue();
+    const emailDomain = emailInput.split("@")[1] || "";
+
+    const domainFilteredIdps = identityProviders.filter((idp) => {
+      if (idp.emailIdentifiers === undefined || idp.emailIdentifiers === "") return true;
+
+      const emailIdentifiersList = idp.emailIdentifiers.split(",").map((identifier) => identifier.trim());
+
+      return emailIdentifiersList.some((identifier) => {
+        return identifier === emailDomain;
+      });
+    });
+
+    if (domainFilteredIdps.length > 0) {
+      //Check that the other sign in options button is visible
+      await expect(page.getByTestId(signinPage.dataTestIds.otherSignInOptionsButton)).toBeVisible();
+      page.getByTestId(signinPage.dataTestIds.otherSignInOptionsButton).click();
+      //check that a button for each identity provider is visible
+      for (const idp of domainFilteredIdps) {
+        const buttonLabel = getIdentityProviderButtonLabel(idp);
+        await expect(page.getByRole("button", { name: buttonLabel })).toBeVisible();
+      }
     }
   });
 });
