@@ -2,6 +2,7 @@ import test, { expect } from "@playwright/test";
 import { getIdentityProviderButtonLabel } from "app/(public)/(main-image)/signin/utils";
 import { PageURLs } from "page-objects/pages";
 import { SigninPage } from "page-objects/signin-page";
+import { GlobalStateManager } from "test-utils/global-state-manager";
 import { ProviderAPIClient } from "test-utils/provider-api-client";
 
 test.describe("Signin Page", () => {
@@ -141,5 +142,57 @@ test.describe("Signin Page", () => {
         await expect(page.getByRole("button", { name: buttonLabel })).toBeVisible();
       }
     }
+  });
+
+  test("identity-provider-login-redirect", async ({ page }) => {
+    // const state = "idp-auth-state";
+    const state = "idp-auth-state";
+    const identityProviderName = "Test Identity Provider";
+
+    const authState = {
+      identityProvider: identityProviderName,
+      nonce: state,
+    };
+
+    const encodedLocalAuthState = Buffer.from(JSON.stringify(authState), "utf8").toString("base64");
+
+    await page.evaluate((encodedLocalAuthState) => {
+      sessionStorage.setItem("authState", encodedLocalAuthState);
+    }, encodedLocalAuthState);
+
+    //get userToken the global state manager
+
+    const userToken = GlobalStateManager.getToken("user");
+
+    page.on("request", (request) => {
+      console.log("🌐 Request:", request.method(), request.url());
+    });
+
+    page.on("response", (response) => {
+      console.log("📥 Response:", response.status(), response.url());
+    });
+
+    //intercept the request to the identity provider auth endpoint "/api/sign-in-with-idp
+    await page.route("**/api/sign-in-with-idp", (route) => {
+      // Log the request payload for debugging
+      console.log("✅ INTERCEPTED sign-in-with-idp:", route.request().url());
+
+      const request = route.request();
+      console.log("Intercepted API call:", request.method(), request.url());
+      console.log("Request payload:", request.postDataJSON());
+
+      // Return mock successful response
+      route.fulfill({
+        status: 200,
+        contentType: "application/json",
+        body: JSON.stringify({
+          data: {
+            jwtToken: userToken,
+          },
+        }),
+      });
+    });
+
+    await page.goto(`/idp-auth?state=${state}&code=test-code`);
   });
 });
