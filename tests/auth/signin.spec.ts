@@ -1,6 +1,7 @@
 import test, { expect } from "@playwright/test";
 import { PageURLs } from "page-objects/pages";
 import { SigninPage } from "page-objects/signin-page";
+import { ProviderAPIClient } from "test-utils/provider-api-client";
 
 test.describe("Signin Page", () => {
   let signinPage: SigninPage;
@@ -67,10 +68,7 @@ test.describe("Signin Page", () => {
     await signinPage.goToPasswordLoginStep();
     // Check Forgot Password Link
     if (process.env.ENVIRONMENT_TYPE === "PROD") {
-      await expect(page.getByRole("link", { name: "Forgot Password" })).toHaveAttribute(
-        "href",
-        PageURLs.resetPassword
-      );
+      await expect(page.getByRole("link", { name: "Forgot Password" })).toHaveAttribute("href", PageURLs.resetPassword);
       await page.getByRole("link", { name: "Forgot Password" }).click();
       //heading should be visible
       await expect(page.getByRole("heading", { name: "Reset your password" })).toBeVisible();
@@ -105,5 +103,23 @@ test.describe("Signin Page", () => {
     // Click on Allow Necessary
     await page.getByRole("button", { name: "Allow necessary" }).click();
     await expect(page.getByTestId(dataTestIds.cookieConsentBanner)).not.toBeVisible();
+  });
+
+  test("identity-providers", async ({ page }) => {
+    const apiClient = new ProviderAPIClient();
+
+    const identityProviders = await apiClient.getIdentityProviders();
+    console.log("Identity Providers:", identityProviders);
+    const dataTestIds = signinPage.dataTestIds;
+
+    await signinPage.goToLoginOptionsStep();
+    if (identityProviders.length > 0) {
+
+      //get the email input from the email field
+     const emailInput = await page.getByTestId(dataTestIds.emailInput).inputValue();
+     console.log("Email Input:", emailInput);
+      // expect(signinPage.dataTestIds.otherSignInOptionsButton);
+      // Check that the other sign in options button is visible
+    }
   });
 });
