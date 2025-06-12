@@ -71,7 +71,7 @@ const LoginMethodStep: FC<LoginMethodStepProps> = (props) => {
   const [viewType, setViewType] = useState<"password-login" | "login-options">("login-options");
   const environmentType = useEnvironmentType();
   const domainFilteredIdentityProviders = useMemo(() => {
-    return identityProviders.filter((idp) => {
+    const filteredProviders = identityProviders.filter((idp) => {
       if (idp.emailIdentifiers === undefined || idp.emailIdentifiers === "") return true;
 
       const emailIdentifiersList = idp.emailIdentifiers.split(",").map((identifier) => identifier.trim());
@@ -79,6 +79,30 @@ const LoginMethodStep: FC<LoginMethodStepProps> = (props) => {
       return emailIdentifiersList.some((identifier) => {
         return identifier === emailDomain;
       });
+    });
+
+    // Sort providers: exact domain matches first, then others in original order
+    return filteredProviders.sort((a, b) => {
+      const aHasExactMatch =
+        a.emailIdentifiers &&
+        a.emailIdentifiers
+          .split(",")
+          .map((id) => id.trim())
+          .includes(emailDomain);
+      const bHasExactMatch =
+        b.emailIdentifiers &&
+        b.emailIdentifiers
+          .split(",")
+          .map((id) => id.trim())
+          .includes(emailDomain);
+
+      // If 'a' has exact match and 'b' doesn't, 'a' comes first
+      if (aHasExactMatch && !bHasExactMatch) return -1;
+      // If 'b' has exact match and 'a' doesn't, 'b' comes first
+      if (bHasExactMatch && !aHasExactMatch) return 1;
+
+      // For all other cases (both match or both don't match), maintain original order
+      return 0;
     });
   }, [identityProviders, emailDomain]);
 
