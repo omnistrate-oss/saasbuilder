@@ -145,7 +145,6 @@ test.describe("Signin Page", () => {
   });
 
   test("identity-provider-login-redirect", async ({ page }) => {
-    // const state = "idp-auth-state";
     const state = "idp-auth-state";
     const identityProviderName = "Test Identity Provider";
 
@@ -161,38 +160,28 @@ test.describe("Signin Page", () => {
     }, encodedLocalAuthState);
 
     //get userToken the global state manager
-
     const userToken = GlobalStateManager.getToken("user");
 
-    page.on("request", (request) => {
-      console.log("🌐 Request:", request.method(), request.url());
-    });
-
-    page.on("response", (response) => {
-      console.log("📥 Response:", response.status(), response.url());
-    });
-
-    //intercept the request to the identity provider auth endpoint "/api/sign-in-with-idp
-    await page.route("**/api/sign-in-with-idp", (route) => {
-      // Log the request payload for debugging
-      console.log("✅ INTERCEPTED sign-in-with-idp:", route.request().url());
-
-      const request = route.request();
-      console.log("Intercepted API call:", request.method(), request.url());
-      console.log("Request payload:", request.postDataJSON());
-
-      // Return mock successful response
-      route.fulfill({
-        status: 200,
-        contentType: "application/json",
-        body: JSON.stringify({
-          data: {
+    // intercept the request to the identity provider auth endpoint "/api/sign-in-with-idp
+    await page.route("**/api/sign-in-with-idp", async (route) => {
+      try {
+        // Return mock successful response
+        route.fulfill({
+          status: 200,
+          contentType: "application/json",
+          body: JSON.stringify({
             jwtToken: userToken,
-          },
-        }),
-      });
+          }),
+        });
+      } catch (error) {
+        console.log("Error in route handler:", error);
+      }
     });
+    await page.waitForTimeout(2000);
 
     await page.goto(`/idp-auth?state=${state}&code=test-code`);
+
+    //expect page to have redirected to the instances page
+    await expect(page).toHaveURL(PageURLs.instances);
   });
 });
