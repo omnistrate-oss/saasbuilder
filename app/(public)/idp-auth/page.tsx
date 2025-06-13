@@ -50,6 +50,7 @@ const IDPAuthPage = () => {
           }
         }
       } catch (error) {
+        
         isAPICallInprogress.current = false;
         sessionStorage.removeItem("authState");
         if (error.response && error.response.status === 409) {

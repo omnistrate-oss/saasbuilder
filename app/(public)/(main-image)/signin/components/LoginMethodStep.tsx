@@ -19,6 +19,7 @@ import { IdentityProvider } from "src/types/identityProvider";
 
 import { IDENTITY_PROVIDER_ICON_MAP } from "../constants";
 import { useLastLoginDetails } from "../hooks/useLastLoginDetails";
+import { getIdentityProviderButtonLabel } from "../utils";
 
 import PasswordLoginFields from "./PasswordLoginFields";
 
@@ -251,6 +252,7 @@ const LoginMethodStep: FC<LoginMethodStepProps> = (props) => {
         setViewType("password-login");
         setIdpOptionsExpanded(false);
       }}
+      data-testid="password-login-button"
     >
       <Box display="inline-flex" flexGrow={1} justifyContent="center">
         Sign In With Password
@@ -290,9 +292,10 @@ const LoginMethodStep: FC<LoginMethodStepProps> = (props) => {
             onClick={() => {
               handleIDPButtonClick(matchingIdp);
             }}
+            data-testid={`idp-login-button-${matchingIdp.name}`}
           >
             <Box display="inline-flex" flexGrow={1} justifyContent="center">
-              {matchingIdp.loginButtonText || `Continue with ${matchingIdp.name || matchingIdp.identityProviderName}`}
+              {getIdentityProviderButtonLabel(matchingIdp)}
             </Box>
           </Button>
         );
@@ -400,9 +403,10 @@ const LoginMethodStep: FC<LoginMethodStepProps> = (props) => {
                       onClick={() => {
                         handleIDPButtonClick(idp);
                       }}
+                      data-testid={`idp-login-button-${idp.name}`}
                     >
                       <Box display="inline-flex" flexGrow={1} justifyContent="center">
-                        {idp.loginButtonText || `Continue with ${idp.name || idp.identityProviderName}`}
+                        {getIdentityProviderButtonLabel(idp)}
                       </Box>
                     </Button>
                   );
@@ -415,6 +419,7 @@ const LoginMethodStep: FC<LoginMethodStepProps> = (props) => {
           )}
           {numOtherSignInOptions > 0 && (
             <Button
+              data-testid="sign-in-options-button"
               variant="text"
               disableRipple
               endIcon={

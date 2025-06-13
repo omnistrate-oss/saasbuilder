@@ -14,6 +14,10 @@ export class SigninPage {
     googleSigninButton: "google-signin-button",
     githubSigninButton: "github-signin-button",
     cookieConsentBanner: "cookie-consent-banner",
+    nextButton: "next-button",
+    otherSignInOptionsButton: "sign-in-options-button",
+    passwordLoginButton: "password-login-button",
+    resetPasswordSubmitButton: "submit-button",
   };
 
   pageElements = {
@@ -37,16 +41,32 @@ export class SigninPage {
     await this.page.goto(getSigninRoute());
   }
 
-  async signIn() {
+  async goToLoginOptionsStep() {
+    await this.navigate();
+    await this.page.getByTestId(this.dataTestIds.emailInput).fill(process.env.USER_EMAIL!);
+    await this.page.getByTestId(this.dataTestIds.nextButton).click();
+  }
+
+  async goToPasswordLoginStep() {
+    const dataTestIds = this.dataTestIds;
+    // Navigate to the Signin Page
+    await this.goToLoginOptionsStep();
+    await this.page.getByTestId(dataTestIds.otherSignInOptionsButton).click();
+    if (process.env.DISABLE_PASSWORD_LOGIN !== "true") {
+      await this.page.getByTestId(dataTestIds.passwordLoginButton).click();
+    }
+  }
+
+  async signInWithPassword() {
     const dataTestIds = this.dataTestIds;
 
     // Navigate to the Signin Page
-    await this.navigate();
-
-    // Fill the Email and Password Fields
-    await this.page.getByTestId(dataTestIds.emailInput).fill(process.env.USER_EMAIL!);
-    await this.page.getByTestId(dataTestIds.passwordInput).fill(process.env.USER_PASSWORD!);
-    await this.page.getByTestId(dataTestIds.loginButton).click();
+    await this.goToPasswordLoginStep();
+    if (process.env.DISABLE_PASSWORD_LOGIN !== "true") {
+      // Fill the Password Field
+      await this.page.getByTestId(dataTestIds.passwordInput).fill(process.env.USER_PASSWORD!);
+      await this.page.getByTestId(dataTestIds.loginButton).click();
+    }
   }
 
   async allowCookies() {

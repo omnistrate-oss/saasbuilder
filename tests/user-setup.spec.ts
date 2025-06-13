@@ -13,7 +13,7 @@ setup("Authenticate User", async ({ page }) => {
   const apiClient = new UserAPIClient();
   const signinPage = new SigninPage(page);
 
-  await signinPage.signIn();
+  await signinPage.signInWithPassword();
 
   // Intercept the Request to Get the JWT Token
   const request = await page.waitForResponse((response) => response.url().includes("/api/signin"));
