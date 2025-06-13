@@ -49,7 +49,7 @@ function ResourceInstanceOverview(props) {
       }}
     >
       {[
-        "Service Name",
+        "Product Name",
         "Subscription Plan",
         "Subscription Owner",
         "Lifecycle Status",

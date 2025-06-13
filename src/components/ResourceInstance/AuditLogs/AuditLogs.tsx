@@ -218,7 +218,7 @@ const AuditLogs: FC<AuditLogsTabProps> = ({ instanceId, subscriptionId }) => {
           let userDisplayLabel = userName;
 
           if (isUserServiceProvider) {
-            userDisplayLabel = `Service Provider`;
+            userDisplayLabel = `SaaS Provider`;
           }
 
           return <GridCellExpand href={pageLink} target="_blank" value={userDisplayLabel || "-"} />;

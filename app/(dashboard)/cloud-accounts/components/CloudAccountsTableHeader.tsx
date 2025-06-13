@@ -58,7 +58,7 @@ const CloudAccountsTableHeader = ({
         : isDeploying
           ? "Please wait for the instance to get to Ready state"
           : !isOnPremCopilot
-            ? "This feature is not supported for this service plan"
+            ? "This feature is not supported for this plan"
             : "";
   const isConnectDisabledMessage = !selectedInstance
     ? "Please select a cloud account"
@@ -69,7 +69,7 @@ const CloudAccountsTableHeader = ({
         : isDeploying
           ? "Please wait for the instance to get to Ready state"
           : !isOnPremCopilot
-            ? "This feature is not supported for this service plan"
+            ? "This feature is not supported for this plan"
             : "";
 
   const isDeleteDisabledMessage = !selectedInstance

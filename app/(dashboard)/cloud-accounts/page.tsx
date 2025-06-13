@@ -288,7 +288,7 @@ const CloudAccountsPage = () => {
         },
         {
           id: "serviceName",
-          header: "Service Name",
+          header: "Product Name",
           cell: (data) => {
             const { serviceLogoURL, serviceName } = subscriptionsObj[data.row.original.subscriptionId as string] || {};
             return <ServiceNameWithLogo serviceName={serviceName} serviceLogoURL={serviceLogoURL} />;
