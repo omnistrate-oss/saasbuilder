@@ -89,7 +89,7 @@ export class ProviderAPIClient {
     return context.delete(`/${this.apiVersion}/service/${serviceId}`);
   }
 
-  async getIdentityProviders() {
+  async getIdentityProviders(): Promise<IdentityProvider[]> {
     const context = await this.createProviderRequest();
     const response = await context.get(`/${this.apiVersion}/identity-provider-render`);
 

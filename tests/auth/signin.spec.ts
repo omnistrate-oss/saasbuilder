@@ -112,7 +112,6 @@ test.describe("Signin Page", () => {
     const apiClient = new ProviderAPIClient();
 
     const identityProviders = await apiClient.getIdentityProviders();
-    console.log("Identity Providers:", identityProviders);
     const dataTestIds = signinPage.dataTestIds;
 
     await signinPage.goToLoginOptionsStep();
@@ -135,7 +134,7 @@ test.describe("Signin Page", () => {
     if (domainFilteredIdps.length > 0) {
       //Check that the other sign in options button is visible
       await expect(page.getByTestId(signinPage.dataTestIds.otherSignInOptionsButton)).toBeVisible();
-      page.getByTestId(signinPage.dataTestIds.otherSignInOptionsButton).click();
+      await page.getByTestId(signinPage.dataTestIds.otherSignInOptionsButton).click();
       //check that a button for each identity provider is visible
       for (const idp of domainFilteredIdps) {
         const buttonLabel = getIdentityProviderButtonLabel(idp);
@@ -166,7 +165,7 @@ test.describe("Signin Page", () => {
     await page.route("**/api/sign-in-with-idp", async (route) => {
       try {
         // Return mock successful response
-        route.fulfill({
+        await route.fulfill({
           status: 200,
           contentType: "application/json",
           body: JSON.stringify({

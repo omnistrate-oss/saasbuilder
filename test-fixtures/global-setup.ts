@@ -1,6 +1,7 @@
 import { yamlTemplates } from "constants/yaml-templates";
 import { GlobalStateManager } from "test-utils/global-state-manager";
 import { ProviderAPIClient } from "test-utils/provider-api-client";
+import { UserAPIClient } from "test-utils/user-api-client";
 
 async function globalSetup() {
   console.log("Running Global Setup...");
@@ -21,6 +22,10 @@ async function globalSetup() {
   }
 
   console.log("Provider Auth Successful");
+
+  const userClient = new UserAPIClient();
+  await userClient.userLogin(process.env.USER_EMAIL!, process.env.USER_PASSWORD!);
+
   const date = `${Date.now()}`;
 
   await Promise.all([
