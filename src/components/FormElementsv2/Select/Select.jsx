@@ -15,7 +15,7 @@ const LoadingUI = () => {
   );
 };
 
-const Select = styled(({ isLoading = false, children, ...props }) => (
+const Select = styled(({ isLoading = false, children, maxWidth, ...props }) => (
   <MuiSelect
     fullWidth
     IconComponent={KeyboardArrowDownIcon}
@@ -28,6 +28,8 @@ const Select = styled(({ isLoading = false, children, ...props }) => (
           border: "1px solid #EAECF0",
           boxShadow: "0px 4px 6px -2px rgba(16, 24, 40, 0.03), 0px 12px 16px -4px rgba(16, 24, 40, 0.08)",
           borderRadius: "8px",
+          maxHeight: "450px",
+          maxWidth: maxWidth || "none",
         },
         [`& .${menuClasses.list}`]: {
           padding: "4px",
