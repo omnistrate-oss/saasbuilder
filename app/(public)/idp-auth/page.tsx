@@ -29,7 +29,6 @@ const IDPAuthPage = () => {
       try {
         isAPICallInprogress.current = true;
         const response = await customerSignInWithIdentityProvider(payload);
-        console.log("Sign in response:", response);
         // @ts-ignore
         const jwtToken = response.data.jwtToken;
         sessionStorage.removeItem("authState");
