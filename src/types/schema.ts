@@ -7185,10 +7185,10 @@ export interface components {
         /** @example {
          *       "defaultValue": "default value",
          *       "dependentResourceId": "r-12345678",
-         *       "description": "Dolor esse.",
-         *       "hasOptions": true,
+         *       "description": "Voluptas necessitatibus consequatur.",
+         *       "hasOptions": false,
          *       "isList": true,
-         *       "key": "h",
+         *       "key": "ca1",
          *       "labeledOptions": {
          *         "large": "t3.xlarge",
          *         "medium": "t3.large",
@@ -7200,18 +7200,19 @@ export interface components {
          *         "min": "A unde eveniet voluptatem omnis qui eveniet.",
          *         "minLength": "Iure distinctio rerum provident iure eligendi facilis."
          *       },
-         *       "modifiable": false,
-         *       "name": "iu",
+         *       "modifiable": true,
+         *       "name": "zl",
          *       "options": [
          *         "a",
          *         "b",
          *         "c",
          *         "default value"
          *       ],
-         *       "required": true,
+         *       "required": false,
          *       "resourceId": "r-12345678",
          *       "serviceId": "s-12345678",
-         *       "token": "sg",
+         *       "tabIndex": 1,
+         *       "token": "oe",
          *       "type": "Boolean|Float64|String|Resource|Secret|Password"
          *     } */
         CreateInputParameterRequest: {
@@ -7222,12 +7223,12 @@ export interface components {
             defaultValue?: string;
             /**
              * @description ID of a resource
-             * @example Quia maxime corrupti perspiciatis.
+             * @example Voluptatem quis impedit hic est.
              */
             dependentResourceId?: string;
             /**
              * @description A brief description of the input parameter
-             * @example Nam laudantium autem laborum inventore quo.
+             * @example Laborum inventore quo exercitationem earum vel et.
              */
             description: string;
             /**
@@ -7244,7 +7245,7 @@ export interface components {
             isList: boolean;
             /**
              * @description Key of the input parameter
-             * @example 3l5
+             * @example 9
              */
             key: string;
             /**
@@ -7261,12 +7262,12 @@ export interface components {
             limits?: components["schemas"]["Limits"];
             /**
              * @description Marks the input parameter as immutable
-             * @example false
+             * @example true
              */
             modifiable: boolean;
             /**
              * @description External name for the input parameter
-             * @example ivj
+             * @example rw
              */
             name: string;
             /**
@@ -7281,12 +7282,12 @@ export interface components {
             options?: string[];
             /**
              * @description Enforces the input parameter as a required parameter
-             * @example true
+             * @example false
              */
             required: boolean;
             /**
              * @description ID of a resource
-             * @example Tempora esse voluptas dolores et et dolores.
+             * @example Dolores optio deleniti voluptas.
              */
             resourceId: string;
             /**
@@ -7295,8 +7296,15 @@ export interface components {
              */
             serviceId: string;
             /**
+             * Format: int64
+             * @description Index for parameter ordering in the SaaS portal
+             * @default 0
+             * @example 1
+             */
+            tabIndex: number;
+            /**
              * @description JWT token used to perform authorization
-             * @example s
+             * @example j3
              */
             token: string;
             /**
@@ -7333,6 +7341,7 @@ export interface components {
          *       ],
          *       "required": true,
          *       "resourceId": "r-12345678",
+         *       "tabIndex": 1,
          *       "type": "Cum inventore aut asperiores fugiat."
          *     } */
         CreateInputParameterRequest2: {
@@ -7410,6 +7419,13 @@ export interface components {
              * @example r-12345678
              */
             resourceId: string;
+            /**
+             * Format: int64
+             * @description Index for parameter ordering in the SaaS portal
+             * @default 0
+             * @example 1
+             */
+            tabIndex: number;
             /** @example Non sit reprehenderit culpa qui ipsum fuga. */
             type: string;
         };
@@ -7599,7 +7615,7 @@ export interface components {
          *       "name": "Username",
          *       "resourceId": "r-12345678",
          *       "serviceId": "s-12345678",
-         *       "token": "7",
+         *       "token": "w4",
          *       "value": "johndoe",
          *       "valueRef": "$var.username",
          *       "valueType": "Boolean|Float64|String|Secret|Password"
@@ -7622,7 +7638,7 @@ export interface components {
             name: string;
             /**
              * @description ID of a resource
-             * @example Ut officiis.
+             * @example Quae et.
              */
             resourceId: string;
             /**
@@ -7632,7 +7648,7 @@ export interface components {
             serviceId: string;
             /**
              * @description JWT token used to perform authorization
-             * @example tvq
+             * @example c
              */
             token: string;
             /**
@@ -8599,7 +8615,7 @@ export interface components {
          *           "terraformPath": "/project1/tf"
          *         }
          *       },
-         *       "token": "r6"
+         *       "token": "9"
          *     } */
         CreateResourceRequest: {
             additionalSecurityContext?: components["schemas"]["AdditionalSecurityContext"];
@@ -8658,24 +8674,24 @@ export interface components {
             helmChartConfiguration?: components["schemas"]["HelmChartConfiguration"];
             /**
              * @description ID of an Image Config
-             * @example Enim sed quisquam voluptatum et quia quod.
+             * @example Minus saepe placeat consequatur.
              */
             imageConfigId?: string;
             /**
              * @description ID of an Infra Config
-             * @example Impedit sunt magni earum dolore facilis rerum.
+             * @example Culpa nam sunt aliquam nemo.
              */
             infraConfigId?: string;
             /**
              * @description Whether this resource is internal or not
              * @default false
-             * @example false
+             * @example true
              */
             internal: boolean;
             /**
              * @description Whether this resource is a proxy or not
              * @default false
-             * @example true
+             * @example false
              */
             isProxy: boolean;
             jobConfig?: components["schemas"]["JobConfig"];
@@ -8695,7 +8711,7 @@ export interface components {
             operatorCRDConfiguration?: components["schemas"]["OperatorCRDConfiguration"];
             /**
              * @description ID of a Product Tier
-             * @example Quod et voluptatum quo mollitia natus minima.
+             * @example Et quia quod.
              */
             productTierId: string;
             /**
@@ -8734,7 +8750,7 @@ export interface components {
             terraformConfigurations?: components["schemas"]["TerraformConfigurations"];
             /**
              * @description JWT token used to perform authorization
-             * @example 9x8
+             * @example 3tv
              */
             token: string;
         };
@@ -10872,12 +10888,12 @@ export interface components {
         /** @example {
          *       "id": "r-12345678",
          *       "serviceId": "s-12345678",
-         *       "token": "ui"
+         *       "token": "eq"
          *     } */
         DeRegisterResourceMetricsConfigRequest: {
             /**
              * @description ID of a resource
-             * @example Facere tenetur est vel nobis nesciunt voluptatum.
+             * @example Minima voluptatem quam id similique.
              */
             id: string;
             /**
@@ -10887,7 +10903,7 @@ export interface components {
             serviceId: string;
             /**
              * @description JWT token used to perform authorization
-             * @example 0
+             * @example jot
              */
             token: string;
         };
@@ -11084,12 +11100,12 @@ export interface components {
         /** @example {
          *       "id": "var-12345678",
          *       "serviceId": "s-12345678",
-         *       "token": "f"
+         *       "token": "fw"
          *     } */
         DeleteInputParameterRequest: {
             /**
              * @description ID of an Input Parameter
-             * @example Expedita iure dolor repellendus.
+             * @example Illo dicta tempore quia perspiciatis voluptatem.
              */
             id: string;
             /**
@@ -11099,7 +11115,7 @@ export interface components {
             serviceId: string;
             /**
              * @description JWT token used to perform authorization
-             * @example qg
+             * @example wi
              */
             token: string;
         };
@@ -11150,12 +11166,12 @@ export interface components {
         /** @example {
          *       "id": "op-12345678",
          *       "serviceId": "s-12345678",
-         *       "token": "5"
+         *       "token": "7"
          *     } */
         DeleteOutputParameterRequest: {
             /**
              * @description ID of an Output Parameter
-             * @example Maiores repellat repudiandae.
+             * @example Autem reprehenderit eum.
              */
             id: string;
             /**
@@ -11165,7 +11181,7 @@ export interface components {
             serviceId: string;
             /**
              * @description JWT token used to perform authorization
-             * @example ouj
+             * @example rvt
              */
             token: string;
         };
@@ -11280,12 +11296,12 @@ export interface components {
         /** @example {
          *       "id": "r-12345678",
          *       "serviceId": "s-12345678",
-         *       "token": "s"
+         *       "token": "yx"
          *     } */
         DeleteResourceRequest: {
             /**
              * @description ID of a resource
-             * @example Quidem placeat et est dolore magnam.
+             * @example Aspernatur ut modi quidem placeat et est.
              */
             id: string;
             /**
@@ -11295,7 +11311,7 @@ export interface components {
             serviceId: string;
             /**
              * @description JWT token used to perform authorization
-             * @example 03p
+             * @example n
              */
             token: string;
         };
@@ -12046,7 +12062,7 @@ export interface components {
             serviceId: string;
             /**
              * @description JWT token used to perform authorization
-             * @example 2
+             * @example x2
              */
             token: string;
         };
@@ -12104,13 +12120,13 @@ export interface components {
          *       "id": "r-12345678",
          *       "scope": "CLUSTER",
          *       "serviceId": "s-12345678",
-         *       "token": "ofv",
+         *       "token": "su",
          *       "type": "ADD"
          *     } */
         DeregisterActionHookRequest: {
             /**
              * @description ID of a resource
-             * @example Vel fuga consequatur dolor ab eos.
+             * @example Asperiores neque fuga doloribus.
              */
             id: string;
             /**
@@ -12125,7 +12141,7 @@ export interface components {
             serviceId: string;
             /**
              * @description JWT token used to perform authorization
-             * @example b
+             * @example f
              */
             token: string;
             /**
@@ -12441,6 +12457,7 @@ export interface components {
          *       "awsCloudFormationNoLBTemplateURL": "https://s3.amazonaws.com/omnistrate-cloudformation/org-EUVvex3bVm/account-config-setup-template-no-lb-policy.yaml",
          *       "awsCloudFormationTemplateURL": "https://s3.amazonaws.com/omnistrate-cloudformation/org-EUVvex3bVm/account-config-setup-template.yaml",
          *       "azureBootstrapShellCommand": "bash -c \"$(curl -fsSL https://omnistrate.com/account-setup/azure-bootstrap.sh?account_config_id=ac-MOju2uwKM0)\"",
+         *       "azureDisconnectShellCommand": "bash -c \"$(curl -fsSL https://omnistrate.com/account-setup/azure-disconnect.sh?account_config_id=ac-MOju2uwKM0)\"",
          *       "azureSubscriptionID": "12345678-1234-1234-1234-123456789012",
          *       "azureTenantID": "12345678-1234-1234-1234-123456789012",
          *       "byoaInstanceIDs": [
@@ -12486,6 +12503,11 @@ export interface components {
              * @example bash -c "$(curl -fsSL https://omnistrate.com/account-setup/azure-bootstrap.sh?account_config_id=ac-MOju2uwKM0)"
              */
             azureBootstrapShellCommand?: string;
+            /**
+             * @description The Azure disconnect shell command
+             * @example bash -c "$(curl -fsSL https://omnistrate.com/account-setup/azure-disconnect.sh?account_config_id=ac-MOju2uwKM0)"
+             */
+            azureDisconnectShellCommand?: string;
             /**
              * @description The Azure subscription ID
              * @example 12345678-1234-1234-1234-123456789012
@@ -13650,25 +13672,25 @@ export interface components {
         };
         /** @example {
          *       "ProductTierId": "Beatae beatae.",
-         *       "ProductTierVersion": "Nulla eaque quibusdam.",
+         *       "ProductTierVersion": "Consequatur nisi dignissimos placeat nihil nobis.",
          *       "id": "var-12345678",
          *       "serviceId": "s-12345678",
-         *       "token": "gu"
+         *       "token": "bty"
          *     } */
         DescribeInputParameterRequest: {
             /**
              * @description ID of a Product Tier
-             * @example Dicta voluptas non.
+             * @example Nulla eaque quibusdam.
              */
             ProductTierId?: string;
             /**
              * @description The product tier version of the infra config to describe. If not specified, the latest version is described.
-             * @example Eos corporis vel voluptatem aut molestiae ut.
+             * @example Excepturi dicta voluptas non culpa impedit ut.
              */
             ProductTierVersion?: string;
             /**
              * @description ID of an Input Parameter
-             * @example Voluptatem nihil.
+             * @example Voluptatem aut molestiae.
              */
             id: string;
             /**
@@ -13678,18 +13700,18 @@ export interface components {
             serviceId: string;
             /**
              * @description JWT token used to perform authorization
-             * @example 8
+             * @example bww
              */
             token: string;
         };
         /** @example {
          *       "defaultValue": "true",
          *       "dependentResourceId": "r-12345678",
-         *       "description": "A corrupti nisi sint quia repellat explicabo.",
-         *       "hasOptions": false,
+         *       "description": "Dolores voluptatem labore et.",
+         *       "hasOptions": true,
          *       "id": "var-12345678",
-         *       "isList": true,
-         *       "key": "m",
+         *       "isList": false,
+         *       "key": "n4c",
          *       "labeledOptions": {
          *         "large": "t3.xlarge",
          *         "medium": "t3.large",
@@ -13702,7 +13724,7 @@ export interface components {
          *         "minLength": "Iure distinctio rerum provident iure eligendi facilis."
          *       },
          *       "modifiable": true,
-         *       "name": "r",
+         *       "name": "2mi",
          *       "options": [
          *         "true",
          *         "false"
@@ -13710,6 +13732,7 @@ export interface components {
          *       "required": true,
          *       "resourceId": "r-12345678",
          *       "serviceId": "s-12345678",
+         *       "tabIndex": 1,
          *       "type": "Boolean|Float64|String|Resource|Secret|Password"
          *     } */
         DescribeInputParameterResult: {
@@ -13720,34 +13743,34 @@ export interface components {
             defaultValue?: string;
             /**
              * @description ID of a resource
-             * @example Aperiam ut.
+             * @example Nisi sint quia repellat explicabo alias.
              */
             dependentResourceId?: string;
             /**
              * @description A brief description of the input parameter
-             * @example Recusandae temporibus est sit repudiandae nemo.
+             * @example Enim praesentium aut eum.
              */
             description: string;
             /**
              * @description Marks the input parameter to be selectable from a list of values
              * @default false
-             * @example false
+             * @example true
              */
             hasOptions: boolean;
             /**
              * @description ID of an Input Parameter
-             * @example Harum commodi rerum.
+             * @example Cumque iure ea.
              */
             id: string;
             /**
              * @description Marks the input parameter as a list of values
              * @default false
-             * @example true
+             * @example false
              */
             isList: boolean;
             /**
              * @description Key of the input parameter
-             * @example h
+             * @example lug
              */
             key: string;
             /**
@@ -13769,7 +13792,7 @@ export interface components {
             modifiable: boolean;
             /**
              * @description External name for the input parameter
-             * @example e
+             * @example o
              */
             name: string;
             /**
@@ -13782,12 +13805,12 @@ export interface components {
             options?: string[];
             /**
              * @description Enforces the input parameter as a required parameter
-             * @example false
+             * @example true
              */
             required: boolean;
             /**
              * @description ID of a resource
-             * @example Consequatur nisi dignissimos placeat nihil nobis.
+             * @example Recusandae temporibus est sit repudiandae nemo.
              */
             resourceId: string;
             /**
@@ -13795,6 +13818,13 @@ export interface components {
              * @example s-123456
              */
             serviceId: string;
+            /**
+             * Format: int64
+             * @description Index for parameter ordering in the SaaS portal
+             * @default 0
+             * @example 1
+             */
+            tabIndex: number;
             /**
              * @description Type of the variable encoding the value
              * @example Boolean|Float64|String|Resource|Secret|Password
@@ -14065,25 +14095,25 @@ export interface components {
         };
         /** @example {
          *       "ProductTierId": "Beatae beatae.",
-         *       "ProductTierVersion": "Non voluptatum incidunt ullam corporis minima quos.",
+         *       "ProductTierVersion": "Dolor eligendi quis nam provident.",
          *       "id": "op-12345678",
          *       "serviceId": "s-12345678",
-         *       "token": "eby"
+         *       "token": "u"
          *     } */
         DescribeOutputParameterRequest: {
             /**
              * @description ID of a Product Tier
-             * @example Ea incidunt explicabo ullam.
+             * @example Culpa maiores rerum amet accusantium est.
              */
             ProductTierId?: string;
             /**
              * @description The product tier version of the infra config to describe. If not specified, the latest version is described.
-             * @example Laborum voluptatem.
+             * @example Quod omnis nisi a praesentium aut ducimus.
              */
             ProductTierVersion?: string;
             /**
              * @description ID of an Output Parameter
-             * @example Deserunt est labore.
+             * @example Incidunt ullam corporis minima quos consequatur.
              */
             id: string;
             /**
@@ -14093,7 +14123,7 @@ export interface components {
             serviceId: string;
             /**
              * @description JWT token used to perform authorization
-             * @example n
+             * @example y95
              */
             token: string;
         };
@@ -14116,7 +14146,7 @@ export interface components {
             description: string;
             /**
              * @description ID of an Output Parameter
-             * @example Omnis quod.
+             * @example Unde et.
              */
             id: string;
             /**
@@ -14131,7 +14161,7 @@ export interface components {
             name: string;
             /**
              * @description ID of a resource
-             * @example Nisi a praesentium aut.
+             * @example Et autem soluta voluptatem.
              */
             resourceId: string;
             /**
@@ -15254,25 +15284,25 @@ export interface components {
         };
         /** @example {
          *       "ProductTierId": "Beatae beatae.",
-         *       "ProductTierVersion": "Laudantium est in aperiam corporis qui earum.",
+         *       "ProductTierVersion": "Sed error aut itaque asperiores pariatur.",
          *       "id": "r-12345678",
          *       "serviceId": "s-12345678",
-         *       "token": "i"
+         *       "token": "7"
          *     } */
         DescribeResourceMetricsConfigRequest: {
             /**
              * @description ID of a Product Tier
-             * @example Aperiam quia cumque occaecati inventore doloribus.
+             * @example Quos temporibus magni occaecati ut officiis.
              */
             ProductTierId?: string;
             /**
              * @description The product tier version of the infra config to describe. If not specified, the latest version is described.
-             * @example Voluptas non magnam illo.
+             * @example Laudantium est in aperiam corporis qui earum.
              */
             ProductTierVersion?: string;
             /**
              * @description ID of a resource
-             * @example Minima voluptatem quam id similique.
+             * @example Quia cumque occaecati inventore doloribus voluptas occaecati.
              */
             id: string;
             /**
@@ -15282,31 +15312,31 @@ export interface components {
             serviceId: string;
             /**
              * @description JWT token used to perform authorization
-             * @example jot
+             * @example 98
              */
             token: string;
         };
         /** @example {
          *       "ProductTierId": "Beatae beatae.",
-         *       "ProductTierVersion": "Rem optio maxime porro exercitationem.",
+         *       "ProductTierVersion": "Ea tempore quisquam eum et.",
          *       "id": "r-12345678",
          *       "serviceId": "s-12345678",
-         *       "token": "e"
+         *       "token": "d7"
          *     } */
         DescribeResourceRequest: {
             /**
              * @description ID of a Product Tier
-             * @example Tempore quisquam eum et ex pariatur veniam.
+             * @example Repellendus quia voluptatem qui voluptatem vero.
              */
             ProductTierId?: string;
             /**
              * @description The product tier version of the infra config to describe. If not specified, the latest version is described.
-             * @example Molestiae placeat atque.
+             * @example Nemo aliquid corporis aut quia.
              */
             ProductTierVersion?: string;
             /**
              * @description ID of a resource
-             * @example Repellendus quia voluptatem qui voluptatem vero.
+             * @example Et illum placeat incidunt temporibus.
              */
             id: string;
             /**
@@ -15316,7 +15346,7 @@ export interface components {
             serviceId: string;
             /**
              * @description JWT token used to perform authorization
-             * @example 9
+             * @example 4
              */
             token: string;
         };
@@ -15351,20 +15381,6 @@ export interface components {
          *         "S3Configuration": {}
          *       },
          *       "capabilities": [
-         *         {
-         *           "capability": "SERVERLESS",
-         *           "configuration": {
-         *             "EnableAutoStop": true,
-         *             "MinimumNodesInPool": 5,
-         *             "PortsMappingProxyConfig": {
-         *               "MaxNumberOfClustersPerProxyInstance": 50,
-         *               "NumberOfPortsPerCluster": 4
-         *             },
-         *             "ProxyId": "r-123456",
-         *             "ReferenceProxyKey": "resource-proxy",
-         *             "TargetPort": 5432
-         *           }
-         *         },
          *         {
          *           "capability": "SERVERLESS",
          *           "configuration": {
@@ -15727,6 +15743,20 @@ export interface components {
              *           "ReferenceProxyKey": "resource-proxy",
              *           "TargetPort": 5432
              *         }
+             *       },
+             *       {
+             *         "capability": "SERVERLESS",
+             *         "configuration": {
+             *           "EnableAutoStop": true,
+             *           "MinimumNodesInPool": 5,
+             *           "PortsMappingProxyConfig": {
+             *             "MaxNumberOfClustersPerProxyInstance": 50,
+             *             "NumberOfPortsPerCluster": 4
+             *           },
+             *           "ProxyId": "r-123456",
+             *           "ReferenceProxyKey": "resource-proxy",
+             *           "TargetPort": 5432
+             *         }
              *       }
              *     ]
              */
@@ -15801,17 +15831,17 @@ export interface components {
             helmChartConfiguration?: components["schemas"]["HelmChartConfiguration"];
             /**
              * @description ID of a resource
-             * @example Vel et.
+             * @example Pariatur veniam quaerat.
              */
             id: string;
             /**
              * @description ID of an Image Config
-             * @example Incidunt cum est maiores quo.
+             * @example Et maiores et est quisquam sapiente.
              */
             imageConfigId?: string;
             /**
              * @description ID of an Infra Config
-             * @example Non sed perferendis rerum.
+             * @example Debitis est architecto incidunt cum est.
              */
             infraConfigId?: string;
             /**
@@ -15823,7 +15853,7 @@ export interface components {
             /**
              * @description Whether this resource is deprecated or not
              * @default false
-             * @example true
+             * @example false
              */
             isDeprecated: boolean;
             jobConfig?: components["schemas"]["JobConfig"];
@@ -15843,7 +15873,7 @@ export interface components {
             operatorCRDConfiguration?: components["schemas"]["OperatorCRDConfiguration"];
             /**
              * @description ID of a Product Tier
-             * @example Et est quisquam sapiente molestiae debitis est.
+             * @example Omnis rem optio maxime porro exercitationem cum.
              */
             productTierId: string;
             /**
@@ -18204,7 +18234,7 @@ export interface components {
          *       "capability": "SERVERLESS",
          *       "id": "r-12345678",
          *       "serviceId": "s-12345678",
-         *       "token": "u"
+         *       "token": "5n"
          *     } */
         DisableResourceCapabilityRequest: {
             /**
@@ -18214,7 +18244,7 @@ export interface components {
             capability: string;
             /**
              * @description ID of a resource
-             * @example Aut ex consectetur molestias fugiat sed reiciendis.
+             * @example Consequatur voluptas.
              */
             id: string;
             /**
@@ -18224,7 +18254,7 @@ export interface components {
             serviceId: string;
             /**
              * @description JWT token used to perform authorization
-             * @example br
+             * @example hde
              */
             token: string;
         };
@@ -18412,7 +18442,7 @@ export interface components {
          *       },
          *       "id": "r-12345678",
          *       "serviceId": "s-12345678",
-         *       "token": "m"
+         *       "token": "y0"
          *     } */
         EnableResourceCapabilityRequest: {
             /**
@@ -18438,7 +18468,7 @@ export interface components {
             };
             /**
              * @description ID of a resource
-             * @example Ducimus quo nihil ea dicta veritatis facere.
+             * @example Ea dicta.
              */
             id: string;
             /**
@@ -18448,7 +18478,7 @@ export interface components {
             serviceId: string;
             /**
              * @description JWT token used to perform authorization
-             * @example 5n
+             * @example rz
              */
             token: string;
         };
@@ -18619,7 +18649,7 @@ export interface components {
             userName?: string;
         };
         /** @example {
-         *       "disableMonitoring": false,
+         *       "disableMonitoring": true,
          *       "host": "https://my-endpoint.com",
          *       "networkingType": "PUBLIC|PRIVATE",
          *       "ports": [
@@ -18632,7 +18662,7 @@ export interface components {
             /**
              * @description Whether to disable monitoring for this endpoint
              * @default false
-             * @example false
+             * @example true
              */
             disableMonitoring: boolean;
             /**
@@ -19973,6 +20003,7 @@ export interface components {
          *         "option2"
          *       ],
          *       "required": true,
+         *       "tabIndex": 1,
          *       "type": "Boolean|Float64|String|JSON|Resource"
          *     } */
         InputParameterEntity: {
@@ -20029,6 +20060,13 @@ export interface components {
              * @example true
              */
             required: boolean;
+            /**
+             * Format: int64
+             * @description Index for parameter ordering in the SaaS portal
+             * @default 0
+             * @example 1
+             */
+            tabIndex: number;
             /**
              * @description The parameter type
              * @example Boolean|Float64|String|JSON|Resource
@@ -20885,6 +20923,7 @@ export interface components {
          *           "awsCloudFormationNoLBTemplateURL": "https://s3.amazonaws.com/omnistrate-cloudformation/org-EUVvex3bVm/account-config-setup-template-no-lb-policy.yaml",
          *           "awsCloudFormationTemplateURL": "https://s3.amazonaws.com/omnistrate-cloudformation/org-EUVvex3bVm/account-config-setup-template.yaml",
          *           "azureBootstrapShellCommand": "bash -c \"$(curl -fsSL https://omnistrate.com/account-setup/azure-bootstrap.sh?account_config_id=ac-MOju2uwKM0)\"",
+         *           "azureDisconnectShellCommand": "bash -c \"$(curl -fsSL https://omnistrate.com/account-setup/azure-disconnect.sh?account_config_id=ac-MOju2uwKM0)\"",
          *           "azureSubscriptionID": "12345678-1234-1234-1234-123456789012",
          *           "azureTenantID": "12345678-1234-1234-1234-123456789012",
          *           "byoaInstanceIDs": [
@@ -20909,6 +20948,7 @@ export interface components {
          *           "awsCloudFormationNoLBTemplateURL": "https://s3.amazonaws.com/omnistrate-cloudformation/org-EUVvex3bVm/account-config-setup-template-no-lb-policy.yaml",
          *           "awsCloudFormationTemplateURL": "https://s3.amazonaws.com/omnistrate-cloudformation/org-EUVvex3bVm/account-config-setup-template.yaml",
          *           "azureBootstrapShellCommand": "bash -c \"$(curl -fsSL https://omnistrate.com/account-setup/azure-bootstrap.sh?account_config_id=ac-MOju2uwKM0)\"",
+         *           "azureDisconnectShellCommand": "bash -c \"$(curl -fsSL https://omnistrate.com/account-setup/azure-disconnect.sh?account_config_id=ac-MOju2uwKM0)\"",
          *           "azureSubscriptionID": "12345678-1234-1234-1234-123456789012",
          *           "azureTenantID": "12345678-1234-1234-1234-123456789012",
          *           "byoaInstanceIDs": [
@@ -20946,6 +20986,7 @@ export interface components {
              *         "awsCloudFormationNoLBTemplateURL": "https://s3.amazonaws.com/omnistrate-cloudformation/org-EUVvex3bVm/account-config-setup-template-no-lb-policy.yaml",
              *         "awsCloudFormationTemplateURL": "https://s3.amazonaws.com/omnistrate-cloudformation/org-EUVvex3bVm/account-config-setup-template.yaml",
              *         "azureBootstrapShellCommand": "bash -c \"$(curl -fsSL https://omnistrate.com/account-setup/azure-bootstrap.sh?account_config_id=ac-MOju2uwKM0)\"",
+             *         "azureDisconnectShellCommand": "bash -c \"$(curl -fsSL https://omnistrate.com/account-setup/azure-disconnect.sh?account_config_id=ac-MOju2uwKM0)\"",
              *         "azureSubscriptionID": "12345678-1234-1234-1234-123456789012",
              *         "azureTenantID": "12345678-1234-1234-1234-123456789012",
              *         "byoaInstanceIDs": [
@@ -20970,6 +21011,7 @@ export interface components {
              *         "awsCloudFormationNoLBTemplateURL": "https://s3.amazonaws.com/omnistrate-cloudformation/org-EUVvex3bVm/account-config-setup-template-no-lb-policy.yaml",
              *         "awsCloudFormationTemplateURL": "https://s3.amazonaws.com/omnistrate-cloudformation/org-EUVvex3bVm/account-config-setup-template.yaml",
              *         "azureBootstrapShellCommand": "bash -c \"$(curl -fsSL https://omnistrate.com/account-setup/azure-bootstrap.sh?account_config_id=ac-MOju2uwKM0)\"",
+             *         "azureDisconnectShellCommand": "bash -c \"$(curl -fsSL https://omnistrate.com/account-setup/azure-disconnect.sh?account_config_id=ac-MOju2uwKM0)\"",
              *         "azureSubscriptionID": "12345678-1234-1234-1234-123456789012",
              *         "azureTenantID": "12345678-1234-1234-1234-123456789012",
              *         "byoaInstanceIDs": [
@@ -20994,6 +21036,7 @@ export interface components {
              *         "awsCloudFormationNoLBTemplateURL": "https://s3.amazonaws.com/omnistrate-cloudformation/org-EUVvex3bVm/account-config-setup-template-no-lb-policy.yaml",
              *         "awsCloudFormationTemplateURL": "https://s3.amazonaws.com/omnistrate-cloudformation/org-EUVvex3bVm/account-config-setup-template.yaml",
              *         "azureBootstrapShellCommand": "bash -c \"$(curl -fsSL https://omnistrate.com/account-setup/azure-bootstrap.sh?account_config_id=ac-MOju2uwKM0)\"",
+             *         "azureDisconnectShellCommand": "bash -c \"$(curl -fsSL https://omnistrate.com/account-setup/azure-disconnect.sh?account_config_id=ac-MOju2uwKM0)\"",
              *         "azureSubscriptionID": "12345678-1234-1234-1234-123456789012",
              *         "azureTenantID": "12345678-1234-1234-1234-123456789012",
              *         "byoaInstanceIDs": [
@@ -21018,6 +21061,7 @@ export interface components {
              *         "awsCloudFormationNoLBTemplateURL": "https://s3.amazonaws.com/omnistrate-cloudformation/org-EUVvex3bVm/account-config-setup-template-no-lb-policy.yaml",
              *         "awsCloudFormationTemplateURL": "https://s3.amazonaws.com/omnistrate-cloudformation/org-EUVvex3bVm/account-config-setup-template.yaml",
              *         "azureBootstrapShellCommand": "bash -c \"$(curl -fsSL https://omnistrate.com/account-setup/azure-bootstrap.sh?account_config_id=ac-MOju2uwKM0)\"",
+             *         "azureDisconnectShellCommand": "bash -c \"$(curl -fsSL https://omnistrate.com/account-setup/azure-disconnect.sh?account_config_id=ac-MOju2uwKM0)\"",
              *         "azureSubscriptionID": "12345678-1234-1234-1234-123456789012",
              *         "azureTenantID": "12345678-1234-1234-1234-123456789012",
              *         "byoaInstanceIDs": [
@@ -21054,12 +21098,12 @@ export interface components {
         /** @example {
          *       "id": "r-12345678",
          *       "serviceId": "s-12345678",
-         *       "token": "cv"
+         *       "token": "3l5"
          *     } */
         ListActionHooksRequest: {
             /**
              * @description ID of a resource
-             * @example Hic id aspernatur quibusdam enim.
+             * @example Odit eum excepturi voluptas iure ut.
              */
             id: string;
             /**
@@ -21069,32 +21113,12 @@ export interface components {
             serviceId: string;
             /**
              * @description JWT token used to perform authorization
-             * @example 7s
+             * @example 5
              */
             token: string;
         };
         /** @example {
          *       "hooks": [
-         *         {
-         *           "commandTemplate": "ZWNobyAiaGVsbG8gd29ybGQi",
-         *           "customCommand": [
-         *             "/bin/sh",
-         *             "-c"
-         *           ],
-         *           "customImage": "my-custom-image:latest",
-         *           "scope": "CLUSTER",
-         *           "type": "ADD"
-         *         },
-         *         {
-         *           "commandTemplate": "ZWNobyAiaGVsbG8gd29ybGQi",
-         *           "customCommand": [
-         *             "/bin/sh",
-         *             "-c"
-         *           ],
-         *           "customImage": "my-custom-image:latest",
-         *           "scope": "CLUSTER",
-         *           "type": "ADD"
-         *         },
          *         {
          *           "commandTemplate": "ZWNobyAiaGVsbG8gd29ybGQi",
          *           "customCommand": [
@@ -21121,6 +21145,16 @@ export interface components {
             /**
              * @description The list of action hooks
              * @example [
+             *       {
+             *         "commandTemplate": "ZWNobyAiaGVsbG8gd29ybGQi",
+             *         "customCommand": [
+             *           "/bin/sh",
+             *           "-c"
+             *         ],
+             *         "customImage": "my-custom-image:latest",
+             *         "scope": "CLUSTER",
+             *         "type": "ADD"
+             *       },
              *       {
              *         "commandTemplate": "ZWNobyAiaGVsbG8gd29ybGQi",
              *         "customCommand": [
@@ -22498,6 +22532,7 @@ export interface components {
          *           "awsCloudFormationNoLBTemplateURL": "https://s3.amazonaws.com/omnistrate-cloudformation/org-EUVvex3bVm/account-config-setup-template-no-lb-policy.yaml",
          *           "awsCloudFormationTemplateURL": "https://s3.amazonaws.com/omnistrate-cloudformation/org-EUVvex3bVm/account-config-setup-template.yaml",
          *           "azureBootstrapShellCommand": "bash -c \"$(curl -fsSL https://omnistrate.com/account-setup/azure-bootstrap.sh?account_config_id=ac-MOju2uwKM0)\"",
+         *           "azureDisconnectShellCommand": "bash -c \"$(curl -fsSL https://omnistrate.com/account-setup/azure-disconnect.sh?account_config_id=ac-MOju2uwKM0)\"",
          *           "azureSubscriptionID": "12345678-1234-1234-1234-123456789012",
          *           "azureTenantID": "12345678-1234-1234-1234-123456789012",
          *           "byoaInstanceIDs": [
@@ -22522,6 +22557,7 @@ export interface components {
          *           "awsCloudFormationNoLBTemplateURL": "https://s3.amazonaws.com/omnistrate-cloudformation/org-EUVvex3bVm/account-config-setup-template-no-lb-policy.yaml",
          *           "awsCloudFormationTemplateURL": "https://s3.amazonaws.com/omnistrate-cloudformation/org-EUVvex3bVm/account-config-setup-template.yaml",
          *           "azureBootstrapShellCommand": "bash -c \"$(curl -fsSL https://omnistrate.com/account-setup/azure-bootstrap.sh?account_config_id=ac-MOju2uwKM0)\"",
+         *           "azureDisconnectShellCommand": "bash -c \"$(curl -fsSL https://omnistrate.com/account-setup/azure-disconnect.sh?account_config_id=ac-MOju2uwKM0)\"",
          *           "azureSubscriptionID": "12345678-1234-1234-1234-123456789012",
          *           "azureTenantID": "12345678-1234-1234-1234-123456789012",
          *           "byoaInstanceIDs": [
@@ -22546,6 +22582,7 @@ export interface components {
          *           "awsCloudFormationNoLBTemplateURL": "https://s3.amazonaws.com/omnistrate-cloudformation/org-EUVvex3bVm/account-config-setup-template-no-lb-policy.yaml",
          *           "awsCloudFormationTemplateURL": "https://s3.amazonaws.com/omnistrate-cloudformation/org-EUVvex3bVm/account-config-setup-template.yaml",
          *           "azureBootstrapShellCommand": "bash -c \"$(curl -fsSL https://omnistrate.com/account-setup/azure-bootstrap.sh?account_config_id=ac-MOju2uwKM0)\"",
+         *           "azureDisconnectShellCommand": "bash -c \"$(curl -fsSL https://omnistrate.com/account-setup/azure-disconnect.sh?account_config_id=ac-MOju2uwKM0)\"",
          *           "azureSubscriptionID": "12345678-1234-1234-1234-123456789012",
          *           "azureTenantID": "12345678-1234-1234-1234-123456789012",
          *           "byoaInstanceIDs": [
@@ -22570,6 +22607,7 @@ export interface components {
          *           "awsCloudFormationNoLBTemplateURL": "https://s3.amazonaws.com/omnistrate-cloudformation/org-EUVvex3bVm/account-config-setup-template-no-lb-policy.yaml",
          *           "awsCloudFormationTemplateURL": "https://s3.amazonaws.com/omnistrate-cloudformation/org-EUVvex3bVm/account-config-setup-template.yaml",
          *           "azureBootstrapShellCommand": "bash -c \"$(curl -fsSL https://omnistrate.com/account-setup/azure-bootstrap.sh?account_config_id=ac-MOju2uwKM0)\"",
+         *           "azureDisconnectShellCommand": "bash -c \"$(curl -fsSL https://omnistrate.com/account-setup/azure-disconnect.sh?account_config_id=ac-MOju2uwKM0)\"",
          *           "azureSubscriptionID": "12345678-1234-1234-1234-123456789012",
          *           "azureTenantID": "12345678-1234-1234-1234-123456789012",
          *           "byoaInstanceIDs": [
@@ -22607,6 +22645,7 @@ export interface components {
              *         "awsCloudFormationNoLBTemplateURL": "https://s3.amazonaws.com/omnistrate-cloudformation/org-EUVvex3bVm/account-config-setup-template-no-lb-policy.yaml",
              *         "awsCloudFormationTemplateURL": "https://s3.amazonaws.com/omnistrate-cloudformation/org-EUVvex3bVm/account-config-setup-template.yaml",
              *         "azureBootstrapShellCommand": "bash -c \"$(curl -fsSL https://omnistrate.com/account-setup/azure-bootstrap.sh?account_config_id=ac-MOju2uwKM0)\"",
+             *         "azureDisconnectShellCommand": "bash -c \"$(curl -fsSL https://omnistrate.com/account-setup/azure-disconnect.sh?account_config_id=ac-MOju2uwKM0)\"",
              *         "azureSubscriptionID": "12345678-1234-1234-1234-123456789012",
              *         "azureTenantID": "12345678-1234-1234-1234-123456789012",
              *         "byoaInstanceIDs": [
@@ -22631,6 +22670,7 @@ export interface components {
              *         "awsCloudFormationNoLBTemplateURL": "https://s3.amazonaws.com/omnistrate-cloudformation/org-EUVvex3bVm/account-config-setup-template-no-lb-policy.yaml",
              *         "awsCloudFormationTemplateURL": "https://s3.amazonaws.com/omnistrate-cloudformation/org-EUVvex3bVm/account-config-setup-template.yaml",
              *         "azureBootstrapShellCommand": "bash -c \"$(curl -fsSL https://omnistrate.com/account-setup/azure-bootstrap.sh?account_config_id=ac-MOju2uwKM0)\"",
+             *         "azureDisconnectShellCommand": "bash -c \"$(curl -fsSL https://omnistrate.com/account-setup/azure-disconnect.sh?account_config_id=ac-MOju2uwKM0)\"",
              *         "azureSubscriptionID": "12345678-1234-1234-1234-123456789012",
              *         "azureTenantID": "12345678-1234-1234-1234-123456789012",
              *         "byoaInstanceIDs": [
@@ -22655,6 +22695,7 @@ export interface components {
              *         "awsCloudFormationNoLBTemplateURL": "https://s3.amazonaws.com/omnistrate-cloudformation/org-EUVvex3bVm/account-config-setup-template-no-lb-policy.yaml",
              *         "awsCloudFormationTemplateURL": "https://s3.amazonaws.com/omnistrate-cloudformation/org-EUVvex3bVm/account-config-setup-template.yaml",
              *         "azureBootstrapShellCommand": "bash -c \"$(curl -fsSL https://omnistrate.com/account-setup/azure-bootstrap.sh?account_config_id=ac-MOju2uwKM0)\"",
+             *         "azureDisconnectShellCommand": "bash -c \"$(curl -fsSL https://omnistrate.com/account-setup/azure-disconnect.sh?account_config_id=ac-MOju2uwKM0)\"",
              *         "azureSubscriptionID": "12345678-1234-1234-1234-123456789012",
              *         "azureTenantID": "12345678-1234-1234-1234-123456789012",
              *         "byoaInstanceIDs": [
@@ -23932,25 +23973,25 @@ export interface components {
         };
         /** @example {
          *       "ProductTierId": "Beatae beatae.",
-         *       "ProductTierVersion": "Ut eius quia quaerat.",
+         *       "ProductTierVersion": "Ratione inventore.",
          *       "resourceId": "r-12345678",
          *       "serviceId": "s-12345678",
-         *       "token": "gbk"
+         *       "token": "5v"
          *     } */
         ListInputParametersRequest: {
             /**
              * @description ID of a Product Tier
-             * @example Amet qui sit ipsa iure.
+             * @example Voluptates nulla iste necessitatibus quia aut qui.
              */
             ProductTierId?: string;
             /**
              * @description The product tier version of the infra config to describe. If not specified, the latest version is described.
-             * @example Dolores cumque.
+             * @example Dignissimos ad ut eius quia quaerat.
              */
             ProductTierVersion?: string;
             /**
              * @description ID of a resource
-             * @example Optio fugit possimus dolores voluptatem labore et.
+             * @example Adipisci labore.
              */
             resourceId: string;
             /**
@@ -23960,7 +24001,7 @@ export interface components {
             serviceId: string;
             /**
              * @description JWT token used to perform authorization
-             * @example e
+             * @example s9j
              */
             token: string;
         };
@@ -23998,6 +24039,7 @@ export interface components {
          *           "required": true,
          *           "resourceId": "r-12345678",
          *           "serviceId": "s-12345678",
+         *           "tabIndex": 1,
          *           "type": "Boolean|Float64|String|Resource|Secret|Password"
          *         },
          *         {
@@ -24028,66 +24070,7 @@ export interface components {
          *           "required": true,
          *           "resourceId": "r-12345678",
          *           "serviceId": "s-12345678",
-         *           "type": "Boolean|Float64|String|Resource|Secret|Password"
-         *         },
-         *         {
-         *           "defaultValue": "true",
-         *           "dependentResourceId": "r-12345678",
-         *           "description": "Sed in dolor.",
-         *           "hasOptions": false,
-         *           "id": "var-12345678",
-         *           "isList": true,
-         *           "key": "rgn",
-         *           "labeledOptions": {
-         *             "large": "t3.xlarge",
-         *             "medium": "t3.large",
-         *             "small": "t3.medium"
-         *           },
-         *           "limits": {
-         *             "max": "Hic sit.",
-         *             "maxLength": "Incidunt quibusdam et atque quia sed.",
-         *             "min": "A unde eveniet voluptatem omnis qui eveniet.",
-         *             "minLength": "Iure distinctio rerum provident iure eligendi facilis."
-         *           },
-         *           "modifiable": false,
-         *           "name": "m0q",
-         *           "options": [
-         *             "true",
-         *             "false"
-         *           ],
-         *           "required": true,
-         *           "resourceId": "r-12345678",
-         *           "serviceId": "s-12345678",
-         *           "type": "Boolean|Float64|String|Resource|Secret|Password"
-         *         },
-         *         {
-         *           "defaultValue": "true",
-         *           "dependentResourceId": "r-12345678",
-         *           "description": "Sed in dolor.",
-         *           "hasOptions": false,
-         *           "id": "var-12345678",
-         *           "isList": true,
-         *           "key": "rgn",
-         *           "labeledOptions": {
-         *             "large": "t3.xlarge",
-         *             "medium": "t3.large",
-         *             "small": "t3.medium"
-         *           },
-         *           "limits": {
-         *             "max": "Hic sit.",
-         *             "maxLength": "Incidunt quibusdam et atque quia sed.",
-         *             "min": "A unde eveniet voluptatem omnis qui eveniet.",
-         *             "minLength": "Iure distinctio rerum provident iure eligendi facilis."
-         *           },
-         *           "modifiable": false,
-         *           "name": "m0q",
-         *           "options": [
-         *             "true",
-         *             "false"
-         *           ],
-         *           "required": true,
-         *           "resourceId": "r-12345678",
-         *           "serviceId": "s-12345678",
+         *           "tabIndex": 1,
          *           "type": "Boolean|Float64|String|Resource|Secret|Password"
          *         }
          *       ],
@@ -24133,6 +24116,7 @@ export interface components {
              *         "required": true,
              *         "resourceId": "r-12345678",
              *         "serviceId": "s-12345678",
+             *         "tabIndex": 1,
              *         "type": "Boolean|Float64|String|Resource|Secret|Password"
              *       },
              *       {
@@ -24163,36 +24147,7 @@ export interface components {
              *         "required": true,
              *         "resourceId": "r-12345678",
              *         "serviceId": "s-12345678",
-             *         "type": "Boolean|Float64|String|Resource|Secret|Password"
-             *       },
-             *       {
-             *         "defaultValue": "true",
-             *         "dependentResourceId": "r-12345678",
-             *         "description": "Sed in dolor.",
-             *         "hasOptions": false,
-             *         "id": "var-12345678",
-             *         "isList": true,
-             *         "key": "rgn",
-             *         "labeledOptions": {
-             *           "large": "t3.xlarge",
-             *           "medium": "t3.large",
-             *           "small": "t3.medium"
-             *         },
-             *         "limits": {
-             *           "max": "Hic sit.",
-             *           "maxLength": "Incidunt quibusdam et atque quia sed.",
-             *           "min": "A unde eveniet voluptatem omnis qui eveniet.",
-             *           "minLength": "Iure distinctio rerum provident iure eligendi facilis."
-             *         },
-             *         "modifiable": false,
-             *         "name": "m0q",
-             *         "options": [
-             *           "true",
-             *           "false"
-             *         ],
-             *         "required": true,
-             *         "resourceId": "r-12345678",
-             *         "serviceId": "s-12345678",
+             *         "tabIndex": 1,
              *         "type": "Boolean|Float64|String|Resource|Secret|Password"
              *       }
              *     ]
@@ -24425,25 +24380,25 @@ export interface components {
         };
         /** @example {
          *       "ProductTierId": "Beatae beatae.",
-         *       "ProductTierVersion": "Et quidem et.",
+         *       "ProductTierVersion": "Consequuntur consequatur.",
          *       "resourceId": "r-12345678",
          *       "serviceId": "s-12345678",
-         *       "token": "a"
+         *       "token": "3"
          *     } */
         ListOutputParametersRequest: {
             /**
              * @description ID of a Product Tier
-             * @example Alias dolor eligendi quis nam.
+             * @example Voluptas ea veniam eos.
              */
             ProductTierId?: string;
             /**
              * @description The product tier version of the infra config to describe. If not specified, the latest version is described.
-             * @example Accusantium est ipsam.
+             * @example Maiores repellat repudiandae.
              */
             ProductTierVersion?: string;
             /**
              * @description ID of a resource
-             * @example Maiores rerum.
+             * @example Mollitia tenetur et ipsam excepturi.
              */
             resourceId: string;
             /**
@@ -24463,17 +24418,6 @@ export interface components {
          *       ],
          *       "nextPageToken": "next-token",
          *       "outputParameters": [
-         *         {
-         *           "description": "Username of the user created in the target system",
-         *           "id": "op-12345678",
-         *           "key": "username",
-         *           "name": "Username",
-         *           "resourceId": "r-12345678",
-         *           "serviceId": "s-12345678",
-         *           "value": "johndoe",
-         *           "valueRef": "$var.username",
-         *           "valueType": "Boolean|Float64|String|Secret|Password"
-         *         },
          *         {
          *           "description": "Username of the user created in the target system",
          *           "id": "op-12345678",
@@ -24707,25 +24651,25 @@ export interface components {
         };
         /** @example {
          *       "ProductTierId": "Beatae beatae.",
-         *       "ProductTierVersion": "Reprehenderit porro nostrum aut doloremque ipsum et.",
+         *       "ProductTierVersion": "Illo unde odit quo.",
          *       "id": "r-12345678",
          *       "serviceId": "s-12345678",
-         *       "token": "n5q"
+         *       "token": "o"
          *     } */
         ListResourceCapabilitiesRequest: {
             /**
              * @description ID of a Product Tier
-             * @example Omnis quis optio illo.
+             * @example Modi non voluptas reprehenderit aperiam ut.
              */
             ProductTierId?: string;
             /**
              * @description The product tier version of the infra config to describe. If not specified, the latest version is described.
-             * @example Vel modi non voluptas reprehenderit aperiam.
+             * @example Dolor occaecati vel.
              */
             ProductTierVersion?: string;
             /**
              * @description ID of a resource
-             * @example Sed corporis eligendi dolor occaecati.
+             * @example Quia sed corporis.
              */
             id: string;
             /**
@@ -24735,12 +24679,26 @@ export interface components {
             serviceId: string;
             /**
              * @description JWT token used to perform authorization
-             * @example 68
+             * @example s6
              */
             token: string;
         };
         /** @example {
          *       "capabilities": [
+         *         {
+         *           "capability": "SERVERLESS",
+         *           "configuration": {
+         *             "EnableAutoStop": true,
+         *             "MinimumNodesInPool": 5,
+         *             "PortsMappingProxyConfig": {
+         *               "MaxNumberOfClustersPerProxyInstance": 50,
+         *               "NumberOfPortsPerCluster": 4
+         *             },
+         *             "ProxyId": "r-123456",
+         *             "ReferenceProxyKey": "resource-proxy",
+         *             "TargetPort": 5432
+         *           }
+         *         },
          *         {
          *           "capability": "SERVERLESS",
          *           "configuration": {
@@ -24775,6 +24733,34 @@ export interface components {
             /**
              * @description The configurationParameters to enable capabilities for the resource
              * @example [
+             *       {
+             *         "capability": "SERVERLESS",
+             *         "configuration": {
+             *           "EnableAutoStop": true,
+             *           "MinimumNodesInPool": 5,
+             *           "PortsMappingProxyConfig": {
+             *             "MaxNumberOfClustersPerProxyInstance": 50,
+             *             "NumberOfPortsPerCluster": 4
+             *           },
+             *           "ProxyId": "r-123456",
+             *           "ReferenceProxyKey": "resource-proxy",
+             *           "TargetPort": 5432
+             *         }
+             *       },
+             *       {
+             *         "capability": "SERVERLESS",
+             *         "configuration": {
+             *           "EnableAutoStop": true,
+             *           "MinimumNodesInPool": 5,
+             *           "PortsMappingProxyConfig": {
+             *             "MaxNumberOfClustersPerProxyInstance": 50,
+             *             "NumberOfPortsPerCluster": 4
+             *           },
+             *           "ProxyId": "r-123456",
+             *           "ReferenceProxyKey": "resource-proxy",
+             *           "TargetPort": 5432
+             *         }
+             *       },
              *       {
              *         "capability": "SERVERLESS",
              *         "configuration": {
@@ -24980,16 +24966,16 @@ export interface components {
             nextPageToken?: string;
         };
         /** @example {
-         *       "ProductTierVersion": "Dolore quod labore.",
+         *       "ProductTierVersion": "Facere corrupti dolore quod labore porro.",
          *       "managed": false,
          *       "productTierId": "pt-12345678",
          *       "serviceId": "si-12345678",
-         *       "token": "j"
+         *       "token": "hhv"
          *     } */
         ListResourcesRequest: {
             /**
              * @description The product tier version of the infra config to describe. If not specified, the latest version is described.
-             * @example Eos impedit.
+             * @example Deserunt et magnam rem sed itaque dolores.
              */
             ProductTierVersion?: string;
             /**
@@ -24999,7 +24985,7 @@ export interface components {
             managed?: boolean;
             /**
              * @description ID of a Product Tier
-             * @example Itaque dolores corrupti.
+             * @example Cum culpa nisi aut dignissimos quo.
              */
             productTierId: string;
             /**
@@ -25009,7 +24995,7 @@ export interface components {
             serviceId: string;
             /**
              * @description JWT token used to perform authorization
-             * @example gdu
+             * @example se9
              */
             token: string;
         };
@@ -27780,7 +27766,7 @@ export interface components {
          *       "serviceEnvironmentID": "se-123456",
          *       "serviceID": "s-123456",
          *       "startDate": "2023-01-01T10:00:00Z",
-         *       "token": "o"
+         *       "token": "y"
          *     } */
         ListServiceProviderEvents: {
             /**
@@ -27822,7 +27808,7 @@ export interface components {
             pageSize?: number;
             /**
              * @description ID of a Product Tier
-             * @example Beatae vel et.
+             * @example Eius rerum.
              */
             productTierID?: string;
             /**
@@ -27843,7 +27829,7 @@ export interface components {
             startDate?: string;
             /**
              * @description JWT token used to perform authorization
-             * @example oq
+             * @example o
              */
             token: string;
         };
@@ -27854,8 +27840,8 @@ export interface components {
          *           "eventCategory": "InstanceEvent",
          *           "eventID": "e-123456",
          *           "eventPayload": {
-         *             "Facilis quisquam impedit qui at.": "Necessitatibus hic perferendis tenetur blanditiis id maxime.",
-         *             "Quod quae corporis eaque autem.": "Dolorem omnis hic laboriosam quaerat eveniet alias."
+         *             "Dolorem omnis hic laboriosam quaerat eveniet alias.": "Beatae quidem iure illo rerum quia et.",
+         *             "Necessitatibus hic perferendis tenetur blanditiis id maxime.": "Quod quae corporis eaque autem."
          *           },
          *           "eventType": "UnhealthyInstance",
          *           "expiryTime": "2023-01-10T00:00:00Z",
@@ -27875,8 +27861,8 @@ export interface components {
          *           "eventCategory": "InstanceEvent",
          *           "eventID": "e-123456",
          *           "eventPayload": {
-         *             "Facilis quisquam impedit qui at.": "Necessitatibus hic perferendis tenetur blanditiis id maxime.",
-         *             "Quod quae corporis eaque autem.": "Dolorem omnis hic laboriosam quaerat eveniet alias."
+         *             "Dolorem omnis hic laboriosam quaerat eveniet alias.": "Beatae quidem iure illo rerum quia et.",
+         *             "Necessitatibus hic perferendis tenetur blanditiis id maxime.": "Quod quae corporis eaque autem."
          *           },
          *           "eventType": "UnhealthyInstance",
          *           "expiryTime": "2023-01-10T00:00:00Z",
@@ -27896,29 +27882,8 @@ export interface components {
          *           "eventCategory": "InstanceEvent",
          *           "eventID": "e-123456",
          *           "eventPayload": {
-         *             "Facilis quisquam impedit qui at.": "Necessitatibus hic perferendis tenetur blanditiis id maxime.",
-         *             "Quod quae corporis eaque autem.": "Dolorem omnis hic laboriosam quaerat eveniet alias."
-         *           },
-         *           "eventType": "UnhealthyInstance",
-         *           "expiryTime": "2023-01-10T00:00:00Z",
-         *           "instanceID": "instance-12345678",
-         *           "planVersion": "v1.0",
-         *           "priority": "Critical",
-         *           "resourceName": "Resource-123",
-         *           "scope": "ServiceProvider",
-         *           "serviceEnvironmentID": "se-123456",
-         *           "serviceID": "s-123456",
-         *           "serviceName": "Service-123",
-         *           "servicePlanName": "Basic Plan",
-         *           "time": "2023-01-10T00:00:00Z"
-         *         },
-         *         {
-         *           "alertType": "Alarm",
-         *           "eventCategory": "InstanceEvent",
-         *           "eventID": "e-123456",
-         *           "eventPayload": {
-         *             "Facilis quisquam impedit qui at.": "Necessitatibus hic perferendis tenetur blanditiis id maxime.",
-         *             "Quod quae corporis eaque autem.": "Dolorem omnis hic laboriosam quaerat eveniet alias."
+         *             "Dolorem omnis hic laboriosam quaerat eveniet alias.": "Beatae quidem iure illo rerum quia et.",
+         *             "Necessitatibus hic perferendis tenetur blanditiis id maxime.": "Quod quae corporis eaque autem."
          *           },
          *           "eventType": "UnhealthyInstance",
          *           "expiryTime": "2023-01-10T00:00:00Z",
@@ -27951,8 +27916,8 @@ export interface components {
              *         "eventCategory": "InstanceEvent",
              *         "eventID": "e-123456",
              *         "eventPayload": {
-             *           "Facilis quisquam impedit qui at.": "Necessitatibus hic perferendis tenetur blanditiis id maxime.",
-             *           "Quod quae corporis eaque autem.": "Dolorem omnis hic laboriosam quaerat eveniet alias."
+             *           "Dolorem omnis hic laboriosam quaerat eveniet alias.": "Beatae quidem iure illo rerum quia et.",
+             *           "Necessitatibus hic perferendis tenetur blanditiis id maxime.": "Quod quae corporis eaque autem."
              *         },
              *         "eventType": "UnhealthyInstance",
              *         "expiryTime": "2023-01-10T00:00:00Z",
@@ -27972,8 +27937,8 @@ export interface components {
              *         "eventCategory": "InstanceEvent",
              *         "eventID": "e-123456",
              *         "eventPayload": {
-             *           "Facilis quisquam impedit qui at.": "Necessitatibus hic perferendis tenetur blanditiis id maxime.",
-             *           "Quod quae corporis eaque autem.": "Dolorem omnis hic laboriosam quaerat eveniet alias."
+             *           "Dolorem omnis hic laboriosam quaerat eveniet alias.": "Beatae quidem iure illo rerum quia et.",
+             *           "Necessitatibus hic perferendis tenetur blanditiis id maxime.": "Quod quae corporis eaque autem."
              *         },
              *         "eventType": "UnhealthyInstance",
              *         "expiryTime": "2023-01-10T00:00:00Z",
@@ -27993,8 +27958,29 @@ export interface components {
              *         "eventCategory": "InstanceEvent",
              *         "eventID": "e-123456",
              *         "eventPayload": {
-             *           "Facilis quisquam impedit qui at.": "Necessitatibus hic perferendis tenetur blanditiis id maxime.",
-             *           "Quod quae corporis eaque autem.": "Dolorem omnis hic laboriosam quaerat eveniet alias."
+             *           "Dolorem omnis hic laboriosam quaerat eveniet alias.": "Beatae quidem iure illo rerum quia et.",
+             *           "Necessitatibus hic perferendis tenetur blanditiis id maxime.": "Quod quae corporis eaque autem."
+             *         },
+             *         "eventType": "UnhealthyInstance",
+             *         "expiryTime": "2023-01-10T00:00:00Z",
+             *         "instanceID": "instance-12345678",
+             *         "planVersion": "v1.0",
+             *         "priority": "Critical",
+             *         "resourceName": "Resource-123",
+             *         "scope": "ServiceProvider",
+             *         "serviceEnvironmentID": "se-123456",
+             *         "serviceID": "s-123456",
+             *         "serviceName": "Service-123",
+             *         "servicePlanName": "Basic Plan",
+             *         "time": "2023-01-10T00:00:00Z"
+             *       },
+             *       {
+             *         "alertType": "Alarm",
+             *         "eventCategory": "InstanceEvent",
+             *         "eventID": "e-123456",
+             *         "eventPayload": {
+             *           "Dolorem omnis hic laboriosam quaerat eveniet alias.": "Beatae quidem iure illo rerum quia et.",
+             *           "Necessitatibus hic perferendis tenetur blanditiis id maxime.": "Quod quae corporis eaque autem."
              *         },
              *         "eventType": "UnhealthyInstance",
              *         "expiryTime": "2023-01-10T00:00:00Z",
@@ -30189,7 +30175,7 @@ export interface components {
             associatedKubernetesServiceName?: string;
             /**
              * @description ID of a resource
-             * @example Perferendis voluptate possimus veritatis commodi quas.
+             * @example Sit eum et vel sunt alias.
              */
             associatedResourceID: string;
             /**
@@ -31225,7 +31211,7 @@ export interface components {
          *       "id": "r-12345678",
          *       "scope": "CLUSTER",
          *       "serviceId": "s-12345678",
-         *       "token": "w0w",
+         *       "token": "ns2",
          *       "type": "ADD"
          *     } */
         RegisterActionHookRequest: {
@@ -31249,7 +31235,7 @@ export interface components {
             customImage?: string;
             /**
              * @description ID of a resource
-             * @example Sed nisi quas.
+             * @example Minima quo dignissimos tempora.
              */
             id: string;
             /**
@@ -31264,7 +31250,7 @@ export interface components {
             serviceId: string;
             /**
              * @description JWT token used to perform authorization
-             * @example vv7
+             * @example 939
              */
             token: string;
             /**
@@ -31317,12 +31303,12 @@ export interface components {
          *       "id": "r-12345678",
          *       "metricEndpoint": "http://localhost:9187/metrics",
          *       "serviceId": "s-12345678",
-         *       "token": "fw"
+         *       "token": "ui"
          *     } */
         RegisterResourceMetricsConfigRequest: {
             /**
              * @description ID of a resource
-             * @example Illo dicta tempore quia perspiciatis voluptatem.
+             * @example Facere tenetur est vel nobis nesciunt voluptatum.
              */
             id: string;
             /**
@@ -31337,7 +31323,7 @@ export interface components {
             serviceId: string;
             /**
              * @description JWT token used to perform authorization
-             * @example wi
+             * @example 0
              */
             token: string;
         };
@@ -32185,7 +32171,8 @@ export interface components {
          * @description Resource dependency relation specification
          * @example {
          *       "parameterMap": {
-         *         "Est iure aliquam.": "Fugiat aliquam autem."
+         *         "Autem facilis perferendis voluptate possimus.": "Commodi quas ducimus natus rerum.",
+         *         "Qui et.": "Qui autem."
          *       },
          *       "resourceId": "Dolores sit aut repellendus eveniet recusandae fugit."
          *     }
@@ -32194,9 +32181,8 @@ export interface components {
             /**
              * @description A map of the source parameter to the resource dependency parameter
              * @example {
-             *       "Asperiores praesentium delectus beatae fugiat unde voluptatem.": "Sed voluptatem accusantium minus ea excepturi fugiat.",
-             *       "Et porro pariatur voluptatibus explicabo rerum reprehenderit.": "At magni ea quam.",
-             *       "Molestiae et laudantium accusantium ipsum esse est.": "Aut architecto in laborum velit."
+             *       "Architecto in laborum velit.": "Asperiores praesentium delectus beatae fugiat unde voluptatem.",
+             *       "Sed voluptatem accusantium minus ea excepturi fugiat.": "Veniam est iure aliquam dolore."
              *     }
              */
             parameterMap?: {
@@ -32204,7 +32190,7 @@ export interface components {
             };
             /**
              * @description ID of a resource
-             * @example Autem reprehenderit eum.
+             * @example Ea quam vitae molestiae et laudantium accusantium.
              */
             resourceId: string;
         };
@@ -33914,7 +33900,7 @@ export interface components {
         /** @example {
          *       "serviceEnvironmentID": "se-123456",
          *       "serviceID": "s-123456",
-         *       "token": "8ga"
+         *       "token": "n"
          *     } */
         ServiceHealthRequest: {
             /**
@@ -33929,7 +33915,7 @@ export interface components {
             serviceID: string;
             /**
              * @description JWT token used to perform authorization
-             * @example n
+             * @example u
              */
             token: string;
         };
@@ -33992,15 +33978,14 @@ export interface components {
          *           "unknownInstances": 3917145726241980400
          *         }
          *       },
-         *       "deployingInstances": 6342794780255880000,
-         *       "healthyInstances": 581710845714817500,
+         *       "healthyInstances": 2201241342467490600,
          *       "message": "Service is healthy",
          *       "serviceEnvironmentID": "se-123456",
          *       "serviceID": "s-123456",
          *       "status": "Healthy",
-         *       "totalInstances": 2201241342467490600,
-         *       "unhealthyInstances": 8226853786468084000,
-         *       "unknownInstances": 62013084007132580
+         *       "totalInstances": 6226004675641925000,
+         *       "unhealthyInstances": 581710845714817500,
+         *       "unknownInstances": 8226853786468084000
          *     } */
         ServiceHealthSummary: {
             /**
@@ -34069,12 +34054,6 @@ export interface components {
             };
             /**
              * Format: int64
-             * @description The number of instances currently deploying
-             * @example 4539486089889112600
-             */
-            deployingInstances: number;
-            /**
-             * Format: int64
              * @description The number of healthy instances in the region
              * @example 6997140245976517000
              */
@@ -34114,7 +34093,7 @@ export interface components {
             /**
              * Format: int64
              * @description The number of instances with unknown status
-             * @example 8394288750758285000
+             * @example 4539486089889112600
              */
             unknownInstances?: number;
         };
@@ -34474,7 +34453,7 @@ export interface components {
          *       "eventCategory": "InstanceEvent",
          *       "eventID": "e-123456",
          *       "eventPayload": {
-         *         "Consequatur pariatur.": "Rerum deleniti exercitationem natus porro quis."
+         *         "Nulla facere.": "Ipsa beatae vel et."
          *       },
          *       "eventType": "UnhealthyInstance",
          *       "expiryTime": "2023-01-10T00:00:00Z",
@@ -34502,13 +34481,14 @@ export interface components {
             eventCategory: string;
             /**
              * @description ID of a Event
-             * @example Doloribus fuga qui quod qui consequatur.
+             * @example Expedita consequatur recusandae fugit.
              */
             eventID: string;
             /**
              * @description The event payload for a service provider
              * @example {
-             *       "Necessitatibus voluptatum esse alias.": "Sunt voluptatibus dolores natus."
+             *       "Qui quod qui consequatur necessitatibus animi necessitatibus.": "Esse alias explicabo.",
+             *       "Voluptatibus dolores natus error veritatis consequatur.": "Sit rerum deleniti exercitationem natus porro."
              *     }
              */
             eventPayload: {
@@ -34630,7 +34610,7 @@ export interface components {
          *       ],
          *       "id": "r-12345678",
          *       "serviceId": "s-12345678",
-         *       "token": "pxd"
+         *       "token": "233"
          *     } */
         SetEnvironmentVariablesRequest: {
             /**
@@ -34645,7 +34625,7 @@ export interface components {
             environmentVariables?: components["schemas"]["EnvironmentVariable"][];
             /**
              * @description ID of a resource
-             * @example Assumenda a aut cupiditate.
+             * @example Vitae minima enim nesciunt nulla.
              */
             id: string;
             /**
@@ -34655,7 +34635,7 @@ export interface components {
             serviceId: string;
             /**
              * @description JWT token used to perform authorization
-             * @example s
+             * @example nh
              */
             token: string;
         };
@@ -35317,7 +35297,7 @@ export interface components {
          *       ],
          *       "id": "r-12345678",
          *       "serviceId": "s-12345678",
-         *       "token": "r2g"
+         *       "token": "pxd"
          *     } */
         UnsetEnvironmentVariablesRequest: {
             /**
@@ -35332,7 +35312,7 @@ export interface components {
             environmentVariables?: components["schemas"]["EnvironmentVariable"][];
             /**
              * @description ID of a resource
-             * @example Et illum placeat incidunt temporibus.
+             * @example Assumenda a aut cupiditate.
              */
             id: string;
             /**
@@ -35342,7 +35322,7 @@ export interface components {
             serviceId: string;
             /**
              * @description JWT token used to perform authorization
-             * @example 4
+             * @example s
              */
             token: string;
         };
@@ -36230,7 +36210,7 @@ export interface components {
         };
         /** @example {
          *       "defaultValue": "[\"1\", \"2.8\", \"3\"]",
-         *       "description": "Quidem ut sed expedita.",
+         *       "description": "Ut sed expedita consequatur consequatur odio placeat.",
          *       "hasOptions": false,
          *       "id": "var-12345678",
          *       "labeledOptions": {
@@ -36245,14 +36225,15 @@ export interface components {
          *         "minLength": "Iure distinctio rerum provident iure eligendi facilis."
          *       },
          *       "modifiable": true,
-         *       "name": "udi",
+         *       "name": "7",
          *       "options": [
          *         "[\"1\", \"2.8\", \"3\"]",
          *         "[\"3.4\", \"4.5\"]"
          *       ],
-         *       "required": false,
+         *       "required": true,
          *       "serviceId": "s-12345678",
-         *       "token": "o"
+         *       "tabIndex": 1,
+         *       "token": "d"
          *     } */
         UpdateInputParameterRequest: {
             /**
@@ -36262,7 +36243,7 @@ export interface components {
             defaultValue?: string;
             /**
              * @description A brief description of the input parameter
-             * @example Laboriosam et ut voluptas aut.
+             * @example Quia omnis et.
              */
             description?: string;
             /**
@@ -36272,7 +36253,7 @@ export interface components {
             hasOptions?: boolean;
             /**
              * @description ID of an Input Parameter
-             * @example Nihil eos voluptas necessitatibus consequatur eligendi quis.
+             * @example Laboriosam et ut voluptas aut.
              */
             id: string;
             /**
@@ -36294,7 +36275,7 @@ export interface components {
             modifiable?: boolean;
             /**
              * @description External name for the input parameter
-             * @example 9v4
+             * @example 7
              */
             name?: string;
             /**
@@ -36316,8 +36297,15 @@ export interface components {
              */
             serviceId: string;
             /**
+             * Format: int64
+             * @description Index for parameter ordering in the SaaS portal
+             * @default 0
+             * @example 1
+             */
+            tabIndex: number;
+            /**
              * @description JWT token used to perform authorization
-             * @example zl
+             * @example 9v4
              */
             token: string;
         };
@@ -36342,7 +36330,8 @@ export interface components {
          *         "[\"1\", \"2.8\", \"3\"]",
          *         "[\"3.4\", \"4.5\"]"
          *       ],
-         *       "required": true
+         *       "required": true,
+         *       "tabIndex": 1
          *     } */
         UpdateInputParameterRequest2: {
             /**
@@ -36395,6 +36384,13 @@ export interface components {
              * @example false
              */
             required?: boolean;
+            /**
+             * Format: int64
+             * @description Index for parameter ordering in the SaaS portal
+             * @default 0
+             * @example 1
+             */
+            tabIndex: number;
         };
         /** @example {
          *       "id": "svc-12345678",
@@ -36711,7 +36707,7 @@ export interface components {
          *       "id": "op-12345678",
          *       "name": "Username",
          *       "serviceId": "s-12345678",
-         *       "token": "c",
+         *       "token": "2e",
          *       "value": "johndoe",
          *       "valueRef": "$var.username",
          *       "valueType": "Boolean|Float64|String|Secret|Password"
@@ -36724,7 +36720,7 @@ export interface components {
             description?: string;
             /**
              * @description ID of an Output Parameter
-             * @example Aut itaque asperiores pariatur.
+             * @example Maiores ea incidunt explicabo.
              */
             id: string;
             /**
@@ -36739,7 +36735,7 @@ export interface components {
             serviceId: string;
             /**
              * @description JWT token used to perform authorization
-             * @example 3
+             * @example 7
              */
             token: string;
             /**
@@ -37668,7 +37664,7 @@ export interface components {
          *           "terraformPath": "/project1/tf"
          *         }
          *       },
-         *       "token": "233"
+         *       "token": "8"
          *     } */
         UpdateResourceRequest: {
             additionalSecurityContext?: components["schemas"]["AdditionalSecurityContext"];
@@ -37742,17 +37738,17 @@ export interface components {
             helmChartConfiguration?: components["schemas"]["HelmChartConfiguration"];
             /**
              * @description ID of a resource
-             * @example Et nam voluptate voluptatum eligendi.
+             * @example Ipsum et magni.
              */
             id: string;
             /**
              * @description ID of an Image Config
-             * @example Enim fuga et error quae illum excepturi.
+             * @example Culpa exercitationem.
              */
             imageConfigId?: string;
             /**
              * @description ID of an Infra Config
-             * @example Dolorem vel nobis necessitatibus.
+             * @example Et nam voluptate voluptatum eligendi.
              */
             infraConfigId?: string;
             jobConfig?: components["schemas"]["JobConfig"];
@@ -37773,7 +37769,7 @@ export interface components {
             terraformConfigurations?: components["schemas"]["TerraformConfigurations"];
             /**
              * @description JWT token used to perform authorization
-             * @example z
+             * @example xya
              */
             token: string;
         };
@@ -39331,6 +39327,7 @@ export interface operations {
                      *       "awsCloudFormationNoLBTemplateURL": "https://s3.amazonaws.com/omnistrate-cloudformation/org-EUVvex3bVm/account-config-setup-template-no-lb-policy.yaml",
                      *       "awsCloudFormationTemplateURL": "https://s3.amazonaws.com/omnistrate-cloudformation/org-EUVvex3bVm/account-config-setup-template.yaml",
                      *       "azureBootstrapShellCommand": "bash -c \"$(curl -fsSL https://omnistrate.com/account-setup/azure-bootstrap.sh?account_config_id=ac-MOju2uwKM0)\"",
+                     *       "azureDisconnectShellCommand": "bash -c \"$(curl -fsSL https://omnistrate.com/account-setup/azure-disconnect.sh?account_config_id=ac-MOju2uwKM0)\"",
                      *       "azureSubscriptionID": "12345678-1234-1234-1234-123456789012",
                      *       "azureTenantID": "12345678-1234-1234-1234-123456789012",
                      *       "byoaInstanceIDs": [
@@ -39688,6 +39685,7 @@ export interface operations {
                      *           "awsCloudFormationNoLBTemplateURL": "https://s3.amazonaws.com/omnistrate-cloudformation/org-EUVvex3bVm/account-config-setup-template-no-lb-policy.yaml",
                      *           "awsCloudFormationTemplateURL": "https://s3.amazonaws.com/omnistrate-cloudformation/org-EUVvex3bVm/account-config-setup-template.yaml",
                      *           "azureBootstrapShellCommand": "bash -c \"$(curl -fsSL https://omnistrate.com/account-setup/azure-bootstrap.sh?account_config_id=ac-MOju2uwKM0)\"",
+                     *           "azureDisconnectShellCommand": "bash -c \"$(curl -fsSL https://omnistrate.com/account-setup/azure-disconnect.sh?account_config_id=ac-MOju2uwKM0)\"",
                      *           "azureSubscriptionID": "12345678-1234-1234-1234-123456789012",
                      *           "azureTenantID": "12345678-1234-1234-1234-123456789012",
                      *           "byoaInstanceIDs": [
@@ -39712,6 +39710,7 @@ export interface operations {
                      *           "awsCloudFormationNoLBTemplateURL": "https://s3.amazonaws.com/omnistrate-cloudformation/org-EUVvex3bVm/account-config-setup-template-no-lb-policy.yaml",
                      *           "awsCloudFormationTemplateURL": "https://s3.amazonaws.com/omnistrate-cloudformation/org-EUVvex3bVm/account-config-setup-template.yaml",
                      *           "azureBootstrapShellCommand": "bash -c \"$(curl -fsSL https://omnistrate.com/account-setup/azure-bootstrap.sh?account_config_id=ac-MOju2uwKM0)\"",
+                     *           "azureDisconnectShellCommand": "bash -c \"$(curl -fsSL https://omnistrate.com/account-setup/azure-disconnect.sh?account_config_id=ac-MOju2uwKM0)\"",
                      *           "azureSubscriptionID": "12345678-1234-1234-1234-123456789012",
                      *           "azureTenantID": "12345678-1234-1234-1234-123456789012",
                      *           "byoaInstanceIDs": [
@@ -39736,6 +39735,7 @@ export interface operations {
                      *           "awsCloudFormationNoLBTemplateURL": "https://s3.amazonaws.com/omnistrate-cloudformation/org-EUVvex3bVm/account-config-setup-template-no-lb-policy.yaml",
                      *           "awsCloudFormationTemplateURL": "https://s3.amazonaws.com/omnistrate-cloudformation/org-EUVvex3bVm/account-config-setup-template.yaml",
                      *           "azureBootstrapShellCommand": "bash -c \"$(curl -fsSL https://omnistrate.com/account-setup/azure-bootstrap.sh?account_config_id=ac-MOju2uwKM0)\"",
+                     *           "azureDisconnectShellCommand": "bash -c \"$(curl -fsSL https://omnistrate.com/account-setup/azure-disconnect.sh?account_config_id=ac-MOju2uwKM0)\"",
                      *           "azureSubscriptionID": "12345678-1234-1234-1234-123456789012",
                      *           "azureTenantID": "12345678-1234-1234-1234-123456789012",
                      *           "byoaInstanceIDs": [
@@ -39760,6 +39760,7 @@ export interface operations {
                      *           "awsCloudFormationNoLBTemplateURL": "https://s3.amazonaws.com/omnistrate-cloudformation/org-EUVvex3bVm/account-config-setup-template-no-lb-policy.yaml",
                      *           "awsCloudFormationTemplateURL": "https://s3.amazonaws.com/omnistrate-cloudformation/org-EUVvex3bVm/account-config-setup-template.yaml",
                      *           "azureBootstrapShellCommand": "bash -c \"$(curl -fsSL https://omnistrate.com/account-setup/azure-bootstrap.sh?account_config_id=ac-MOju2uwKM0)\"",
+                     *           "azureDisconnectShellCommand": "bash -c \"$(curl -fsSL https://omnistrate.com/account-setup/azure-disconnect.sh?account_config_id=ac-MOju2uwKM0)\"",
                      *           "azureSubscriptionID": "12345678-1234-1234-1234-123456789012",
                      *           "azureTenantID": "12345678-1234-1234-1234-123456789012",
                      *           "byoaInstanceIDs": [
@@ -39874,6 +39875,7 @@ export interface operations {
                      *           "awsCloudFormationNoLBTemplateURL": "https://s3.amazonaws.com/omnistrate-cloudformation/org-EUVvex3bVm/account-config-setup-template-no-lb-policy.yaml",
                      *           "awsCloudFormationTemplateURL": "https://s3.amazonaws.com/omnistrate-cloudformation/org-EUVvex3bVm/account-config-setup-template.yaml",
                      *           "azureBootstrapShellCommand": "bash -c \"$(curl -fsSL https://omnistrate.com/account-setup/azure-bootstrap.sh?account_config_id=ac-MOju2uwKM0)\"",
+                     *           "azureDisconnectShellCommand": "bash -c \"$(curl -fsSL https://omnistrate.com/account-setup/azure-disconnect.sh?account_config_id=ac-MOju2uwKM0)\"",
                      *           "azureSubscriptionID": "12345678-1234-1234-1234-123456789012",
                      *           "azureTenantID": "12345678-1234-1234-1234-123456789012",
                      *           "byoaInstanceIDs": [
@@ -39898,6 +39900,7 @@ export interface operations {
                      *           "awsCloudFormationNoLBTemplateURL": "https://s3.amazonaws.com/omnistrate-cloudformation/org-EUVvex3bVm/account-config-setup-template-no-lb-policy.yaml",
                      *           "awsCloudFormationTemplateURL": "https://s3.amazonaws.com/omnistrate-cloudformation/org-EUVvex3bVm/account-config-setup-template.yaml",
                      *           "azureBootstrapShellCommand": "bash -c \"$(curl -fsSL https://omnistrate.com/account-setup/azure-bootstrap.sh?account_config_id=ac-MOju2uwKM0)\"",
+                     *           "azureDisconnectShellCommand": "bash -c \"$(curl -fsSL https://omnistrate.com/account-setup/azure-disconnect.sh?account_config_id=ac-MOju2uwKM0)\"",
                      *           "azureSubscriptionID": "12345678-1234-1234-1234-123456789012",
                      *           "azureTenantID": "12345678-1234-1234-1234-123456789012",
                      *           "byoaInstanceIDs": [
@@ -39922,6 +39925,7 @@ export interface operations {
                      *           "awsCloudFormationNoLBTemplateURL": "https://s3.amazonaws.com/omnistrate-cloudformation/org-EUVvex3bVm/account-config-setup-template-no-lb-policy.yaml",
                      *           "awsCloudFormationTemplateURL": "https://s3.amazonaws.com/omnistrate-cloudformation/org-EUVvex3bVm/account-config-setup-template.yaml",
                      *           "azureBootstrapShellCommand": "bash -c \"$(curl -fsSL https://omnistrate.com/account-setup/azure-bootstrap.sh?account_config_id=ac-MOju2uwKM0)\"",
+                     *           "azureDisconnectShellCommand": "bash -c \"$(curl -fsSL https://omnistrate.com/account-setup/azure-disconnect.sh?account_config_id=ac-MOju2uwKM0)\"",
                      *           "azureSubscriptionID": "12345678-1234-1234-1234-123456789012",
                      *           "azureTenantID": "12345678-1234-1234-1234-123456789012",
                      *           "byoaInstanceIDs": [
@@ -39946,6 +39950,7 @@ export interface operations {
                      *           "awsCloudFormationNoLBTemplateURL": "https://s3.amazonaws.com/omnistrate-cloudformation/org-EUVvex3bVm/account-config-setup-template-no-lb-policy.yaml",
                      *           "awsCloudFormationTemplateURL": "https://s3.amazonaws.com/omnistrate-cloudformation/org-EUVvex3bVm/account-config-setup-template.yaml",
                      *           "azureBootstrapShellCommand": "bash -c \"$(curl -fsSL https://omnistrate.com/account-setup/azure-bootstrap.sh?account_config_id=ac-MOju2uwKM0)\"",
+                     *           "azureDisconnectShellCommand": "bash -c \"$(curl -fsSL https://omnistrate.com/account-setup/azure-disconnect.sh?account_config_id=ac-MOju2uwKM0)\"",
                      *           "azureSubscriptionID": "12345678-1234-1234-1234-123456789012",
                      *           "azureTenantID": "12345678-1234-1234-1234-123456789012",
                      *           "byoaInstanceIDs": [
@@ -57492,6 +57497,7 @@ export interface operations {
                  *       ],
                  *       "required": false,
                  *       "resourceId": "r-12345678",
+                 *       "tabIndex": 1,
                  *       "type": "Quis sunt."
                  *     } */
                 "application/json": components["schemas"]["CreateInputParameterRequest2"];
@@ -57628,6 +57634,7 @@ export interface operations {
                      *       "required": true,
                      *       "resourceId": "r-12345678",
                      *       "serviceId": "s-12345678",
+                     *       "tabIndex": 1,
                      *       "type": "Nemo libero doloremque velit et."
                      *     } */
                     "application/json": components["schemas"]["DescribeInputParameterResult"];
@@ -57813,7 +57820,8 @@ export interface operations {
                  *         "[\"1\", \"2.8\", \"3\"]",
                  *         "[\"3.4\", \"4.5\"]"
                  *       ],
-                 *       "required": true
+                 *       "required": true,
+                 *       "tabIndex": 1
                  *     } */
                 "application/json": components["schemas"]["UpdateInputParameterRequest2"];
             };
@@ -66936,6 +66944,7 @@ export interface operations {
                      *           "required": true,
                      *           "resourceId": "r-12345678",
                      *           "serviceId": "s-12345678",
+                     *           "tabIndex": 1,
                      *           "type": "Aut vitae."
                      *         },
                      *         {
@@ -66966,6 +66975,7 @@ export interface operations {
                      *           "required": true,
                      *           "resourceId": "r-12345678",
                      *           "serviceId": "s-12345678",
+                     *           "tabIndex": 1,
                      *           "type": "Aut vitae."
                      *         },
                      *         {
@@ -66996,6 +67006,7 @@ export interface operations {
                      *           "required": true,
                      *           "resourceId": "r-12345678",
                      *           "serviceId": "s-12345678",
+                     *           "tabIndex": 1,
                      *           "type": "Aut vitae."
                      *         }
                      *       ],
