@@ -23,8 +23,14 @@ async function globalSetup() {
 
   console.log("Provider Auth Successful");
 
+  const userEmail = process.env.USER_EMAIL;
+  const userPassword = process.env.USER_PASSWORD;
+  if (!userEmail || !userPassword) {
+    throw new Error("Missing user credentials in environment variables");
+  }
+
   const userClient = new UserAPIClient();
-  await userClient.userLogin(process.env.USER_EMAIL!, process.env.USER_PASSWORD!);
+  await userClient.userLogin(userEmail!, userPassword!);
 
   const date = `${Date.now()}`;
 
