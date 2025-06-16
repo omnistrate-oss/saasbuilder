@@ -1,5 +1,6 @@
 import { request } from "@playwright/test";
 
+import { IdentityProvider } from "src/types/identityProvider";
 import { Service } from "src/types/service";
 
 import { GlobalStateManager } from "./global-state-manager";
@@ -86,5 +87,18 @@ export class ProviderAPIClient {
   async deleteService(serviceId: string) {
     const context = await this.createProviderRequest();
     return context.delete(`/${this.apiVersion}/service/${serviceId}`);
+  }
+
+  async getIdentityProviders(): Promise<IdentityProvider[]> {
+    const context = await this.createProviderRequest();
+    const response = await context.get(`/${this.apiVersion}/identity-provider-render`);
+
+    if (!response.ok()) {
+      console.error(await response.json());
+      throw new Error("Failed to get identity providers");
+    }
+
+    const identityProviders: IdentityProvider[] = (await response.json()).identityProviders || [];
+    return identityProviders;
   }
 }
