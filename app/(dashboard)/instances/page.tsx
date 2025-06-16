@@ -305,7 +305,7 @@ const InstancesPage = () => {
       }),
       columnHelper.accessor("cloud_provider", {
         id: "cloud_provider",
-        header: "Provider",
+        header: "Cloud Provider",
         cell: (data) => {
           const cloudProvider = data.row.original.cloud_provider;
 

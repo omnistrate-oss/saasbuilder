@@ -324,7 +324,7 @@ const CloudAccountsPage = () => {
         },
         {
           id: "cloud_provider",
-          header: "Provider",
+          header: "Cloud Provider",
           cell: (data) => {
             let cloudProvider: CloudProvider | undefined;
             const result_params = data.row.original.result_params;
