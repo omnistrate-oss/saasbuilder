@@ -67,9 +67,7 @@ const CloudProviderRadio: React.FC<CloudProviderRadioProps> = ({
   }
 
   return (
-    <div
-      className={cn("grid gap-4", cloudProviders.length === 3 ? "grid-cols-3" : `grid-cols-${cloudProviders.length}`)}
-    >
+    <div className="grid gap-4" style={{ gridTemplateColumns: `repeat(${cloudProviders.length}, minmax(0, 1fr))` }}>
       {cloudProviders.map((cloudProvider, index) => {
         return (
           <CloudProviderCard
