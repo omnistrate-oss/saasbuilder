@@ -464,16 +464,23 @@ export const getDeploymentConfigurationFields = (
   const fields: Field[] = [];
   if (!resourceSchema?.inputParameters) return fields;
 
-  const filteredSchema = resourceSchema?.inputParameters.filter(
-    (param) =>
-      param.key !== "cloud_provider" &&
-      param.key !== "region" &&
-      param.key !== "custom_network_id" &&
-      param.key !== "custom_availability_zone" &&
-      param.key !== "subscriptionId" &&
-      param.key !== "cloud_provider_native_network_id" &&
-      param.key !== "custom_dns_configuration"
-  ).sort((a, b) => a.tabIndex - b.tabIndex);
+  const filteredSchema = resourceSchema?.inputParameters
+    .filter(
+      (param) =>
+        param.key !== "cloud_provider" &&
+        param.key !== "region" &&
+        param.key !== "custom_network_id" &&
+        param.key !== "custom_availability_zone" &&
+        param.key !== "subscriptionId" &&
+        param.key !== "cloud_provider_native_network_id" &&
+        param.key !== "custom_dns_configuration"
+    ) 
+    .sort((a, b) => {
+      if(a.tabIndex === undefined || b.tabIndex === undefined) {
+        return 0
+      }
+      return a.tabIndex - b.tabIndex;
+    });
 
   filteredSchema.forEach((param) => {
     if (param.type?.toLowerCase() === "password") {

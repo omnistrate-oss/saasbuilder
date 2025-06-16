@@ -253,7 +253,7 @@ const InstanceDetailsPage = ({
           resultParameters={resourceInstanceData.resultParameters}
           isLoading={resourceSchemaQuery.isPending || resourceInstanceQuery.isPending}
           resultParametersSchema={resourceSchemaQuery?.data?.DESCRIBE?.outputParameters?.map((param) => {
-            const createInputParam = resourceSchemaQuery?.data?.CREATE?.inputParameters.find(
+            const createInputParam = resourceSchemaQuery?.data?.CREATE?.inputParameters?.find(
               (inputParam) => inputParam.key === param.key
             );
             return {
