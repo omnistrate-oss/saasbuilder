@@ -473,7 +473,7 @@ export const getDeploymentConfigurationFields = (
       param.key !== "subscriptionId" &&
       param.key !== "cloud_provider_native_network_id" &&
       param.key !== "custom_dns_configuration"
-  );
+  ).sort((a, b) => a.tabIndex - b.tabIndex);
 
   filteredSchema.forEach((param) => {
     if (param.type?.toLowerCase() === "password") {

@@ -252,7 +252,15 @@ const InstanceDetailsPage = ({
           modifiedAt={resourceInstanceData.modifiedAt}
           resultParameters={resourceInstanceData.resultParameters}
           isLoading={resourceSchemaQuery.isPending || resourceInstanceQuery.isPending}
-          resultParametersSchema={resourceSchemaQuery?.data?.DESCRIBE?.outputParameters}
+          resultParametersSchema={resourceSchemaQuery?.data?.DESCRIBE?.outputParameters?.map((param) => {
+            const createInputParam = resourceSchemaQuery?.data?.CREATE?.inputParameters.find(
+              (inputParam) => inputParam.key === param.key
+            );
+            return {
+              ...param,
+              tabIndex: createInputParam?.tabIndex,
+            };
+          })}
           serviceOffering={offering}
           subscriptionId={subscriptionId}
           customNetworkDetails={resourceInstanceData.customNetworkDetails}
