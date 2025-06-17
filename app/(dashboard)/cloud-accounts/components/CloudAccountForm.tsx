@@ -274,7 +274,7 @@ const CloudAccountForm = ({
 
         body: {
           cloud_provider: values.cloudProvider,
-          ...requestParams,
+          requestParams,
         },
       });
     },
