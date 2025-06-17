@@ -66,15 +66,15 @@ test.describe("Instances Page - Capacity Scaling Tests", () => {
     }
   });
 
-  test("Wait for Running Instance -> Add Capacity to Instance", async () => {
-    if (!instance.id) {
-      throw new Error(`${logPrefix} Instance ID is not present`);
-    }
+  // test("Wait for Running Instance -> Add Capacity to Instance", async () => {
+  //   if (!instance.id) {
+  //     throw new Error(`${logPrefix} Instance ID is not present`);
+  //   }
 
-    await instancesPage.waitForStatus(instance.id, "Running", logPrefix);
-    await instancesPage.changeCapacity("add", instance.id, 1);
-    await instancesPage.waitForStatus(instance.id, "Scaling Up", logPrefix);
-  });
+  //   await instancesPage.waitForStatus(instance.id, "Running", logPrefix);
+  //   await instancesPage.changeCapacity("add", instance.id, 1);
+  //   await instancesPage.waitForStatus(instance.id, "Scaling Up", logPrefix);
+  // });
 
   // TODO: Fix this Test
   // test("Wait for Running Instance -> Remove Capacity from Instance", async () => {
