@@ -1,11 +1,13 @@
 import { Metadata } from "next";
-import { IDENTITY_PROVIDER_TYPES } from "app/(public)/(main-image)/signin/constants";
 
-import { getIdentityProvidersList } from "src/server/api/identity-provider";
+import { getRenderIdentityProvidersList } from "src/server/api/identity-provider";
 import { checkReCaptchaSetup } from "src/server/utils/checkReCaptchaSetup";
+import { getEnvironmentType } from "src/server/utils/getEnvironmentType";
 import { getSaaSDomainURL } from "src/server/utils/getSaaSDomainURL";
+import { IdentityProvider } from "src/types/identityProvider";
 
 import SigninPage from "./components/SigninPage";
+import { getIdentityProviderButtonLabel } from "./utils";
 
 export const metadata: Metadata = {
   title: "Sign In",
@@ -13,28 +15,31 @@ export const metadata: Metadata = {
 };
 
 const Page = async () => {
-  let googleIdentityProvider = null;
-  let githubIdentityProvider = null;
+  const idpRedirectUri = `${getSaaSDomainURL()}/idp-auth`;
+  const identityProvidersResponse = await getRenderIdentityProvidersList({
+    environmentType: getEnvironmentType(),
+    redirectUrl: idpRedirectUri,
+  });
 
-  const response = await getIdentityProvidersList();
-  const providers = response.data.identityProviders || [];
-  const googleIDP = providers.find((provider) => provider.identityProviderName === IDENTITY_PROVIDER_TYPES.Google);
-  if (googleIDP) {
-    googleIdentityProvider = googleIDP;
-  }
+  const identityProviders: IdentityProvider[] = identityProvidersResponse.data.identityProviders || [];
 
-  const githubIDP = providers.find((provider) => provider.identityProviderName === IDENTITY_PROVIDER_TYPES.GitHub);
-  if (githubIDP) {
-    githubIdentityProvider = githubIDP;
-  }
+  //sort identity providers by login button text
+  identityProviders.sort((a, b) => {
+    const loginButtonTextA = getIdentityProviderButtonLabel(a).toLowerCase();
+    const loginButtonTextB = getIdentityProviderButtonLabel(b).toLowerCase();
+
+    return loginButtonTextA.localeCompare(loginButtonTextB);
+  });
+
+  const isPasswordLoginEnabled = process.env.DISABLE_PASSWORD_LOGIN?.toLowerCase() !== "true";
 
   return (
     <SigninPage
-      googleIdentityProvider={googleIdentityProvider}
-      githubIdentityProvider={githubIdentityProvider}
       isReCaptchaSetup={checkReCaptchaSetup()}
       saasBuilderBaseURL={getSaaSDomainURL()}
-      googleReCaptchaSiteKey={process.env.GOOGLE_RECAPTCHA_SITE_KEY || null}
+      googleReCaptchaSiteKey={process.env.GOOGLE_RECAPTCHA_SITE_KEY || ""}
+      isPasswordLoginEnabled={isPasswordLoginEnabled}
+      identityProviders={identityProviders}
     />
   );
 };

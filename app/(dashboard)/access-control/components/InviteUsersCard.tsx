@@ -4,10 +4,11 @@ import { Add } from "@mui/icons-material";
 import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
 import { InputAdornment } from "@mui/material";
 import { useMutation } from "@tanstack/react-query";
-import { FieldArray, FormikProvider, useFormik } from "formik";
+import { FieldArray, FormikProvider, getIn, useFormik } from "formik";
 import { cn } from "lib/utils";
 
 import { inviteSubscriptionUser } from "src/api/users";
+import FieldError from "src/components/FormElementsv2/FieldError/FieldError";
 import useSnackbar from "src/hooks/useSnackbar";
 import { useGlobalData } from "src/providers/GlobalDataProvider";
 import { colors } from "src/themeConfig";
@@ -21,6 +22,8 @@ import TextField from "components/FormElementsv2/TextField/TextField";
 import DataGridHeaderTitle from "components/Headers/DataGridHeaderTitle";
 import DeleteIcon from "components/Icons/Delete/Delete";
 import { Text } from "components/Typography/Typography";
+
+import { inviteUsersValidationSchema } from "../utils";
 
 const getNewEnvVariable = () => {
   return {
@@ -76,6 +79,18 @@ type InviteUsersCardProps = {
   isFetchingUsers?: boolean;
 };
 
+interface UserInvite {
+  email: string;
+  roleType: string;
+  serviceId: string;
+  servicePlanId: string;
+}
+
+// Define the interface for the entire form values
+interface InviteUsersFormValues {
+  userInvite: UserInvite[];
+}
+
 const InviteUsersCard: React.FC<InviteUsersCardProps> = ({ refetchUsers, isFetchingUsers }) => {
   const snackbar = useSnackbar();
   const { subscriptions, isSubscriptionsPending } = useGlobalData();
@@ -86,7 +101,7 @@ const InviteUsersCard: React.FC<InviteUsersCardProps> = ({ refetchUsers, isFetch
         await Promise.all(
           data.userInvite.map((d) => {
             const payload = {
-              email: d.email,
+              email: d.email.trim(),
               roleType: d.roleType,
             };
 
@@ -107,7 +122,7 @@ const InviteUsersCard: React.FC<InviteUsersCardProps> = ({ refetchUsers, isFetch
     },
   });
 
-  const formData = useFormik({
+  const formData = useFormik<InviteUsersFormValues>({
     initialValues: {
       userInvite: [
         {
@@ -131,6 +146,7 @@ const InviteUsersCard: React.FC<InviteUsersCardProps> = ({ refetchUsers, isFetch
       }
       createUserInvitesMutation.mutate(valuesToBeSubmitted);
     },
+    validationSchema: inviteUsersValidationSchema,
   });
 
   const { values, handleChange, handleBlur, setFieldValue } = formData;
@@ -174,112 +190,141 @@ const InviteUsersCard: React.FC<InviteUsersCardProps> = ({ refetchUsers, isFetch
                         );
 
                         return (
-                          <div className="flex items-center flex-wrap gap-4" key={index}>
-                            <TextField
-                              data-testid="email-input"
-                              required
-                              placeholder="you@example.com"
-                              value={invite.email}
-                              onChange={handleChange}
-                              name={`userInvite[${index}].email`}
-                              disabled={createUserInvitesMutation.isPending || isFetchingUsers}
-                              sx={{
-                                minWidth: "240px",
-                                flex: 1,
-                                mt: 0,
-                                "& .MuiInputAdornment-root": {
-                                  border: "none", // Remove the default border of Input Adornment
-                                  paddingRight: "0px",
-                                },
-                              }}
-                              InputProps={{
-                                startAdornment: (
-                                  <InputAdornment position="start">
-                                    <EmailOutlinedIcon />
-                                  </InputAdornment>
-                                ),
-                              }}
-                            />
+                          <div className="flex items-start flex-wrap gap-4" key={index}>
+                            <div className="flex-1 max-w-60">
+                              <TextField
+                                data-testid="email-input"
+                                required
+                                placeholder="you@example.com"
+                                value={invite.email}
+                                onChange={handleChange}
+                                name={`userInvite[${index}].email`}
+                                disabled={createUserInvitesMutation.isPending || isFetchingUsers}
+                                sx={{
+                                  minWidth: "240px",
+                                  mt: 0,
+                                  "& .MuiInputAdornment-root": {
+                                    border: "none", // Remove the default border of Input Adornment
+                                    paddingRight: "0px",
+                                  },
+                                }}
+                                InputProps={{
+                                  startAdornment: (
+                                    <InputAdornment position="start">
+                                      <EmailOutlinedIcon />
+                                    </InputAdornment>
+                                  ),
+                                }}
+                              />
+                              <FieldError mt="4px">
+                                {getIn(formData.touched, `userInvite[${index}].email`) &&
+                                  getIn(formData.errors, `userInvite[${index}].email`)}
+                              </FieldError>
+                            </div>
 
-                            <Select
-                              data-testid="service-select"
-                              required
-                              isLoading={isSubscriptionsPending}
-                              name={`userInvite[${index}].serviceId`}
-                              value={invite.serviceId}
-                              onBlur={handleBlur}
-                              disabled={createUserInvitesMutation.isPending || isFetchingUsers}
-                              onChange={(e) => {
-                                handleChange(e);
-                                setFieldValue(`userInvite[${index}].servicePlanId`, "");
-                              }}
-                              sx={{ flex: 1, mt: 0 }}
-                              displayEmpty
-                              renderValue={(value) => {
-                                if (!value) return "Service";
-                                return serivceMenuItems.find((item) => item.value === value)?.label;
-                              }}
-                            >
-                              {serivceMenuItems?.length > 0 ? (
-                                serivceMenuItems.map((option) => (
-                                  <MenuItem key={option.value} value={option.value}>
-                                    {option.label}
+                            <div className="flex-1 max-w-60">
+                              <Select
+                                data-testid="service-select"
+                                required
+                                isLoading={isSubscriptionsPending}
+                                name={`userInvite[${index}].serviceId`}
+                                value={invite.serviceId}
+                                onBlur={handleBlur}
+                                disabled={createUserInvitesMutation.isPending || isFetchingUsers}
+                                onChange={(e) => {
+                                  handleChange(e);
+                                  setFieldValue(`userInvite[${index}].servicePlanId`, "");
+                                }}
+                                sx={{ mt: 0 }}
+                                displayEmpty
+                                renderValue={(value) => {
+                                  if (!value) return "Service";
+                                  return serivceMenuItems.find((item) => item.value === value)?.label;
+                                }}
+                                maxWidth="400px"
+                              >
+                                {serivceMenuItems?.length > 0 ? (
+                                  serivceMenuItems.map((option) => (
+                                    <MenuItem key={option.value} value={option.value}>
+                                      {option.label}
+                                    </MenuItem>
+                                  ))
+                                ) : (
+                                  <MenuItem value="" disabled>
+                                    <i>No Services With Root Access</i>
                                   </MenuItem>
-                                ))
-                              ) : (
-                                <MenuItem value="" disabled>
-                                  <i>No Services With Root Access</i>
-                                </MenuItem>
-                              )}
-                            </Select>
-                            <Select
-                              data-testid="subscription-plan-select"
-                              required
-                              isLoading={isSubscriptionsPending}
-                              name={`userInvite[${index}].servicePlanId`}
-                              value={invite.servicePlanId}
-                              onBlur={handleBlur}
-                              onChange={handleChange}
-                              disabled={createUserInvitesMutation.isPending || isFetchingUsers}
-                              sx={{ flex: 1, mt: 0 }}
-                              displayEmpty
-                              renderValue={(value) => {
-                                if (!value) return "Subscription Plan";
-                                return servicePlanMenuItems.find((item) => item.value === value)?.label;
-                              }}
-                            >
-                              {servicePlanMenuItems?.length > 0 ? (
-                                servicePlanMenuItems.map((option) => (
-                                  <MenuItem key={option.value} value={option.value}>
-                                    {option.label}
+                                )}
+                              </Select>
+                              <FieldError mt="4px">
+                                {getIn(formData.touched, `userInvite[${index}].serviceId`) &&
+                                  getIn(formData.errors, `userInvite[${index}].serviceId`)}
+                              </FieldError>
+                            </div>
+
+                            <div className="flex-1 max-w-60">
+                              <Select
+                                data-testid="subscription-plan-select"
+                                required
+                                isLoading={isSubscriptionsPending}
+                                name={`userInvite[${index}].servicePlanId`}
+                                value={invite.servicePlanId}
+                                onBlur={handleBlur}
+                                onChange={handleChange}
+                                disabled={createUserInvitesMutation.isPending || isFetchingUsers}
+                                sx={{ mt: 0 }}
+                                displayEmpty
+                                renderValue={(value) => {
+                                  if (!value) return "Subscription Plan";
+                                  return servicePlanMenuItems.find((item) => item.value === value)?.label;
+                                }}
+                                maxWidth="400px"
+                              >
+                                {servicePlanMenuItems?.length > 0 ? (
+                                  servicePlanMenuItems.map((option) => (
+                                    <MenuItem key={option.value} value={option.value}>
+                                      {option.label}
+                                    </MenuItem>
+                                  ))
+                                ) : (
+                                  <MenuItem value="" disabled>
+                                    <i>{invite.serviceId ? "No subscription plans" : "Select a service first"}</i>
                                   </MenuItem>
-                                ))
-                              ) : (
-                                <MenuItem value="" disabled>
-                                  <i>{invite.serviceId ? "No subscription plans" : "Select a service first"}</i>
-                                </MenuItem>
-                              )}
-                            </Select>
-                            <Select
-                              data-testid="role-select"
-                              required
-                              name={`userInvite[${index}].roleType`}
-                              value={invite.roleType}
-                              onChange={handleChange}
-                              sx={{ flex: 1, mt: 0 }}
-                              displayEmpty
-                              disabled={createUserInvitesMutation.isPending || isFetchingUsers}
-                              renderValue={(value) => {
-                                if (value) return value;
-                                return "Role";
-                              }}
-                            >
-                              {["Editor", "Reader"].map((option) => (
-                                <MenuItem key={option} value={option}>
-                                  {option}
-                                </MenuItem>
-                              ))}
-                            </Select>
+                                )}
+                              </Select>
+                              <FieldError mt="4px">
+                                {getIn(formData.touched, `userInvite[${index}].servicePlanId`) &&
+                                  getIn(formData.errors, `userInvite[${index}].servicePlanId`)}
+                              </FieldError>
+                            </div>
+
+                            <div className="flex-1 max-w-60">
+                              <Select
+                                data-testid="role-select"
+                                required
+                                name={`userInvite[${index}].roleType`}
+                                value={invite.roleType}
+                                onChange={handleChange}
+                                sx={{ mt: 0 }}
+                                displayEmpty
+                                disabled={createUserInvitesMutation.isPending || isFetchingUsers}
+                                renderValue={(value) => {
+                                  if (value) return value;
+                                  return "Role";
+                                }}
+                                maxWidth="400px"
+                              >
+                                {["Editor", "Reader"].map((option) => (
+                                  <MenuItem key={option} value={option}>
+                                    {option}
+                                  </MenuItem>
+                                ))}
+                              </Select>
+                              <FieldError mt="4px">
+                                {getIn(formData.touched, `userInvite[${index}].roleType`) &&
+                                  getIn(formData.errors, `userInvite[${index}].roleType`)}
+                              </FieldError>
+                            </div>
+
                             <div
                               onClick={() => {
                                 remove(index);

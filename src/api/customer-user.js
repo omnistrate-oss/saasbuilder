@@ -1,43 +1,21 @@
-import createFetchClient from "openapi-fetch";
-
-export const defaultClient = createFetchClient();
+import axios from "axios";
 
 export function customerUserSignup(payload) {
-  return defaultClient.POST("/api/signup", {
-    body: payload,
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
+  return axios.post(`/api/signup`, payload);
 }
 
 export function customerUserSignin(payload) {
-  return defaultClient.POST("/api/signin", {
-    body: payload,
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
+  return axios.post(`/api/signin`, payload);
 }
 
 export function customerUserResetPassword(payload) {
-  return defaultClient.POST("/api/reset-password", {
-    body: payload,
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
+  return axios.post(`/api/reset-password`, payload);
 }
 
 export function getProviderOrgDetails() {
-  return defaultClient.GET("/api/provider-details");
+  return axios.get(`/api/provider-details`);
 }
 
 export function customerSignInWithIdentityProvider(payload) {
-  return defaultClient.POST("/api/sign-in-with-idp", {
-    body: payload,
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
+  return axios.post("/api/sign-in-with-idp", payload);
 }

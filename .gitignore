@@ -36,10 +36,6 @@ yarn-error.log*
 package-lock.json
 .vscode/extensions.json
 
-fly.deploy.toml
-fly.dev.toml
-fly.toml
-
 tsconfig.tsbuildinfo
 
 # Playwright
