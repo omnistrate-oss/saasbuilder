@@ -1,6 +1,7 @@
 import { yamlTemplates } from "constants/yaml-templates";
 import { GlobalStateManager } from "test-utils/global-state-manager";
 import { ProviderAPIClient } from "test-utils/provider-api-client";
+import { UserAPIClient } from "test-utils/user-api-client";
 
 async function globalSetup() {
   console.log("Running Global Setup...");
@@ -21,6 +22,16 @@ async function globalSetup() {
   }
 
   console.log("Provider Auth Successful");
+
+  const userEmail = process.env.USER_EMAIL;
+  const userPassword = process.env.USER_PASSWORD;
+  if (!userEmail || !userPassword) {
+    throw new Error("Missing user credentials in environment variables");
+  }
+
+  const userClient = new UserAPIClient();
+  await userClient.userLogin(userEmail!, userPassword!);
+
   const date = `${Date.now()}`;
 
   await Promise.all([

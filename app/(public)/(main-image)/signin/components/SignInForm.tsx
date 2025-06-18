@@ -92,7 +92,6 @@ const SignInForm: FC<SignInFormProps> = ({
       return customerUserSignin(payload);
     },
     onSuccess: (response) => {
-      console.log("Successfully signed in:", response);
       setLoginMethod({
         methodType: "Password",
       });
