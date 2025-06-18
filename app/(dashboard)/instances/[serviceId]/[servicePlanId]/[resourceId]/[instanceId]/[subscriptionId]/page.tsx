@@ -42,7 +42,7 @@ export type CurrentTab =
   | "Nodes"
   | "Metrics"
   | "Logs"
-  | "Events"
+  | "Audit Logs"
   | "Backups"
   | "Custom DNS";
 
