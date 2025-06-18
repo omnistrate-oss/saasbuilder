@@ -9,6 +9,7 @@
 declare global {
   interface Window {
     __recaptchaErrorHandlerAdded?: boolean;
+    __recaptchaErrorHandler?: (event: PromiseRejectionEvent) => void;
   }
 }
 
@@ -21,7 +22,7 @@ interface RecaptchaError {
 export function suppressRecaptchaErrors(): void {
   // Only add the listener once
   if (typeof window !== "undefined" && !window.__recaptchaErrorHandlerAdded) {
-    window.addEventListener("unhandledrejection", (event: PromiseRejectionEvent) => {
+    const handleUnhandledRejection = (event: PromiseRejectionEvent) => {
       const reason = event.reason as RecaptchaError;
 
       // Convert reason to string for analysis
@@ -84,7 +85,11 @@ export function suppressRecaptchaErrors(): void {
         console.warn("Suppressed possible reCAPTCHA timeout error (reCAPTCHA detected on page):", errorString);
         event.preventDefault();
       }
-    });
+    };
+
+    // Store the handler reference for cleanup
+    window.__recaptchaErrorHandler = handleUnhandledRejection;
+    window.addEventListener("unhandledrejection", handleUnhandledRejection);
 
     // Mark that we've added the handler
     window.__recaptchaErrorHandlerAdded = true;
@@ -93,6 +98,13 @@ export function suppressRecaptchaErrors(): void {
 
 export function cleanupRecaptchaErrorHandler(): void {
   if (typeof window !== "undefined") {
+    // Remove the event listener if it exists
+    if (window.__recaptchaErrorHandler) {
+      window.removeEventListener("unhandledrejection", window.__recaptchaErrorHandler);
+      window.__recaptchaErrorHandler = undefined;
+    }
+
+    // Reset the flag
     window.__recaptchaErrorHandlerAdded = false;
   }
 }
