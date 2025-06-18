@@ -393,7 +393,7 @@ const SubscriptionPlanRadio: React.FC<SubscriptionPlanRadioProps> = ({
                 }}
                 isSelected={servicePlanId === plan.productTierID}
                 disabled={disabled || plan.serviceModelStatus !== "READY"}
-                disabledMessage={plan.serviceModelStatus !== "READY" ? "SaaS Product not available at the moment" : ""}
+                disabledMessage={plan.serviceModelStatus !== "READY" ? "Product not available at the moment" : ""}
                 isPlanSelectionDisabled={isPlanSelectionDisabled || disabled || plan.serviceModelStatus !== "READY"}
                 disabledReasonText={servicePlanDisabledText}
               />

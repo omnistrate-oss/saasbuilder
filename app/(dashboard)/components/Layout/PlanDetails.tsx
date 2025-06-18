@@ -53,7 +53,7 @@ const PlanDetails = ({ startingTab }) => {
               <FieldLabel required sx={{ color: "#414651", fontWeight: "600" }}>
                 Product Name
               </FieldLabel>
-              <FieldDescription sx={{ mt: 0, color: "#535862" }}>Select the SaaS Product</FieldDescription>
+              <FieldDescription sx={{ mt: 0, color: "#535862" }}>Select the Product</FieldDescription>
             </div>
 
             <Select
@@ -70,7 +70,7 @@ const PlanDetails = ({ startingTab }) => {
                 ))
               ) : (
                 <MenuItem value="" disabled>
-                  <i>No SaaS Product found</i>
+                  <i>No Product found</i>
                 </MenuItem>
               )}
             </Select>

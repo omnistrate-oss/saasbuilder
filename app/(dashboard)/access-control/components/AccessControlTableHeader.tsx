@@ -7,7 +7,7 @@ const AccessControlTableHeader = ({ searchText, setSearchText, refetchUsers, isF
     <div className="flex items-center justify-between gap-4 py-5 px-6">
       <DataGridHeaderTitle
         title="Access Permissions"
-        desc="Manage user roles and permissions for your SaaS Product subscriptions"
+        desc="Manage user roles and permissions for your Product subscriptions"
         count={count}
         units={{
           singular: "Access Permission",

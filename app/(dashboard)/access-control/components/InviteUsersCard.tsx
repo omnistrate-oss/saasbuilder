@@ -159,7 +159,7 @@ const InviteUsersCard: React.FC<InviteUsersCardProps> = ({ refetchUsers, isFetch
           <div className="flex items-center justify-between gap-4 pt-4 px-6">
             <DataGridHeaderTitle
               title="Invite Users"
-              desc="Invite team members with specific roles to manage your SaaS Product subscriptions"
+              desc="Invite team members with specific roles to manage your Product subscriptions"
             />
 
             <Button
@@ -238,7 +238,7 @@ const InviteUsersCard: React.FC<InviteUsersCardProps> = ({ refetchUsers, isFetch
                                 sx={{ mt: 0 }}
                                 displayEmpty
                                 renderValue={(value) => {
-                                  if (!value) return "SaaS Product";
+                                  if (!value) return "Product";
                                   return serivceMenuItems.find((item) => item.value === value)?.label;
                                 }}
                                 maxWidth="400px"
@@ -251,7 +251,7 @@ const InviteUsersCard: React.FC<InviteUsersCardProps> = ({ refetchUsers, isFetch
                                   ))
                                 ) : (
                                   <MenuItem value="" disabled>
-                                    <i>No SaaS Products With Root Access</i>
+                                    <i>No Products With Root Access</i>
                                   </MenuItem>
                                 )}
                               </Select>
@@ -287,7 +287,7 @@ const InviteUsersCard: React.FC<InviteUsersCardProps> = ({ refetchUsers, isFetch
                                   ))
                                 ) : (
                                   <MenuItem value="" disabled>
-                                    <i>{invite.serviceId ? "No subscription plans" : "Select a SaaS product first"}</i>
+                                    <i>{invite.serviceId ? "No subscription plans" : "Select a Product first"}</i>
                                   </MenuItem>
                                 )}
                               </Select>

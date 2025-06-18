@@ -139,7 +139,7 @@ const InstancesTableHeader = ({
         !isUpdateAllowedByRBAC,
       onClick: () => {
         if (!selectedInstance) return snackbar.showError("Please select an instance");
-        if (!selectedInstanceOffering) return snackbar.showError("SaaS Product not found");
+        if (!selectedInstanceOffering) return snackbar.showError("Product not found");
         stopInstanceMutation.mutate({
           params: {
             path: pathData,
@@ -176,7 +176,7 @@ const InstancesTableHeader = ({
         !isUpdateAllowedByRBAC,
       onClick: () => {
         if (!selectedInstance) return snackbar.showError("Please select an instance");
-        if (!selectedInstanceOffering) return snackbar.showError("SaaS Product not found");
+        if (!selectedInstanceOffering) return snackbar.showError("Product not found");
         startInstanceMutation.mutate({
           params: {
             path: pathData,
@@ -281,7 +281,7 @@ const InstancesTableHeader = ({
           !isUpdateAllowedByRBAC,
         onClick: () => {
           if (!selectedInstance) return snackbar.showError("Please select an instance");
-          if (!selectedInstanceOffering) return snackbar.showError("SaaS Product not found");
+          if (!selectedInstanceOffering) return snackbar.showError("Product not found");
           restartInstanceMutation.mutate({
             params: {
               path: pathData,

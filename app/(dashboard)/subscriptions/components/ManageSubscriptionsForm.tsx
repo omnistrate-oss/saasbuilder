@@ -130,7 +130,7 @@ const ManageSubscriptionsForm = ({ defaultServiceId, defaultServicePlanId, isFet
         <div className="grid grid-cols-5">
           <div>
             <FieldTitle required>Product Name</FieldTitle>
-            <FieldDescription>Select SaaS Product</FieldDescription>
+            <FieldDescription>Select Product</FieldDescription>
           </div>
           <div className="col-span-4">
             <Select value={selectedServiceId} onChange={(e) => setSelectedServiceId(e.target.value)} sx={{ mt: 0 }}>
@@ -265,7 +265,7 @@ const ManageSubscriptionsForm = ({ defaultServiceId, defaultServicePlanId, isFet
           await unSubscribeMutation.mutateAsync(subscriptionsObj[selectedPlanId].id);
         }}
         confirmationText="unsubscribe"
-        title="Unsubscribe SaaS Product"
+        title="Unsubscribe Product"
         buttonLabel="Unsubscribe"
         isLoading={unSubscribeMutation.isPending}
         subtitle={`Are you sure you want to unsubscribe from ${subscriptionsObj[selectedPlanId]?.serviceName}?`}

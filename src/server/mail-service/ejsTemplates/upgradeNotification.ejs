@@ -312,7 +312,7 @@
                                             >
                                             <% if (notification_type == "upgradeScheduled") { %>
                                                 Your deployment (<span style="font-weight: 800"><%= instance_id %></span>) for
-                                                <span style="font-weight: 800"><%= service_name %></span> SaaS Product
+                                                <span style="font-weight: 800"><%= service_name %></span> Product
                                                 under <span style="font-weight: 800"><%= service_plan_name %></span>
                                                 <% if (scheduling_event_type == "reminder") { %>
                                                   is scheduled for an upgrade in 1 hour.
@@ -324,7 +324,7 @@
                                                 <% } %>
                                             <% } else { %>
                                                 The upgrade of your deployment (<span style="font-weight: 800"><%= instance_id %></span>) for
-                                                <span style="font-weight: 800"><%= service_name %></span> SaaS Product
+                                                <span style="font-weight: 800"><%= service_name %></span> Product
                                                 under <span style="font-weight: 800"><%= service_plan_name %></span>
                                                 <% if (completion_status == "SUCCESS") { %>
                                                     has been completed successfully.

@@ -104,7 +104,7 @@ const InstanceForm = ({
     ),
     enableReinitialize: true,
     validationSchema: yup.object({
-      serviceId: yup.string().required("SaaS Product is required"),
+      serviceId: yup.string().required("Product is required"),
       servicePlanId: yup.string().required("A plan with a valid subscription is required"),
       subscriptionId: yup.string().required("Subscription is required"),
       resourceId: yup.string().required("Resource is required"),

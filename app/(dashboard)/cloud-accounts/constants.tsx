@@ -1,7 +1,7 @@
 import * as yup from "yup";
 
 export const CloudAccountValidationSchema = yup.object({
-  serviceId: yup.string().required("SaaS Product ID is required"),
+  serviceId: yup.string().required("Product ID is required"),
   servicePlanId: yup.string().required("Subscription Plan ID is required"),
   subscriptionId: yup.string().required("Subscription ID is required"),
   cloudProvider: yup.string().required("Cloud Provider is required"),

@@ -16,7 +16,7 @@ const ServiceOfferingUnavailableUI = () => {
               fontSize: "30px",
             }}
           >
-            SaaS Product
+            Product
           </div>
           <div
             justifyContent="center"

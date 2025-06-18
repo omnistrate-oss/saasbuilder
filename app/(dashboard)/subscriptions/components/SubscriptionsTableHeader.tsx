@@ -20,8 +20,8 @@ const SubscriptionsTableHeader = ({
   return (
     <div className="py-5 px-6 flex items justify-between gap-8">
       <DataGridHeaderTitle
-        title="Detailed list of your SaaS Product subscriptions"
-        desc="Explore your current SaaS Product subscriptions here"
+        title="Detailed list of your Product subscriptions"
+        desc="Explore your current Product subscriptions here"
         units={{
           singular: "Subscription",
           plural: "Subscriptions",

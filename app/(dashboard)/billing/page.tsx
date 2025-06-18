@@ -75,7 +75,7 @@ const BillingPage = () => {
       }
 
       if (errorMessage === "You have not been subscribed to a service yet.") {
-        errorDisplayText = "Please subscribe to a SaaS Product to start using billing";
+        errorDisplayText = "Please subscribe to a Product to start using billing";
       }
 
       if (errorMessage === "You have not been enrolled in a service plan with a billing plan yet.") {
