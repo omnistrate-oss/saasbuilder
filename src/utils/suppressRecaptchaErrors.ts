@@ -1,6 +1,8 @@
 /**
  * Suppresses unhandled promise rejections from Google reCAPTCHA v2 invisible
  * These are known issues with Google's script that cannot be caught by user code
+ *
+ * Note: This analyzes JavaScript error stack traces, not URLs, to identify reCAPTCHA-related errors
  */
 
 // Extend the Window interface to include our custom property
@@ -26,13 +28,20 @@ export function suppressRecaptchaErrors(): void {
       const errorString = reason?.toString?.() || reason?.message || "";
       const stackString = reason?.stack || "";
 
+      // SECURITY NOTE: We are analyzing JavaScript error stack traces here, NOT URLs
+      // The stack traces contain function call information from script execution
+      // This is safe because we're not making security decisions based on URL parsing
+
       // Check for reCAPTCHA timeout errors with various patterns
       const isRecaptchaTimeoutError =
         // Basic timeout error check with reCAPTCHA context
         (errorString.includes("Timeout") || errorString.includes("timeout")) &&
-        // Check for reCAPTCHA context indicators
+        // Check for reCAPTCHA context indicators in stack traces (not URLs)
         (stackString.includes("recaptcha") ||
-          stackString.includes("google.com") ||
+          // More specific Google reCAPTCHA domain patterns in stack traces
+          stackString.includes("www.google.com/recaptcha") ||
+          stackString.includes("www.gstatic.com/recaptcha") ||
+          stackString.includes("recaptcha.net") ||
           stackString.includes("gstatic") ||
           stackString.includes("bfram") ||
           errorString.includes("bfram") ||
