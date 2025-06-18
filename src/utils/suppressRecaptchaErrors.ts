@@ -35,24 +35,21 @@ export function suppressRecaptchaErrors(): void {
 
       // Check for reCAPTCHA timeout errors with various patterns
       const isRecaptchaTimeoutError =
+        // Check for specific timeout patterns like "Timeout (B)", "Timeout (i)", "Timeout (1)", etc.
+        /Timeout\s*\([a-zA-Z0-9]\)/.test(errorString) ||
+        /^Timeout \([a-zA-Z0-9]\)/.test(errorString) ||
         // Basic timeout error check with reCAPTCHA context
-        (errorString.includes("Timeout") || errorString.includes("timeout")) &&
-        // Check for reCAPTCHA context indicators in stack traces
-        (stackString.includes("recaptcha") ||
-          // More specific Google reCAPTCHA domain patterns in stack traces
-          stackString.includes("www.google.com/recaptcha") ||
-          stackString.includes("www.gstatic.com/recaptcha") ||
-          stackString.includes("gstatic") ||
-          stackString.includes("bfram") ||
-          errorString.includes("bfram") ||
-          // Check for reCAPTCHA script presence in DOM
-          document.querySelector('script[src*="recaptcha"]') ||
-          document.querySelector('script[src*="gstatic.com"]') ||
-          document.querySelector('iframe[src*="recaptcha"]') ||
-          // Check for specific timeout patterns like "Timeout (B)", "Timeout (i)", "Timeout (1)", etc.
-          /Timeout\s*\([a-zA-Z0-9]\)/.test(errorString) ||
-          // Additional patterns for reCAPTCHA errors
-          /^Timeout \([a-zA-Z0-9]\)/.test(errorString));
+        ((errorString.includes("Timeout") || errorString.includes("timeout")) &&
+          // Check for reCAPTCHA context indicators in stack traces
+          (stackString.includes("recaptcha") ||
+            stackString.includes("recaptcha__") ||
+            stackString.includes("bfram") ||
+            stackString.includes("gstatic") ||
+            errorString.includes("bfram") ||
+            // Check for reCAPTCHA script presence in DOM
+            document.querySelector('script[src*="recaptcha"]') ||
+            document.querySelector('script[src*="gstatic.com"]') ||
+            document.querySelector('iframe[src*="recaptcha"]')));
 
       if (isRecaptchaTimeoutError) {
         event.preventDefault(); // Prevent the error from appearing in console
