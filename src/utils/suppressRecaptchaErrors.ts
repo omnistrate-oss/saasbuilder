@@ -37,12 +37,11 @@ export function suppressRecaptchaErrors(): void {
       const isRecaptchaTimeoutError =
         // Basic timeout error check with reCAPTCHA context
         (errorString.includes("Timeout") || errorString.includes("timeout")) &&
-        // Check for reCAPTCHA context indicators in stack traces (not URLs)
+        // Check for reCAPTCHA context indicators in stack traces
         (stackString.includes("recaptcha") ||
           // More specific Google reCAPTCHA domain patterns in stack traces
           stackString.includes("www.google.com/recaptcha") ||
           stackString.includes("www.gstatic.com/recaptcha") ||
-          stackString.includes("recaptcha.net") ||
           stackString.includes("gstatic") ||
           stackString.includes("bfram") ||
           errorString.includes("bfram") ||
