@@ -364,7 +364,7 @@ const SyntaxHighlightedLog: React.FC<SyntaxHighlightedLogProps> = ({ logLine, en
   // If syntax highlighting is disabled, use a consistent styled wrapper
   if (!enableSyntaxHighlighting) {
     return (
-      <HighlightedLogContent logType={null}>
+      <HighlightedLogContent>
         <Ansi>{logLine}</Ansi>
       </HighlightedLogContent>
     );
