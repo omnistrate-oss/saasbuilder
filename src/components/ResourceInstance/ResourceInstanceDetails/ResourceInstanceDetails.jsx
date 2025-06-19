@@ -70,6 +70,14 @@ function ResourceInstanceDetails(props) {
         }
 
         return !filterArr.includes(param.key);
+      })
+      .sort((a, b) => {
+        const aTabIndex = a.tabIndex;
+        const bTabIndex = b.tabIndex;
+        if (aTabIndex !== undefined && bTabIndex !== undefined) {
+          return aTabIndex - bTabIndex; // Sort by tabIndex if available
+        }
+        return 0; // If tabIndex is not available, maintain original order
       });
     return result;
   }, [isResourceBYOA, resultParameters, resultParametersSchema]);

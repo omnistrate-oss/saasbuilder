@@ -92,7 +92,6 @@ const SignInForm: FC<SignInFormProps> = ({
       return customerUserSignin(payload);
     },
     onSuccess: (response) => {
-      console.log("Successfully signed in:", response);
       setLoginMethod({
         methodType: "Password",
       });
@@ -104,7 +103,6 @@ const SignInForm: FC<SignInFormProps> = ({
       handlePasswordSignInSuccess(jwtToken);
     },
     onError: (error: any) => {
-      console.log("Error signing in:", error);
       if (error.response.data && error.response.data.message) {
         const errorMessage = error.response.data.message;
         snackbar.showError(errorMessage);

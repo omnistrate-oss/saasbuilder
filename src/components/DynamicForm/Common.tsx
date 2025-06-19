@@ -165,6 +165,7 @@ export const SelectField = ({ field, formData }) => {
       error={Boolean(touched[field.name] && errors[field.name])}
       disabled={field.disabled}
       sx={{ mt: 0 }}
+      maxWidth="590px"
     >
       {field.menuItems?.length > 0 ? (
         field.menuItems.map((option) => {
