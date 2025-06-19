@@ -378,7 +378,7 @@ const SyntaxHighlightedLog: React.FC<SyntaxHighlightedLogProps> = ({ logLine, en
 
   // For regular logs with ANSI colors but no structured format - use consistent wrapper
   return (
-    <HighlightedLogContent logType={null}>
+    <HighlightedLogContent>
       <Ansi>{logLine}</Ansi>
     </HighlightedLogContent>
   );
