@@ -8,6 +8,7 @@ const MenuItem = styled(MuiMenuItem)(() => ({
   fontWeight: 500,
   lineHeight: "24px",
   color: "#101828",
+  textWrap: "wrap",
   "&+&": {
     marginTop: "4px",
   },

@@ -6,14 +6,14 @@ import { cloudProviderLabels } from "src/constants/cloudProviders";
 import { colors } from "src/themeConfig";
 import { Text } from "components/Typography/Typography";
 
-import AWSLogo from "../Icons/AWSLogo";
-import AzureFullLogo from "../Icons/AzureFullLogo";
-import GCPFullLogo from "../Icons/GCPFullLogo";
+import AWSIcon from "./AWSIcon";
+import AzureIcon from "./AzureIcon";
+import GcpIcon from "./GCPIcon";
 
-export const cloudProviderFullLogoMap = {
-  aws: <AWSLogo />,
-  gcp: <GCPFullLogo />,
-  azure: <AzureFullLogo height="32px" width="96px" />,
+const cloudIcons = {
+  aws: <AWSIcon style={{ height: "32px", width: "auto" }} />,
+  gcp: <GcpIcon style={{ height: "32px", width: "auto" }} />,
+  azure: <AzureIcon style={{ height: "32px", width: "auto" }} />,
 };
 
 const CloudProviderCard = ({ cloudProvider, isSelected, onClick, disabled }) => {
@@ -33,7 +33,7 @@ const CloudProviderCard = ({ cloudProvider, isSelected, onClick, disabled }) => 
         }
       }}
     >
-      {cloudProviderFullLogoMap[cloudProvider]}
+      {cloudIcons[cloudProvider]}
       <Text size="small" weight="medium" color={disabled ? "#667085" : "#414651"}>
         {cloudProviderLabels[cloudProvider]}
       </Text>
@@ -67,7 +67,7 @@ const CloudProviderRadio: React.FC<CloudProviderRadioProps> = ({
   }
 
   return (
-    <div className={cn("grid gap-8", `grid-cols-${cloudProviders.length}`)}>
+    <div className="grid gap-4" style={{ gridTemplateColumns: `repeat(${cloudProviders.length}, minmax(0, 1fr))` }}>
       {cloudProviders.map((cloudProvider, index) => {
         return (
           <CloudProviderCard
