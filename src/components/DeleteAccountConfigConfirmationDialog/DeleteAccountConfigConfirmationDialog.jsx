@@ -142,7 +142,7 @@ const DeleteInstructions = ({ accountInstructionDetails }) => {
 
           <Text size="medium" weight="regular" color="#374151">
             To off-board this cloud account, first delete this cloud account instance. If this cloud account is used for
-            other services, delete those cloud account instances too before proceeding to the next step
+            other Products, delete those cloud account instances too before proceeding to the next step
           </Text>
         </ListItem>
         {accountInstructionDetails?.awsAccountID && (

@@ -288,7 +288,7 @@ const CloudAccountsPage = () => {
         },
         {
           id: "serviceName",
-          header: "Service Name",
+          header: "Product Name",
           cell: (data) => {
             const { serviceLogoURL, serviceName } = subscriptionsObj[data.row.original.subscriptionId as string] || {};
             return <ServiceNameWithLogo serviceName={serviceName} serviceLogoURL={serviceLogoURL} />;
@@ -324,7 +324,7 @@ const CloudAccountsPage = () => {
         },
         {
           id: "cloud_provider",
-          header: "Provider",
+          header: "Cloud Provider",
           cell: (data) => {
             let cloudProvider: CloudProvider | undefined;
             const result_params = data.row.original.result_params;

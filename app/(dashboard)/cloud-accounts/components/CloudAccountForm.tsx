@@ -301,12 +301,12 @@ const CloudAccountForm = ({
           fields: [
             {
               dataTestId: "service-name-select",
-              label: "Service Name",
-              subLabel: "Select the service you want to deploy in this cloud account",
+              label: "Product Name",
+              subLabel: "Select the Product you want to deploy in this cloud account",
               name: "serviceId",
               type: "select",
               required: true,
-              emptyMenuText: "No services available",
+              emptyMenuText: "No Products available",
               isLoading: isFetchingServiceOfferings,
               menuItems: serviceMenuItems,
               disabled: formMode !== "create",
@@ -407,7 +407,7 @@ const CloudAccountForm = ({
                     isLoading: isSubscriptionsPending,
                     disabled: formMode !== "create",
                     emptyMenuText: !serviceId
-                      ? "Select a service"
+                      ? "Select a Product"
                       : !servicePlanId
                         ? "Select a subscription plan"
                         : "No subscriptions available",

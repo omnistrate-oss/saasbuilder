@@ -91,7 +91,7 @@ const UsageOverview: FC<UsageOverviewProps> = (props) => {
     return services;
   }, [subscriptions, servicePlansGroupedByServiceId]);
 
-  const serviceOptions = [{ serviceName: "All Services", serviceId: "" }, ...rootSubscriptionServices];
+  const serviceOptions = [{ serviceName: "All Products", serviceId: "" }, ...rootSubscriptionServices];
 
   let servicePlanOptions = [{ label: "All Subscription Plans", value: "" }];
   if (selectedServiceId) {
@@ -113,7 +113,7 @@ const UsageOverview: FC<UsageOverviewProps> = (props) => {
               Cost and usage graph{" "}
             </Text>
             <Text size="xsmall" weight="medium" color="#414651">
-              Memory, storage, and CPU usage by service or subscription plan.{" "}
+              Memory, storage, and CPU usage by Product or subscription plan.{" "}
             </Text>
           </div>
           <div className="flex items-center gap-3">

@@ -6,7 +6,7 @@ async function getOrgRevokeUserMailContent(revokeUserEventObj, orgLogoURL) {
   const userName = revokeUserEventObj.eventPayload.inviting_user_name;
   const serviceName = revokeUserEventObj.eventPayload.service_name;
 
-  const subject = `Access revoked for ${userName}'s subscription on ${serviceName} service`;
+  const subject = `Access revoked for ${userName}'s subscription on ${serviceName} Product`;
 
   const templatePath = path.resolve(__dirname, "..", "ejsTemplates", "revokeAccess.ejs");
 
