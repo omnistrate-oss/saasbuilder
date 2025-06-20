@@ -135,7 +135,7 @@ const InstancesPage = () => {
         },
         {
           id: "serviceName",
-          header: "Service Name",
+          header: "Product Name",
           cell: (data) => {
             const subscription = subscriptionsObj[data.row.original.subscriptionId as string];
             const serviceName = subscription?.serviceName;
@@ -305,7 +305,7 @@ const InstancesPage = () => {
       }),
       columnHelper.accessor("cloud_provider", {
         id: "cloud_provider",
-        header: "Provider",
+        header: "Cloud Provider",
         cell: (data) => {
           const cloudProvider = data.row.original.cloud_provider;
 

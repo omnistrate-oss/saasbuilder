@@ -89,13 +89,13 @@ export const getStandardInformationFields = (
   const fields: Field[] = [
     {
       dataTestId: "service-name-select",
-      label: "Service Name",
-      subLabel: "Select the service you want to deploy",
+      label: "Product Name",
+      subLabel: "Select the Product you want to deploy",
       name: "serviceId",
       type: "select",
       required: true,
       disabled: formMode !== "create",
-      emptyMenuText: "No services available",
+      emptyMenuText: "No Products available",
       menuItems: serviceMenuItems,
       onChange: (e) => {
         const serviceId = e.target.value;
@@ -206,7 +206,7 @@ export const getStandardInformationFields = (
             isLoading: isFetchingSubscriptions,
             disabled: formMode !== "create",
             emptyMenuText: !serviceId
-              ? "Select a service"
+              ? "Select a Product"
               : !servicePlanId
                 ? "Select a subscription plan"
                 : "No subscriptions available",
@@ -233,7 +233,7 @@ export const getStandardInformationFields = (
       type: "select",
       required: true,
       emptyMenuText: !serviceId
-        ? "Select a service"
+        ? "Select a Product"
         : !servicePlanId
           ? "Select a subscription plan"
           : "No resources available",
@@ -474,10 +474,10 @@ export const getDeploymentConfigurationFields = (
         param.key !== "subscriptionId" &&
         param.key !== "cloud_provider_native_network_id" &&
         param.key !== "custom_dns_configuration"
-    ) 
+    )
     .sort((a, b) => {
-      if(a.tabIndex === undefined || b.tabIndex === undefined) {
-        return 0
+      if (a.tabIndex === undefined || b.tabIndex === undefined) {
+        return 0;
       }
       return a.tabIndex - b.tabIndex;
     });

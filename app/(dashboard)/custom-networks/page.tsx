@@ -92,7 +92,7 @@ const CustomNetworksPage = () => {
       }),
       columnHelper.accessor("cloudProviderName", {
         id: "cloudProviderName",
-        header: "Provider",
+        header: "Cloud Provider",
         cell: (data) => {
           const cloudProvider = data.row.original.cloudProviderName;
           return cloudProviderLongLogoMap[cloudProvider] || "-";

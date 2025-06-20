@@ -19,7 +19,11 @@ import ClusterLocations from "./components/ClusterLocations";
 import DashboardLogsTableHeader from "./components/DashboardLogsTableHeader";
 
 const DashboardPage = () => {
-  const { data: instances = [], isPending: isInstancesPending } = useInstances();
+  const { data: allInstances = [], isPending: isInstancesPending } = useInstances();
+
+  // Filter out instances with resourceID starting with "r-injectedaccountconfig"
+  const instances = allInstances.filter((instance) => !instance.resourceID?.startsWith("r-injectedaccountconfig"));
+
   const { isFetchingSubscriptions } = useGlobalData();
 
   const { data: dashboardLogs, isFetching: isFetchingDashboardLogs } = useAuditLogs({

@@ -20,8 +20,8 @@ const SubscriptionsTableHeader = ({
   return (
     <div className="py-5 px-6 flex items justify-between gap-8">
       <DataGridHeaderTitle
-        title="Detailed list of your service subscriptions"
-        desc="Explore your current service subscriptions here"
+        title="Detailed list of your Product subscriptions"
+        desc="Explore your current Product subscriptions here"
         units={{
           singular: "Subscription",
           plural: "Subscriptions",
@@ -31,7 +31,7 @@ const SubscriptionsTableHeader = ({
 
       <div className="flex items-center gap-4 flex-shrink-0">
         <SearchInput
-          placeholder="Search by Service Name"
+          placeholder="Search by Product Name"
           searchText={searchText}
           setSearchText={setSearchText}
           width="250px"
