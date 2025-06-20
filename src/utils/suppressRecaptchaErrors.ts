@@ -78,7 +78,6 @@ export function suppressRecaptchaErrors(): void {
           document.querySelector('iframe[src*="recaptcha"]'));
 
       if (isPossibleRecaptchaError) {
-        console.warn("Suppressed possible reCAPTCHA timeout error (reCAPTCHA detected on page):", errorString);
         event.preventDefault();
       }
     };
