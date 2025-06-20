@@ -97,7 +97,10 @@ function Logs(props) {
   const bufferTimeoutRef = useRef(null); // Add this ref
   const [enableSyntaxHighlighting, setEnableSyntaxHighlighting] = useState(true);
   const [searchText, setSearchText] = useState("");
-  const [invertLogOrder, setInvertLogOrder] = useState(false);
+  const [
+    invertLogOrder,
+    // setInvertLogOrder
+  ] = useState(false);
 
   let firstNode = null;
 
