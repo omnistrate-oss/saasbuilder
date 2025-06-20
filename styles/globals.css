@@ -8,6 +8,16 @@ body {
   height: 100%;
 }
 
+/* Enable ligatures globally for code elements */
+code,
+pre,
+.code-font {
+  font-feature-settings:
+    "liga" 1,
+    "calt" 1;
+  font-variant-ligatures: contextual;
+}
+
 *,
 *::before,
 *::after {

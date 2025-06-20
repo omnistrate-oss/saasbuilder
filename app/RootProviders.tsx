@@ -20,6 +20,7 @@ import ProviderOrgDetailsProvider from "src/providers/ProviderOrgDetailsProvider
 import { store } from "src/redux-store";
 import { EnvironmentType } from "src/types/common/enums";
 import { ProviderUser } from "src/types/users";
+import { cleanupRecaptchaErrorHandler, suppressRecaptchaErrors } from "src/utils/suppressRecaptchaErrors";
 
 import { theme as dashboardTheme } from "../styles/theme";
 
@@ -61,6 +62,16 @@ const RootProviders = ({
       PAGE_TITLE_MAP[pathname as keyof typeof PAGE_TITLE_MAP] || providerOrgDetails?.orgName || "Dashboard";
   }, [pathname, providerOrgDetails?.orgName]);
 
+  // Global reCAPTCHA error suppression
+  useEffect(() => {
+    suppressRecaptchaErrors();
+
+    // Cleanup on unmount
+    return () => {
+      cleanupRecaptchaErrorHandler();
+    };
+  }, []);
+
   return (
     <AppRouterCacheProvider>
       <Provider store={store}>
@@ -71,7 +82,7 @@ const RootProviders = ({
               <NotificationBarProvider>
                 <AxiosGlobalErrorHandler />
                 <GlobalErrorHandler />
-                <ThemeProvider theme={ dashboardTheme}>
+                <ThemeProvider theme={dashboardTheme}>
                   <EnvironmentTypeProvider envType={envType}>
                     <ProviderOrgDetailsProvider details={providerOrgDetails}>
                       <CookieConsentProvider googleAnalyticsTagID={googleAnalyticsTagID}>
