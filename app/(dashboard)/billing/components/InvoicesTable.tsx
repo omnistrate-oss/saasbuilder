@@ -142,6 +142,7 @@ const InvoicesTable: FC<InvoicesTableProps> = ({ invoices = [] }) => {
       HeaderComponent={TableHeader}
       noRowsText="No invoices"
       tableStyles={{ marginTop: "12px" }}
+      rowId="invoiceNumber"
     />
   );
 };
