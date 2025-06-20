@@ -93,7 +93,7 @@ const AccessControlPage = () => {
         },
         {
           id: "serviceName",
-          header: "Service Name",
+          header: "Product Name",
           cell: (data) => {
             const { serviceLogoURL, serviceName } = subscriptionsObj[data.row.original.subscriptionId] || {};
             return <ServiceNameWithLogo serviceName={serviceName} serviceLogoURL={serviceLogoURL} />;

@@ -33,7 +33,7 @@ const SubscriptionUsageTable: FC<SubscriptionUsageTableProps> = ({ rows, isSubsc
       //@ts-ignore
       columnHelper.accessor("serviceName", {
         id: "serviceName",
-        header: "Service Name",
+        header: "Product Name",
         meta: {
           minWidth: 320,
         },

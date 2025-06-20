@@ -75,12 +75,12 @@ const BillingPage = () => {
       }
 
       if (errorMessage === "You have not been subscribed to a service yet.") {
-        errorDisplayText = "Please subscribe to a service to start using billing";
+        errorDisplayText = "Please subscribe to a Product to start using billing";
       }
 
       if (errorMessage === "You have not been enrolled in a service plan with a billing plan yet.") {
         errorDisplayText =
-          "You have not been enrolled in a service plan with a billing plan. Please contact support for assistance";
+          "You have not been enrolled in a plan with a billing plan. Please contact support for assistance";
       } else {
         errorDisplayText = errorMessage;
       }

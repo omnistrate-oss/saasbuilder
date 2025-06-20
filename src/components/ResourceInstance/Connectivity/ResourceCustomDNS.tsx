@@ -39,11 +39,7 @@ function ResourceCustomDNS(props) {
   }, [globalEndpoints]);
 
   const rows = useMemo(() => {
-    let sectionLabel = "Resource";
-
-    if (context === "inventory") {
-      sectionLabel = "Service Component";
-    }
+    const sectionLabel = "Resource";
 
     const res: any[] = [];
 

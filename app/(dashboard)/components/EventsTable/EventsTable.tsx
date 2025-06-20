@@ -91,7 +91,7 @@ const EventsTable = ({
         },
         {
           id: "serviceName",
-          header: "Service Name",
+          header: "Product Name",
           cell: (data) => {
             const { serviceLogoURL, serviceName } = subscriptionsObj[data.row.original.subscriptionId] || {};
             if (!serviceName) return "-";
@@ -106,7 +106,7 @@ const EventsTable = ({
       ),
       resourceType: columnHelper.accessor("resourceName", {
         id: "resourceName",
-        header: "Resource Type",
+        header: "Resource Name",
         enableSorting: false,
       }),
       time: columnHelper.accessor((row) => formatDateUTC(row.time), {

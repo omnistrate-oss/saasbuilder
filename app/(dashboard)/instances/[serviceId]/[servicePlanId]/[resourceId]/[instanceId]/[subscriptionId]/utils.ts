@@ -23,7 +23,7 @@ export const getTabs = (
     delete tabs.nodes;
   }
 
-  tabs["auditLogs"] = "Events";
+  tabs["auditLogs"] = "Audit Logs";
   if (isBackup) {
     tabs["backups"] = "Backups";
   }
