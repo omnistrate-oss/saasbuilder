@@ -3,11 +3,13 @@
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import ArrowOutwardIcon from "@mui/icons-material/ArrowOutward";
-import { Box, Stack } from "@mui/material";
+import { Box, Stack, tabClasses } from "@mui/material";
 import { useSelector } from "react-redux";
 
 import StatusChip from "src/components/StatusChip/StatusChip";
+import { Tab, Tabs } from "src/components/Tab/Tab";
 import { selectUserrootData } from "src/slices/userDataSlice";
+import { colors } from "src/themeConfig";
 import Button from "components/Button/Button";
 import Card from "components/Card/Card";
 import LoadingSpinner from "components/LoadingSpinner/LoadingSpinner";
@@ -19,6 +21,7 @@ import PageContainer from "../components/Layout/PageContainer";
 import PageTitle from "../components/Layout/PageTitle";
 
 import ConsumptionUsage from "./components/ConsumptionUsage";
+import { StripeIcon } from "./components/Icons";
 import InvoicesTable from "./components/InvoicesTable";
 import useBillingDetails from "./hooks/useBillingDetails";
 import useBillingStatus from "./hooks/useBillingStatus";
@@ -26,6 +29,8 @@ import useConsumptionInvoices from "./hooks/useConsumptionInvoices";
 import useConsumptionUsage from "./hooks/useConsumptionUsage";
 
 const BillingPage = () => {
+  const [paymentURL, setPaymentURL] = useState("");
+  const [selectedBillingProvider, setSelectedBillingProvider] = useState("");
   const selectUser = useSelector(selectUserrootData);
 
   const billingStatusQuery = useBillingStatus();
@@ -33,14 +38,17 @@ const BillingPage = () => {
   const isBillingEnabled = Boolean(billingStatusQuery.data?.enabled);
 
   const { isPending: isBillingDetailsPending, data: billingDetails, error } = useBillingDetails(isBillingEnabled);
-
   const { data: consumptionUsageData, isPending: isConsumptionDataPending } = useConsumptionUsage();
-
   const { data: invoicesData, isPending: isInvoicesPending } = useConsumptionInvoices();
 
   const invoices = useMemo(() => invoicesData?.invoices || [], [invoicesData]);
 
-  const [paymentURL, setPaymentURL] = useState("");
+  useEffect(() => {
+    if (billingDetails?.billingProviders?.length) {
+      const firstProvider = billingDetails.billingProviders[0];
+      setSelectedBillingProvider(firstProvider.type);
+    }
+  }, [billingDetails]);
 
   useEffect(() => {
     const firstOpenInvoice = invoices.find((invoice) => invoice.invoiceStatus === "open");
@@ -90,6 +98,10 @@ const BillingPage = () => {
   const isLoading = isBillingDetailsPending || isConsumptionDataPending || isInvoicesPending;
 
   if (isLoading) return <LoadingSpinner />;
+  const isStripe = selectedBillingProvider === "STRIPE";
+  const balanceDueLink =
+    billingDetails?.billingProviders?.find((provider) => provider.type === selectedBillingProvider)?.balanceDueLink ||
+    "#";
 
   return (
     <div>
@@ -117,25 +129,79 @@ const BillingPage = () => {
           </Stack>
         ) : (
           <>
-            <Box display="grid" gap="24px" gridTemplateColumns="1fr 1fr">
+            <ConsumptionUsage consumptionUsageData={consumptionUsageData} />
+
+            <Tabs value={selectedBillingProvider} className="mt-3">
+              {billingDetails?.billingProviders?.map((provider) => {
+                const styles =
+                  provider.type === "STRIPE"
+                    ? {
+                        borderBottom: "1px solid #635BFF",
+                        backgroundColor: "#EAE9FF",
+                        color: colors.gray600,
+                      }
+                    : {
+                        borderBottom: "1px solid #D79640",
+                        backgroundColor: "#FFF4ED",
+                        color: colors.gray600,
+                      };
+
+                return (
+                  <Tab
+                    key={provider.type}
+                    label={
+                      provider.type === "STRIPE" ? (
+                        <Stack direction="row" alignItems="center" gap="8px">
+                          <StripeIcon
+                            style={{
+                              width: "24px",
+                              height: "24px",
+                            }}
+                          />
+                          <div>OmniBilling (Stripe)</div>
+                        </Stack>
+                      ) : (
+                        <Stack direction="row" alignItems="center" gap="8px">
+                          <div className="w-6 h-6 flex items-center justify-center rounded-sm overflow-hidden">
+                            {/* eslint-disable-next-line @next/next/no-img-element */}
+                            <img src={provider.logoURL} width="24" height="24" alt="Img" className="object-cover" />
+                          </div>
+                          <div>{provider.name || "Billing Provider"}</div>
+                        </Stack>
+                      )
+                    }
+                    value={provider.type}
+                    onClick={() => setSelectedBillingProvider(provider.type)}
+                    sx={{
+                      padding: "8px 18px !important",
+                      fontWeight: "500",
+                      marginRight: "0px",
+                      borderWidth: "1px",
+                      "&:hover": styles,
+                      [`&.${tabClasses.selected}`]: styles,
+                    }}
+                  />
+                );
+              })}
+            </Tabs>
+
+            <div className="grid grid-cols-2 gap-6 mt-3">
               <Card sx={{ boxShadow: "0px 1px 2px 0px #0A0D120D" }}>
-                <Stack direction="row" justifyContent="space-between" alignItems="center">
-                  <Box>
-                    <Text size="large" weight="semibold" color="#181D27">
-                      Balance
-                    </Text>
-                    <Text size="small" weight="regular" color="#535862" marginTop="2px">
-                      Pay open invoices amount
-                    </Text>
-                  </Box>
-                </Stack>
+                <Box>
+                  <Text size="large" weight="semibold" color="#181D27">
+                    Balance
+                  </Text>
+                  <Text size="small" weight="regular" color="#535862" marginTop="2px">
+                    Pay open invoices amount
+                  </Text>
+                </Box>
                 <Stack direction="row" gap="24px" justifyContent="space-between" marginTop="10px">
                   {/*@ts-ignore */}
                   <DisplayText size="small" weight="semibold">
-                    ${invoicesTotalAmount}
+                    {selectedBillingProvider === "STRIPE" ? `$${invoicesTotalAmount}` : "NA"}
                   </DisplayText>
-                  {paymentURL ? (
-                    <Link href={paymentURL} target="_blank">
+                  {!isStripe || paymentURL ? (
+                    <Link href={isStripe ? paymentURL : balanceDueLink} target="_blank">
                       <Button
                         variant="contained"
                         endIcon={
@@ -166,35 +232,30 @@ const BillingPage = () => {
                   )}
                 </Stack>
               </Card>
-              <Card sx={{ boxShadow: "0px 1px 2px 0px #0A0D120D" }}>
-                <Stack direction="row" justifyContent="space-between" alignItems="center">
-                  <Box>
-                    <Text size="large" weight="semibold" color="#181D27">
-                      Payment Method
-                    </Text>
-                    <Text size="small" weight="regular" color="#535862" marginTop="2px">
-                      Change how you pay for your plan
-                    </Text>
-                  </Box>
-                </Stack>
+              <Card sx={{ boxShadow: "0px 1px 2px 0px #0A0D120D", backgroundColor: isStripe ? "#FFF" : "#FAFAFA" }}>
+                <Box>
+                  <Text size="large" weight="semibold" color="#181D27">
+                    Payment Method
+                  </Text>
+                  <Text size="small" weight="regular" color="#535862" marginTop="2px">
+                    Change how you pay for your plan
+                  </Text>
+                </Box>
 
                 <Stack direction="row" gap="24px" justifyContent="space-between" marginTop="10px">
                   <StatusChip
-                    label={paymentConfigured === true ? "Configured" : "Not Configured"}
-                    category={paymentConfigured === true ? "success" : "failed"}
+                    label={
+                      !isStripe ? "Non Configurable" : paymentConfigured === true ? "Configured" : "Not Configured"
+                    }
+                    category={!isStripe ? "failed" : paymentConfigured === true ? "success" : "failed"}
                     sx={{ alignSelf: "center" }}
                   />
-                  {billingDetails?.paymentInfoPortalURL ? (
+                  {isStripe && billingDetails?.paymentInfoPortalURL ? (
                     <Link href={billingDetails?.paymentInfoPortalURL} target="_blank">
                       <Button
+                        disabled={!isStripe}
                         variant="contained"
-                        endIcon={
-                          <ArrowOutwardIcon
-                            sx={{
-                              fontSize: "18px",
-                            }}
-                          />
-                        }
+                        endIcon={<ArrowOutwardIcon sx={{ fontSize: "18px" }} />}
                       >
                         Configure
                       </Button>
@@ -216,11 +277,8 @@ const BillingPage = () => {
                   )}
                 </Stack>
               </Card>
-            </Box>
-
-            <ConsumptionUsage consumptionUsageData={consumptionUsageData} />
-
-            <InvoicesTable invoices={invoices} />
+            </div>
+            {isStripe && <InvoicesTable invoices={invoices} />}
           </>
         )}
       </PageContainer>
