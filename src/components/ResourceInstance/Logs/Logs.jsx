@@ -97,7 +97,10 @@ function Logs(props) {
   const bufferTimeoutRef = useRef(null); // Add this ref
   const [enableSyntaxHighlighting, setEnableSyntaxHighlighting] = useState(true);
   const [searchText, setSearchText] = useState("");
-  const [invertLogOrder, setInvertLogOrder] = useState(false);
+  const [
+    invertLogOrder,
+    // setInvertLogOrder
+  ] = useState(false);
 
   let firstNode = null;
 
@@ -392,10 +395,10 @@ function Logs(props) {
             />
           </Stack>
 
-          <Stack direction="row" gap="6px" alignItems="center">
+          {/* <Stack direction="row" gap="6px" alignItems="center">
             <FieldTitle>Log Order</FieldTitle>
             <Switch checked={invertLogOrder} onChange={(e) => setInvertLogOrder(e.target.checked)} size="small" />
-          </Stack>
+          </Stack> */}
         </Stack>
       </Box>
       <Divider sx={{ marginTop: "12px" }} />
