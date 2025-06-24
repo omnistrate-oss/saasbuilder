@@ -12,8 +12,10 @@ import ConnectAccountConfigDialog from "src/components/AccountConfigDialog/Conne
 import DisconnectAccountConfigDialog from "src/components/AccountConfigDialog/DisconnectAccountConfigDialog";
 import { cloudProviderLongLogoMap } from "src/constants/cloudProviders";
 import { getResourceInstanceStatusStylesAndLabel } from "src/constants/statusChipStyles/resourceInstanceStatus";
+import useAccountConfigsByIds from "src/hooks/query/useAccountConfigByIds";
 import useSnackbar from "src/hooks/useSnackbar";
 import { useGlobalData } from "src/providers/GlobalDataProvider";
+import { AccountConfig } from "src/types/account-config";
 import { CloudProvider } from "src/types/common/enums";
 import { ResourceInstance } from "src/types/resourceInstance";
 import { isCloudAccountInstance } from "src/utils/access/byoaResource";
@@ -115,6 +117,23 @@ const CloudAccountsPage = () => {
     isFetching: isFetchingInstances,
     refetch: refetchInstances,
   } = useInstances();
+
+  const accountConfigIds = useMemo(() => {
+    const ids = new Set<string>();
+    instances.forEach((instance) => {
+      const resultParams = instance?.result_params as Record<string, any>;
+      if (resultParams?.cloud_provider_account_config_id) {
+        ids.add(resultParams.cloud_provider_account_config_id);
+      }
+    });
+    return Array.from(ids);
+  }, [instances]);
+
+  console.log("Account Config IDs:", accountConfigIds);
+  const { data: accountConfigsHash, isPending } = useAccountConfigsByIds(accountConfigIds);
+  console.log("accountConfigIds", accountConfigIds);
+  console.log("accountConfigIds", accountConfigsHash);
+  console.log("accountConfigIds", isPending);
 
   const billingStatusQuery = useBillingStatus();
 
@@ -366,6 +385,17 @@ const CloudAccountsPage = () => {
     return instances.find((instance) => instance.id === selectedRows[0]);
   }, [selectedRows, instances]);
 
+  const selectedAccountConfig: AccountConfig | undefined = useMemo(() => {
+    if (selectedInstance) {
+      const resultParams = selectedInstance?.result_params as Record<string, any>;
+      if (resultParams?.cloud_provider_account_config_id) {
+        return accountConfigsHash[resultParams.cloud_provider_account_config_id];
+      }
+    }
+  }, [selectedInstance, accountConfigsHash]);
+
+  console.log("selectedAccountConfig", selectedAccountConfig);
+
   const deleteAccountInstructionDetails = useMemo(() => {
     const result_params: any = selectedInstance?.result_params;
     let details: any = {};
@@ -520,6 +550,11 @@ const CloudAccountsPage = () => {
               setClickedInstance(selectedInstance);
               setIsOverlayOpen(true);
               setOverlayType("disconnect-dialog");
+            },
+            onOffboardClick : () => {
+              setClickedInstance(selectedInstance);
+              setIsOverlayOpen(true);
+              setOverlayType("view-instructions-dialog");
             },
             selectedInstance,
             refetchInstances: refetchInstances,
