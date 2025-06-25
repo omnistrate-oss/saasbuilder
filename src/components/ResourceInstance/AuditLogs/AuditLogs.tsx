@@ -6,6 +6,7 @@ import { createColumnHelper } from "@tanstack/react-table";
 import dayjs from "dayjs";
 import isSameOrAfter from "dayjs/plugin/isSameOrAfter";
 import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
+import { pageElements } from "page-objects/instance-details-page";
 import { OnCopyProps } from "react-json-view";
 
 import SearchInput from "src/components/DataGrid/SearchInput";
@@ -71,7 +72,7 @@ const AuditLogsTableHeader: FC<AuditLogsTableHeaderProps> = (props) => {
       borderBottom="1px solid #EAECF0"
     >
       <DataGridHeaderTitle
-        title="List of Logs"
+        title={pageElements.auditLogsTableTitle}
         desc="Detailed audit trail of user actions performed on deployment instances"
         count={count}
         units={{

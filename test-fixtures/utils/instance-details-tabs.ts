@@ -215,14 +215,14 @@ export const TestEventsTab = async (instanceDetailsPage: InstanceDetailsPage, in
     dataTestIds = instanceDetailsPage.dataTestIds,
     pageElements = instanceDetailsPage.pageElements;
 
-  await page.getByTestId(dataTestIds.tabs.eventsTab).click();
+  await page.getByTestId(dataTestIds.tabs.auditLogsTab).click();
   const eventsData = await page.waitForResponse((response) =>
-    response.url().includes(`/api/action?endpoint=%2Fresource-instance%2F${instance.id}%2Faudit-events`)
+    response.url().includes(`%2Fresource-instance%2F${instance.id}%2Faudit-events`)
   );
   const events = (await eventsData.json()).events;
 
   // Check the Events Table
-  await expect(page.getByText(pageElements.eventsTableTitle)).toBeVisible();
+  await expect(page.getByText(pageElements.auditLogsTableTitle)).toBeVisible();
 
   if (events.length === 0) {
     await expect(page.getByText("No events")).toBeVisible();

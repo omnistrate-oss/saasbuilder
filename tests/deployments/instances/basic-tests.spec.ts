@@ -27,9 +27,10 @@ test.describe("Instances Page - Basic Lifecycle Tests", () => {
     instancesPage = new InstancesPage(page);
     instanceDetailsPage = new InstanceDetailsPage(page);
     await instancesPage.navigate();
+    await page.waitForLoadState("networkidle");
   });
 
-  test("Overall Structure and Elements", async ({ page }) => {
+  test("Overall Structre and Elements + Create a Postgres DT Instance", async ({ page }) => {
     const dataTestIds = instancesPage.dataTestIds;
 
     // Expect the Refresh, Stop, Start, Modify, Delete, Create, and Actions Menu to be Visible
@@ -40,19 +41,19 @@ test.describe("Instances Page - Basic Lifecycle Tests", () => {
     await expect(page.getByTestId(dataTestIds.deleteButton)).toBeVisible();
     await expect(page.getByTestId(dataTestIds.createButton)).toBeVisible();
     await expect(page.getByTestId(dataTestIds.actionsMenu)).toBeVisible();
-  });
 
-  test("Create a Postgres DT Instance", async ({ page }) => {
-    await page.waitForLoadState("networkidle");
-
-    const dataTestIds = instancesPage.dataTestIds;
     const date = GlobalStateManager.getDate() || "";
     await page.getByTestId(dataTestIds.createButton).click();
 
     // Wait for the Form to Load and Click the Service Name Dropdown
     await page.getByTestId(dataTestIds.serviceNameSelect).click();
     await page.getByRole("option", { name: `SaaSBuilder Postgres DT - ${date}` }).click();
-    await page.waitForLoadState("networkidle");
+
+    // If the Subscribe Button is Visible, Click it
+    const subscribeButton = page.getByTestId("subscribe-button");
+    if (await subscribeButton.isVisible()) {
+      await subscribeButton.click();
+    }
 
     await page.getByTestId(dataTestIds.gcpCard).click();
     await page.getByTestId(dataTestIds.regionSelect).click();
@@ -73,7 +74,7 @@ test.describe("Instances Page - Basic Lifecycle Tests", () => {
 
     // Intercept Data from Instance Details Request
     const instanceDetails = await page.waitForResponse((response) =>
-      response.url().includes("/api/action?endpoint=%2Fresource-instance%2F")
+      response.url().includes("/api/action?endpoint=%2F2022-09-01-00%2Fresource-instance%2F")
     );
 
     instance = await instanceDetails.json();
@@ -95,7 +96,7 @@ test.describe("Instances Page - Basic Lifecycle Tests", () => {
 
     // Intercept Data from Instance Details Request
     const instanceDetails = await page.waitForResponse((response) =>
-      response.url().includes("/api/action?endpoint=%2Fresource-instance%2F")
+      response.url().includes("/api/action?endpoint=%2F2022-09-01-00%2Fresource-instance%2F")
     );
 
     instance = await instanceDetails.json();

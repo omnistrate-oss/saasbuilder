@@ -88,19 +88,27 @@ export class UserAPIClient {
 
     const services = (await response.json()).services;
     const serviceOfferings: ServiceOffering[] = [];
+    const date = GlobalStateManager.getDate();
 
     // Include only Playwright Services
-    services.forEach((service) => {
-      service.offerings.forEach((offering) => {
-        const offeringData = {
-          ...service,
-          ...offering,
-          offerings: undefined,
-        };
+    services
+      .filter(
+        (service) =>
+          service.serviceName.startsWith("SaaSBuilder") &&
+          (service.serviceName.includes(date) ||
+            new Date(service.createdAt).getTime() > Date.now() - 2 * 60 * 60 * 1000) // 2 hours
+      )
+      .forEach((service) => {
+        service.offerings.forEach((offering) => {
+          const offeringData = {
+            ...service,
+            ...offering,
+            offerings: undefined,
+          };
 
-        serviceOfferings.push(offeringData);
+          serviceOfferings.push(offeringData);
+        });
       });
-    });
 
     // @ts-ignore
     serviceOfferings.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));

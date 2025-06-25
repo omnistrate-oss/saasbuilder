@@ -13,7 +13,7 @@ test.describe("Signin Page", () => {
     await signinPage.navigate();
   });
 
-  test("email field validation", async ({ page }) => {
+  test("Email Field Validation", async ({ page }) => {
     const dataTestIds = signinPage.dataTestIds;
     await expect(page.getByTestId(dataTestIds.emailInput)).toBeVisible();
     await page.getByTestId(dataTestIds.emailInput).fill("invalid-email");
@@ -21,10 +21,10 @@ test.describe("Signin Page", () => {
     await expect(page.locator("#email-helper-text")).toContainText(signinPage.pageElements.invalidEmailText);
   });
 
-  test("login-options-elements", async ({ page }) => {
+  test("Login Option Elements", async ({ page }) => {
     await signinPage.goToLoginOptionsStep();
 
-    //check that the other sign in  options button is visible
+    //check that the other sign in options button is visible
     await expect(page.getByTestId(signinPage.dataTestIds.otherSignInOptionsButton)).toBeVisible();
     await page.getByTestId(signinPage.dataTestIds.otherSignInOptionsButton).click();
     if (process.env.DISABLE_PASSWORD_LOGIN !== "true") {
@@ -107,8 +107,8 @@ test.describe("Signin Page", () => {
     await expect(page.getByTestId(dataTestIds.cookieConsentBanner)).not.toBeVisible();
   });
 
-  //check that the identity providers buttons are visible based on the email domain
-  test("identity-providers-buttons", async ({ page }) => {
+  // check that the identity providers buttons are visible based on the email domain
+  test("Identity Provider Buttons", async ({ page }) => {
     const apiClient = new ProviderAPIClient();
 
     const identityProviders = await apiClient.getIdentityProviders();
@@ -143,7 +143,7 @@ test.describe("Signin Page", () => {
     }
   });
 
-  test("identity-provider-login-redirect", async ({ page }) => {
+  test("Identity Provider Redirect", async ({ page }) => {
     const state = "idp-auth-state";
     const identityProviderName = "Test Identity Provider";
 

@@ -8,6 +8,8 @@ import { ServiceOffering } from "src/types/serviceOffering";
 const deleteInstances = async (instances: ResourceInstance[], serviceOfferings: ServiceOffering[]) => {
   const userAPIClient = new UserAPIClient();
 
+  const deletingInstanceIds: string[] = [];
+
   for (const instance of instances) {
     try {
       const subscription = await userAPIClient.describeSubscription(instance.subscriptionId);
@@ -57,20 +59,25 @@ const deleteInstances = async (instances: ResourceInstance[], serviceOfferings: 
       );
 
       console.log("Deleting Resource Instance: ", resourceInstance);
+      deletingInstanceIds.push(instance.id);
     } catch (error) {
       console.error(`Failed to delete instance ${instance.id}:`, error);
     }
   }
+
+  return deletingInstanceIds;
 };
 
-const waitForDeletion = async (instanceType: "instance" | "cloudAccount") => {
+const waitForDeletion = async (instanceType: "instance" | "cloudAccount", instanceIds: (string | undefined)[]) => {
   const userAPIClient = new UserAPIClient(),
     startTime = Date.now(),
     timeout = 10 * 60 * 1000; // 10 minutes
 
   while (Date.now() - startTime < timeout) {
     const instances = await userAPIClient.listResourceInstances();
-    const deletingInstances = instances.filter((instance) => instance.status === "DELETING");
+    const deletingInstances = instances.filter(
+      (instance) => instance.status === "DELETING" && instanceIds.includes(instance.id)
+    );
 
     if (deletingInstances.length === 0) {
       console.log(`All ${instanceType === "instance" ? "Instances" : "Cloud Accounts"} deleted successfully`);
@@ -94,39 +101,40 @@ async function globalTeardown() {
   const serviceOfferings = await userAPIClient.listServiceOffering();
 
   // Delete Instances
-  await deleteInstances(
+  const deletingInstanceIds = await deleteInstances(
     instances.filter((el) => !el.resourceID?.startsWith("r-injected")),
     serviceOfferings
   );
-  await waitForDeletion("instance");
+  await waitForDeletion("instance", deletingInstanceIds);
 
   // Delete Cloud Accounts
-  await deleteInstances(
+  const deletingCloudAccountIds = await deleteInstances(
     instances.filter((el) => el.resourceID?.startsWith("r-injected")),
     serviceOfferings
   );
-  await waitForDeletion("cloudAccount");
+  await waitForDeletion("cloudAccount", deletingCloudAccountIds);
 
-  // Delete Created Services and Services Older than 2 Days
+  // Delete Created Services and Services Older than 1 Days
   const providerAPIClient = new ProviderAPIClient();
-  const services = await providerAPIClient.listSaaSBuilderServices();
-  const twoDaysAgo = Date.now() - 2 * 24 * 60 * 60 * 1000;
+  const twoHoursAgo = Date.now() - 2 * 60 * 60 * 1000;
   const date = GlobalStateManager.getDate();
 
-  const servicesToDelete = services.filter((service) => {
-    const createdAt = new Date(service.createdAt).getTime();
+  const serviceOfferingsToDelete = serviceOfferings.filter((offering) => {
+    const createdAt = new Date(offering.createdAt).getTime();
     if (date) {
-      return createdAt < twoDaysAgo || service.name.includes(date);
+      return createdAt < twoHoursAgo || offering.serviceName.includes(date);
     }
-    return createdAt < twoDaysAgo;
+    return createdAt < twoHoursAgo;
   });
 
-  for (const service of servicesToDelete) {
+  const uniqueServiceIds = Array.from(new Set(serviceOfferingsToDelete.map((offering) => offering.serviceId)));
+
+  for (const serviceId of uniqueServiceIds) {
     try {
-      await providerAPIClient.deleteService(service.id);
-      console.log(`Deleted Service: ${service.name}`);
+      await providerAPIClient.deleteService(serviceId);
+      console.log(`Deleted Service: ${serviceId}`);
     } catch (error) {
-      console.error(`Failed to delete service ${service.name}:`, error);
+      console.error(`Failed to delete service ${serviceId}:`, error);
     }
   }
 
