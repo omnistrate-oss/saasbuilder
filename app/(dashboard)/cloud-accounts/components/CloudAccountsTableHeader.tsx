@@ -1,15 +1,34 @@
+import { FC } from "react";
 import AddIcon from "@mui/icons-material/Add";
 import { CircularProgress } from "@mui/material";
 
 import ConnectIcon from "src/components/Icons/Connect/Connect";
 import DisconnectIcon from "src/components/Icons/Disconnect/Disconnect";
+import { AccountConfig } from "src/types/account-config";
+import { ResourceInstance } from "src/types/resourceInstance";
 import Button from "components/Button/Button";
 import SearchInput from "components/DataGrid/SearchInput";
 import DataGridHeaderTitle from "components/Headers/DataGridHeaderTitle";
 import DeleteIcon from "components/Icons/Delete/Delete";
 import RefreshWithToolTip from "components/RefreshWithTooltip/RefreshWithToolTip";
 
-const CloudAccountsTableHeader = ({
+type CloudAccountTableHeaderProps = {
+  count: number;
+  searchText: string;
+  setSearchText: (text: string) => void;
+  onCreateClick: () => void;
+  onDeleteClick: () => void;
+  selectedInstance: ResourceInstance;
+  refetchInstances: () => void;
+  isFetchingInstances: boolean;
+  onConnectClick: () => void;
+  onDisconnectClick: () => void;
+  onOffboardClick?: () => void;
+  serviceModelType: string;
+  accountConfig: AccountConfig;
+};
+
+const CloudAccountsTableHeader: FC<CloudAccountTableHeaderProps> = ({
   count,
   searchText,
   setSearchText,
@@ -21,6 +40,8 @@ const CloudAccountsTableHeader = ({
   onConnectClick,
   onDisconnectClick,
   serviceModelType,
+  accountConfig,
+  onOffboardClick,
 }) => {
   const isDeploying = selectedInstance?.status === "DEPLOYING";
   const isAttaching = selectedInstance?.status === "ATTACHING";
@@ -48,6 +69,9 @@ const CloudAccountsTableHeader = ({
     !isOnPremCopilot;
 
   const isDeleteDisabled = !selectedInstance || isDeleting || isDisconnected;
+
+  const isOffboardEnabled =
+    selectedInstance && selectedInstance.status === "DELETING" && accountConfig?.status === "READY_TO_OFFBOARD";
 
   const isDisconnectDisabledMessage = !selectedInstance
     ? "Please select a cloud account"
@@ -80,6 +104,12 @@ const CloudAccountsTableHeader = ({
         ? "Cloud account is disconnected"
         : "";
 
+  const offboardingDisabledMessage = !selectedInstance
+    ? "Please select a cloud account"
+    : !isOffboardEnabled
+      ? "Cloud account is not ready to offboard"
+      : "";
+
   return (
     <div className="py-5 px-6 flex items justify-between gap-4">
       <DataGridHeaderTitle
@@ -109,11 +139,20 @@ const CloudAccountsTableHeader = ({
           Delete
         </Button>
         <Button
+          data-testid="offboard-button"
+          variant="outlined"
+          disabled={!isOffboardEnabled}
+          onClick={onOffboardClick}
+          disabledMessage={offboardingDisabledMessage}
+        >
+          Offboard
+        </Button>
+        <Button
           data-testid="disconnect-button"
           variant="outlined"
           disabled={isDisconnectDisabled}
           onClick={onDisconnectClick}
-          startIcon={<DisconnectIcon disabled={isDisconnectDisabled} />}
+          startIcon={<DisconnectIcon disabled={!isOffboardEnabled} />}
           disabledMessage={isDisconnectDisabledMessage}
         >
           Disconnect

@@ -1,9 +1,10 @@
 import { FC } from "react";
 // import Link from "next/link";
 import CloseIcon from "@mui/icons-material/Close";
-import { Box, Dialog, IconButton, Stack, styled, TextField } from "@mui/material";
+import { Box, Dialog, IconButton, Stack, styled } from "@mui/material";
 import { useFormik } from "formik";
 
+import TextField from "src/components/FormElementsv2/TextField/TextField";
 import ArrowBulletIcon from "src/components/Icons/ArrowIcon/ArrowBulletIcon";
 import useSnackbar from "src/hooks/useSnackbar";
 import { AccountConfig } from "src/types/account-config";
@@ -22,7 +23,7 @@ const StyledForm = styled(Box)({
   boxShadow: "0px 8px 8px -4px rgba(16, 24, 40, 0.03), 0px 20px 24px -4px rgba(16, 24, 40, 0.08)",
   padding: "24px",
   width: "100%",
-  maxWidth: "600px",
+  maxWidth: "543px",
   display: "flex",
   flexDirection: "column",
   justifyContent: "flex-start",
@@ -71,12 +72,11 @@ const LastInstanceConfimationMessage = () => {
   return (
     <>
       <Text size="small" weight="medim" color="#414651">
-        You&apos;re about to delete the last remaining cloud account instance using this cloud account across all
-        Product Subscriptions.
-        <br /> This action will mark the entire cloud account for deletion.
+        You are about to delete the last cloud account instance linked to this cloud account. This will mark the cloud
+        account for deletion.
       </Text>
-      <Text size="small" weight="semibold" color="#344054" marginTop="12px">
-        Important: The deletion is a two-step process:{" "}
+      <Text size="small" weight="semibold" color="#344054" sx={{ mt: "12px" }}>
+        Note: Deletion is a two-step process:{" "}
       </Text>
       <List>
         <ListItem>
@@ -85,7 +85,7 @@ const LastInstanceConfimationMessage = () => {
           </ListItemIcon>
 
           <Text size="small" weight="regular" color="#414651">
-            In the first step, the cloud account instance and the cloud account itself will be marked for deletion.
+            The instance and cloud account will be marked for deletion.
           </Text>
         </ListItem>
         <ListItem>
@@ -94,7 +94,7 @@ const LastInstanceConfimationMessage = () => {
           </ListItemIcon>
 
           <Text size="small" weight="regular" color="#414651">
-            In the first step, the cloud account instance and the cloud account itself will be marked for deletion.
+            You will need to return later to complete offboarding.
           </Text>
         </ListItem>
       </List>
@@ -105,9 +105,11 @@ const LastInstanceConfimationMessage = () => {
 const ConfirmationMessage = () => {
   return (
     <>
-      <Text size="small" weight="medim" color="#414651">
+      <Text size="small" weight="medium" color="#414651">
         You&apos;re about to delete this cloud account instance.
-        <br />
+      </Text>
+
+      <Text size="small" weight="regular" color="#414651" sx={{ mt: "12px" }}>
         Other cloud account instances using the same cloud account across different Product Subscriptions will continue
         to function normally.This action will only remove the selected instance.
       </Text>
@@ -116,29 +118,19 @@ const ConfirmationMessage = () => {
 };
 
 type DeleteAccountConfigConfirmationDialogProps = {
-  accountConfig: AccountConfig;
+  accountConfig: AccountConfig | undefined;
   isLoadingAccountConfig: boolean;
   open: boolean;
-  handleClose: () => void;
+  onClose: () => void;
   buttonLabel?: string;
   buttonColor?: string;
   isLoading?: boolean;
   IconComponent?: React.ComponentType;
-  context: string;
   onConfirm: () => Promise<void>;
 };
 
 const DeleteAccountConfigConfirmationDialog: FC<DeleteAccountConfigConfirmationDialogProps> = (props) => {
-  const {
-    open = false,
-    handleClose,
-    buttonLabel = "Delete",
-    buttonColor = "#D92D20",
-    isLoading,
-    IconComponent = DeleteCirleIcon,
-    accountConfig,
-    onConfirm,
-  } = props;
+  const { open = false, onClose, isLoading, IconComponent = DeleteCirleIcon, accountConfig, onConfirm } = props;
   const snackbar = useSnackbar();
 
   const formData = useFormik({
@@ -147,6 +139,7 @@ const DeleteAccountConfigConfirmationDialog: FC<DeleteAccountConfigConfirmationD
     },
     onSubmit: async (values) => {
       if (values.confirmationText === "deleteme") {
+        console.log("Confirm");
         await onConfirm();
         formData.resetForm();
         handleClose();
@@ -156,6 +149,11 @@ const DeleteAccountConfigConfirmationDialog: FC<DeleteAccountConfigConfirmationD
     },
     validateOnChange: false,
   });
+
+  function handleClose() {
+    onClose();
+    formData.resetForm();
+  }
 
   return (
     <Dialog open={open} onClose={handleClose}>
@@ -178,20 +176,13 @@ const DeleteAccountConfigConfirmationDialog: FC<DeleteAccountConfigConfirmationD
           </IconButton>
         </Header>
         <Content>
-          <Text size="small" weight="medim" color="#414651">
-            You&apos;re about to delete the last remaining cloud account instance using this cloud account across all
-            Product Subscriptions.
-            <br /> This action will mark the entire cloud account for deletion.
-          </Text>
-          <Text size="small" weight="semibold" color="#344054" marginTop="12px">
-            Important: The deletion is a two-step process:{" "}
-          </Text>
           {accountConfig?.byoaInstanceIDs && accountConfig?.byoaInstanceIDs?.length > 1 ? (
             <ConfirmationMessage />
           ) : (
             <LastInstanceConfimationMessage />
           )}
-          <Text size="small" weight="medium" color="#344054" sx={{ mt: "9px" }}>
+
+          <Text size="small" weight="medium" color="#344054" sx={{ mt: "20px" }}>
             To confirm deletion, please enter{" "}
             <i>
               <b> deleteme</b>
@@ -226,9 +217,9 @@ const DeleteAccountConfigConfirmationDialog: FC<DeleteAccountConfigConfirmationD
             type="submit"
             variant="contained"
             disabled={isLoading}
-            bgColor={buttonColor}
+            bgColor={"#D92D20"}
           >
-            {buttonLabel} {isLoading && <LoadingSpinnerSmall />}
+            Delete{isLoading && <LoadingSpinnerSmall />}
           </Button>
         </Footer>
       </StyledForm>
