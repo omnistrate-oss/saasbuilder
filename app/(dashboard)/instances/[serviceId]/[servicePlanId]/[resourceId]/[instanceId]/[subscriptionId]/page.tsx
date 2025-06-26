@@ -221,7 +221,7 @@ const InstanceDetailsPage = ({
           modifiedAt={resourceInstanceData.modifiedAt}
           isCliManagedResource={isCliManagedResource}
           subscriptionOwner={subscription.subscriptionOwnerName}
-          detailedNetworkTopology={resourceInstanceData.detailedNetworkTopology || {}}
+          detailedNetworkTopology={resourceInstanceData?.detailedNetworkTopology || {}}
           onViewNodesClick={() => {
             setCurrentTab("Nodes");
           }}
