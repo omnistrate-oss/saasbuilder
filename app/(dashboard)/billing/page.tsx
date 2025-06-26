@@ -131,77 +131,94 @@ const BillingPage = () => {
           <>
             <ConsumptionUsage consumptionUsageData={consumptionUsageData} />
 
-            <Tabs value={selectedBillingProvider} className="mt-3">
-              {billingDetails?.billingProviders?.map((provider) => {
-                const styles =
-                  provider.type === "STRIPE"
-                    ? {
-                        borderBottom: "1px solid #635BFF",
-                        backgroundColor: "#EAE9FF",
-                        color: colors.gray600,
+            {selectedBillingProvider && (
+              <Tabs value={selectedBillingProvider} className="mt-3">
+                {billingDetails?.billingProviders?.map((provider) => {
+                  const styles =
+                    provider.type === "STRIPE"
+                      ? {
+                          borderBottom: "1px solid #635BFF",
+                          backgroundColor: "#EAE9FF",
+                          color: colors.gray600,
+                        }
+                      : {
+                          borderBottom: "1px solid #D79640",
+                          backgroundColor: "#FFF4ED",
+                          color: colors.gray600,
+                        };
+
+                  return (
+                    <Tab
+                      key={provider.type}
+                      label={
+                        provider.type === "STRIPE" ? (
+                          <Stack direction="row" alignItems="center" gap="8px">
+                            <StripeIcon
+                              style={{
+                                width: "24px",
+                                height: "24px",
+                              }}
+                            />
+                            <div>OmniBilling (Stripe)</div>
+                          </Stack>
+                        ) : (
+                          <Stack direction="row" alignItems="center" gap="8px">
+                            <div className="w-6 h-6 flex items-center justify-center rounded-sm overflow-hidden">
+                              {/* eslint-disable-next-line @next/next/no-img-element */}
+                              <img src={provider.logoURL} width="24" height="24" alt="Img" className="object-cover" />
+                            </div>
+                            <div>{provider.name || "Billing Provider"}</div>
+                          </Stack>
+                        )
                       }
-                    : {
-                        borderBottom: "1px solid #D79640",
-                        backgroundColor: "#FFF4ED",
-                        color: colors.gray600,
-                      };
+                      value={provider.type}
+                      onClick={() => setSelectedBillingProvider(provider.type)}
+                      sx={{
+                        padding: "8px 18px !important",
+                        fontWeight: "500",
+                        marginRight: "0px",
+                        borderWidth: "1px",
+                        "&:hover": styles,
+                        [`&.${tabClasses.selected}`]: styles,
+                      }}
+                    />
+                  );
+                })}
+              </Tabs>
+            )}
 
-                return (
-                  <Tab
-                    key={provider.type}
-                    label={
-                      provider.type === "STRIPE" ? (
-                        <Stack direction="row" alignItems="center" gap="8px">
-                          <StripeIcon
-                            style={{
-                              width: "24px",
-                              height: "24px",
-                            }}
-                          />
-                          <div>OmniBilling (Stripe)</div>
-                        </Stack>
-                      ) : (
-                        <Stack direction="row" alignItems="center" gap="8px">
-                          <div className="w-6 h-6 flex items-center justify-center rounded-sm overflow-hidden">
-                            {/* eslint-disable-next-line @next/next/no-img-element */}
-                            <img src={provider.logoURL} width="24" height="24" alt="Img" className="object-cover" />
-                          </div>
-                          <div>{provider.name || "Billing Provider"}</div>
-                        </Stack>
-                      )
-                    }
-                    value={provider.type}
-                    onClick={() => setSelectedBillingProvider(provider.type)}
-                    sx={{
-                      padding: "8px 18px !important",
-                      fontWeight: "500",
-                      marginRight: "0px",
-                      borderWidth: "1px",
-                      "&:hover": styles,
-                      [`&.${tabClasses.selected}`]: styles,
-                    }}
-                  />
-                );
-              })}
-            </Tabs>
-
-            <div className="grid grid-cols-2 gap-6 mt-3">
-              <Card sx={{ boxShadow: "0px 1px 2px 0px #0A0D120D" }}>
-                <Box>
-                  <Text size="large" weight="semibold" color="#181D27">
-                    Balance
-                  </Text>
-                  <Text size="small" weight="regular" color="#535862" marginTop="2px">
-                    Pay open invoices amount
-                  </Text>
-                </Box>
-                <Stack direction="row" gap="24px" justifyContent="space-between" marginTop="10px">
-                  {/*@ts-ignore */}
-                  <DisplayText size="small" weight="semibold">
-                    {selectedBillingProvider === "STRIPE" ? `$${invoicesTotalAmount}` : "NA"}
-                  </DisplayText>
-                  {!isStripe || paymentURL ? (
-                    <Link href={isStripe ? paymentURL : balanceDueLink} target="_blank">
+            {selectedBillingProvider && (
+              <div className="grid grid-cols-2 gap-6 mt-3">
+                <Card sx={{ boxShadow: "0px 1px 2px 0px #0A0D120D" }}>
+                  <Box>
+                    <Text size="large" weight="semibold" color="#181D27">
+                      Balance
+                    </Text>
+                    <Text size="small" weight="regular" color="#535862" marginTop="2px">
+                      Pay open invoices amount
+                    </Text>
+                  </Box>
+                  <Stack direction="row" gap="24px" justifyContent="space-between" marginTop="10px">
+                    {/*@ts-ignore */}
+                    <DisplayText size="small" weight="semibold">
+                      {selectedBillingProvider === "STRIPE" ? `$${invoicesTotalAmount}` : "NA"}
+                    </DisplayText>
+                    {!isStripe || paymentURL ? (
+                      <Link href={isStripe ? paymentURL : balanceDueLink} target="_blank">
+                        <Button
+                          variant="contained"
+                          endIcon={
+                            <ArrowOutwardIcon
+                              sx={{
+                                fontSize: "18px",
+                              }}
+                            />
+                          }
+                        >
+                          Pay Now
+                        </Button>
+                      </Link>
+                    ) : (
                       <Button
                         variant="contained"
                         endIcon={
@@ -211,73 +228,60 @@ const BillingPage = () => {
                             }}
                           />
                         }
+                        disabled={!paymentURL}
                       >
                         Pay Now
                       </Button>
-                    </Link>
-                  ) : (
-                    <Button
-                      variant="contained"
-                      endIcon={
-                        <ArrowOutwardIcon
-                          sx={{
-                            fontSize: "18px",
-                          }}
-                        />
-                      }
-                      disabled={!paymentURL}
-                    >
-                      Pay Now
-                    </Button>
-                  )}
-                </Stack>
-              </Card>
-              <Card sx={{ boxShadow: "0px 1px 2px 0px #0A0D120D", backgroundColor: isStripe ? "#FFF" : "#FAFAFA" }}>
-                <Box>
-                  <Text size="large" weight="semibold" color="#181D27">
-                    Payment Method
-                  </Text>
-                  <Text size="small" weight="regular" color="#535862" marginTop="2px">
-                    Change how you pay for your plan
-                  </Text>
-                </Box>
+                    )}
+                  </Stack>
+                </Card>
+                <Card sx={{ boxShadow: "0px 1px 2px 0px #0A0D120D", backgroundColor: isStripe ? "#FFF" : "#FAFAFA" }}>
+                  <Box>
+                    <Text size="large" weight="semibold" color="#181D27">
+                      Payment Method
+                    </Text>
+                    <Text size="small" weight="regular" color="#535862" marginTop="2px">
+                      Change how you pay for your plan
+                    </Text>
+                  </Box>
 
-                <Stack direction="row" gap="24px" justifyContent="space-between" marginTop="10px">
-                  <StatusChip
-                    label={
-                      !isStripe ? "Non Configurable" : paymentConfigured === true ? "Configured" : "Not Configured"
-                    }
-                    category={!isStripe ? "failed" : paymentConfigured === true ? "success" : "failed"}
-                    sx={{ alignSelf: "center" }}
-                  />
-                  {isStripe && billingDetails?.paymentInfoPortalURL ? (
-                    <Link href={billingDetails?.paymentInfoPortalURL} target="_blank">
+                  <Stack direction="row" gap="24px" justifyContent="space-between" marginTop="10px">
+                    <StatusChip
+                      label={
+                        !isStripe ? "Non Configurable" : paymentConfigured === true ? "Configured" : "Not Configured"
+                      }
+                      category={!isStripe ? "failed" : paymentConfigured === true ? "success" : "failed"}
+                      sx={{ alignSelf: "center" }}
+                    />
+                    {isStripe && billingDetails?.paymentInfoPortalURL ? (
+                      <Link href={billingDetails?.paymentInfoPortalURL} target="_blank">
+                        <Button
+                          disabled={!isStripe}
+                          variant="contained"
+                          endIcon={<ArrowOutwardIcon sx={{ fontSize: "18px" }} />}
+                        >
+                          Configure
+                        </Button>
+                      </Link>
+                    ) : (
                       <Button
-                        disabled={!isStripe}
                         variant="contained"
-                        endIcon={<ArrowOutwardIcon sx={{ fontSize: "18px" }} />}
+                        endIcon={
+                          <ArrowOutwardIcon
+                            sx={{
+                              fontSize: "18px",
+                            }}
+                          />
+                        }
+                        disabled
                       >
                         Configure
                       </Button>
-                    </Link>
-                  ) : (
-                    <Button
-                      variant="contained"
-                      endIcon={
-                        <ArrowOutwardIcon
-                          sx={{
-                            fontSize: "18px",
-                          }}
-                        />
-                      }
-                      disabled
-                    >
-                      Configure
-                    </Button>
-                  )}
-                </Stack>
-              </Card>
-            </div>
+                    )}
+                  </Stack>
+                </Card>
+              </div>
+            )}
             {isStripe && <InvoicesTable invoices={invoices} />}
           </>
         )}
