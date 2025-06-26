@@ -617,8 +617,7 @@ const CloudAccountsPage = () => {
         }}
       />
       <OffboardingConfirmationDialog
-        open={true}
-        // open={isOverlayOpen && overlayType === "offboard-dialog"}
+        open={isOverlayOpen && overlayType === "offboard-dialog"}
         handleClose={() => {
           setIsOverlayOpen(false);
         }}
