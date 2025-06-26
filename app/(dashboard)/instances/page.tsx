@@ -216,7 +216,7 @@ const InstancesPage = () => {
               <InstanceHealthStatusChip
                 computedHealthStatus={value}
                 detailedNetworkTopology={
-                  data.row.original?.detailedNetworkTopology as Record<string, ResourceInstanceNetworkTopology>
+                  (data.row.original?.detailedNetworkTopology ?? {}) as Record<string, ResourceInstanceNetworkTopology>
                 }
                 viewNodesLink={resourceInstanceUrlLink}
               />
@@ -381,7 +381,7 @@ const InstancesPage = () => {
   const unhealthyInstances = useMemo(() => {
     return nonBYOAInstances?.filter((instance) => {
       const instanceHealthStatus = getInstanceHealthStatus(
-        instance?.detailedNetworkTopology as Record<string, ResourceInstanceNetworkTopology>,
+        (instance?.detailedNetworkTopology ?? {}) as Record<string, ResourceInstanceNetworkTopology>,
 
         instance.status as string
       );
