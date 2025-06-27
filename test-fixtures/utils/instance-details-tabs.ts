@@ -101,7 +101,7 @@ export const TestConnectivityTab = async (
 
   await page.getByTestId(dataTestIds.tabs.connectivityTab).click();
 
-  const resources: any = Object.values(instance.detailedNetworkTopology || {});
+  const resources: any = Object.values(instance?.detailedNetworkTopology || {});
   const mainResource = resources.find((resource) => resource.main);
 
   if (!mainResource) {
@@ -143,7 +143,7 @@ export const TestNodesTab = async (instanceDetailsPage: InstanceDetailsPage, ins
   await expect(page.getByText(pageElements.nodesTableDescription)).toBeVisible();
 
   // Check the Nodes Table
-  const mainResource: any = Object.values(instance.detailedNetworkTopology || {}).find(
+  const mainResource: any = Object.values(instance?.detailedNetworkTopology || {}).find(
     (resource: any) => resource.main
   );
   if (!mainResource) {
