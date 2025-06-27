@@ -81,6 +81,7 @@ const SubscriptionPlanCard = ({
         </div>
         {!rootSubscription && !subscriptionRequest && (
           <Button
+            data-testid="subscribe-button"
             variant="contained"
             disabled={disabled || isSubscribing}
             startIcon={<CirclePlusIcon disabled={disabled || isSubscribing} />}
