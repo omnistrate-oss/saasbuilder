@@ -51,7 +51,7 @@ const BillingPage = () => {
   }, [billingDetails]);
 
   useEffect(() => {
-    const firstOpenInvoice = invoices.find((invoice) => invoice.invoiceStatus === "open");
+    const firstOpenInvoice = invoices.find((invoice) => ["open", "pastDue"].includes(invoice.invoiceStatus as string));
     const paymentURL = firstOpenInvoice?.invoiceUrl;
     if (paymentURL) {
       setPaymentURL(paymentURL);
@@ -59,7 +59,7 @@ const BillingPage = () => {
   }, [invoices]);
 
   const invoicesTotalAmount = invoices.reduce((acc, invoice) => {
-    if (invoice.invoiceStatus === "open") {
+    if (["open", "pastDue"].includes(invoice.invoiceStatus as string)) {
       acc = acc + (invoice.totalAmount || 0);
     }
     return acc;
