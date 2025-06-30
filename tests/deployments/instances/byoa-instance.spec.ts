@@ -28,12 +28,19 @@ test.describe("Instances Page - Specialized Tests", () => {
     await page.getByTestId(dataTestIds.serviceNameSelect).click();
     const date = GlobalStateManager.getDate();
     await page.getByRole("option", { name: `SaaSBuilder Supabase DT BYOA - ${date}` }).click();
+
+    // If the Subscribe Button is Visible, Click it
+    const subscribeButton = page.getByTestId("subscribe-button");
+    if (await subscribeButton.isVisible()) {
+      await subscribeButton.click();
+    }
+
     await page.getByTestId(dataTestIds.awsAccountIdInput).fill(process.env.BYOA_AWS_ACCOUNT_ID!);
     await page.getByTestId(dataTestIds.submitButton).click();
 
     // Intercept Data from Instance Details Request
     const instanceDetails = await page.waitForResponse((response) =>
-      response.url().includes("/api/action?endpoint=%2Fresource-instance%2F")
+      response.url().includes("/api/action?endpoint=%2F2022-09-01-00%2Fresource-instance%2F")
     );
 
     const cloudAccount = await instanceDetails.json();

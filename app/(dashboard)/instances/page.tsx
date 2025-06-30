@@ -188,7 +188,7 @@ const InstancesPage = () => {
       columnHelper.accessor(
         (row) => {
           const status = row.status;
-          const detailedNetworkTopology = row.detailedNetworkTopology;
+          const detailedNetworkTopology = row?.detailedNetworkTopology ?? {};
           const healthStatus = getInstanceHealthStatus(
             detailedNetworkTopology as Record<string, ResourceInstanceNetworkTopology>,
             status as string
@@ -216,7 +216,7 @@ const InstancesPage = () => {
               <InstanceHealthStatusChip
                 computedHealthStatus={value}
                 detailedNetworkTopology={
-                  data.row.original.detailedNetworkTopology as Record<string, ResourceInstanceNetworkTopology>
+                  (data.row.original?.detailedNetworkTopology ?? {}) as Record<string, ResourceInstanceNetworkTopology>
                 }
                 viewNodesLink={resourceInstanceUrlLink}
               />
@@ -381,7 +381,7 @@ const InstancesPage = () => {
   const unhealthyInstances = useMemo(() => {
     return nonBYOAInstances?.filter((instance) => {
       const instanceHealthStatus = getInstanceHealthStatus(
-        instance.detailedNetworkTopology as Record<string, ResourceInstanceNetworkTopology>,
+        (instance?.detailedNetworkTopology ?? {}) as Record<string, ResourceInstanceNetworkTopology>,
 
         instance.status as string
       );
@@ -560,7 +560,7 @@ const InstancesPage = () => {
           selectionMode="single"
           getRowClassName={(rowData) => {
             const healthStatus = getInstanceHealthStatus(
-              rowData.detailedNetworkTopology as Record<string, ResourceInstanceNetworkTopology>,
+              (rowData?.detailedNetworkTopology ?? {}) as Record<string, ResourceInstanceNetworkTopology>,
               rowData.status
             );
             return healthStatus;

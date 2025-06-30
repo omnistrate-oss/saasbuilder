@@ -320,44 +320,6 @@ const InstancesTableHeader = ({
                 : "",
         });
       }
-
-      // if (selectedInstance?.autoscalingEnabled) {
-      //   other.push({
-      //     dataTestId: "add-capacity-button",
-      //     label: "Add Capacity",
-      //     isDisabled: !selectedInstance || status !== "RUNNING" || !isUpdateAllowedByRBAC,
-      //     onClick: () => {
-      //       if (!selectedInstance) return snackbar.showError("Please select an instance");
-      //       setOverlayType("add-capacity-dialog");
-      //       setIsOverlayOpen(true);
-      //     },
-      //     disabledMessage: !selectedInstance
-      //       ? "Please select an instance"
-      //       : status !== "RUNNING"
-      //         ? "Instance must be running to add capacity"
-      //         : !isUpdateAllowedByRBAC
-      //           ? "Unauthorized to add capacity"
-      //           : "",
-      //   });
-
-      //   other.push({
-      //     dataTestId: "remove-capacity-button",
-      //     label: "Remove Capacity",
-      //     isDisabled: !selectedInstance || status !== "RUNNING" || !isUpdateAllowedByRBAC,
-      //     onClick: () => {
-      //       if (!selectedInstance) return snackbar.showError("Please select an instance");
-      //       setOverlayType("remove-capacity-dialog");
-      //       setIsOverlayOpen(true);
-      //     },
-      //     disabledMessage: !selectedInstance
-      //       ? "Please select an instance"
-      //       : status !== "RUNNING"
-      //         ? "Instance must be running to remove capacity"
-      //         : !isUpdateAllowedByRBAC
-      //           ? "Unauthorized to remove capacity"
-      //           : "",
-      //   });
-      // }
     }
 
     if (selectedInstance?.kubernetesDashboardEndpoint?.dashboardEndpoint) {
