@@ -5,6 +5,7 @@ import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import { Box, CircularProgress, IconButton as MuiIconButton, Stack } from "@mui/material";
 // import Ansi from "ansi-to-react";
 import _ from "lodash";
+import { dataTestIds } from "page-objects/instance-details-page";
 import InfiniteScroll from "react-infinite-scroller";
 import { useWebSocket } from "react-use-websocket/dist/lib/use-websocket";
 
@@ -345,6 +346,7 @@ function Logs(props) {
                 Node ID
               </Text>
               <Select
+                data-testid={dataTestIds.liveLogs.nodeIdMenu}
                 value={selectedNode}
                 sx={{
                   width: "100%",

@@ -426,7 +426,7 @@ export const getInstanceFiltersObject = (
     }
 
     //add health status options
-    const detailedNetworkTopology = instance?.detailedNetworkTopology;
+    const detailedNetworkTopology = instance?.detailedNetworkTopology ?? {};
     const healthStatus = getInstanceHealthStatus(
       detailedNetworkTopology as Record<string, ResourceInstanceNetworkTopology>,
       status as string
@@ -598,7 +598,7 @@ export const getFilteredInstances = (
 
     result = result.filter((instance) => {
       const status = instance.status;
-      const detailedNetworkTopology = instance?.detailedNetworkTopology;
+      const detailedNetworkTopology = instance?.detailedNetworkTopology ?? {};
       const healthStatus = getInstanceHealthStatus(
         detailedNetworkTopology as Record<string, ResourceInstanceNetworkTopology>,
         status as string

@@ -1,4 +1,4 @@
-import styled from "@emotion/styled";
+import { styled } from "@mui/material";
 import MuiTab, { tabClasses } from "@mui/material/Tab";
 import MuiTabs, { tabsClasses } from "@mui/material/Tabs";
 
@@ -17,7 +17,6 @@ export const Tabs = styled(MuiTabs)({
 });
 
 export const Tab = styled(MuiTab)({
-  padding: 0,
   textTransform: "none",
   borderBottom: "0px solid #EAECF0",
   fontSize: 14,
