@@ -12949,7 +12949,7 @@ export interface components {
             name: string;
             /**
              * @description The status of the account configuration
-             * @example PENDING|VERIFYING|READY|FAILED|DELETING
+             * @example PENDING|VERIFYING|READY|FAILED|DELETING|READY_TO_OFFBOARD
              */
             status: string;
             /**
@@ -13032,7 +13032,7 @@ export interface components {
             name: string;
             /**
              * @description The status of the account configuration
-             * @example PENDING|VERIFYING|READY|FAILED|DELETING
+             * @example PENDING|VERIFYING|READY|FAILED|DELETING|READY_TO_OFFBOARD
              */
             status: string;
             /**
@@ -13121,7 +13121,7 @@ export interface components {
             name: string;
             /**
              * @description The status of the account configuration
-             * @example PENDING|VERIFYING|READY|FAILED|DELETING
+             * @example PENDING|VERIFYING|READY|FAILED|DELETING|READY_TO_OFFBOARD
              */
             status: string;
             /**
@@ -13270,7 +13270,7 @@ export interface components {
             name: string;
             /**
              * @description The status of the account configuration
-             * @example PENDING|VERIFYING|READY|FAILED|DELETING
+             * @example PENDING|VERIFYING|READY|FAILED|DELETING|READY_TO_OFFBOARD
              */
             status: string;
             /**
@@ -18016,6 +18016,7 @@ export interface components {
          *       "createdAt": "2019-01-01T00:00:00Z",
          *       "defaultSubscription": true,
          *       "id": "sub-12345678",
+         *       "paymentMethodConfigured": true,
          *       "productTierId": "pt-12345678",
          *       "productTierName": "Omnistrate Multi Tenancy",
          *       "roleType": "root",
@@ -18057,6 +18058,11 @@ export interface components {
              * @example Explicabo quam libero qui odit sit.
              */
             id: string;
+            /**
+             * @description Return true if the required payment method is configured for this subscription or no payment method is required. False if the subscription requires a payment method but it is not configured.
+             * @example true
+             */
+            paymentMethodConfigured?: boolean;
             /**
              * @description ID of a Product Tier
              * @example Voluptatibus accusamus.
@@ -29996,6 +30002,7 @@ export interface components {
          *           "createdAt": "2019-01-01T00:00:00Z",
          *           "defaultSubscription": true,
          *           "id": "sub-12345678",
+         *           "paymentMethodConfigured": true,
          *           "productTierId": "pt-12345678",
          *           "productTierName": "Omnistrate Multi Tenancy",
          *           "roleType": "root",
@@ -30017,6 +30024,7 @@ export interface components {
          *           "createdAt": "2019-01-01T00:00:00Z",
          *           "defaultSubscription": true,
          *           "id": "sub-12345678",
+         *           "paymentMethodConfigured": true,
          *           "productTierId": "pt-12345678",
          *           "productTierName": "Omnistrate Multi Tenancy",
          *           "roleType": "root",
@@ -30058,6 +30066,7 @@ export interface components {
              *         "createdAt": "2019-01-01T00:00:00Z",
              *         "defaultSubscription": true,
              *         "id": "sub-12345678",
+             *         "paymentMethodConfigured": true,
              *         "productTierId": "pt-12345678",
              *         "productTierName": "Omnistrate Multi Tenancy",
              *         "roleType": "root",
@@ -30079,6 +30088,7 @@ export interface components {
              *         "createdAt": "2019-01-01T00:00:00Z",
              *         "defaultSubscription": true,
              *         "id": "sub-12345678",
+             *         "paymentMethodConfigured": true,
              *         "productTierId": "pt-12345678",
              *         "productTierName": "Omnistrate Multi Tenancy",
              *         "roleType": "root",
@@ -30100,6 +30110,7 @@ export interface components {
              *         "createdAt": "2019-01-01T00:00:00Z",
              *         "defaultSubscription": true,
              *         "id": "sub-12345678",
+             *         "paymentMethodConfigured": true,
              *         "productTierId": "pt-12345678",
              *         "productTierName": "Omnistrate Multi Tenancy",
              *         "roleType": "root",
@@ -30121,6 +30132,7 @@ export interface components {
              *         "createdAt": "2019-01-01T00:00:00Z",
              *         "defaultSubscription": true,
              *         "id": "sub-12345678",
+             *         "paymentMethodConfigured": true,
              *         "productTierId": "pt-12345678",
              *         "productTierName": "Omnistrate Multi Tenancy",
              *         "roleType": "root",
@@ -71391,6 +71403,7 @@ export interface operations {
                      *           "createdAt": "2019-01-01T00:00:00Z",
                      *           "defaultSubscription": true,
                      *           "id": "sub-12345678",
+                     *           "paymentMethodConfigured": true,
                      *           "productTierId": "pt-12345678",
                      *           "productTierName": "Omnistrate Multi Tenancy",
                      *           "roleType": "root",
@@ -71412,6 +71425,7 @@ export interface operations {
                      *           "createdAt": "2019-01-01T00:00:00Z",
                      *           "defaultSubscription": true,
                      *           "id": "sub-12345678",
+                     *           "paymentMethodConfigured": true,
                      *           "productTierId": "pt-12345678",
                      *           "productTierName": "Omnistrate Multi Tenancy",
                      *           "roleType": "root",
@@ -71597,6 +71611,7 @@ export interface operations {
                      *       "createdAt": "2019-01-01T00:00:00Z",
                      *       "defaultSubscription": true,
                      *       "id": "sub-12345678",
+                     *       "paymentMethodConfigured": true,
                      *       "productTierId": "pt-12345678",
                      *       "productTierName": "Omnistrate Multi Tenancy",
                      *       "roleType": "root",
