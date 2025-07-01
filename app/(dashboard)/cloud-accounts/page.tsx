@@ -83,7 +83,9 @@ const CloudAccountsPage = () => {
 
   const azureBootstrapShellCommand = useMemo(() => {
     const result_params: any = clickedInstance?.result_params;
-    if (result_params?.cloud_provider_account_config_id) {
+    if (result_params?.azure_bootstrap_shell_script) {
+      return result_params?.azure_bootstrap_shell_script;
+    } else if (result_params?.cloud_provider_account_config_id) {
       return getAzureBootstrapShellCommand(result_params?.cloud_provider_account_config_id);
     }
   }, [clickedInstance]);
