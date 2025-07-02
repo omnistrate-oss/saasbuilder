@@ -128,7 +128,7 @@ const SubscriptionPlanCard = ({
         )}
       </div>
 
-      {isPlanSelectionDisabled && disabledReasonText && (
+      {disabledReasonText && (
         <div className="mt-2 mb-1 flex items-center gap-2">
           <AlertTriangle height="15px" width="15px" color="#DC6803" style={{ flexShrink: 0 }} />
           <Text weight="medium" size="xsmall" color="#DC6803">
@@ -173,7 +173,6 @@ type SubscriptionPlanRadioProps = {
   name: string;
   onChange?: (servicePlanId?: string, subscriptionId?: string) => void;
   disabled?: boolean;
-  isPaymentConfigured: boolean;
   instances: ResourceInstance[];
   isCloudAccountForm?: boolean;
 };
@@ -185,7 +184,6 @@ const SubscriptionPlanRadio: React.FC<SubscriptionPlanRadioProps> = ({
   formData,
   onChange = () => {},
   disabled,
-  isPaymentConfigured,
   instances,
   isCloudAccountForm = false,
 }) => {
@@ -209,6 +207,16 @@ const SubscriptionPlanRadio: React.FC<SubscriptionPlanRadioProps> = ({
   const createSubscriptionMutation = $api.useMutation("post", "/2022-09-01-00/subscription");
   const createSubscriptionRequestMutation = $api.useMutation("post", "/2022-09-01-00/subscription/request");
 
+  const subscriptionInstanceCountHash: Record<string, number> = useMemo(() => {
+    const res: Record<string, number> = {};
+    instances.forEach((instance) => {
+      if (instance.subscriptionId) {
+        res[instance.subscriptionId] = (res[instance.subscriptionId] || 0) + 1;
+      }
+    });
+    return res;
+  }, [instances]);
+
   if (!servicePlans.length) {
     return (
       <div className="flex items-center justify-center h-10">
@@ -219,68 +227,31 @@ const SubscriptionPlanRadio: React.FC<SubscriptionPlanRadioProps> = ({
     );
   }
 
-  const subscriptionInstanceCountHash: Record<string, number> = {};
-  instances.forEach((instance) => {
-    if (subscriptionInstanceCountHash[instance?.subscriptionId as string]) {
-      subscriptionInstanceCountHash[instance.subscriptionId as string] =
-        subscriptionInstanceCountHash[instance.subscriptionId as string] + 1;
-    } else {
-      subscriptionInstanceCountHash[instance.subscriptionId as string] = 1;
-    }
-  });
-
   return (
     <div className="space-y-4">
       {servicePlans
         // When disabled, show only the Selected Service Plan. This is in case of Modify Instance
         .filter((el) => (disabled ? el.productTierID === servicePlanId : true))
         .map((plan) => {
-          const isPaymentConfigBlock = !isPaymentConfigured && !plan.allowCreatesWhenPaymentNotConfigured;
-
-          let hasReachedInstanceQuotaLimit = false;
-
-          const planSubscritions = serviceSubscriptions.filter(
-            (subscription) => subscription.productTierId === plan.productTierID
-          );
-
-          const editorAndRootSubscriptions = planSubscritions.filter((subscription) =>
+          const subscriptionForPlan = serviceSubscriptions.filter((el) => el.productTierId === plan.productTierID);
+          const editorAndRootSubscriptions = subscriptionForPlan.filter((subscription) =>
             ["root", "editor"].includes(subscription.roleType)
           );
 
-          const maxAllowedInstances = plan.maxNumberOfInstances;
-
-          //card should be disabled for selection if quota limits have been hit for all editor, root subscriptions and the form type is not cloud account
-          if (editorAndRootSubscriptions.length > 0 && !isCloudAccountForm) {
-            hasReachedInstanceQuotaLimit = editorAndRootSubscriptions.every(
-              (subscription) =>
-                maxAllowedInstances !== undefined &&
-                (subscriptionInstanceCountHash[subscription.id] || 0) >= maxAllowedInstances
-            );
-          }
-
-          const isPlanSelectionDisabled = isPaymentConfigBlock || hasReachedInstanceQuotaLimit;
+          const isPlanBlocked = isCloudAccountForm
+            ? false
+            : editorAndRootSubscriptions.every((subscription) => {
+                const limit = subscription.maxNumberOfInstances ?? plan.maxNumberOfInstances ?? Infinity;
+                const isPaymentIssue =
+                  !subscription.paymentMethodConfigured &&
+                  !(subscription.allowCreatesWhenPaymentNotConfigured ?? plan.allowCreatesWhenPaymentNotConfigured);
+                return (subscriptionInstanceCountHash[subscription.id] ?? 0) >= limit || isPaymentIssue;
+              });
 
           let servicePlanDisabledText: ReactNode = "";
 
-          if (hasReachedInstanceQuotaLimit) {
-            servicePlanDisabledText = `You have reached the quota limit for maximum allowed instances ${editorAndRootSubscriptions.length > 1 ? "for all subscriptions" : ""}`;
-          }
-
-          if (isPaymentConfigBlock) {
-            servicePlanDisabledText = (
-              <>
-                To use this subscription plan, you need to set up your payment.{" "}
-                <Link
-                  href="/billing"
-                  style={{
-                    textDecoration: "underline",
-                    textUnderlineOffset: "2px",
-                  }}
-                >
-                  Click here to configure{" "}
-                </Link>
-              </>
-            );
+          if (isPlanBlocked) {
+            servicePlanDisabledText = "No usable subscriptions available for this plan";
           }
 
           return (
@@ -376,10 +347,9 @@ const SubscriptionPlanRadio: React.FC<SubscriptionPlanRadioProps> = ({
                           };
                         }
                       );
-                      if (!isPaymentConfigBlock) {
-                        formData.setFieldValue(name, plan.productTierID);
-                        onChange(plan.productTierID, id);
-                      }
+
+                      formData.setFieldValue(name, plan.productTierID);
+                      onChange(plan.productTierID, id);
                     }
                   } catch (error) {
                     console.error(error);
@@ -395,7 +365,7 @@ const SubscriptionPlanRadio: React.FC<SubscriptionPlanRadioProps> = ({
                 isSelected={servicePlanId === plan.productTierID}
                 disabled={disabled || plan.serviceModelStatus !== "READY"}
                 disabledMessage={plan.serviceModelStatus !== "READY" ? "Product not available at the moment" : ""}
-                isPlanSelectionDisabled={isPlanSelectionDisabled || disabled || plan.serviceModelStatus !== "READY"}
+                isPlanSelectionDisabled={disabled || plan.serviceModelStatus !== "READY"}
                 disabledReasonText={servicePlanDisabledText}
               />
             </Box>
