@@ -43,12 +43,12 @@ const useAccountConfigsByIds = (
   accountConfigIds: string[],
   queryOptions: UseAccountConfigsByIdsOptions = {}
 ): UseAccountConfigsByIdsResult => {
-  const isQueryEnabled = Boolean(accountConfigIds && accountConfigIds.length > 0) && queryOptions.enabled !== false;
 
   // Default to 60 seconds (60000ms) if refetchInterval is not specified and queries are enabled
-  const refetchInterval = queryOptions.refetchInterval ?? (isQueryEnabled ? 60000 : false);
+  const refetchInterval = queryOptions.refetchInterval ?? ( 60000 );
 
   const queries = useQueries({
+
     queries: accountConfigIds.map((id) =>
       $api.queryOptions("get", "/2022-09-01-00/accountconfig/{id}", {
         params: {
@@ -56,7 +56,6 @@ const useAccountConfigsByIds = (
             id,
           },
         },
-        enabled: isQueryEnabled,
         refetchOnMount: queryOptions.refetchOnMount ?? true,
         refetchOnWindowFocus: queryOptions.refetchOnWindowFocus ?? false,
         refetchInterval,

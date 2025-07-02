@@ -187,3 +187,8 @@ export const getInitialValues = (
     gcpProjectNumber: "",
   };
 };
+
+export const getOffboardReadiness = (cloudAccountInstanceStatus?: string, accountConfigInstanceStatus?: string) => {
+  if (cloudAccountInstanceStatus === "DELETING" && accountConfigInstanceStatus === "READY_TO_OFFBOARD") return true;
+  else return false;
+};

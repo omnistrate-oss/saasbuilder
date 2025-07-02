@@ -1,16 +1,17 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Box, Stack } from "@mui/material";
 import { useMutation } from "@tanstack/react-query";
 import { createColumnHelper } from "@tanstack/react-table";
 
-import { $api } from "src/api/query";
+// import { $api } from "src/api/query";
 import { deleteResourceInstance, getResourceInstanceDetails } from "src/api/resourceInstance";
 import ConnectAccountConfigDialog from "src/components/AccountConfigDialog/ConnectAccountConfigDialog";
 import DisconnectAccountConfigDialog from "src/components/AccountConfigDialog/DisconnectAccountConfigDialog";
 import { cloudProviderLongLogoMap } from "src/constants/cloudProviders";
+import { chipCategoryColors } from "src/constants/statusChipStyles";
 import { getResourceInstanceStatusStylesAndLabel } from "src/constants/statusChipStyles/resourceInstanceStatus";
 import useAccountConfigsByIds from "src/hooks/query/useAccountConfigByIds";
 import useSnackbar from "src/hooks/useSnackbar";
@@ -46,7 +47,8 @@ import useInstances from "../instances/hooks/useInstances";
 import CloudAccountForm from "./components/CloudAccountForm";
 import CloudAccountsTableHeader from "./components/CloudAccountsTableHeader";
 import DeleteAccountConfigConfirmationDialog from "./components/DeleteConfirmationDialog";
-import OffboardingConfirmationDialog, { OffboardInstructionDetails } from "./components/OffboardingConfirmationDialog";
+import { OffboardInstructionDetails } from "./components/OffboardingInstructions";
+import { getOffboardReadiness } from "./utils";
 
 const columnHelper = createColumnHelper<ResourceInstance>();
 
@@ -75,7 +77,6 @@ const CloudAccountsPage = () => {
   const [isOverlayOpen, setIsOverlayOpen] = useState(false);
   const [isAccountCreation, setIsAccountCreation] = useState(false);
   const [clickedInstance, setClickedInstance] = useState<ResourceInstance>();
-  const isOffboarding = useRef(false);
 
   const gcpBootstrapShellCommand = useMemo(() => {
     const result_params: any = clickedInstance?.result_params;
@@ -132,11 +133,10 @@ const CloudAccountsPage = () => {
     return Array.from(ids);
   }, [instances]);
 
-  console.log("Account Config IDs:", accountConfigIds);
   const {
     data: accountConfigsHash,
     isPending: isAccountConfigsPending,
-    isFetching: isFetchingAccountConfig,
+    isFetching: isFetchingAccountConfigs,
     refetch: refetchAccountConfigs,
   } = useAccountConfigsByIds(accountConfigIds);
 
@@ -224,7 +224,7 @@ const CloudAccountsPage = () => {
         header: "Lifecycle Status",
         cell: (data) => {
           const status = data.row.original.status;
-          const statusSytlesAndLabel = getResourceInstanceStatusStylesAndLabel(status as string);
+          let statusSytlesAndLabel = getResourceInstanceStatusStylesAndLabel(status as string);
           const showInstructions = [
             "VERIFYING",
             "PENDING",
@@ -235,14 +235,20 @@ const CloudAccountsPage = () => {
             "FAILED",
           ].includes(status as string);
 
-          // let isReadyToOffboard = false;
-          // const resultParams = data.row.original.result_params as Record<string, any>;
+          let isReadyToOffboard = false;
+          const resultParams = data.row.original.result_params as Record<string, any> | undefined;
 
-          // const linkedAccountConfig = accountConfigsHash[resultParams?.cloud_provider_account_config_id];
+          const linkedAccountConfig = accountConfigsHash[resultParams?.cloud_provider_account_config_id];
 
-          // if (linkedAccountConfig) {
-          //   isReadyToOffboard = status === "DELETING" && linkedAccountConfig?.status === "READY_TO_OFFBOARD";
-          // }
+          if (linkedAccountConfig) {
+            isReadyToOffboard = status === "DELETING" && linkedAccountConfig?.status === "READY_TO_OFFBOARD";
+          }
+          if (isReadyToOffboard) {
+            statusSytlesAndLabel = {
+              ...chipCategoryColors.unknown,
+              label: "Ready to Offboard",
+            };
+          }
 
           const showDisconnectInstructions = ["PENDING_DETACHING", "DETACHING", "DISCONNECTING"].includes(
             status as string
@@ -252,7 +258,27 @@ const CloudAccountsPage = () => {
 
           return (
             <Stack direction="row" alignItems="center" gap="6px" width="104px" justifyContent="space-between">
-              <StatusChip status={status} {...statusSytlesAndLabel} />
+              <Box flex={1}>
+                <StatusChip status={status} {...statusSytlesAndLabel} />
+              </Box>
+              {isReadyToOffboard && (
+                <Tooltip title="View offboarding instructions" placement="top">
+                  <Box
+                    sx={{
+                      cursor: "pointer",
+                      display: "flex",
+                      alignItems: "center",
+                    }}
+                    onClick={() => {
+                      setClickedInstance(data.row.original);
+                      setIsOverlayOpen(true);
+                      setOverlayType("delete-dialog");
+                    }}
+                  >
+                    <ViewInstructionsIcon />
+                  </Box>
+                </Tooltip>
+              )}
               {showInstructions && (
                 <Tooltip title="View account configuration instructions" placement="top">
                   <Box
@@ -311,7 +337,7 @@ const CloudAccountsPage = () => {
           );
         },
         meta: {
-          minWidth: 190,
+          minWidth: 200,
         },
       }),
       columnHelper.accessor(
@@ -393,7 +419,7 @@ const CloudAccountsPage = () => {
         },
       }),
     ];
-  }, [subscriptionsObj]);
+  }, [subscriptionsObj, accountConfigsHash]);
 
   const selectedInstance = useMemo(() => {
     return instances.find((instance) => instance.id === selectedRows[0]);
@@ -408,9 +434,19 @@ const CloudAccountsPage = () => {
     }
   }, [selectedInstance, accountConfigsHash]);
 
-  console.log("selectedAccountConfig", selectedAccountConfig);
+  const isSelectedInstanceReadyToOffboard = getOffboardReadiness(
+    selectedInstance?.status,
+    selectedAccountConfig?.status
+  );
 
-  const offboardingInstructionDetils: OffboardInstructionDetails = useMemo(() => {
+  useEffect(() => {
+    if (!isFetchingInstances && !isFetchingAccountConfigs) {
+      refetchAccountConfigs();
+    }
+    //eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [instances, isFetchingInstances]);
+
+  const offboardingInstructionDetails: OffboardInstructionDetails = useMemo(() => {
     const result_params: any = selectedInstance?.result_params;
     let details: any = {};
     if (result_params?.aws_account_id) {
@@ -472,27 +508,29 @@ const CloudAccountsPage = () => {
       };
       return deleteResourceInstance(requestPayload);
     },
-    onSuccess: () => {
-      //this mutation is used while offboarding as well as deleting the cloud account instance
-      //run the on success callback only if the user is not offboarding
-      if (!isOffboarding.current) {
+    onSuccess: async () => {
+      const isLastInstance =
+        !selectedAccountConfig?.byoaInstanceIDs || selectedAccountConfig?.byoaInstanceIDs?.length === 1;
+      if (!isLastInstance) {
         setSelectedRows([]);
-        refetchInstances();
-        refetchAccountConfigs();
         setIsOverlayOpen(false);
         snackbar.showSuccess("Deleting cloud account...");
+        await refetchInstances();
+        // refetchAccountConfigs();
+      } else {
+        await refetchInstances();
       }
     },
   });
 
-  const deleteAccountConfigMutation = $api.useMutation("delete", "/2022-09-01-00/accountconfig/{id}", {
-    onSuccess: () => {
-      //refetch cloud account instances
-      //refectAccountConfigs
-      //close confirmation dialog
-      //clear dialog form state
-    },
-  });
+  // const deleteAccountConfigMutation = $api.useMutation("delete", "/2022-09-01-00/accountconfig/{id}", {
+  //   onSuccess: () => {
+  //     //refetch cloud account instances
+  //     //refectAccountConfigs
+  //     //close confirmation dialog
+  //     //clear dialog form state
+  //   },
+  // });
 
   const clickedInstanceSubscription = useMemo(() => {
     return subscriptionsObj[clickedInstance?.subscriptionId as string];
@@ -562,12 +600,15 @@ const CloudAccountsPage = () => {
             onOffboardClick: () => {
               setClickedInstance(selectedInstance);
               setIsOverlayOpen(true);
-              setOverlayType("view-instructions-dialog");
+              setOverlayType("delete-dialog");
             },
             selectedInstance,
             refetchInstances: refetchInstances,
             isFetchingInstances: isFetchingInstances,
+            refetchAccountConfigs: refetchAccountConfigs,
+            isFetchingAccountConfigs: isFetchingAccountConfigs,
             serviceModelType: selectedInstanceOffering?.serviceModelType,
+            isSelectedInstanceReadyToOffboard: isSelectedInstanceReadyToOffboard,
           }}
           isLoading={isInstancesPending || isAccountConfigsPending}
           selectionMode="single"
@@ -606,38 +647,26 @@ const CloudAccountsPage = () => {
         onClose={() => {
           setIsOverlayOpen(false);
         }}
-        isLoading={deleteCloudAccountInstanceMutation.isPending}
+        isDeletingInstance={deleteCloudAccountInstanceMutation.isPending}
+        // isDeletingAccountConfig={deleteAccountConfigMutation.isPending}
         accountConfig={selectedAccountConfig}
-        isLoadingAccountConfig={isFetchingAccountConfig}
-        onConfirm={async () => {
+        isLoadingAccountConfig={isFetchingAccountConfigs}
+        onInstanceDeleteClick={async () => {
           if (!selectedInstance) return snackbar.showError("No instance selected");
           if (!selectedResource) return snackbar.showError("Resource not found");
 
           await deleteCloudAccountInstanceMutation.mutateAsync();
         }}
-      />
-      <OffboardingConfirmationDialog
-        open={isOverlayOpen && overlayType === "offboard-dialog"}
-        handleClose={() => {
-          setIsOverlayOpen(false);
-        }}
-        offboardingInstructionDetils={offboardingInstructionDetils}
-        isLoading={false}
-        onConfirm={async () => {
-          isOffboarding.current = true;
+        onOffboardClick={async () => {
           if (!selectedInstance || !selectedAccountConfig) return snackbar.showError("No instance selected");
+          if (!selectedResource) return snackbar.showError("Resource not found");
 
           await deleteCloudAccountInstanceMutation.mutateAsync();
-          await deleteAccountConfigMutation.mutateAsync({
-            params: {
-              path: {
-                id: selectedAccountConfig.id,
-              },
-            },
-          });
-          isOffboarding.current = false;
         }}
+        instanceStatus={selectedInstance?.status}
+        offboardingInstructionDetails={offboardingInstructionDetails}
       />
+
       <ConnectAccountConfigDialog
         open={isOverlayOpen && overlayType === "connect-dialog"}
         handleClose={() => {

@@ -26,6 +26,8 @@ type CloudAccountTableHeaderProps = {
   onOffboardClick?: () => void;
   serviceModelType: string;
   accountConfig: AccountConfig;
+  isSelectedInstanceReadyToOffboard: boolean;
+  isFetchingAccountConfigs: boolean;
 };
 
 const CloudAccountsTableHeader: FC<CloudAccountTableHeaderProps> = ({
@@ -37,11 +39,12 @@ const CloudAccountsTableHeader: FC<CloudAccountTableHeaderProps> = ({
   selectedInstance,
   refetchInstances,
   isFetchingInstances,
+  isFetchingAccountConfigs,
   onConnectClick,
   onDisconnectClick,
   serviceModelType,
-  accountConfig,
   onOffboardClick,
+  isSelectedInstanceReadyToOffboard,
 }) => {
   const isDeploying = selectedInstance?.status === "DEPLOYING";
   const isAttaching = selectedInstance?.status === "ATTACHING";
@@ -70,8 +73,7 @@ const CloudAccountsTableHeader: FC<CloudAccountTableHeaderProps> = ({
 
   const isDeleteDisabled = !selectedInstance || isDeleting || isDisconnected;
 
-  const isOffboardEnabled =
-    selectedInstance && selectedInstance.status === "DELETING" && accountConfig?.status === "READY_TO_OFFBOARD";
+  const isOffboardDisabled = !isSelectedInstanceReadyToOffboard;
 
   const isDisconnectDisabledMessage = !selectedInstance
     ? "Please select a cloud account"
@@ -106,7 +108,7 @@ const CloudAccountsTableHeader: FC<CloudAccountTableHeaderProps> = ({
 
   const offboardingDisabledMessage = !selectedInstance
     ? "Please select a cloud account"
-    : !isOffboardEnabled
+    : isOffboardDisabled
       ? "Cloud account is not ready to offboard"
       : "";
 
@@ -126,7 +128,7 @@ const CloudAccountsTableHeader: FC<CloudAccountTableHeaderProps> = ({
         <div className="flex items-center mr-6">{isFetchingInstances && <CircularProgress size={20} />}</div>
 
         <SearchInput placeholder="Search by ID" searchText={searchText} setSearchText={setSearchText} />
-        <RefreshWithToolTip refetch={refetchInstances} disabled={isFetchingInstances} />
+        <RefreshWithToolTip refetch={refetchInstances} disabled={isFetchingInstances || isFetchingAccountConfigs} />
 
         <Button
           data-testid="delete-button"
@@ -141,7 +143,7 @@ const CloudAccountsTableHeader: FC<CloudAccountTableHeaderProps> = ({
         <Button
           data-testid="offboard-button"
           variant="outlined"
-          disabled={!isOffboardEnabled}
+          disabled={isOffboardDisabled}
           onClick={onOffboardClick}
           disabledMessage={offboardingDisabledMessage}
         >
@@ -152,7 +154,7 @@ const CloudAccountsTableHeader: FC<CloudAccountTableHeaderProps> = ({
           variant="outlined"
           disabled={isDisconnectDisabled}
           onClick={onDisconnectClick}
-          startIcon={<DisconnectIcon disabled={!isOffboardEnabled} />}
+          startIcon={<DisconnectIcon disabled={isOffboardDisabled} />}
           disabledMessage={isDisconnectDisabledMessage}
         >
           Disconnect

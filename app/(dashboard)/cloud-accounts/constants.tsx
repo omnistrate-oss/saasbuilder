@@ -19,3 +19,14 @@ export const CloudAccountValidationSchema = yup.object({
     then: yup.string().required("GCP Project Number is required"),
   }),
 });
+
+export const cloudAccountOffboardingSteps = [
+  {
+    label: "Initiate Deletion",
+    description: "Complete Offboarding",
+  },
+  {
+    label: "Confirm Deletion",
+    description: "Confirm Offboarding",
+  },
+];
