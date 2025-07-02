@@ -5326,6 +5326,83 @@ export interface components {
             status: string;
         };
         /** @example {
+         *       "scope": {
+         *         "{{ $sys.cloudProviderName }}": "aws"
+         *       },
+         *       "values": {
+         *         "global": {
+         *           "affinity": {
+         *             "nodeAffinity": {
+         *               "requiredDuringSchedulingIgnoredDuringExecution": {
+         *                 "nodeSelectorTerms": [
+         *                   {
+         *                     "matchExpressions": [
+         *                       {
+         *                         "key": "omnistrate.com/managed-by",
+         *                         "operator": "In",
+         *                         "values": [
+         *                           "omnistrate"
+         *                         ]
+         *                       }
+         *                     ]
+         *                   }
+         *                 ]
+         *               }
+         *             }
+         *           }
+         *         }
+         *       },
+         *       "valuesFile": {
+         *         "gitConfiguration": {
+         *           "accessToken": "my-token",
+         *           "commitSHA": "1e386b5f54de9150d336ccfe2e14782b94faf67c",
+         *           "path": "helm/values/production.yaml",
+         *           "referenceName": "refs/heads/main",
+         *           "repositoryUrl": "https://github.com/username/myrepo",
+         *           "userName": "my-user"
+         *         }
+         *       }
+         *     } */
+        ChartValuesRef: {
+            /**
+             * @description Scope condition for applying these chart values (can be used with either values or valuesFile). Key is the parameter name which supports template expressions like '{{ $sys.cloudProviderName }}', value is the expected value.
+             * @example {
+             *       "{{ $sys.cloudProviderName }}": "aws"
+             *     }
+             */
+            scope?: {
+                [key: string]: string;
+            };
+            /**
+             * @description Inline chart values as a map (mutually exclusive with valuesFile)
+             * @example {
+             *       "global": {
+             *         "affinity": {
+             *           "nodeAffinity": {
+             *             "requiredDuringSchedulingIgnoredDuringExecution": {
+             *               "nodeSelectorTerms": [
+             *                 {
+             *                   "matchExpressions": [
+             *                     {
+             *                       "key": "omnistrate.com/managed-by",
+             *                       "operator": "In",
+             *                       "values": [
+             *                         "omnistrate"
+             *                       ]
+             *                     }
+             *                   ]
+             *                 }
+             *               ]
+             *             }
+             *           }
+             *         }
+             *       }
+             *     }
+             */
+            values?: unknown;
+            valuesFile?: components["schemas"]["ValuesFile"];
+        };
+        /** @example {
          *       "image": "library/mysql:5.7",
          *       "imageRegistry": "docker.io",
          *       "password": "password",
@@ -7729,7 +7806,7 @@ export interface components {
          *       "name": "Username",
          *       "resourceId": "r-12345678",
          *       "serviceId": "s-12345678",
-         *       "token": "vfj",
+         *       "token": "45",
          *       "value": "johndoe",
          *       "valueRef": "$var.username",
          *       "valueType": "Boolean|Float64|String|Secret|Password"
@@ -7752,7 +7829,7 @@ export interface components {
             name: string;
             /**
              * @description ID of a resource
-             * @example Magnam rem sed itaque dolores corrupti molestias.
+             * @example Quo vitae deserunt et magnam rem sed.
              */
             resourceId: string;
             /**
@@ -7762,7 +7839,7 @@ export interface components {
             serviceId: string;
             /**
              * @description JWT token used to perform authorization
-             * @example b
+             * @example ahd
              */
             token: string;
             /**
@@ -8507,6 +8584,38 @@ export interface components {
          *             "primary": true
          *           }
          *         },
+         *         "layeredChartValues": [
+         *           {
+         *             "values": {
+         *               "global": {
+         *                 "image": {
+         *                   "tag": "v1.0.0"
+         *                 },
+         *                 "replicaCount": 1,
+         *                 "resources": {
+         *                   "requests": {
+         *                     "cpu": "100m",
+         *                     "memory": "128Mi"
+         *                   }
+         *                 }
+         *               }
+         *             }
+         *           },
+         *           {
+         *             "scope": {
+         *               "{{ $sys.cloudProviderName }}": "aws"
+         *             },
+         *             "valuesFile": {
+         *               "gitConfiguration": {
+         *                 "accessToken": "ghp_...",
+         *                 "commitSHA": "a1b2c3d4e5f6",
+         *                 "path": "aws/production.yaml",
+         *                 "referenceName": "refs/heads/main",
+         *                 "repositoryUrl": "https://github.com/org/helm-values"
+         *               }
+         *             }
+         *           }
+         *         ],
          *         "password": "my-password",
          *         "runtimeConfiguration": {
          *           "disableHooks": true,
@@ -8525,7 +8634,7 @@ export interface components {
          *       "imageConfigId": "imgc-12345678",
          *       "infraConfigId": "ic-12345678",
          *       "internal": false,
-         *       "isProxy": true,
+         *       "isProxy": false,
          *       "jobConfig": {
          *         "activeDeadlineSeconds": 300,
          *         "backoffLimit": 5
@@ -8701,7 +8810,7 @@ export interface components {
          *           "terraformPath": "/project1/tf"
          *         }
          *       },
-         *       "token": "np6"
+         *       "token": "u5"
          *     } */
         CreateResourceRequest: {
             additionalSecurityContext?: components["schemas"]["AdditionalSecurityContext"];
@@ -8760,24 +8869,24 @@ export interface components {
             helmChartConfiguration?: components["schemas"]["HelmChartConfiguration"];
             /**
              * @description ID of an Image Config
-             * @example Autem libero.
+             * @example Vel veniam.
              */
             imageConfigId?: string;
             /**
              * @description ID of an Infra Config
-             * @example Sit id sit ullam ullam et sint.
+             * @example Et sint nam autem libero reiciendis molestias.
              */
             infraConfigId?: string;
             /**
              * @description Whether this resource is internal or not
              * @default false
-             * @example false
+             * @example true
              */
             internal: boolean;
             /**
              * @description Whether this resource is a proxy or not
              * @default false
-             * @example false
+             * @example true
              */
             isProxy: boolean;
             jobConfig?: components["schemas"]["JobConfig"];
@@ -8797,7 +8906,7 @@ export interface components {
             operatorCRDConfiguration?: components["schemas"]["OperatorCRDConfiguration"];
             /**
              * @description ID of a Product Tier
-             * @example Rerum velit molestiae et.
+             * @example Id sit ullam.
              */
             productTierId: string;
             /**
@@ -8836,7 +8945,7 @@ export interface components {
             terraformConfigurations?: components["schemas"]["TerraformConfigurations"];
             /**
              * @description JWT token used to perform authorization
-             * @example wrh
+             * @example 67
              */
             token: string;
         };
@@ -8927,6 +9036,38 @@ export interface components {
          *             "primary": true
          *           }
          *         },
+         *         "layeredChartValues": [
+         *           {
+         *             "values": {
+         *               "global": {
+         *                 "image": {
+         *                   "tag": "v1.0.0"
+         *                 },
+         *                 "replicaCount": 1,
+         *                 "resources": {
+         *                   "requests": {
+         *                     "cpu": "100m",
+         *                     "memory": "128Mi"
+         *                   }
+         *                 }
+         *               }
+         *             }
+         *           },
+         *           {
+         *             "scope": {
+         *               "{{ $sys.cloudProviderName }}": "aws"
+         *             },
+         *             "valuesFile": {
+         *               "gitConfiguration": {
+         *                 "accessToken": "ghp_...",
+         *                 "commitSHA": "a1b2c3d4e5f6",
+         *                 "path": "aws/production.yaml",
+         *                 "referenceName": "refs/heads/main",
+         *                 "repositoryUrl": "https://github.com/org/helm-values"
+         *               }
+         *             }
+         *           }
+         *         ],
          *         "password": "my-password",
          *         "runtimeConfiguration": {
          *           "disableHooks": true,
@@ -11032,12 +11173,12 @@ export interface components {
         /** @example {
          *       "id": "r-12345678",
          *       "serviceId": "s-12345678",
-         *       "token": "ko"
+         *       "token": "1s7"
          *     } */
         DeRegisterResourceMetricsConfigRequest: {
             /**
              * @description ID of a resource
-             * @example Vel et.
+             * @example Est quisquam.
              */
             id: string;
             /**
@@ -11047,7 +11188,7 @@ export interface components {
             serviceId: string;
             /**
              * @description JWT token used to perform authorization
-             * @example 3
+             * @example d
              */
             token: string;
         };
@@ -11310,12 +11451,12 @@ export interface components {
         /** @example {
          *       "id": "op-12345678",
          *       "serviceId": "s-12345678",
-         *       "token": "vlx"
+         *       "token": "t2"
          *     } */
         DeleteOutputParameterRequest: {
             /**
              * @description ID of an Output Parameter
-             * @example Impedit similique laudantium repellat pariatur reprehenderit.
+             * @example Voluptatum et ut.
              */
             id: string;
             /**
@@ -11325,7 +11466,7 @@ export interface components {
             serviceId: string;
             /**
              * @description JWT token used to perform authorization
-             * @example itp
+             * @example h75
              */
             token: string;
         };
@@ -12949,7 +13090,7 @@ export interface components {
             name: string;
             /**
              * @description The status of the account configuration
-             * @example PENDING|VERIFYING|READY|FAILED|DELETING
+             * @example PENDING|VERIFYING|READY|FAILED|DELETING|READY_TO_OFFBOARD
              */
             status: string;
             /**
@@ -13032,7 +13173,7 @@ export interface components {
             name: string;
             /**
              * @description The status of the account configuration
-             * @example PENDING|VERIFYING|READY|FAILED|DELETING
+             * @example PENDING|VERIFYING|READY|FAILED|DELETING|READY_TO_OFFBOARD
              */
             status: string;
             /**
@@ -13121,7 +13262,7 @@ export interface components {
             name: string;
             /**
              * @description The status of the account configuration
-             * @example PENDING|VERIFYING|READY|FAILED|DELETING
+             * @example PENDING|VERIFYING|READY|FAILED|DELETING|READY_TO_OFFBOARD
              */
             status: string;
             /**
@@ -13270,7 +13411,7 @@ export interface components {
             name: string;
             /**
              * @description The status of the account configuration
-             * @example PENDING|VERIFYING|READY|FAILED|DELETING
+             * @example PENDING|VERIFYING|READY|FAILED|DELETING|READY_TO_OFFBOARD
              */
             status: string;
             /**
@@ -14790,25 +14931,25 @@ export interface components {
         };
         /** @example {
          *       "ProductTierId": "Beatae beatae.",
-         *       "ProductTierVersion": "Omnis pariatur natus aperiam ipsam aut pariatur.",
+         *       "ProductTierVersion": "Et non et quis.",
          *       "id": "op-12345678",
          *       "serviceId": "s-12345678",
-         *       "token": "w1a"
+         *       "token": "a"
          *     } */
         DescribeOutputParameterRequest: {
             /**
              * @description ID of a Product Tier
-             * @example Delectus sit.
+             * @example Quae magnam excepturi odit et.
              */
             ProductTierId?: string;
             /**
              * @description The product tier version of the infra config to describe. If not specified, the latest version is described.
-             * @example Autem delectus quae magnam excepturi odit.
+             * @example Placeat et est dolore magnam quo autem.
              */
             ProductTierVersion?: string;
             /**
              * @description ID of an Output Parameter
-             * @example Quidem placeat et est dolore magnam.
+             * @example Aliquam quos aspernatur ut modi.
              */
             id: string;
             /**
@@ -14818,7 +14959,7 @@ export interface components {
             serviceId: string;
             /**
              * @description JWT token used to perform authorization
-             * @example 03p
+             * @example 6
              */
             token: string;
         };
@@ -14841,7 +14982,7 @@ export interface components {
             description: string;
             /**
              * @description ID of an Output Parameter
-             * @example Atque illo ea molestias.
+             * @example Pariatur natus.
              */
             id: string;
             /**
@@ -14856,7 +14997,7 @@ export interface components {
             name: string;
             /**
              * @description ID of a resource
-             * @example Aut maxime.
+             * @example Ipsam aut pariatur hic atque illo ea.
              */
             resourceId: string;
             /**
@@ -15958,25 +16099,25 @@ export interface components {
         };
         /** @example {
          *       "ProductTierId": "Beatae beatae.",
-         *       "ProductTierVersion": "Cum culpa nisi aut dignissimos quo.",
+         *       "ProductTierVersion": "Sed consequatur reprehenderit.",
          *       "id": "r-12345678",
          *       "serviceId": "s-12345678",
-         *       "token": "e9"
+         *       "token": "vhz"
          *     } */
         DescribeResourceMetricsConfigRequest: {
             /**
              * @description ID of a Product Tier
-             * @example Nam ut qui magnam quisquam mollitia distinctio.
+             * @example Ullam nam ut qui.
              */
             ProductTierId?: string;
             /**
              * @description The product tier version of the infra config to describe. If not specified, the latest version is described.
-             * @example Quo minus non sed perferendis rerum hic.
+             * @example Non sed perferendis rerum.
              */
             ProductTierVersion?: string;
             /**
              * @description ID of a resource
-             * @example Debitis est architecto incidunt cum est.
+             * @example Maiores quo.
              */
             id: string;
             /**
@@ -15986,7 +16127,7 @@ export interface components {
             serviceId: string;
             /**
              * @description JWT token used to perform authorization
-             * @example k
+             * @example va
              */
             token: string;
         };
@@ -16178,6 +16319,38 @@ export interface components {
          *             "primary": true
          *           }
          *         },
+         *         "layeredChartValues": [
+         *           {
+         *             "values": {
+         *               "global": {
+         *                 "image": {
+         *                   "tag": "v1.0.0"
+         *                 },
+         *                 "replicaCount": 1,
+         *                 "resources": {
+         *                   "requests": {
+         *                     "cpu": "100m",
+         *                     "memory": "128Mi"
+         *                   }
+         *                 }
+         *               }
+         *             }
+         *           },
+         *           {
+         *             "scope": {
+         *               "{{ $sys.cloudProviderName }}": "aws"
+         *             },
+         *             "valuesFile": {
+         *               "gitConfiguration": {
+         *                 "accessToken": "ghp_...",
+         *                 "commitSHA": "a1b2c3d4e5f6",
+         *                 "path": "aws/production.yaml",
+         *                 "referenceName": "refs/heads/main",
+         *                 "repositoryUrl": "https://github.com/org/helm-values"
+         *               }
+         *             }
+         *           }
+         *         ],
          *         "password": "my-password",
          *         "runtimeConfiguration": {
          *           "disableHooks": true,
@@ -18009,6 +18182,7 @@ export interface components {
         };
         /** @example {
          *       "accountConfigIdentityId": "org-12345678",
+         *       "allowCreatesWhenPaymentNotConfigured": true,
          *       "cloudProviderNames": [
          *         "aws",
          *         "gcp"
@@ -18016,6 +18190,8 @@ export interface components {
          *       "createdAt": "2019-01-01T00:00:00Z",
          *       "defaultSubscription": true,
          *       "id": "sub-12345678",
+         *       "maxNumberOfInstances": 10,
+         *       "paymentMethodConfigured": true,
          *       "productTierId": "pt-12345678",
          *       "productTierName": "Omnistrate Multi Tenancy",
          *       "roleType": "root",
@@ -18034,6 +18210,11 @@ export interface components {
              * @example Quasi qui reiciendis praesentium placeat.
              */
             accountConfigIdentityId: string;
+            /**
+             * @description Whether to allow creating instances when payment is not configured.
+             * @example true
+             */
+            allowCreatesWhenPaymentNotConfigured?: boolean;
             /**
              * @description List of cloud provider names
              * @example [
@@ -18057,6 +18238,17 @@ export interface components {
              * @example Explicabo quam libero qui odit sit.
              */
             id: string;
+            /**
+             * Format: int64
+             * @description The maximum number of instances that can be created for this subscription.
+             * @example 10
+             */
+            maxNumberOfInstances?: number;
+            /**
+             * @description Return true if the required payment method is configured for this subscription or no payment method is required. False if the subscription requires a payment method but it is not configured.
+             * @example true
+             */
+            paymentMethodConfigured?: boolean;
             /**
              * @description ID of a Product Tier
              * @example Voluptatibus accusamus.
@@ -18884,7 +19076,7 @@ export interface components {
          *       "capability": "SERVERLESS",
          *       "id": "r-12345678",
          *       "serviceId": "s-12345678",
-         *       "token": "m"
+         *       "token": "kf"
          *     } */
         DisableResourceCapabilityRequest: {
             /**
@@ -18894,7 +19086,7 @@ export interface components {
             capability: string;
             /**
              * @description ID of a resource
-             * @example Fuga blanditiis in ea et ut.
+             * @example Ut ut consequatur quas et.
              */
             id: string;
             /**
@@ -18904,7 +19096,7 @@ export interface components {
             serviceId: string;
             /**
              * @description JWT token used to perform authorization
-             * @example 5
+             * @example f8
              */
             token: string;
         };
@@ -19158,7 +19350,7 @@ export interface components {
          *       },
          *       "id": "r-12345678",
          *       "serviceId": "s-12345678",
-         *       "token": "spu"
+         *       "token": "zs"
          *     } */
         EnableResourceCapabilityRequest: {
             /**
@@ -19184,7 +19376,7 @@ export interface components {
             };
             /**
              * @description ID of a resource
-             * @example Itaque dolorem qui in aut repellat natus.
+             * @example Aut repellat.
              */
             id: string;
             /**
@@ -19194,7 +19386,7 @@ export interface components {
             serviceId: string;
             /**
              * @description JWT token used to perform authorization
-             * @example e4
+             * @example v
              */
             token: string;
         };
@@ -19413,7 +19605,7 @@ export interface components {
             /**
              * @description Whether this is the primary endpoint to highlight
              * @default false
-             * @example false
+             * @example true
              */
             primary: boolean;
         };
@@ -20490,6 +20682,46 @@ export interface components {
             userName?: string;
         };
         /** @example {
+         *       "accessToken": "my-token",
+         *       "commitSHA": "1e386b5f54de9150d336ccfe2e14782b94faf67c",
+         *       "path": "helm/values/production.yaml",
+         *       "referenceName": "refs/heads/main",
+         *       "repositoryUrl": "https://github.com/username/myrepo",
+         *       "userName": "my-user"
+         *     } */
+        GitFileConfiguration: {
+            /**
+             * @description The access token
+             * @example my-token
+             */
+            accessToken?: string;
+            /**
+             * @description The commit SHA to checkout
+             * @example 1e386b5f54de9150d336ccfe2e14782b94faf67c
+             */
+            commitSHA?: string;
+            /**
+             * @description The relative file path from repository root
+             * @example helm/values/production.yaml
+             */
+            path: string;
+            /**
+             * @description The reference name of the repository
+             * @example refs/heads/main
+             */
+            referenceName: string;
+            /**
+             * @description The URL of the repository
+             * @example https://github.com/username/myrepo
+             */
+            repositoryUrl: string;
+            /**
+             * @description The name of github user
+             * @example my-user
+             */
+            userName?: string;
+        };
+        /** @example {
          *       "chartName": "my-chart",
          *       "chartRepoName": "my-repo",
          *       "chartRepoUrl": "https://my-repo.com",
@@ -20521,6 +20753,38 @@ export interface components {
          *           "primary": true
          *         }
          *       },
+         *       "layeredChartValues": [
+         *         {
+         *           "values": {
+         *             "global": {
+         *               "image": {
+         *                 "tag": "v1.0.0"
+         *               },
+         *               "replicaCount": 1,
+         *               "resources": {
+         *                 "requests": {
+         *                   "cpu": "100m",
+         *                   "memory": "128Mi"
+         *                 }
+         *               }
+         *             }
+         *           }
+         *         },
+         *         {
+         *           "scope": {
+         *             "{{ $sys.cloudProviderName }}": "aws"
+         *           },
+         *           "valuesFile": {
+         *             "gitConfiguration": {
+         *               "accessToken": "ghp_...",
+         *               "commitSHA": "a1b2c3d4e5f6",
+         *               "path": "aws/production.yaml",
+         *               "referenceName": "refs/heads/main",
+         *               "repositoryUrl": "https://github.com/org/helm-values"
+         *             }
+         *           }
+         *         }
+         *       ],
          *       "password": "my-password",
          *       "runtimeConfiguration": {
          *         "disableHooks": true,
@@ -20553,7 +20817,7 @@ export interface components {
              */
             chartRepoUrl: string;
             /**
-             * @description The values of the Helm package
+             * @description The values of the Helm package (mutually exclusive with layeredChartValues)
              * @example {
              *       "key1": "value1",
              *       "key2": 3,
@@ -20596,6 +20860,42 @@ export interface components {
             endpointConfiguration?: {
                 [key: string]: components["schemas"]["Endpoint"];
             };
+            /**
+             * @description Layered chart values configuration with conditional scoping (mutually exclusive with chartValues). Values are processed in order - later entries override earlier ones for the same keys.
+             * @example [
+             *       {
+             *         "values": {
+             *           "global": {
+             *             "image": {
+             *               "tag": "v1.0.0"
+             *             },
+             *             "replicaCount": 1,
+             *             "resources": {
+             *               "requests": {
+             *                 "cpu": "100m",
+             *                 "memory": "128Mi"
+             *               }
+             *             }
+             *           }
+             *         }
+             *       },
+             *       {
+             *         "scope": {
+             *           "{{ $sys.cloudProviderName }}": "aws"
+             *         },
+             *         "valuesFile": {
+             *           "gitConfiguration": {
+             *             "accessToken": "ghp_...",
+             *             "commitSHA": "a1b2c3d4e5f6",
+             *             "path": "aws/production.yaml",
+             *             "referenceName": "refs/heads/main",
+             *             "repositoryUrl": "https://github.com/org/helm-values"
+             *           }
+             *         }
+             *       }
+             *     ]
+             */
+            layeredChartValues?: components["schemas"]["ChartValuesRef"][];
             /**
              * @description The password to authenticate with the registry
              * @example my-password
@@ -24931,25 +25231,25 @@ export interface components {
         };
         /** @example {
          *       "ProductTierId": "Beatae beatae.",
-         *       "ProductTierVersion": "Cum possimus unde.",
+         *       "ProductTierVersion": "Vero exercitationem tempore esse cum possimus.",
          *       "resourceId": "r-12345678",
          *       "serviceId": "s-12345678",
-         *       "token": "h"
+         *       "token": "fj"
          *     } */
         ListOutputParametersRequest: {
             /**
              * @description ID of a Product Tier
-             * @example Adipisci pariatur vero.
+             * @example Alias dolores magnam aut porro nostrum in.
              */
             ProductTierId?: string;
             /**
              * @description The product tier version of the infra config to describe. If not specified, the latest version is described.
-             * @example Porro nostrum in aut.
+             * @example Doloremque ducimus voluptatem.
              */
             ProductTierVersion?: string;
             /**
              * @description ID of a resource
-             * @example Ducimus voluptatem hic alias dolores magnam.
+             * @example Perspiciatis et.
              */
             resourceId: string;
             /**
@@ -24959,7 +25259,7 @@ export interface components {
             serviceId: string;
             /**
              * @description JWT token used to perform authorization
-             * @example 5oj
+             * @example i2z
              */
             token: string;
         };
@@ -25020,28 +25320,6 @@ export interface components {
             /**
              * @description The output parameters
              * @example [
-             *       {
-             *         "description": "Username of the user created in the target system",
-             *         "id": "op-12345678",
-             *         "key": "username",
-             *         "name": "Username",
-             *         "resourceId": "r-12345678",
-             *         "serviceId": "s-12345678",
-             *         "value": "johndoe",
-             *         "valueRef": "$var.username",
-             *         "valueType": "Boolean|Float64|String|Secret|Password"
-             *       },
-             *       {
-             *         "description": "Username of the user created in the target system",
-             *         "id": "op-12345678",
-             *         "key": "username",
-             *         "name": "Username",
-             *         "resourceId": "r-12345678",
-             *         "serviceId": "s-12345678",
-             *         "value": "johndoe",
-             *         "valueRef": "$var.username",
-             *         "valueType": "Boolean|Float64|String|Secret|Password"
-             *       },
              *       {
              *         "description": "Username of the user created in the target system",
              *         "id": "op-12345678",
@@ -25215,25 +25493,25 @@ export interface components {
         };
         /** @example {
          *       "ProductTierId": "Beatae beatae.",
-         *       "ProductTierVersion": "Quis sit natus.",
+         *       "ProductTierVersion": "Odio quis sit natus.",
          *       "id": "r-12345678",
          *       "serviceId": "s-12345678",
-         *       "token": "wbc"
+         *       "token": "wwb"
          *     } */
         ListResourceCapabilitiesRequest: {
             /**
              * @description ID of a Product Tier
-             * @example Et et dolore quae eos.
+             * @example Dolore quae.
              */
             ProductTierId?: string;
             /**
              * @description The product tier version of the infra config to describe. If not specified, the latest version is described.
-             * @example Sunt et sint in expedita omnis.
+             * @example Sint in expedita omnis iste et.
              */
             ProductTierVersion?: string;
             /**
              * @description ID of a resource
-             * @example Sunt magni modi.
+             * @example Neque quaerat sunt magni modi asperiores sunt.
              */
             id: string;
             /**
@@ -25243,7 +25521,7 @@ export interface components {
             serviceId: string;
             /**
              * @description JWT token used to perform authorization
-             * @example tw
+             * @example um
              */
             token: string;
         };
@@ -25739,6 +26017,38 @@ export interface components {
          *                 "primary": true
          *               }
          *             },
+         *             "layeredChartValues": [
+         *               {
+         *                 "values": {
+         *                   "global": {
+         *                     "image": {
+         *                       "tag": "v1.0.0"
+         *                     },
+         *                     "replicaCount": 1,
+         *                     "resources": {
+         *                       "requests": {
+         *                         "cpu": "100m",
+         *                         "memory": "128Mi"
+         *                       }
+         *                     }
+         *                   }
+         *                 }
+         *               },
+         *               {
+         *                 "scope": {
+         *                   "{{ $sys.cloudProviderName }}": "aws"
+         *                 },
+         *                 "valuesFile": {
+         *                   "gitConfiguration": {
+         *                     "accessToken": "ghp_...",
+         *                     "commitSHA": "a1b2c3d4e5f6",
+         *                     "path": "aws/production.yaml",
+         *                     "referenceName": "refs/heads/main",
+         *                     "repositoryUrl": "https://github.com/org/helm-values"
+         *                   }
+         *                 }
+         *               }
+         *             ],
          *             "password": "my-password",
          *             "runtimeConfiguration": {
          *               "disableHooks": true,
@@ -26073,6 +26383,38 @@ export interface components {
          *                 "primary": true
          *               }
          *             },
+         *             "layeredChartValues": [
+         *               {
+         *                 "values": {
+         *                   "global": {
+         *                     "image": {
+         *                       "tag": "v1.0.0"
+         *                     },
+         *                     "replicaCount": 1,
+         *                     "resources": {
+         *                       "requests": {
+         *                         "cpu": "100m",
+         *                         "memory": "128Mi"
+         *                       }
+         *                     }
+         *                   }
+         *                 }
+         *               },
+         *               {
+         *                 "scope": {
+         *                   "{{ $sys.cloudProviderName }}": "aws"
+         *                 },
+         *                 "valuesFile": {
+         *                   "gitConfiguration": {
+         *                     "accessToken": "ghp_...",
+         *                     "commitSHA": "a1b2c3d4e5f6",
+         *                     "path": "aws/production.yaml",
+         *                     "referenceName": "refs/heads/main",
+         *                     "repositoryUrl": "https://github.com/org/helm-values"
+         *                   }
+         *                 }
+         *               }
+         *             ],
          *             "password": "my-password",
          *             "runtimeConfiguration": {
          *               "disableHooks": true,
@@ -26407,6 +26749,38 @@ export interface components {
          *                 "primary": true
          *               }
          *             },
+         *             "layeredChartValues": [
+         *               {
+         *                 "values": {
+         *                   "global": {
+         *                     "image": {
+         *                       "tag": "v1.0.0"
+         *                     },
+         *                     "replicaCount": 1,
+         *                     "resources": {
+         *                       "requests": {
+         *                         "cpu": "100m",
+         *                         "memory": "128Mi"
+         *                       }
+         *                     }
+         *                   }
+         *                 }
+         *               },
+         *               {
+         *                 "scope": {
+         *                   "{{ $sys.cloudProviderName }}": "aws"
+         *                 },
+         *                 "valuesFile": {
+         *                   "gitConfiguration": {
+         *                     "accessToken": "ghp_...",
+         *                     "commitSHA": "a1b2c3d4e5f6",
+         *                     "path": "aws/production.yaml",
+         *                     "referenceName": "refs/heads/main",
+         *                     "repositoryUrl": "https://github.com/org/helm-values"
+         *                   }
+         *                 }
+         *               }
+         *             ],
          *             "password": "my-password",
          *             "runtimeConfiguration": {
          *               "disableHooks": true,
@@ -26761,6 +27135,38 @@ export interface components {
              *               "primary": true
              *             }
              *           },
+             *           "layeredChartValues": [
+             *             {
+             *               "values": {
+             *                 "global": {
+             *                   "image": {
+             *                     "tag": "v1.0.0"
+             *                   },
+             *                   "replicaCount": 1,
+             *                   "resources": {
+             *                     "requests": {
+             *                       "cpu": "100m",
+             *                       "memory": "128Mi"
+             *                     }
+             *                   }
+             *                 }
+             *               }
+             *             },
+             *             {
+             *               "scope": {
+             *                 "{{ $sys.cloudProviderName }}": "aws"
+             *               },
+             *               "valuesFile": {
+             *                 "gitConfiguration": {
+             *                   "accessToken": "ghp_...",
+             *                   "commitSHA": "a1b2c3d4e5f6",
+             *                   "path": "aws/production.yaml",
+             *                   "referenceName": "refs/heads/main",
+             *                   "repositoryUrl": "https://github.com/org/helm-values"
+             *                 }
+             *               }
+             *             }
+             *           ],
              *           "password": "my-password",
              *           "runtimeConfiguration": {
              *             "disableHooks": true,
@@ -27095,6 +27501,38 @@ export interface components {
              *               "primary": true
              *             }
              *           },
+             *           "layeredChartValues": [
+             *             {
+             *               "values": {
+             *                 "global": {
+             *                   "image": {
+             *                     "tag": "v1.0.0"
+             *                   },
+             *                   "replicaCount": 1,
+             *                   "resources": {
+             *                     "requests": {
+             *                       "cpu": "100m",
+             *                       "memory": "128Mi"
+             *                     }
+             *                   }
+             *                 }
+             *               }
+             *             },
+             *             {
+             *               "scope": {
+             *                 "{{ $sys.cloudProviderName }}": "aws"
+             *               },
+             *               "valuesFile": {
+             *                 "gitConfiguration": {
+             *                   "accessToken": "ghp_...",
+             *                   "commitSHA": "a1b2c3d4e5f6",
+             *                   "path": "aws/production.yaml",
+             *                   "referenceName": "refs/heads/main",
+             *                   "repositoryUrl": "https://github.com/org/helm-values"
+             *                 }
+             *               }
+             *             }
+             *           ],
              *           "password": "my-password",
              *           "runtimeConfiguration": {
              *             "disableHooks": true,
@@ -29989,6 +30427,7 @@ export interface components {
          *       "subscriptions": [
          *         {
          *           "accountConfigIdentityId": "org-12345678",
+         *           "allowCreatesWhenPaymentNotConfigured": true,
          *           "cloudProviderNames": [
          *             "aws",
          *             "gcp"
@@ -29996,6 +30435,8 @@ export interface components {
          *           "createdAt": "2019-01-01T00:00:00Z",
          *           "defaultSubscription": true,
          *           "id": "sub-12345678",
+         *           "maxNumberOfInstances": 10,
+         *           "paymentMethodConfigured": true,
          *           "productTierId": "pt-12345678",
          *           "productTierName": "Omnistrate Multi Tenancy",
          *           "roleType": "root",
@@ -30010,6 +30451,7 @@ export interface components {
          *         },
          *         {
          *           "accountConfigIdentityId": "org-12345678",
+         *           "allowCreatesWhenPaymentNotConfigured": true,
          *           "cloudProviderNames": [
          *             "aws",
          *             "gcp"
@@ -30017,6 +30459,8 @@ export interface components {
          *           "createdAt": "2019-01-01T00:00:00Z",
          *           "defaultSubscription": true,
          *           "id": "sub-12345678",
+         *           "maxNumberOfInstances": 10,
+         *           "paymentMethodConfigured": true,
          *           "productTierId": "pt-12345678",
          *           "productTierName": "Omnistrate Multi Tenancy",
          *           "roleType": "root",
@@ -30051,6 +30495,7 @@ export interface components {
              * @example [
              *       {
              *         "accountConfigIdentityId": "org-12345678",
+             *         "allowCreatesWhenPaymentNotConfigured": true,
              *         "cloudProviderNames": [
              *           "aws",
              *           "gcp"
@@ -30058,6 +30503,8 @@ export interface components {
              *         "createdAt": "2019-01-01T00:00:00Z",
              *         "defaultSubscription": true,
              *         "id": "sub-12345678",
+             *         "maxNumberOfInstances": 10,
+             *         "paymentMethodConfigured": true,
              *         "productTierId": "pt-12345678",
              *         "productTierName": "Omnistrate Multi Tenancy",
              *         "roleType": "root",
@@ -30072,6 +30519,7 @@ export interface components {
              *       },
              *       {
              *         "accountConfigIdentityId": "org-12345678",
+             *         "allowCreatesWhenPaymentNotConfigured": true,
              *         "cloudProviderNames": [
              *           "aws",
              *           "gcp"
@@ -30079,6 +30527,8 @@ export interface components {
              *         "createdAt": "2019-01-01T00:00:00Z",
              *         "defaultSubscription": true,
              *         "id": "sub-12345678",
+             *         "maxNumberOfInstances": 10,
+             *         "paymentMethodConfigured": true,
              *         "productTierId": "pt-12345678",
              *         "productTierName": "Omnistrate Multi Tenancy",
              *         "roleType": "root",
@@ -30093,6 +30543,7 @@ export interface components {
              *       },
              *       {
              *         "accountConfigIdentityId": "org-12345678",
+             *         "allowCreatesWhenPaymentNotConfigured": true,
              *         "cloudProviderNames": [
              *           "aws",
              *           "gcp"
@@ -30100,6 +30551,8 @@ export interface components {
              *         "createdAt": "2019-01-01T00:00:00Z",
              *         "defaultSubscription": true,
              *         "id": "sub-12345678",
+             *         "maxNumberOfInstances": 10,
+             *         "paymentMethodConfigured": true,
              *         "productTierId": "pt-12345678",
              *         "productTierName": "Omnistrate Multi Tenancy",
              *         "roleType": "root",
@@ -30114,6 +30567,7 @@ export interface components {
              *       },
              *       {
              *         "accountConfigIdentityId": "org-12345678",
+             *         "allowCreatesWhenPaymentNotConfigured": true,
              *         "cloudProviderNames": [
              *           "aws",
              *           "gcp"
@@ -30121,6 +30575,8 @@ export interface components {
              *         "createdAt": "2019-01-01T00:00:00Z",
              *         "defaultSubscription": true,
              *         "id": "sub-12345678",
+             *         "maxNumberOfInstances": 10,
+             *         "paymentMethodConfigured": true,
              *         "productTierId": "pt-12345678",
              *         "productTierName": "Omnistrate Multi Tenancy",
              *         "roleType": "root",
@@ -30896,7 +31352,7 @@ export interface components {
             associatedKubernetesServiceName?: string;
             /**
              * @description ID of a resource
-             * @example Et tenetur.
+             * @example Et tenetur excepturi.
              */
             associatedResourceID: string;
             /**
@@ -31994,12 +32450,12 @@ export interface components {
          *       "id": "r-12345678",
          *       "metricEndpoint": "http://localhost:9187/metrics",
          *       "serviceId": "s-12345678",
-         *       "token": "f"
+         *       "token": "8"
          *     } */
         RegisterResourceMetricsConfigRequest: {
             /**
              * @description ID of a resource
-             * @example Ex pariatur veniam quaerat laborum omnis rem.
+             * @example Rem optio maxime porro exercitationem.
              */
             id: string;
             /**
@@ -32014,7 +32470,7 @@ export interface components {
             serviceId: string;
             /**
              * @description JWT token used to perform authorization
-             * @example c2
+             * @example xxe
              */
             token: string;
         };
@@ -32902,7 +33358,7 @@ export interface components {
          * @description Resource dependency relation specification
          * @example {
          *       "parameterMap": {
-         *         "Dolorem eos.": "Necessitatibus sit consequuntur qui adipisci blanditiis quisquam."
+         *         "Accusamus et tenetur explicabo itaque mollitia delectus.": "Excepturi qui recusandae ut commodi."
          *       },
          *       "resourceId": "Dolores sit aut repellendus eveniet recusandae fugit."
          *     }
@@ -32911,7 +33367,8 @@ export interface components {
             /**
              * @description A map of the source parameter to the resource dependency parameter
              * @example {
-             *       "Sit ad.": "Laudantium et voluptate."
+             *       "Aliquid magni quaerat.": "Rem eum in sit.",
+             *       "Mollitia laudantium et voluptate alias et dolorem.": "Omnis necessitatibus sit consequuntur qui adipisci."
              *     }
              */
             parameterMap?: {
@@ -32919,7 +33376,7 @@ export interface components {
             };
             /**
              * @description ID of a resource
-             * @example Veritatis qui placeat.
+             * @example Voluptatem non.
              */
             resourceId: string;
         };
@@ -37318,7 +37775,7 @@ export interface components {
          *       "id": "op-12345678",
          *       "name": "Username",
          *       "serviceId": "s-12345678",
-         *       "token": "0",
+         *       "token": "1op",
          *       "value": "johndoe",
          *       "valueRef": "$var.username",
          *       "valueType": "Boolean|Float64|String|Secret|Password"
@@ -37331,7 +37788,7 @@ export interface components {
             description?: string;
             /**
              * @description ID of an Output Parameter
-             * @example Porro assumenda odit et molestias temporibus est.
+             * @example Corrupti dolore quod labore porro assumenda.
              */
             id: string;
             /**
@@ -37346,7 +37803,7 @@ export interface components {
             serviceId: string;
             /**
              * @description JWT token used to perform authorization
-             * @example ns
+             * @example hvf
              */
             token: string;
             /**
@@ -38074,6 +38531,38 @@ export interface components {
          *             "primary": true
          *           }
          *         },
+         *         "layeredChartValues": [
+         *           {
+         *             "values": {
+         *               "global": {
+         *                 "image": {
+         *                   "tag": "v1.0.0"
+         *                 },
+         *                 "replicaCount": 1,
+         *                 "resources": {
+         *                   "requests": {
+         *                     "cpu": "100m",
+         *                     "memory": "128Mi"
+         *                   }
+         *                 }
+         *               }
+         *             }
+         *           },
+         *           {
+         *             "scope": {
+         *               "{{ $sys.cloudProviderName }}": "aws"
+         *             },
+         *             "valuesFile": {
+         *               "gitConfiguration": {
+         *                 "accessToken": "ghp_...",
+         *                 "commitSHA": "a1b2c3d4e5f6",
+         *                 "path": "aws/production.yaml",
+         *                 "referenceName": "refs/heads/main",
+         *                 "repositoryUrl": "https://github.com/org/helm-values"
+         *               }
+         *             }
+         *           }
+         *         ],
          *         "password": "my-password",
          *         "runtimeConfiguration": {
          *           "disableHooks": true,
@@ -38448,6 +38937,38 @@ export interface components {
          *             "primary": true
          *           }
          *         },
+         *         "layeredChartValues": [
+         *           {
+         *             "values": {
+         *               "global": {
+         *                 "image": {
+         *                   "tag": "v1.0.0"
+         *                 },
+         *                 "replicaCount": 1,
+         *                 "resources": {
+         *                   "requests": {
+         *                     "cpu": "100m",
+         *                     "memory": "128Mi"
+         *                   }
+         *                 }
+         *               }
+         *             }
+         *           },
+         *           {
+         *             "scope": {
+         *               "{{ $sys.cloudProviderName }}": "aws"
+         *             },
+         *             "valuesFile": {
+         *               "gitConfiguration": {
+         *                 "accessToken": "ghp_...",
+         *                 "commitSHA": "a1b2c3d4e5f6",
+         *                 "path": "aws/production.yaml",
+         *                 "referenceName": "refs/heads/main",
+         *                 "repositoryUrl": "https://github.com/org/helm-values"
+         *               }
+         *             }
+         *           }
+         *         ],
          *         "password": "my-password",
          *         "runtimeConfiguration": {
          *           "disableHooks": true,
@@ -39601,6 +40122,19 @@ export interface components {
             email: string;
             /** @example fc7b8dea-a50b-4c9a-8864-fc3d845a2be6 */
             token: string;
+        };
+        /** @example {
+         *       "gitConfiguration": {
+         *         "accessToken": "my-token",
+         *         "commitSHA": "1e386b5f54de9150d336ccfe2e14782b94faf67c",
+         *         "path": "helm/values/production.yaml",
+         *         "referenceName": "refs/heads/main",
+         *         "repositoryUrl": "https://github.com/username/myrepo",
+         *         "userName": "my-user"
+         *       }
+         *     } */
+        ValuesFile: {
+            gitConfiguration: components["schemas"]["GitFileConfiguration"];
         };
         /** @example {
          *       "id": "ac-12345678",
@@ -63608,6 +64142,38 @@ export interface operations {
                      *                 "primary": true
                      *               }
                      *             },
+                     *             "layeredChartValues": [
+                     *               {
+                     *                 "values": {
+                     *                   "global": {
+                     *                     "image": {
+                     *                       "tag": "v1.0.0"
+                     *                     },
+                     *                     "replicaCount": 1,
+                     *                     "resources": {
+                     *                       "requests": {
+                     *                         "cpu": "100m",
+                     *                         "memory": "128Mi"
+                     *                       }
+                     *                     }
+                     *                   }
+                     *                 }
+                     *               },
+                     *               {
+                     *                 "scope": {
+                     *                   "{{ $sys.cloudProviderName }}": "aws"
+                     *                 },
+                     *                 "valuesFile": {
+                     *                   "gitConfiguration": {
+                     *                     "accessToken": "ghp_...",
+                     *                     "commitSHA": "a1b2c3d4e5f6",
+                     *                     "path": "aws/production.yaml",
+                     *                     "referenceName": "refs/heads/main",
+                     *                     "repositoryUrl": "https://github.com/org/helm-values"
+                     *                   }
+                     *                 }
+                     *               }
+                     *             ],
                      *             "password": "my-password",
                      *             "runtimeConfiguration": {
                      *               "disableHooks": true,
@@ -63978,6 +64544,38 @@ export interface operations {
                      *                 "primary": true
                      *               }
                      *             },
+                     *             "layeredChartValues": [
+                     *               {
+                     *                 "values": {
+                     *                   "global": {
+                     *                     "image": {
+                     *                       "tag": "v1.0.0"
+                     *                     },
+                     *                     "replicaCount": 1,
+                     *                     "resources": {
+                     *                       "requests": {
+                     *                         "cpu": "100m",
+                     *                         "memory": "128Mi"
+                     *                       }
+                     *                     }
+                     *                   }
+                     *                 }
+                     *               },
+                     *               {
+                     *                 "scope": {
+                     *                   "{{ $sys.cloudProviderName }}": "aws"
+                     *                 },
+                     *                 "valuesFile": {
+                     *                   "gitConfiguration": {
+                     *                     "accessToken": "ghp_...",
+                     *                     "commitSHA": "a1b2c3d4e5f6",
+                     *                     "path": "aws/production.yaml",
+                     *                     "referenceName": "refs/heads/main",
+                     *                     "repositoryUrl": "https://github.com/org/helm-values"
+                     *                   }
+                     *                 }
+                     *               }
+                     *             ],
                      *             "password": "my-password",
                      *             "runtimeConfiguration": {
                      *               "disableHooks": true,
@@ -64357,6 +64955,38 @@ export interface operations {
                  *             "primary": true
                  *           }
                  *         },
+                 *         "layeredChartValues": [
+                 *           {
+                 *             "values": {
+                 *               "global": {
+                 *                 "image": {
+                 *                   "tag": "v1.0.0"
+                 *                 },
+                 *                 "replicaCount": 1,
+                 *                 "resources": {
+                 *                   "requests": {
+                 *                     "cpu": "100m",
+                 *                     "memory": "128Mi"
+                 *                   }
+                 *                 }
+                 *               }
+                 *             }
+                 *           },
+                 *           {
+                 *             "scope": {
+                 *               "{{ $sys.cloudProviderName }}": "aws"
+                 *             },
+                 *             "valuesFile": {
+                 *               "gitConfiguration": {
+                 *                 "accessToken": "ghp_...",
+                 *                 "commitSHA": "a1b2c3d4e5f6",
+                 *                 "path": "aws/production.yaml",
+                 *                 "referenceName": "refs/heads/main",
+                 *                 "repositoryUrl": "https://github.com/org/helm-values"
+                 *               }
+                 *             }
+                 *           }
+                 *         ],
                  *         "password": "my-password",
                  *         "runtimeConfiguration": {
                  *           "disableHooks": true,
@@ -64810,6 +65440,38 @@ export interface operations {
                      *             "primary": true
                      *           }
                      *         },
+                     *         "layeredChartValues": [
+                     *           {
+                     *             "values": {
+                     *               "global": {
+                     *                 "image": {
+                     *                   "tag": "v1.0.0"
+                     *                 },
+                     *                 "replicaCount": 1,
+                     *                 "resources": {
+                     *                   "requests": {
+                     *                     "cpu": "100m",
+                     *                     "memory": "128Mi"
+                     *                   }
+                     *                 }
+                     *               }
+                     *             }
+                     *           },
+                     *           {
+                     *             "scope": {
+                     *               "{{ $sys.cloudProviderName }}": "aws"
+                     *             },
+                     *             "valuesFile": {
+                     *               "gitConfiguration": {
+                     *                 "accessToken": "ghp_...",
+                     *                 "commitSHA": "a1b2c3d4e5f6",
+                     *                 "path": "aws/production.yaml",
+                     *                 "referenceName": "refs/heads/main",
+                     *                 "repositoryUrl": "https://github.com/org/helm-values"
+                     *               }
+                     *             }
+                     *           }
+                     *         ],
                      *         "password": "my-password",
                      *         "runtimeConfiguration": {
                      *           "disableHooks": true,
@@ -65280,6 +65942,38 @@ export interface operations {
                  *             "primary": true
                  *           }
                  *         },
+                 *         "layeredChartValues": [
+                 *           {
+                 *             "values": {
+                 *               "global": {
+                 *                 "image": {
+                 *                   "tag": "v1.0.0"
+                 *                 },
+                 *                 "replicaCount": 1,
+                 *                 "resources": {
+                 *                   "requests": {
+                 *                     "cpu": "100m",
+                 *                     "memory": "128Mi"
+                 *                   }
+                 *                 }
+                 *               }
+                 *             }
+                 *           },
+                 *           {
+                 *             "scope": {
+                 *               "{{ $sys.cloudProviderName }}": "aws"
+                 *             },
+                 *             "valuesFile": {
+                 *               "gitConfiguration": {
+                 *                 "accessToken": "ghp_...",
+                 *                 "commitSHA": "a1b2c3d4e5f6",
+                 *                 "path": "aws/production.yaml",
+                 *                 "referenceName": "refs/heads/main",
+                 *                 "repositoryUrl": "https://github.com/org/helm-values"
+                 *               }
+                 *             }
+                 *           }
+                 *         ],
                  *         "password": "my-password",
                  *         "runtimeConfiguration": {
                  *           "disableHooks": true,
@@ -71384,6 +72078,7 @@ export interface operations {
                      *       "subscriptions": [
                      *         {
                      *           "accountConfigIdentityId": "org-12345678",
+                     *           "allowCreatesWhenPaymentNotConfigured": true,
                      *           "cloudProviderNames": [
                      *             "aws",
                      *             "gcp"
@@ -71391,6 +72086,8 @@ export interface operations {
                      *           "createdAt": "2019-01-01T00:00:00Z",
                      *           "defaultSubscription": true,
                      *           "id": "sub-12345678",
+                     *           "maxNumberOfInstances": 10,
+                     *           "paymentMethodConfigured": true,
                      *           "productTierId": "pt-12345678",
                      *           "productTierName": "Omnistrate Multi Tenancy",
                      *           "roleType": "root",
@@ -71405,6 +72102,7 @@ export interface operations {
                      *         },
                      *         {
                      *           "accountConfigIdentityId": "org-12345678",
+                     *           "allowCreatesWhenPaymentNotConfigured": true,
                      *           "cloudProviderNames": [
                      *             "aws",
                      *             "gcp"
@@ -71412,6 +72110,8 @@ export interface operations {
                      *           "createdAt": "2019-01-01T00:00:00Z",
                      *           "defaultSubscription": true,
                      *           "id": "sub-12345678",
+                     *           "maxNumberOfInstances": 10,
+                     *           "paymentMethodConfigured": true,
                      *           "productTierId": "pt-12345678",
                      *           "productTierName": "Omnistrate Multi Tenancy",
                      *           "roleType": "root",
@@ -71590,6 +72290,7 @@ export interface operations {
                 content: {
                     /** @example {
                      *       "accountConfigIdentityId": "org-12345678",
+                     *       "allowCreatesWhenPaymentNotConfigured": true,
                      *       "cloudProviderNames": [
                      *         "aws",
                      *         "gcp"
@@ -71597,6 +72298,8 @@ export interface operations {
                      *       "createdAt": "2019-01-01T00:00:00Z",
                      *       "defaultSubscription": true,
                      *       "id": "sub-12345678",
+                     *       "maxNumberOfInstances": 10,
+                     *       "paymentMethodConfigured": true,
                      *       "productTierId": "pt-12345678",
                      *       "productTierName": "Omnistrate Multi Tenancy",
                      *       "roleType": "root",
