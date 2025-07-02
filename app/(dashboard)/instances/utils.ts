@@ -188,10 +188,10 @@ export const getValidSubscriptionForInstanceCreation = (
 
   // Helper function to check if subscription is valid for creation
   const isSubscriptionValid = (subscription: Subscription): boolean => {
-    const serviceOffering = serviceOfferingsObj[subscription.serviceId][subscription.productTierId];
-    const limit = subscription.maxNumberOfInstances ?? serviceOffering.maxNumberOfInstances ?? 0;
+    const serviceOffering = serviceOfferingsObj[subscription.serviceId]?.[subscription.productTierId] || {};
+    const limit = subscription.maxNumberOfInstances ?? serviceOffering.maxNumberOfInstances ?? Infinity;
     const instanceCount = subscriptionInstancesNumHash[subscription.id] || 0;
-    const isLessThanLimit = instanceCount < limit;
+    const isLessThanLimit = limit === 0 ? false : instanceCount < limit;
 
     const hasValidPayment =
       subscription.paymentMethodConfigured ||

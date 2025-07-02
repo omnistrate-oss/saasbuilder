@@ -128,7 +128,7 @@ const SubscriptionPlanCard = ({
         )}
       </div>
 
-      {isPlanSelectionDisabled && disabledReasonText && (
+      {disabledReasonText && (
         <div className="mt-2 mb-1 flex items-center gap-2">
           <AlertTriangle height="15px" width="15px" color="#DC6803" style={{ flexShrink: 0 }} />
           <Text weight="medium" size="xsmall" color="#DC6803">
@@ -238,43 +238,20 @@ const SubscriptionPlanRadio: React.FC<SubscriptionPlanRadioProps> = ({
             ["root", "editor"].includes(subscription.roleType)
           );
 
-          const hasReachedLimit = isCloudAccountForm
+          const isPlanBlocked = isCloudAccountForm
             ? false
             : editorAndRootSubscriptions.every((subscription) => {
-                const limit = subscription.maxNumberOfInstances ?? plan.maxNumberOfInstances ?? 0;
-                return subscriptionInstanceCountHash[subscription.id] >= limit;
-              });
-
-          const isPaymentIssue = isCloudAccountForm
-            ? false
-            : editorAndRootSubscriptions.every((subscription) => {
-                return (
+                const limit = subscription.maxNumberOfInstances ?? plan.maxNumberOfInstances ?? Infinity;
+                const isPaymentIssue =
                   !subscription.paymentMethodConfigured &&
-                  !(subscription.allowCreatesWhenPaymentNotConfigured ?? plan.allowCreatesWhenPaymentNotConfigured)
-                );
+                  !(subscription.allowCreatesWhenPaymentNotConfigured ?? plan.allowCreatesWhenPaymentNotConfigured);
+                return (subscriptionInstanceCountHash[subscription.id] ?? 0) >= limit || isPaymentIssue;
               });
 
           let servicePlanDisabledText: ReactNode = "";
 
-          if (hasReachedLimit) {
-            servicePlanDisabledText = `You have reached the quota limit for maximum allowed instances ${editorAndRootSubscriptions.length > 1 ? "for all subscriptions" : ""}`;
-          }
-
-          if (isPaymentIssue) {
-            servicePlanDisabledText = (
-              <>
-                To use this plan, you need to configure payments on atleast one of your subscriptions.{" "}
-                <Link
-                  href="/billing"
-                  style={{
-                    textDecoration: "underline",
-                    textUnderlineOffset: "2px",
-                  }}
-                >
-                  Click here to configure
-                </Link>
-              </>
-            );
+          if (isPlanBlocked) {
+            servicePlanDisabledText = "No usable subscriptions available for this plan";
           }
 
           return (
@@ -370,10 +347,9 @@ const SubscriptionPlanRadio: React.FC<SubscriptionPlanRadioProps> = ({
                           };
                         }
                       );
-                      if (!isPaymentIssue) {
-                        formData.setFieldValue(name, plan.productTierID);
-                        onChange(plan.productTierID, id);
-                      }
+
+                      formData.setFieldValue(name, plan.productTierID);
+                      onChange(plan.productTierID, id);
                     }
                   } catch (error) {
                     console.error(error);
@@ -389,9 +365,7 @@ const SubscriptionPlanRadio: React.FC<SubscriptionPlanRadioProps> = ({
                 isSelected={servicePlanId === plan.productTierID}
                 disabled={disabled || plan.serviceModelStatus !== "READY"}
                 disabledMessage={plan.serviceModelStatus !== "READY" ? "Product not available at the moment" : ""}
-                isPlanSelectionDisabled={
-                  hasReachedLimit || isPaymentIssue || disabled || plan.serviceModelStatus !== "READY"
-                }
+                isPlanSelectionDisabled={disabled || plan.serviceModelStatus !== "READY"}
                 disabledReasonText={servicePlanDisabledText}
               />
             </Box>

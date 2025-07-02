@@ -3,7 +3,6 @@ import MenuItem from "src/components/FormElementsv2/MenuItem/MenuItem";
 import Select from "src/components/FormElementsv2/Select/Select";
 import SubscriptionTypeDirectIcon from "src/components/Icons/SubscriptionType/SubscriptionTypeDirectIcon";
 import SubscriptionTypeInvitedIcon from "src/components/Icons/SubscriptionType/SubscriptionTypeInvitedIcon";
-import Tooltip from "src/components/Tooltip/Tooltip";
 import { Text } from "src/components/Typography/Typography";
 import { useGlobalData } from "src/providers/GlobalDataProvider";
 import { Subscription } from "src/types/subscription";
@@ -47,8 +46,8 @@ const SubscriptionMenu: React.FC<SubscriptionMenuProps> = ({
       {subscriptions?.length > 0 ? (
         subscriptions.map((subscription) => {
           const plan = serviceOfferingsObj?.[subscription.serviceId]?.[subscription.productTierId] || {};
-          const limit = subscription.maxNumberOfInstances ?? plan.maxNumberOfInstances ?? 0;
-          const isInstanceLimitReached = subscriptionInstanceCountHash[subscription.id] >= limit;
+          const limit = subscription.maxNumberOfInstances ?? plan.maxNumberOfInstances ?? Infinity;
+          const isInstanceLimitReached = (subscriptionInstanceCountHash[subscription.id] ?? 0) >= limit;
 
           const hasPaymentIssue =
             !subscription.paymentMethodConfigured &&
@@ -82,14 +81,6 @@ const SubscriptionMenu: React.FC<SubscriptionMenuProps> = ({
               </div>
             </MenuItem>
           );
-
-          if (isDisabled && disabledMessage) {
-            return (
-              <Tooltip title={disabledMessage} key={subscription.id} placement="top">
-                <span>{menuItem}</span>
-              </Tooltip>
-            );
-          }
 
           return menuItem;
         })

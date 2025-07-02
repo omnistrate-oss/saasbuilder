@@ -38,13 +38,13 @@ export const getValidSubscriptionForInstanceCreation = (
 
   // Helper function to check if subscription is valid for creation
   const isSubscriptionValid = (subscription: Subscription, checkQuota: boolean = true): boolean => {
-    const serviceOffering = serviceOfferingsObj[subscription.serviceId][subscription.productTierId];
+    const serviceOffering = serviceOfferingsObj[subscription.serviceId]?.[subscription.productTierId] || {};
 
     // Check instance limit (only if checkQuota is true)
     if (checkQuota) {
-      const limit = subscription.maxNumberOfInstances ?? serviceOffering.maxNumberOfInstances ?? 0;
+      const limit = subscription.maxNumberOfInstances ?? serviceOffering.maxNumberOfInstances ?? Infinity;
       const instanceCount = subscriptionInstancesNumHash[subscription.id] || 0;
-      const isLessThanLimit = instanceCount < limit;
+      const isLessThanLimit = limit === 0 ? false : instanceCount < limit;
       if (!isLessThanLimit) return false;
     }
 
