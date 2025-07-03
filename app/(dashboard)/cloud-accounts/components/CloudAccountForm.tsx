@@ -370,6 +370,7 @@ const CloudAccountForm = ({
                   }}
                   serviceSubscriptions={subscriptions.filter((subscription) => subscription.serviceId === serviceId)}
                   instances={allInstances}
+                  subscriptionInstancesNumHash={subscriptionInstanceCountHash}
                   isCloudAccountForm={true}
                 />
               ),
@@ -381,7 +382,7 @@ const CloudAccountForm = ({
               subLabel: "Select the subscription",
               name: "subscriptionId",
               required: true,
-              isHidden: subscriptionMenuItems.length <= 1,
+              isHidden: subscriptionMenuItems.length === 0,
               customComponent: (
                 <SubscriptionMenu
                   field={{

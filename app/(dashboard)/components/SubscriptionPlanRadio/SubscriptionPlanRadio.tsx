@@ -5,16 +5,17 @@ import Link from "next/link";
 import { ArrowOutward } from "@mui/icons-material";
 import { Box } from "@mui/material";
 import { useQueryClient } from "@tanstack/react-query";
+import { isSubscriptionValid } from "app/(dashboard)/instances/utils";
 import clsx from "clsx";
-import { useSelector } from "react-redux";
 
 import { $api } from "src/api/query";
+import { getSubscriptionRequest } from "src/api/subscriptionRequests";
+import { getSubscription } from "src/api/subscriptions";
 import LoadingSpinnerSmall from "src/components/CircularProgress/CircularProgress";
 import AlertTriangle from "src/components/Icons/AlertTriangle/AlertTriangle";
 import useEnvironmentType from "src/hooks/useEnvironmentType";
 import useSnackbar from "src/hooks/useSnackbar";
 import { useGlobalData } from "src/providers/GlobalDataProvider";
-import { selectUserrootData } from "src/slices/userDataSlice";
 import { colors } from "src/themeConfig";
 import { ResourceInstance } from "src/types/resourceInstance";
 import { ServiceOffering } from "src/types/serviceOffering";
@@ -174,6 +175,7 @@ type SubscriptionPlanRadioProps = {
   onChange?: (servicePlanId?: string, subscriptionId?: string) => void;
   disabled?: boolean;
   instances: ResourceInstance[];
+  subscriptionInstancesNumHash: Record<string, number>;
   isCloudAccountForm?: boolean;
 };
 
@@ -185,13 +187,14 @@ const SubscriptionPlanRadio: React.FC<SubscriptionPlanRadioProps> = ({
   onChange = () => {},
   disabled,
   instances,
+  subscriptionInstancesNumHash,
   isCloudAccountForm = false,
 }) => {
   const environmentType = useEnvironmentType();
   const snackbar = useSnackbar();
   const queryClient = useQueryClient();
-  const selectUser = useSelector(selectUserrootData);
-  const { subscriptions, subscriptionRequests } = useGlobalData();
+
+  const { subscriptions, subscriptionRequests, serviceOfferingsObj } = useGlobalData();
 
   const servicePlanId = formData.values[name];
 
@@ -250,7 +253,7 @@ const SubscriptionPlanRadio: React.FC<SubscriptionPlanRadioProps> = ({
 
           let servicePlanDisabledText: ReactNode = "";
 
-          if (isPlanBlocked) {
+          if (editorAndRootSubscriptions.length && isPlanBlocked) {
             servicePlanDisabledText = "No usable subscriptions available for this plan";
           }
 
@@ -287,31 +290,17 @@ const SubscriptionPlanRadio: React.FC<SubscriptionPlanRadioProps> = ({
 
                     if (id.startsWith("subr")) {
                       snackbar.showSuccess("Subscription Request sent successfully");
+                      const subscriptionRequst: SubscriptionRequest = (await getSubscriptionRequest(id)).data;
 
                       queryClient.setQueryData(["get", "/2022-09-01-00/subscription/request", {}], (oldData: any) => {
                         return {
-                          subscriptionRequests: [
-                            ...(oldData.subscriptionRequests || []),
-                            {
-                              id,
-                              serviceId: plan.serviceId,
-                              serviceName: plan.serviceName,
-                              productTierId: plan.productTierID,
-                              productTierName: plan.productTierName,
-                              rootUserId: selectUser.id,
-                              rootUserEmail: selectUser.email,
-                              rootUserName: selectUser.name,
-                              status: "PENDING",
-                              createdAt: new Date().toISOString(),
-                              updatedAt: new Date().toISOString(),
-                              updatedByUserId: "",
-                              updatedByUserName: "",
-                            },
-                          ],
+                          subscriptionRequests: [...(oldData.subscriptionRequests || []), subscriptionRequst],
                         };
                       });
                     } else if (id.startsWith("sub")) {
                       snackbar.showSuccess("Subscribed successfully");
+                      const subscription: Subscription = (await getSubscription(id)).data;
+                      console.log("New subscription created:", subscription);
 
                       queryClient.setQueryData(
                         [
@@ -323,33 +312,18 @@ const SubscriptionPlanRadio: React.FC<SubscriptionPlanRadioProps> = ({
                         ],
                         (oldData: any) => {
                           return {
-                            subscriptions: [
-                              ...(oldData.subscriptions || []),
-                              {
-                                id,
-                                rootUserId: selectUser.id,
-                                serviceId: plan.serviceId,
-                                productTierId: plan.productTierID,
-                                serviceOrgId: plan.serviceOrgId,
-                                serviceOrgName: plan.serviceProviderName,
-                                roleType: "root",
-                                createdAt: new Date().toISOString(),
-                                subscriptionOwnerName: selectUser.name,
-                                serviceName: plan.serviceName,
-                                serviceLogoURL: plan.serviceLogoURL,
-                                cloudProviderNames: plan.cloudProviders,
-                                defaultSubscription: false,
-                                productTierName: plan.productTierName,
-                                accountConfigIdentityId: selectUser.orgId,
-                                status: "ACTIVE",
-                              },
-                            ],
+                            subscriptions: [...(oldData.subscriptions || []), subscription],
                           };
                         }
                       );
 
                       formData.setFieldValue(name, plan.productTierID);
-                      onChange(plan.productTierID, id);
+                      if (
+                        isCloudAccountForm ||
+                        isSubscriptionValid(subscription, serviceOfferingsObj, subscriptionInstancesNumHash)
+                      ) {
+                        onChange(plan.productTierID, id);
+                      }
                     }
                   } catch (error) {
                     console.error(error);
