@@ -55,7 +55,7 @@ const useAccountConfigsByIds = (
           },
           //@ts-ignore
           query: {
-            "x-ignore-global-error": true,
+            ignoreGlobalError: "true",
           },
         },
         refetchOnMount: queryOptions.refetchOnMount ?? true,
