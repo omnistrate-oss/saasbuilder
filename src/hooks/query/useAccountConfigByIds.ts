@@ -53,10 +53,9 @@ const useAccountConfigsByIds = (
           path: {
             id,
           },
-          //@ts-ignore
-          query: {
-            ignoreGlobalError: "true",
-          },
+        },
+        headers: {
+          "x-ignore-global-error": true,
         },
         refetchOnMount: queryOptions.refetchOnMount ?? true,
         refetchOnWindowFocus: queryOptions.refetchOnWindowFocus ?? false,
