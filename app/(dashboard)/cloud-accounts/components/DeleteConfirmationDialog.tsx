@@ -209,6 +209,7 @@ const DeleteAccountConfigConfirmationDialog: FC<DeleteAccountConfigConfirmationD
   return (
     <Dialog open={open} onClose={handleClose}>
       <StyledForm
+        maxWidth={isLastInstance ? "588px" : "543px"}
         component="form"
         onSubmit={(e) => {
           e.preventDefault();
