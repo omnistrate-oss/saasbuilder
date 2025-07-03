@@ -169,7 +169,7 @@ const useResourceInstance = (queryParams) => {
         const createdAt = data.created_at;
         const modifiedAt = data.last_modified_at;
 
-        const topologyDetailsOtherThanMain = Object.entries(data.detailedNetworkTopology ?? {})?.filter(
+        const topologyDetailsOtherThanMain = Object.entries(data?.detailedNetworkTopology ?? {})?.filter(
           ([, topologyDetails]: any) => {
             return topologyDetails.main === false;
           }
@@ -261,7 +261,7 @@ const useResourceInstance = (queryParams) => {
 
         let clusterPorts;
         if (data?.detailedNetworkTopology) {
-          clusterPorts = Object.values(data.detailedNetworkTopology).reduce(
+          clusterPorts = Object.values(data?.detailedNetworkTopology).reduce(
             (accumulator: any, topologyDetails: any) => {
               if (topologyDetails.main) return accumulator;
 
@@ -281,7 +281,7 @@ const useResourceInstance = (queryParams) => {
         }
 
         const additionalEndpoints: any[] = [];
-        Object.values(data.detailedNetworkTopology || {}).forEach((resource: any) => {
+        Object.values(data?.detailedNetworkTopology || {}).forEach((resource: any) => {
           additionalEndpoints.push({
             resourceName: resource.resourceName,
             additionalEndpoints: resource.additionalEndpoints,
@@ -332,7 +332,7 @@ const useResourceInstance = (queryParams) => {
           mainResourceHasCompute: Boolean(topologyDetails?.hasCompute),
           customMetrics: customMetrics,
           customNetworkDetails,
-          detailedNetworkTopology: data.detailedNetworkTopology || {},
+          detailedNetworkTopology: data?.detailedNetworkTopology || {},
           maintenanceTasks: data.maintenanceTasks || {},
           subscriptionLicense: data?.subscriptionLicense || {},
         };

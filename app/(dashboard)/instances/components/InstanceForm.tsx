@@ -7,7 +7,6 @@ import { cloneDeep } from "lodash";
 import * as yup from "yup";
 
 import { $api } from "src/api/query";
-import Tooltip from "src/components/Tooltip/Tooltip";
 import { productTierTypes } from "src/constants/servicePlan";
 import useAvailabilityZone from "src/hooks/query/useAvailabilityZone";
 import useResourcesInstanceIds from "src/hooks/useResourcesInstanceIds";
@@ -27,7 +26,7 @@ import LoadingSpinner from "components/LoadingSpinner/LoadingSpinner";
 import { Text } from "components/Typography/Typography";
 
 import useResourceSchema from "../hooks/useResourceSchema";
-import { getInitialValues, getOfferingPaymentConfigRequiredStatus } from "../utils";
+import { getInitialValues } from "../utils";
 
 import {
   getDeploymentConfigurationFields,
@@ -43,7 +42,6 @@ const InstanceForm = ({
   setOverlayType,
   setIsOverlayOpen,
   setCreateInstanceModalData,
-  isPaymentConfigured,
 }) => {
   const snackbar = useSnackbar();
   const {
@@ -99,13 +97,12 @@ const InstanceForm = ({
       subscriptions,
       serviceOfferingsObj,
       serviceOfferings,
-      nonCloudAccountInstances,
-      isPaymentConfigured
+      nonCloudAccountInstances
     ),
     enableReinitialize: true,
     validationSchema: yup.object({
-      serviceId: yup.string().required("Service is required"),
-      servicePlanId: yup.string().required("A service plan with a valid subscription is required"),
+      serviceId: yup.string().required("Product is required"),
+      servicePlanId: yup.string().required("A plan with a valid subscription is required"),
       subscriptionId: yup.string().required("Subscription is required"),
       resourceId: yup.string().required("Resource is required"),
     }),
@@ -348,12 +345,6 @@ const InstanceForm = ({
     subscriptionsObj[values.subscriptionId]?.productTierId === values.servicePlanId && values.subscriptionId
   );
 
-  const requiresValidPaymentConfig = getOfferingPaymentConfigRequiredStatus(
-    serviceOfferings,
-    values.serviceId,
-    values.servicePlanId
-  );
-
   // Sets the Default Values for the Request Parameters
   useEffect(() => {
     const inputParameters = resourceSchema?.inputParameters || [];
@@ -436,18 +427,9 @@ const InstanceForm = ({
       formMode,
       customAvailabilityZones,
       isFetchingCustomAvailabilityZones,
-      isPaymentConfigured,
       nonCloudAccountInstances
     );
-  }, [
-    formMode,
-    formData.values,
-    resourceSchema,
-    customAvailabilityZones,
-    subscriptions,
-    isPaymentConfigured,
-    nonCloudAccountInstances,
-  ]);
+  }, [formMode, formData.values, resourceSchema, customAvailabilityZones, subscriptions, nonCloudAccountInstances]);
 
   const networkConfigurationFields = useMemo(() => {
     return getNetworkConfigurationFields(
@@ -495,8 +477,6 @@ const InstanceForm = ({
     ],
     [standardInformationFields, networkConfigurationFields, deploymentConfigurationFields]
   );
-
-  const disableInstanceCreation = requiresValidPaymentConfig && !isPaymentConfigured;
 
   if (isFetchingServiceOfferings) {
     return <LoadingSpinner />;
@@ -572,25 +552,18 @@ const InstanceForm = ({
             >
               Cancel
             </Button>
-            <Tooltip
-              title="Valid payment method configuration required"
-              placement="top"
-              isVisible={disableInstanceCreation}
-            >
-              <span>
-                <Button
-                  data-testid="submit-button"
-                  variant="contained"
-                  disabled={
-                    createInstanceMutation.isPending || updateInstanceMutation.isPending || disableInstanceCreation
-                  }
-                  type="submit"
-                >
-                  {formMode === "create" ? "Create" : "Update"}
-                  {(createInstanceMutation.isPending || updateInstanceMutation.isPending) && <LoadingSpinnerSmall />}
-                </Button>
-              </span>
-            </Tooltip>
+
+            <span>
+              <Button
+                data-testid="submit-button"
+                variant="contained"
+                disabled={createInstanceMutation.isPending || updateInstanceMutation.isPending}
+                type="submit"
+              >
+                {formMode === "create" ? "Create" : "Update"}
+                {(createInstanceMutation.isPending || updateInstanceMutation.isPending) && <LoadingSpinnerSmall />}
+              </Button>
+            </span>
           </div>
         </div>
       </div>

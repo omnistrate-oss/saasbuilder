@@ -49,11 +49,15 @@ export class SigninPage {
 
   async goToPasswordLoginStep() {
     const dataTestIds = this.dataTestIds;
+
     // Navigate to the Signin Page
     await this.goToLoginOptionsStep();
-    await this.page.getByTestId(dataTestIds.otherSignInOptionsButton).click();
-    if (process.env.DISABLE_PASSWORD_LOGIN !== "true") {
-      await this.page.getByTestId(dataTestIds.passwordLoginButton).click();
+
+    if (await this.page.getByTestId(dataTestIds.otherSignInOptionsButton).isVisible()) {
+      await this.page.getByTestId(dataTestIds.otherSignInOptionsButton).click();
+      if (process.env.DISABLE_PASSWORD_LOGIN !== "true") {
+        await this.page.getByTestId(dataTestIds.passwordLoginButton).click();
+      }
     }
   }
 

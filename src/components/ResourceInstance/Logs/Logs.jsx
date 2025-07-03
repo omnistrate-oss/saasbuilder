@@ -5,6 +5,7 @@ import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import { Box, CircularProgress, IconButton as MuiIconButton, Stack } from "@mui/material";
 // import Ansi from "ansi-to-react";
 import _ from "lodash";
+import { dataTestIds } from "page-objects/instance-details-page";
 import InfiniteScroll from "react-infinite-scroller";
 import { useWebSocket } from "react-use-websocket/dist/lib/use-websocket";
 
@@ -97,7 +98,10 @@ function Logs(props) {
   const bufferTimeoutRef = useRef(null); // Add this ref
   const [enableSyntaxHighlighting, setEnableSyntaxHighlighting] = useState(true);
   const [searchText, setSearchText] = useState("");
-  const [invertLogOrder, setInvertLogOrder] = useState(false);
+  const [
+    invertLogOrder,
+    // setInvertLogOrder
+  ] = useState(false);
 
   let firstNode = null;
 
@@ -342,6 +346,7 @@ function Logs(props) {
                 Node ID
               </Text>
               <Select
+                data-testid={dataTestIds.liveLogs.nodeIdMenu}
                 value={selectedNode}
                 sx={{
                   width: "100%",
@@ -392,10 +397,10 @@ function Logs(props) {
             />
           </Stack>
 
-          <Stack direction="row" gap="6px" alignItems="center">
+          {/* <Stack direction="row" gap="6px" alignItems="center">
             <FieldTitle>Log Order</FieldTitle>
             <Switch checked={invertLogOrder} onChange={(e) => setInvertLogOrder(e.target.checked)} size="small" />
-          </Stack>
+          </Stack> */}
         </Stack>
       </Box>
       <Divider sx={{ marginTop: "12px" }} />

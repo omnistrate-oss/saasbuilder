@@ -15,7 +15,7 @@ async function getOrgInviteUserMailContent(inviteUserEventObj, orgLogoURL) {
   const userName = inviteUserEventObj.eventPayload.inviting_user_name;
   const serviceName = inviteUserEventObj.eventPayload.service_name;
 
-  const subject = `Invitation to join ${userName}'s subscription on ${serviceName} service`;
+  const subject = `Invitation to join ${userName}'s subscription on ${serviceName} Product`;
 
   const templatePath = path.resolve(__dirname, "..", "ejsTemplates", "orgInviteUser.ejs");
 

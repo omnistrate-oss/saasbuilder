@@ -17,7 +17,7 @@ const ServiceFilter = ({ selectedServiceId, setSelectedServiceId, serviceOfferin
       name={"service-options"}
       value={selectedServiceId}
       renderValue={() => {
-        return serviceOptions?.find((option) => option.value == selectedServiceId)?.label ?? "Filter by Service";
+        return serviceOptions?.find((option) => option.value == selectedServiceId)?.label ?? "Filter by Product Name";
       }}
       sx={{
         minWidth: "auto",

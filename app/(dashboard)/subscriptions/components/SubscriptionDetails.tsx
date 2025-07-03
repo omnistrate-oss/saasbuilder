@@ -15,7 +15,7 @@ const SubscriptionDetails = ({ subscription, serviceOfferingsObj }) => {
   const columns = useMemo(
     () => [
       {
-        title: "Service Name",
+        title: "Product Name",
         content: (
           <ServiceNameWithLogo serviceName={subscription?.serviceName} serviceLogoURL={subscription?.serviceLogoURL} />
         ),
@@ -27,7 +27,7 @@ const SubscriptionDetails = ({ subscription, serviceOfferingsObj }) => {
           : "-",
       },
       {
-        title: "Service Plan",
+        title: "Plan",
         content: subscription?.productTierName || "-",
       },
       {

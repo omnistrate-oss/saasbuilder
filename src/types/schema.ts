@@ -5326,6 +5326,83 @@ export interface components {
             status: string;
         };
         /** @example {
+         *       "scope": {
+         *         "{{ $sys.cloudProviderName }}": "aws"
+         *       },
+         *       "values": {
+         *         "global": {
+         *           "affinity": {
+         *             "nodeAffinity": {
+         *               "requiredDuringSchedulingIgnoredDuringExecution": {
+         *                 "nodeSelectorTerms": [
+         *                   {
+         *                     "matchExpressions": [
+         *                       {
+         *                         "key": "omnistrate.com/managed-by",
+         *                         "operator": "In",
+         *                         "values": [
+         *                           "omnistrate"
+         *                         ]
+         *                       }
+         *                     ]
+         *                   }
+         *                 ]
+         *               }
+         *             }
+         *           }
+         *         }
+         *       },
+         *       "valuesFile": {
+         *         "gitConfiguration": {
+         *           "accessToken": "my-token",
+         *           "commitSHA": "1e386b5f54de9150d336ccfe2e14782b94faf67c",
+         *           "path": "helm/values/production.yaml",
+         *           "referenceName": "refs/heads/main",
+         *           "repositoryUrl": "https://github.com/username/myrepo",
+         *           "userName": "my-user"
+         *         }
+         *       }
+         *     } */
+        ChartValuesRef: {
+            /**
+             * @description Scope condition for applying these chart values (can be used with either values or valuesFile). Key is the parameter name which supports template expressions like '{{ $sys.cloudProviderName }}', value is the expected value.
+             * @example {
+             *       "{{ $sys.cloudProviderName }}": "aws"
+             *     }
+             */
+            scope?: {
+                [key: string]: string;
+            };
+            /**
+             * @description Inline chart values as a map (mutually exclusive with valuesFile)
+             * @example {
+             *       "global": {
+             *         "affinity": {
+             *           "nodeAffinity": {
+             *             "requiredDuringSchedulingIgnoredDuringExecution": {
+             *               "nodeSelectorTerms": [
+             *                 {
+             *                   "matchExpressions": [
+             *                     {
+             *                       "key": "omnistrate.com/managed-by",
+             *                       "operator": "In",
+             *                       "values": [
+             *                         "omnistrate"
+             *                       ]
+             *                     }
+             *                   ]
+             *                 }
+             *               ]
+             *             }
+             *           }
+             *         }
+             *       }
+             *     }
+             */
+            values?: unknown;
+            valuesFile?: components["schemas"]["ValuesFile"];
+        };
+        /** @example {
          *       "image": "library/mysql:5.7",
          *       "imageRegistry": "docker.io",
          *       "password": "password",
@@ -6265,6 +6342,17 @@ export interface components {
              *           "Aut dicta iusto facere accusantium ut.": "Ipsum mollitia.",
              *           "Molestias nulla.": "Dolorem velit veniam.",
              *           "Sunt debitis est in magni.": "Quod aut illum quia non."
+<<<<<<< HEAD
+=======
+             *         },
+             *         "feature": "Eos ullam voluptatum fuga aut optio similique."
+             *       },
+             *       {
+             *         "configuration": {
+             *           "Aut dicta iusto facere accusantium ut.": "Ipsum mollitia.",
+             *           "Molestias nulla.": "Dolorem velit veniam.",
+             *           "Sunt debitis est in magni.": "Quod aut illum quia non."
+>>>>>>> 61f89eeed5352a5db1e6dcfe7b01b09c8af3839e
              *         },
              *         "feature": "Eos ullam voluptatum fuga aut optio similique."
              *       },
@@ -6275,6 +6363,7 @@ export interface components {
              *           "Sunt debitis est in magni.": "Quod aut illum quia non."
              *         },
              *         "feature": "Eos ullam voluptatum fuga aut optio similique."
+<<<<<<< HEAD
              *       },
              *       {
              *         "configuration": {
@@ -6283,6 +6372,8 @@ export interface components {
              *           "Sunt debitis est in magni.": "Quod aut illum quia non."
              *         },
              *         "feature": "Eos ullam voluptatum fuga aut optio similique."
+=======
+>>>>>>> 61f89eeed5352a5db1e6dcfe7b01b09c8af3839e
              *       }
              *     ]
              */
@@ -7729,7 +7820,11 @@ export interface components {
          *       "name": "Username",
          *       "resourceId": "r-12345678",
          *       "serviceId": "s-12345678",
+<<<<<<< HEAD
          *       "token": "vfj",
+=======
+         *       "token": "45",
+>>>>>>> 61f89eeed5352a5db1e6dcfe7b01b09c8af3839e
          *       "value": "johndoe",
          *       "valueRef": "$var.username",
          *       "valueType": "Boolean|Float64|String|Secret|Password"
@@ -7752,7 +7847,11 @@ export interface components {
             name: string;
             /**
              * @description ID of a resource
+<<<<<<< HEAD
              * @example Magnam rem sed itaque dolores corrupti molestias.
+=======
+             * @example Quo vitae deserunt et magnam rem sed.
+>>>>>>> 61f89eeed5352a5db1e6dcfe7b01b09c8af3839e
              */
             resourceId: string;
             /**
@@ -7762,7 +7861,11 @@ export interface components {
             serviceId: string;
             /**
              * @description JWT token used to perform authorization
+<<<<<<< HEAD
              * @example b
+=======
+             * @example ahd
+>>>>>>> 61f89eeed5352a5db1e6dcfe7b01b09c8af3839e
              */
             token: string;
             /**
@@ -7960,6 +8063,11 @@ export interface components {
              *     ]
              */
             billingProviders?: string[];
+<<<<<<< HEAD
+            /**
+             * @description The billing provider type
+             * @example STRIPE|BRING_YOUR_OWN
+=======
             /**
              * @description The billing provider type
              * @example STRIPE|BRING_YOUR_OWN
@@ -8159,8 +8267,218 @@ export interface components {
             /**
              * @description Optional billing product ID for tax purposes
              * @example abc123
+>>>>>>> 61f89eeed5352a5db1e6dcfe7b01b09c8af3839e
+             */
+            defaultBillingProvider?: string;
+            /**
+             * @description A brief description of the product tier
+             * @example A premium product tier
+             */
+            description: string;
+            /**
+             * @description Documentation
+             * @example Any documentation
+             */
+            documentation?: string;
+            /**
+             * @description Export usage metering data
+             * @example true
+             */
+            exportUsageMetering?: boolean;
+            /**
+             * @description Export usage metering data configuration
+             * @example {
+             *       "GCS": {
+             *         "GCSBucketName": "my_billing_bucket_name"
+             *       },
+             *       "S3": {
+             *         "S3BucketArn": "arn:aws:s3:::my_billing_bucket_name"
+             *       }
+             *     }
+             */
+            exportUsageMeteringConfig?: {
+                [key: string]: unknown;
+            };
+            /**
+             * @description The GCP regions that this product tier is available on
+             * @example [
+             *       "us-central1"
+             *     ]
+             */
+            gcpRegions?: string[];
+            /**
+             * @description Create the product tier in a disabled state. Enabling the product tier will let end-customers subscribe and use the service plan.
+             * @example false
+             */
+            isDisabled?: boolean;
+            /**
+             * Format: int64
+             * @description Maximum number of instances
+             * @example 5
+             */
+            maxNumberOfInstances?: number;
+            /**
+             * @description Name of the product tier
+             * @example Premium
+             */
+            name: string;
+            /**
+             * @description A brief description for the end user of the product tier
+             * @example A premium plan
+             */
+            planDescription: string;
+            /**
+             * @description Price per unit.
+             * @example {
+             *       "CPU core hours": {
+             *         "amount": 0.001,
+             *         "currency": "USD"
+             *       },
+             *       "Memory GiB hours": {
+             *         "amount": 0.0001,
+             *         "currency": "USD"
+             *       },
+             *       "Storage GiB hours": {
+             *         "amount": 0.0001,
+             *         "currency": "USD"
+             *       }
+             *     }
+             */
+            pricePerUnit?: {
+                [key: string]: unknown;
+            };
+            /**
+             * @description Pricing
+             * @example {
+             *       "price1": "value1"
+             *     }
+             */
+            pricing?: unknown;
+            /**
+             * @description ID of a Service
+             * @example s-123456
+             */
+            serviceId: string;
+            /**
+             * @description ID of a Service Model
+             * @example Et qui quaerat ea et assumenda.
+             */
+            serviceModelId: string;
+            /**
+             * @description Support
+             * @example Any support
+             */
+            support?: string;
+            /**
+             * @description ProductTierType is the type of tier for a product
+             * @example OMNISTRATE_DEDICATED_TENANCY|OMNISTRATE_MULTI_TENANCY|CUSTOM_TENANCY
+             */
+            tierType: string;
+            /**
+             * @description JWT token used to perform authorization
+             * @example vt
+             */
+            token: string;
+        };
+        /** @example {
+         *       "allowCreatesWhenPaymentNotConfigured": true,
+         *       "autoApproveSubscription": false,
+         *       "awsRegions": [
+         *         "us-east-2",
+         *         "ca-central-1"
+         *       ],
+         *       "azureRegions": [
+         *         "northcentralus"
+         *       ],
+         *       "billingProductID": "abc123",
+         *       "billingProviders": [
+         *         "STRIPE",
+         *         "BRING_YOUR_OWN"
+         *       ],
+         *       "defaultBillingProvider": "STRIPE",
+         *       "description": "A premium product tier",
+         *       "documentation": "Any documentation",
+         *       "exportUsageMetering": true,
+         *       "exportUsageMeteringConfig": {
+         *         "GCS": {
+         *           "GCSBucketName": "my_billing_bucket_name"
+         *         },
+         *         "S3": {
+         *           "S3BucketArn": "arn:aws:s3:::my_billing_bucket_name"
+         *         }
+         *       },
+         *       "gcpRegions": [
+         *         "us-central1"
+         *       ],
+         *       "isDisabled": false,
+         *       "maxNumberOfInstances": 5,
+         *       "name": "Premium",
+         *       "planDescription": "A premium plan",
+         *       "pricePerUnit": {
+         *         "CPU core hours": {
+         *           "amount": 0.001,
+         *           "currency": "USD"
+         *         },
+         *         "Memory GiB hours": {
+         *           "amount": 0.0001,
+         *           "currency": "USD"
+         *         },
+         *         "Storage GiB hours": {
+         *           "amount": 0.0001,
+         *           "currency": "USD"
+         *         }
+         *       },
+         *       "pricing": {
+         *         "price1": "value1"
+         *       },
+         *       "serviceModelId": "sm-12345678",
+         *       "support": "Any support",
+         *       "tierType": "OMNISTRATE_DEDICATED_TENANCY"
+         *     } */
+        CreateProductTierRequest2: {
+            /**
+             * @description Allow creates when payment not configured
+             * @example true
+             */
+            allowCreatesWhenPaymentNotConfigured?: boolean;
+            /**
+             * @description Auto approve subscription or not
+             * @example false
+             */
+            autoApproveSubscription?: boolean;
+            /**
+             * @description The AWS regions that this product tier is available on
+             * @example [
+             *       "us-east-2",
+             *       "ca-central-1"
+             *     ]
+             */
+            awsRegions?: string[];
+            /**
+             * @description The Azure regions that this product tier is available on
+             * @example [
+             *       "northcentralus"
+             *     ]
+             */
+            azureRegions?: string[];
+            /**
+             * @description Optional billing product ID for tax purposes
+             * @example abc123
              */
             billingProductID?: string;
+            /**
+             * @description List of billing providers to be used for the product tier
+             * @example [
+             *       "STRIPE",
+             *       "BRING_YOUR_OWN"
+             *     ]
+             */
+            billingProviders?: string[];
+            /**
+             * @description The default billing provider to be used for the product tier
+             * @example STRIPE
+             */
+            defaultBillingProvider?: string;
             /**
              * @description List of billing providers to be used for the product tier
              * @example [
@@ -8507,6 +8825,38 @@ export interface components {
          *             "primary": true
          *           }
          *         },
+         *         "layeredChartValues": [
+         *           {
+         *             "values": {
+         *               "global": {
+         *                 "image": {
+         *                   "tag": "v1.0.0"
+         *                 },
+         *                 "replicaCount": 1,
+         *                 "resources": {
+         *                   "requests": {
+         *                     "cpu": "100m",
+         *                     "memory": "128Mi"
+         *                   }
+         *                 }
+         *               }
+         *             }
+         *           },
+         *           {
+         *             "scope": {
+         *               "{{ $sys.cloudProviderName }}": "aws"
+         *             },
+         *             "valuesFile": {
+         *               "gitConfiguration": {
+         *                 "accessToken": "ghp_...",
+         *                 "commitSHA": "a1b2c3d4e5f6",
+         *                 "path": "aws/production.yaml",
+         *                 "referenceName": "refs/heads/main",
+         *                 "repositoryUrl": "https://github.com/org/helm-values"
+         *               }
+         *             }
+         *           }
+         *         ],
          *         "password": "my-password",
          *         "runtimeConfiguration": {
          *           "disableHooks": true,
@@ -8525,7 +8875,11 @@ export interface components {
          *       "imageConfigId": "imgc-12345678",
          *       "infraConfigId": "ic-12345678",
          *       "internal": false,
+<<<<<<< HEAD
          *       "isProxy": true,
+=======
+         *       "isProxy": false,
+>>>>>>> 61f89eeed5352a5db1e6dcfe7b01b09c8af3839e
          *       "jobConfig": {
          *         "activeDeadlineSeconds": 300,
          *         "backoffLimit": 5
@@ -8701,7 +9055,11 @@ export interface components {
          *           "terraformPath": "/project1/tf"
          *         }
          *       },
+<<<<<<< HEAD
          *       "token": "np6"
+=======
+         *       "token": "u5"
+>>>>>>> 61f89eeed5352a5db1e6dcfe7b01b09c8af3839e
          *     } */
         CreateResourceRequest: {
             additionalSecurityContext?: components["schemas"]["AdditionalSecurityContext"];
@@ -8760,12 +9118,20 @@ export interface components {
             helmChartConfiguration?: components["schemas"]["HelmChartConfiguration"];
             /**
              * @description ID of an Image Config
+<<<<<<< HEAD
              * @example Autem libero.
+=======
+             * @example Vel veniam.
+>>>>>>> 61f89eeed5352a5db1e6dcfe7b01b09c8af3839e
              */
             imageConfigId?: string;
             /**
              * @description ID of an Infra Config
+<<<<<<< HEAD
              * @example Sit id sit ullam ullam et sint.
+=======
+             * @example Et sint nam autem libero reiciendis molestias.
+>>>>>>> 61f89eeed5352a5db1e6dcfe7b01b09c8af3839e
              */
             infraConfigId?: string;
             /**
@@ -8777,7 +9143,7 @@ export interface components {
             /**
              * @description Whether this resource is a proxy or not
              * @default false
-             * @example false
+             * @example true
              */
             isProxy: boolean;
             jobConfig?: components["schemas"]["JobConfig"];
@@ -8797,7 +9163,11 @@ export interface components {
             operatorCRDConfiguration?: components["schemas"]["OperatorCRDConfiguration"];
             /**
              * @description ID of a Product Tier
+<<<<<<< HEAD
              * @example Rerum velit molestiae et.
+=======
+             * @example Id sit ullam.
+>>>>>>> 61f89eeed5352a5db1e6dcfe7b01b09c8af3839e
              */
             productTierId: string;
             /**
@@ -8836,7 +9206,11 @@ export interface components {
             terraformConfigurations?: components["schemas"]["TerraformConfigurations"];
             /**
              * @description JWT token used to perform authorization
+<<<<<<< HEAD
              * @example wrh
+=======
+             * @example 67
+>>>>>>> 61f89eeed5352a5db1e6dcfe7b01b09c8af3839e
              */
             token: string;
         };
@@ -8927,6 +9301,38 @@ export interface components {
          *             "primary": true
          *           }
          *         },
+         *         "layeredChartValues": [
+         *           {
+         *             "values": {
+         *               "global": {
+         *                 "image": {
+         *                   "tag": "v1.0.0"
+         *                 },
+         *                 "replicaCount": 1,
+         *                 "resources": {
+         *                   "requests": {
+         *                     "cpu": "100m",
+         *                     "memory": "128Mi"
+         *                   }
+         *                 }
+         *               }
+         *             }
+         *           },
+         *           {
+         *             "scope": {
+         *               "{{ $sys.cloudProviderName }}": "aws"
+         *             },
+         *             "valuesFile": {
+         *               "gitConfiguration": {
+         *                 "accessToken": "ghp_...",
+         *                 "commitSHA": "a1b2c3d4e5f6",
+         *                 "path": "aws/production.yaml",
+         *                 "referenceName": "refs/heads/main",
+         *                 "repositoryUrl": "https://github.com/org/helm-values"
+         *               }
+         *             }
+         *           }
+         *         ],
          *         "password": "my-password",
          *         "runtimeConfiguration": {
          *           "disableHooks": true,
@@ -9838,6 +10244,17 @@ export interface components {
              *           "Aut dicta iusto facere accusantium ut.": "Ipsum mollitia.",
              *           "Molestias nulla.": "Dolorem velit veniam.",
              *           "Sunt debitis est in magni.": "Quod aut illum quia non."
+<<<<<<< HEAD
+             *         },
+             *         "feature": "Eos ullam voluptatum fuga aut optio similique."
+             *       },
+             *       {
+             *         "configuration": {
+             *           "Aut dicta iusto facere accusantium ut.": "Ipsum mollitia.",
+             *           "Molestias nulla.": "Dolorem velit veniam.",
+             *           "Sunt debitis est in magni.": "Quod aut illum quia non."
+=======
+>>>>>>> 61f89eeed5352a5db1e6dcfe7b01b09c8af3839e
              *         },
              *         "feature": "Eos ullam voluptatum fuga aut optio similique."
              *       },
@@ -9848,6 +10265,8 @@ export interface components {
              *           "Sunt debitis est in magni.": "Quod aut illum quia non."
              *         },
              *         "feature": "Eos ullam voluptatum fuga aut optio similique."
+<<<<<<< HEAD
+=======
              *       },
              *       {
              *         "configuration": {
@@ -9856,6 +10275,7 @@ export interface components {
              *           "Sunt debitis est in magni.": "Quod aut illum quia non."
              *         },
              *         "feature": "Eos ullam voluptatum fuga aut optio similique."
+>>>>>>> 61f89eeed5352a5db1e6dcfe7b01b09c8af3839e
              *       }
              *     ]
              */
@@ -11032,12 +11452,20 @@ export interface components {
         /** @example {
          *       "id": "r-12345678",
          *       "serviceId": "s-12345678",
+<<<<<<< HEAD
          *       "token": "ko"
+=======
+         *       "token": "1s7"
+>>>>>>> 61f89eeed5352a5db1e6dcfe7b01b09c8af3839e
          *     } */
         DeRegisterResourceMetricsConfigRequest: {
             /**
              * @description ID of a resource
+<<<<<<< HEAD
              * @example Vel et.
+=======
+             * @example Est quisquam.
+>>>>>>> 61f89eeed5352a5db1e6dcfe7b01b09c8af3839e
              */
             id: string;
             /**
@@ -11047,7 +11475,11 @@ export interface components {
             serviceId: string;
             /**
              * @description JWT token used to perform authorization
+<<<<<<< HEAD
              * @example 3
+=======
+             * @example d
+>>>>>>> 61f89eeed5352a5db1e6dcfe7b01b09c8af3839e
              */
             token: string;
         };
@@ -11310,12 +11742,20 @@ export interface components {
         /** @example {
          *       "id": "op-12345678",
          *       "serviceId": "s-12345678",
+<<<<<<< HEAD
          *       "token": "vlx"
+=======
+         *       "token": "t2"
+>>>>>>> 61f89eeed5352a5db1e6dcfe7b01b09c8af3839e
          *     } */
         DeleteOutputParameterRequest: {
             /**
              * @description ID of an Output Parameter
+<<<<<<< HEAD
              * @example Impedit similique laudantium repellat pariatur reprehenderit.
+=======
+             * @example Voluptatum et ut.
+>>>>>>> 61f89eeed5352a5db1e6dcfe7b01b09c8af3839e
              */
             id: string;
             /**
@@ -11325,7 +11765,11 @@ export interface components {
             serviceId: string;
             /**
              * @description JWT token used to perform authorization
+<<<<<<< HEAD
              * @example itp
+=======
+             * @example h75
+>>>>>>> 61f89eeed5352a5db1e6dcfe7b01b09c8af3839e
              */
             token: string;
         };
@@ -11737,6 +12181,8 @@ export interface components {
          *                   "status": "HEALTHY"
          *                 },
          *                 "Voluptas aut vel vel.": {
+<<<<<<< HEAD
+=======
          *                   "availabilityZone": "us-east-2a",
          *                   "connectivityStatus": "HEALTHY",
          *                   "diskHealth": "HEALTHY",
@@ -11765,6 +12211,7 @@ export interface components {
          *             "Dicta voluptas non.": {
          *               "nodesHealth": {
          *                 "Quia omnis et.": {
+>>>>>>> 61f89eeed5352a5db1e6dcfe7b01b09c8af3839e
          *                   "availabilityZone": "us-east-2a",
          *                   "connectivityStatus": "HEALTHY",
          *                   "diskHealth": "HEALTHY",
@@ -11783,6 +12230,70 @@ export interface components {
          *                   "processHealth": "HEALTHY",
          *                   "processLiveness": "HEALTHY",
          *                   "status": "HEALTHY"
+<<<<<<< HEAD
+         *                 }
+         *               },
+         *               "resourceID": "resource-12345678",
+         *               "resourceKey": "primary",
+         *               "resourceType": "Kustomize",
+         *               "status": "HEALTHY"
+         *             },
+         *             "Dicta voluptas non.": {
+         *               "nodesHealth": {
+         *                 "Quia omnis et.": {
+=======
+         *                 },
+         *                 "Voluptas aut vel vel.": {
+>>>>>>> 61f89eeed5352a5db1e6dcfe7b01b09c8af3839e
+         *                   "availabilityZone": "us-east-2a",
+         *                   "connectivityStatus": "HEALTHY",
+         *                   "diskHealth": "HEALTHY",
+         *                   "endpoint": "primary-0.instance-abcd1234.us-east-2.aws.omnistrate.cloud",
+         *                   "integrationsHealth": {
+         *                     "CustomerObservabilityHealth": "HEALTHY",
+         *                     "InternalObservabilityHealth": "HEALTHY"
+         *                   },
+         *                   "loadStatus": "LOAD_NORMAL",
+         *                   "nodeHealth": "HEALTHY",
+         *                   "nodeName": "postgres-0",
+         *                   "ports": [
+         *                     80,
+         *                     443
+         *                   ],
+         *                   "processHealth": "HEALTHY",
+         *                   "processLiveness": "HEALTHY",
+         *                   "status": "HEALTHY"
+<<<<<<< HEAD
+=======
+         *                 }
+         *               },
+         *               "resourceID": "resource-12345678",
+         *               "resourceKey": "primary",
+         *               "resourceType": "Kustomize",
+         *               "status": "HEALTHY"
+         *             },
+         *             "Impedit ut.": {
+         *               "nodesHealth": {
+         *                 "Quia omnis et.": {
+         *                   "availabilityZone": "us-east-2a",
+         *                   "connectivityStatus": "HEALTHY",
+         *                   "diskHealth": "HEALTHY",
+         *                   "endpoint": "primary-0.instance-abcd1234.us-east-2.aws.omnistrate.cloud",
+         *                   "integrationsHealth": {
+         *                     "CustomerObservabilityHealth": "HEALTHY",
+         *                     "InternalObservabilityHealth": "HEALTHY"
+         *                   },
+         *                   "loadStatus": "LOAD_NORMAL",
+         *                   "nodeHealth": "HEALTHY",
+         *                   "nodeName": "postgres-0",
+         *                   "ports": [
+         *                     80,
+         *                     443
+         *                   ],
+         *                   "processHealth": "HEALTHY",
+         *                   "processLiveness": "HEALTHY",
+         *                   "status": "HEALTHY"
+>>>>>>> 61f89eeed5352a5db1e6dcfe7b01b09c8af3839e
          *                 },
          *                 "Voluptas aut vel vel.": {
          *                   "availabilityZone": "us-east-2a",
@@ -11809,8 +12320,20 @@ export interface components {
          *               "resourceKey": "primary",
          *               "resourceType": "Kustomize",
          *               "status": "HEALTHY"
+<<<<<<< HEAD
          *             },
          *             "Impedit ut.": {
+=======
+         *             }
+         *           },
+         *           "status": "HEALTHY"
+         *         },
+         *         "Nisi dignissimos placeat nihil nobis asperiores.": {
+         *           "instanceID": "instance-12345678",
+         *           "lifeCycleStatus": "RUNNING",
+         *           "resourcesHealth": {
+         *             "Corporis vel voluptatem aut molestiae ut.": {
+>>>>>>> 61f89eeed5352a5db1e6dcfe7b01b09c8af3839e
          *               "nodesHealth": {
          *                 "Quia omnis et.": {
          *                   "availabilityZone": "us-east-2a",
@@ -11857,6 +12380,7 @@ export interface components {
          *               "resourceKey": "primary",
          *               "resourceType": "Kustomize",
          *               "status": "HEALTHY"
+<<<<<<< HEAD
          *             }
          *           },
          *           "status": "HEALTHY"
@@ -11912,10 +12436,13 @@ export interface components {
          *               "resourceKey": "primary",
          *               "resourceType": "Kustomize",
          *               "status": "HEALTHY"
+=======
+>>>>>>> 61f89eeed5352a5db1e6dcfe7b01b09c8af3839e
          *             },
          *             "Dicta voluptas non.": {
          *               "nodesHealth": {
          *                 "Quia omnis et.": {
+<<<<<<< HEAD
          *                   "availabilityZone": "us-east-2a",
          *                   "connectivityStatus": "HEALTHY",
          *                   "diskHealth": "HEALTHY",
@@ -12019,6 +12546,8 @@ export interface components {
          *             "Corporis vel voluptatem aut molestiae ut.": {
          *               "nodesHealth": {
          *                 "Quia omnis et.": {
+=======
+>>>>>>> 61f89eeed5352a5db1e6dcfe7b01b09c8af3839e
          *                   "availabilityZone": "us-east-2a",
          *                   "connectivityStatus": "HEALTHY",
          *                   "diskHealth": "HEALTHY",
@@ -12064,6 +12593,112 @@ export interface components {
          *               "resourceType": "Kustomize",
          *               "status": "HEALTHY"
          *             },
+<<<<<<< HEAD
+=======
+         *             "Impedit ut.": {
+         *               "nodesHealth": {
+         *                 "Quia omnis et.": {
+         *                   "availabilityZone": "us-east-2a",
+         *                   "connectivityStatus": "HEALTHY",
+         *                   "diskHealth": "HEALTHY",
+         *                   "endpoint": "primary-0.instance-abcd1234.us-east-2.aws.omnistrate.cloud",
+         *                   "integrationsHealth": {
+         *                     "CustomerObservabilityHealth": "HEALTHY",
+         *                     "InternalObservabilityHealth": "HEALTHY"
+         *                   },
+         *                   "loadStatus": "LOAD_NORMAL",
+         *                   "nodeHealth": "HEALTHY",
+         *                   "nodeName": "postgres-0",
+         *                   "ports": [
+         *                     80,
+         *                     443
+         *                   ],
+         *                   "processHealth": "HEALTHY",
+         *                   "processLiveness": "HEALTHY",
+         *                   "status": "HEALTHY"
+         *                 },
+         *                 "Voluptas aut vel vel.": {
+         *                   "availabilityZone": "us-east-2a",
+         *                   "connectivityStatus": "HEALTHY",
+         *                   "diskHealth": "HEALTHY",
+         *                   "endpoint": "primary-0.instance-abcd1234.us-east-2.aws.omnistrate.cloud",
+         *                   "integrationsHealth": {
+         *                     "CustomerObservabilityHealth": "HEALTHY",
+         *                     "InternalObservabilityHealth": "HEALTHY"
+         *                   },
+         *                   "loadStatus": "LOAD_NORMAL",
+         *                   "nodeHealth": "HEALTHY",
+         *                   "nodeName": "postgres-0",
+         *                   "ports": [
+         *                     80,
+         *                     443
+         *                   ],
+         *                   "processHealth": "HEALTHY",
+         *                   "processLiveness": "HEALTHY",
+         *                   "status": "HEALTHY"
+         *                 }
+         *               },
+         *               "resourceID": "resource-12345678",
+         *               "resourceKey": "primary",
+         *               "resourceType": "Kustomize",
+         *               "status": "HEALTHY"
+         *             }
+         *           },
+         *           "status": "HEALTHY"
+         *         },
+         *         "Sit repudiandae nemo.": {
+         *           "instanceID": "instance-12345678",
+         *           "lifeCycleStatus": "RUNNING",
+         *           "resourcesHealth": {
+         *             "Corporis vel voluptatem aut molestiae ut.": {
+         *               "nodesHealth": {
+         *                 "Quia omnis et.": {
+         *                   "availabilityZone": "us-east-2a",
+         *                   "connectivityStatus": "HEALTHY",
+         *                   "diskHealth": "HEALTHY",
+         *                   "endpoint": "primary-0.instance-abcd1234.us-east-2.aws.omnistrate.cloud",
+         *                   "integrationsHealth": {
+         *                     "CustomerObservabilityHealth": "HEALTHY",
+         *                     "InternalObservabilityHealth": "HEALTHY"
+         *                   },
+         *                   "loadStatus": "LOAD_NORMAL",
+         *                   "nodeHealth": "HEALTHY",
+         *                   "nodeName": "postgres-0",
+         *                   "ports": [
+         *                     80,
+         *                     443
+         *                   ],
+         *                   "processHealth": "HEALTHY",
+         *                   "processLiveness": "HEALTHY",
+         *                   "status": "HEALTHY"
+         *                 },
+         *                 "Voluptas aut vel vel.": {
+         *                   "availabilityZone": "us-east-2a",
+         *                   "connectivityStatus": "HEALTHY",
+         *                   "diskHealth": "HEALTHY",
+         *                   "endpoint": "primary-0.instance-abcd1234.us-east-2.aws.omnistrate.cloud",
+         *                   "integrationsHealth": {
+         *                     "CustomerObservabilityHealth": "HEALTHY",
+         *                     "InternalObservabilityHealth": "HEALTHY"
+         *                   },
+         *                   "loadStatus": "LOAD_NORMAL",
+         *                   "nodeHealth": "HEALTHY",
+         *                   "nodeName": "postgres-0",
+         *                   "ports": [
+         *                     80,
+         *                     443
+         *                   ],
+         *                   "processHealth": "HEALTHY",
+         *                   "processLiveness": "HEALTHY",
+         *                   "status": "HEALTHY"
+         *                 }
+         *               },
+         *               "resourceID": "resource-12345678",
+         *               "resourceKey": "primary",
+         *               "resourceType": "Kustomize",
+         *               "status": "HEALTHY"
+         *             },
+>>>>>>> 61f89eeed5352a5db1e6dcfe7b01b09c8af3839e
          *             "Dicta voluptas non.": {
          *               "nodesHealth": {
          *                 "Quia omnis et.": {
@@ -12338,6 +12973,8 @@ export interface components {
              *         "lifeCycleStatus": "RUNNING",
              *         "resourcesHealth": {
              *           "Corporis vel voluptatem aut molestiae ut.": {
+<<<<<<< HEAD
+=======
              *             "nodesHealth": {
              *               "Quia omnis et.": {
              *                 "availabilityZone": "us-east-2a",
@@ -12386,6 +13023,7 @@ export interface components {
              *             "status": "HEALTHY"
              *           },
              *           "Dicta voluptas non.": {
+>>>>>>> 61f89eeed5352a5db1e6dcfe7b01b09c8af3839e
              *             "nodesHealth": {
              *               "Quia omnis et.": {
              *                 "availabilityZone": "us-east-2a",
@@ -12432,6 +13070,59 @@ export interface components {
              *             "resourceKey": "primary",
              *             "resourceType": "Kustomize",
              *             "status": "HEALTHY"
+             *           },
+<<<<<<< HEAD
+             *           "Dicta voluptas non.": {
+=======
+             *           "Impedit ut.": {
+>>>>>>> 61f89eeed5352a5db1e6dcfe7b01b09c8af3839e
+             *             "nodesHealth": {
+             *               "Quia omnis et.": {
+             *                 "availabilityZone": "us-east-2a",
+             *                 "connectivityStatus": "HEALTHY",
+             *                 "diskHealth": "HEALTHY",
+             *                 "endpoint": "primary-0.instance-abcd1234.us-east-2.aws.omnistrate.cloud",
+             *                 "integrationsHealth": {
+             *                   "CustomerObservabilityHealth": "HEALTHY",
+             *                   "InternalObservabilityHealth": "HEALTHY"
+             *                 },
+             *                 "loadStatus": "LOAD_NORMAL",
+             *                 "nodeHealth": "HEALTHY",
+             *                 "nodeName": "postgres-0",
+             *                 "ports": [
+             *                   80,
+             *                   443
+             *                 ],
+             *                 "processHealth": "HEALTHY",
+             *                 "processLiveness": "HEALTHY",
+             *                 "status": "HEALTHY"
+             *               },
+             *               "Voluptas aut vel vel.": {
+             *                 "availabilityZone": "us-east-2a",
+             *                 "connectivityStatus": "HEALTHY",
+             *                 "diskHealth": "HEALTHY",
+             *                 "endpoint": "primary-0.instance-abcd1234.us-east-2.aws.omnistrate.cloud",
+             *                 "integrationsHealth": {
+             *                   "CustomerObservabilityHealth": "HEALTHY",
+             *                   "InternalObservabilityHealth": "HEALTHY"
+             *                 },
+             *                 "loadStatus": "LOAD_NORMAL",
+             *                 "nodeHealth": "HEALTHY",
+             *                 "nodeName": "postgres-0",
+             *                 "ports": [
+             *                   80,
+             *                   443
+             *                 ],
+             *                 "processHealth": "HEALTHY",
+             *                 "processLiveness": "HEALTHY",
+             *                 "status": "HEALTHY"
+             *               }
+             *             },
+             *             "resourceID": "resource-12345678",
+             *             "resourceKey": "primary",
+             *             "resourceType": "Kustomize",
+             *             "status": "HEALTHY"
+<<<<<<< HEAD
              *           },
              *           "Impedit ut.": {
              *             "nodesHealth": {
@@ -12480,6 +13171,8 @@ export interface components {
              *             "resourceKey": "primary",
              *             "resourceType": "Kustomize",
              *             "status": "HEALTHY"
+=======
+>>>>>>> 61f89eeed5352a5db1e6dcfe7b01b09c8af3839e
              *           }
              *         },
              *         "status": "HEALTHY"
@@ -12949,7 +13642,7 @@ export interface components {
             name: string;
             /**
              * @description The status of the account configuration
-             * @example PENDING|VERIFYING|READY|FAILED|DELETING
+             * @example PENDING|VERIFYING|READY|FAILED|DELETING|READY_TO_OFFBOARD
              */
             status: string;
             /**
@@ -13032,7 +13725,7 @@ export interface components {
             name: string;
             /**
              * @description The status of the account configuration
-             * @example PENDING|VERIFYING|READY|FAILED|DELETING
+             * @example PENDING|VERIFYING|READY|FAILED|DELETING|READY_TO_OFFBOARD
              */
             status: string;
             /**
@@ -13121,7 +13814,7 @@ export interface components {
             name: string;
             /**
              * @description The status of the account configuration
-             * @example PENDING|VERIFYING|READY|FAILED|DELETING
+             * @example PENDING|VERIFYING|READY|FAILED|DELETING|READY_TO_OFFBOARD
              */
             status: string;
             /**
@@ -13270,7 +13963,7 @@ export interface components {
             name: string;
             /**
              * @description The status of the account configuration
-             * @example PENDING|VERIFYING|READY|FAILED|DELETING
+             * @example PENDING|VERIFYING|READY|FAILED|DELETING|READY_TO_OFFBOARD
              */
             status: string;
             /**
@@ -14790,25 +15483,44 @@ export interface components {
         };
         /** @example {
          *       "ProductTierId": "Beatae beatae.",
+<<<<<<< HEAD
          *       "ProductTierVersion": "Omnis pariatur natus aperiam ipsam aut pariatur.",
          *       "id": "op-12345678",
          *       "serviceId": "s-12345678",
          *       "token": "w1a"
+=======
+         *       "ProductTierVersion": "Et non et quis.",
+         *       "id": "op-12345678",
+         *       "serviceId": "s-12345678",
+         *       "token": "a"
+>>>>>>> 61f89eeed5352a5db1e6dcfe7b01b09c8af3839e
          *     } */
         DescribeOutputParameterRequest: {
             /**
              * @description ID of a Product Tier
+<<<<<<< HEAD
              * @example Delectus sit.
+=======
+             * @example Quae magnam excepturi odit et.
+>>>>>>> 61f89eeed5352a5db1e6dcfe7b01b09c8af3839e
              */
             ProductTierId?: string;
             /**
              * @description The product tier version of the infra config to describe. If not specified, the latest version is described.
+<<<<<<< HEAD
              * @example Autem delectus quae magnam excepturi odit.
+=======
+             * @example Placeat et est dolore magnam quo autem.
+>>>>>>> 61f89eeed5352a5db1e6dcfe7b01b09c8af3839e
              */
             ProductTierVersion?: string;
             /**
              * @description ID of an Output Parameter
+<<<<<<< HEAD
              * @example Quidem placeat et est dolore magnam.
+=======
+             * @example Aliquam quos aspernatur ut modi.
+>>>>>>> 61f89eeed5352a5db1e6dcfe7b01b09c8af3839e
              */
             id: string;
             /**
@@ -14818,7 +15530,11 @@ export interface components {
             serviceId: string;
             /**
              * @description JWT token used to perform authorization
+<<<<<<< HEAD
              * @example 03p
+=======
+             * @example 6
+>>>>>>> 61f89eeed5352a5db1e6dcfe7b01b09c8af3839e
              */
             token: string;
         };
@@ -14841,7 +15557,11 @@ export interface components {
             description: string;
             /**
              * @description ID of an Output Parameter
+<<<<<<< HEAD
              * @example Atque illo ea molestias.
+=======
+             * @example Pariatur natus.
+>>>>>>> 61f89eeed5352a5db1e6dcfe7b01b09c8af3839e
              */
             id: string;
             /**
@@ -14856,7 +15576,11 @@ export interface components {
             name: string;
             /**
              * @description ID of a resource
+<<<<<<< HEAD
              * @example Aut maxime.
+=======
+             * @example Ipsam aut pariatur hic atque illo ea.
+>>>>>>> 61f89eeed5352a5db1e6dcfe7b01b09c8af3839e
              */
             resourceId: string;
             /**
@@ -15958,25 +16682,44 @@ export interface components {
         };
         /** @example {
          *       "ProductTierId": "Beatae beatae.",
+<<<<<<< HEAD
          *       "ProductTierVersion": "Cum culpa nisi aut dignissimos quo.",
          *       "id": "r-12345678",
          *       "serviceId": "s-12345678",
          *       "token": "e9"
+=======
+         *       "ProductTierVersion": "Sed consequatur reprehenderit.",
+         *       "id": "r-12345678",
+         *       "serviceId": "s-12345678",
+         *       "token": "vhz"
+>>>>>>> 61f89eeed5352a5db1e6dcfe7b01b09c8af3839e
          *     } */
         DescribeResourceMetricsConfigRequest: {
             /**
              * @description ID of a Product Tier
+<<<<<<< HEAD
              * @example Nam ut qui magnam quisquam mollitia distinctio.
+=======
+             * @example Ullam nam ut qui.
+>>>>>>> 61f89eeed5352a5db1e6dcfe7b01b09c8af3839e
              */
             ProductTierId?: string;
             /**
              * @description The product tier version of the infra config to describe. If not specified, the latest version is described.
+<<<<<<< HEAD
              * @example Quo minus non sed perferendis rerum hic.
+=======
+             * @example Non sed perferendis rerum.
+>>>>>>> 61f89eeed5352a5db1e6dcfe7b01b09c8af3839e
              */
             ProductTierVersion?: string;
             /**
              * @description ID of a resource
+<<<<<<< HEAD
              * @example Debitis est architecto incidunt cum est.
+=======
+             * @example Maiores quo.
+>>>>>>> 61f89eeed5352a5db1e6dcfe7b01b09c8af3839e
              */
             id: string;
             /**
@@ -15986,7 +16729,11 @@ export interface components {
             serviceId: string;
             /**
              * @description JWT token used to perform authorization
+<<<<<<< HEAD
              * @example k
+=======
+             * @example va
+>>>>>>> 61f89eeed5352a5db1e6dcfe7b01b09c8af3839e
              */
             token: string;
         };
@@ -16178,6 +16925,38 @@ export interface components {
          *             "primary": true
          *           }
          *         },
+         *         "layeredChartValues": [
+         *           {
+         *             "values": {
+         *               "global": {
+         *                 "image": {
+         *                   "tag": "v1.0.0"
+         *                 },
+         *                 "replicaCount": 1,
+         *                 "resources": {
+         *                   "requests": {
+         *                     "cpu": "100m",
+         *                     "memory": "128Mi"
+         *                   }
+         *                 }
+         *               }
+         *             }
+         *           },
+         *           {
+         *             "scope": {
+         *               "{{ $sys.cloudProviderName }}": "aws"
+         *             },
+         *             "valuesFile": {
+         *               "gitConfiguration": {
+         *                 "accessToken": "ghp_...",
+         *                 "commitSHA": "a1b2c3d4e5f6",
+         *                 "path": "aws/production.yaml",
+         *                 "referenceName": "refs/heads/main",
+         *                 "repositoryUrl": "https://github.com/org/helm-values"
+         *               }
+         *             }
+         *           }
+         *         ],
          *         "password": "my-password",
          *         "runtimeConfiguration": {
          *           "disableHooks": true,
@@ -18009,6 +18788,7 @@ export interface components {
         };
         /** @example {
          *       "accountConfigIdentityId": "org-12345678",
+         *       "allowCreatesWhenPaymentNotConfigured": true,
          *       "cloudProviderNames": [
          *         "aws",
          *         "gcp"
@@ -18016,6 +18796,8 @@ export interface components {
          *       "createdAt": "2019-01-01T00:00:00Z",
          *       "defaultSubscription": true,
          *       "id": "sub-12345678",
+         *       "maxNumberOfInstances": 10,
+         *       "paymentMethodConfigured": true,
          *       "productTierId": "pt-12345678",
          *       "productTierName": "Omnistrate Multi Tenancy",
          *       "roleType": "root",
@@ -18034,6 +18816,11 @@ export interface components {
              * @example Quasi qui reiciendis praesentium placeat.
              */
             accountConfigIdentityId: string;
+            /**
+             * @description Whether to allow creating instances when payment is not configured.
+             * @example true
+             */
+            allowCreatesWhenPaymentNotConfigured?: boolean;
             /**
              * @description List of cloud provider names
              * @example [
@@ -18057,6 +18844,17 @@ export interface components {
              * @example Explicabo quam libero qui odit sit.
              */
             id: string;
+            /**
+             * Format: int64
+             * @description The maximum number of instances that can be created for this subscription.
+             * @example 10
+             */
+            maxNumberOfInstances?: number;
+            /**
+             * @description Return true if the required payment method is configured for this subscription or no payment method is required. False if the subscription requires a payment method but it is not configured.
+             * @example true
+             */
+            paymentMethodConfigured?: boolean;
             /**
              * @description ID of a Product Tier
              * @example Voluptatibus accusamus.
@@ -18884,7 +19682,11 @@ export interface components {
          *       "capability": "SERVERLESS",
          *       "id": "r-12345678",
          *       "serviceId": "s-12345678",
+<<<<<<< HEAD
          *       "token": "m"
+=======
+         *       "token": "kf"
+>>>>>>> 61f89eeed5352a5db1e6dcfe7b01b09c8af3839e
          *     } */
         DisableResourceCapabilityRequest: {
             /**
@@ -18894,7 +19696,11 @@ export interface components {
             capability: string;
             /**
              * @description ID of a resource
+<<<<<<< HEAD
              * @example Fuga blanditiis in ea et ut.
+=======
+             * @example Ut ut consequatur quas et.
+>>>>>>> 61f89eeed5352a5db1e6dcfe7b01b09c8af3839e
              */
             id: string;
             /**
@@ -18904,7 +19710,11 @@ export interface components {
             serviceId: string;
             /**
              * @description JWT token used to perform authorization
+<<<<<<< HEAD
              * @example 5
+=======
+             * @example f8
+>>>>>>> 61f89eeed5352a5db1e6dcfe7b01b09c8af3839e
              */
             token: string;
         };
@@ -19158,7 +19968,11 @@ export interface components {
          *       },
          *       "id": "r-12345678",
          *       "serviceId": "s-12345678",
+<<<<<<< HEAD
          *       "token": "spu"
+=======
+         *       "token": "zs"
+>>>>>>> 61f89eeed5352a5db1e6dcfe7b01b09c8af3839e
          *     } */
         EnableResourceCapabilityRequest: {
             /**
@@ -19184,7 +19998,11 @@ export interface components {
             };
             /**
              * @description ID of a resource
+<<<<<<< HEAD
              * @example Itaque dolorem qui in aut repellat natus.
+=======
+             * @example Aut repellat.
+>>>>>>> 61f89eeed5352a5db1e6dcfe7b01b09c8af3839e
              */
             id: string;
             /**
@@ -19194,7 +20012,11 @@ export interface components {
             serviceId: string;
             /**
              * @description JWT token used to perform authorization
+<<<<<<< HEAD
              * @example e4
+=======
+             * @example v
+>>>>>>> 61f89eeed5352a5db1e6dcfe7b01b09c8af3839e
              */
             token: string;
         };
@@ -20490,6 +21312,46 @@ export interface components {
             userName?: string;
         };
         /** @example {
+         *       "accessToken": "my-token",
+         *       "commitSHA": "1e386b5f54de9150d336ccfe2e14782b94faf67c",
+         *       "path": "helm/values/production.yaml",
+         *       "referenceName": "refs/heads/main",
+         *       "repositoryUrl": "https://github.com/username/myrepo",
+         *       "userName": "my-user"
+         *     } */
+        GitFileConfiguration: {
+            /**
+             * @description The access token
+             * @example my-token
+             */
+            accessToken?: string;
+            /**
+             * @description The commit SHA to checkout
+             * @example 1e386b5f54de9150d336ccfe2e14782b94faf67c
+             */
+            commitSHA?: string;
+            /**
+             * @description The relative file path from repository root
+             * @example helm/values/production.yaml
+             */
+            path: string;
+            /**
+             * @description The reference name of the repository
+             * @example refs/heads/main
+             */
+            referenceName: string;
+            /**
+             * @description The URL of the repository
+             * @example https://github.com/username/myrepo
+             */
+            repositoryUrl: string;
+            /**
+             * @description The name of github user
+             * @example my-user
+             */
+            userName?: string;
+        };
+        /** @example {
          *       "chartName": "my-chart",
          *       "chartRepoName": "my-repo",
          *       "chartRepoUrl": "https://my-repo.com",
@@ -20521,6 +21383,38 @@ export interface components {
          *           "primary": true
          *         }
          *       },
+         *       "layeredChartValues": [
+         *         {
+         *           "values": {
+         *             "global": {
+         *               "image": {
+         *                 "tag": "v1.0.0"
+         *               },
+         *               "replicaCount": 1,
+         *               "resources": {
+         *                 "requests": {
+         *                   "cpu": "100m",
+         *                   "memory": "128Mi"
+         *                 }
+         *               }
+         *             }
+         *           }
+         *         },
+         *         {
+         *           "scope": {
+         *             "{{ $sys.cloudProviderName }}": "aws"
+         *           },
+         *           "valuesFile": {
+         *             "gitConfiguration": {
+         *               "accessToken": "ghp_...",
+         *               "commitSHA": "a1b2c3d4e5f6",
+         *               "path": "aws/production.yaml",
+         *               "referenceName": "refs/heads/main",
+         *               "repositoryUrl": "https://github.com/org/helm-values"
+         *             }
+         *           }
+         *         }
+         *       ],
          *       "password": "my-password",
          *       "runtimeConfiguration": {
          *         "disableHooks": true,
@@ -20553,7 +21447,7 @@ export interface components {
              */
             chartRepoUrl: string;
             /**
-             * @description The values of the Helm package
+             * @description The values of the Helm package (mutually exclusive with layeredChartValues)
              * @example {
              *       "key1": "value1",
              *       "key2": 3,
@@ -20596,6 +21490,42 @@ export interface components {
             endpointConfiguration?: {
                 [key: string]: components["schemas"]["Endpoint"];
             };
+            /**
+             * @description Layered chart values configuration with conditional scoping (mutually exclusive with chartValues). Values are processed in order - later entries override earlier ones for the same keys.
+             * @example [
+             *       {
+             *         "values": {
+             *           "global": {
+             *             "image": {
+             *               "tag": "v1.0.0"
+             *             },
+             *             "replicaCount": 1,
+             *             "resources": {
+             *               "requests": {
+             *                 "cpu": "100m",
+             *                 "memory": "128Mi"
+             *               }
+             *             }
+             *           }
+             *         }
+             *       },
+             *       {
+             *         "scope": {
+             *           "{{ $sys.cloudProviderName }}": "aws"
+             *         },
+             *         "valuesFile": {
+             *           "gitConfiguration": {
+             *             "accessToken": "ghp_...",
+             *             "commitSHA": "a1b2c3d4e5f6",
+             *             "path": "aws/production.yaml",
+             *             "referenceName": "refs/heads/main",
+             *             "repositoryUrl": "https://github.com/org/helm-values"
+             *           }
+             *         }
+             *       }
+             *     ]
+             */
+            layeredChartValues?: components["schemas"]["ChartValuesRef"][];
             /**
              * @description The password to authenticate with the registry
              * @example my-password
@@ -24931,25 +25861,44 @@ export interface components {
         };
         /** @example {
          *       "ProductTierId": "Beatae beatae.",
+<<<<<<< HEAD
          *       "ProductTierVersion": "Cum possimus unde.",
          *       "resourceId": "r-12345678",
          *       "serviceId": "s-12345678",
          *       "token": "h"
+=======
+         *       "ProductTierVersion": "Vero exercitationem tempore esse cum possimus.",
+         *       "resourceId": "r-12345678",
+         *       "serviceId": "s-12345678",
+         *       "token": "fj"
+>>>>>>> 61f89eeed5352a5db1e6dcfe7b01b09c8af3839e
          *     } */
         ListOutputParametersRequest: {
             /**
              * @description ID of a Product Tier
+<<<<<<< HEAD
              * @example Adipisci pariatur vero.
+=======
+             * @example Alias dolores magnam aut porro nostrum in.
+>>>>>>> 61f89eeed5352a5db1e6dcfe7b01b09c8af3839e
              */
             ProductTierId?: string;
             /**
              * @description The product tier version of the infra config to describe. If not specified, the latest version is described.
+<<<<<<< HEAD
              * @example Porro nostrum in aut.
+=======
+             * @example Doloremque ducimus voluptatem.
+>>>>>>> 61f89eeed5352a5db1e6dcfe7b01b09c8af3839e
              */
             ProductTierVersion?: string;
             /**
              * @description ID of a resource
+<<<<<<< HEAD
              * @example Ducimus voluptatem hic alias dolores magnam.
+=======
+             * @example Perspiciatis et.
+>>>>>>> 61f89eeed5352a5db1e6dcfe7b01b09c8af3839e
              */
             resourceId: string;
             /**
@@ -24959,7 +25908,11 @@ export interface components {
             serviceId: string;
             /**
              * @description JWT token used to perform authorization
+<<<<<<< HEAD
              * @example 5oj
+=======
+             * @example i2z
+>>>>>>> 61f89eeed5352a5db1e6dcfe7b01b09c8af3839e
              */
             token: string;
         };
@@ -25020,28 +25973,6 @@ export interface components {
             /**
              * @description The output parameters
              * @example [
-             *       {
-             *         "description": "Username of the user created in the target system",
-             *         "id": "op-12345678",
-             *         "key": "username",
-             *         "name": "Username",
-             *         "resourceId": "r-12345678",
-             *         "serviceId": "s-12345678",
-             *         "value": "johndoe",
-             *         "valueRef": "$var.username",
-             *         "valueType": "Boolean|Float64|String|Secret|Password"
-             *       },
-             *       {
-             *         "description": "Username of the user created in the target system",
-             *         "id": "op-12345678",
-             *         "key": "username",
-             *         "name": "Username",
-             *         "resourceId": "r-12345678",
-             *         "serviceId": "s-12345678",
-             *         "value": "johndoe",
-             *         "valueRef": "$var.username",
-             *         "valueType": "Boolean|Float64|String|Secret|Password"
-             *       },
              *       {
              *         "description": "Username of the user created in the target system",
              *         "id": "op-12345678",
@@ -25215,25 +26146,44 @@ export interface components {
         };
         /** @example {
          *       "ProductTierId": "Beatae beatae.",
+<<<<<<< HEAD
          *       "ProductTierVersion": "Quis sit natus.",
          *       "id": "r-12345678",
          *       "serviceId": "s-12345678",
          *       "token": "wbc"
+=======
+         *       "ProductTierVersion": "Odio quis sit natus.",
+         *       "id": "r-12345678",
+         *       "serviceId": "s-12345678",
+         *       "token": "wwb"
+>>>>>>> 61f89eeed5352a5db1e6dcfe7b01b09c8af3839e
          *     } */
         ListResourceCapabilitiesRequest: {
             /**
              * @description ID of a Product Tier
+<<<<<<< HEAD
              * @example Et et dolore quae eos.
+=======
+             * @example Dolore quae.
+>>>>>>> 61f89eeed5352a5db1e6dcfe7b01b09c8af3839e
              */
             ProductTierId?: string;
             /**
              * @description The product tier version of the infra config to describe. If not specified, the latest version is described.
+<<<<<<< HEAD
              * @example Sunt et sint in expedita omnis.
+=======
+             * @example Sint in expedita omnis iste et.
+>>>>>>> 61f89eeed5352a5db1e6dcfe7b01b09c8af3839e
              */
             ProductTierVersion?: string;
             /**
              * @description ID of a resource
+<<<<<<< HEAD
              * @example Sunt magni modi.
+=======
+             * @example Neque quaerat sunt magni modi asperiores sunt.
+>>>>>>> 61f89eeed5352a5db1e6dcfe7b01b09c8af3839e
              */
             id: string;
             /**
@@ -25243,7 +26193,11 @@ export interface components {
             serviceId: string;
             /**
              * @description JWT token used to perform authorization
+<<<<<<< HEAD
              * @example tw
+=======
+             * @example um
+>>>>>>> 61f89eeed5352a5db1e6dcfe7b01b09c8af3839e
              */
             token: string;
         };
@@ -25739,6 +26693,38 @@ export interface components {
          *                 "primary": true
          *               }
          *             },
+         *             "layeredChartValues": [
+         *               {
+         *                 "values": {
+         *                   "global": {
+         *                     "image": {
+         *                       "tag": "v1.0.0"
+         *                     },
+         *                     "replicaCount": 1,
+         *                     "resources": {
+         *                       "requests": {
+         *                         "cpu": "100m",
+         *                         "memory": "128Mi"
+         *                       }
+         *                     }
+         *                   }
+         *                 }
+         *               },
+         *               {
+         *                 "scope": {
+         *                   "{{ $sys.cloudProviderName }}": "aws"
+         *                 },
+         *                 "valuesFile": {
+         *                   "gitConfiguration": {
+         *                     "accessToken": "ghp_...",
+         *                     "commitSHA": "a1b2c3d4e5f6",
+         *                     "path": "aws/production.yaml",
+         *                     "referenceName": "refs/heads/main",
+         *                     "repositoryUrl": "https://github.com/org/helm-values"
+         *                   }
+         *                 }
+         *               }
+         *             ],
          *             "password": "my-password",
          *             "runtimeConfiguration": {
          *               "disableHooks": true,
@@ -26073,6 +27059,404 @@ export interface components {
          *                 "primary": true
          *               }
          *             },
+         *             "layeredChartValues": [
+         *               {
+         *                 "values": {
+         *                   "global": {
+         *                     "image": {
+         *                       "tag": "v1.0.0"
+         *                     },
+         *                     "replicaCount": 1,
+         *                     "resources": {
+         *                       "requests": {
+         *                         "cpu": "100m",
+         *                         "memory": "128Mi"
+         *                       }
+         *                     }
+         *                   }
+         *                 }
+         *               },
+         *               {
+         *                 "scope": {
+         *                   "{{ $sys.cloudProviderName }}": "aws"
+         *                 },
+         *                 "valuesFile": {
+         *                   "gitConfiguration": {
+         *                     "accessToken": "ghp_...",
+         *                     "commitSHA": "a1b2c3d4e5f6",
+         *                     "path": "aws/production.yaml",
+         *                     "referenceName": "refs/heads/main",
+         *                     "repositoryUrl": "https://github.com/org/helm-values"
+         *                   }
+         *                 }
+         *               }
+         *             ],
+         *             "password": "my-password",
+         *             "runtimeConfiguration": {
+         *               "disableHooks": true,
+         *               "recreate": true,
+         *               "resetThenReuseValues": true,
+         *               "resetValues": true,
+         *               "reuseValues": true,
+         *               "skipCRDs": true,
+         *               "timeoutNanos": 1000000000,
+         *               "upgradeCRDs": true,
+         *               "wait": true,
+         *               "waitForJobs": true
+         *             },
+         *             "username": "my-user"
+         *           },
+         *           "id": "r-12345678",
+         *           "imageConfigId": "imgc-12345678",
+         *           "infraConfigId": "ic-12345678",
+         *           "internal": true,
+         *           "isDeprecated": false,
+         *           "jobConfig": {
+         *             "activeDeadlineSeconds": 300,
+         *             "backoffLimit": 5
+         *           },
+         *           "key": "galera",
+         *           "kustomizeConfiguration": {
+         *             "endpointConfiguration": {
+         *               "admin": {
+         *                 "host": "https://{{ $sys.network.externalClusterEndpoint }}/admin",
+         *                 "networkingType": "PRIVATE",
+         *                 "ports": [
+         *                   8080,
+         *                   8081
+         *                 ],
+         *                 "primary": false
+         *               },
+         *               "cluster": {
+         *                 "host": "https://my-endpoint.com",
+         *                 "networkingType": "PUBLIC",
+         *                 "ports": [
+         *                   8080,
+         *                   8081
+         *                 ],
+         *                 "primary": true
+         *               }
+         *             },
+         *             "gitConfiguration": {
+         *               "accessToken": "my-token",
+         *               "commitSHA": "1e386b5f54de9150d336ccfe2e14782b94faf67c",
+         *               "referenceName": "tags/v1.0.0",
+         *               "repositoryUrl": "https://github.com/username/myrepo",
+         *               "userName": "my-user"
+         *             },
+         *             "helmChartDependencies": [
+         *               {
+         *                 "chartName": "cert-manager",
+         *                 "chartVersion": "v1.5.3"
+         *               },
+         *               {
+         *                 "chartName": "nginx-ingress",
+         *                 "chartVersion": "v0.48.1"
+         *               },
+         *               {
+         *                 "chartName": "external-dns",
+         *                 "chartVersion": "v0.7.0"
+         *               },
+         *               {
+         *                 "chartName": "cnpg-operator",
+         *                 "chartVersion": "v0.23.1"
+         *               }
+         *             ],
+         *             "kustomizePath": "/kustomize"
+         *           },
+         *           "l4LoadBalancerConfiguration": {
+         *             "ingressPortConfiguration": [
+         *               {
+         *                 "associatedResourceIDs": [
+         *                   "r-12345678",
+         *                   "r-abcdef12"
+         *                 ],
+         *                 "backendPort": 8080,
+         *                 "ingressPort": 1234
+         *               },
+         *               {
+         *                 "associatedResourceIDs": [
+         *                   "r-12345678",
+         *                   "r-abcdef12"
+         *                 ],
+         *                 "backendPort": 8081,
+         *                 "ingressPort": 5678
+         *               },
+         *               {
+         *                 "associatedResourceIDs": [
+         *                   "r-vwxybz12",
+         *                   "r-poij122v"
+         *                 ],
+         *                 "backendPort": 8082,
+         *                 "ingressPort": 9012
+         *               }
+         *             ]
+         *           },
+         *           "l7LoadBalancerConfiguration": {
+         *             "paths": [
+         *               {
+         *                 "associatedResourceID": "r-12345678",
+         *                 "path": "/path",
+         *                 "port": 8080
+         *               }
+         *             ]
+         *           },
+         *           "name": "Galera",
+         *           "operatorCRDConfiguration": {
+         *             "endpointConfiguration": {
+         *               "admin": {
+         *                 "host": "https://{{ $sys.network.externalClusterEndpoint }}/admin",
+         *                 "networkingType": "PRIVATE",
+         *                 "ports": [
+         *                   8080,
+         *                   8081
+         *                 ],
+         *                 "primary": false
+         *               },
+         *               "cluster": {
+         *                 "host": "https://my-endpoint.com",
+         *                 "networkingType": "PUBLIC",
+         *                 "ports": [
+         *                   8080,
+         *                   8081
+         *                 ],
+         *                 "primary": true
+         *               }
+         *             },
+         *             "helmChartDependencies": [
+         *               {
+         *                 "chartName": "cert-manager",
+         *                 "chartVersion": "v1.5.3"
+         *               },
+         *               {
+         *                 "chartName": "nginx-ingress",
+         *                 "chartVersion": "v0.48.1"
+         *               },
+         *               {
+         *                 "chartName": "external-dns",
+         *                 "chartVersion": "v0.7.0"
+         *               },
+         *               {
+         *                 "chartName": "cnpg-operator",
+         *                 "chartVersion": "v0.23.1"
+         *               }
+         *             ],
+         *             "outputParameters": {
+         *               "expiresAt": "$out.status.notAfter",
+         *               "issuerName": "letsencrypt-prod"
+         *             },
+         *             "readinessConditions": {
+         *               "$out.status.conditions[?(@.type=='Ready')].status": true
+         *             },
+         *             "supplementalFiles": [
+         *               "apiVersion: cert-manager.io/v1\nkind: ClusterIssuer\nmetadata:\n  name: letsencrypt-prod\nspec:\n  acme:\n    server: https://acme-v02.api.letsencrypt.org/directory\n",
+         *               "apiVersion: ingress.nginx.io/v1\nkind: IngressClass\nmetadata:\n  name: nginx\nspec:\n  controller: nginx.org/ingress-controller"
+         *             ],
+         *             "template": "apiVersion: cert-manager.io/v1\nkind: ClusterIssuer\nmetadata:\n  name: letsencrypt-prod\nspec:\n  acme:\n    server: https://acme-v02.api.letsencrypt.org/directory\n    email: test@example.com\n    privateKeySecretRef:\n      name: letsencrypt-prod\n    solvers:\n    - http01:\n        ingress:\n          class: nginx"
+         *           },
+         *           "productTierId": "pt-12345678",
+         *           "proxyType": "PortsBasedProxy",
+         *           "resourceType": "Generic",
+         *           "serviceId": "s-12345678",
+         *           "terraformConfigurations": {
+         *             "aws": {
+         *               "gitConfiguration": {
+         *                 "referenceName": "ref",
+         *                 "repositoryUrl": "gitUrl"
+         *               },
+         *               "privateModuleGitAccessTokens": {
+         *                 "tokenName": "accessToken"
+         *               },
+         *               "terraformPath": "/project1/tf"
+         *             }
+         *           }
+         *         },
+         *         {
+         *           "actionHooks": [
+         *             {
+         *               "command": "curl -v -X POST https://$HOSTNAME:8080/cluster/init",
+         *               "scope": "CLUSTER",
+         *               "type": "INIT"
+         *             }
+         *           ],
+         *           "additionalSecurityContext": {
+         *             "AddCapabilities": [
+         *               "CAP_NET_ADMIN",
+         *               "CAP_NET_RAW"
+         *             ],
+         *             "DropCapabilities": [
+         *               "CAP_NET_ADMIN",
+         *               "CAP_NET_RAW"
+         *             ],
+         *             "SupplementalGroupIDs": [
+         *               1001,
+         *               999
+         *             ]
+         *           },
+         *           "backupConfiguration": {
+         *             "backupPeriodInHours": 24,
+         *             "backupRetentionInDays": 7
+         *           },
+         *           "blobStorageConfiguration": {
+         *             "GCSConfiguration": {},
+         *             "S3Configuration": {}
+         *           },
+         *           "capabilities": [
+         *             {
+         *               "capability": "SERVERLESS",
+         *               "configuration": {
+         *                 "EnableAutoStop": true,
+         *                 "MinimumNodesInPool": 5,
+         *                 "PortsMappingProxyConfig": {
+         *                   "MaxNumberOfClustersPerProxyInstance": 50,
+         *                   "NumberOfPortsPerCluster": 4
+         *                 },
+         *                 "ProxyId": "r-123456",
+         *                 "ReferenceProxyKey": "resource-proxy",
+         *                 "TargetPort": 5432
+         *               }
+         *             },
+         *             {
+         *               "capability": "SERVERLESS",
+         *               "configuration": {
+         *                 "EnableAutoStop": true,
+         *                 "MinimumNodesInPool": 5,
+         *                 "PortsMappingProxyConfig": {
+         *                   "MaxNumberOfClustersPerProxyInstance": 50,
+         *                   "NumberOfPortsPerCluster": 4
+         *                 },
+         *                 "ProxyId": "r-123456",
+         *                 "ReferenceProxyKey": "resource-proxy",
+         *                 "TargetPort": 5432
+         *               }
+         *             },
+         *             {
+         *               "capability": "SERVERLESS",
+         *               "configuration": {
+         *                 "EnableAutoStop": true,
+         *                 "MinimumNodesInPool": 5,
+         *                 "PortsMappingProxyConfig": {
+         *                   "MaxNumberOfClustersPerProxyInstance": 50,
+         *                   "NumberOfPortsPerCluster": 4
+         *                 },
+         *                 "ProxyId": "r-123456",
+         *                 "ReferenceProxyKey": "resource-proxy",
+         *                 "TargetPort": 5432
+         *               }
+         *             }
+         *           ],
+         *           "customLabels": {
+         *             "key": "value"
+         *           },
+         *           "customSysCTLs": {
+         *             "net.ipv4.tcp_syncookies": "1"
+         *           },
+         *           "customULimits": [
+         *             {
+         *               "ULimitsName": "NoProc",
+         *               "ULimitsType": "Soft",
+         *               "ULimitsValue": 1000
+         *             },
+         *             {
+         *               "ULimitsName": "NoFile",
+         *               "ULimitsType": "Hard",
+         *               "ULimitsValue": 2048
+         *             }
+         *           ],
+         *           "dependencies": [
+         *             {
+         *               "parameterMap": {
+         *                 "clusterId": "writerId",
+         *                 "clusterOrg": "userDatabase"
+         *               },
+         *               "resourceId": "r-12345678"
+         *             },
+         *             {
+         *               "parameterMap": {
+         *                 "clusterId": "readerId",
+         *                 "clusterOrg": "userDatabase"
+         *               },
+         *               "resourceId": "r-abcdef12"
+         *             }
+         *           ],
+         *           "description": "An resource to manage a hosted public SaaS offering of a multi-writer MySQL service",
+         *           "environmentVariables": [
+         *             {
+         *               "name": "MYSQL_ROOT_PASSWORD",
+         *               "value": "password"
+         *             }
+         *           ],
+         *           "fileSystemConfiguration": {
+         *             "EFSFileSystemConfiguration": {
+         *               "PerformanceMode": "generalPurpose|maxIO",
+         *               "ProvisionedThroughputInMibps": 125,
+         *               "ThroughputMode": "provisioned|bursting|elastic"
+         *             }
+         *           },
+         *           "helmChartConfiguration": {
+         *             "chartName": "my-chart",
+         *             "chartRepoName": "my-repo",
+         *             "chartRepoUrl": "https://my-repo.com",
+         *             "chartValues": {
+         *               "key1": "value1",
+         *               "key2": 3,
+         *               "key3": {
+         *                 "key4": "value4"
+         *               }
+         *             },
+         *             "chartVersion": "1.0.0",
+         *             "endpointConfiguration": {
+         *               "admin": {
+         *                 "host": "https://{{ $sys.network.externalClusterEndpoint }}/admin",
+         *                 "networkingType": "PRIVATE",
+         *                 "ports": [
+         *                   8080,
+         *                   8081
+         *                 ],
+         *                 "primary": false
+         *               },
+         *               "cluster": {
+         *                 "host": "https://my-endpoint.com",
+         *                 "networkingType": "PUBLIC",
+         *                 "ports": [
+         *                   8080,
+         *                   8081
+         *                 ],
+         *                 "primary": true
+         *               }
+         *             },
+         *             "layeredChartValues": [
+         *               {
+         *                 "values": {
+         *                   "global": {
+         *                     "image": {
+         *                       "tag": "v1.0.0"
+         *                     },
+         *                     "replicaCount": 1,
+         *                     "resources": {
+         *                       "requests": {
+         *                         "cpu": "100m",
+         *                         "memory": "128Mi"
+         *                       }
+         *                     }
+         *                   }
+         *                 }
+         *               },
+         *               {
+         *                 "scope": {
+         *                   "{{ $sys.cloudProviderName }}": "aws"
+         *                 },
+         *                 "valuesFile": {
+         *                   "gitConfiguration": {
+         *                     "accessToken": "ghp_...",
+         *                     "commitSHA": "a1b2c3d4e5f6",
+         *                     "path": "aws/production.yaml",
+         *                     "referenceName": "refs/heads/main",
+         *                     "repositoryUrl": "https://github.com/org/helm-values"
+         *                   }
+         *                 }
+         *               }
+         *             ],
          *             "password": "my-password",
          *             "runtimeConfiguration": {
          *               "disableHooks": true,
@@ -26761,6 +28145,38 @@ export interface components {
              *               "primary": true
              *             }
              *           },
+             *           "layeredChartValues": [
+             *             {
+             *               "values": {
+             *                 "global": {
+             *                   "image": {
+             *                     "tag": "v1.0.0"
+             *                   },
+             *                   "replicaCount": 1,
+             *                   "resources": {
+             *                     "requests": {
+             *                       "cpu": "100m",
+             *                       "memory": "128Mi"
+             *                     }
+             *                   }
+             *                 }
+             *               }
+             *             },
+             *             {
+             *               "scope": {
+             *                 "{{ $sys.cloudProviderName }}": "aws"
+             *               },
+             *               "valuesFile": {
+             *                 "gitConfiguration": {
+             *                   "accessToken": "ghp_...",
+             *                   "commitSHA": "a1b2c3d4e5f6",
+             *                   "path": "aws/production.yaml",
+             *                   "referenceName": "refs/heads/main",
+             *                   "repositoryUrl": "https://github.com/org/helm-values"
+             *                 }
+             *               }
+             *             }
+             *           ],
              *           "password": "my-password",
              *           "runtimeConfiguration": {
              *             "disableHooks": true,
@@ -27095,6 +28511,38 @@ export interface components {
              *               "primary": true
              *             }
              *           },
+             *           "layeredChartValues": [
+             *             {
+             *               "values": {
+             *                 "global": {
+             *                   "image": {
+             *                     "tag": "v1.0.0"
+             *                   },
+             *                   "replicaCount": 1,
+             *                   "resources": {
+             *                     "requests": {
+             *                       "cpu": "100m",
+             *                       "memory": "128Mi"
+             *                     }
+             *                   }
+             *                 }
+             *               }
+             *             },
+             *             {
+             *               "scope": {
+             *                 "{{ $sys.cloudProviderName }}": "aws"
+             *               },
+             *               "valuesFile": {
+             *                 "gitConfiguration": {
+             *                   "accessToken": "ghp_...",
+             *                   "commitSHA": "a1b2c3d4e5f6",
+             *                   "path": "aws/production.yaml",
+             *                   "referenceName": "refs/heads/main",
+             *                   "repositoryUrl": "https://github.com/org/helm-values"
+             *                 }
+             *               }
+             *             }
+             *           ],
              *           "password": "my-password",
              *           "runtimeConfiguration": {
              *             "disableHooks": true,
@@ -29989,6 +31437,7 @@ export interface components {
          *       "subscriptions": [
          *         {
          *           "accountConfigIdentityId": "org-12345678",
+         *           "allowCreatesWhenPaymentNotConfigured": true,
          *           "cloudProviderNames": [
          *             "aws",
          *             "gcp"
@@ -29996,6 +31445,8 @@ export interface components {
          *           "createdAt": "2019-01-01T00:00:00Z",
          *           "defaultSubscription": true,
          *           "id": "sub-12345678",
+         *           "maxNumberOfInstances": 10,
+         *           "paymentMethodConfigured": true,
          *           "productTierId": "pt-12345678",
          *           "productTierName": "Omnistrate Multi Tenancy",
          *           "roleType": "root",
@@ -30010,6 +31461,7 @@ export interface components {
          *         },
          *         {
          *           "accountConfigIdentityId": "org-12345678",
+         *           "allowCreatesWhenPaymentNotConfigured": true,
          *           "cloudProviderNames": [
          *             "aws",
          *             "gcp"
@@ -30017,6 +31469,11 @@ export interface components {
          *           "createdAt": "2019-01-01T00:00:00Z",
          *           "defaultSubscription": true,
          *           "id": "sub-12345678",
+<<<<<<< HEAD
+=======
+         *           "maxNumberOfInstances": 10,
+         *           "paymentMethodConfigured": true,
+>>>>>>> 61f89eeed5352a5db1e6dcfe7b01b09c8af3839e
          *           "productTierId": "pt-12345678",
          *           "productTierName": "Omnistrate Multi Tenancy",
          *           "roleType": "root",
@@ -30051,6 +31508,7 @@ export interface components {
              * @example [
              *       {
              *         "accountConfigIdentityId": "org-12345678",
+             *         "allowCreatesWhenPaymentNotConfigured": true,
              *         "cloudProviderNames": [
              *           "aws",
              *           "gcp"
@@ -30058,6 +31516,8 @@ export interface components {
              *         "createdAt": "2019-01-01T00:00:00Z",
              *         "defaultSubscription": true,
              *         "id": "sub-12345678",
+             *         "maxNumberOfInstances": 10,
+             *         "paymentMethodConfigured": true,
              *         "productTierId": "pt-12345678",
              *         "productTierName": "Omnistrate Multi Tenancy",
              *         "roleType": "root",
@@ -30072,6 +31532,7 @@ export interface components {
              *       },
              *       {
              *         "accountConfigIdentityId": "org-12345678",
+             *         "allowCreatesWhenPaymentNotConfigured": true,
              *         "cloudProviderNames": [
              *           "aws",
              *           "gcp"
@@ -30079,6 +31540,8 @@ export interface components {
              *         "createdAt": "2019-01-01T00:00:00Z",
              *         "defaultSubscription": true,
              *         "id": "sub-12345678",
+             *         "maxNumberOfInstances": 10,
+             *         "paymentMethodConfigured": true,
              *         "productTierId": "pt-12345678",
              *         "productTierName": "Omnistrate Multi Tenancy",
              *         "roleType": "root",
@@ -30093,6 +31556,7 @@ export interface components {
              *       },
              *       {
              *         "accountConfigIdentityId": "org-12345678",
+             *         "allowCreatesWhenPaymentNotConfigured": true,
              *         "cloudProviderNames": [
              *           "aws",
              *           "gcp"
@@ -30100,6 +31564,32 @@ export interface components {
              *         "createdAt": "2019-01-01T00:00:00Z",
              *         "defaultSubscription": true,
              *         "id": "sub-12345678",
+             *         "maxNumberOfInstances": 10,
+             *         "paymentMethodConfigured": true,
+             *         "productTierId": "pt-12345678",
+             *         "productTierName": "Omnistrate Multi Tenancy",
+             *         "roleType": "root",
+             *         "rootUserId": "user-12345678",
+             *         "serviceId": "s-12345678",
+             *         "serviceLogoURL": "Dolor accusamus fuga at.",
+             *         "serviceName": "MySQL multi-writer service",
+             *         "serviceOrgId": "org-12345678",
+             *         "serviceOrgName": "Omnistrate",
+             *         "status": "ACTIVE",
+             *         "subscriptionOwnerName": "John Doe"
+             *       },
+             *       {
+             *         "accountConfigIdentityId": "org-12345678",
+             *         "allowCreatesWhenPaymentNotConfigured": true,
+             *         "cloudProviderNames": [
+             *           "aws",
+             *           "gcp"
+             *         ],
+             *         "createdAt": "2019-01-01T00:00:00Z",
+             *         "defaultSubscription": true,
+             *         "id": "sub-12345678",
+             *         "maxNumberOfInstances": 10,
+             *         "paymentMethodConfigured": true,
              *         "productTierId": "pt-12345678",
              *         "productTierName": "Omnistrate Multi Tenancy",
              *         "roleType": "root",
@@ -30896,7 +32386,11 @@ export interface components {
             associatedKubernetesServiceName?: string;
             /**
              * @description ID of a resource
+<<<<<<< HEAD
              * @example Et tenetur.
+=======
+             * @example Et tenetur excepturi.
+>>>>>>> 61f89eeed5352a5db1e6dcfe7b01b09c8af3839e
              */
             associatedResourceID: string;
             /**
@@ -31994,12 +33488,20 @@ export interface components {
          *       "id": "r-12345678",
          *       "metricEndpoint": "http://localhost:9187/metrics",
          *       "serviceId": "s-12345678",
+<<<<<<< HEAD
          *       "token": "f"
+=======
+         *       "token": "8"
+>>>>>>> 61f89eeed5352a5db1e6dcfe7b01b09c8af3839e
          *     } */
         RegisterResourceMetricsConfigRequest: {
             /**
              * @description ID of a resource
+<<<<<<< HEAD
              * @example Ex pariatur veniam quaerat laborum omnis rem.
+=======
+             * @example Rem optio maxime porro exercitationem.
+>>>>>>> 61f89eeed5352a5db1e6dcfe7b01b09c8af3839e
              */
             id: string;
             /**
@@ -32014,7 +33516,11 @@ export interface components {
             serviceId: string;
             /**
              * @description JWT token used to perform authorization
+<<<<<<< HEAD
              * @example c2
+=======
+             * @example xxe
+>>>>>>> 61f89eeed5352a5db1e6dcfe7b01b09c8af3839e
              */
             token: string;
         };
@@ -32902,7 +34408,11 @@ export interface components {
          * @description Resource dependency relation specification
          * @example {
          *       "parameterMap": {
+<<<<<<< HEAD
          *         "Dolorem eos.": "Necessitatibus sit consequuntur qui adipisci blanditiis quisquam."
+=======
+         *         "Accusamus et tenetur explicabo itaque mollitia delectus.": "Excepturi qui recusandae ut commodi."
+>>>>>>> 61f89eeed5352a5db1e6dcfe7b01b09c8af3839e
          *       },
          *       "resourceId": "Dolores sit aut repellendus eveniet recusandae fugit."
          *     }
@@ -32911,7 +34421,12 @@ export interface components {
             /**
              * @description A map of the source parameter to the resource dependency parameter
              * @example {
+<<<<<<< HEAD
              *       "Sit ad.": "Laudantium et voluptate."
+=======
+             *       "Aliquid magni quaerat.": "Rem eum in sit.",
+             *       "Mollitia laudantium et voluptate alias et dolorem.": "Omnis necessitatibus sit consequuntur qui adipisci."
+>>>>>>> 61f89eeed5352a5db1e6dcfe7b01b09c8af3839e
              *     }
              */
             parameterMap?: {
@@ -32919,7 +34434,11 @@ export interface components {
             };
             /**
              * @description ID of a resource
+<<<<<<< HEAD
              * @example Veritatis qui placeat.
+=======
+             * @example Voluptatem non.
+>>>>>>> 61f89eeed5352a5db1e6dcfe7b01b09c8af3839e
              */
             resourceId: string;
         };
@@ -37318,7 +38837,11 @@ export interface components {
          *       "id": "op-12345678",
          *       "name": "Username",
          *       "serviceId": "s-12345678",
+<<<<<<< HEAD
          *       "token": "0",
+=======
+         *       "token": "1op",
+>>>>>>> 61f89eeed5352a5db1e6dcfe7b01b09c8af3839e
          *       "value": "johndoe",
          *       "valueRef": "$var.username",
          *       "valueType": "Boolean|Float64|String|Secret|Password"
@@ -37331,7 +38854,11 @@ export interface components {
             description?: string;
             /**
              * @description ID of an Output Parameter
+<<<<<<< HEAD
              * @example Porro assumenda odit et molestias temporibus est.
+=======
+             * @example Corrupti dolore quod labore porro assumenda.
+>>>>>>> 61f89eeed5352a5db1e6dcfe7b01b09c8af3839e
              */
             id: string;
             /**
@@ -37346,7 +38873,11 @@ export interface components {
             serviceId: string;
             /**
              * @description JWT token used to perform authorization
+<<<<<<< HEAD
              * @example ns
+=======
+             * @example hvf
+>>>>>>> 61f89eeed5352a5db1e6dcfe7b01b09c8af3839e
              */
             token: string;
             /**
@@ -38074,6 +39605,38 @@ export interface components {
          *             "primary": true
          *           }
          *         },
+         *         "layeredChartValues": [
+         *           {
+         *             "values": {
+         *               "global": {
+         *                 "image": {
+         *                   "tag": "v1.0.0"
+         *                 },
+         *                 "replicaCount": 1,
+         *                 "resources": {
+         *                   "requests": {
+         *                     "cpu": "100m",
+         *                     "memory": "128Mi"
+         *                   }
+         *                 }
+         *               }
+         *             }
+         *           },
+         *           {
+         *             "scope": {
+         *               "{{ $sys.cloudProviderName }}": "aws"
+         *             },
+         *             "valuesFile": {
+         *               "gitConfiguration": {
+         *                 "accessToken": "ghp_...",
+         *                 "commitSHA": "a1b2c3d4e5f6",
+         *                 "path": "aws/production.yaml",
+         *                 "referenceName": "refs/heads/main",
+         *                 "repositoryUrl": "https://github.com/org/helm-values"
+         *               }
+         *             }
+         *           }
+         *         ],
          *         "password": "my-password",
          *         "runtimeConfiguration": {
          *           "disableHooks": true,
@@ -38448,6 +40011,38 @@ export interface components {
          *             "primary": true
          *           }
          *         },
+         *         "layeredChartValues": [
+         *           {
+         *             "values": {
+         *               "global": {
+         *                 "image": {
+         *                   "tag": "v1.0.0"
+         *                 },
+         *                 "replicaCount": 1,
+         *                 "resources": {
+         *                   "requests": {
+         *                     "cpu": "100m",
+         *                     "memory": "128Mi"
+         *                   }
+         *                 }
+         *               }
+         *             }
+         *           },
+         *           {
+         *             "scope": {
+         *               "{{ $sys.cloudProviderName }}": "aws"
+         *             },
+         *             "valuesFile": {
+         *               "gitConfiguration": {
+         *                 "accessToken": "ghp_...",
+         *                 "commitSHA": "a1b2c3d4e5f6",
+         *                 "path": "aws/production.yaml",
+         *                 "referenceName": "refs/heads/main",
+         *                 "repositoryUrl": "https://github.com/org/helm-values"
+         *               }
+         *             }
+         *           }
+         *         ],
          *         "password": "my-password",
          *         "runtimeConfiguration": {
          *           "disableHooks": true,
@@ -39601,6 +41196,19 @@ export interface components {
             email: string;
             /** @example fc7b8dea-a50b-4c9a-8864-fc3d845a2be6 */
             token: string;
+        };
+        /** @example {
+         *       "gitConfiguration": {
+         *         "accessToken": "my-token",
+         *         "commitSHA": "1e386b5f54de9150d336ccfe2e14782b94faf67c",
+         *         "path": "helm/values/production.yaml",
+         *         "referenceName": "refs/heads/main",
+         *         "repositoryUrl": "https://github.com/username/myrepo",
+         *         "userName": "my-user"
+         *       }
+         *     } */
+        ValuesFile: {
+            gitConfiguration: components["schemas"]["GitFileConfiguration"];
         };
         /** @example {
          *       "id": "ac-12345678",
@@ -41385,7 +42993,11 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
+<<<<<<< HEAD
+                    /** @example Magnam qui dolores quis ducimus. */
+=======
                     /** @example Officiis ea aliquid ut deleniti. */
+>>>>>>> 61f89eeed5352a5db1e6dcfe7b01b09c8af3839e
                     "application/json": string;
                 };
             };
@@ -41866,6 +43478,10 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
+<<<<<<< HEAD
+                    /** @example Officiis ea aliquid ut deleniti. */
+=======
+>>>>>>> 61f89eeed5352a5db1e6dcfe7b01b09c8af3839e
                     "application/json": string;
                 };
             };
@@ -42309,7 +43925,8 @@ export interface operations {
                     "application/vnd.goa.error": components["schemas"]["Error"];
                 };
             };
-            /** @description failed_request: Response used on failure to invite user */
+<<<<<<< HEAD
+            /** @description failed_request: Response used on failure to create an Custom Domain */
             500: {
                 headers: {
                     [name: string]: unknown;
@@ -42320,7 +43937,348 @@ export interface operations {
             };
         };
     };
+    "custom-domain-api/DescribeCustomDomain": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /**
+                 * @description custom domain ID to operate on
+                 * @example cd-12345678
+                 */
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK response. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    /** @example {
+                     *       "customDomain": "mydomain.dev",
+                     *       "description": "Description of the domain",
+                     *       "id": "cd-12345678",
+                     *       "name": "Dev domain",
+                     *       "route53Configuration": {
+                     *         "awsAccountID": "123456789012",
+                     *         "awsCloudFormationTemplateURL": "https://s3.amazonaws.com/my-bucket/my-template.json"
+                     *       },
+                     *       "status": "READY",
+                     *       "statusMessage": "Account is ready"
+                     *     } */
+                    "application/json": components["schemas"]["DescribeCustomDomainResult"];
+                };
+            };
+            /** @description bad_request: Response used on a bad request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/vnd.goa.error": components["schemas"]["Error"];
+                };
+            };
+            /** @description auth_failure: Response used on authentication failure */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/vnd.goa.error": components["schemas"]["Error"];
+                };
+            };
+            /** @description forbidden: Response used on authorization failure */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/vnd.goa.error": components["schemas"]["Error"];
+                };
+            };
+            /** @description not_found: Response used when the requested resource is not found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/vnd.goa.error": components["schemas"]["Error"];
+                };
+            };
+            /** @description invalid_state: Response used when requested resource is in an invalid state for this operation */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/vnd.goa.error": components["schemas"]["Error"];
+                };
+            };
+            /** @description failed_request: Response used on failure to describe an Custom Domain */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/vnd.goa.error": components["schemas"]["Error"];
+                };
+            };
+        };
+    };
+    "custom-domain-api/DeleteCustomDomain": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /**
+                 * @description custom domain ID to operate on
+                 * @example cd-12345678
+                 */
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Accepted response. */
+            202: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description bad_request: Response used on a bad request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/vnd.goa.error": components["schemas"]["Error"];
+                };
+            };
+            /** @description not_found: Response used when the requested resource is not found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/vnd.goa.error": components["schemas"]["Error"];
+                };
+            };
+            /** @description invalid_state: Response used when requested resource is in an invalid state for this operation */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/vnd.goa.error": components["schemas"]["Error"];
+                };
+            };
+            /** @description failed_request: Response used on failure to delete an Custom Domain */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/vnd.goa.error": components["schemas"]["Error"];
+                };
+            };
+        };
+    };
+    "custom-domain-api/CustomDomainIdentityID": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK response. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    /** @example {
+                     *       "id": "org-12345678"
+                     *     } */
+                    "application/json": components["schemas"]["CustomDomainIdentityIDResult"];
+                };
+            };
+            /** @description bad_request: Response used on a bad request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/vnd.goa.error": components["schemas"]["Error"];
+                };
+            };
+            /** @description failed_request: Response used on failure to get an Custom Domain identity id */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/vnd.goa.error": components["schemas"]["Error"];
+                };
+            };
+        };
+    };
+    "custom-domain-api/VerifyCustomDomain": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /**
+                 * @description custom domain ID to operate on
+                 * @example cd-12345678
+                 */
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Accepted response. */
+            202: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description bad_request: Response used on a bad request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/vnd.goa.error": components["schemas"]["Error"];
+                };
+            };
+            /** @description auth_failure: Response used on authentication failure */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/vnd.goa.error": components["schemas"]["Error"];
+                };
+            };
+            /** @description forbidden: Response used on authorization failure */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/vnd.goa.error": components["schemas"]["Error"];
+                };
+            };
+            /** @description not_found: Response used when the requested resource is not found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/vnd.goa.error": components["schemas"]["Error"];
+                };
+            };
+            /** @description failed_request: Response used on failure to list Custom Domains */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/vnd.goa.error": components["schemas"]["Error"];
+                };
+            };
+        };
+    };
+    "users-api/CustomerDeleteUser": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK response. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description bad_request: Response used on a bad request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/vnd.goa.error": components["schemas"]["Error"];
+                };
+            };
+            /** @description auth_failure: Response used on authentication failure */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/vnd.goa.error": components["schemas"]["Error"];
+                };
+            };
+            /** @description forbidden: Response used on authorization failure */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/vnd.goa.error": components["schemas"]["Error"];
+                };
+            };
+            /** @description not_found: Response used when the requested resource is not found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/vnd.goa.error": components["schemas"]["Error"];
+                };
+            };
+            /** @description invalid_state: Response used when requested resource is in an invalid state for this operation */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/vnd.goa.error": components["schemas"]["Error"];
+                };
+            };
+            /** @description failed_request: Response used on failure to delete user */
+=======
+            /** @description failed_request: Response used on failure to invite user */
+>>>>>>> 61f89eeed5352a5db1e6dcfe7b01b09c8af3839e
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/vnd.goa.error": components["schemas"]["Error"];
+                };
+            };
+        };
+    };
+<<<<<<< HEAD
+    "users-api/CustomerInviteUser": {
+=======
     "users-api/CustomerLoginWithIdentityProvider": {
+>>>>>>> 61f89eeed5352a5db1e6dcfe7b01b09c8af3839e
         parameters: {
             query?: never;
             header?: never;
@@ -42330,6 +44288,11 @@ export interface operations {
         requestBody: {
             content: {
                 /** @example {
+<<<<<<< HEAD
+                 *       "email": "abc@example.com"
+                 *     } */
+                "application/json": components["schemas"]["CustomerInviteUserRequest2"];
+=======
                  *       "authorizationCode": "4/P7q7W91a-oMsCeLvIaQm6bTrgtp7&",
                  *       "companyDescription": "We sell xyz database software",
                  *       "companyUrl": "https://www.mywebsite.com",
@@ -42341,6 +44304,117 @@ export interface operations {
                  *       "state": "state"
                  *     } */
                 "application/json": components["schemas"]["CustomerLoginWithIdentityProviderRequest2"];
+>>>>>>> 61f89eeed5352a5db1e6dcfe7b01b09c8af3839e
+            };
+        };
+        responses: {
+            /** @description OK response. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+<<<<<<< HEAD
+                content?: never;
+=======
+                content: {
+                    /** @example {
+                     *       "jwtToken": ""
+                     *     } */
+                    "application/json": components["schemas"]["CustomerLoginWithIdentityProviderResult"];
+                };
+>>>>>>> 61f89eeed5352a5db1e6dcfe7b01b09c8af3839e
+            };
+            /** @description bad_request: Response used on a bad request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/vnd.goa.error": components["schemas"]["Error"];
+                };
+            };
+            /** @description auth_failure: Response used on authentication failure */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/vnd.goa.error": components["schemas"]["Error"];
+                };
+            };
+            /** @description forbidden: Response used on authorization failure */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/vnd.goa.error": components["schemas"]["Error"];
+                };
+            };
+            /** @description not_found: Response used when the requested resource is not found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/vnd.goa.error": components["schemas"]["Error"];
+                };
+            };
+            /** @description invalid_state: Response used when requested resource is in an invalid state for this operation */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/vnd.goa.error": components["schemas"]["Error"];
+                };
+            };
+<<<<<<< HEAD
+            /** @description failed_request: Response used on failure to invite user */
+=======
+            /** @description failed_request: Response used on failure to signin */
+>>>>>>> 61f89eeed5352a5db1e6dcfe7b01b09c8af3839e
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/vnd.goa.error": components["schemas"]["Error"];
+                };
+            };
+        };
+    };
+<<<<<<< HEAD
+    "users-api/CustomerLoginWithIdentityProvider": {
+=======
+    "users-api/CustomerResetPassword": {
+>>>>>>> 61f89eeed5352a5db1e6dcfe7b01b09c8af3839e
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                /** @example {
+<<<<<<< HEAD
+                 *       "authorizationCode": "4/P7q7W91a-oMsCeLvIaQm6bTrgtp7&",
+                 *       "companyDescription": "We sell xyz database software",
+                 *       "companyUrl": "https://www.mywebsite.com",
+                 *       "environmentType": "DEV",
+                 *       "identityProviderName": "Google",
+                 *       "invitedEmail": "abc@gmail.com",
+                 *       "legalCompanyName": "mywebsite",
+                 *       "redirectUri": "https://www.example/redirect",
+                 *       "state": "state"
+                 *     } */
+                "application/json": components["schemas"]["CustomerLoginWithIdentityProviderRequest2"];
+=======
+                 *       "email": "abc@example.com"
+                 *     } */
+                "application/json": components["schemas"]["CustomerResetPasswordRequest2"];
+>>>>>>> 61f89eeed5352a5db1e6dcfe7b01b09c8af3839e
             };
         };
         responses: {
@@ -42412,7 +44486,11 @@ export interface operations {
             };
         };
     };
+<<<<<<< HEAD
     "users-api/CustomerResetPassword": {
+=======
+    "users-api/CustomerSignin": {
+>>>>>>> 61f89eeed5352a5db1e6dcfe7b01b09c8af3839e
         parameters: {
             query?: never;
             header?: never;
@@ -42422,91 +44500,18 @@ export interface operations {
         requestBody: {
             content: {
                 /** @example {
+<<<<<<< HEAD
                  *       "email": "abc@example.com"
                  *     } */
                 "application/json": components["schemas"]["CustomerResetPasswordRequest2"];
-            };
-        };
-        responses: {
-            /** @description OK response. */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-            /** @description bad_request: Response used on a bad request */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/vnd.goa.error": components["schemas"]["Error"];
-                };
-            };
-            /** @description auth_failure: Response used on authentication failure */
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/vnd.goa.error": components["schemas"]["Error"];
-                };
-            };
-            /** @description forbidden: Response used on authorization failure */
-            403: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/vnd.goa.error": components["schemas"]["Error"];
-                };
-            };
-            /** @description not_found: Response used when the requested resource is not found */
-            404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/vnd.goa.error": components["schemas"]["Error"];
-                };
-            };
-            /** @description invalid_state: Response used when requested resource is in an invalid state for this operation */
-            409: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/vnd.goa.error": components["schemas"]["Error"];
-                };
-            };
-            /** @description failed_request: Response used on failure to signin */
-            500: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/vnd.goa.error": components["schemas"]["Error"];
-                };
-            };
-        };
-    };
-    "users-api/CustomerSignin": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                /** @example {
+=======
                  *       "email": "abc@gmail.com",
                  *       "environmentType": "DEV",
                  *       "hashedPassword": "deprecated",
                  *       "password": "password"
                  *     } */
                 "application/json": components["schemas"]["CustomerSigninRequest2"];
+>>>>>>> 61f89eeed5352a5db1e6dcfe7b01b09c8af3839e
             };
         };
         responses: {
@@ -42578,7 +44583,11 @@ export interface operations {
             };
         };
     };
+<<<<<<< HEAD
+    "users-api/CustomerSignin": {
+=======
     "users-api/CustomerSignup": {
+>>>>>>> 61f89eeed5352a5db1e6dcfe7b01b09c8af3839e
         parameters: {
             query?: never;
             header?: never;
@@ -42588,6 +44597,14 @@ export interface operations {
         requestBody: {
             content: {
                 /** @example {
+<<<<<<< HEAD
+                 *       "email": "abc@gmail.com",
+                 *       "environmentType": "DEV",
+                 *       "hashedPassword": "deprecated",
+                 *       "password": "password"
+                 *     } */
+                "application/json": components["schemas"]["CustomerSigninRequest2"];
+=======
                  *       "companyDescription": "We sell xyz database software",
                  *       "companyUrl": "https://www.mywebsite.com",
                  *       "email": "abc@gmail.com",
@@ -42596,6 +44613,109 @@ export interface operations {
                  *       "password": "password"
                  *     } */
                 "application/json": components["schemas"]["CustomerSignupRequest2"];
+>>>>>>> 61f89eeed5352a5db1e6dcfe7b01b09c8af3839e
+            };
+        };
+        responses: {
+            /** @description OK response. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    /** @example {
+                     *       "jwtToken": ""
+                     *     } */
+                    "application/json": components["schemas"]["CustomerSigninResult"];
+                };
+            };
+            /** @description bad_request: Response used on a bad request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/vnd.goa.error": components["schemas"]["Error"];
+                };
+            };
+            /** @description auth_failure: Response used on authentication failure */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/vnd.goa.error": components["schemas"]["Error"];
+                };
+            };
+            /** @description forbidden: Response used on authorization failure */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/vnd.goa.error": components["schemas"]["Error"];
+                };
+            };
+            /** @description not_found: Response used when the requested resource is not found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/vnd.goa.error": components["schemas"]["Error"];
+                };
+            };
+            /** @description invalid_state: Response used when requested resource is in an invalid state for this operation */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/vnd.goa.error": components["schemas"]["Error"];
+                };
+            };
+            /** @description failed_request: Response used on failure to signin */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/vnd.goa.error": components["schemas"]["Error"];
+                };
+            };
+        };
+    };
+<<<<<<< HEAD
+    "users-api/CustomerSignup": {
+=======
+    "demo-api/Demo": {
+>>>>>>> 61f89eeed5352a5db1e6dcfe7b01b09c8af3839e
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                /** @example {
+<<<<<<< HEAD
+                 *       "companyDescription": "We sell xyz database software",
+                 *       "companyUrl": "https://www.mywebsite.com",
+                 *       "email": "abc@gmail.com",
+                 *       "legalCompanyName": "mywebsite",
+                 *       "name": "John Doe",
+                 *       "password": "password"
+                 *     } */
+                "application/json": components["schemas"]["CustomerSignupRequest2"];
+=======
+                 *       "company": "ABC",
+                 *       "email": "abc@gmail.com",
+                 *       "name": "John Doe",
+                 *       "phone": "+1-234567890"
+                 *     } */
+                "application/json": components["schemas"]["DemoRequest"];
+>>>>>>> 61f89eeed5352a5db1e6dcfe7b01b09c8af3839e
             };
         };
         responses: {
@@ -42651,7 +44771,11 @@ export interface operations {
                     "application/vnd.goa.error": components["schemas"]["Error"];
                 };
             };
+<<<<<<< HEAD
             /** @description failed_request: Response used on failure to delete user */
+=======
+            /** @description failed_request: Response used on failure to demo */
+>>>>>>> 61f89eeed5352a5db1e6dcfe7b01b09c8af3839e
             500: {
                 headers: {
                     [name: string]: unknown;
@@ -42662,13 +44786,18 @@ export interface operations {
             };
         };
     };
+<<<<<<< HEAD
     "demo-api/Demo": {
+=======
+    "deployment-config-api/ListDeploymentConfigs": {
+>>>>>>> 61f89eeed5352a5db1e6dcfe7b01b09c8af3839e
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
+<<<<<<< HEAD
         requestBody: {
             content: {
                 /** @example {
@@ -42680,84 +44809,18 @@ export interface operations {
                 "application/json": components["schemas"]["DemoRequest"];
             };
         };
-        responses: {
-            /** @description OK response. */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-            /** @description bad_request: Response used on a bad request */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/vnd.goa.error": components["schemas"]["Error"];
-                };
-            };
-            /** @description auth_failure: Response used on authentication failure */
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/vnd.goa.error": components["schemas"]["Error"];
-                };
-            };
-            /** @description forbidden: Response used on authorization failure */
-            403: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/vnd.goa.error": components["schemas"]["Error"];
-                };
-            };
-            /** @description not_found: Response used when the requested resource is not found */
-            404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/vnd.goa.error": components["schemas"]["Error"];
-                };
-            };
-            /** @description invalid_state: Response used when requested resource is in an invalid state for this operation */
-            409: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/vnd.goa.error": components["schemas"]["Error"];
-                };
-            };
-            /** @description failed_request: Response used on failure to demo */
-            500: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/vnd.goa.error": components["schemas"]["Error"];
-                };
-            };
-        };
-    };
-    "deployment-config-api/ListDeploymentConfigs": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
+=======
         requestBody?: never;
+>>>>>>> 61f89eeed5352a5db1e6dcfe7b01b09c8af3839e
         responses: {
             /** @description OK response. */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
+<<<<<<< HEAD
+                content?: never;
+=======
                 content: {
                     /** @example {
                      *       "ids": [
@@ -42767,6 +44830,7 @@ export interface operations {
                      *     } */
                     "application/json": components["schemas"]["ListDeploymentConfigsResult"];
                 };
+>>>>>>> 61f89eeed5352a5db1e6dcfe7b01b09c8af3839e
             };
             /** @description bad_request: Response used on a bad request */
             400: {
@@ -42813,7 +44877,11 @@ export interface operations {
                     "application/vnd.goa.error": components["schemas"]["Error"];
                 };
             };
+<<<<<<< HEAD
+            /** @description failed_request: Response used on failure to demo */
+=======
             /** @description failed_request: Response used on failure to list deployment configs */
+>>>>>>> 61f89eeed5352a5db1e6dcfe7b01b09c8af3839e
             500: {
                 headers: {
                     [name: string]: unknown;
@@ -42824,6 +44892,121 @@ export interface operations {
             };
         };
     };
+<<<<<<< HEAD
+    "deployment-config-api/ListDeploymentConfigs": {
+=======
+    "deployment-config-api/CreateDeploymentConfig": {
+>>>>>>> 61f89eeed5352a5db1e6dcfe7b01b09c8af3839e
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+<<<<<<< HEAD
+        requestBody?: never;
+=======
+        requestBody: {
+            content: {
+                /** @example {
+                 *       "description": "A production deployment config",
+                 *       "infraRollConfiguration": {
+                 *         "infraRolloutStrategy": "NEW_DEPLOYMENT_ONLY",
+                 *         "maximumNumberOfResourceInstancesPerBatch": 1,
+                 *         "maximumUnavailableReplicas": 1
+                 *       },
+                 *       "name": "Production",
+                 *       "rolloutPriorityList": [
+                 *         "region-12345678",
+                 *         "region-abcd1234",
+                 *         "region-3c3c3c3c"
+                 *       ]
+                 *     } */
+                "application/json": components["schemas"]["CreateDeploymentConfigRequest2"];
+            };
+        };
+>>>>>>> 61f89eeed5352a5db1e6dcfe7b01b09c8af3839e
+        responses: {
+            /** @description OK response. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+<<<<<<< HEAD
+                    /** @example {
+                     *       "ids": [
+                     *         "dc-12345678"
+                     *       ],
+                     *       "nextPageToken": "next-token"
+                     *     } */
+                    "application/json": components["schemas"]["ListDeploymentConfigsResult"];
+=======
+                    "application/json": string;
+>>>>>>> 61f89eeed5352a5db1e6dcfe7b01b09c8af3839e
+                };
+            };
+            /** @description bad_request: Response used on a bad request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/vnd.goa.error": components["schemas"]["Error"];
+                };
+            };
+            /** @description auth_failure: Response used on authentication failure */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/vnd.goa.error": components["schemas"]["Error"];
+                };
+            };
+            /** @description forbidden: Response used on authorization failure */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/vnd.goa.error": components["schemas"]["Error"];
+                };
+            };
+            /** @description not_found: Response used when the requested resource is not found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/vnd.goa.error": components["schemas"]["Error"];
+                };
+            };
+            /** @description invalid_state: Response used when requested resource is in an invalid state for this operation */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/vnd.goa.error": components["schemas"]["Error"];
+                };
+            };
+<<<<<<< HEAD
+            /** @description failed_request: Response used on failure to list deployment configs */
+=======
+            /** @description failed_request: Response used on failure to create the deployment config */
+>>>>>>> 61f89eeed5352a5db1e6dcfe7b01b09c8af3839e
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/vnd.goa.error": components["schemas"]["Error"];
+                };
+            };
+        };
+    };
+<<<<<<< HEAD
     "deployment-config-api/CreateDeploymentConfig": {
         parameters: {
             query?: never;
@@ -42848,8 +45031,19 @@ export interface operations {
                  *       ]
                  *     } */
                 "application/json": components["schemas"]["CreateDeploymentConfigRequest2"];
+=======
+    "deployment-config-api/DescribeDeploymentConfig": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description The deployment configuration ID */
+                id: string;
+>>>>>>> 61f89eeed5352a5db1e6dcfe7b01b09c8af3839e
             };
+            cookie?: never;
         };
+        requestBody?: never;
         responses: {
             /** @description OK response. */
             200: {
@@ -42857,7 +45051,26 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
+<<<<<<< HEAD
                     "application/json": string;
+=======
+                    /** @example {
+                     *       "description": "A production deployment config",
+                     *       "id": "dc-12345678",
+                     *       "infraRollConfiguration": {
+                     *         "infraRolloutStrategy": "NEW_DEPLOYMENT_ONLY",
+                     *         "maximumNumberOfResourceInstancesPerBatch": 1,
+                     *         "maximumUnavailableReplicas": 1
+                     *       },
+                     *       "name": "Production",
+                     *       "rolloutPriorityList": [
+                     *         "region-12345678",
+                     *         "region-abcd1234",
+                     *         "region-3c3c3c3c"
+                     *       ]
+                     *     } */
+                    "application/json": components["schemas"]["DescribeDeploymentConfigResult"];
+>>>>>>> 61f89eeed5352a5db1e6dcfe7b01b09c8af3839e
                 };
             };
             /** @description bad_request: Response used on a bad request */
@@ -42905,7 +45118,11 @@ export interface operations {
                     "application/vnd.goa.error": components["schemas"]["Error"];
                 };
             };
+<<<<<<< HEAD
             /** @description failed_request: Response used on failure to create the deployment config */
+=======
+            /** @description failed_request: Response used on failure to describe the deployment config */
+>>>>>>> 61f89eeed5352a5db1e6dcfe7b01b09c8af3839e
             500: {
                 headers: {
                     [name: string]: unknown;
@@ -42916,12 +45133,23 @@ export interface operations {
             };
         };
     };
+<<<<<<< HEAD
     "deployment-config-api/DescribeDeploymentConfig": {
+=======
+    "deployment-config-api/DeleteDeploymentConfig": {
+>>>>>>> 61f89eeed5352a5db1e6dcfe7b01b09c8af3839e
         parameters: {
             query?: never;
             header?: never;
             path: {
+<<<<<<< HEAD
                 /** @description The deployment configuration ID */
+=======
+                /**
+                 * @description The deployment configuration ID
+                 * @example dc-12345678
+                 */
+>>>>>>> 61f89eeed5352a5db1e6dcfe7b01b09c8af3839e
                 id: string;
             };
             cookie?: never;
@@ -42997,7 +45225,11 @@ export interface operations {
                     "application/vnd.goa.error": components["schemas"]["Error"];
                 };
             };
+<<<<<<< HEAD
             /** @description failed_request: Response used on failure to describe the deployment config */
+=======
+            /** @description failed_request: Response used on failure to delete the deployment config */
+>>>>>>> 61f89eeed5352a5db1e6dcfe7b01b09c8af3839e
             500: {
                 headers: {
                     [name: string]: unknown;
@@ -43008,7 +45240,11 @@ export interface operations {
             };
         };
     };
+<<<<<<< HEAD
     "deployment-config-api/DeleteDeploymentConfig": {
+=======
+    "deployment-config-api/UpdateDeploymentConfig": {
+>>>>>>> 61f89eeed5352a5db1e6dcfe7b01b09c8af3839e
         parameters: {
             query?: never;
             header?: never;
@@ -43018,6 +45254,29 @@ export interface operations {
                  * @example dc-12345678
                  */
                 id: string;
+<<<<<<< HEAD
+=======
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                /** @example {
+                 *       "description": "A production deployment config",
+                 *       "infraRollConfiguration": {
+                 *         "infraRolloutStrategy": "NEW_DEPLOYMENT_ONLY",
+                 *         "maximumNumberOfResourceInstancesPerBatch": 1,
+                 *         "maximumUnavailableReplicas": 1
+                 *       },
+                 *       "name": "Production",
+                 *       "rolloutPriorityList": [
+                 *         "region-12345678",
+                 *         "region-abcd1234",
+                 *         "region-3c3c3c3c"
+                 *       ]
+                 *     } */
+                "application/json": components["schemas"]["UpdateDeploymentConfigRequest2"];
+>>>>>>> 61f89eeed5352a5db1e6dcfe7b01b09c8af3839e
             };
             cookie?: never;
         };
@@ -43075,7 +45334,11 @@ export interface operations {
                     "application/vnd.goa.error": components["schemas"]["Error"];
                 };
             };
+<<<<<<< HEAD
             /** @description failed_request: Response used on failure to delete the deployment config */
+=======
+            /** @description failed_request: Response used on failure to update the deployment config */
+>>>>>>> 61f89eeed5352a5db1e6dcfe7b01b09c8af3839e
             500: {
                 headers: {
                     [name: string]: unknown;
@@ -43086,16 +45349,32 @@ export interface operations {
             };
         };
     };
+<<<<<<< HEAD
     "deployment-config-api/UpdateDeploymentConfig": {
+=======
+    "secrets-api/GetSecret": {
+>>>>>>> 61f89eeed5352a5db1e6dcfe7b01b09c8af3839e
         parameters: {
             query?: never;
             header?: never;
             path: {
                 /**
+<<<<<<< HEAD
                  * @description The deployment configuration ID
                  * @example dc-12345678
                  */
                 id: string;
+=======
+                 * @description The environment type for the secret
+                 * @example DEV
+                 */
+                environmentType: string;
+                /**
+                 * @description Name of the secret
+                 * @example my-secret
+                 */
+                name: string;
+>>>>>>> 61f89eeed5352a5db1e6dcfe7b01b09c8af3839e
             };
             cookie?: never;
         };
@@ -43124,89 +45403,9 @@ export interface operations {
                 headers: {
                     [name: string]: unknown;
                 };
+<<<<<<< HEAD
                 content?: never;
-            };
-            /** @description bad_request: Response used on a bad request */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/vnd.goa.error": components["schemas"]["Error"];
-                };
-            };
-            /** @description auth_failure: Response used on authentication failure */
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/vnd.goa.error": components["schemas"]["Error"];
-                };
-            };
-            /** @description forbidden: Response used on authorization failure */
-            403: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/vnd.goa.error": components["schemas"]["Error"];
-                };
-            };
-            /** @description not_found: Response used when the requested resource is not found */
-            404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/vnd.goa.error": components["schemas"]["Error"];
-                };
-            };
-            /** @description invalid_state: Response used when requested resource is in an invalid state for this operation */
-            409: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/vnd.goa.error": components["schemas"]["Error"];
-                };
-            };
-            /** @description failed_request: Response used on failure to update the deployment config */
-            500: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/vnd.goa.error": components["schemas"]["Error"];
-                };
-            };
-        };
-    };
-    "secrets-api/GetSecret": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /**
-                 * @description The environment type for the secret
-                 * @example DEV
-                 */
-                environmentType: string;
-                /**
-                 * @description Name of the secret
-                 * @example my-secret
-                 */
-                name: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK response. */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
+=======
                 content: {
                     /** @example {
                      *       "environmentType": "DEV",
@@ -43215,6 +45414,7 @@ export interface operations {
                      *     } */
                     "application/json": components["schemas"]["GetSecretResult"];
                 };
+>>>>>>> 61f89eeed5352a5db1e6dcfe7b01b09c8af3839e
             };
             /** @description bad_request: Response used on a bad request */
             400: {
@@ -43252,7 +45452,20 @@ export interface operations {
                     "application/vnd.goa.error": components["schemas"]["Error"];
                 };
             };
+<<<<<<< HEAD
+            /** @description invalid_state: Response used when requested resource is in an invalid state for this operation */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/vnd.goa.error": components["schemas"]["Error"];
+                };
+            };
+            /** @description failed_request: Response used on failure to update the deployment config */
+=======
             /** @description failed_request: Response used on failure to get secret */
+>>>>>>> 61f89eeed5352a5db1e6dcfe7b01b09c8af3839e
             500: {
                 headers: {
                     [name: string]: unknown;
@@ -43263,7 +45476,96 @@ export interface operations {
             };
         };
     };
+<<<<<<< HEAD
+    "secrets-api/GetSecret": {
+=======
     "secrets-api/SetSecret": {
+>>>>>>> 61f89eeed5352a5db1e6dcfe7b01b09c8af3839e
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /**
+                 * @description The environment type for the secret
+                 * @example DEV
+                 */
+                environmentType: string;
+                /**
+                 * @description Name of the secret
+                 * @example my-secret
+                 */
+                name: string;
+<<<<<<< HEAD
+=======
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                /** @example {
+                 *       "value": "super-secret-value"
+                 *     } */
+                "application/json": components["schemas"]["SetSecretRequest2"];
+>>>>>>> 61f89eeed5352a5db1e6dcfe7b01b09c8af3839e
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK response. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description bad_request: Response used on a bad request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+<<<<<<< HEAD
+                    /** @example {
+                     *       "environmentType": "DEV",
+                     *       "name": "my-secret",
+                     *       "value": "super-secret-value"
+                     *     } */
+                    "application/json": components["schemas"]["GetSecretResult"];
+=======
+                    "application/vnd.goa.error": components["schemas"]["Error"];
+                };
+            };
+            /** @description auth_failure: Response used on authentication failure */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/vnd.goa.error": components["schemas"]["Error"];
+                };
+            };
+            /** @description forbidden: Response used on authorization failure */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/vnd.goa.error": components["schemas"]["Error"];
+                };
+            };
+            /** @description failed_request: Response used on failure to set secret */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/vnd.goa.error": components["schemas"]["Error"];
+                };
+            };
+        };
+    };
+    "secrets-api/DeleteSecret": {
         parameters: {
             query?: never;
             header?: never;
@@ -43281,19 +45583,13 @@ export interface operations {
             };
             cookie?: never;
         };
-        requestBody: {
-            content: {
-                /** @example {
-                 *       "value": "super-secret-value"
-                 *     } */
-                "application/json": components["schemas"]["SetSecretRequest2"];
-            };
-        };
+        requestBody?: never;
         responses: {
             /** @description OK response. */
             200: {
                 headers: {
                     [name: string]: unknown;
+>>>>>>> 61f89eeed5352a5db1e6dcfe7b01b09c8af3839e
                 };
                 content?: never;
             };
@@ -43324,6 +45620,119 @@ export interface operations {
                     "application/vnd.goa.error": components["schemas"]["Error"];
                 };
             };
+            /** @description not_found: Response used when the requested secret is not found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/vnd.goa.error": components["schemas"]["Error"];
+                };
+            };
+<<<<<<< HEAD
+            /** @description failed_request: Response used on failure to get secret */
+=======
+            /** @description failed_request: Response used on failure to delete secret */
+>>>>>>> 61f89eeed5352a5db1e6dcfe7b01b09c8af3839e
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/vnd.goa.error": components["schemas"]["Error"];
+                };
+            };
+        };
+    };
+<<<<<<< HEAD
+    "secrets-api/SetSecret": {
+=======
+    "secrets-api/ListSecrets": {
+>>>>>>> 61f89eeed5352a5db1e6dcfe7b01b09c8af3839e
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /**
+                 * @description The environment type for the secret
+                 * @example DEV
+                 */
+                environmentType: string;
+<<<<<<< HEAD
+                /**
+                 * @description Name of the secret
+                 * @example my-secret
+                 */
+                name: string;
+=======
+>>>>>>> 61f89eeed5352a5db1e6dcfe7b01b09c8af3839e
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                /** @example {
+                 *       "value": "super-secret-value"
+                 *     } */
+                "application/json": components["schemas"]["SetSecretRequest2"];
+            };
+        };
+        responses: {
+            /** @description OK response. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+<<<<<<< HEAD
+                content?: never;
+=======
+                content: {
+                    /** @example {
+                     *       "secrets": [
+                     *         {
+                     *           "environmentType": "DEV",
+                     *           "name": "my-secret",
+                     *           "value": "super-secret-value"
+                     *         },
+                     *         {
+                     *           "environmentType": "DEV",
+                     *           "name": "my-secret",
+                     *           "value": "super-secret-value"
+                     *         }
+                     *       ]
+                     *     } */
+                    "application/json": components["schemas"]["ListSecretsResult"];
+                };
+>>>>>>> 61f89eeed5352a5db1e6dcfe7b01b09c8af3839e
+            };
+            /** @description bad_request: Response used on a bad request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/vnd.goa.error": components["schemas"]["Error"];
+                };
+            };
+            /** @description auth_failure: Response used on authentication failure */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/vnd.goa.error": components["schemas"]["Error"];
+                };
+            };
+            /** @description forbidden: Response used on authorization failure */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/vnd.goa.error": components["schemas"]["Error"];
+                };
+            };
+<<<<<<< HEAD
             /** @description failed_request: Response used on failure to set secret */
             500: {
                 headers: {
@@ -43474,6 +45883,8 @@ export interface operations {
                     "application/vnd.goa.error": components["schemas"]["Error"];
                 };
             };
+=======
+>>>>>>> 61f89eeed5352a5db1e6dcfe7b01b09c8af3839e
             /** @description failed_request: Response used on failure to list secrets */
             500: {
                 headers: {
@@ -58542,6 +60953,7 @@ export interface operations {
                  *             "Aut dicta iusto facere accusantium ut.": "Ipsum mollitia.",
                  *             "Molestias nulla.": "Dolorem velit veniam.",
                  *             "Sunt debitis est in magni.": "Quod aut illum quia non."
+<<<<<<< HEAD
                  *           },
                  *           "feature": "Eos ullam voluptatum fuga aut optio similique."
                  *         },
@@ -58552,6 +60964,18 @@ export interface operations {
                  *             "Sunt debitis est in magni.": "Quod aut illum quia non."
                  *           },
                  *           "feature": "Eos ullam voluptatum fuga aut optio similique."
+=======
+                 *           },
+                 *           "feature": "Eos ullam voluptatum fuga aut optio similique."
+                 *         },
+                 *         {
+                 *           "configuration": {
+                 *             "Aut dicta iusto facere accusantium ut.": "Ipsum mollitia.",
+                 *             "Molestias nulla.": "Dolorem velit veniam.",
+                 *             "Sunt debitis est in magni.": "Quod aut illum quia non."
+                 *           },
+                 *           "feature": "Eos ullam voluptatum fuga aut optio similique."
+>>>>>>> 61f89eeed5352a5db1e6dcfe7b01b09c8af3839e
                  *         }
                  *       ],
                  *       "modelType": "CUSTOMER_HOSTED",
@@ -58669,6 +61093,17 @@ export interface operations {
                      *             "Earum qui accusamus veniam.": "Dolorem qui quasi aliquam voluptas voluptas facere.",
                      *             "Quae assumenda et velit.": "Ut omnis eum hic ad.",
                      *             "Ratione non quis officiis qui totam id.": "Ducimus dicta eveniet sit expedita."
+<<<<<<< HEAD
+                     *           },
+                     *           "feature": "Inventore expedita minima consectetur rerum eum neque."
+                     *         },
+                     *         {
+                     *           "configuration": {
+                     *             "Earum qui accusamus veniam.": "Dolorem qui quasi aliquam voluptas voluptas facere.",
+                     *             "Quae assumenda et velit.": "Ut omnis eum hic ad.",
+                     *             "Ratione non quis officiis qui totam id.": "Ducimus dicta eveniet sit expedita."
+=======
+>>>>>>> 61f89eeed5352a5db1e6dcfe7b01b09c8af3839e
                      *           },
                      *           "feature": "Inventore expedita minima consectetur rerum eum neque."
                      *         },
@@ -58687,6 +61122,8 @@ export interface operations {
                      *             "Ratione non quis officiis qui totam id.": "Ducimus dicta eveniet sit expedita."
                      *           },
                      *           "feature": "Inventore expedita minima consectetur rerum eum neque."
+<<<<<<< HEAD
+=======
                      *         },
                      *         {
                      *           "configuration": {
@@ -58695,6 +61132,7 @@ export interface operations {
                      *             "Ratione non quis officiis qui totam id.": "Ducimus dicta eveniet sit expedita."
                      *           },
                      *           "feature": "Inventore expedita minima consectetur rerum eum neque."
+>>>>>>> 61f89eeed5352a5db1e6dcfe7b01b09c8af3839e
                      *         }
                      *       ],
                      *       "id": "sm-12345678",
@@ -59713,6 +62151,17 @@ export interface operations {
                  *             "Aut dicta iusto facere accusantium ut.": "Ipsum mollitia.",
                  *             "Molestias nulla.": "Dolorem velit veniam.",
                  *             "Sunt debitis est in magni.": "Quod aut illum quia non."
+<<<<<<< HEAD
+                 *           },
+                 *           "feature": "Eos ullam voluptatum fuga aut optio similique."
+                 *         },
+                 *         {
+                 *           "configuration": {
+                 *             "Aut dicta iusto facere accusantium ut.": "Ipsum mollitia.",
+                 *             "Molestias nulla.": "Dolorem velit veniam.",
+                 *             "Sunt debitis est in magni.": "Quod aut illum quia non."
+=======
+>>>>>>> 61f89eeed5352a5db1e6dcfe7b01b09c8af3839e
                  *           },
                  *           "feature": "Eos ullam voluptatum fuga aut optio similique."
                  *         },
@@ -59723,6 +62172,8 @@ export interface operations {
                  *             "Sunt debitis est in magni.": "Quod aut illum quia non."
                  *           },
                  *           "feature": "Eos ullam voluptatum fuga aut optio similique."
+<<<<<<< HEAD
+=======
                  *         },
                  *         {
                  *           "configuration": {
@@ -59731,6 +62182,7 @@ export interface operations {
                  *             "Sunt debitis est in magni.": "Quod aut illum quia non."
                  *           },
                  *           "feature": "Eos ullam voluptatum fuga aut optio similique."
+>>>>>>> 61f89eeed5352a5db1e6dcfe7b01b09c8af3839e
                  *         }
                  *       ],
                  *       "name": "MySQL multi-writer service hosted model",
@@ -62848,6 +65300,8 @@ export interface operations {
                      *         "Modi exercitationem et ut.": {
                      *           "categorizedResourceChanges": {
                      *             "Eos cupiditate laborum eum perspiciatis.": {
+<<<<<<< HEAD
+=======
                      *               "changes": [
                      *                 {
                      *                   "attributes": {
@@ -62881,6 +65335,7 @@ export interface operations {
                      *               "status": "PENDING_UPDATE"
                      *             },
                      *             "Fuga eum.": {
+>>>>>>> 61f89eeed5352a5db1e6dcfe7b01b09c8af3839e
                      *               "changes": [
                      *                 {
                      *                   "attributes": {
@@ -62909,6 +65364,42 @@ export interface operations {
                      *                   },
                      *                   "changeType": "PENDING_NEW",
                      *                   "name": "Customer metrics"
+<<<<<<< HEAD
+                     *                 }
+                     *               ],
+                     *               "status": "PENDING_UPDATE"
+                     *             },
+                     *             "Fuga eum.": {
+                     *               "changes": [
+                     *                 {
+                     *                   "attributes": {
+                     *                     "resourceId": "r-12345678"
+                     *                   },
+                     *                   "changeType": "PENDING_NEW",
+                     *                   "name": "Customer metrics"
+                     *                 },
+                     *                 {
+                     *                   "attributes": {
+                     *                     "resourceId": "r-12345678"
+                     *                   },
+                     *                   "changeType": "PENDING_NEW",
+                     *                   "name": "Customer metrics"
+                     *                 },
+                     *                 {
+                     *                   "attributes": {
+                     *                     "resourceId": "r-12345678"
+                     *                   },
+                     *                   "changeType": "PENDING_NEW",
+                     *                   "name": "Customer metrics"
+                     *                 },
+                     *                 {
+                     *                   "attributes": {
+                     *                     "resourceId": "r-12345678"
+                     *                   },
+                     *                   "changeType": "PENDING_NEW",
+                     *                   "name": "Customer metrics"
+=======
+>>>>>>> 61f89eeed5352a5db1e6dcfe7b01b09c8af3839e
                      *                 }
                      *               ],
                      *               "status": "PENDING_UPDATE"
@@ -62932,6 +65423,7 @@ export interface operations {
                      *         "Voluptatem provident laboriosam omnis sed.": {
                      *           "categorizedResourceChanges": {
                      *             "Eos cupiditate laborum eum perspiciatis.": {
+<<<<<<< HEAD
                      *               "changes": [
                      *                 {
                      *                   "attributes": {
@@ -62965,6 +65457,8 @@ export interface operations {
                      *               "status": "PENDING_UPDATE"
                      *             },
                      *             "Fuga eum.": {
+=======
+>>>>>>> 61f89eeed5352a5db1e6dcfe7b01b09c8af3839e
                      *               "changes": [
                      *                 {
                      *                   "attributes": {
@@ -62993,6 +65487,42 @@ export interface operations {
                      *                   },
                      *                   "changeType": "PENDING_NEW",
                      *                   "name": "Customer metrics"
+<<<<<<< HEAD
+=======
+                     *                 }
+                     *               ],
+                     *               "status": "PENDING_UPDATE"
+                     *             },
+                     *             "Fuga eum.": {
+                     *               "changes": [
+                     *                 {
+                     *                   "attributes": {
+                     *                     "resourceId": "r-12345678"
+                     *                   },
+                     *                   "changeType": "PENDING_NEW",
+                     *                   "name": "Customer metrics"
+                     *                 },
+                     *                 {
+                     *                   "attributes": {
+                     *                     "resourceId": "r-12345678"
+                     *                   },
+                     *                   "changeType": "PENDING_NEW",
+                     *                   "name": "Customer metrics"
+                     *                 },
+                     *                 {
+                     *                   "attributes": {
+                     *                     "resourceId": "r-12345678"
+                     *                   },
+                     *                   "changeType": "PENDING_NEW",
+                     *                   "name": "Customer metrics"
+                     *                 },
+                     *                 {
+                     *                   "attributes": {
+                     *                     "resourceId": "r-12345678"
+                     *                   },
+                     *                   "changeType": "PENDING_NEW",
+                     *                   "name": "Customer metrics"
+>>>>>>> 61f89eeed5352a5db1e6dcfe7b01b09c8af3839e
                      *                 }
                      *               ],
                      *               "status": "PENDING_UPDATE"
@@ -63608,6 +66138,38 @@ export interface operations {
                      *                 "primary": true
                      *               }
                      *             },
+                     *             "layeredChartValues": [
+                     *               {
+                     *                 "values": {
+                     *                   "global": {
+                     *                     "image": {
+                     *                       "tag": "v1.0.0"
+                     *                     },
+                     *                     "replicaCount": 1,
+                     *                     "resources": {
+                     *                       "requests": {
+                     *                         "cpu": "100m",
+                     *                         "memory": "128Mi"
+                     *                       }
+                     *                     }
+                     *                   }
+                     *                 }
+                     *               },
+                     *               {
+                     *                 "scope": {
+                     *                   "{{ $sys.cloudProviderName }}": "aws"
+                     *                 },
+                     *                 "valuesFile": {
+                     *                   "gitConfiguration": {
+                     *                     "accessToken": "ghp_...",
+                     *                     "commitSHA": "a1b2c3d4e5f6",
+                     *                     "path": "aws/production.yaml",
+                     *                     "referenceName": "refs/heads/main",
+                     *                     "repositoryUrl": "https://github.com/org/helm-values"
+                     *                   }
+                     *                 }
+                     *               }
+                     *             ],
                      *             "password": "my-password",
                      *             "runtimeConfiguration": {
                      *               "disableHooks": true,
@@ -63978,6 +66540,38 @@ export interface operations {
                      *                 "primary": true
                      *               }
                      *             },
+                     *             "layeredChartValues": [
+                     *               {
+                     *                 "values": {
+                     *                   "global": {
+                     *                     "image": {
+                     *                       "tag": "v1.0.0"
+                     *                     },
+                     *                     "replicaCount": 1,
+                     *                     "resources": {
+                     *                       "requests": {
+                     *                         "cpu": "100m",
+                     *                         "memory": "128Mi"
+                     *                       }
+                     *                     }
+                     *                   }
+                     *                 }
+                     *               },
+                     *               {
+                     *                 "scope": {
+                     *                   "{{ $sys.cloudProviderName }}": "aws"
+                     *                 },
+                     *                 "valuesFile": {
+                     *                   "gitConfiguration": {
+                     *                     "accessToken": "ghp_...",
+                     *                     "commitSHA": "a1b2c3d4e5f6",
+                     *                     "path": "aws/production.yaml",
+                     *                     "referenceName": "refs/heads/main",
+                     *                     "repositoryUrl": "https://github.com/org/helm-values"
+                     *                   }
+                     *                 }
+                     *               }
+                     *             ],
                      *             "password": "my-password",
                      *             "runtimeConfiguration": {
                      *               "disableHooks": true,
@@ -64357,6 +66951,38 @@ export interface operations {
                  *             "primary": true
                  *           }
                  *         },
+                 *         "layeredChartValues": [
+                 *           {
+                 *             "values": {
+                 *               "global": {
+                 *                 "image": {
+                 *                   "tag": "v1.0.0"
+                 *                 },
+                 *                 "replicaCount": 1,
+                 *                 "resources": {
+                 *                   "requests": {
+                 *                     "cpu": "100m",
+                 *                     "memory": "128Mi"
+                 *                   }
+                 *                 }
+                 *               }
+                 *             }
+                 *           },
+                 *           {
+                 *             "scope": {
+                 *               "{{ $sys.cloudProviderName }}": "aws"
+                 *             },
+                 *             "valuesFile": {
+                 *               "gitConfiguration": {
+                 *                 "accessToken": "ghp_...",
+                 *                 "commitSHA": "a1b2c3d4e5f6",
+                 *                 "path": "aws/production.yaml",
+                 *                 "referenceName": "refs/heads/main",
+                 *                 "repositoryUrl": "https://github.com/org/helm-values"
+                 *               }
+                 *             }
+                 *           }
+                 *         ],
                  *         "password": "my-password",
                  *         "runtimeConfiguration": {
                  *           "disableHooks": true,
@@ -64810,6 +67436,38 @@ export interface operations {
                      *             "primary": true
                      *           }
                      *         },
+                     *         "layeredChartValues": [
+                     *           {
+                     *             "values": {
+                     *               "global": {
+                     *                 "image": {
+                     *                   "tag": "v1.0.0"
+                     *                 },
+                     *                 "replicaCount": 1,
+                     *                 "resources": {
+                     *                   "requests": {
+                     *                     "cpu": "100m",
+                     *                     "memory": "128Mi"
+                     *                   }
+                     *                 }
+                     *               }
+                     *             }
+                     *           },
+                     *           {
+                     *             "scope": {
+                     *               "{{ $sys.cloudProviderName }}": "aws"
+                     *             },
+                     *             "valuesFile": {
+                     *               "gitConfiguration": {
+                     *                 "accessToken": "ghp_...",
+                     *                 "commitSHA": "a1b2c3d4e5f6",
+                     *                 "path": "aws/production.yaml",
+                     *                 "referenceName": "refs/heads/main",
+                     *                 "repositoryUrl": "https://github.com/org/helm-values"
+                     *               }
+                     *             }
+                     *           }
+                     *         ],
                      *         "password": "my-password",
                      *         "runtimeConfiguration": {
                      *           "disableHooks": true,
@@ -65280,6 +67938,38 @@ export interface operations {
                  *             "primary": true
                  *           }
                  *         },
+                 *         "layeredChartValues": [
+                 *           {
+                 *             "values": {
+                 *               "global": {
+                 *                 "image": {
+                 *                   "tag": "v1.0.0"
+                 *                 },
+                 *                 "replicaCount": 1,
+                 *                 "resources": {
+                 *                   "requests": {
+                 *                     "cpu": "100m",
+                 *                     "memory": "128Mi"
+                 *                   }
+                 *                 }
+                 *               }
+                 *             }
+                 *           },
+                 *           {
+                 *             "scope": {
+                 *               "{{ $sys.cloudProviderName }}": "aws"
+                 *             },
+                 *             "valuesFile": {
+                 *               "gitConfiguration": {
+                 *                 "accessToken": "ghp_...",
+                 *                 "commitSHA": "a1b2c3d4e5f6",
+                 *                 "path": "aws/production.yaml",
+                 *                 "referenceName": "refs/heads/main",
+                 *                 "repositoryUrl": "https://github.com/org/helm-values"
+                 *               }
+                 *             }
+                 *           }
+                 *         ],
                  *         "password": "my-password",
                  *         "runtimeConfiguration": {
                  *           "disableHooks": true,
@@ -71384,6 +74074,10 @@ export interface operations {
                      *       "subscriptions": [
                      *         {
                      *           "accountConfigIdentityId": "org-12345678",
+<<<<<<< HEAD
+=======
+                     *           "allowCreatesWhenPaymentNotConfigured": true,
+>>>>>>> 61f89eeed5352a5db1e6dcfe7b01b09c8af3839e
                      *           "cloudProviderNames": [
                      *             "aws",
                      *             "gcp"
@@ -71391,6 +74085,11 @@ export interface operations {
                      *           "createdAt": "2019-01-01T00:00:00Z",
                      *           "defaultSubscription": true,
                      *           "id": "sub-12345678",
+<<<<<<< HEAD
+=======
+                     *           "maxNumberOfInstances": 10,
+                     *           "paymentMethodConfigured": true,
+>>>>>>> 61f89eeed5352a5db1e6dcfe7b01b09c8af3839e
                      *           "productTierId": "pt-12345678",
                      *           "productTierName": "Omnistrate Multi Tenancy",
                      *           "roleType": "root",
@@ -71405,6 +74104,10 @@ export interface operations {
                      *         },
                      *         {
                      *           "accountConfigIdentityId": "org-12345678",
+<<<<<<< HEAD
+=======
+                     *           "allowCreatesWhenPaymentNotConfigured": true,
+>>>>>>> 61f89eeed5352a5db1e6dcfe7b01b09c8af3839e
                      *           "cloudProviderNames": [
                      *             "aws",
                      *             "gcp"
@@ -71412,6 +74115,11 @@ export interface operations {
                      *           "createdAt": "2019-01-01T00:00:00Z",
                      *           "defaultSubscription": true,
                      *           "id": "sub-12345678",
+<<<<<<< HEAD
+=======
+                     *           "maxNumberOfInstances": 10,
+                     *           "paymentMethodConfigured": true,
+>>>>>>> 61f89eeed5352a5db1e6dcfe7b01b09c8af3839e
                      *           "productTierId": "pt-12345678",
                      *           "productTierName": "Omnistrate Multi Tenancy",
                      *           "roleType": "root",
@@ -71590,6 +74298,10 @@ export interface operations {
                 content: {
                     /** @example {
                      *       "accountConfigIdentityId": "org-12345678",
+<<<<<<< HEAD
+=======
+                     *       "allowCreatesWhenPaymentNotConfigured": true,
+>>>>>>> 61f89eeed5352a5db1e6dcfe7b01b09c8af3839e
                      *       "cloudProviderNames": [
                      *         "aws",
                      *         "gcp"
@@ -71597,6 +74309,11 @@ export interface operations {
                      *       "createdAt": "2019-01-01T00:00:00Z",
                      *       "defaultSubscription": true,
                      *       "id": "sub-12345678",
+<<<<<<< HEAD
+=======
+                     *       "maxNumberOfInstances": 10,
+                     *       "paymentMethodConfigured": true,
+>>>>>>> 61f89eeed5352a5db1e6dcfe7b01b09c8af3839e
                      *       "productTierId": "pt-12345678",
                      *       "productTierName": "Omnistrate Multi Tenancy",
                      *       "roleType": "root",

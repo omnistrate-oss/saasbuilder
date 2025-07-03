@@ -23,17 +23,24 @@ test.describe("Instances Page - Specialized Tests", () => {
     instancesPage = new InstancesPage(page);
     // instanceDetailsPage = new InstanceDetailsPage(page);
     await instancesPage.navigate();
+    await page.waitForLoadState("networkidle");
   });
 
   test("Create a Helm Instance", async ({ page }) => {
     const dataTestIds = instancesPage.dataTestIds;
 
-    await page.waitForLoadState("networkidle");
     await page.getByTestId("create-button").click();
     await page.getByTestId(dataTestIds.serviceNameSelect).click();
 
     const date = GlobalStateManager.getDate();
     await page.getByRole("option", { name: `SaaSBuilder Redis Helm - ${date}` }).click();
+
+    // If the Subscribe Button is Visible, Click it
+    const subscribeButton = page.getByTestId("subscribe-button");
+    if (await subscribeButton.isVisible()) {
+      await subscribeButton.click();
+    }
+
     await page.getByTestId(dataTestIds.resourceTypeSelect).click();
     await page.getByRole("option", { name: "Redis Cluster" }).click();
 

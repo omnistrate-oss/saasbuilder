@@ -37,7 +37,6 @@ export const getStandardInformationFields = (
   formMode: FormMode,
   customAvailabilityZones: AvailabilityZone[],
   isFetchingCustomAvailabilityZones: boolean,
-  isPaymentConfigured: boolean,
   instances: ResourceInstance[]
 ) => {
   if (isFetchingServiceOfferings) return [];
@@ -51,20 +50,6 @@ export const getStandardInformationFields = (
     } else {
       subscriptionInstanceCountHash[instance.subscriptionId as string] = 1;
     }
-  });
-
-  //key-> subscriptionID value-> boolean that indicates if the subscription has reached its quota limit
-  const subscriptionQuotaLimitHash: Record<string, boolean> = {};
-  subscriptions.forEach((subscription) => {
-    const { serviceId, productTierId } = subscription;
-    const offering = serviceOfferingsObj[serviceId]?.[productTierId];
-    const quotaLimit = offering?.maxNumberOfInstances;
-    const instanceCount = subscriptionInstanceCountHash[subscription.id] || 0;
-    let hasReachedInstanceQuotaLimit = false;
-    if (quotaLimit) {
-      hasReachedInstanceQuotaLimit = instanceCount >= quotaLimit;
-    }
-    subscriptionQuotaLimitHash[subscription.id] = hasReachedInstanceQuotaLimit;
   });
 
   const { values, setFieldValue, setFieldTouched } = formData;
@@ -89,23 +74,21 @@ export const getStandardInformationFields = (
   const fields: Field[] = [
     {
       dataTestId: "service-name-select",
-      label: "Service Name",
-      subLabel: "Select the service you want to deploy",
+      label: "Product Name",
+      subLabel: "Select the Product you want to deploy",
       name: "serviceId",
       type: "select",
       required: true,
       disabled: formMode !== "create",
-      emptyMenuText: "No services available",
+      emptyMenuText: "No Products available",
       menuItems: serviceMenuItems,
       onChange: (e) => {
         const serviceId = e.target.value;
 
         const subscription = getValidSubscriptionForInstanceCreation(
-          serviceOfferings,
           serviceOfferingsObj,
           subscriptions,
           instances,
-          isPaymentConfigured,
           serviceId
         );
 
@@ -172,20 +155,19 @@ export const getStandardInformationFields = (
             setFieldValue("resourceId", resources[0]?.value || "");
             setFieldValue("requestParams", {});
 
-            const filteredSubscriptions = subscriptions.filter(
-              (sub) => sub.productTierId === servicePlanId && ["root", "editor"].includes(sub.roleType)
+            const subscription = getValidSubscriptionForInstanceCreation(
+              serviceOfferingsObj,
+              subscriptions,
+              instances,
+              serviceId,
+              servicePlanId
             );
-            const rootSubscription = filteredSubscriptions.find((sub) => sub.roleType === "root");
 
-            setFieldValue(
-              "subscriptionId",
-              subscriptionId || rootSubscription?.id || filteredSubscriptions[0]?.id || ""
-            );
+            setFieldValue("subscriptionId", subscriptionId || subscription?.id || "");
 
             setFieldTouched("subscriptionId", false);
             setFieldTouched("resourceId", false);
           }}
-          isPaymentConfigured={isPaymentConfigured}
           instances={instances}
         />
       ),
@@ -206,7 +188,7 @@ export const getStandardInformationFields = (
             isLoading: isFetchingSubscriptions,
             disabled: formMode !== "create",
             emptyMenuText: !serviceId
-              ? "Select a service"
+              ? "Select a Product"
               : !servicePlanId
                 ? "Select a subscription plan"
                 : "No subscriptions available",
@@ -220,7 +202,7 @@ export const getStandardInformationFields = (
           }}
           formData={formData}
           subscriptions={subscriptionMenuItems}
-          subscriptionQuotaLimitHash={subscriptionQuotaLimitHash}
+          subscriptionInstanceCountHash={subscriptionInstanceCountHash}
         />
       ),
       previewValue: subscriptionsObj[values.subscriptionId]?.id,
@@ -233,7 +215,7 @@ export const getStandardInformationFields = (
       type: "select",
       required: true,
       emptyMenuText: !serviceId
-        ? "Select a service"
+        ? "Select a Product"
         : !servicePlanId
           ? "Select a subscription plan"
           : "No resources available",
@@ -474,10 +456,10 @@ export const getDeploymentConfigurationFields = (
         param.key !== "subscriptionId" &&
         param.key !== "cloud_provider_native_network_id" &&
         param.key !== "custom_dns_configuration"
-    ) 
+    )
     .sort((a, b) => {
-      if(a.tabIndex === undefined || b.tabIndex === undefined) {
-        return 0
+      if (a.tabIndex === undefined || b.tabIndex === undefined) {
+        return 0;
       }
       return a.tabIndex - b.tabIndex;
     });

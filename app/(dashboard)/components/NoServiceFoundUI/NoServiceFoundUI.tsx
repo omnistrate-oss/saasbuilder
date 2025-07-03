@@ -31,7 +31,7 @@ const NoServiceFoundUI: FC<NoServiceFoundUIProps> = ({ text }) => {
         {text}
       </Typography>
 
-      <Image src={NoServicesImage} alt="No Services" width={582} height={400} />
+      <Image src={NoServicesImage} alt="No Products" width={582} height={400} />
     </Box>
   );
 };

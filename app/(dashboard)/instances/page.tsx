@@ -8,7 +8,6 @@ import { $api } from "src/api/query";
 import LoadIndicatorHigh from "src/components/Icons/LoadIndicator/LoadIndicatorHigh";
 import LoadIndicatorIdle from "src/components/Icons/LoadIndicator/LoadIndicatorIdle";
 import LoadIndicatorNormal from "src/components/Icons/LoadIndicator/LoadIndicatorNormal";
-// import { getInitialFilterState } from "src/components/InstanceFilters/InstanceFilters";
 import InstanceHealthStatusChip, {
   getInstanceHealthStatus,
 } from "src/components/InstanceHealthStatusChip/InstanceHealthStatusChip";
@@ -34,13 +33,9 @@ import ServiceNameWithLogo from "components/ServiceNameWithLogo/ServiceNameWithL
 import StatusChip from "components/StatusChip/StatusChip";
 import TextConfirmationDialog from "components/TextConfirmationDialog/TextConfirmationDialog";
 
-import useBillingDetails from "../billing/hooks/useBillingDetails";
-import useBillingStatus from "../billing/hooks/useBillingStatus";
 import FullScreenDrawer from "../components/FullScreenDrawer/FullScreenDrawer";
-// import InstancesIcon from "../components/Icons/InstancesIcon";
 import PageContainer from "../components/Layout/PageContainer";
 
-// import PageTitle from "../components/Layout/PageTitle";
 import InstanceForm from "./components/InstanceForm";
 import InstancesOverview from "./components/InstancesOverview";
 import InstancesTableHeader from "./components/InstancesTableHeader";
@@ -76,13 +71,6 @@ const InstancesPage = () => {
     instanceId?: string;
     isCustomDNS?: boolean;
   }>({});
-
-  const billingStatusQuery = useBillingStatus();
-
-  const isBillingEnabled = Boolean(billingStatusQuery.data?.enabled);
-
-  const { data: billingConfig, isPending: isLoadingPaymentConfiguration } = useBillingDetails(isBillingEnabled);
-  const isPaymentConfigured = Boolean(billingConfig?.paymentConfigured);
 
   // const [statusFilters, setStatusFilters] = useState(getInitialFilterState());
 
@@ -135,7 +123,7 @@ const InstancesPage = () => {
         },
         {
           id: "serviceName",
-          header: "Service Name",
+          header: "Product Name",
           cell: (data) => {
             const subscription = subscriptionsObj[data.row.original.subscriptionId as string];
             const serviceName = subscription?.serviceName;
@@ -188,7 +176,7 @@ const InstancesPage = () => {
       columnHelper.accessor(
         (row) => {
           const status = row.status;
-          const detailedNetworkTopology = row.detailedNetworkTopology;
+          const detailedNetworkTopology = row?.detailedNetworkTopology ?? {};
           const healthStatus = getInstanceHealthStatus(
             detailedNetworkTopology as Record<string, ResourceInstanceNetworkTopology>,
             status as string
@@ -216,7 +204,7 @@ const InstancesPage = () => {
               <InstanceHealthStatusChip
                 computedHealthStatus={value}
                 detailedNetworkTopology={
-                  data.row.original.detailedNetworkTopology as Record<string, ResourceInstanceNetworkTopology>
+                  (data.row.original?.detailedNetworkTopology ?? {}) as Record<string, ResourceInstanceNetworkTopology>
                 }
                 viewNodesLink={resourceInstanceUrlLink}
               />
@@ -305,7 +293,7 @@ const InstancesPage = () => {
       }),
       columnHelper.accessor("cloud_provider", {
         id: "cloud_provider",
-        header: "Provider",
+        header: "Cloud Provider",
         cell: (data) => {
           const cloudProvider = data.row.original.cloud_provider;
 
@@ -381,7 +369,7 @@ const InstancesPage = () => {
   const unhealthyInstances = useMemo(() => {
     return nonBYOAInstances?.filter((instance) => {
       const instanceHealthStatus = getInstanceHealthStatus(
-        instance.detailedNetworkTopology as Record<string, ResourceInstanceNetworkTopology>,
+        (instance?.detailedNetworkTopology ?? {}) as Record<string, ResourceInstanceNetworkTopology>,
 
         instance.status as string
       );
@@ -549,7 +537,6 @@ const InstancesPage = () => {
             selectedFilters,
             setSelectedFilters,
             isLoadingInstances,
-            isLoadingPaymentConfiguration,
             // instancesFilterCount: instancesFilterCount,
             // statusFilters: statusFilters,
             // setStatusFilters: setStatusFilters,
@@ -560,7 +547,7 @@ const InstancesPage = () => {
           selectionMode="single"
           getRowClassName={(rowData) => {
             const healthStatus = getInstanceHealthStatus(
-              rowData.detailedNetworkTopology as Record<string, ResourceInstanceNetworkTopology>,
+              (rowData?.detailedNetworkTopology ?? {}) as Record<string, ResourceInstanceNetworkTopology>,
               rowData.status
             );
             return healthStatus;
@@ -604,7 +591,6 @@ const InstancesPage = () => {
             setCreateInstanceModalData={setCreateInstanceModalData}
             setIsOverlayOpen={setIsOverlayOpen}
             setOverlayType={setOverlayType}
-            isPaymentConfigured={isPaymentConfigured}
           />
         }
       />

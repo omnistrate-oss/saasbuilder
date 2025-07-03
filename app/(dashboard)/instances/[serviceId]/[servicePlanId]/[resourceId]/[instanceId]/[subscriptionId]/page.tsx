@@ -42,7 +42,7 @@ export type CurrentTab =
   | "Nodes"
   | "Metrics"
   | "Logs"
-  | "Events"
+  | "Audit Logs"
   | "Backups"
   | "Custom DNS";
 
@@ -221,7 +221,7 @@ const InstanceDetailsPage = ({
           modifiedAt={resourceInstanceData.modifiedAt}
           isCliManagedResource={isCliManagedResource}
           subscriptionOwner={subscription.subscriptionOwnerName}
-          detailedNetworkTopology={resourceInstanceData.detailedNetworkTopology || {}}
+          detailedNetworkTopology={resourceInstanceData?.detailedNetworkTopology || {}}
           onViewNodesClick={() => {
             setCurrentTab("Nodes");
           }}
