@@ -5,7 +5,7 @@ import { Box, Dialog, IconButton, Stack, styled } from "@mui/material";
 import { useFormik } from "formik";
 
 import TextField from "src/components/FormElementsv2/TextField/TextField";
-import OffboardIcon from "src/components/Icons/Offboard/Offboard";
+import OffboardConfirmationIcon from "src/components/Icons/OffboardConfirmatiion/OffboardConfirmation";
 import { Step, StepLabel, Stepper } from "src/components/Stepper/Stepper";
 import useSnackbar from "src/hooks/useSnackbar";
 import { AccountConfig } from "src/types/account-config";
@@ -19,10 +19,10 @@ import { cloudAccountOffboardingSteps } from "../constants";
 import { OffboardingInstructions, OffboardInstructionDetails } from "./OffboardingInstructions";
 
 const StyledForm = styled(Box)({
+  top :"50%",
   position: "fixed",
-  top: "0",
   right: "50%",
-  transform: "translateX(50%)",
+  transform: "translate(50%, -50%)",
   background: "white",
   borderRadius: "12px",
   boxShadow: "0px 8px 8px -4px rgba(16, 24, 40, 0.03), 0px 20px 24px -4px rgba(16, 24, 40, 0.08)",
@@ -78,7 +78,7 @@ const LastInstanceConfimationMessage: FC<{
       </>
     );
   } else {
-    return <OffboardingInstructions offboardingInstructionDetils={offboardingInstructionDetails} />;
+    return <OffboardingInstructions offboardingInstructionDetails={offboardingInstructionDetails} />;
   }
 };
 
@@ -139,7 +139,7 @@ const DeleteAccountConfigConfirmationDialog: FC<DeleteAccountConfigConfirmationD
   let isDeletionInProgress = false;
 
   if (isLastInstance) {
-    IconComponent = OffboardIcon;
+    IconComponent = OffboardConfirmationIcon;
     title = "Delete and Offboard Account";
   }
 

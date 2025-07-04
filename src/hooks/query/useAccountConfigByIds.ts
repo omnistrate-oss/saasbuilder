@@ -1,15 +1,7 @@
-import { useQueries } from "@tanstack/react-query";
+import { useQueries, UseQueryOptions } from "@tanstack/react-query";
 
 import { apiClient } from "src/api/client";
 import { $api } from "src/api/query";
-
-interface UseAccountConfigsByIdsOptions {
-  enabled?: boolean;
-  refetchOnMount?: boolean;
-  refetchOnWindowFocus?: boolean;
-  refetchInterval?: number; // Auto-refetch interval in milliseconds
-  [key: string]: any;
-}
 
 // Infer the AccountConfig type from the underlying fetch client
 type AccountConfigResponse = Awaited<
@@ -29,20 +21,13 @@ type AccountConfigResponse = Awaited<
 type AccountConfigData = NonNullable<AccountConfigResponse["data"]>;
 
 // Define the return type using the inferred AccountConfig type
-interface UseAccountConfigsByIdsResult {
-  data: Record<string, AccountConfigData>;
-  isPending: boolean;
-  isFetching: boolean;
-  isError: boolean;
-  errors: unknown[];
-  refetch: () => void;
-  refetchById: (id: string) => void;
-}
 
-const useAccountConfigsByIds = (
-  accountConfigIds: string[],
-  queryOptions: UseAccountConfigsByIdsOptions = {}
-): UseAccountConfigsByIdsResult => {
+type QueryOptions = Omit<
+  UseQueryOptions<AccountConfigData, unknown, AccountConfigData, string[]>,
+  "queryKey" | "queryFn"
+>;
+
+const useAccountConfigsByIds = (accountConfigIds: string[], queryOptions: QueryOptions = {}) => {
   // Default to 60 seconds (60000ms) if refetchInterval is not specified and queries are enabled
   const refetchInterval = queryOptions.refetchInterval ?? 60000;
 
@@ -60,10 +45,12 @@ const useAccountConfigsByIds = (
         refetchOnMount: queryOptions.refetchOnMount ?? true,
         refetchOnWindowFocus: queryOptions.refetchOnWindowFocus ?? false,
         refetchInterval,
+        retry: false, // Disable automatic retries on failure
+        retryOnMount: false, // Don't retry when component mounts
         ...queryOptions,
       })
     ),
-    combine: (results): UseAccountConfigsByIdsResult => {
+    combine: (results) => {
       // Create a record with account config IDs as keys and their data as values
       const accountConfigsData: Record<string, AccountConfigData> = {};
 

@@ -4,6 +4,7 @@ import { CircularProgress } from "@mui/material";
 
 import ConnectIcon from "src/components/Icons/Connect/Connect";
 import DisconnectIcon from "src/components/Icons/Disconnect/Disconnect";
+import OffboardIcon from "src/components/Icons/Offboard/Offboard";
 import { AccountConfig } from "src/types/account-config";
 import { ResourceInstance } from "src/types/resourceInstance";
 import Button from "components/Button/Button";
@@ -146,6 +147,7 @@ const CloudAccountsTableHeader: FC<CloudAccountTableHeaderProps> = ({
           disabled={isOffboardDisabled}
           onClick={onOffboardClick}
           disabledMessage={offboardingDisabledMessage}
+          startIcon={<OffboardIcon disabled={isOffboardDisabled} />}
         >
           Offboard
         </Button>
@@ -154,7 +156,7 @@ const CloudAccountsTableHeader: FC<CloudAccountTableHeaderProps> = ({
           variant="outlined"
           disabled={isDisconnectDisabled}
           onClick={onDisconnectClick}
-          startIcon={<DisconnectIcon disabled={isOffboardDisabled} />}
+          startIcon={<DisconnectIcon disabled={isDisconnectDisabled} />}
           disabledMessage={isDisconnectDisabledMessage}
         >
           Disconnect

@@ -51,50 +51,50 @@ export type OffboardInstructionDetails = {
   azureOffboardCommand?: string;
 };
 
-export const OffboardingInstructions: FC<{ offboardingInstructionDetils: OffboardInstructionDetails }> = ({
-  offboardingInstructionDetils,
+export const OffboardingInstructions: FC<{ offboardingInstructionDetails: OffboardInstructionDetails }> = ({
+  offboardingInstructionDetails,
 }) => {
   return (
     <Box width={"100%"} mb="30px">
-      {offboardingInstructionDetils?.awsAccountID && (
+      {offboardingInstructionDetails?.awsAccountID && (
         <Box marginBottom={"20px"}>
           <Text size="small" weight="semibold" color="#374151">
             AWS Account ID
           </Text>
-          <TextContainerToCopy text={offboardingInstructionDetils?.awsAccountID} marginTop="6px" />
+          <TextContainerToCopy text={offboardingInstructionDetails?.awsAccountID} marginTop="6px" />
         </Box>
       )}
 
-      {offboardingInstructionDetils?.gcpProjectID && (
+      {offboardingInstructionDetails?.gcpProjectID && (
         <Stack direction={"row"} alignItems={"flex-start"} gap="12px" marginBottom={"20px"}>
           <Box flex={1} maxWidth={"50%"}>
             <Text size="small" weight="semibold" color="#374151">
               GCP Project ID
             </Text>
-            <TextContainerToCopy text={offboardingInstructionDetils?.gcpProjectID} marginTop="6px" />
+            <TextContainerToCopy text={offboardingInstructionDetails?.gcpProjectID} marginTop="6px" />
           </Box>
           <Box flex={1} maxWidth={"50%"}>
             <Text size="small" weight="semibold" color="#374151">
               GCP Project Number
             </Text>
-            <TextContainerToCopy text={offboardingInstructionDetils?.gcpProjectNumber} marginTop="6px" />
+            <TextContainerToCopy text={offboardingInstructionDetails?.gcpProjectNumber} marginTop="6px" />
           </Box>
         </Stack>
       )}
 
-      {offboardingInstructionDetils?.azureSubscriptionID && (
+      {offboardingInstructionDetails?.azureSubscriptionID && (
         <Stack direction={"row"} alignItems={"flex-start"} gap="12px" marginBottom={"20px"}>
           <Box flex={1} maxWidth={"50%"}>
             <Text size="small" weight="semibold" color="#374151">
               Azure Subscription ID
             </Text>
-            <TextContainerToCopy text={offboardingInstructionDetils?.azureSubscriptionID} marginTop="6px" />
+            <TextContainerToCopy text={offboardingInstructionDetails?.azureSubscriptionID} marginTop="6px" />
           </Box>
           <Box flex={1} maxWidth={"50%"}>
             <Text size="small" weight="semibold" color="#374151">
               Azure Tenant ID
             </Text>
-            <TextContainerToCopy text={offboardingInstructionDetils?.azureTenantID} marginTop="6px" />
+            <TextContainerToCopy text={offboardingInstructionDetails?.azureTenantID} marginTop="6px" />
           </Box>
         </Stack>
       )}
@@ -104,7 +104,7 @@ export const OffboardingInstructions: FC<{ offboardingInstructionDetils: Offboar
       </Text>
 
       <List>
-        {offboardingInstructionDetils?.awsAccountID && (
+        {offboardingInstructionDetails?.awsAccountID && (
           <ListItem>
             <ListItemIcon>
               <ArrowBullet />
@@ -125,7 +125,7 @@ export const OffboardingInstructions: FC<{ offboardingInstructionDetils: Offboar
           </ListItem>
         )}
 
-        {offboardingInstructionDetils?.gcpProjectID && (
+        {offboardingInstructionDetails?.gcpProjectID && (
           <ListItem>
             <ListItemIcon>
               <ArrowBullet />
@@ -144,14 +144,14 @@ export const OffboardingInstructions: FC<{ offboardingInstructionDetils: Offboar
                 . Once the terminal is open, execute the following command to complete the off-boarding process and
                 remove remaining access from your cloud account.
               </Text>
-              {offboardingInstructionDetils?.gcpOffboardCommand && (
-                <TextContainerToCopy text={offboardingInstructionDetils?.gcpOffboardCommand} marginTop="12px" />
+              {offboardingInstructionDetails?.gcpOffboardCommand && (
+                <TextContainerToCopy text={offboardingInstructionDetails?.gcpOffboardCommand} marginTop="12px" />
               )}
             </Box>
           </ListItem>
         )}
 
-        {offboardingInstructionDetils?.azureSubscriptionID && (
+        {offboardingInstructionDetails?.azureSubscriptionID && (
           <ListItem>
             <ListItemIcon>
               <ArrowBullet />
@@ -168,12 +168,24 @@ export const OffboardingInstructions: FC<{ offboardingInstructionDetils: Offboar
                 revoke our access.
               </Text>
 
-              {offboardingInstructionDetils?.azureOffboardCommand && (
-                <TextContainerToCopy text={offboardingInstructionDetils?.azureOffboardCommand} marginTop="12px" />
+              {offboardingInstructionDetails?.azureOffboardCommand && (
+                <TextContainerToCopy text={offboardingInstructionDetails?.azureOffboardCommand} marginTop="12px" />
               )}
             </Box>
           </ListItem>
         )}
+
+        <ListItem sx={{ marginTop: "8px" }}>
+          <ListItemIcon>
+            <ArrowBullet />
+          </ListItemIcon>
+
+          <Box overflow={"hidden"} flex={1}>
+            <Text size="medium" weight="regular" color="#374151">
+              After completing the above step, continue with offboarding below
+            </Text>
+          </Box>
+        </ListItem>
       </List>
     </Box>
   );

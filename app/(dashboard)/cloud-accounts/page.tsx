@@ -217,7 +217,7 @@ const CloudAccountsPage = () => {
         header: "Lifecycle Status",
         cell: (data) => {
           const status = data.row.original.status;
-          let statusSytlesAndLabel = getResourceInstanceStatusStylesAndLabel(status as string);
+          let statusStylesAndLabel = getResourceInstanceStatusStylesAndLabel(status as string);
           const showInstructions = [
             "VERIFYING",
             "PENDING",
@@ -241,14 +241,14 @@ const CloudAccountsPage = () => {
           isOffboarding = status === "DELETING" && !linkedAccountConfig;
 
           if (isReadyToOffboard) {
-            statusSytlesAndLabel = {
+            statusStylesAndLabel = {
               ...chipCategoryColors.unknown,
               label: "Ready to Offboard",
             };
           }
 
           if (isOffboarding) {
-            statusSytlesAndLabel = {
+            statusStylesAndLabel = {
               ...chipCategoryColors.unknown,
               label: "Offboarding",
             };
@@ -263,7 +263,7 @@ const CloudAccountsPage = () => {
           return (
             <Stack direction="row" alignItems="center" gap="6px" width="104px" justifyContent="space-between">
               <Box flex={1}>
-                <StatusChip status={status} {...statusSytlesAndLabel} />
+                <StatusChip status={status} {...statusStylesAndLabel} />
               </Box>
               {isReadyToOffboard && (
                 <Tooltip title="View offboarding instructions" placement="top">
@@ -448,6 +448,7 @@ const CloudAccountsPage = () => {
     if (!isFetchingInstances && !isFetchingAccountConfigs) {
       refetchAccountConfigs();
     }
+    console.log("fetching account configs", isFetchingAccountConfigs);
     //eslint-disable-next-line react-hooks/exhaustive-deps
   }, [instances, isFetchingInstances]);
 
