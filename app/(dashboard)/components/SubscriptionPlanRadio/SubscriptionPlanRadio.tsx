@@ -286,17 +286,16 @@ const SubscriptionPlanRadio: React.FC<SubscriptionPlanRadioProps> = ({
 
                     if (id.startsWith("subr")) {
                       snackbar.showSuccess("Subscription Request sent successfully");
-                      const subscriptionRequst: SubscriptionRequest = (await getSubscriptionRequest(id)).data;
+                      const subscriptionRequest: SubscriptionRequest = (await getSubscriptionRequest(id)).data;
 
                       queryClient.setQueryData(["get", "/2022-09-01-00/subscription/request", {}], (oldData: any) => {
                         return {
-                          subscriptionRequests: [...(oldData.subscriptionRequests || []), subscriptionRequst],
+                          subscriptionRequests: [...(oldData.subscriptionRequests || []), subscriptionRequest],
                         };
                       });
                     } else if (id.startsWith("sub")) {
                       snackbar.showSuccess("Subscribed successfully");
                       const subscription: Subscription = (await getSubscription(id)).data;
-                      console.log("New subscription created:", subscription);
 
                       queryClient.setQueryData(
                         [
