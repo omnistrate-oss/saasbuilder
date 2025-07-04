@@ -662,8 +662,8 @@ const CloudAccountsPage = () => {
           await deleteCloudAccountInstanceMutation.mutateAsync();
         }}
         onOffboardClick={async () => {
-          if (!selectedInstance || !selectedAccountConfig) return snackbar.showError("No instance selected");
-          if ((selectedInstance && selectedInstance?.status === "DELETING") && !selectedAccountConfig)
+          if (!selectedInstance) return snackbar.showError("No instance selected");
+          if (selectedInstance && selectedInstance?.status === "DELETING" && !selectedAccountConfig)
             return snackbar.showError("Offboarding is in progress");
           if (!selectedResource) return snackbar.showError("Resource not found");
 

@@ -172,12 +172,14 @@ const DeleteAccountConfigConfirmationDialog: FC<DeleteAccountConfigConfirmationD
     onSubmit: async (values) => {
       if (activeStepIndex === 0) {
         if (values.confirmationText === "deleteme") {
-          await onInstanceDeleteClick();
-          if (!isLastInstance) {
-            handleClose();
-          } else {
-            firstDeleteRequestMade.current = true;
-          }
+          try {
+            await onInstanceDeleteClick();
+            if (!isLastInstance) {
+              handleClose();
+            } else {
+              firstDeleteRequestMade.current = true;
+            }
+          } catch {}
         } else {
           snackbar.showError(`Please enter deleteme to confirm`);
         }
@@ -202,7 +204,7 @@ const DeleteAccountConfigConfirmationDialog: FC<DeleteAccountConfigConfirmationD
   useEffect(() => {
     if (open) {
       formData.resetForm();
-      stepChangedToOffboard.current = true;
+      firstDeleteRequestMade.current = false;
     }
     //eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open]);
