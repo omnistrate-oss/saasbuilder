@@ -200,11 +200,20 @@ const DeleteAccountConfigConfirmationDialog: FC<DeleteAccountConfigConfirmationD
   }
 
   useEffect(() => {
+    if (open) {
+      formData.resetForm();
+      stepChangedToOffboard.current = true;
+    }
+    //eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [open]);
+
+  useEffect(() => {
     if (step === "offboard" && !stepChangedToOffboard.current) {
       stepChangedToOffboard.current = true;
       formData.resetForm();
     }
-  }, [step, formData]);
+    //eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [step, open]);
 
   return (
     <Dialog open={open} onClose={handleClose}>

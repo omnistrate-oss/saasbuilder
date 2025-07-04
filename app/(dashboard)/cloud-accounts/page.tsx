@@ -229,6 +229,7 @@ const CloudAccountsPage = () => {
           ].includes(status as string);
 
           let isReadyToOffboard = false;
+          let isOffboarding = false;
           const resultParams = data.row.original.result_params as Record<string, any> | undefined;
 
           const linkedAccountConfig = accountConfigsHash[resultParams?.cloud_provider_account_config_id];
@@ -236,10 +237,20 @@ const CloudAccountsPage = () => {
           if (linkedAccountConfig) {
             isReadyToOffboard = status === "DELETING" && linkedAccountConfig?.status === "READY_TO_OFFBOARD";
           }
+          // If the instance is in DELETING status and there is no linked account config, assume that it is being offboarding
+          isOffboarding = status === "DELETING" && !linkedAccountConfig;
+
           if (isReadyToOffboard) {
             statusSytlesAndLabel = {
               ...chipCategoryColors.unknown,
               label: "Ready to Offboard",
+            };
+          }
+
+          if (isOffboarding) {
+            statusSytlesAndLabel = {
+              ...chipCategoryColors.unknown,
+              label: "Offboarding",
             };
           }
 
@@ -563,6 +574,7 @@ const CloudAccountsPage = () => {
 
       <div>
         <DataTable
+          key={Object.keys(subscriptionsObj).length} // Force re-render when subscriptionsObj changes
           columns={dataTableColumns}
           rows={byoaInstances}
           noRowsText="No cloud accounts"
@@ -651,6 +663,8 @@ const CloudAccountsPage = () => {
         }}
         onOffboardClick={async () => {
           if (!selectedInstance || !selectedAccountConfig) return snackbar.showError("No instance selected");
+          if ((selectedInstance && selectedInstance?.status === "DELETING") && !selectedAccountConfig)
+            return snackbar.showError("Offboarding is in progress");
           if (!selectedResource) return snackbar.showError("Resource not found");
 
           await deleteCloudAccountInstanceMutation.mutateAsync();
