@@ -176,7 +176,6 @@ type SubscriptionPlanRadioProps = {
   disabled?: boolean;
   instances: ResourceInstance[];
   subscriptionInstancesNumHash: Record<string, number>;
-  isCloudAccountForm?: boolean;
 };
 
 const SubscriptionPlanRadio: React.FC<SubscriptionPlanRadioProps> = ({
@@ -188,7 +187,6 @@ const SubscriptionPlanRadio: React.FC<SubscriptionPlanRadioProps> = ({
   disabled,
   instances,
   subscriptionInstancesNumHash,
-  isCloudAccountForm = false,
 }) => {
   const environmentType = useEnvironmentType();
   const snackbar = useSnackbar();
@@ -241,15 +239,13 @@ const SubscriptionPlanRadio: React.FC<SubscriptionPlanRadioProps> = ({
             ["root", "editor"].includes(subscription.roleType)
           );
 
-          const isPlanBlocked = isCloudAccountForm
-            ? false
-            : editorAndRootSubscriptions.every((subscription) => {
-                const limit = subscription.maxNumberOfInstances ?? plan.maxNumberOfInstances ?? Infinity;
-                const isPaymentIssue =
-                  !subscription.paymentMethodConfigured &&
-                  !(subscription.allowCreatesWhenPaymentNotConfigured ?? plan.allowCreatesWhenPaymentNotConfigured);
-                return (subscriptionInstanceCountHash[subscription.id] ?? 0) >= limit || isPaymentIssue;
-              });
+          const isPlanBlocked = editorAndRootSubscriptions.every((subscription) => {
+            const limit = subscription.maxNumberOfInstances ?? plan.maxNumberOfInstances ?? Infinity;
+            const isPaymentIssue =
+              !subscription.paymentMethodConfigured &&
+              !(subscription.allowCreatesWhenPaymentNotConfigured ?? plan.allowCreatesWhenPaymentNotConfigured);
+            return (subscriptionInstanceCountHash[subscription.id] ?? 0) >= limit || isPaymentIssue;
+          });
 
           let servicePlanDisabledText: ReactNode = "";
 
@@ -318,10 +314,7 @@ const SubscriptionPlanRadio: React.FC<SubscriptionPlanRadioProps> = ({
                       );
 
                       formData.setFieldValue(name, plan.productTierID);
-                      if (
-                        isCloudAccountForm ||
-                        isSubscriptionValid(subscription, serviceOfferingsObj, subscriptionInstancesNumHash)
-                      ) {
+                      if (isSubscriptionValid(subscription, serviceOfferingsObj, subscriptionInstancesNumHash)) {
                         onChange(plan.productTierID, id);
                       }
                     }
