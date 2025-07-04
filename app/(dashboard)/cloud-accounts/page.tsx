@@ -275,6 +275,7 @@ const CloudAccountsPage = () => {
                     }}
                     onClick={() => {
                       setClickedInstance(data.row.original);
+                      setSelectedRows([data.row.original.id as string]);
                       setIsOverlayOpen(true);
                       setOverlayType("delete-dialog");
                     }}
