@@ -12,7 +12,6 @@ type SubscriptionMenuProps = {
   field: Omit<Field, "label" | "subLabel">;
   subscriptions: Subscription[];
   subscriptionInstanceCountHash: Record<string, number>;
-  isCloudAccountForm?: boolean;
 };
 
 const SubscriptionMenu: React.FC<SubscriptionMenuProps> = ({
@@ -20,7 +19,6 @@ const SubscriptionMenu: React.FC<SubscriptionMenuProps> = ({
   field,
   subscriptions,
   subscriptionInstanceCountHash = {},
-  isCloudAccountForm = false,
 }) => {
   const { values, touched, errors, handleChange, handleBlur } = formData;
   const { serviceOfferingsObj } = useGlobalData();
@@ -54,8 +52,7 @@ const SubscriptionMenu: React.FC<SubscriptionMenuProps> = ({
             !(subscription.allowCreatesWhenPaymentNotConfigured ?? plan.allowCreatesWhenPaymentNotConfigured);
 
           const isDisabled =
-            !["editor", "root"].includes(subscription.roleType) ||
-            (!isCloudAccountForm && (isInstanceLimitReached || hasPaymentIssue));
+            !["editor", "root"].includes(subscription.roleType) || isInstanceLimitReached || hasPaymentIssue;
 
           let disabledMessage = "";
           if (isInstanceLimitReached) {

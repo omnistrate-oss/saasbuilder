@@ -305,9 +305,7 @@ const CloudAccountForm = ({
                   byoaServiceOfferingsObj,
                   byoaSubscriptions,
                   allInstances,
-                  serviceId,
-                  "",
-                  true
+                  serviceId
                 );
 
                 const servicePlanId = subscription?.productTierId || "";
@@ -358,8 +356,7 @@ const CloudAccountForm = ({
                       byoaSubscriptions,
                       allInstances,
                       serviceId,
-                      servicePlanId,
-                      true
+                      servicePlanId
                     );
 
                     setFieldValue("subscriptionId", subscriptionId || subscription?.id || "");
@@ -370,7 +367,7 @@ const CloudAccountForm = ({
                   }}
                   serviceSubscriptions={subscriptions.filter((subscription) => subscription.serviceId === serviceId)}
                   instances={allInstances}
-                  isCloudAccountForm={true}
+                  subscriptionInstancesNumHash={subscriptionInstanceCountHash}
                 />
               ),
               previewValue: serviceOfferingsObj[values.serviceId]?.[values.servicePlanId]?.productTierName,
@@ -381,7 +378,7 @@ const CloudAccountForm = ({
               subLabel: "Select the subscription",
               name: "subscriptionId",
               required: true,
-              isHidden: subscriptionMenuItems.length <= 1,
+              isHidden: subscriptionMenuItems.length === 0,
               customComponent: (
                 <SubscriptionMenu
                   field={{
@@ -398,7 +395,6 @@ const CloudAccountForm = ({
                   formData={formData}
                   subscriptions={subscriptionMenuItems}
                   subscriptionInstanceCountHash={subscriptionInstanceCountHash}
-                  isCloudAccountForm={true}
                 />
               ),
               previewValue: subscriptionsObj[values.subscriptionId]?.id,
