@@ -23,7 +23,10 @@ function MultiLineChart(props) {
           <XAxis dataKey="time" tickFormatter={() => ""} tickLine={false} />
           <YAxis
             tickFormatter={(value) => `${value}`}
-            domain={([, datamax]) => [0, datamax > 0 ? Math.round(datamax + 1) : 1]}
+            domain={([datamin, datamax]) => [
+              datamin < 0 ? Math.round(datamin - 1) : 0,
+              datamax > 0 ? Math.round(datamax + 1) : 1,
+            ]}
             style={{ fontSize: 14 }}
           />
           <Tooltip isAnimationActive={false} formatter={(value) => `${value}`} />
