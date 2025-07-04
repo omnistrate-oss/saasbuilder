@@ -670,6 +670,7 @@ const CloudAccountsPage = () => {
           if (!selectedResource) return snackbar.showError("Resource not found");
 
           await deleteCloudAccountInstanceMutation.mutateAsync();
+          setSelectedRows([])
         }}
         instanceStatus={selectedInstance?.status}
         offboardingInstructionDetails={offboardingInstructionDetails}

@@ -205,6 +205,7 @@ const DeleteAccountConfigConfirmationDialog: FC<DeleteAccountConfigConfirmationD
     if (open) {
       formData.resetForm();
       firstDeleteRequestMade.current = false;
+      stepChangedToOffboard.current = false;
     }
     //eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open]);

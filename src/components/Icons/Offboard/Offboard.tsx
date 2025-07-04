@@ -6,7 +6,7 @@ import { SVGIconProps } from "src/types/common/generalTypes";
 const OffboardIcon: FC<SVGIconProps> = (props) => {
   let { color = "#414651" } = props;
 
-  color = props.disabled ? colors.gray700 : color;
+  color = props.disabled ? colors.gray400 : color;
   return (
     <svg width="17" height="17" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
       <g clipPath="url(#clip0_303_10530)">
