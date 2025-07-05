@@ -524,7 +524,9 @@ const CloudAccountsPage = () => {
         await refetchInstances();
         // refetchAccountConfigs();
       } else {
-        await refetchInstances();
+        setTimeout(async () => {
+          await refetchInstances();
+        }, 1700);
       }
     },
   });
@@ -670,7 +672,7 @@ const CloudAccountsPage = () => {
           if (!selectedResource) return snackbar.showError("Resource not found");
 
           await deleteCloudAccountInstanceMutation.mutateAsync();
-          setSelectedRows([])
+          setSelectedRows([]);
         }}
         instanceStatus={selectedInstance?.status}
         offboardingInstructionDetails={offboardingInstructionDetails}
