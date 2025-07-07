@@ -42,7 +42,6 @@ const CloudAccountForm = ({
   setOverlayType,
   setClickedInstance,
   instances,
-  isPaymentConfigured,
 }) => {
   const environmentType = useEnvironmentType();
   const queryClient = useQueryClient();
@@ -68,20 +67,6 @@ const CloudAccountForm = ({
     } else {
       subscriptionInstanceCountHash[instance.subscriptionId as string] = 1;
     }
-  });
-
-  //key-> subscriptionID value-> boolean that indicates if the subscription has reached its quota limit
-  const subscriptionQuotaLimitHash: Record<string, boolean> = {};
-  subscriptions.forEach((subscription) => {
-    const { serviceId, productTierId } = subscription;
-    const offering = serviceOfferingsObj[serviceId]?.[productTierId];
-    const quotaLimit = offering?.maxNumberOfInstances;
-    const instanceCount = subscriptionInstanceCountHash[subscription.id] || 0;
-    let hasReachedInstanceQuotaLimit = false;
-    if (quotaLimit) {
-      hasReachedInstanceQuotaLimit = instanceCount >= quotaLimit;
-    }
-    subscriptionQuotaLimitHash[subscription.id] = hasReachedInstanceQuotaLimit;
   });
 
   const byoaServiceOfferings = useMemo(() => {
@@ -214,8 +199,7 @@ const CloudAccountForm = ({
       byoaSubscriptions,
       byoaServiceOfferingsObj,
       byoaServiceOfferings,
-      allInstances,
-      isPaymentConfigured
+      allInstances
     ),
     enableReinitialize: true,
     validationSchema: CloudAccountValidationSchema,
@@ -318,13 +302,10 @@ const CloudAccountForm = ({
                 const serviceId = e.target.value;
 
                 const subscription = getValidSubscriptionForInstanceCreation(
-                  byoaServiceOfferings,
                   byoaServiceOfferingsObj,
                   byoaSubscriptions,
                   allInstances,
-                  isPaymentConfigured,
-                  serviceId,
-                  true
+                  serviceId
                 );
 
                 const servicePlanId = subscription?.productTierId || "";
@@ -370,24 +351,23 @@ const CloudAccountForm = ({
                     setFieldValue("cloudProvider", cloudProvider);
                     setFieldValue("accountConfigurationMethod", CLOUD_PROVIDER_DEFAULT_CREATION_METHOD[cloudProvider]);
 
-                    const filteredSubscriptions = byoaSubscriptions.filter(
-                      (sub) => sub.productTierId === servicePlanId
+                    const subscription = getValidSubscriptionForInstanceCreation(
+                      byoaServiceOfferingsObj,
+                      byoaSubscriptions,
+                      allInstances,
+                      serviceId,
+                      servicePlanId
                     );
-                    const rootSubscription = filteredSubscriptions.find((sub) => sub.roleType === "root");
 
-                    setFieldValue(
-                      "subscriptionId",
-                      subscriptionId || rootSubscription?.id || filteredSubscriptions[0]?.id || ""
-                    );
+                    setFieldValue("subscriptionId", subscriptionId || subscription?.id || "");
 
                     // Set Field Touched to False
                     formData.setFieldTouched("subscriptionId", false);
                     formData.setFieldTouched("cloudProvider", false);
                   }}
                   serviceSubscriptions={subscriptions.filter((subscription) => subscription.serviceId === serviceId)}
-                  isPaymentConfigured={isPaymentConfigured}
                   instances={allInstances}
-                  isCloudAccountForm={true}
+                  subscriptionInstancesNumHash={subscriptionInstanceCountHash}
                 />
               ),
               previewValue: serviceOfferingsObj[values.serviceId]?.[values.servicePlanId]?.productTierName,
@@ -398,7 +378,7 @@ const CloudAccountForm = ({
               subLabel: "Select the subscription",
               name: "subscriptionId",
               required: true,
-              isHidden: subscriptionMenuItems.length <= 1,
+              isHidden: subscriptionMenuItems.length === 0,
               customComponent: (
                 <SubscriptionMenu
                   field={{
@@ -414,8 +394,7 @@ const CloudAccountForm = ({
                   }}
                   formData={formData}
                   subscriptions={subscriptionMenuItems}
-                  subscriptionQuotaLimitHash={subscriptionQuotaLimitHash}
-                  isCloudAccountForm={true}
+                  subscriptionInstanceCountHash={subscriptionInstanceCountHash}
                 />
               ),
               previewValue: subscriptionsObj[values.subscriptionId]?.id,

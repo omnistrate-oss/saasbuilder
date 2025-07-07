@@ -37,7 +37,6 @@ export const getStandardInformationFields = (
   formMode: FormMode,
   customAvailabilityZones: AvailabilityZone[],
   isFetchingCustomAvailabilityZones: boolean,
-  isPaymentConfigured: boolean,
   instances: ResourceInstance[]
 ) => {
   if (isFetchingServiceOfferings) return [];
@@ -51,20 +50,6 @@ export const getStandardInformationFields = (
     } else {
       subscriptionInstanceCountHash[instance.subscriptionId as string] = 1;
     }
-  });
-
-  //key-> subscriptionID value-> boolean that indicates if the subscription has reached its quota limit
-  const subscriptionQuotaLimitHash: Record<string, boolean> = {};
-  subscriptions.forEach((subscription) => {
-    const { serviceId, productTierId } = subscription;
-    const offering = serviceOfferingsObj[serviceId]?.[productTierId];
-    const quotaLimit = offering?.maxNumberOfInstances;
-    const instanceCount = subscriptionInstanceCountHash[subscription.id] || 0;
-    let hasReachedInstanceQuotaLimit = false;
-    if (quotaLimit) {
-      hasReachedInstanceQuotaLimit = instanceCount >= quotaLimit;
-    }
-    subscriptionQuotaLimitHash[subscription.id] = hasReachedInstanceQuotaLimit;
   });
 
   const { values, setFieldValue, setFieldTouched } = formData;
@@ -101,11 +86,9 @@ export const getStandardInformationFields = (
         const serviceId = e.target.value;
 
         const subscription = getValidSubscriptionForInstanceCreation(
-          serviceOfferings,
           serviceOfferingsObj,
           subscriptions,
           instances,
-          isPaymentConfigured,
           serviceId
         );
 
@@ -172,20 +155,20 @@ export const getStandardInformationFields = (
             setFieldValue("resourceId", resources[0]?.value || "");
             setFieldValue("requestParams", {});
 
-            const filteredSubscriptions = subscriptions.filter(
-              (sub) => sub.productTierId === servicePlanId && ["root", "editor"].includes(sub.roleType)
+            const subscription = getValidSubscriptionForInstanceCreation(
+              serviceOfferingsObj,
+              subscriptions,
+              instances,
+              serviceId,
+              servicePlanId
             );
-            const rootSubscription = filteredSubscriptions.find((sub) => sub.roleType === "root");
 
-            setFieldValue(
-              "subscriptionId",
-              subscriptionId || rootSubscription?.id || filteredSubscriptions[0]?.id || ""
-            );
+            setFieldValue("subscriptionId", subscriptionId || subscription?.id || "");
 
             setFieldTouched("subscriptionId", false);
             setFieldTouched("resourceId", false);
           }}
-          isPaymentConfigured={isPaymentConfigured}
+          subscriptionInstancesNumHash={subscriptionInstanceCountHash}
           instances={instances}
         />
       ),
@@ -197,7 +180,7 @@ export const getStandardInformationFields = (
       subLabel: "Select the subscription",
       name: "subscriptionId",
       required: true,
-      isHidden: subscriptionMenuItems.length <= 1,
+      isHidden: subscriptionMenuItems.length === 0,
       customComponent: (
         <SubscriptionMenu
           field={{
@@ -220,7 +203,7 @@ export const getStandardInformationFields = (
           }}
           formData={formData}
           subscriptions={subscriptionMenuItems}
-          subscriptionQuotaLimitHash={subscriptionQuotaLimitHash}
+          subscriptionInstanceCountHash={subscriptionInstanceCountHash}
         />
       ),
       previewValue: subscriptionsObj[values.subscriptionId]?.id,

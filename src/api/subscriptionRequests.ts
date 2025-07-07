@@ -12,6 +12,10 @@ export const listSubscriptionRequests = (
   });
 };
 
+export const getSubscriptionRequest = (requestId: string) => {
+  return axios.get(`/subscription/request/${requestId}`);
+};
+
 export const createSubscriptionRequest = (body, ignoreError = false) => {
   return axios.post("/subscription/request", body, {
     ignoreGlobalErrorSnack: ignoreError,
