@@ -1,9 +1,9 @@
 import test, { expect } from "@playwright/test";
-// import { getIdentityProviderButtonLabel } from "app/(public)/(main-image)/signin/utils";
+import { getIdentityProviderButtonLabel } from "app/(public)/(main-image)/signin/utils";
 import { PageURLs } from "page-objects/pages";
 import { SigninPage } from "page-objects/signin-page";
 import { GlobalStateManager } from "test-utils/global-state-manager";
-// import { ProviderAPIClient } from "test-utils/provider-api-client";
+import { ProviderAPIClient } from "test-utils/provider-api-client";
 
 test.describe("Signin Page", () => {
   let signinPage: SigninPage;
@@ -21,42 +21,42 @@ test.describe("Signin Page", () => {
     await expect(page.locator("#email-helper-text")).toContainText(signinPage.pageElements.invalidEmailText);
   });
 
-  // test("Login Option Elements", async ({ page }) => {
-  //   await signinPage.goToLoginOptionsStep();
+  test("Login Option Elements", async ({ page }) => {
+    await signinPage.goToLoginOptionsStep();
 
-  //   //check that the other sign in options button is visible
-  //   await expect(page.getByTestId(signinPage.dataTestIds.otherSignInOptionsButton)).toBeVisible();
-  //   await page.getByTestId(signinPage.dataTestIds.otherSignInOptionsButton).click();
-  //   if (process.env.DISABLE_PASSWORD_LOGIN !== "true") {
-  //     //check that the password login button is visible
-  //     await expect(page.getByTestId(signinPage.dataTestIds.passwordLoginButton)).toBeVisible();
-  //     page.getByTestId(signinPage.dataTestIds.passwordLoginButton).click();
+    //check that the other sign in options button is visible
+    await expect(page.getByTestId(signinPage.dataTestIds.otherSignInOptionsButton)).toBeVisible();
+    await page.getByTestId(signinPage.dataTestIds.otherSignInOptionsButton).click();
+    if (process.env.DISABLE_PASSWORD_LOGIN !== "true") {
+      //check that the password login button is visible
+      await expect(page.getByTestId(signinPage.dataTestIds.passwordLoginButton)).toBeVisible();
+      page.getByTestId(signinPage.dataTestIds.passwordLoginButton).click();
 
-  //     // Check Forgot Password and Create Account Links
-  //     if (process.env.ENVIRONMENT_TYPE === "PROD") {
-  //       await expect(page.getByRole("link", { name: "Forgot Password" })).toHaveAttribute(
-  //         "href",
-  //         PageURLs.resetPassword
-  //       );
-  //       await expect(page.getByRole("link", { name: "Sign Up" })).toHaveAttribute("href", PageURLs.signup);
-  //     } else {
-  //       await expect(page.getByRole("link", { name: "Forgot Password" })).not.toBeVisible();
-  //       await expect(page.getByRole("link", { name: "New to Omnistrate? Sign Up" })).not.toBeVisible();
-  //     }
+      // Check Forgot Password and Create Account Links
+      if (process.env.ENVIRONMENT_TYPE === "PROD") {
+        await expect(page.getByRole("link", { name: "Forgot Password" })).toHaveAttribute(
+          "href",
+          PageURLs.resetPassword
+        );
+        await expect(page.getByRole("link", { name: "Sign Up" })).toHaveAttribute("href", PageURLs.signup);
+      } else {
+        await expect(page.getByRole("link", { name: "Forgot Password" })).not.toBeVisible();
+        await expect(page.getByRole("link", { name: "New to Omnistrate? Sign Up" })).not.toBeVisible();
+      }
 
-  //     //check that the email input is disabled
-  //     await expect(page.getByTestId(signinPage.dataTestIds.emailInput)).toBeDisabled();
-  //     //check that the password input is visible
-  //     await expect(page.getByTestId(signinPage.dataTestIds.passwordInput)).toBeVisible();
-  //     //test password required validation
-  //     await page.getByTestId(signinPage.dataTestIds.passwordInput).fill("");
-  //     await page.getByTestId(signinPage.dataTestIds.passwordInput).blur();
+      //check that the email input is disabled
+      await expect(page.getByTestId(signinPage.dataTestIds.emailInput)).toBeDisabled();
+      //check that the password input is visible
+      await expect(page.getByTestId(signinPage.dataTestIds.passwordInput)).toBeVisible();
+      //test password required validation
+      await page.getByTestId(signinPage.dataTestIds.passwordInput).fill("");
+      await page.getByTestId(signinPage.dataTestIds.passwordInput).blur();
 
-  //     await expect(page.locator("#password-helper-text")).toContainText(signinPage.pageElements.passwordRequiredText);
-  //   } else {
-  //     await expect(page.getByTestId(signinPage.dataTestIds.passwordLoginButton)).toBeHidden();
-  //   }
-  // });
+      await expect(page.locator("#password-helper-text")).toContainText(signinPage.pageElements.passwordRequiredText);
+    } else {
+      await expect(page.getByTestId(signinPage.dataTestIds.passwordLoginButton)).toBeHidden();
+    }
+  });
 
   test("Login", async ({ page }) => {
     await signinPage.signInWithPassword();
@@ -108,40 +108,40 @@ test.describe("Signin Page", () => {
   });
 
   // check that the identity providers buttons are visible based on the email domain
-  // test("Identity Provider Buttons", async ({ page }) => {
-  //   const apiClient = new ProviderAPIClient();
+  test("Identity Provider Buttons", async ({ page }) => {
+    const apiClient = new ProviderAPIClient();
 
-  //   const identityProviders = await apiClient.getIdentityProviders();
-  //   const dataTestIds = signinPage.dataTestIds;
+    const identityProviders = await apiClient.getIdentityProviders();
+    const dataTestIds = signinPage.dataTestIds;
 
-  //   await signinPage.goToLoginOptionsStep();
+    await signinPage.goToLoginOptionsStep();
 
-  //   // Check that the other sign in options button is visible
-  //   //get the email input from the email field
-  //   const emailInput = await page.getByTestId(dataTestIds.emailInput).inputValue();
-  //   const emailDomain = emailInput.split("@")[1] || "";
+    // Check that the other sign in options button is visible
+    //get the email input from the email field
+    const emailInput = await page.getByTestId(dataTestIds.emailInput).inputValue();
+    const emailDomain = emailInput.split("@")[1] || "";
 
-  //   const domainFilteredIdps = identityProviders.filter((idp) => {
-  //     if (idp.emailIdentifiers === undefined || idp.emailIdentifiers === "") return true;
+    const domainFilteredIdps = identityProviders.filter((idp) => {
+      if (idp.emailIdentifiers === undefined || idp.emailIdentifiers === "") return true;
 
-  //     const emailIdentifiersList = idp.emailIdentifiers.split(",").map((identifier) => identifier.trim());
+      const emailIdentifiersList = idp.emailIdentifiers.split(",").map((identifier) => identifier.trim());
 
-  //     return emailIdentifiersList.some((identifier) => {
-  //       return identifier === emailDomain;
-  //     });
-  //   });
+      return emailIdentifiersList.some((identifier) => {
+        return identifier === emailDomain;
+      });
+    });
 
-  //   if (domainFilteredIdps.length > 0) {
-  //     //Check that the other sign in options button is visible
-  //     await expect(page.getByTestId(signinPage.dataTestIds.otherSignInOptionsButton)).toBeVisible();
-  //     await page.getByTestId(signinPage.dataTestIds.otherSignInOptionsButton).click();
-  //     //check that a button for each identity provider is visible
-  //     for (const idp of domainFilteredIdps) {
-  //       const buttonLabel = getIdentityProviderButtonLabel(idp);
-  //       await expect(page.getByRole("button", { name: buttonLabel })).toBeVisible();
-  //     }
-  //   }
-  // });
+    if (domainFilteredIdps.length > 0) {
+      //Check that the other sign in options button is visible
+      await expect(page.getByTestId(signinPage.dataTestIds.otherSignInOptionsButton)).toBeVisible();
+      await page.getByTestId(signinPage.dataTestIds.otherSignInOptionsButton).click();
+      //check that a button for each identity provider is visible
+      for (const idp of domainFilteredIdps) {
+        const buttonLabel = getIdentityProviderButtonLabel(idp);
+        await expect(page.getByRole("button", { name: buttonLabel })).toBeVisible();
+      }
+    }
+  });
 
   test("Identity Provider Redirect", async ({ page }) => {
     const state = "idp-auth-state";
@@ -181,6 +181,6 @@ test.describe("Signin Page", () => {
     await page.goto(`/idp-auth?state=${state}&code=test-code`);
 
     //expect page to have redirected to the instances page
-    await expect(page).toHaveURL(PageURLs.instances);
+    await expect(page).toHaveURL(PageURLs.instances, { timeout: 7000 });
   });
 });
