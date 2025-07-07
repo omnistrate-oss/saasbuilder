@@ -58,7 +58,7 @@ export default async function handleSignIn(nextRequest, nextResponse) {
       });
 
       if (error.name === "ProviderAuthError" || error?.response?.status === undefined) {
-        nextResponse.status(500).send({
+        nextResponse.status(400).send({
           message: defaultErrorMessage,
         });
       } else if (error.response?.data?.message === "wrong user email or password") {
@@ -74,8 +74,14 @@ export default async function handleSignIn(nextRequest, nextResponse) {
         nextResponse.status(400).send({
           message: defaultErrorMessage,
         });
+      } else if (
+        error.response?.data?.message === "user has not been activated. Please check your email for activation link."
+      ) {
+        nextResponse.status(400).send({
+          message: defaultErrorMessage,
+        });
       } else {
-        nextResponse.status(error.response?.status || 500).send({
+        nextResponse.status(error.response?.status || 400).send({
           message: error.response?.data?.message || defaultErrorMessage,
         });
       }
