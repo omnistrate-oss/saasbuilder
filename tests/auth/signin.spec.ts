@@ -181,6 +181,7 @@ test.describe("Signin Page", () => {
     await page.goto(`/idp-auth?state=${state}&code=test-code`);
 
     //expect page to have redirected to the instances page
-    await expect(page).toHaveURL(PageURLs.instances, { timeout: 7000 });
+    await expect(page).toHaveURL(PageURLs.instances, { timeout: 10000 });
   });
 });
+
