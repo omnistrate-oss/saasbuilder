@@ -19,7 +19,7 @@ import { cloudAccountOffboardingSteps } from "../constants";
 import { OffboardingInstructions, OffboardInstructionDetails } from "./OffboardingInstructions";
 
 const StyledForm = styled(Box)({
-  top :"50%",
+  top: "50%",
   position: "fixed",
   right: "50%",
   transform: "translate(50%, -50%)",
@@ -267,6 +267,7 @@ const DeleteAccountConfigConfirmationDialog: FC<DeleteAccountConfigConfirmationD
             , in the field below:
           </Text>
           <TextField
+            id="confirmationText"
             name="confirmationText"
             value={formData.values.confirmationText}
             onChange={formData.handleChange}
@@ -291,6 +292,7 @@ const DeleteAccountConfigConfirmationDialog: FC<DeleteAccountConfigConfirmationD
             Cancel
           </Button>
           <Button
+            data-testid={step === "delete" ? "delete-submit-button" : "offboard-submit-button"}
             sx={{ height: "40px !important", padding: "10px 14px !important" }}
             type="submit"
             variant="contained"
