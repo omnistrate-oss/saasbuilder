@@ -152,88 +152,73 @@ export const getMainResourceFromInstance = (instance?: ResourceInstance, offerin
 
   return mainResource;
 };
+// Helper function to check if subscription is valid for creation
+export const isSubscriptionValid = (
+  subscription: Subscription,
+  serviceOfferingsObj,
+  subscriptionInstancesNumHash
+): boolean => {
+  const serviceOffering = serviceOfferingsObj[subscription.serviceId]?.[subscription.productTierId] || {};
+  const limit = subscription.maxNumberOfInstances ?? serviceOffering.maxNumberOfInstances ?? Infinity;
+  const instanceCount = subscriptionInstancesNumHash[subscription.id] || 0;
+  const isLessThanLimit = limit === 0 ? false : instanceCount < limit;
+
+  const hasValidPayment =
+    subscription.paymentMethodConfigured ||
+    (subscription.allowCreatesWhenPaymentNotConfigured ?? serviceOffering.allowCreatesWhenPaymentNotConfigured);
+
+  return Boolean(isLessThanLimit && hasValidPayment);
+};
 
 export const getValidSubscriptionForInstanceCreation = (
-  serviceOfferings: ServiceOffering[],
   serviceOfferingsObj: Record<string, Record<string, ServiceOffering>>,
   subscriptions: Subscription[],
   instances: ResourceInstance[],
-  isPaymentConfigured: boolean,
-  serviceID?: string
+  serviceId?: string,
+  servicePlanId?: string
 ): Subscription | undefined => {
-  const productTierInstanceLimitHash: Record<string, number> = {};
-  const productTierPaymentRequirementHash: Record<string, boolean> = {};
+  // Build subscription instance count hash
   const subscriptionInstancesNumHash: Record<string, number> = {};
-
-  serviceOfferings.forEach((serviceOffering) => {
-    productTierInstanceLimitHash[serviceOffering.productTierID] =
-      serviceOffering.maxNumberOfInstances !== undefined ? serviceOffering.maxNumberOfInstances : -1;
-
-    productTierPaymentRequirementHash[serviceOffering.productTierID] = !Boolean(
-      serviceOffering.allowCreatesWhenPaymentNotConfigured
-    );
-  });
-
   instances.forEach((instance) => {
-    if (subscriptionInstancesNumHash[instance.subscriptionId as string]) {
-      subscriptionInstancesNumHash[instance.subscriptionId as string] =
-        subscriptionInstancesNumHash[instance.subscriptionId as string] + 1;
-    } else {
-      subscriptionInstancesNumHash[instance.subscriptionId as string] = 1;
-    }
+    const subId = instance.subscriptionId as string;
+    subscriptionInstancesNumHash[subId] = (subscriptionInstancesNumHash[subId] || 0) + 1;
   });
 
+  // Filter subscriptions to editor/root roles and valid service offerings
   let filteredSubscriptions = subscriptions.filter(
     (sub) => serviceOfferingsObj[sub.serviceId]?.[sub.productTierId] && ["root", "editor"].includes(sub.roleType)
   );
 
-  //if serviceID has been provided, look for subscriptions within the serviceID
-  if (serviceID) {
-    filteredSubscriptions = filteredSubscriptions.filter((subscription) => subscription.serviceId === serviceID);
+  // Filter by serviceID if provided
+  if (serviceId) {
+    filteredSubscriptions = filteredSubscriptions.filter((subscription) => subscription.serviceId === serviceId);
   }
 
-  const sortedSubscriptionsByName = filteredSubscriptions.sort((a, b) => a.serviceName.localeCompare(b.serviceName));
-
-  const rootSubscriptions = sortedSubscriptionsByName.filter((sub) => sub.roleType === "root");
-
-  const editorSubscriptions = sortedSubscriptionsByName.filter((sub) => sub.roleType === "editor");
-
-  let selectedSubscription: Subscription | undefined;
-
-  //from all subscriptions, prefer a root subscription, where user has not hit subsription limit
-
-  selectedSubscription = rootSubscriptions.find((subsription) => {
-    //check for blockers
-    //-> if plan requires valid payment config, check that payment is configured
-    //-> if plan has max instance limit set, check that the limit has not been met
-    const productTierID = subsription.productTierId;
-    const requiresPaymentConfig = productTierPaymentRequirementHash[productTierID];
-    const numInstances = subscriptionInstancesNumHash[subsription.id] || 0;
-    const instancesLimit = productTierInstanceLimitHash[productTierID];
-    if ((requiresPaymentConfig && !isPaymentConfigured) || (instancesLimit > -1 && numInstances >= instancesLimit))
-      return false;
-
-    return true;
-  });
-
-  if (!selectedSubscription) {
-    //if no root subscription matches the required criteria, look for editor subscriptions
-    selectedSubscription = editorSubscriptions.find((subsription) => {
-      //check for blockers
-      //-> if plan requires valid payment config, check that payment is configured
-      //-> if plan has max instance limit set, check that the limit has not been met
-      const productTierID = subsription.productTierId;
-      const requiresPaymentConfig = productTierPaymentRequirementHash[productTierID];
-      const numInstances = subscriptionInstancesNumHash[subsription.id] || 0;
-      const instancesLimit = productTierInstanceLimitHash[productTierID];
-      if ((requiresPaymentConfig && !isPaymentConfigured) || (instancesLimit > -1 && numInstances >= instancesLimit))
-        return false;
-
-      return true;
-    });
+  if (servicePlanId) {
+    filteredSubscriptions = filteredSubscriptions.filter(
+      (subscription) => subscription.productTierId === servicePlanId
+    );
   }
 
-  return selectedSubscription;
+  // Sort by service name
+  const sortedSubscriptions = filteredSubscriptions.sort((a, b) => a.serviceName.localeCompare(b.serviceName));
+
+  // First try to find a valid root subscription
+  const rootSubscriptions = sortedSubscriptions.filter((sub) => sub.roleType === "root");
+  const validRootSubscription = rootSubscriptions.find((el) =>
+    isSubscriptionValid(el, serviceOfferingsObj, subscriptionInstancesNumHash)
+  );
+
+  if (validRootSubscription) {
+    return validRootSubscription;
+  }
+
+  // If no valid root subscription, try editor subscriptions
+  const editorSubscriptions = sortedSubscriptions.filter((sub) => sub.roleType === "editor");
+  return (
+    editorSubscriptions.find((el) => isSubscriptionValid(el, serviceOfferingsObj, subscriptionInstancesNumHash)) ||
+    undefined
+  );
 };
 
 export const getInitialValues = (
@@ -241,8 +226,7 @@ export const getInitialValues = (
   subscriptions: Subscription[],
   serviceOfferingsObj: Record<string, Record<string, ServiceOffering>>,
   serviceOfferings: ServiceOffering[],
-  instances: ResourceInstance[],
-  isPaymentConfigured: boolean
+  instances: ResourceInstance[]
 ) => {
   if (instance) {
     const subscription = subscriptions.find((sub) => sub.id === instance?.subscriptionId);
@@ -279,11 +263,9 @@ export const getInitialValues = (
   //choose first subscription from which user can create an instance
 
   const selectedSubscription: Subscription | undefined = getValidSubscriptionForInstanceCreation(
-    serviceOfferings,
     serviceOfferingsObj,
     subscriptions,
-    instances,
-    isPaymentConfigured
+    instances
   );
 
   const serviceId =
@@ -669,21 +651,4 @@ export const getRowBorderStyles = () => {
     };
   }
   return styles;
-};
-
-//
-export const getOfferingPaymentConfigRequiredStatus = (
-  serviceOfferings: ServiceOffering[],
-  selectedServiceId: string,
-  selectedProductTierId: string
-): boolean => {
-  let requiresValidPaymentConfig = false;
-  const offering = serviceOfferings.find(
-    (offering) => offering.serviceId === selectedServiceId && offering.productTierID === selectedProductTierId
-  );
-  if (offering && offering.allowCreatesWhenPaymentNotConfigured === false) {
-    requiresValidPaymentConfig = true;
-  }
-
-  return requiresValidPaymentConfig;
 };

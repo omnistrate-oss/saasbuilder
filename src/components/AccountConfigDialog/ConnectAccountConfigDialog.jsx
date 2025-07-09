@@ -276,6 +276,20 @@ const Check = ({ instance, fetchClickedInstanceDetails, setClickedInstance, serv
                 </StyledLink>
                  CloudFormation template to grant {`${serviceProviderName}`} the required permissions.
               </Text>
+            ) : instance?.result_params?.azure_subscription_id ? (
+              <Box>
+                <Text size="medium" weight="regular" color="#374151">
+                  {/* <b>Using Azure Cloud Shell:</b>  */}
+                  Please open the Azure Cloud Shell environment using the following link:{" "}
+                  <StyledLink target="_blank" rel="noopener noreferrer" href="https://portal.azure.com/#cloudshell/">
+                    Azure Cloud Shell
+                  </StyledLink>
+                  . Once the terminal is open, execute the following command:
+                </Text>
+                {instance?.result_params?.azure_bootstrap_shell_script && (
+                  <TextContainerToCopy text={instance?.result_params?.azure_bootstrap_shell_script} marginTop="12px" />
+                )}
+              </Box>
             ) : (
               <Box>
                 <Text size="medium" weight="regular" color="#374151">

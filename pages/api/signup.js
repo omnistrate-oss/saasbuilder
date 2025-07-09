@@ -44,10 +44,12 @@ export default async function handleSignup(nextRequest, nextResponse) {
       } else {
         const responseErrorMessage = error.response?.data?.message;
 
-        if (responseErrorMessage === "tenant already exists") {
-          nextResponse.status(400).send({
-            message: `This email is already registered. You may reset your password or contact support for help`,
-          });
+        if (
+          responseErrorMessage?.toLowerCase() === "tenant already exists" ||
+          responseErrorMessage?.toLowerCase() ===
+            "tenant with a valid token already exists, wait for the current token to expire"
+        ) {
+          nextResponse.status(200).send();
         }
         nextResponse.status(error.response?.status || 500).send({
           message: responseErrorMessage || defaultErrorMessage,

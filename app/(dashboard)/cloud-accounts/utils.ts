@@ -4,90 +4,69 @@ import { Subscription } from "src/types/subscription";
 import { CLOUD_PROVIDER_DEFAULT_CREATION_METHOD } from "src/utils/constants/accountConfig";
 
 export const getValidSubscriptionForInstanceCreation = (
-  serviceOfferings: ServiceOffering[],
   serviceOfferingsObj: Record<string, Record<string, ServiceOffering>>,
   subscriptions: Subscription[],
   instances: ResourceInstance[],
-  isPaymentConfigured: boolean,
-  serviceID?: string,
-  skipInstanceQuotaCheck = true
+  serviceId?: string,
+  servicePlanId?: string
 ): Subscription | undefined => {
-  const productTierInstanceLimitHash: Record<string, number> = {};
-  const productTierPaymentRequirementHash: Record<string, boolean> = {};
+  // Build subscription instance count hash
   const subscriptionInstancesNumHash: Record<string, number> = {};
-
-  serviceOfferings.forEach((serviceOffering) => {
-    productTierInstanceLimitHash[serviceOffering.productTierID] =
-      serviceOffering.maxNumberOfInstances !== undefined ? serviceOffering.maxNumberOfInstances : -1;
-
-    productTierPaymentRequirementHash[serviceOffering.productTierID] = !Boolean(
-      serviceOffering.allowCreatesWhenPaymentNotConfigured
-    );
-  });
-
   instances.forEach((instance) => {
-    if (subscriptionInstancesNumHash[instance.subscriptionId as string]) {
-      subscriptionInstancesNumHash[instance.subscriptionId as string] =
-        subscriptionInstancesNumHash[instance.subscriptionId as string] + 1;
-    } else {
-      subscriptionInstancesNumHash[instance.subscriptionId as string] = 1;
-    }
+    const subId = instance.subscriptionId as string;
+    subscriptionInstancesNumHash[subId] = (subscriptionInstancesNumHash[subId] || 0) + 1;
   });
 
+  // Filter subscriptions to editor/root roles and valid service offerings
   let filteredSubscriptions = subscriptions.filter(
     (sub) => serviceOfferingsObj[sub.serviceId]?.[sub.productTierId] && ["root", "editor"].includes(sub.roleType)
   );
 
-  //if serviceID has been provided, look for subscriptions within the serviceID
-  if (serviceID) {
-    filteredSubscriptions = filteredSubscriptions.filter((subscription) => subscription.serviceId === serviceID);
+  // Filter by serviceID if provided
+  if (serviceId) {
+    filteredSubscriptions = filteredSubscriptions.filter((subscription) => subscription.serviceId === serviceId);
+  }
+  if (servicePlanId) {
+    filteredSubscriptions = filteredSubscriptions.filter(
+      (subscription) => subscription.productTierId === servicePlanId
+    );
   }
 
-  const sortedSubscriptionsByName = filteredSubscriptions.sort((a, b) => a.serviceName.localeCompare(b.serviceName));
+  // Sort by service name
+  const sortedSubscriptions = filteredSubscriptions.sort((a, b) => a.serviceName.localeCompare(b.serviceName));
 
-  const rootSubscriptions = sortedSubscriptionsByName.filter((sub) => sub.roleType === "root");
+  // Helper function to check if subscription is valid for creation
+  const isSubscriptionValid = (subscription: Subscription, checkQuota: boolean = true): boolean => {
+    const serviceOffering = serviceOfferingsObj[subscription.serviceId]?.[subscription.productTierId] || {};
 
-  const editorSubscriptions = sortedSubscriptionsByName.filter((sub) => sub.roleType === "editor");
+    // Check instance limit (only if checkQuota is true)
+    if (checkQuota) {
+      const limit = subscription.maxNumberOfInstances ?? serviceOffering.maxNumberOfInstances ?? Infinity;
+      const instanceCount = subscriptionInstancesNumHash[subscription.id] || 0;
+      const isLessThanLimit = limit === 0 ? false : instanceCount < limit;
+      if (!isLessThanLimit) return false;
+    }
 
-  let selectedSubscription: Subscription | undefined;
+    // Check payment configuration
+    const hasValidPayment =
+      subscription.paymentMethodConfigured ||
+      (subscription.allowCreatesWhenPaymentNotConfigured ?? serviceOffering.allowCreatesWhenPaymentNotConfigured);
 
-  //from all subscriptions, prefer a root subscription, where user has not hit subsription limit
+    return !!hasValidPayment;
+  };
 
-  selectedSubscription = rootSubscriptions.find((subsription) => {
-    //check for blockers
-    //-> if plan requires valid payment config, check that payment is configured
-    //-> if plan has max instance limit set, check that the limit has not been met
-    const productTierID = subsription.productTierId;
-    const requiresPaymentConfig = productTierPaymentRequirementHash[productTierID];
-    const numInstances = subscriptionInstancesNumHash[subsription.id] || 0;
-    const instancesLimit = productTierInstanceLimitHash[productTierID];
-    if (
-      (requiresPaymentConfig && !isPaymentConfigured) ||
-      (instancesLimit > -1 && numInstances >= instancesLimit && !skipInstanceQuotaCheck)
-    )
-      return false;
+  // First try to find a valid root subscription
+  const rootSubscriptions = sortedSubscriptions.filter((sub) => sub.roleType === "root");
+  const validRootSubscription = rootSubscriptions.find((sub) => isSubscriptionValid(sub));
 
-    return true;
-  });
-
-  if (!selectedSubscription) {
-    //if no root subscription matches the required criteria, look for editor subscriptions
-    selectedSubscription = editorSubscriptions.find((subsription) => {
-      //check for blockers
-      //-> if plan requires valid payment config, check that payment is configured
-      //-> if plan has max instance limit set, check that the limit has not been met
-      const productTierID = subsription.productTierId;
-      const requiresPaymentConfig = productTierPaymentRequirementHash[productTierID];
-      const numInstances = subscriptionInstancesNumHash[subsription.id] || 0;
-      const instancesLimit = productTierInstanceLimitHash[productTierID];
-      if ((requiresPaymentConfig && !isPaymentConfigured) || (instancesLimit > -1 && numInstances >= instancesLimit))
-        return false;
-
-      return true;
-    });
+  if (validRootSubscription) {
+    return validRootSubscription;
   }
 
-  return selectedSubscription;
+  // If no valid root subscription, try editor subscriptions
+  // Note: Editor subscriptions always check quota
+  const editorSubscriptions = sortedSubscriptions.filter((sub) => sub.roleType === "editor");
+  return editorSubscriptions.find((sub) => isSubscriptionValid(sub, true));
 };
 
 export const getInitialValues = (
@@ -100,8 +79,7 @@ export const getInitialValues = (
   byoaSubscriptions: Subscription[],
   byoaServiceOfferingsObj: Record<string, Record<string, ServiceOffering>>,
   byoaServiceOfferings: ServiceOffering[],
-  instances: ResourceInstance[],
-  isPaymentConfigured: boolean
+  instances: ResourceInstance[]
 ) => {
   if (selectedInstance) {
     const subscription = byoaSubscriptions.find((sub) => sub.id === selectedInstance.subscriptionId);
@@ -160,13 +138,11 @@ export const getInitialValues = (
   );
 
   const selectedSubscription: Subscription | undefined = getValidSubscriptionForInstanceCreation(
-    byoaServiceOfferings,
     byoaServiceOfferingsObj,
     byoaSubscriptions,
     instances,
-    isPaymentConfigured,
     "",
-    false
+    ""
   );
 
   const serviceId =
@@ -186,4 +162,9 @@ export const getInitialValues = (
     gcpProjectId: "",
     gcpProjectNumber: "",
   };
+};
+
+export const getOffboardReadiness = (cloudAccountInstanceStatus?: string, accountConfigInstanceStatus?: string) => {
+  if (cloudAccountInstanceStatus === "DELETING" && accountConfigInstanceStatus === "READY_TO_OFFBOARD") return true;
+  else return false;
 };

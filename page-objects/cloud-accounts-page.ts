@@ -79,7 +79,7 @@ export class CloudAccountsPage {
     await this.selectCloudAccount(instanceId);
     await this.page.getByTestId(this.dataTestIds.deleteButton).click();
 
-    await this.page.locator("#deleteme").fill("deleteme");
+    await this.page.locator("#confirmationText").fill("deleteme");
     await this.page.getByTestId("delete-submit-button").click();
   }
 }

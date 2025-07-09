@@ -1,5 +1,7 @@
 import { request } from "@playwright/test";
 
+import { getEnvironmentType } from "src/server/utils/getEnvironmentType";
+import { getSaaSDomainURL } from "src/server/utils/getSaaSDomainURL";
 import { IdentityProvider } from "src/types/identityProvider";
 import { Service } from "src/types/service";
 
@@ -91,7 +93,12 @@ export class ProviderAPIClient {
 
   async getIdentityProviders(): Promise<IdentityProvider[]> {
     const context = await this.createProviderRequest();
-    const response = await context.get(`/${this.apiVersion}/identity-provider-render`);
+    const response = await context.get(`/${this.apiVersion}/identity-provider-render`, {
+      params: {
+        environmentType: getEnvironmentType(),
+        redirectUrl: `${getSaaSDomainURL()}/idp-auth`,
+      },
+    });
 
     if (!response.ok()) {
       console.error(await response.json());
