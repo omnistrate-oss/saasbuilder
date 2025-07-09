@@ -75,7 +75,8 @@ export default async function handleSignIn(nextRequest, nextResponse) {
           message: defaultErrorMessage,
         });
       } else if (
-        error.response?.data?.message === "user has not been activated. Please check your email for activation link."
+        error.response?.data?.message?.toLowerCase() ===
+        "user has not been activated. please check your email for activation link."
       ) {
         nextResponse.status(400).send({
           message: defaultErrorMessage,

@@ -45,8 +45,9 @@ export default async function handleSignup(nextRequest, nextResponse) {
         const responseErrorMessage = error.response?.data?.message;
 
         if (
-          responseErrorMessage === "tenant already exists" ||
-          responseErrorMessage === "tenant with a valid token already exists, wait for the current token to expire"
+          responseErrorMessage?.toLowerCase() === "tenant already exists" ||
+          responseErrorMessage?.toLowerCase() ===
+            "tenant with a valid token already exists, wait for the current token to expire"
         ) {
           nextResponse.status(200).send();
         }
