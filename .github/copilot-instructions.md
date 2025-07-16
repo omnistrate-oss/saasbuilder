@@ -1,4 +1,4 @@
-# GitHub Copilot Instructions for Omnistrate Website
+# GitHub Copilot Instructions for Omnistrate SaaSBuilder
 
 ## Code Review Guidelines
 
