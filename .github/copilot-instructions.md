@@ -4,6 +4,108 @@
 
 When reviewing code for this project, please include the following checks:
 
+### TypeScript Implementation Review
+
+- **Type Definitions**: Ensure all code has proper TypeScript implementation:
+  - **Components**: All React components should have defined props interfaces/types
+  - **Hooks**: Custom hooks should have proper return type definitions and parameter types
+  - **API Layer**: All API calls (Axios, TanStack Query, OpenAPI Fetch) should have defined request/response types
+  - **Forms**: Form validation, submission handlers, and form data should be properly typed
+  - **State Management**: Redux slices, context providers, and state should have defined types
+  - **Utility Functions**: All utility functions should have proper input/output types
+
+- **Type Safety Best Practices**:
+  - Avoid using `any` type - use proper type definitions or `unknown` when appropriate
+  - Implement proper null and undefined checks using optional chaining (`?.`) and nullish coalescing (`??`)
+  - Use type guards and type assertions correctly
+  - Ensure proper error handling with typed error objects
+  - Use generic types appropriately for reusable components and functions
+  - Implement proper enum usage instead of string literals where applicable
+  - Use `strict` mode TypeScript configuration compliance
+
+- **Code Examples to Flag**:
+```typescript
+// ❌ Flag this - missing types and null checks
+const Component = (props) => {
+  const data = props.data.map(item => item.name);
+  return <div>{data}</div>;
+};
+
+// ✅ Suggest this instead
+interface ComponentProps {
+  data: Array<{ name: string; id: string }>;
+}
+
+const Component: React.FC<ComponentProps> = ({ data }) => {
+  const names = data?.map(item => item.name) ?? [];
+  return <div>{names.join(', ')}</div>;
+};
+```
+
+```typescript
+// ❌ Flag this - untyped API call
+const fetchUser = async (id) => {
+  const response = await fetch(`/api/users/${id}`);
+  return response.json();
+};
+
+// ✅ Suggest this instead
+interface User {
+  id: string;
+  name: string;
+  email: string;
+}
+
+const fetchUser = async (id: string): Promise<User> => {
+  const response = await fetch(`/api/users/${id}`);
+  if (!response.ok) {
+    throw new Error(`Failed to fetch user: ${response.statusText}`);
+  }
+  return response.json() as User;
+};
+```
+
+### Testing Requirements
+
+- **Test Coverage**: Ensure comprehensive test coverage for all new features:
+  - **Unit Tests**: All utility functions, hooks, and business logic should have unit tests
+  - **Component Tests**: React components should have tests covering different states and user interactions
+  - **Integration Tests**: API integrations and complex workflows should have integration tests
+  - **E2E Tests**: Critical user journeys should have end-to-end tests using Playwright
+  - **API Tests**: All API endpoints should have proper request/response testing
+
+- **Testing Best Practices**:
+  - Use proper test structure (Arrange, Act, Assert)
+  - Mock external dependencies appropriately
+  - Test error scenarios and edge cases
+  - Ensure tests are deterministic and don't rely on external state
+  - Use meaningful test descriptions that explain what is being tested
+  - Follow testing pyramid principles (more unit tests, fewer E2E tests)
+  - Ensure tests are maintainable and don't test implementation details
+
+- **Required Test Types for New Features**:
+```typescript
+// ❌ Flag this - missing tests for new feature
+const calculatePricing = (plan: Plan, usage: Usage): number => {
+  // Complex pricing logic
+  return price;
+};
+
+// ✅ Suggest this instead - with accompanying tests
+describe('calculatePricing', () => {
+  it('should calculate correct price for basic plan', () => {
+    const plan = { type: 'basic', basePrice: 10 };
+    const usage = { requests: 1000 };
+    expect(calculatePricing(plan, usage)).toBe(10);
+  });
+
+  it('should handle null usage gracefully', () => {
+    const plan = { type: 'basic', basePrice: 10 };
+    expect(() => calculatePricing(plan, null)).not.toThrow();
+  });
+});
+```
+
 ### English Syntax and Grammar Review
 
 - **Text Content**: Carefully review all user-facing text content including:
