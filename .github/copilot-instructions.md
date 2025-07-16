@@ -69,21 +69,27 @@ const fetchUser = async (id: string): Promise<User> => {
 
 - **Test Coverage**: Ensure comprehensive test coverage for all new features:
 
-  - **Unit Tests**: All utility functions, hooks, and business logic should have unit tests
-  - **Component Tests**: React components should have tests covering different states and user interactions
-  - **Integration Tests**: API integrations and complex workflows should have integration tests
-  - **E2E Tests**: Critical user journeys should have end-to-end tests using Playwright
-  - **API Tests**: All API endpoints should have proper request/response testing
+  - **Required**: Every new feature must have either integration tests OR E2E tests (or both) to ensure the feature works correctly in realistic scenarios
 
-- **Testing Best Practices**:
+- **General Testing Best Practices**:
 
   - Use proper test structure (Arrange, Act, Assert)
   - Mock external dependencies appropriately
   - Test error scenarios and edge cases
   - Ensure tests are deterministic and don't rely on external state
   - Use meaningful test descriptions that explain what is being tested
-  - Follow testing pyramid principles (more unit tests, fewer E2E tests)
-  - Ensure tests are maintainable and don't test implementation details
+
+- **Playwright E2E Testing Best Practices**:
+
+  - **Test Organization**: Use `test.describe()` for grouping related tests and `test.describe.configure({ mode: "serial" })` for dependent test sequences
+  - **Page Object Pattern**: Always use page objects for reusable UI interactions (see existing `page-objects/` directory)
+  - **Data Test IDs**: Use `getByTestId()` for reliable element selection instead of text-based selectors when possible
+  - **Wait Strategies**: Use appropriate wait strategies (`waitForLoadState("networkidle")`, `waitForResponse()`, `waitFor()`) instead of fixed timeouts
+  - **Environment Variables**: Always use environment variables for test data (emails, passwords, URLs)
+  - **State Management**: Use the GlobalStateManager for sharing data between tests
+  - **Authentication**: Leverage the user-setup.spec.ts pattern with `storageState` for authenticated test scenarios
+  - **API Integration**: Use API clients (`UserAPIClient`, `ProviderAPIClient`) for setup/teardown and data verification
+  - **Timeouts**: Configure appropriate timeouts for different test types (current: 12 minutes for E2E, 30 seconds for actions)
 
 - **Required Test Types for New Features**:
 
@@ -106,6 +112,98 @@ describe("calculatePricing", () => {
     const plan = { type: "basic", basePrice: 10 };
     expect(() => calculatePricing(plan, null)).not.toThrow();
   });
+});
+```
+
+- **Playwright Test Examples to Follow**:
+
+```typescript
+// ✅ Good Playwright test structure
+test.describe("Feature Name", () => {
+  let pageObject: PageObjectClass;
+
+  test.beforeEach(async ({ page }) => {
+    pageObject = new PageObjectClass(page);
+    await pageObject.navigate();
+    await page.waitForLoadState("networkidle");
+  });
+
+  test("should perform basic functionality", async ({ page }) => {
+    // Arrange
+    const dataTestIds = pageObject.dataTestIds;
+
+    // Act
+    await page.getByTestId(dataTestIds.inputField).fill("test value");
+    await page.getByTestId(dataTestIds.submitButton).click();
+
+    // Assert
+    await expect(page.getByTestId(dataTestIds.successMessage)).toBeVisible();
+  });
+});
+```
+
+```typescript
+// ✅ Good pattern for API integration
+test("should create resource and verify in UI", async ({ page }) => {
+  // Setup via API
+  const apiClient = new UserAPIClient();
+  const resource = await apiClient.createResource(testData);
+
+  // Verify in UI
+  await pageObject.navigate();
+  await expect(page.getByTestId(resource.id)).toBeVisible();
+
+  // Cleanup via API
+  await apiClient.deleteResource(resource.id);
+});
+```
+
+```typescript
+// ✅ Good pattern for waiting and response interception
+test("should handle async operations", async ({ page }) => {
+  // Intercept API response
+  const responsePromise = page.waitForResponse((response) => response.url().includes("/api/endpoint"));
+
+  await page.getByTestId("trigger-button").click();
+
+  const response = await responsePromise;
+  const data = await response.json();
+
+  // Verify response data
+  expect(data.status).toBe("success");
+});
+```
+
+- **Playwright Anti-Patterns to Flag**:
+
+```typescript
+// ❌ Flag this - avoid fixed timeouts
+await page.waitForTimeout(5000);
+
+// ✅ Suggest this instead
+await page.waitForLoadState("networkidle");
+// or
+await expect(page.getByTestId("element")).toBeVisible();
+
+// ❌ Flag this - avoid text-based selectors for dynamic content
+await page.getByText("Submit").click();
+
+// ✅ Suggest this instead
+await page.getByTestId("submit-button").click();
+
+// ❌ Flag this - missing cleanup
+test("should create resource", async () => {
+  const resource = await apiClient.createResource();
+  // test logic but no cleanup
+});
+
+// ✅ Suggest this instead
+test("should create resource", async () => {
+  const resource = await apiClient.createResource();
+  // test logic
+
+  // Cleanup
+  await apiClient.deleteResource(resource.id);
 });
 ```
 
