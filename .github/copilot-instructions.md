@@ -91,7 +91,7 @@ const fetchUser = async (id: string): Promise<User> => {
   - **API Integration**: Use API clients (`UserAPIClient`, `ProviderAPIClient`) for setup/teardown and data verification
   - **Timeouts**: Configure appropriate timeouts for different test types (current: 12 minutes for E2E, 30 seconds for actions)
 
-- **Required Test Types for New Features**:
+- **Required Test Cases for New Features**:
 
 ```typescript
 // ❌ Flag this - missing tests for new feature
