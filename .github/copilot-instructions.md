@@ -221,6 +221,22 @@ const errorMessage = "An error has occurred while processing your request";
 <h2>Create Your SaaS Product</h2>
 ```
 
+```jsx
+// ❌ Flag this - incorrect capitalization of SaaS
+<p>Our Saas platform provides enterprise solutions</p>
+
+// ✅ Suggest this instead
+<p>Our SaaS platform provides enterprise solutions</p>
+```
+
+```jsx
+// ❌ Flag this - inconsistent confirmation text and action
+<Text>To confirm deletion type <b>unsubscribe</b> in the dialog below</Text>
+
+// ✅ Suggest this instead
+<Text>To confirm deletion type <b>deleteme</b> in the dialog below</Text>
+```
+
 ```html
 <!-- ❌ Flag this - missing accessibility -->
 <img src="product-screenshot.png" />
