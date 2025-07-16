@@ -7,6 +7,7 @@ When reviewing code for this project, please include the following checks:
 ### TypeScript Implementation Review
 
 - **Type Definitions**: Ensure all code has proper TypeScript implementation:
+
   - **Components**: All React components should have defined props interfaces/types
   - **Hooks**: Custom hooks should have proper return type definitions and parameter types
   - **API Layer**: All API calls (Axios, TanStack Query, OpenAPI Fetch) should have defined request/response types
@@ -15,6 +16,7 @@ When reviewing code for this project, please include the following checks:
   - **Utility Functions**: All utility functions should have proper input/output types
 
 - **Type Safety Best Practices**:
+
   - Avoid using `any` type - use proper type definitions or `unknown` when appropriate
   - Implement proper null and undefined checks using optional chaining (`?.`) and nullish coalescing (`??`)
   - Use type guards and type assertions correctly
@@ -24,6 +26,7 @@ When reviewing code for this project, please include the following checks:
   - Use `strict` mode TypeScript configuration compliance
 
 - **Code Examples to Flag**:
+
 ```typescript
 // ❌ Flag this - missing types and null checks
 const Component = (props) => {
@@ -45,8 +48,8 @@ const Component: React.FC<ComponentProps> = ({ data }) => {
 ```typescript
 // ❌ Flag this - untyped API call
 const fetchUser = async (id) => {
-  const response = await fetch(`/api/users/${id}`);
-  return response.json();
+  const response = await axios.get(`/api/users/${id}`);
+  return response.data;
 };
 
 // ✅ Suggest this instead
@@ -57,17 +60,15 @@ interface User {
 }
 
 const fetchUser = async (id: string): Promise<User> => {
-  const response = await fetch(`/api/users/${id}`);
-  if (!response.ok) {
-    throw new Error(`Failed to fetch user: ${response.statusText}`);
-  }
-  return response.json() as User;
+  const response = await axios.get<User>(`/api/users/${id}`);
+  return response.data;
 };
 ```
 
 ### Testing Requirements
 
 - **Test Coverage**: Ensure comprehensive test coverage for all new features:
+
   - **Unit Tests**: All utility functions, hooks, and business logic should have unit tests
   - **Component Tests**: React components should have tests covering different states and user interactions
   - **Integration Tests**: API integrations and complex workflows should have integration tests
@@ -75,6 +76,7 @@ const fetchUser = async (id: string): Promise<User> => {
   - **API Tests**: All API endpoints should have proper request/response testing
 
 - **Testing Best Practices**:
+
   - Use proper test structure (Arrange, Act, Assert)
   - Mock external dependencies appropriately
   - Test error scenarios and edge cases
@@ -84,6 +86,7 @@ const fetchUser = async (id: string): Promise<User> => {
   - Ensure tests are maintainable and don't test implementation details
 
 - **Required Test Types for New Features**:
+
 ```typescript
 // ❌ Flag this - missing tests for new feature
 const calculatePricing = (plan: Plan, usage: Usage): number => {
@@ -92,15 +95,15 @@ const calculatePricing = (plan: Plan, usage: Usage): number => {
 };
 
 // ✅ Suggest this instead - with accompanying tests
-describe('calculatePricing', () => {
-  it('should calculate correct price for basic plan', () => {
-    const plan = { type: 'basic', basePrice: 10 };
+describe("calculatePricing", () => {
+  it("should calculate correct price for basic plan", () => {
+    const plan = { type: "basic", basePrice: 10 };
     const usage = { requests: 1000 };
     expect(calculatePricing(plan, usage)).toBe(10);
   });
 
-  it('should handle null usage gracefully', () => {
-    const plan = { type: 'basic', basePrice: 10 };
+  it("should handle null usage gracefully", () => {
+    const plan = { type: "basic", basePrice: 10 };
     expect(() => calculatePricing(plan, null)).not.toThrow();
   });
 });
@@ -109,6 +112,7 @@ describe('calculatePricing', () => {
 ### English Syntax and Grammar Review
 
 - **Text Content**: Carefully review all user-facing text content including:
+
   - Marketing copy and value propositions
   - Headlines, subheadings, and CTAs (Call-to-Actions)
   - Component text and labels
@@ -121,6 +125,7 @@ describe('calculatePricing', () => {
   - Configuration files with text content
 
 - **Grammar and Syntax Checks**:
+
   - Check for proper grammar, spelling, and punctuation
   - Ensure consistent tone and voice across the application
   - Verify proper capitalization and formatting (follow AP Style for headlines)
@@ -139,23 +144,24 @@ describe('calculatePricing', () => {
   - Check for inclusive language and avoid jargon that may exclude audiences
 
 ### Deprecated Terms (Flag for Replacement)
+
 When reviewing content, flag these outdated terms and suggest the correct alternatives:
 
-| Deprecated Term | Correct Term |
-|----------------|--------------|
-| Service | SaaS Product |
-| SaaS Offer | SaaS Product |
-| Service Plan | Plan |
-| Create SaaS Offer | Create SaaS Product |
-| service name | product name |
-| Service Component | Resource |
-| Service Provider | SaaS Provider |
-| Service Blueprint | Plan Blueprint |
-| Service Environment | Environment |
-| Hosting Model | Tenancy Type |
-| Events | Notification |
-| Alarm | Alerts |
-| Docker image | Container image |
+| Deprecated Term     | Correct Term        |
+| ------------------- | ------------------- |
+| Service             | SaaS Product        |
+| SaaS Offer          | SaaS Product        |
+| Service Plan        | Plan                |
+| Create SaaS Offer   | Create SaaS Product |
+| service name        | product name        |
+| Service Component   | Resource            |
+| Service Provider    | SaaS Provider       |
+| Service Blueprint   | Plan Blueprint      |
+| Service Environment | Environment         |
+| Hosting Model       | Tenancy Type        |
+| Events              | Notification        |
+| Alarm               | Alerts              |
+| Docker image        | Container image     |
 
 ### Technical Review Areas
 
