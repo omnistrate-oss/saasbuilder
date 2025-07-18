@@ -1,24 +1,24 @@
-# SaaSBuilder Open Source Project README
+# CustomerPortal Open Source Project README
 
 ## Introduction
 
-The SaaSBuilder project, provided by Omnistrate, is an open-source platform designed for service providers to deliver customizable SaaS solutions to end customers. It supports direct use for quick deployment or extensive customization through forking, catering to diverse provider needs. This adaptability saves significant time and costs in developing and launching SaaS offerings. Additionally, its open-source nature encourages community engagement, leading to continuous improvement, innovation, and security enhancements, benefiting from the collective expertise of developers worldwide.
+The CustomerPortal project, provided by Omnistrate, is an open-source platform designed for service providers to deliver customizable SaaS solutions to end customers. It supports direct use for quick deployment or extensive customization through forking, catering to diverse provider needs. This adaptability saves significant time and costs in developing and launching SaaS offerings. Additionally, its open-source nature encourages community engagement, leading to continuous improvement, innovation, and security enhancements, benefiting from the collective expertise of developers worldwide.
 
 ## Getting Started
 
-To get started with the SaaSBuilder open-source project, begin by configuring your service on the Omnistrate Platform to make it ready for use. While familiarity with Next.js and Docker enhances your ability to customize the application, lack of expertise in these areas won't hinder your ability to deploy the SaaS Builder application with basic customizations. The process involves cloning the project's repository, setting up your development environment, and configuring the necessary environment variables to tailor the application to your requirements.
+To get started with the CustomerPortal open-source project, begin by configuring your service on the Omnistrate Platform to make it ready for use. While familiarity with Next.js and Docker enhances your ability to customize the application, lack of expertise in these areas won't hinder your ability to deploy the SaaS Builder application with basic customizations. The process involves cloning the project's repository, setting up your development environment, and configuring the necessary environment variables to tailor the application to your requirements.
 
 ### Pre-requisites
 
 - Before starting, ensure your SaaS offering is already configured on the Omnistrate platform; for guidance, refer to this instructional video [here](https://www.youtube.com/watch?v=oYhxQIjdbAc).
 - Make sure your service is marked public for customer access
-- Update your Omnistrate profile with essential service and SaasBuilder configurations, including your organization's description, support email, logo, and favicon URLs.
+- Update your Omnistrate profile with essential service and CustomerPortal configurations, including your organization's description, support email, logo, and favicon URLs.
 
 These details are crucial as they will be presented to customers accessing your application, enhancing brand visibility and support accessibility.
 
 ![Alt text](https://drive.google.com/uc?id=1ZcxfwS1cqRNbpdGTnUSj_-SGZ4FwFosE "Organization config")
 
-![Alt text](https://drive.google.com/uc?id=1h7Lnp_-1P-dOdD1ri0QZPi2Rd_U1LUK9 "SaaSBuilder config")
+![Alt text](https://drive.google.com/uc?id=1h7Lnp_-1P-dOdD1ri0QZPi2Rd_U1LUK9 "CustomerPortal config")
 
 | Service Provider Details    | Description                                                |
 | --------------------------- | ---------------------------------------------------------- |
@@ -27,8 +27,8 @@ These details are crucial as they will be presented to customers accessing your 
 | Organization Support Email  | Email address to which customers can reach out for support |
 | Organization Logo URL       | Your organization's logo URL                               |
 | Organization Favicon URL    | Your organization's favicon URL                            |
-| Organization Privacy Policy | Your organization's privacy policy for SaaSBuilder         |
-| Organization Terms of use   | Your organization's terms of use for SaaSBuilder           |
+| Organization Privacy Policy | Your organization's privacy policy for CustomerPortal         |
+| Organization Terms of use   | Your organization's terms of use for CustomerPortal           |
 
 ### Customizations
 
@@ -65,7 +65,7 @@ yarn --version
 3. Clone the Repository: Use Git to clone the repository to your local machine.
 
 ```bash
-git clone https://github.com/omnistrate/saasbuilder.git
+git clone https://github.com/omnistrate/CustomerPortal.git
 ```
 
 4. Install dependencies with yarn
@@ -106,16 +106,16 @@ Deploying on the Omnistrate Platform can follow two main paths: without code cus
 
 ### With Code Customizations
 
-For users looking to customize the SaaSBuilder, this option involves customizing the code after forking the SaaSBuilder repository. You'll make necessary changes, build and push your Docker image to a repository, update the Docker compose file to use your new image, and then create and launch your service on Omnistrate. This method allows for significant level of customization and flexibility however it is important to remember that maintaining your forked repository and keeping it in sync with the master branch is your responsibility.
+For users looking to customize the CustomerPortal, this option involves customizing the code after forking the CustomerPortal repository. You'll make necessary changes, build and push your Docker image to a repository, update the Docker compose file to use your new image, and then create and launch your service on Omnistrate. This method allows for significant level of customization and flexibility however it is important to remember that maintaining your forked repository and keeping it in sync with the master branch is your responsibility.
 
-- After you have made all the customization code changes, you need to build a docker image and push it to your own repo. The dockerfile is already [available](https://github.com/omnistrate/saasbuilder/blob/master/Dockerfile), you could use the same.
+- After you have made all the customization code changes, you need to build a docker image and push it to your own repo. The dockerfile is already [available](https://github.com/omnistrate/CustomerPortal/blob/master/Dockerfile), you could use the same.
 
 ```bash
-docker build -t yourorg/yoursaasbuilder:1.0.0 .
+docker build -t yourorg/yourCustomerPortal:1.0.0 .
 ```
 
 ```bash
-docker push yourorg/yoursaasbuilder:1.0.0
+docker push yourorg/yourCustomerPortal:1.0.0
 ```
 
 - Once you have pushed the docker image, you need to refer to it in your docker compose spec
@@ -124,36 +124,36 @@ docker push yourorg/yoursaasbuilder:1.0.0
 
 ### Without Code Customizations
 
-For users looking to deploy the SaaSBuilder quickly and without modifications, the straightforward approach involves using a predefined Docker compose [yaml](https://github.com/omnistrate/saasbuilder/blob/master/saasbuilder-docker-compose.yaml). This method facilitates the creation and launching of your service on the Omnistrate platform, utilizing the SaaSBuilder's existing setup and allowing for basic, provided customizations. It's an efficient path for rapid deployment, capitalizing on the built-in configurations of SaaSBuilder.
+For users looking to deploy the CustomerPortal quickly and without modifications, the straightforward approach involves using a predefined Docker compose [yaml](https://github.com/omnistrate/CustomerPortal/blob/master/CustomerPortal-docker-compose.yaml). This method facilitates the creation and launching of your service on the Omnistrate platform, utilizing the CustomerPortal's existing setup and allowing for basic, provided customizations. It's an efficient path for rapid deployment, capitalizing on the built-in configurations of CustomerPortal.
 
 For a video guide covering all the below steps, you can follow it [here](https://www.loom.com/share/58d0019c307646868dae2ba9bc56f727?sid=bab3b5f7-b6b8-4669-9dff-e53ee74dd3cc). The manual steps are listed below -
 
-- Copy the contents of the saasbuilder-docker-compose.yaml
+- Copy the contents of the CustomerPortal-docker-compose.yaml
 - Login to Omnistrate and navigate to "Build Your SaaS" and "Your Compose Spec" tab
-- Paste the content of saasbuilder-docker-compose.yaml in the yaml editor and provide name, description (logo image is optional and wont be seen by your customers).
+- Paste the content of CustomerPortal-docker-compose.yaml in the yaml editor and provide name, description (logo image is optional and wont be seen by your customers).
 - Choose your service model i.e. Provider Hosted, to create your service.
-- Follow the prompt to launch an instance of the SaaSBuilder Service.
+- Follow the prompt to launch an instance of the CustomerPortal Service.
 - Specify instance details: type, Omnistrate account and password, SMTP email and password, and hosting domain.
 - Post-creation, navigate to the "Connectivity" tab, copy the cluster endpoint.
-- Access the SaaSBuilder App through the copied endpoint to reach the login page.
-- Once you have confirmed that you can access the SaaSBuilder app. You are ready to configure your domain.
+- Access the CustomerPortal App through the copied endpoint to reach the login page.
+- Once you have confirmed that you can access the CustomerPortal app. You are ready to configure your domain.
 
-  - Contact Omnistrate support and share your domain name that you want to use for the SaaSBuilder App along with the cluster endpoint for the SaaSBuilder App. Omnistrate team will be able to use this data and do the necessary configurations in Omnistrate Platform.
+  - Contact Omnistrate support and share your domain name that you want to use for the CustomerPortal App along with the cluster endpoint for the CustomerPortal App. Omnistrate team will be able to use this data and do the necessary configurations in Omnistrate Platform.
   - Login to your DNS provider/domain registrar portal (where you bought your domain). Find the DNS section for your domain and add two CNAME records as follows -
 
     - Type - CNAME
     - Name - @
-    - Target - SaaSBuilder cluster endpoint
+    - Target - CustomerPortal cluster endpoint
     - TTL - Leave as default or as suggested by your DNS provider
 
     and
 
     - Type - CNAME
     - Name - www
-    - Target - SaaSBuilder cluster endpoint
+    - Target - CustomerPortal cluster endpoint
     - TTL - Leave as default or as suggested by your DNS provider
 
-- Access your domain and confirm that SaaSBuilder app is now available on your domain.
+- Access your domain and confirm that CustomerPortal app is now available on your domain.
 
 ## Troubleshooting/FAQ
 
@@ -163,7 +163,7 @@ Ensure your node and yarn versions meet the project's requirements. Try clearing
 
 #### Why do I need to specify an environment type?
 
-SaaSBuilder runs in an environment scope. The services and subscription plans that are made available to the users depend on the environment type that you specify when running the application. SaaSBuilder supports DEV, STAGING, QA, CANARY, PRIVATE and PROD environment types.
+CustomerPortal runs in an environment scope. The services and subscription plans that are made available to the users depend on the environment type that you specify when running the application. CustomerPortal supports DEV, STAGING, QA, CANARY, PRIVATE and PROD environment types.
 User sign-ups are supported in _PROD_, while other environments are meant for internal use.
 
 Learn more about environments [here](https://docs.omnistrate.com/operate-guides/pipelines/)
@@ -190,7 +190,7 @@ Configuring Google Account for sending out emails is a two step process. First t
 
   ![Alt text](https://drive.google.com/uc?id=1TNKc7u0zLcozw95OIMbFUf22EBL5ocAY "Create App Password")
 
-  4. Provide name of the app, say SaasBuilder.
+  4. Provide name of the app, say CustomerPortal.
   5. Click "Create."
   6. Google will display a 16-character password something like "fasb nxpq lfnr chtn"
   7. Copy this password and **remove in between spaces** (e.g. fasbnxpqlfnrchtn) to use it instead of your regular Google Account password.
@@ -201,7 +201,7 @@ Configuring Google Account for sending out emails is a two step process. First t
 
 #### How to configure Google reCAPTCHA?
 
-SaaSBuilder uses Google reCAPTCHA v2 (Invisible) to protect certain pages from attacks against bots. To configure reCAPTCHA,
+CustomerPortal uses Google reCAPTCHA v2 (Invisible) to protect certain pages from attacks against bots. To configure reCAPTCHA,
 
 1. Register a new site by navigating to https://www.google.com/recaptcha/admin/create
 2. On the site registration form, choose "Challenge(v2)" as the reCAPTCHA type and then choose the
@@ -216,9 +216,9 @@ SaaSBuilder uses Google reCAPTCHA v2 (Invisible) to protect certain pages from a
 
 #### How do I resolve "node version not compatible" errors?
 
-Ensure that you have the correct Node.js version installed. SaaSBuilder requires Node.js version 20.11.1 as mentioned in the guide. You can check your current Node version by running node --version in your terminal. If the version is incorrect, download and install the correct version from Node.js [official website](https://nodejs.org/).
+Ensure that you have the correct Node.js version installed. CustomerPortal requires Node.js version 20.11.1 as mentioned in the guide. You can check your current Node version by running node --version in your terminal. If the version is incorrect, download and install the correct version from Node.js [official website](https://nodejs.org/).
 
-#### What if my organization details do not appear correctly on the SaaSBuilder platform?
+#### What if my organization details do not appear correctly on the CustomerPortal platform?
 
 Double-check that you've correctly updated your Omnistrate profile with your organization's details, including the description, support email, logo, and favicon URLs. These details are crucial for presenting your organization correctly to customers. Refer to the provided instructional video for guidance on updating these details on the Omnistrate platform.
 
