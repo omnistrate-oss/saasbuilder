@@ -42,18 +42,25 @@ When reviewing content, flag these outdated terms and suggest the correct altern
 | Deprecated Term | Correct Term |
 |----------------|--------------|
 | Service | SaaS Product |
+| Software Product | SaaS Product |
 | SaaS Offer | SaaS Product |
 | Service Plan | Plan |
-| Create SaaS Offer | Create SaaS Product |
+| SaaS Offer | SaaS Product |
 | service name | product name |
 | Service Component | Resource |
 | Service Provider | SaaS Provider |
 | Service Blueprint | Plan Blueprint |
 | Service Environment | Environment |
-| Hosting Model | Tenancy Type |
+| Hosting Model | Deployment Model |
+| Deployment Model | Tenancy Type |
 | Events | Notification |
 | Alarm | Alerts |
 | Docker image | Container image |
+| Human Resources | People |
+| BYOA | BYOC |
+| Bring Your Own Account | Bring Your Own Cloud |
+| SaaS Portal | Customer Portal |
+| SaasBuilder | Customer Portal |
 
 ### Technical Review Areas
 
