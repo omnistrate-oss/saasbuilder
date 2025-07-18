@@ -1,24 +1,24 @@
-# CustomerPortal Open Source Project README
+# Customer Portal Open Source Project README
 
 ## Introduction
 
-The CustomerPortal project, provided by Omnistrate, is an open-source platform designed for service providers to deliver customizable SaaS solutions to end customers. It supports direct use for quick deployment or extensive customization through forking, catering to diverse provider needs. This adaptability saves significant time and costs in developing and launching SaaS offerings. Additionally, its open-source nature encourages community engagement, leading to continuous improvement, innovation, and security enhancements, benefiting from the collective expertise of developers worldwide.
+The Customer Portal project, provided by Omnistrate, is an open-source platform designed for service providers to deliver customizable SaaS solutions to end customers. It supports direct use for quick deployment or extensive customization through forking, catering to diverse provider needs. This adaptability saves significant time and costs in developing and launching SaaS offerings. Additionally, its open-source nature encourages community engagement, leading to continuous improvement, innovation, and security enhancements, benefiting from the collective expertise of developers worldwide.
 
 ## Getting Started
 
-To get started with the CustomerPortal open-source project, begin by configuring your service on the Omnistrate Platform to make it ready for use. While familiarity with Next.js and Docker enhances your ability to customize the application, lack of expertise in these areas won't hinder your ability to deploy the SaaS Builder application with basic customizations. The process involves cloning the project's repository, setting up your development environment, and configuring the necessary environment variables to tailor the application to your requirements.
+To get started with the Customer Portal open-source project, begin by configuring your service on the Omnistrate Platform to make it ready for use. While familiarity with Next.js and Docker enhances your ability to customize the application, lack of expertise in these areas won't hinder your ability to deploy the SaaS Builder application with basic customizations. The process involves cloning the project's repository, setting up your development environment, and configuring the necessary environment variables to tailor the application to your requirements.
 
 ### Pre-requisites
 
 - Before starting, ensure your SaaS offering is already configured on the Omnistrate platform; for guidance, refer to this instructional video [here](https://www.youtube.com/watch?v=oYhxQIjdbAc).
 - Make sure your service is marked public for customer access
-- Update your Omnistrate profile with essential service and CustomerPortal configurations, including your organization's description, support email, logo, and favicon URLs.
+- Update your Omnistrate profile with essential service and Customer Portal configurations, including your organization's description, support email, logo, and favicon URLs.
 
 These details are crucial as they will be presented to customers accessing your application, enhancing brand visibility and support accessibility.
 
 ![Alt text](https://drive.google.com/uc?id=1ZcxfwS1cqRNbpdGTnUSj_-SGZ4FwFosE "Organization config")
 
-![Alt text](https://drive.google.com/uc?id=1h7Lnp_-1P-dOdD1ri0QZPi2Rd_U1LUK9 "CustomerPortal config")
+![Alt text](https://drive.google.com/uc?id=1h7Lnp_-1P-dOdD1ri0QZPi2Rd_U1LUK9 "Customer Portal config")
 
 | Service Provider Details    | Description                                                |
 | --------------------------- | ---------------------------------------------------------- |
@@ -27,8 +27,8 @@ These details are crucial as they will be presented to customers accessing your 
 | Organization Support Email  | Email address to which customers can reach out for support |
 | Organization Logo URL       | Your organization's logo URL                               |
 | Organization Favicon URL    | Your organization's favicon URL                            |
-| Organization Privacy Policy | Your organization's privacy policy for CustomerPortal         |
-| Organization Terms of use   | Your organization's terms of use for CustomerPortal           |
+| Organization Privacy Policy | Your organization's privacy policy for Customer Portal         |
+| Organization Terms of use   | Your organization's terms of use for Customer Portal           |
 
 ### Customizations
 
@@ -50,13 +50,13 @@ These details are crucial as they will be presented to customers accessing your 
 
 To build and run the SaaS Builder locally
 
-1. You'll need Node.js installed on your system. Download the latest LTS version (20.11.1 as of March 13, 2024) from https://nodejs.org/. Check the node version to confirm successful installation.
+1. You'll need Node.js installed on your system. Download the latest LTS version (20.11.1 as of March 13, 2024) from <https://nodejs.org/>. Check the node version to confirm successful installation.
 
 ```bash
 node --version
 ```
 
-2. Visit the Yarn website: Go to https://classic.yarnpkg.com/lang/en/docs/install/ and follow platform-specific instructions for your operating system (Linux, macOS, Windows) to install yarn classic (1.x). Check the yarn version (1.22.19 as of March 13, 2024) to confirm successful installation.
+2. Visit the Yarn website: Go to <https://classic.yarnpkg.com/lang/en/docs/install/> and follow platform-specific instructions for your operating system (Linux, macOS, Windows) to install yarn classic (1.x). Check the yarn version (1.22.19 as of March 13, 2024) to confirm successful installation.
 
 ```bash
 yarn --version
@@ -65,7 +65,7 @@ yarn --version
 3. Clone the Repository: Use Git to clone the repository to your local machine.
 
 ```bash
-git clone https://github.com/omnistrate/CustomerPortal.git
+git clone https://github.com/omnistrate-oss/customer-portal.git
 ```
 
 4. Install dependencies with yarn
@@ -81,7 +81,7 @@ yarn install
 | PROVIDER_EMAIL              | Service provider's Omnistrate email address                                                                                                                                                                                                                               |
 | PROVIDER_PASSWORD           | Service provider's Omnistrate account password                                                                                                                                                                                                                            |
 | ENVIRONMENT_TYPE            | The environment type for your application. Defaults to _PROD_. Learn more about environments [here](https://docs.omnistrate.com/operate-guides/pipelines/)                                                                                                                |
-| YOUR_SAAS_DOMAIN_URL        | The secure domain URL where this application will be deployed eg. https://www.yourcloud.com. When working locally, it should be http://localhost:3000                                                                                                                     |
+| YOUR_SAAS_DOMAIN_URL        | The secure domain URL where this application will be deployed eg. <https://www.yourcloud.com>. When working locally, it should be <http://localhost:3000>                                                                                                                     |
 | YOUR_SAAS_DOMAIN_ALIAS      | The domain alias for your deployment                                                                                                                                                                                                                                      |
 | MAIL_SMTP_HOST              | The the hostname or IP address of the mail service provider. Defaults to _smtp.gmail.com_                                                                                                                                                                                 |     |
 | MAIL_SMTP_PORT              | The port to be used for creating the SMTP connection. Defaults to _587_                                                                                                                                                                                                   |     |
@@ -106,16 +106,16 @@ Deploying on the Omnistrate Platform can follow two main paths: without code cus
 
 ### With Code Customizations
 
-For users looking to customize the CustomerPortal, this option involves customizing the code after forking the CustomerPortal repository. You'll make necessary changes, build and push your Docker image to a repository, update the Docker compose file to use your new image, and then create and launch your service on Omnistrate. This method allows for significant level of customization and flexibility however it is important to remember that maintaining your forked repository and keeping it in sync with the master branch is your responsibility.
+For users looking to customize the Customer Portal, this option involves customizing the code after forking the Customer Portal repository. You'll make necessary changes, build and push your Docker image to a repository, update the Docker compose file to use your new image, and then create and launch your service on Omnistrate. This method allows for significant level of customization and flexibility however it is important to remember that maintaining your forked repository and keeping it in sync with the master branch is your responsibility.
 
-- After you have made all the customization code changes, you need to build a docker image and push it to your own repo. The dockerfile is already [available](https://github.com/omnistrate/CustomerPortal/blob/master/Dockerfile), you could use the same.
+- After you have made all the customization code changes, you need to build a docker image and push it to your own repo. The dockerfile is already [available](https://github.com/omnistrate-oss/customer-portal/blob/master/Dockerfile), you could use the same.
 
 ```bash
-docker build -t yourorg/yourCustomerPortal:1.0.0 .
+docker build -t yourorg/your-customer-portal:1.0.0 .
 ```
 
 ```bash
-docker push yourorg/yourCustomerPortal:1.0.0
+docker push yourorg/your-customer-portal:1.0.0
 ```
 
 - Once you have pushed the docker image, you need to refer to it in your docker compose spec
@@ -124,36 +124,36 @@ docker push yourorg/yourCustomerPortal:1.0.0
 
 ### Without Code Customizations
 
-For users looking to deploy the CustomerPortal quickly and without modifications, the straightforward approach involves using a predefined Docker compose [yaml](https://github.com/omnistrate/CustomerPortal/blob/master/CustomerPortal-docker-compose.yaml). This method facilitates the creation and launching of your service on the Omnistrate platform, utilizing the CustomerPortal's existing setup and allowing for basic, provided customizations. It's an efficient path for rapid deployment, capitalizing on the built-in configurations of CustomerPortal.
+For users looking to deploy the Customer Portal quickly and without modifications, the straightforward approach involves using a predefined Docker compose [yaml](https://github.com/omnistrate-oss/customer-portal/blob/master/docker-compose.yaml). This method facilitates the creation and launching of your service on the Omnistrate platform, utilizing the Customer Portal's existing setup and allowing for basic, provided customizations. It's an efficient path for rapid deployment, capitalizing on the built-in configurations of Customer Portal.
 
 For a video guide covering all the below steps, you can follow it [here](https://www.loom.com/share/58d0019c307646868dae2ba9bc56f727?sid=bab3b5f7-b6b8-4669-9dff-e53ee74dd3cc). The manual steps are listed below -
 
-- Copy the contents of the CustomerPortal-docker-compose.yaml
+- Copy the contents of the docker-compose.yaml
 - Login to Omnistrate and navigate to "Build Your SaaS" and "Your Compose Spec" tab
-- Paste the content of CustomerPortal-docker-compose.yaml in the yaml editor and provide name, description (logo image is optional and wont be seen by your customers).
+- Paste the content of docker-compose.yaml in the yaml editor and provide name, description (logo image is optional and wont be seen by your customers).
 - Choose your service model i.e. Provider Hosted, to create your service.
-- Follow the prompt to launch an instance of the CustomerPortal Service.
+- Follow the prompt to launch an instance of the Customer Portal Service.
 - Specify instance details: type, Omnistrate account and password, SMTP email and password, and hosting domain.
 - Post-creation, navigate to the "Connectivity" tab, copy the cluster endpoint.
-- Access the CustomerPortal App through the copied endpoint to reach the login page.
-- Once you have confirmed that you can access the CustomerPortal app. You are ready to configure your domain.
+- Access the Customer Portal App through the copied endpoint to reach the login page.
+- Once you have confirmed that you can access the Customer Portal app. You are ready to configure your domain.
 
-  - Contact Omnistrate support and share your domain name that you want to use for the CustomerPortal App along with the cluster endpoint for the CustomerPortal App. Omnistrate team will be able to use this data and do the necessary configurations in Omnistrate Platform.
+  - Contact Omnistrate support and share your domain name that you want to use for the Customer Portal App along with the cluster endpoint for the Customer Portal App. Omnistrate team will be able to use this data and do the necessary configurations in Omnistrate Platform.
   - Login to your DNS provider/domain registrar portal (where you bought your domain). Find the DNS section for your domain and add two CNAME records as follows -
 
     - Type - CNAME
     - Name - @
-    - Target - CustomerPortal cluster endpoint
+    - Target - Customer Portal cluster endpoint
     - TTL - Leave as default or as suggested by your DNS provider
 
     and
 
     - Type - CNAME
     - Name - www
-    - Target - CustomerPortal cluster endpoint
+    - Target - Customer Portal cluster endpoint
     - TTL - Leave as default or as suggested by your DNS provider
 
-- Access your domain and confirm that CustomerPortal app is now available on your domain.
+- Access your domain and confirm that Customer Portal app is now available on your domain.
 
 ## Troubleshooting/FAQ
 
@@ -163,7 +163,7 @@ Ensure your node and yarn versions meet the project's requirements. Try clearing
 
 #### Why do I need to specify an environment type?
 
-CustomerPortal runs in an environment scope. The services and subscription plans that are made available to the users depend on the environment type that you specify when running the application. CustomerPortal supports DEV, STAGING, QA, CANARY, PRIVATE and PROD environment types.
+Customer Portal runs in an environment scope. The services and subscription plans that are made available to the users depend on the environment type that you specify when running the application. Customer Portal supports DEV, STAGING, QA, CANARY, PRIVATE and PROD environment types.
 User sign-ups are supported in _PROD_, while other environments are meant for internal use.
 
 Learn more about environments [here](https://docs.omnistrate.com/operate-guides/pipelines/)
@@ -174,7 +174,7 @@ Configuring Google Account for sending out emails is a two step process. First t
 
 - Step 1 - Enable 2-Step Verification
 
-  1. Visit Your Google Account by navigating to https://myaccount.google.com and log in.
+  1. Visit Your Google Account by navigating to <https://myaccount.google.com> and log in.
   2. Navigate to Security by clicking on "Security" in the left navigation menu.
   3. Scroll down to find the "How you sign in to Google" section and click on "2-Step Verification."
   4. Click on "Get Started."
@@ -186,11 +186,11 @@ Configuring Google Account for sending out emails is a two step process. First t
 
   1. Once 2-Step Verification is configured, follow the below instructions to create App Password.
   2. While still in the "How you sign in to Google" -> "2-Step Verification" section of your account security, locate and click "App Passwords"
-  3. If for some reason you can't locate it, you can follow this link - https://myaccount.google.com/apppasswords make sure it is configured for the same Google Account, in case you have multiple Google Accounts opened in your browser.
+  3. If for some reason you can't locate it, you can follow this link - <https://myaccount.google.com/apppasswords> make sure it is configured for the same Google Account, in case you have multiple Google Accounts opened in your browser.
 
   ![Alt text](https://drive.google.com/uc?id=1TNKc7u0zLcozw95OIMbFUf22EBL5ocAY "Create App Password")
 
-  4. Provide name of the app, say CustomerPortal.
+  4. Provide name of the app, say Customer Portal.
   5. Click "Create."
   6. Google will display a 16-character password something like "fasb nxpq lfnr chtn"
   7. Copy this password and **remove in between spaces** (e.g. fasbnxpqlfnrchtn) to use it instead of your regular Google Account password.
@@ -201,9 +201,9 @@ Configuring Google Account for sending out emails is a two step process. First t
 
 #### How to configure Google reCAPTCHA?
 
-CustomerPortal uses Google reCAPTCHA v2 (Invisible) to protect certain pages from attacks against bots. To configure reCAPTCHA,
+Customer Portal uses Google reCAPTCHA v2 (Invisible) to protect certain pages from attacks against bots. To configure reCAPTCHA,
 
-1. Register a new site by navigating to https://www.google.com/recaptcha/admin/create
+1. Register a new site by navigating to <https://www.google.com/recaptcha/admin/create>
 2. On the site registration form, choose "Challenge(v2)" as the reCAPTCHA type and then choose the
    "Invisible reCAPTCHA badge" option
 
@@ -216,9 +216,9 @@ CustomerPortal uses Google reCAPTCHA v2 (Invisible) to protect certain pages fro
 
 #### How do I resolve "node version not compatible" errors?
 
-Ensure that you have the correct Node.js version installed. CustomerPortal requires Node.js version 20.11.1 as mentioned in the guide. You can check your current Node version by running node --version in your terminal. If the version is incorrect, download and install the correct version from Node.js [official website](https://nodejs.org/).
+Ensure that you have the correct Node.js version installed. Customer Portal requires Node.js version 20.11.1 as mentioned in the guide. You can check your current Node version by running node --version in your terminal. If the version is incorrect, download and install the correct version from Node.js [official website](https://nodejs.org/).
 
-#### What if my organization details do not appear correctly on the CustomerPortal platform?
+#### What if my organization details do not appear correctly on the Customer Portal platform?
 
 Double-check that you've correctly updated your Omnistrate profile with your organization's details, including the description, support email, logo, and favicon URLs. These details are crucial for presenting your organization correctly to customers. Refer to the provided instructional video for guidance on updating these details on the Omnistrate platform.
 
