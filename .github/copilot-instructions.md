@@ -61,6 +61,7 @@ When reviewing content, flag these outdated terms and suggest the correct altern
 | Bring Your Own Account | Bring Your Own Cloud |
 | SaaS Portal | Customer Portal |
 | SaasBuilder | Customer Portal |
+| Custom Network | Customer Network |
 
 ### Technical Review Areas
 
