@@ -17,23 +17,6 @@ import Tooltip from "../Tooltip/Tooltip";
 
 import { Field } from "./types";
 
-const generatePassword = (field, formData) => {
-  if (field.disabled) return;
-
-  const password = Generator.generate({
-    length: 12,
-    numbers: true,
-  });
-
-  formData.setFieldValue(field.name, password);
-  field.onChange?.({
-    target: {
-      name: field.name,
-      value: password,
-    },
-  });
-};
-
 const insertTextAtCursor = (text, start, end, currentValue) => {
   return currentValue.substring(0, start) + text + currentValue.substring(end);
 };
@@ -258,82 +241,6 @@ export const MultilinePasswordInput = ({ field, formData }) => {
                     field.onChange?.(syntheticEvent);
                     formData.handleChange(syntheticEvent);
                   }}
-                >
-                  <KeyIcon />
-                </Box>
-              </Tooltip>
-            )}
-          </InputAdornment>
-        ),
-      }}
-    />
-  );
-};
-
-export const PasswordInput = ({ field, formData }) => {
-  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
-
-  return (
-    <TextField
-      inputProps={{
-        "data-testid": field.dataTestId ?? "",
-      }}
-      autoComplete="new-password"
-      type={isPasswordVisible ? "text" : "password"}
-      id={field.name}
-      name={field.name}
-      value={field.value ?? formData.values[field.name] ?? ""}
-      onChange={(e) => {
-        field.onChange?.(e);
-        formData.handleChange(e);
-      }}
-      error={Boolean(formData.touched[field.name] && formData.errors[field.name])}
-      onBlur={(e) => {
-        field.onBlur?.(e);
-        formData.handleBlur(e);
-      }}
-      disabled={field.disabled}
-      placeholder={field.placeholder}
-      sx={{
-        "& .MuiInputAdornment-root": {
-          border: "none",
-          paddingRight: 0,
-        },
-        mt: 0,
-      }}
-      InputProps={{
-        endAdornment: (
-          <InputAdornment position="end">
-            <Text
-              size="xsmall"
-              weight="medium"
-              style={{
-                color: "#7F56D9",
-                cursor: "pointer",
-                userSelect: "none",
-                paddingRight: "14px",
-                width: "46px",
-                textAlign: "center",
-              }}
-              onClick={() => setIsPasswordVisible(!isPasswordVisible)}
-            >
-              {isPasswordVisible ? "Hide" : "Show"}
-            </Text>
-            {field.showPasswordGenerator && (
-              <Tooltip title="Password Generator" placement="top-end" arrow>
-                <Box
-                  sx={{
-                    cursor: field.disabled ? "not-allowed" : "pointer",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    px: "15px",
-                    backgroundColor: "#F9F5FF",
-                    height: "100%",
-                    borderRadius: "0 8px 8px 0",
-                    borderLeft: "1px solid #D0D5DD",
-                  }}
-                  onClick={() => generatePassword(field, formData)}
                 >
                   <KeyIcon />
                 </Box>
