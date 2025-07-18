@@ -4,7 +4,7 @@ x-omnistrate-integrations:
   - omnistrateMetrics
 services:
   SaaSBuilder:
-    image: ghcr.io/omnistrate/saasbuilder:latest
+    image: ghcr.io/omnistrate-oss/customer-portal:latest
     ports:
       - '8080:8080'
     environment:
