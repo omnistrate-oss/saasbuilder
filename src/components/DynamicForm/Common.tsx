@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Box, InputAdornment, Stack } from "@mui/material";
 import Generator from "generate-password";
 
@@ -17,30 +17,165 @@ import Tooltip from "../Tooltip/Tooltip";
 
 import { Field } from "./types";
 
-export const PasswordInput = ({ field, formData }) => {
+const insertTextAtCursor = (text, start, end, currentValue) => {
+  return currentValue.substring(0, start) + text + currentValue.substring(end);
+};
+
+const updateCursorPosition = (element, position) => {
+  requestAnimationFrame(() => {
+    element?.setSelectionRange(position, position);
+  });
+};
+
+export const MultilinePasswordInput = ({ field, formData }) => {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+  const textAreaRef = useRef();
+  const compositionRef = useRef(false);
+
+  const currentValue = field.value ?? formData.values[field.name] ?? "";
+  const displayValue = isPasswordVisible ? currentValue : currentValue.replace(/[^\n]/g, "•");
+
+  // Create synthetic event helper
+  const createChangeEvent = (newValue) => ({
+    target: {
+      name: field.name,
+      value: newValue,
+    },
+  });
+
+  // Handle composition events (for IME input)
+  const handleCompositionStart = () => {
+    compositionRef.current = true;
+  };
+
+  const handleCompositionEnd = () => {
+    compositionRef.current = false;
+  };
+
+  // Capture the actual input before it's displayed
+  const handleBeforeInput = (event) => {
+    if (event.data && !compositionRef.current) {
+      event.preventDefault();
+
+      const input: HTMLTextAreaElement = textAreaRef.current!;
+      if (!input) return;
+      const start = input.selectionStart;
+      const end = input.selectionEnd;
+
+      const newValue = insertTextAtCursor(event.data, start, end, currentValue);
+      const syntheticEvent = createChangeEvent(newValue);
+      field.onChange?.(syntheticEvent);
+      formData.handleChange(syntheticEvent);
+
+      updateCursorPosition(input, start + event.data.length);
+    }
+  };
+
+  // Handle keyboard events for delete/backspace/enter
+  const handleKeyDown = (event) => {
+    if (compositionRef.current) return;
+
+    const input: HTMLTextAreaElement = textAreaRef.current!;
+    if (!input) return;
+    const start = input.selectionStart;
+    const end = input.selectionEnd;
+    let newValue = currentValue;
+    let newCursorPos = start;
+    let shouldPrevent = false;
+
+    switch (event.key) {
+      case "Backspace":
+        shouldPrevent = true;
+        if (start === end && start > 0) {
+          newValue = currentValue.substring(0, start - 1) + currentValue.substring(start);
+          newCursorPos = start - 1;
+        } else if (start !== end) {
+          newValue = insertTextAtCursor("", start, end, currentValue);
+        }
+        break;
+
+      case "Delete":
+        shouldPrevent = true;
+        if (start === end && start < currentValue.length) {
+          newValue = currentValue.substring(0, start) + currentValue.substring(start + 1);
+        } else if (start !== end) {
+          newValue = insertTextAtCursor("", start, end, currentValue);
+        }
+        break;
+
+      case "Enter":
+        shouldPrevent = true;
+        newValue = insertTextAtCursor("\n", start, end, currentValue);
+        newCursorPos = start + 1;
+        break;
+    }
+
+    if (shouldPrevent) {
+      event.preventDefault();
+      const syntheticEvent = createChangeEvent(newValue);
+      field.onChange?.(syntheticEvent);
+      formData.handleChange(syntheticEvent);
+      updateCursorPosition(input, newCursorPos);
+    }
+  };
+
+  // Handle paste
+  const handlePaste = (event) => {
+    event.preventDefault();
+    const pastedText = event.clipboardData.getData("text");
+    const input: HTMLTextAreaElement = textAreaRef.current!;
+    if (!input) return;
+    const start = input.selectionStart;
+    const end = input.selectionEnd;
+
+    const newValue = insertTextAtCursor(pastedText, start, end, currentValue);
+    const syntheticEvent = createChangeEvent(newValue);
+    field.onChange?.(syntheticEvent);
+    formData.handleChange(syntheticEvent);
+    updateCursorPosition(input, start + pastedText.length);
+  };
+
+  // Prevent copy/cut when hidden
+  const preventDefaultHandler = (event) => {
+    event.preventDefault();
+  };
+
+  // Regular onChange for when password is visible
+  const handleChange = (event) => {
+    field.onChange?.(event);
+    formData.handleChange(event);
+  };
+
+  // Conditionally apply masked input handlers
+  const maskedInputHandlers = !isPasswordVisible
+    ? {
+        onCopy: preventDefaultHandler,
+        onCut: preventDefaultHandler,
+        onPaste: handlePaste,
+        onBeforeInput: handleBeforeInput,
+        onKeyDown: handleKeyDown,
+        onCompositionStart: handleCompositionStart,
+        onCompositionEnd: handleCompositionEnd,
+      }
+    : {};
+
+  const toggleVisibility = () => {
+    if (!field.disabled) {
+      setIsPasswordVisible(!isPasswordVisible);
+    }
+  };
 
   return (
     <TextField
-      inputProps={{
-        "data-testid": field.dataTestId ?? "",
-      }}
       autoComplete="new-password"
-      type={isPasswordVisible ? "text" : "password"}
+      multiline
+      minRows={1}
+      maxRows={3}
       id={field.name}
       name={field.name}
-      value={field.value ?? formData.values[field.name] ?? ""}
-      onChange={(e) => {
-        field.onChange?.(e);
-        formData.handleChange(e);
-      }}
-      error={Boolean(formData.touched[field.name] && formData.errors[field.name])}
-      onBlur={(e) => {
-        field.onBlur?.(e);
-        formData.handleBlur(e);
-      }}
-      disabled={field.disabled}
-      placeholder={field.placeholder}
+      inputRef={textAreaRef}
+      value={displayValue}
+      onChange={isPasswordVisible ? handleChange : undefined}
       sx={{
         "& .MuiInputAdornment-root": {
           border: "none",
@@ -48,29 +183,36 @@ export const PasswordInput = ({ field, formData }) => {
         },
         mt: 0,
       }}
+      inputProps={{
+        "data-testid": field.dataTestId || "multi-line-password-field",
+        ...maskedInputHandlers,
+      }}
       InputProps={{
         endAdornment: (
           <InputAdornment position="end">
             <Text
+              as="span"
               size="xsmall"
               weight="medium"
               style={{
                 color: "#7F56D9",
-                cursor: "pointer",
+                cursor: field.disabled ? "not-allowed" : "pointer",
                 userSelect: "none",
                 paddingRight: "14px",
                 width: "46px",
                 textAlign: "center",
+                opacity: field.disabled ? 0.6 : 1,
               }}
-              onClick={() => setIsPasswordVisible(!isPasswordVisible)}
+              onClick={toggleVisibility}
+              tabIndex={field.disabled ? -1 : 0}
             >
               {isPasswordVisible ? "Hide" : "Show"}
             </Text>
-            {field.showPasswordGenerator && (
+            {field.showPasswordGenerator && !field.disabled && (
               <Tooltip title="Password Generator" placement="top-end" arrow>
                 <Box
                   sx={{
-                    cursor: field.disabled ? "not-allowed" : "pointer",
+                    cursor: "pointer",
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
@@ -88,13 +230,16 @@ export const PasswordInput = ({ field, formData }) => {
                       numbers: true,
                     });
 
-                    formData.setFieldValue(field.name, password);
-                    field.onChange?.({
+                    const syntheticEvent = {
                       target: {
                         name: field.name,
                         value: password,
                       },
-                    });
+                    };
+
+                    formData.setFieldValue(field.name, password);
+                    field.onChange?.(syntheticEvent);
+                    formData.handleChange(syntheticEvent);
                   }}
                 >
                   <KeyIcon />

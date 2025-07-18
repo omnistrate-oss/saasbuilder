@@ -3,8 +3,8 @@ import FieldDescription from "../FormElementsv2/FieldDescription/FieldDescriptio
 import FieldError from "../FormElementsv2/FieldError/FieldError";
 
 import {
+  MultilinePasswordInput,
   MultiSelectAutocomplete,
-  PasswordInput,
   RadioField,
   SelectField,
   SingleSelectAutocomplete,
@@ -31,7 +31,7 @@ const GridDynamicField: React.FC<GridDynamicFieldProps> = ({ field, formData }) 
   } else if (type === "text" || type === "text-multiline" || type === "description" || type === "number") {
     Field = <TextInput field={field} formData={formData} />;
   } else if (type === "password") {
-    Field = <PasswordInput field={field} formData={formData} />;
+    Field = <MultilinePasswordInput field={field} formData={formData} />;
   } else if (type === "select") {
     Field = <SelectField field={field} formData={formData} />;
   } else if (type === "radio") {
