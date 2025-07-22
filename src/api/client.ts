@@ -31,7 +31,7 @@ apiClient.use({
 
       // Firefox doesn't always expose request.body, but we can still try to read it
       // assume all non-GET/HEAD requests have a body
-      const hasBodyContent = request.method !== "GET" && request.method !== "HEAD";
+      const hasBodyContent = request.method !== "GET" && request.method !== "HEAD" && request.method !== "OPTIONS";
 
       if (hasBodyContent) {
         try {
