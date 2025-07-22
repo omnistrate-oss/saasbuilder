@@ -27,14 +27,27 @@ apiClient.use({
       const originalRequestURL = pathname;
       const originalRequestMethod = request.method;
 
-      // Get original request body
       let originalRequestPayload;
-      if (request.body) {
-        const clonedRequest = request.clone();
+
+      // Firefox doesn't always expose request.body, but we can still try to read it
+      // assume all non-GET/HEAD requests have a body
+      const hasBodyContent = request.method !== "GET" && request.method !== "HEAD" && request.method !== "OPTIONS";
+
+      if (hasBodyContent) {
         try {
-          originalRequestPayload = await clonedRequest.json();
-        } catch {
-          originalRequestPayload = await clonedRequest.text();
+          // Clone the request before reading the body to avoid consumption issues
+          const requestClone = request.clone();
+          const bodyText = await requestClone.text();
+
+          if (bodyText) {
+            try {
+              originalRequestPayload = JSON.parse(bodyText);
+            } catch {
+              originalRequestPayload = bodyText;
+            }
+          }
+        } catch (error) {
+          console.warn("Failed to read request body:", error);
         }
       }
 
@@ -66,7 +79,7 @@ apiClient.use({
       // Create new request with modified properties
       const modifiedRequest = new Request(newUrl.toString(), {
         method: "POST",
-        headers: request.headers,
+        headers: new Headers(request.headers), // Create new Headers object
         body: JSON.stringify(requestMetaData),
       });
 
