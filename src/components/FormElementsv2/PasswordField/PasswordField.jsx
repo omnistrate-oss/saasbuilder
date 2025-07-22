@@ -8,13 +8,26 @@ import { Text } from "src/components/Typography/Typography";
 
 import TextField from "../TextField/TextField";
 
+const generatePassword = (restProps) => {
+  const password = Generator.generate({
+    length: 12,
+    numbers: true,
+  });
+
+  restProps.onChange?.({
+    target: {
+      name: restProps.name,
+      value: password,
+    },
+  });
+};
+
 export const PasswordField = (props) => {
-  const { disabled = false, value, dataCy, showPasswordGenerator, sx = {}, ...restProps } = props;
+  const { disabled = false, value, dataTestId, showPasswordGenerator, sx = {}, ...restProps } = props;
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
   return (
     <TextField
-      data-cy={dataCy || "password-field"}
       type={isPasswordVisible ? "text" : "password"}
       value={value}
       disabled={disabled}
@@ -58,19 +71,7 @@ export const PasswordField = (props) => {
                     borderRadius: "0 8px 8px 0",
                     borderLeft: "1px solid #D0D5DD",
                   }}
-                  onClick={() => {
-                    const password = Generator.generate({
-                      length: 12,
-                      numbers: true,
-                    });
-
-                    restProps.onChange?.({
-                      target: {
-                        name: restProps.name,
-                        value: password,
-                      },
-                    });
-                  }}
+                  onClick={() => generatePassword(restProps)}
                 >
                   <KeyIcon />
                 </Box>
@@ -79,6 +80,7 @@ export const PasswordField = (props) => {
           </InputAdornment>
         ),
       }}
+      inputProps={{ "data-testid": dataTestId || "password-field" }}
     />
   );
 };
