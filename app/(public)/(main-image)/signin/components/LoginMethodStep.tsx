@@ -70,9 +70,26 @@ const LoginMethodStep: FC<LoginMethodStepProps> = (props) => {
   } | null>(null);
   const [viewType, setViewType] = useState<"password-login" | "login-options">("login-options");
   const environmentType = useEnvironmentType();
+  const hasIDPWithMatchingDomain = useMemo(() => {
+    return (
+      identityProviders.length > 0 &&
+      identityProviders.some((idp) => {
+        if (idp.emailIdentifiers === undefined || idp.emailIdentifiers === "") return false;
+
+        const emailIdentifiersList = idp.emailIdentifiers.split(",").map((identifier) => identifier.trim());
+        return emailIdentifiersList.includes(emailDomain);
+      })
+    );
+  }, [identityProviders, emailDomain]);
+
+  //hide password login if there is some IDP with email identifiers matching the email domain
+  const allowPasswordLogin = isPasswordLoginEnabled && !hasIDPWithMatchingDomain;
+
   const domainFilteredIdentityProviders = useMemo(() => {
+    //if some IDP has a configured domain and the domain matches the email domain, show only those IDPs with matching domains and hide the ones without configured domains
+
     const filteredProviders = identityProviders.filter((idp) => {
-      if (idp.emailIdentifiers === undefined || idp.emailIdentifiers === "") return true;
+      if ((idp.emailIdentifiers === undefined || idp.emailIdentifiers === "") && !hasIDPWithMatchingDomain) return true;
 
       const emailIdentifiersList = idp.emailIdentifiers.split(",").map((identifier) => identifier.trim());
 
@@ -104,7 +121,7 @@ const LoginMethodStep: FC<LoginMethodStepProps> = (props) => {
       // For all other cases (both match or both don't match), maintain original order
       return 0;
     });
-  }, [identityProviders, emailDomain]);
+  }, [identityProviders, emailDomain, hasIDPWithMatchingDomain]);
 
   //set default sign in method using data from last login stored in localStorage
   useEffect(() => {
@@ -122,7 +139,7 @@ const LoginMethodStep: FC<LoginMethodStepProps> = (props) => {
         lastLoginMethodType = methodType;
         lastLoginIdpName = idpName;
 
-        if (lastLoginMethodType && lastLoginMethodType?.toLowerCase() === "password" && isPasswordLoginEnabled) {
+        if (lastLoginMethodType && lastLoginMethodType?.toLowerCase() === "password" && allowPasswordLogin) {
           selectedPreferredLoginMethod = "Password";
         } else if (lastLoginIdpName || lastLoginMethodType) {
           //check if the identity providers list has the preferredIdpName
@@ -154,14 +171,14 @@ const LoginMethodStep: FC<LoginMethodStepProps> = (props) => {
         selectedPreferredLoginMethod = domainFilteredIdentityProviders[0].identityProviderName;
         selectedPreferredIdpName = domainFilteredIdentityProviders[0].name;
       } else {
-        if (isPasswordLoginEnabled) {
+        if (allowPasswordLogin) {
           selectedPreferredLoginMethod = "Password";
         }
       }
     }
 
     //if not preferredLoginMethod is set, check if password login is enabled and set it as preferredLoginMethod
-    if (!selectedPreferredLoginMethod && isPasswordLoginEnabled) {
+    if (!selectedPreferredLoginMethod && allowPasswordLogin) {
       selectedPreferredLoginMethod = "Password";
     }
 
@@ -174,7 +191,7 @@ const LoginMethodStep: FC<LoginMethodStepProps> = (props) => {
         setViewType("password-login");
       }
     }
-  }, [loginMethodStringified, domainFilteredIdentityProviders, isPasswordLoginEnabled]);
+  }, [loginMethodStringified, domainFilteredIdentityProviders, allowPasswordLogin]);
 
   let defaultLoginMethodButton: ReactNode | null = null;
 
@@ -203,7 +220,7 @@ const LoginMethodStep: FC<LoginMethodStepProps> = (props) => {
 
   const numOtherSignInOptions =
     otherIdpSignInOptions.length +
-    (isPasswordLoginEnabled && preferredLoginMethod?.type?.toLowerCase() !== "password" ? 1 : 0);
+    (allowPasswordLogin && preferredLoginMethod?.type?.toLowerCase() !== "password" ? 1 : 0);
 
   function handleIDPButtonClick(idp: IdentityProvider) {
     //check if state query param is present in the renderdAuthorizationEndpoint
@@ -303,8 +320,8 @@ const LoginMethodStep: FC<LoginMethodStepProps> = (props) => {
     }
   }
 
-  const hasNoLoginMethods = !isPasswordLoginEnabled && identityProviders.length === 0;
-  const hasNoLoginMethodsForEmail = !isPasswordLoginEnabled && domainFilteredIdentityProviders.length === 0;
+  const hasNoLoginMethods = !allowPasswordLogin && identityProviders.length === 0;
+  const hasNoLoginMethodsForEmail = !allowPasswordLogin && domainFilteredIdentityProviders.length === 0;
 
   return (
     <Stack gap="24px">
@@ -412,7 +429,7 @@ const LoginMethodStep: FC<LoginMethodStepProps> = (props) => {
                   );
                 })}
               {preferredLoginMethod?.type?.toLowerCase() !== "password" &&
-                isPasswordLoginEnabled &&
+                allowPasswordLogin &&
                 idpOptionsExpanded &&
                 passwordLoginButton}
             </Stack>
@@ -449,7 +466,7 @@ const LoginMethodStep: FC<LoginMethodStepProps> = (props) => {
               </Text>
             </Button>
           )}
-          {environmentType === "PROD" && isPasswordLoginEnabled && (
+          {environmentType === "PROD" && allowPasswordLogin && (
             <Text size="small" weight="regular" sx={{ color: "#535862", textAlign: "center" }}>
               New to Omnistrate?{" "}
               <Link href="/signup" style={{ color: "#364152", fontWeight: 600 }}>
