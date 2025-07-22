@@ -5,7 +5,7 @@ import CloudProviderRadio from "app/(dashboard)/components/CloudProviderRadio/Cl
 import { useFormik } from "formik";
 
 import { $api } from "src/api/query";
-import { cloudProviderLongLogoMap } from "src/constants/cloudProviders";
+import { CLOUD_PROVIDERS, cloudProviderLongLogoMap } from "src/constants/cloudProviders";
 import useSnackbar from "src/hooks/useSnackbar";
 import GridDynamicForm from "components/DynamicForm/GridDynamicForm";
 import { FormConfiguration } from "components/DynamicForm/types";
@@ -90,6 +90,7 @@ const CustomNetworkForm = ({
           }
           return acc;
         }, [])
+        .filter((provider) => Object.values(CLOUD_PROVIDERS).includes(provider))
         // Sort as ['aws', 'azure', 'gcp']
         .sort((a, b) => a.localeCompare(b))
     );
