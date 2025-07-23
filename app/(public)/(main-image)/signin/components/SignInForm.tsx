@@ -9,9 +9,9 @@ import ReCAPTCHA from "react-google-recaptcha";
 
 import { customerUserSignin } from "src/api/customer-user";
 import axios from "src/axios";
-import { PAGE_TITLE_MAP } from "src/constants/pageTitleMap";
 import useSnackbar from "src/hooks/useSnackbar";
 import { IdentityProvider } from "src/types/identityProvider";
+import checkRouteValidity from "src/utils/route/checkRouteValidity";
 import { getInstancesRoute } from "src/utils/routes";
 
 import { createSigninValidationSchema } from "../constants";
@@ -59,12 +59,6 @@ const SignInForm: FC<SignInFormProps> = ({
   }, [redirect_reason]);
 
   function handlePasswordSignInSuccess(jwtToken) {
-    function isValidDestination(destination) {
-      const decodedURL = decodeURIComponent(destination);
-      const isAllowedPath = Boolean(PAGE_TITLE_MAP[decodedURL]);
-      return isAllowedPath;
-    }
-
     if (jwtToken) {
       Cookies.set("token", jwtToken, { sameSite: "Lax", secure: true });
 
@@ -75,10 +69,10 @@ const SignInForm: FC<SignInFormProps> = ({
       }
 
       axios.defaults.headers["Authorization"] = "Bearer " + jwtToken;
+      const decodedDestination = decodeURIComponent(destination || "");
 
       // Redirect to the Destination URL
-      if (destination && isValidDestination(destination)) {
-        const decodedDestination = decodeURIComponent(destination);
+      if (destination && checkRouteValidity(decodedDestination)) {
         router.replace(decodedDestination, {}, { showProgressBar: true });
       } else {
         router.replace(getInstancesRoute(), {}, { showProgressBar: true });
