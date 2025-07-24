@@ -12,7 +12,10 @@ const checkRouteValidity = (path: string) => {
 
   return allPatterns.some((pattern) => {
     // Convert Next.js route pattern to regex
-    const regexPattern = pattern.replace(/\[([^\]]+)\]/g, "([^/]+)").replace(/\//g, "\\/");
+    const regexPattern = pattern
+      .replace(/\\/g, "\\\\") // Escape backslashes
+      .replace(/\[([^\]]+)\]/g, "([^/]+)") // Replace dynamic segments
+      .replace(/\//g, "\\/"); // Escape forward slashes
     const regex = new RegExp(`^${regexPattern}$`);
     return regex.test(path);
   });
