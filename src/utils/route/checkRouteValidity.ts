@@ -12,6 +12,9 @@ const checkRouteValidity = (path: string) => {
 
   return allPatterns.some((pattern) => {
     // Convert Next.js route pattern to regex
+    // The first replace() converts dynamic route segments like '[serviceId]' into regex capture groups '([^/]+)',
+    // which match any sequence of characters except '/'. The second replace() escapes '/' characters to ensure
+    // they are treated as literal slashes in the regex. This allows us to match paths against the pattern.
     const regexPattern = pattern
       .replace(/\\/g, "\\\\") // Escape backslashes
       .replace(/\[([^\]]+)\]/g, "([^/]+)") // Replace dynamic segments
