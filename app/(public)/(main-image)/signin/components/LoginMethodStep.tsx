@@ -53,7 +53,7 @@ const LoginMethodStep: FC<LoginMethodStepProps> = (props) => {
     isReCaptchaSetup,
     isRecaptchaScriptLoaded,
   } = props;
-  const { orgName } = useProviderOrgDetails();
+  const { orgName = "Omnistrate" } = useProviderOrgDetails();
   const searchParams = useSearchParams();
   const org = searchParams?.get("org");
   const orgUrl = searchParams?.get("orgUrl");
