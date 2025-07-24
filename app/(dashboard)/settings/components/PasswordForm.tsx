@@ -25,13 +25,13 @@ type PasswordFormProps = {
 };
 const PasswordForm: React.FC<PasswordFormProps> = ({ email }) => {
   const snackbar = useSnackbar();
-  const { logout } = useLogout();
+  const { handleLogout } = useLogout();
   const loggedInUsingSSO = localStorage.getItem("loggedInUsingSSO");
   const isLoggedInUsingSSO = loggedInUsingSSO === "true";
 
   const updatePasswordMutation = $api.useMutation("post", "/2022-09-01-00/update-password", {
     onSuccess: () => {
-      logout();
+      handleLogout();
       snackbar.showSuccess("Password updated successfully");
     },
   });
