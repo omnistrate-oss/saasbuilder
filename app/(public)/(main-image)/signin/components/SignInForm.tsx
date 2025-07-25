@@ -135,7 +135,7 @@ const SignInForm: FC<SignInFormProps> = ({
   });
 
   return (
-    <Stack component="form" gap="32px" mt="44px">
+    <>
       {currentStep === 0 && (
         <EmailStep
           formData={formik}
@@ -144,32 +144,34 @@ const SignInForm: FC<SignInFormProps> = ({
           shouldRememberLoginDetails={shouldRememberLoginDetails}
         />
       )}
-      {currentStep === 1 && (
-        <LoginMethodStep
-          formData={formik}
-          setCurrentStep={setCurrentStep}
-          identityProviders={identityProviders}
-          isPasswordLoginEnabled={isPasswordLoginEnabled}
-          isPasswordSignInLoading={passwordSignInMutation.isPending}
-          isReCaptchaSetup={isReCaptchaSetup}
-          isRecaptchaScriptLoaded={isRecaptchaScriptLoaded}
-        />
-      )}
-      {isReCaptchaSetup && (
-        // @ts-ignore
-        <ReCAPTCHA
-          size="invisible"
-          sitekey={googleReCaptchaSiteKey}
-          ref={reCaptchaRef}
-          asyncScriptOnLoad={() => {
-            setIsRecaptchaScriptLoaded(true);
-          }}
-          onErrored={() => {
-            setHasCaptchaErrored(true);
-          }}
-        />
-      )}
-    </Stack>
+      <Stack component="form" gap="32px" mt="44px">
+        {currentStep === 1 && (
+          <LoginMethodStep
+            formData={formik}
+            setCurrentStep={setCurrentStep}
+            identityProviders={identityProviders}
+            isPasswordLoginEnabled={isPasswordLoginEnabled}
+            isPasswordSignInLoading={passwordSignInMutation.isPending}
+            isReCaptchaSetup={isReCaptchaSetup}
+            isRecaptchaScriptLoaded={isRecaptchaScriptLoaded}
+          />
+        )}
+        {isReCaptchaSetup && (
+          // @ts-ignore
+          <ReCAPTCHA
+            size="invisible"
+            sitekey={googleReCaptchaSiteKey}
+            ref={reCaptchaRef}
+            asyncScriptOnLoad={() => {
+              setIsRecaptchaScriptLoaded(true);
+            }}
+            onErrored={() => {
+              setHasCaptchaErrored(true);
+            }}
+          />
+        )}
+      </Stack>
+    </>
   );
 };
 
